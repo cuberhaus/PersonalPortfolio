@@ -11,6 +11,7 @@
     "description": "Finalist at BitsXLaMarató 2023 — a mobile health app combining an AI chatbot with computer vision to support menstrual health tracking and early issue detection.",
     "tags": ["Flutter", "Python", "Computer Vision", "Google LLM", "Django"],
     "github": "https://github.com/cuberhaus/Draculin-Front",
+    "github2": "https://github.com/cuberhaus/Draculin-Backend",
     "live": ""
   },
   {
