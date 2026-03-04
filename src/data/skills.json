@@ -1,0 +1,18 @@
+[
+  {
+    "category": "Languages",
+    "items": ["TypeScript", "Python", "Rust", "Go", "SQL", "HTML/CSS"]
+  },
+  {
+    "category": "Frameworks",
+    "items": ["React", "Next.js", "Astro", "Express", "FastAPI", "Tailwind CSS"]
+  },
+  {
+    "category": "Tools & Platforms",
+    "items": ["Git", "Docker", "AWS", "PostgreSQL", "Redis", "Linux"]
+  },
+  {
+    "category": "Practices",
+    "items": ["CI/CD", "Testing", "Agile", "System Design", "REST APIs", "GraphQL"]
+  }
+]

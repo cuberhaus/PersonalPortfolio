@@ -1,0 +1,45 @@
+<footer class="footer">
+  <div class="container footer-inner">
+    <p class="footer-text">
+      Designed & built with
+      <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="footer-link">Astro</a>
+    </p>
+    <p class="footer-copy">&copy; {new Date().getFullYear()} Your Name</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 0;
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text,
+  .footer-copy {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .footer-link {
+    color: var(--accent-start);
+    transition: color var(--transition-fast);
+  }
+
+  .footer-link:hover {
+    color: var(--accent-end);
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+    }
+  }
+</style>

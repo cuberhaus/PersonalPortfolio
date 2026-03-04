@@ -1,0 +1,32 @@
+[
+  {
+    "role": "Senior Software Engineer",
+    "company": "Tech Corp",
+    "period": "2023 — Present",
+    "bullets": [
+      "Led migration of monolith to microservices, reducing deploy times by 60%",
+      "Designed and built real-time analytics pipeline processing 1M+ events/day",
+      "Mentored team of 4 junior engineers"
+    ]
+  },
+  {
+    "role": "Software Engineer",
+    "company": "StartupXYZ",
+    "period": "2021 — 2023",
+    "bullets": [
+      "Built core product features using React and Node.js",
+      "Implemented CI/CD pipeline reducing release cycle from weeks to days",
+      "Contributed to open-source tooling used by 500+ developers"
+    ]
+  },
+  {
+    "role": "Junior Developer",
+    "company": "Digital Agency",
+    "period": "2019 — 2021",
+    "bullets": [
+      "Developed responsive web applications for 10+ clients",
+      "Introduced automated testing, increasing code coverage from 20% to 80%",
+      "Optimized database queries resulting in 40% faster page loads"
+    ]
+  }
+]

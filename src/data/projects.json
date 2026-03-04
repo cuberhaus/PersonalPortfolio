@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Cloud Dashboard",
+    "description": "Real-time monitoring dashboard with interactive charts and alerts for cloud infrastructure.",
+    "tags": ["React", "TypeScript", "D3.js", "AWS"],
+    "github": "https://github.com/yourusername/cloud-dashboard",
+    "live": ""
+  },
+  {
+    "title": "CLI Task Manager",
+    "description": "A fast, keyboard-driven task manager for the terminal with sync support.",
+    "tags": ["Rust", "SQLite", "CLI"],
+    "github": "https://github.com/yourusername/cli-task-manager",
+    "live": ""
+  },
+  {
+    "title": "ML Pipeline Framework",
+    "description": "Modular machine learning pipeline with automated feature engineering and model selection.",
+    "tags": ["Python", "scikit-learn", "Docker"],
+    "github": "https://github.com/yourusername/ml-pipeline",
+    "live": ""
+  },
+  {
+    "title": "E-Commerce API",
+    "description": "RESTful API with authentication, payments, and inventory management.",
+    "tags": ["Node.js", "Express", "PostgreSQL", "Stripe"],
+    "github": "https://github.com/yourusername/ecommerce-api",
+    "live": ""
+  }
+]

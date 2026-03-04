@@ -1,0 +1,89 @@
+---
+import skills from '../data/skills.json';
+---
+
+<section class="section skills" id="skills">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Skills</span>
+      <h2 class="section-title">Tech I work with</h2>
+      <p class="section-subtitle">
+        Technologies and tools I use to bring ideas to life.
+      </p>
+    </div>
+
+    <div class="skills-grid reveal-stagger">
+      {skills.map((group) => (
+        <div class="skill-group">
+          <h3 class="skill-category">{group.category}</h3>
+          <div class="skill-pills">
+            {group.items.map((item) => (
+              <span class="skill-pill">{item}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .skill-group {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .skill-group:hover {
+    border-color: var(--border-color-hover);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .skill-category {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-start);
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .skill-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .skill-pill {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid var(--border-color);
+    transition: color var(--transition-fast), border-color var(--transition-fast),
+                box-shadow var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .skill-pill:hover {
+    color: var(--text-primary);
+    border-color: var(--accent-start);
+    box-shadow: 0 0 12px var(--glow-color);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    .skills-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
