@@ -1,14 +1,21 @@
 [
   {
     "title": "Aneurysm Detector",
-    "description": "Award-winning convolutional neural network using MaskRCNN to detect aortic aneurysms from video, with 3D visualization of results.",
+    "description": "Award-winning convolutional neural network using MaskRCNN to detect aortic aneurysms from ecography video, with 3D model generation and a GUI for visualization.",
     "tags": ["Python", "MaskRCNN", "Computer Vision", "Deep Learning"],
-    "github": "https://github.com/cuberhaus",
+    "github": "https://github.com/cuberhaus/bitsXlaMarato",
+    "live": "https://devpost.com/software/aneurism-detection-with-markrcnn"
+  },
+  {
+    "title": "Draculin",
+    "description": "Finalist at BitsXLaMarató 2023 — a mobile health app combining an AI chatbot with computer vision to support menstrual health tracking and early issue detection.",
+    "tags": ["Flutter", "Python", "Computer Vision", "Google LLM", "Django"],
+    "github": "https://github.com/cuberhaus/Draculin-Front",
     "live": ""
   },
   {
     "title": "Data Governance Platform",
-    "description": "Enterprise data governance solution for public sector initiatives, integrating Informatica, AWS, and Azure services.",
+    "description": "Enterprise data governance solution integrating Informatica, AWS, and Azure services for large-scale data management.",
     "tags": ["Informatica", "AWS", "Azure", "Data Governance"],
     "github": "",
     "live": ""
