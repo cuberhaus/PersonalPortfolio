@@ -1,18 +1,18 @@
 [
   {
-    "category": "Languages",
-    "items": ["TypeScript", "Python", "Rust", "Go", "SQL", "HTML/CSS"]
+    "category": "Programming Languages",
+    "items": ["Python", "C", "C++", "Java", "SQL", "Haskell", "Prolog", "JavaScript", "PowerShell"]
   },
   {
-    "category": "Frameworks",
-    "items": ["React", "Next.js", "Astro", "Express", "FastAPI", "Tailwind CSS"]
+    "category": "AI & Data Science",
+    "items": ["Machine Learning", "Computer Vision", "Data Mining", "Supervised Learning", "Big Data", "Statistics", "Knowledge-Based Systems"]
   },
   {
     "category": "Tools & Platforms",
-    "items": ["Git", "Docker", "AWS", "PostgreSQL", "Redis", "Linux"]
+    "items": ["AWS", "Azure", "Informatica", "PowerBI", "SQL Server", "Git", "Docker", "Jupyter", "Google Colab"]
   },
   {
-    "category": "Practices",
-    "items": ["CI/CD", "Testing", "Agile", "System Design", "REST APIs", "GraphQL"]
+    "category": "CS Fundamentals",
+    "items": ["Algorithms", "Dynamic Programming", "Software Architecture", "Parallel Processing", "Cybersecurity", "Network Administration"]
   }
 ]

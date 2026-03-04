@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://your-username.github.io',
+  site: 'https://cuberhaus.github.io',
   base: '/PersonalPortfolio',
 });

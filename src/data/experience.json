@@ -1,32 +1,32 @@
 [
   {
-    "role": "Senior Software Engineer",
-    "company": "Tech Corp",
-    "period": "2023 — Present",
+    "role": "AI & Data Consultant",
+    "company": "Deloitte",
+    "period": "Sep 2025 — Present",
     "bullets": [
-      "Led migration of monolith to microservices, reducing deploy times by 60%",
-      "Designed and built real-time analytics pipeline processing 1M+ events/day",
-      "Mentored team of 4 junior engineers"
+      "Led a multidisciplinary team to design and deliver AI and data-driven use cases for public sector initiatives",
+      "Worked on the Generalitat de Catalunya project, focusing on Data Governance, client relationship management, and consulting strategy",
+      "Hands-on experience with Informatica, AWS, and Azure in real-world data management solutions"
     ]
   },
   {
-    "role": "Software Engineer",
-    "company": "StartupXYZ",
-    "period": "2021 — 2023",
+    "role": "Data Engineer",
+    "company": "MGS, Seguros y Reaseguros S.A.",
+    "period": "Sep 2023 — Sep 2024",
     "bullets": [
-      "Built core product features using React and Node.js",
-      "Implemented CI/CD pipeline reducing release cycle from weeks to days",
-      "Contributed to open-source tooling used by 500+ developers"
+      "Championed predictive analytics, robust data governance, and optimized ETL processes, enhancing data quality and efficiency",
+      "Drove a 20% increase in report accuracy with impactful visualizations using Python, R, SQL Server, and PowerBI",
+      "Crafted dynamic dashboards for real-time KPI and business metric monitoring, enabling informed strategic decisions"
     ]
   },
   {
-    "role": "Junior Developer",
-    "company": "Digital Agency",
-    "period": "2019 — 2021",
+    "role": "Software Development Engineer",
+    "company": "bitsxlaMarató TV3 Hackathon (Winner)",
+    "period": "Jan 2022",
     "bullets": [
-      "Developed responsive web applications for 10+ clients",
-      "Introduced automated testing, increasing code coverage from 20% to 80%",
-      "Optimized database queries resulting in 40% faster page loads"
+      "Developed an aneurysm detector using a convolutional neural network with MaskRCNN for cardiovascular health",
+      "Won the bitsxlaMarató TV3 Hackathon 2022 for this project",
+      "Designed a user-friendly interface for uploading video, detecting the aorta, and visualizing 3D models"
     ]
   }
 ]

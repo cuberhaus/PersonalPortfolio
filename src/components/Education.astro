@@ -1,0 +1,86 @@
+---
+import education from '../data/education.json';
+---
+
+<section class="section education" id="education">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Education</span>
+      <h2 class="section-title">Where I studied</h2>
+    </div>
+
+    <div class="education-grid reveal-stagger">
+      {education.map((entry) => (
+        <div class="education-card">
+          <div class="education-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c0 1.66 2.69 3 6 3s6-1.34 6-3v-5"/>
+            </svg>
+          </div>
+          <span class="education-period">{entry.period}</span>
+          <h3 class="education-degree">{entry.degree}</h3>
+          <p class="education-institution">{entry.institution}</p>
+          <p class="education-location">{entry.location}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .education-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .education-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .education-card:hover {
+    border-color: var(--accent-start);
+    box-shadow: 0 12px 40px var(--glow-color);
+  }
+
+  .education-icon {
+    color: var(--accent-start);
+    margin-bottom: 1.25rem;
+  }
+
+  .education-period {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent-start);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .education-degree {
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .education-institution {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  .education-location {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 768px) {
+    .education-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
