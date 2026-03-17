@@ -11,6 +11,29 @@ npm run build      # Build for production
 npm run preview    # Preview the production build
 ```
 
+## Interactive Demos
+
+The portfolio includes interactive demo pages for several projects. Some run entirely in the browser, others need local services.
+
+| Demo | Type | Notes |
+|------|------|-------|
+| WPGMA Clustering | Browser | Fully client-side (TypeScript port) |
+| JSBach Interpreter | Browser | Fully client-side (TypeScript interpreter + Web Audio) |
+| EDA Game Viewer | Browser | Opens viewer in a new tab; supports replay file upload |
+| Tenda Online | Local | Needs PHP + MySQL (see below) |
+| Draculin | Placeholder | Needs Flutter web + Django backend |
+
+### Running Tenda Online locally
+
+The Tenda demo page automatically embeds the real PHP app in dev mode. To start it:
+
+```bash
+cd ../tenda_online
+docker compose up -d    # Start MySQL + PHP server at http://localhost:8888
+```
+
+Then in the portfolio dev server, the Tenda demo page will show the live app in an iframe. In production (GitHub Pages), a client-side mock is shown instead.
+
 ## Customizing
 
 - **Your info**: Edit names, tagline, and bio directly in the `.astro` components under `src/components/`
