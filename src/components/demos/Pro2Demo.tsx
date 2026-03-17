@@ -205,86 +205,166 @@ export default function Pro2Demo() {
 
   return (
     <div style={styles.wrapper}>
+      {/* How it works */}
+      <div style={{
+        ...styles.card,
+        borderLeft: "3px solid #6366f1",
+        background: "linear-gradient(135deg, rgba(99,102,241,0.05), rgba(168,85,247,0.03))",
+      }}>
+        <h3 style={{ ...styles.h3, marginBottom: "0.75rem" }}>How it works</h3>
+        <div style={{ fontSize: "0.85rem", color: "#a1a1aa", lineHeight: 1.8 }}>
+          <p style={{ marginBottom: "0.5rem" }}>
+            <strong style={{ color: "#e4e4e7" }}>1. Add species</strong> — each species has an <strong style={{ color: "#a855f7" }}>ID</strong> (a short name) and a <strong style={{ color: "#a855f7" }}>gene sequence</strong> made of nucleotides (A, C, G, T).
+          </p>
+          <p style={{ marginBottom: "0.5rem" }}>
+            <strong style={{ color: "#e4e4e7" }}>2. Distance table</strong> — distances between species are computed using <strong style={{ color: "#a855f7" }}>k-mer analysis</strong>: the gene is split into overlapping subsequences of length <em>k</em>, and species are compared by how many k-mers they share.
+          </p>
+          <p style={{ marginBottom: "0.5rem" }}>
+            <strong style={{ color: "#e4e4e7" }}>3. WPGMA clustering</strong> — the algorithm repeatedly merges the two closest clusters, averaging their distances to all other clusters. Click <em>Next Step</em> to watch it happen, or <em>Run All</em> to jump to the final tree.
+          </p>
+          <p style={{ marginBottom: 0 }}>
+            <strong style={{ color: "#e4e4e7" }}>4. Dendrogram</strong> — the resulting phylogenetic tree shows how species are related. Closer branches = more similar genes.
+          </p>
+        </div>
+      </div>
+
       {/* Species input */}
       <div style={styles.card}>
-        <h3 style={styles.h3}>Species</h3>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1rem" }}>
-          {species.map((s) => (
-            <div
-              key={s.id}
-              style={{
-                ...styles.tag,
-                display: "flex",
-                alignItems: "center",
-                gap: "0.35rem",
-                padding: "0.35rem 0.65rem",
-              }}
-            >
-              <strong style={{ color: "#e4e4e7" }}>{s.id}</strong>
-              <span style={{ color: "#71717a", fontSize: "0.7rem" }}>
-                {s.gene.length > 12 ? s.gene.slice(0, 12) + "..." : s.gene}
-              </span>
-              <button
-                onClick={() => removeSpecies(s.id)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#71717a",
-                  cursor: "pointer",
-                  padding: "0 0.2rem",
-                  fontSize: "0.9rem",
-                  lineHeight: 1,
-                }}
-                title="Remove"
-              >
-                ×
-              </button>
-            </div>
-          ))}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+          <h3 style={{ ...styles.h3, marginBottom: 0 }}>Species</h3>
+          <span style={{ fontSize: "0.75rem", color: "#71717a" }}>
+            {species.length} species loaded
+          </span>
         </div>
 
-        <div style={styles.inputGroup}>
-          <input
-            style={{ ...styles.input, width: "80px" }}
-            placeholder="ID"
-            value={newId}
-            onChange={(e) => setNewId(e.target.value)}
-            maxLength={8}
-          />
-          <input
-            style={{ ...styles.input, flex: 1, minWidth: "150px" }}
-            placeholder="Gene (ACGT only)"
-            value={newGene}
-            onChange={(e) => setNewGene(e.target.value)}
-          />
-          <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
-            <label style={{ fontSize: "0.8rem", color: "#71717a" }}>k=</label>
-            <input
-              type="number"
-              style={{ ...styles.input, width: "55px" }}
-              value={k}
-              min={1}
-              max={10}
-              onChange={(e) => {
-                setK(Number(e.target.value));
-                setClusterState(null);
-                setHistory([]);
-                setTree(null);
-              }}
-            />
+        {species.length > 0 && (
+          <div style={{ overflowX: "auto", marginBottom: "1rem" }}>
+            <table style={{ ...styles.table, fontSize: "0.8rem" }}>
+              <thead>
+                <tr>
+                  <th style={{ ...styles.th, width: "60px" }}>ID</th>
+                  <th style={styles.th}>Gene Sequence</th>
+                  <th style={{ ...styles.th, width: "50px" }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {species.map((s) => (
+                  <tr key={s.id}>
+                    <td style={{ ...styles.td, fontWeight: 600, color: "#a855f7" }}>{s.id}</td>
+                    <td style={{
+                      ...styles.td,
+                      fontFamily: "monospace",
+                      fontSize: "0.75rem",
+                      letterSpacing: "0.05em",
+                      wordBreak: "break-all" as const,
+                    }}>
+                      {s.gene.split("").map((c, i) => (
+                        <span key={i} style={{
+                          color: c === "A" ? "#4ade80" : c === "C" ? "#60a5fa" : c === "G" ? "#facc15" : "#f87171",
+                        }}>{c}</span>
+                      ))}
+                    </td>
+                    <td style={styles.td}>
+                      <button
+                        onClick={() => removeSpecies(s.id)}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          color: "#71717a",
+                          cursor: "pointer",
+                          padding: "0.2rem 0.4rem",
+                          fontSize: "0.85rem",
+                          borderRadius: "0.25rem",
+                          transition: "color 0.15s",
+                        }}
+                        title="Remove species"
+                        onMouseOver={(e) => (e.currentTarget.style.color = "#f87171")}
+                        onMouseOut={(e) => (e.currentTarget.style.color = "#71717a")}
+                      >
+                        ×
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <button
-            style={{ ...styles.button, ...styles.primaryBtn }}
-            onClick={addSpecies}
-          >
-            Add
-          </button>
-          <button
-            style={{ ...styles.button, ...styles.secondaryBtn }}
-            onClick={loadSample}
-          >
-            Load Sample
-          </button>
+        )}
+
+        {species.length === 0 && (
+          <div style={{
+            padding: "2rem",
+            textAlign: "center" as const,
+            color: "#71717a",
+            fontSize: "0.85rem",
+            marginBottom: "1rem",
+          }}>
+            No species added yet. Add some below or load the sample dataset.
+          </div>
+        )}
+
+        <div style={{
+          background: "#12121a",
+          borderRadius: "0.5rem",
+          padding: "1rem",
+        }}>
+          <div style={{ fontSize: "0.75rem", color: "#71717a", marginBottom: "0.65rem" }}>
+            Add a new species — ID is a short name, Gene is a sequence of A, C, G, T nucleotides
+          </div>
+          <div style={styles.inputGroup}>
+            <input
+              style={{ ...styles.input, width: "80px" }}
+              placeholder="e.g. F"
+              value={newId}
+              onChange={(e) => setNewId(e.target.value)}
+              maxLength={8}
+            />
+            <input
+              style={{ ...styles.input, flex: 1, minWidth: "150px" }}
+              placeholder="e.g. AACTGCTTGA"
+              value={newGene}
+              onChange={(e) => setNewGene(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && addSpecies()}
+            />
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+              <label style={{ fontSize: "0.75rem", color: "#71717a" }} title="k-mer length: longer k means more precise distance but needs longer genes">k=</label>
+              <input
+                type="number"
+                style={{ ...styles.input, width: "55px" }}
+                value={k}
+                min={1}
+                max={10}
+                onChange={(e) => {
+                  setK(Number(e.target.value));
+                  setClusterState(null);
+                  setHistory([]);
+                  setTree(null);
+                }}
+              />
+            </div>
+            <button
+              style={{ ...styles.button, ...styles.primaryBtn }}
+              onClick={addSpecies}
+            >
+              Add
+            </button>
+          </div>
+          <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.65rem" }}>
+            <button
+              style={{ ...styles.button, ...styles.secondaryBtn, fontSize: "0.75rem", padding: "0.35rem 0.85rem" }}
+              onClick={loadSample}
+            >
+              Load Sample (5 species)
+            </button>
+            {species.length > 0 && (
+              <button
+                style={{ ...styles.button, ...styles.dangerBtn, fontSize: "0.75rem", padding: "0.35rem 0.85rem" }}
+                onClick={() => { setSpecies([]); setClusterState(null); setHistory([]); setTree(null); }}
+              >
+                Clear All
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
