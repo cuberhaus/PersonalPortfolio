@@ -21,7 +21,7 @@ The portfolio includes interactive demo pages for several projects. Some run ent
 | JSBach Interpreter | Browser | Fully client-side (TypeScript interpreter + Web Audio) |
 | EDA Game Viewer | Browser | Opens viewer in a new tab; supports replay file upload |
 | Tenda Online | Local | Needs PHP + MySQL (see below) |
-| Draculin | Placeholder | Needs Flutter web + Django backend |
+| Draculin | Local + Mock | Django backend for live chat/news; React mock for quiz/stats/calendar |
 
 ### Running Tenda Online locally
 
@@ -33,6 +33,15 @@ docker compose up -d    # Start MySQL + PHP server at http://localhost:8888
 ```
 
 Then in the portfolio dev server, the Tenda demo page will show the live app in an iframe. In production (GitHub Pages), a client-side mock is shown instead.
+
+### Running Draculin backend locally
+
+The Draculin demo connects to the Django backend when available (for live chat and news). Without it, everything works with mock data.
+
+```bash
+cd ../Draculin-Backend
+docker compose up -d    # Start Django API at http://localhost:8889
+```
 
 ## Customizing
 
