@@ -1,0 +1,399 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<DemoLayout title="EDA Game Viewer" description="Watch AI bots battle on a grid — replay viewer for the EDA programming game competition.">
+  <div class="container joc-eda-page">
+    <div class="demo-header">
+      <h1>EDA Game Viewer</h1>
+      <p class="demo-lead">
+        Watch AI bots compete in "The Purge" — a grid-based strategy game from the EDA
+        (Data Structures and Algorithms) course at FIB-UPC.
+      </p>
+    </div>
+
+    <div class="cards-row">
+      <!-- Sample game card -->
+      <div class="game-card">
+        <div class="game-card-badge">Preloaded</div>
+        <div class="game-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+        </div>
+        <h3>Sample Game</h3>
+        <p>4 AI players battle across 250 rounds on a 15×30 grid. Includes warriors, builders, weapons, barricades, and resource gathering.</p>
+        <div class="game-meta">
+          <span><strong>Map:</strong> 15 × 30</span>
+          <span><strong>Rounds:</strong> 250</span>
+          <span><strong>Players:</strong> 4</span>
+        </div>
+        <a id="launch-sample" class="launch-btn" href="#" target="_blank" rel="noopener noreferrer">
+          Watch Replay
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Upload card -->
+      <div class="game-card upload-card">
+        <div class="game-card-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+        </div>
+        <h3>Your Own Game</h3>
+        <p>Compile and run the game locally, then upload the <code>.out</code> replay file to watch it here.</p>
+        <div class="upload-instructions">
+          <code>make && ./Game &lt; default.cnf &gt; replay.out</code>
+        </div>
+        <label class="launch-btn upload-btn" for="file-upload">
+          Upload Replay File
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+        </label>
+        <input type="file" id="file-upload" accept=".out,.txt" style="display:none" />
+        <div id="upload-status" class="upload-status"></div>
+      </div>
+    </div>
+
+    <!-- Controls reference -->
+    <div class="controls-card">
+      <h3>Viewer Controls</h3>
+      <div class="controls-grid">
+        <div class="control-item"><kbd>Space</kbd><span>Play / Pause</span></div>
+        <div class="control-item"><kbd>←</kbd> <kbd>→</kbd><span>Previous / Next round</span></div>
+        <div class="control-item"><kbd>Home</kbd> <kbd>End</kbd><span>Go to start / end</span></div>
+        <div class="control-item"><kbd>Mouse wheel</kbd><span>Zoom in / out</span></div>
+        <div class="control-item"><kbd>Slider</kbd><span>Scrub through rounds</span></div>
+        <div class="control-item"><kbd>H</kbd><span>Help overlay</span></div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="demo-info">
+      <h3>About this project</h3>
+      <p>
+        Written in C++11, the game engine runs 4 AI players simultaneously on a 2D grid.
+        The custom AI (<code>AIJohnnyMelavo</code>) uses BFS pathfinding to prioritize
+        weapon collection, enemy hunting, and resource gathering. Each player controls
+        warriors (fighters) and builders (constructors) who compete for money, food, guns,
+        and bazookas across day/night cycles.
+      </p>
+      <h4>How to generate your own replays</h4>
+      <ol class="steps-list">
+        <li>Clone the <a href="https://github.com/cuberhaus/joc_eda" target="_blank" rel="noopener noreferrer">repository</a></li>
+        <li>Write your own AI in a file like <code>AIMyBot.cc</code> (extend the <code>Player</code> class)</li>
+        <li>Run <code>make</code> to compile</li>
+        <li>Run <code>./Game -i default.cnf &gt; replay.out</code> to generate a replay</li>
+        <li>Upload the <code>replay.out</code> file here to watch it!</li>
+      </ol>
+      <a href="https://github.com/cuberhaus/joc_eda" target="_blank" rel="noopener noreferrer" class="demo-link">
+        View source on GitHub
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</DemoLayout>
+
+<script>
+  const base = document.querySelector('link[rel="icon"]')?.getAttribute('href')?.replace('/favicon.svg', '') || '';
+  const viewerBase = `${base}/demos/joc-eda/viewer.html`;
+
+  // Sample game launcher
+  document.getElementById('launch-sample')!.setAttribute('href', viewerBase);
+
+  // File upload handler
+  const fileInput = document.getElementById('file-upload') as HTMLInputElement;
+  const statusEl = document.getElementById('upload-status')!;
+
+  fileInput.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    statusEl.textContent = 'Reading file...';
+    statusEl.style.color = '#a1a1aa';
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = reader.result as string;
+      if (!text.includes('ThePurge')) {
+        statusEl.textContent = 'This doesn\'t look like a valid game file (missing "ThePurge" header).';
+        statusEl.style.color = '#f87171';
+        return;
+      }
+      // Store in sessionStorage and open viewer with a flag
+      try {
+        sessionStorage.setItem('joc_eda_custom_game', text);
+        statusEl.textContent = `Loaded "${file.name}" — opening viewer...`;
+        statusEl.style.color = '#4ade80';
+        window.open(`${viewerBase}?custom=1`, '_blank');
+      } catch (err) {
+        statusEl.textContent = 'File too large for session storage. Try a smaller replay.';
+        statusEl.style.color = '#f87171';
+      }
+    };
+    reader.readAsText(file);
+  });
+</script>
+
+<style is:global>
+  .joc-eda-page .demo-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .joc-eda-page .demo-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin-bottom: 1rem;
+  }
+
+  .joc-eda-page .demo-lead {
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .joc-eda-page .cards-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .joc-eda-page .game-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .joc-eda-page .game-card:hover {
+    border-color: var(--accent-start);
+    box-shadow: 0 8px 30px var(--glow-color);
+  }
+
+  .joc-eda-page .game-card-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-start);
+    background: rgba(99, 102, 241, 0.1);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .joc-eda-page .game-card-icon {
+    color: var(--accent-start);
+    margin-bottom: 1.25rem;
+  }
+
+  .joc-eda-page .game-card h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .joc-eda-page .game-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    flex: 1;
+    margin-bottom: 1rem;
+  }
+
+  .joc-eda-page .game-card code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    background: var(--bg-secondary);
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    color: var(--text-secondary);
+  }
+
+  .joc-eda-page .game-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .joc-eda-page .game-meta strong {
+    color: var(--text-secondary);
+  }
+
+  .joc-eda-page .upload-instructions {
+    margin-bottom: 1.25rem;
+  }
+
+  .joc-eda-page .upload-instructions code {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    background: var(--bg-secondary);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+
+  .joc-eda-page .launch-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    border: none;
+  }
+
+  .joc-eda-page .launch-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+  }
+
+  .joc-eda-page .upload-btn {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+  }
+
+  .joc-eda-page .upload-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--accent-start);
+    box-shadow: 0 6px 20px var(--glow-color);
+  }
+
+  .joc-eda-page .upload-status {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    min-height: 1.2rem;
+  }
+
+  .joc-eda-page .controls-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .joc-eda-page .controls-card h3 {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .joc-eda-page .controls-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+
+  .joc-eda-page .control-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+  }
+
+  .joc-eda-page .control-item kbd {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    background: var(--bg-secondary);
+    padding: 0.15rem 0.45rem;
+    border-radius: 0.25rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    width: fit-content;
+  }
+
+  .joc-eda-page .control-item span {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .joc-eda-page .demo-info {
+    padding: 2rem;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+  }
+
+  .joc-eda-page .demo-info h3 { margin-bottom: 0.75rem; }
+  .joc-eda-page .demo-info h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .joc-eda-page .demo-info p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+
+  .joc-eda-page .demo-info code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    background: var(--bg-secondary);
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    color: var(--text-secondary);
+  }
+
+  .joc-eda-page .steps-list {
+    list-style: decimal;
+    padding-left: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 2;
+    margin-bottom: 1.5rem;
+  }
+
+  .joc-eda-page .steps-list a {
+    color: var(--accent-start);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .joc-eda-page .demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent-start);
+    transition: color var(--transition-fast);
+  }
+
+  .joc-eda-page .demo-link:hover { color: var(--accent-end); }
+
+  @media (max-width: 768px) {
+    .joc-eda-page .cards-row { grid-template-columns: 1fr; }
+    .joc-eda-page .controls-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

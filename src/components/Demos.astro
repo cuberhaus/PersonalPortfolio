@@ -1,0 +1,190 @@
+---
+import demos from '../data/demos.json';
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="section demos" id="demos">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Interactive</span>
+      <h2 class="section-title">Try my projects</h2>
+      <p class="section-subtitle">
+        Live, interactive demos you can play with right in your browser.
+      </p>
+    </div>
+
+    <div class="demo-grid reveal-stagger">
+      {demos.map((demo) => (
+        <a href={`${base}/demos/${demo.slug}/`} class="demo-card">
+          <div class="demo-card-inner">
+            <div class="demo-icon">
+              {demo.icon === 'gamepad' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/>
+                  <path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"/>
+                </svg>
+              )}
+              {demo.icon === 'tree' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3v18M12 7l-4-4M12 7l4-4M12 13l-6-2M12 13l6-2M12 19l-8-3M12 19l8-3"/>
+                </svg>
+              )}
+              {demo.icon === 'music' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+                </svg>
+              )}
+              {demo.icon === 'store' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              )}
+              {demo.icon === 'heart' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                </svg>
+              )}
+            </div>
+
+            <div class="demo-badge">
+              <span>Live Demo</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+
+            <h3 class="demo-title">{demo.title}</h3>
+            <p class="demo-desc">{demo.description}</p>
+
+            <ul class="demo-tags">
+              {demo.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .demo-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-base), border-color var(--transition-base),
+                box-shadow var(--transition-base);
+    overflow: hidden;
+    display: block;
+  }
+
+  .demo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  .demo-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-start);
+    box-shadow: 0 12px 40px var(--glow-color);
+  }
+
+  .demo-card:hover::before {
+    opacity: 1;
+  }
+
+  .demo-card-inner {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .demo-icon {
+    color: var(--accent-start);
+    margin-bottom: 1.25rem;
+  }
+
+  .demo-badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-start);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+  }
+
+  .demo-card:hover .demo-badge {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .demo-title {
+    font-size: 1.15rem;
+    margin-bottom: 0.65rem;
+    transition: color var(--transition-fast);
+  }
+
+  .demo-card:hover .demo-title {
+    color: var(--accent-start);
+  }
+
+  .demo-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    flex: 1;
+    margin-bottom: 1.25rem;
+  }
+
+  .demo-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .demo-tags li {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (max-width: 1024px) {
+    .demo-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .demo-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

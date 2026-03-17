@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "joc-eda",
+    "title": "EDA Game Viewer",
+    "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Replay viewer for the EDA programming game competition.",
+    "tags": ["C++", "Canvas", "AI"],
+    "icon": "gamepad"
+  },
+  {
+    "slug": "pro2",
+    "title": "WPGMA Clustering",
+    "description": "Build phylogenetic trees step by step. Input species with gene sequences and watch the WPGMA algorithm merge clusters into a dendrogram.",
+    "tags": ["TypeScript", "Algorithms", "D3"],
+    "icon": "tree"
+  },
+  {
+    "slug": "jsbach",
+    "title": "JSBach Interpreter",
+    "description": "Write and play music with a custom programming language. A browser-based interpreter for the JSBach musical language.",
+    "tags": ["ANTLR4", "Web Audio", "Language"],
+    "icon": "music"
+  },
+  {
+    "slug": "tenda",
+    "title": "Tenda Online",
+    "description": "A full e-commerce store with product browsing, shopping cart, and checkout flow.",
+    "tags": ["PHP", "MySQL", "E-Commerce"],
+    "icon": "store"
+  },
+  {
+    "slug": "draculin",
+    "title": "Draculin",
+    "description": "Health tracking app with AI chatbot and computer vision, built with Flutter. Finalist at BitsXLaMarató 2023.",
+    "tags": ["Flutter", "Django", "AI"],
+    "icon": "heart"
+  }
+]
