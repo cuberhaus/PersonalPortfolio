@@ -28,8 +28,7 @@ import PlanificacionDemo from '../../components/demos/PlanificacionDemo';
       </p>
       <p>
         <strong>Live solving</strong> on this page is optional: GitHub Pages only serves static files. The
-        planner runs in a separate service (<code>planner-api/</code> in this monorepo: FastAPI + ENHSP in
-        Docker). Set <code>PUBLIC_PLANNER_URL</code> at build time and deploy the API (e.g. Fly.io, Railway)
+        planner runs via <code>planner-api/</code> in this repo (FastAPI + ENHSP). Set <code>PUBLIC_PLANNER_URL</code> at build time and deploy that service (e.g. Fly.io, Railway)
         with <code>CORS_ORIGINS</code> matching your site.
       </p>
       <a

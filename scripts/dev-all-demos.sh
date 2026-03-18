@@ -23,7 +23,7 @@ done
 PORTFOLIO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TENDA_DIR="$(cd "$PORTFOLIO/../tenda_online" 2>/dev/null && pwd)" || TENDA_DIR=""
 DRAC_DIR="$(cd "$PORTFOLIO/../Draculin-Backend" 2>/dev/null && pwd)" || DRAC_DIR=""
-PLANNER_DIR="$(cd "$PORTFOLIO/../planner-api" 2>/dev/null && pwd)" || PLANNER_DIR=""
+PLANNER_DIR="$(cd "$PORTFOLIO/planner-api" 2>/dev/null && pwd)" || PLANNER_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
@@ -105,7 +105,7 @@ if [[ "$SKIP_PLANNER" == 0 ]]; then
     fi
     echo ""
   else
-    echo "==> planner-api skipped (no ../planner-api) — planificación tab needs it or PUBLIC_PLANNER_URL"
+    echo "==> planner-api skipped (no planner-api/) — planificación tab needs it or PUBLIC_PLANNER_URL"
     echo ""
   fi
 else

@@ -30,14 +30,14 @@ One command starts everything the demos can use locally (then **Ctrl+C** tears i
 |---------|------|------|----------------------------------------|
 | **Tenda** | 8888 | `/demos/tenda` iframe | `../tenda_online` — `docker compose up -d` |
 | **Draculin** | 8890 (web), 8889 (API) | `/demos/draculin` | `../Draculin-Backend` — `docker compose up -d` |
-| **planner-api** | 8765 | `/demos/planificacion` **Run planner** | `../planner-api` — Python + **Java 17+** |
+| **planner-api** | 8765 | `/demos/planificacion` **Run planner** | **`planner-api/`** in this repo — Python + **Java 17+** |
 | **Astro** | 4321 | Site | this repo |
 
-Requires **bash**, **Docker** (for Tenda + Draculin), **Python 3** + Java for the planner. Missing folders are skipped with a message (e.g. no `planner-api` → planificación still browses PDDL, live solve needs the API).
+Requires **bash**, **Docker** (for Tenda + Draculin), **Python 3** + Java for the planner. Missing **sibling** repos (Tenda/Draculin) are skipped. **`planner-api/`** ships with this project.
 
 Flags (advanced): `bash scripts/dev-all-demos.sh --skip-docker` or `--skip-planner`.
 
-**`npm run dev:with-planner`** — only **planner-api** + Astro; **fails** if `../planner-api` is absent. Use when you don’t want to run Docker.
+**`npm run dev:with-planner`** — only **planner-api** + Astro (no Docker). Use when you don’t need Tenda/Draculin.
 
 **Windows:** use **WSL** or **Git Bash**, or start each stack manually (README sections below).
 
@@ -45,7 +45,7 @@ Optional env (copy from `.env.example`):
 
 | Variable | Purpose |
 |----------|---------|
-| `PUBLIC_PLANNER_URL` | Base URL of the [planner-api](../planner-api) service for `/demos/planificacion` **Run planner** (required for production builds; dev defaults to `http://127.0.0.1:8765`) |
+| `PUBLIC_PLANNER_URL` | Base URL of [planner-api](planner-api/) for `/demos/planificacion` **Run planner** (production builds; dev defaults to `http://127.0.0.1:8765`) |
 
 ## Demo pages
 
@@ -72,17 +72,17 @@ The [planificación demo](src/pages/demos/planificacion.astro) can solve PDDL vi
 1. **Start the API** (Java 17+ on the host):
 
    ```bash
-   cd ../planner-api
+   cd planner-api
    pip install -r requirements.txt
    python -m uvicorn app.main:app --port 8765
    ```
 
-   Docker: `docker build -t planner-api ../planner-api && docker run --rm -p 8765:8000 planner-api`  
-   (container listens on **8000**; map host **8765** → **8000** to match the dev default.)
+   Docker (from portfolio root): `docker build -t planner-api ./planner-api && docker run --rm -p 8765:8000 planner-api`  
+   (container listens on **8000**; map **8765:8000** to match the dev default.)
 
 2. **Local dev:** With `npm run dev`, if `PUBLIC_PLANNER_URL` is unset, the UI uses `http://127.0.0.1:8765`. Start the API and use the **Run planner** tab.
 
-3. **Production:** Set `PUBLIC_PLANNER_URL=https://your-deployed-api` before `npm run build`. Configure the API’s `CORS_ORIGINS` to your Pages domain. Details: [`planner-api/README.md`](../planner-api/README.md).
+3. **Production:** Deploy `planner-api/` (Fly/Railway/Docker), set `PUBLIC_PLANNER_URL`, and `CORS_ORIGINS` on the API. See [`planner-api/README.md`](planner-api/README.md).
 
 ### Tenda Online (local)
 
@@ -105,14 +105,15 @@ Dev: embedded Flutter. Production: React mock.
 ## Project layout
 
 ```
+planner-api/    # FastAPI + ENHSP for planificación demo (not deployed with static Pages)
 src/
-  components/     # Layout, home sections, Contact, …
-  components/demos/   # One React demo per page (e.g. PlanificacionDemo.tsx)
-  data/           # projects.json, skills.json, experience.json, demos.json
-  layouts/        # DemoLayout, BaseLayout
-  lib/            # Shared TS (imgproc, workers, algorithms, …)
-  pages/          # Astro routes (index, demos/*)
-public/           # Static assets (demo data, images)
+  components/   # Layout, home sections, Contact, …
+  components/demos/
+  data/
+  layouts/
+  lib/
+  pages/
+public/
 ```
 
 ## Customizing
@@ -130,4 +131,4 @@ In the repo: **Settings → Pages → Source → GitHub Actions**.
 
 ---
 
-*Monorepo note: sibling folders like `planner-api/`, `tenda_online/`, `Draculin-Backend/` are separate services referenced from this README.*
+*Tenda (`../tenda_online`) and Draculin (`../Draculin-Backend`) are optional sibling repos for local demos. The PDDL planner lives in **`planner-api/`** inside this project.*

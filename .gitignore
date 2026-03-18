@@ -2,3 +2,7 @@ node_modules/
 dist/
 .astro/
 verification-screenshots/
+
+# planner-api (Python)
+planner-api/.venv/
+planner-api/**/__pycache__/
