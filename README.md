@@ -103,6 +103,10 @@ docker compose up -d   # API :8889, Flutter web :8890
 
 Dev: embedded Flutter. Production: React mock.
 
+### BitsXLaMarató — Aorta (static)
+
+[`/demos/bitsx-marato`](https://cuberhaus.github.io/PersonalPortfolio/demos/bitsx-marato) includes an **Interactive** tab with a real rat-aorta B-mode frame bundled as [`public/demos/bitsx-aorta-frame.jpg`](public/demos/bitsx-aorta-frame.jpg) (mock overlay + diameter explorer). Full Mask R-CNN runs in Python/Tkinter + GPU in [`bitsXlaMarato`](https://github.com/cuberhaus/bitsXlaMarato).
+
 ## Project layout
 
 ```

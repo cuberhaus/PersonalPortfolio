@@ -7,6 +7,13 @@
     "icon": "heart"
   },
   {
+    "slug": "bitsx-marato",
+    "title": "BitsXLaMarató — Aorta",
+    "description": "Ultrasound → Mask R-CNN aorta segmentation and 3D reconstruction; browser mock inference + diameter explorer.",
+    "tags": ["PyTorch", "OpenCV", "3D", "CV"],
+    "icon": "aorta"
+  },
+  {
     "slug": "joc-eda",
     "title": "EDA Game Viewer",
     "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Replay viewer for the EDA programming game competition.",
