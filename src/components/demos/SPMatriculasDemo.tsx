@@ -1,0 +1,512 @@
+import { useState, useRef, useEffect, useCallback } from "react";
+import {
+  initWorker,
+  runWorkerPipeline,
+  type LoadProgress,
+  type ImageBuffer,
+  type WorkerPipelineResult,
+} from "../../lib/opencv-loader";
+
+const SAMPLES = [
+  { file: "DSCN0408.jpg", plate: "zmz9157" },
+  { file: "DSCN0412.jpg", plate: "yep7236" },
+  { file: "DSCN0415.jpg", plate: "yhe2993" },
+  { file: "IMG_0378.jpg", plate: "zme8325" },
+  { file: "IMG_0380.jpg", plate: "zkk8153" },
+  { file: "IMG_0384.jpg", plate: "iea5511" },
+  { file: "IMG_0392.jpg", plate: "yaz2074" },
+  { file: "IMG_0414.jpg", plate: "biz1100" },
+];
+
+const FONT_PATH = "demos/matriculas/Greek-License-Plate-Font-2004.jpg";
+
+type Status = "idle" | "loading-cv" | "processing" | "done" | "error";
+
+const s = {
+  wrapper: {
+    fontFamily: "var(--font-sans, 'Inter', sans-serif)",
+    color: "#e4e4e7",
+  },
+  card: {
+    background: "#16161f",
+    border: "1px solid #27272a",
+    borderRadius: "0.75rem",
+    padding: "1.5rem",
+    marginBottom: "1.5rem",
+  },
+  h3: {
+    fontSize: "1.1rem",
+    fontWeight: 600,
+    marginBottom: "1rem",
+    color: "#e4e4e7",
+  } as React.CSSProperties,
+  sampleGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))",
+    gap: "0.75rem",
+    marginBottom: "1rem",
+  },
+  sampleThumb: (selected: boolean) =>
+    ({
+      width: "100%",
+      aspectRatio: "4/3",
+      objectFit: "cover",
+      borderRadius: "0.5rem",
+      border: selected ? "2px solid #6366f1" : "2px solid #27272a",
+      cursor: "pointer",
+      transition: "border-color 0.2s, transform 0.2s",
+      transform: selected ? "scale(1.03)" : "none",
+    }) as React.CSSProperties,
+  uploadBtn: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "0.5rem",
+    padding: "0.6rem 1.2rem",
+    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    color: "#fff",
+    border: "none",
+    borderRadius: "0.5rem",
+    fontSize: "0.85rem",
+    fontWeight: 600,
+    cursor: "pointer",
+  } as React.CSSProperties,
+  runBtn: {
+    padding: "0.6rem 1.5rem",
+    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    color: "#fff",
+    border: "none",
+    borderRadius: "0.5rem",
+    fontSize: "0.9rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    marginTop: "0.75rem",
+  } as React.CSSProperties,
+  disabledBtn: {
+    opacity: 0.5,
+    cursor: "not-allowed",
+  },
+  stageRow: {
+    display: "flex",
+    gap: "0.75rem",
+    overflowX: "auto",
+    padding: "0.5rem 0",
+  } as React.CSSProperties,
+  stageImg: {
+    maxHeight: "160px",
+    borderRadius: "0.5rem",
+    border: "1px solid #27272a",
+  },
+  stageLabel: {
+    fontSize: "0.75rem",
+    color: "#a1a1aa",
+    marginTop: "0.3rem",
+    textAlign: "center" as const,
+  },
+  resultBox: {
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+    padding: "1rem 1.5rem",
+    background: "#1a1a2e",
+    border: "1px solid #6366f1",
+    borderRadius: "0.75rem",
+    marginBottom: "1rem",
+  },
+  plateText: {
+    fontFamily: "monospace",
+    fontSize: "2rem",
+    fontWeight: 700,
+    letterSpacing: "0.15em",
+    color: "#6366f1",
+    textTransform: "uppercase" as const,
+  },
+  truthText: {
+    fontFamily: "monospace",
+    fontSize: "1rem",
+    color: "#a1a1aa",
+  },
+  charRow: {
+    display: "flex",
+    gap: "0.35rem",
+    alignItems: "center",
+    flexWrap: "wrap" as const,
+  },
+  charImg: {
+    height: "40px",
+    borderRadius: "0.25rem",
+    border: "1px solid #27272a",
+    background: "#000",
+  },
+  progressOuter: {
+    width: "100%",
+    height: "8px",
+    background: "#27272a",
+    borderRadius: "4px",
+    overflow: "hidden",
+    marginTop: "0.5rem",
+  },
+  progressInner: (pct: number) =>
+    ({
+      height: "100%",
+      width: `${pct}%`,
+      background: "linear-gradient(90deg, #6366f1, #a855f7)",
+      borderRadius: "4px",
+      transition: "width 0.3s ease",
+    }) as React.CSSProperties,
+  loadingCard: {
+    background: "#16161f",
+    border: "1px solid #27272a",
+    borderRadius: "0.75rem",
+    padding: "1.25rem 1.5rem",
+    marginBottom: "1.5rem",
+  },
+  loadingHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "0.25rem",
+    fontSize: "0.85rem",
+  } as React.CSSProperties,
+  processingDots: {
+    display: "inline-flex",
+    gap: "4px",
+    alignItems: "center",
+    marginLeft: "0.5rem",
+  },
+  infoCard: {
+    background: "rgba(99, 102, 241, 0.08)",
+    border: "1px solid rgba(99, 102, 241, 0.2)",
+    borderRadius: "0.75rem",
+    padding: "1.25rem",
+    marginBottom: "1.5rem",
+    fontSize: "0.85rem",
+    lineHeight: 1.7,
+    color: "#a1a1aa",
+  },
+  stageHeader: {
+    fontSize: "0.9rem",
+    fontWeight: 600,
+    color: "#a1a1aa",
+    marginBottom: "0.5rem",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+  } as React.CSSProperties,
+  stepNum: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "22px",
+    height: "22px",
+    borderRadius: "50%",
+    background: "#6366f1",
+    color: "#fff",
+    fontSize: "0.7rem",
+    fontWeight: 700,
+  },
+};
+
+function PulsingDots() {
+  return (
+    <span style={s.processingDots}>
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          style={{
+            width: 6,
+            height: 6,
+            borderRadius: "50%",
+            background: "#6366f1",
+            animation: `pulse-dot 1.2s ease-in-out ${i * 0.2}s infinite`,
+          }}
+        />
+      ))}
+      <style>{`@keyframes pulse-dot { 0%,80%,100% { opacity: 0.3; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1.2); } }`}</style>
+    </span>
+  );
+}
+
+function ProgressBar({ progress }: { progress: LoadProgress }) {
+  const label =
+    progress.phase === "downloading"
+      ? progress.totalMB
+        ? `Downloading OpenCV.js (${progress.loadedMB} / ${progress.totalMB} MB)`
+        : `Downloading OpenCV.js${progress.loadedMB ? ` (${progress.loadedMB} MB)` : ""}…`
+      : progress.phase === "initializing"
+        ? "Initializing WebAssembly runtime…"
+        : "Ready";
+
+  return (
+    <div style={s.loadingCard}>
+      <div style={s.loadingHeader}>
+        <span style={{ color: "#e4e4e7" }}>
+          {label}
+          {progress.phase !== "ready" && <PulsingDots />}
+        </span>
+        <span style={{ color: "#6366f1", fontWeight: 600, fontFamily: "monospace" }}>
+          {progress.percent}%
+        </span>
+      </div>
+      <div style={s.progressOuter}>
+        <div style={s.progressInner(progress.percent)} />
+      </div>
+      {progress.phase === "downloading" && (
+        <div style={{ fontSize: "0.75rem", color: "#71717a", marginTop: "0.4rem" }}>
+          First load only — cached by your browser after this.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function bufferToDataURL(buf: ImageBuffer): string {
+  const canvas = document.createElement("canvas");
+  canvas.width = buf.width;
+  canvas.height = buf.height;
+  const ctx = canvas.getContext("2d")!;
+  ctx.putImageData(new ImageData(new Uint8ClampedArray(buf.data), buf.width, buf.height), 0, 0);
+  return canvas.toDataURL();
+}
+
+function StageVis({ items }: { items: ImageBuffer[] }) {
+  if (!items.length) return null;
+  return (
+    <div style={{ marginBottom: "1rem" }}>
+      <div style={s.stageRow}>
+        {items.map((item, i) => (
+          <div key={i} style={{ flexShrink: 0 }}>
+            <img src={bufferToDataURL(item)} style={s.stageImg} alt="" />
+            <div style={s.stageLabel}>{item.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function SPMatriculasDemo() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedGT, setSelectedGT] = useState<string>("");
+  const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<WorkerPipelineResult | null>(null);
+  const [progress, setProgress] = useState<LoadProgress>({ phase: "downloading", percent: 0 });
+  const [cvReady, setCvReady] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const rawBase = (typeof import.meta !== "undefined" && (import.meta as any).env?.BASE_URL) || "/";
+  const basePath = rawBase.endsWith("/") ? rawBase : rawBase + "/";
+
+  useEffect(() => {
+    setStatus("loading-cv");
+    initWorker((p) => setProgress(p))
+      .then(() => {
+        setCvReady(true);
+        setStatus((prev) => (prev === "loading-cv" ? "idle" : prev));
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load OpenCV.js");
+        setStatus("error");
+      });
+  }, []);
+
+  const selectSample = useCallback((sample: (typeof SAMPLES)[number]) => {
+    const path = `${basePath}demos/matriculas/samples/${sample.file}`;
+    setSelectedImage(path);
+    setSelectedGT(sample.plate);
+    setResult(null);
+  }, [basePath]);
+
+  const handleUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setSelectedImage(url);
+    setSelectedGT("");
+    setResult(null);
+  }, []);
+
+  const run = useCallback(async () => {
+    if (!selectedImage) return;
+    setError("");
+    setResult(null);
+    setStatus("processing");
+
+    try {
+      const fontPath = `${basePath}${FONT_PATH}`;
+      const res = await runWorkerPipeline(selectedImage, fontPath);
+      setResult(res);
+      setStatus("done");
+    } catch (err: any) {
+      setError(err.message || "Unknown error");
+      setStatus("error");
+    }
+  }, [selectedImage, basePath]);
+
+  return (
+    <div style={s.wrapper}>
+      <div style={s.infoCard}>
+        <strong>How it works:</strong> This is a browser port of a MATLAB license plate detector.
+        The pipeline has 3 stages: <strong>1)</strong> locate the plate region using adaptive
+        binarization and morphological filtering, <strong>2)</strong> segment individual characters
+        via connected component analysis, <strong>3)</strong> recognize each character by template
+        matching against a reference plate font. All processing runs locally in your browser using
+        OpenCV.js (WebAssembly).
+      </div>
+
+      <div style={s.card}>
+        <h3 style={s.h3}>Select an image</h3>
+        <div style={s.sampleGrid}>
+          {SAMPLES.map((sample) => {
+            const path = `${basePath}demos/matriculas/samples/${sample.file}`;
+            return (
+              <img
+                key={sample.file}
+                src={path}
+                alt={sample.plate}
+                style={s.sampleThumb(selectedImage === path)}
+                onClick={() => selectSample(sample)}
+                loading="lazy"
+              />
+            );
+          })}
+        </div>
+        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+          <button style={s.uploadBtn} onClick={() => fileInputRef.current?.click()}>
+            Upload your own
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleUpload}
+          />
+          <button
+            style={{
+              ...s.runBtn,
+              marginTop: 0,
+              ...(!selectedImage || !cvReady || status === "processing" ? s.disabledBtn : {}),
+            }}
+            disabled={!selectedImage || !cvReady || status === "processing"}
+            onClick={run}
+          >
+            {status === "processing"
+              ? "Detecting..."
+              : !cvReady
+                ? "Loading OpenCV.js..."
+                : "Detect plate"}
+          </button>
+        </div>
+      </div>
+
+      {!cvReady && status !== "error" && <ProgressBar progress={progress} />}
+      {status === "processing" && (
+        <div style={s.loadingCard}>
+          <div style={{ ...s.loadingHeader, justifyContent: "flex-start" }}>
+            <span style={{ color: "#e4e4e7" }}>
+              Analyzing image
+              <PulsingDots />
+            </span>
+          </div>
+          <div style={s.progressOuter}>
+            <div
+              style={{
+                height: "100%",
+                background: "linear-gradient(90deg, #6366f1, #a855f7)",
+                borderRadius: "4px",
+                animation: "indeterminate 1.5s ease-in-out infinite",
+              }}
+            />
+          </div>
+          <style>{`@keyframes indeterminate { 0% { width: 0%; margin-left: 0; } 50% { width: 60%; margin-left: 20%; } 100% { width: 0%; margin-left: 100%; } }`}</style>
+        </div>
+      )}
+      {status === "error" && (
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            padding: "0.5rem 1rem",
+            borderRadius: "0.5rem",
+            fontSize: "0.85rem",
+            background: "#1a1a2e",
+            color: "#f87171",
+          }}
+        >
+          Error: {error}
+        </div>
+      )}
+
+      {result && (
+        <>
+          <div style={s.resultBox}>
+            <div>
+              <div style={{ fontSize: "0.75rem", color: "#a1a1aa", marginBottom: "0.25rem" }}>
+                Detected plate
+              </div>
+              <div style={s.plateText}>{result.plateText}</div>
+            </div>
+            {selectedGT && (
+              <div>
+                <div style={{ fontSize: "0.75rem", color: "#a1a1aa", marginBottom: "0.25rem" }}>
+                  Ground truth
+                </div>
+                <div style={s.truthText}>{selectedGT.toUpperCase()}</div>
+                {result.plateText.toLowerCase() === selectedGT.toLowerCase() ? (
+                  <span style={{ color: "#4ade80", fontSize: "0.8rem" }}>Match</span>
+                ) : (
+                  <span style={{ color: "#f87171", fontSize: "0.8rem" }}>Mismatch</span>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div style={s.card}>
+            <div style={s.stageHeader}>
+              <span style={s.stepNum}>1</span> Plate Detection
+            </div>
+            <StageVis items={result.stage1} />
+          </div>
+
+          {result.stage2.length > 0 && (
+            <div style={s.card}>
+              <div style={s.stageHeader}>
+                <span style={s.stepNum}>2</span> Character Segmentation
+              </div>
+              <StageVis items={result.stage2} />
+            </div>
+          )}
+
+          {result.charImages.length > 0 && (
+            <div style={s.card}>
+              <div style={s.stageHeader}>
+                <span style={s.stepNum}>3</span> Character Recognition
+              </div>
+              <div style={s.charRow}>
+                {result.charImages.map((buf, i) => (
+                  <div key={i} style={{ textAlign: "center" }}>
+                    <img src={bufferToDataURL(buf)} style={s.charImg} alt="" />
+                    <div
+                      style={{
+                        fontFamily: "monospace",
+                        fontSize: "1rem",
+                        fontWeight: 700,
+                        color: "#6366f1",
+                        marginTop: "0.25rem",
+                      }}
+                    >
+                      {result.plateText[i] || "?"}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}

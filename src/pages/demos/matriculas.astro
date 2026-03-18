@@ -1,0 +1,86 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+import SPMatriculasDemo from '../../components/demos/SPMatriculasDemo';
+---
+
+<DemoLayout title="License Plate Detection" description="Interactive license plate detector using OpenCV.js — ported from MATLAB.">
+  <div class="container">
+    <div class="demo-header">
+      <h1>License Plate Detection</h1>
+      <p class="demo-lead">
+        Detect and read license plates from car images using computer vision.
+        Select a sample image or upload your own, then watch the 3-stage pipeline
+        (plate detection, character segmentation, OCR) process it in real time — entirely in your browser.
+      </p>
+    </div>
+
+    <SPMatriculasDemo client:load />
+
+    <div class="demo-info">
+      <h3>About this project</h3>
+      <p>
+        Originally a MATLAB project for the Computer Vision course at FIB-UPC. The pipeline uses
+        adaptive binarization, morphological filtering, connected component analysis, and template matching
+        to detect license plates and read their characters. This browser demo ports the full pipeline to
+        JavaScript using OpenCV.js (WebAssembly).
+      </p>
+      <a href="https://github.com/cuberhaus/SPMatriculas" target="_blank" rel="noopener noreferrer" class="demo-link">
+        View source on GitHub
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</DemoLayout>
+
+<style>
+  .demo-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .demo-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin-bottom: 1rem;
+  }
+
+  .demo-lead {
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.7;
+  }
+
+  .demo-info {
+    margin-top: 2.5rem;
+    padding: 2rem;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+  }
+
+  .demo-info h3 {
+    margin-bottom: 0.75rem;
+  }
+
+  .demo-info p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+
+  .demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent-start);
+    transition: color var(--transition-fast);
+  }
+
+  .demo-link:hover {
+    color: var(--accent-end);
+  }
+</style>

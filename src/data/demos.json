@@ -1,5 +1,12 @@
 [
   {
+    "slug": "draculin",
+    "title": "Draculin",
+    "description": "Health tracking app with AI chatbot and computer vision, built with Flutter. Finalist at BitsXLaMarató 2023.",
+    "tags": ["Flutter", "Django", "AI"],
+    "icon": "heart"
+  },
+  {
     "slug": "joc-eda",
     "title": "EDA Game Viewer",
     "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Replay viewer for the EDA programming game competition.",
@@ -28,10 +35,10 @@
     "icon": "store"
   },
   {
-    "slug": "draculin",
-    "title": "Draculin",
-    "description": "Health tracking app with AI chatbot and computer vision, built with Flutter. Finalist at BitsXLaMarató 2023.",
-    "tags": ["Flutter", "Django", "AI"],
-    "icon": "heart"
+    "slug": "matriculas",
+    "title": "License Plate Detection",
+    "description": "Detect and read license plates from car images using computer vision — a MATLAB pipeline ported to the browser with OpenCV.js.",
+    "tags": ["OpenCV.js", "Computer Vision", "WASM"],
+    "icon": "camera"
   }
 ]
