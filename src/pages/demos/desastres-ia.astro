@@ -5,81 +5,57 @@ import DesastresIADemo from '../../components/demos/DesastresIADemo';
 
 <DemoLayout
   title="Desastres IA — disaster relief local search"
-  description="Helicopter assignment for rescue operations: hill climbing and simulated annealing with AIMA (Java)."
+  description="Helicopter assignment for disaster rescue operations using hill climbing and simulated annealing with AIMA (Java)."
 >
   <div class="container">
     <div class="demo-header">
+      <div class="badge">Artificial Intelligence · FIB-UPC</div>
       <h1>Desastres IA</h1>
       <p class="demo-lead">
-        Local search on a disaster-relief model: helicopters pick up <strong>groups</strong> at
-        <strong>centers</strong> in some order. The full solver is <strong>Java + AIMA</strong> (hill climbing,
-        simulated annealing). Use the <strong>Run the demo</strong> panel at the bottom of the page for HC/SA in the
-        browser (<a href="#desastres-run-demo">jump to demo</a>); the Java JAR scales to full instances and batch experiments.
+        Local search on a <strong>disaster-relief</strong> model: helicopters rescue
+        <strong>groups</strong> at <strong>centers</strong> in an optimized order. Compare
+        <strong>hill climbing</strong> vs <strong>simulated annealing</strong> — runs entirely
+        in your browser.
       </p>
     </div>
 
     <DesastresIADemo client:load />
-
-    <div class="demo-info">
-      <h3>About this project</h3>
-      <p>
-        Coursework for <strong>Artificial Intelligence</strong> (FIB-UPC). Implements multiple successor functions
-        and heuristics, compares initial-state strategies, and uses Python to visualize results from batch runs.
-      </p>
-      <a
-        href="https://github.com/cuberhaus/desastresIA"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="demo-link"
-      >
-        View source on GitHub
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-        </svg>
-      </a>
-    </div>
   </div>
 </DemoLayout>
 
 <style>
   .demo-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(34,197,94,0.1));
+    border: 1px solid rgba(99,102,241,0.25);
+    color: #6366f1;
+    margin-bottom: 1rem;
   }
   .demo-header h1 {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
-    margin-bottom: 1rem;
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #6366f1, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
   .demo-lead {
-    color: var(--text-secondary, #a1a1aa);
-    max-width: 42rem;
+    color: #a1a1aa;
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 40rem;
     margin: 0 auto;
-    line-height: 1.65;
   }
-  .demo-lead strong {
-    color: var(--text-primary, #e4e4e7);
-  }
-  .demo-info {
-    margin-top: 2.5rem;
-    padding: 1.5rem;
-    background: var(--bg-card, #16161f);
-    border: 1px solid var(--border, #27272a);
-    border-radius: 0.75rem;
-  }
-  .demo-info h3 {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-  }
-  .demo-info p {
-    color: var(--text-secondary, #a1a1aa);
-    line-height: 1.65;
-    margin-bottom: 1rem;
-  }
-  .demo-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--accent, #6366f1);
-    font-weight: 500;
-  }
+  .demo-lead strong { color: #e4e4e7; }
 </style>
