@@ -4,90 +4,63 @@ import PlanificacionDemo from '../../components/demos/PlanificacionDemo';
 ---
 
 <DemoLayout
-  title="Travel agency planning (PDDL)"
-  description="PDDL domain and problem for automated planning: visit cities, satisfy trip constraints, minimize interest metric."
+  title="Travel Agency Planning (PDDL)"
+  description="PDDL domain for automated travel planning: flights, hotels, duration constraints, and numeric optimization. Interactive planner demo."
 >
   <div class="container">
     <div class="demo-header">
-      <h1>Pràctica de planificació</h1>
+      <div class="badge">Automated Planning · FIB-UPC</div>
+      <h1>Pràctica de Planificació</h1>
       <p class="demo-lead">
-        PDDL model of a travel agency: flights, hotels, stay duration, and a numeric metric. Browse the
-        Extension&nbsp;2 domain and problem, download <code>.pddl</code> files, or use <strong>Run planner</strong>
-        when <code>PUBLIC_PLANNER_URL</code> points at a deployed solver API (see repo README).
+        A <strong>PDDL</strong> model of a travel agency: flights, hotels, stay duration, and a numeric
+        <strong>interest metric</strong> to minimize. Browse the Extension 2 domain, download
+        <code>.pddl</code> files, or run the planner when an ENHSP backend is deployed.
       </p>
     </div>
 
     <PlanificacionDemo client:load />
-
-    <div class="demo-info">
-      <h3>About this project</h3>
-      <p>
-        Coursework for automated planning (FIB-UPC): incremental extensions from basic STRIPS-style city
-        visits to numeric fluents, minimum trip length, per-city “interest”, and metric minimization.
-        Includes Python instance generators and benchmark suites per extension.
-      </p>
-      <p>
-        <strong>Live solving</strong> on this page is optional: GitHub Pages only serves static files. The
-        planner runs via <code>planner-api/</code> in this repo (FastAPI + ENHSP). Set <code>PUBLIC_PLANNER_URL</code> at build time and deploy that service (e.g. Fly.io, Railway)
-        with <code>CORS_ORIGINS</code> matching your site.
-      </p>
-      <a
-        href="https://github.com/cuberhaus/Practica_de_Planificacion"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="demo-link"
-      >
-        View source on GitHub
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-        </svg>
-      </a>
-    </div>
   </div>
 </DemoLayout>
 
 <style>
   .demo-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1));
+    border: 1px solid rgba(99,102,241,0.25);
+    color: #6366f1;
+    margin-bottom: 1rem;
   }
   .demo-header h1 {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
-    margin-bottom: 1rem;
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
   .demo-lead {
-    color: var(--text-secondary, #a1a1aa);
-    max-width: 42rem;
+    color: #a1a1aa;
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 40rem;
     margin: 0 auto;
-    line-height: 1.65;
   }
+  .demo-lead strong { color: #e4e4e7; }
   .demo-lead code {
     font-size: 0.9em;
     background: rgba(99, 102, 241, 0.12);
     padding: 0.15em 0.4em;
     border-radius: 0.25rem;
-  }
-  .demo-info {
-    margin-top: 2.5rem;
-    padding: 1.5rem;
-    background: var(--bg-card, #16161f);
-    border: 1px solid var(--border, #27272a);
-    border-radius: 0.75rem;
-  }
-  .demo-info h3 {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-  }
-  .demo-info p {
-    color: var(--text-secondary, #a1a1aa);
-    line-height: 1.65;
-    margin-bottom: 1rem;
-  }
-  .demo-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--accent, #6366f1);
-    font-weight: 500;
   }
 </style>

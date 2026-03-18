@@ -5,16 +5,16 @@ import BitsXMaratoDemo from '../../components/demos/BitsXMaratoDemo';
 
 <DemoLayout
   title="BitsXLaMarató — Aorta / AAA (Mask R-CNN)"
-  description="Ultrasound segmentation with Mask R-CNN, 3D aorta reconstruction, and diameter estimation for AAA research."
+  description="Hackathon project: abdominal ultrasound → Mask R-CNN aorta masks → 3D mesh and diameter heuristics. Interactive browser mock of the inference pipeline."
 >
   <div class="container">
     <div class="demo-header">
-      <h1>BitsXLaMarató — Aorta detection</h1>
+      <div class="badge">Computer Vision · Hackathon</div>
+      <h1>Aorta Detection</h1>
       <p class="demo-lead">
-        Hackathon project: abdominal ultrasound → <strong>Mask R-CNN</strong> aorta masks → <strong>3D mesh</strong> and
-        <strong>diameter</strong> heuristics. Open the <strong>Interactive</strong> tab for a browser mock; full pipeline runs in Python (
-        <a href="https://github.com/cuberhaus/bitsXlaMarato" target="_blank" rel="noopener noreferrer">bitsXlaMarato</a>
-        ).
+        Abdominal ultrasound → <strong>Mask R-CNN</strong> segmentation → <strong>3D mesh</strong> reconstruction
+        → aortic <strong>diameter</strong> estimation. Built for the
+        <a href="https://www.ccma.cat/tv3/marato/" target="_blank" rel="noopener noreferrer">BitsXLaMarató</a> hackathon.
       </p>
     </div>
 
@@ -25,13 +25,26 @@ import BitsXMaratoDemo from '../../components/demos/BitsXMaratoDemo';
 <style>
   .demo-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(190,18,60,0.15), rgba(14,165,233,0.1));
+    border: 1px solid rgba(190,18,60,0.25);
+    color: #be123c;
+    margin-bottom: 1rem;
   }
   .demo-header h1 {
-    font-size: clamp(1.75rem, 4vw, 2.25rem);
-    font-weight: 700;
-    margin: 0 0 0.75rem;
-    background: linear-gradient(135deg, #f43f5e, #38bdf8);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #be123c, #0ea5e9);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -39,11 +52,11 @@ import BitsXMaratoDemo from '../../components/demos/BitsXMaratoDemo';
   .demo-lead {
     color: #a1a1aa;
     font-size: 1rem;
-    line-height: 1.65;
+    line-height: 1.7;
     max-width: 40rem;
     margin: 0 auto;
   }
-  .demo-lead a {
-    color: #38bdf8;
-  }
+  .demo-lead strong { color: #e4e4e7; }
+  .demo-lead a { color: #0ea5e9; text-decoration: none; }
+  .demo-lead a:hover { text-decoration: underline; }
 </style>
