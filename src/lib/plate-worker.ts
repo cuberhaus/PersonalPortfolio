@@ -27,6 +27,41 @@ const CHAR_LABELS = [
   "a","b","e","h","i","k","m","n","p","t","x","y","z",
 ];
 
+/**
+ * Fixed x-ranges for each glyph in Greek-License-Plate-Font-2004.jpg after crop [15,0,500,70].
+ * Matches MATLAB lettersImagePreprocess + OCR_feature_matching (not connected-components).
+ * Columns 204–224 (0-based) are whited out like the original dash between "0" and "a".
+ */
+function fontCellRects(cropWidth: number): { x: number; w: number }[] {
+  const W = Math.min(500, cropWidth);
+  const rects: { x: number; w: number }[] = [
+    { x: 0, w: 18 },
+    { x: 18, w: 21 },
+    { x: 39, w: 20 },
+    { x: 59, w: 20 },
+    { x: 79, w: 21 },
+    { x: 100, w: 20 },
+    { x: 120, w: 20 },
+    { x: 140, w: 20 },
+    { x: 160, w: 20 },
+    { x: 180, w: 24 },
+    { x: 225, w: 23 },
+    { x: 248, w: 21 },
+    { x: 269, w: 21 },
+    { x: 290, w: 19 },
+    { x: 309, w: 10 },
+    { x: 319, w: 22 },
+    { x: 341, w: 20 },
+    { x: 361, w: 22 },
+    { x: 383, w: 22 },
+    { x: 405, w: 18 },
+    { x: 423, w: 21 },
+    { x: 444, w: 20 },
+    { x: 464, w: Math.max(0, W - 464) },
+  ];
+  return rects.filter((r) => r.w > 2);
+}
+
 interface ImageBuffer {
   data: Uint8ClampedArray;
   width: number;
@@ -127,30 +162,48 @@ function findChars(plate: RGBAImage): { charRects: Rect[]; stages: ImageBuffer[]
   return { charRects: cands.map((c) => c.bbox), stages };
 }
 
+/** Trim horizontal padding on binary glyph (ink bounding box). */
+function trimGlyphHorizontal(bin: GrayImage): GrayImage {
+  let minX = bin.width, maxX = -1;
+  for (let y = 0; y < bin.height; y++) {
+    const row = y * bin.width;
+    for (let x = 0; x < bin.width; x++) {
+      if (bin.data[row + x] < 128) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+      }
+    }
+  }
+  if (maxX < minX) return bin;
+  const pad = 1;
+  minX = Math.max(0, minX - pad);
+  maxX = Math.min(bin.width - 1, maxX + pad);
+  return cropGray(bin, { x: minX, y: 0, w: maxX - minX + 1, h: bin.height });
+}
+
 function prepareTemplates(fontRGBA: RGBAImage): { label: string; tmpl: GrayImage }[] {
   const gray = rgbaToGray(fontRGBA);
   const cropH = Math.min(70, gray.height);
-  const cropped = cropGray(gray, { x: 15, y: 0, w: Math.min(500, gray.width - 15), h: cropH });
+  const cw = Math.min(500, Math.max(0, gray.width - 15));
+  const cropped = cropGray(gray, { x: 15, y: 0, w: cw, h: cropH });
 
-  // Clear the vertical bar between "0" and "a" templates
-  for (let y = 0; y < cropped.height; y++)
-    for (let x = 190; x <= Math.min(210, cropped.width - 1); x++)
+  for (let y = 0; y < cropped.height; y++) {
+    for (let x = 204; x <= 224 && x < cropped.width; x++) {
       cropped.data[y * cropped.width + x] = 255;
-
-  const bin = thresholdOtsu(cropped, true);
-  const { labels, count } = labelConnectedComponents(bin);
-
-  const boxes: Rect[] = [];
-  for (let id = 1; id <= count; id++) {
-    const stats = computeRegionStats(bin, labels, id);
-    if (stats.area > 5) boxes.push(stats.bbox);
+    }
   }
-  boxes.sort((a, b) => a.x - b.x);
 
+  const binFull = thresholdOtsu(cropped, true);
+  const rects = fontCellRects(cropped.width);
   const tmpls: { label: string; tmpl: GrayImage }[] = [];
-  for (let i = 0; i < Math.min(boxes.length, CHAR_LABELS.length); i++) {
-    const roi = cropGray(bin, boxes[i]);
-    tmpls.push({ label: CHAR_LABELS[i], tmpl: resizeGray(roi, 20, 30) });
+
+  for (let i = 0; i < rects.length && i < CHAR_LABELS.length; i++) {
+    const { x, w } = rects[i];
+    if (x + w > cropped.width || w < 3) continue;
+    const cell = cropGray(binFull, { x, y: 0, w, h: cropped.height });
+    const trimmed = trimGlyphHorizontal(cell);
+    if (trimmed.width < 2 || trimmed.height < 4) continue;
+    tmpls.push({ label: CHAR_LABELS[i], tmpl: resizeGray(trimmed, 20, 30) });
   }
   return tmpls;
 }
