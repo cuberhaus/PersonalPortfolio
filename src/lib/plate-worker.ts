@@ -235,6 +235,84 @@ function pushMorphDebugStages(stages: ImageBuffer[], gray: GrayImage): void {
   }
 }
 
+/** Bumper band below grille (front plate sits here on most sedans). */
+function bumperSearchRoi(iw: number, ih: number): Rect {
+  const rx = Math.floor(iw * 0.17);
+  const ry = Math.floor(ih * 0.535);
+  const rw = Math.min(Math.floor(iw * 0.66), iw - rx);
+  const rh = Math.min(Math.floor(ih * 0.215), ih - ry);
+  return { x: rx, y: ry, w: rw, h: rh };
+}
+
+/** When global CC misses the plate — search only lower bumper, not grille. */
+function findPlateBumperRoi(
+  gray: GrayImage,
+  iw: number,
+  ih: number
+): Rect | null {
+  const roi = bumperSearchRoi(iw, ih);
+  const { x: rx, y: ry, w: rw, h: rh } = roi;
+  if (rw < 90 || rh < 36) return null;
+  const sub = cropGray(gray, roi);
+  const roiArea = rw * rh;
+  const imArea = iw * ih;
+  const maxPlatePx = Math.min(roiArea * 0.11, imArea * 0.024);
+
+  type Cand = { sc: number; cyF: number; bbox: Rect };
+  const cands: Cand[] = [];
+
+  for (const sens of [0.52, 0.6, 0.68, 0.76, 0.84]) {
+    for (const inv of [true, false]) {
+      let bin = adaptiveThresholdMean(sub, sens);
+      if (inv) bin = bitwiseNot(bin);
+      const cleared = clearBorder(bin);
+      const { labels, count } = labelConnectedComponents(cleared);
+      for (let id = 1; id <= count; id++) {
+        const st = computeRegionStats(cleared, labels, id);
+        const ar = st.bbox.w / Math.max(1, st.bbox.h);
+        if (ar < 2.45 || ar > 7.5) continue;
+        if (st.area < 180 || st.area > maxPlatePx) continue;
+        if (st.extent < 0.38 || st.solidity < 0.5) continue;
+        if (st.eccentricity < 0.84) continue;
+        const cyF = (ry + st.bbox.y + st.bbox.h * 0.5) / ih;
+        const cxF = (rx + st.bbox.x + st.bbox.w * 0.5) / iw;
+        if (cyF < 0.558 || cyF > 0.785) continue;
+        if (cyF > 0.68 && cxF < 0.32) continue;
+        if (cyF > 0.68 && cxF > 0.68) continue;
+        const relY = (st.bbox.y + st.bbox.h * 0.5) / rh;
+        let sc =
+          st.bbox.w *
+          st.extent *
+          st.solidity *
+          (0.45 + st.eccentricity) *
+          (0.35 + relY) ** 2.2;
+        if (cxF > 0.34 && cxF < 0.66) sc *= 1.28;
+        if (cyF > 0.62 && cyF < 0.74) sc *= 1.45;
+        const bb: Rect = { x: rx + st.bbox.x, y: ry + st.bbox.y, w: st.bbox.w, h: st.bbox.h };
+        cands.push({ sc, cyF, bbox: bb });
+      }
+    }
+  }
+  if (cands.length === 0) return null;
+  cands.sort((a, b) => b.sc - a.sc);
+  const top = cands[0].sc;
+  const near = cands.filter((c) => c.sc >= top * 0.82);
+  near.sort((a, b) => b.cyF - a.cyF);
+  const best = near[0];
+  const padX = Math.max(4, Math.round(best.bbox.w * 0.1));
+  const padY = Math.max(4, Math.round(best.bbox.h * 0.28));
+  let x = best.bbox.x - padX;
+  let y = best.bbox.y - padY;
+  let w = best.bbox.w + 2 * padX;
+  let h = best.bbox.h + 2 * padY;
+  x = Math.max(0, x);
+  y = Math.max(0, y);
+  w = Math.min(w, iw - x);
+  h = Math.min(h, ih - y);
+  return { x, y, w: Math.max(24, w), h: Math.max(14, h) };
+}
+
+
 function findPlate(src: RGBAImage): FindPlateResult {
   const stages: ImageBuffer[] = [];
   const gray = rgbaToGray(src);
@@ -267,10 +345,19 @@ function findPlate(src: RGBAImage): FindPlateResult {
   }
   if (pool.length === 0) {
     pushMorphDebugStages(stages, gray);
+    const fb = findPlateBumperRoi(gray, iw, ih);
+    if (fb) {
+      const dbg: RGBAImage = { data: new Uint8ClampedArray(src.data), width: iw, height: ih };
+      drawRectRGBA(dbg, bumperSearchRoi(iw, ih), [0, 210, 255], 2);
+      drawRectRGBA(dbg, fb, [0, 255, 0], 3);
+      stages.push(rgbaToBuffer(dbg, "Lower-bumper ROI (below grille) — green = plate"));
+      stages.push(rgbaToBuffer(cropRGBA(src, fb), "Plate crop"));
+      return { plateRect: fb, stages };
+    }
     stages.push(
       grayToBuffer(
         gray,
-        "No elongated high-aspect CC found (check lighting / plate contrast vs body)"
+        "No plate CC globally or in bumper ROI (contrast / angle)"
       )
     );
     return { plateRect: null, stages };
@@ -329,6 +416,15 @@ function findPlate(src: RGBAImage): FindPlateResult {
         "Same binary as above @ s=0.7 (where CCs are extracted)"
       )
     );
+    const fb2 = findPlateBumperRoi(gray, iw, ih);
+    if (fb2) {
+      const dbg: RGBAImage = { data: new Uint8ClampedArray(src.data), width: iw, height: ih };
+      drawRectRGBA(dbg, bumperSearchRoi(iw, ih), [0, 210, 255], 2);
+      drawRectRGBA(dbg, fb2, [0, 255, 0], 3);
+      stages.push(rgbaToBuffer(dbg, "Lower-bumper ROI after floor reject"));
+      stages.push(rgbaToBuffer(cropRGBA(src, fb2), "Plate crop"));
+      return { plateRect: fb2, stages };
+    }
     return { plateRect: null, stages };
   }
 

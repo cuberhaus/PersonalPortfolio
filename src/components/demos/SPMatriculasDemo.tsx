@@ -13,8 +13,8 @@ const SAMPLES = [
   { file: "IMG_0378.jpg", plate: "zme8325" },
   { file: "IMG_0380.jpg", plate: "zkk8153" },
   { file: "IMG_0384.jpg", plate: "iea5511" },
-  { file: "IMG_0392.jpg", plate: "yaz2074" },
-  { file: "IMG_0414.jpg", plate: "biz1100" },
+  { file: "IMG_0392.jpg", plate: "zza9341" },
+  { file: "IMG_0414.jpg", plate: "izi2154" },
 ];
 
 const FONT_PATH = "demos/matriculas/Greek-License-Plate-Font-2004.jpg";
