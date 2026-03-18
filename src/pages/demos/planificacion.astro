@@ -1,0 +1,94 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+import PlanificacionDemo from '../../components/demos/PlanificacionDemo';
+---
+
+<DemoLayout
+  title="Travel agency planning (PDDL)"
+  description="PDDL domain and problem for automated planning: visit cities, satisfy trip constraints, minimize interest metric."
+>
+  <div class="container">
+    <div class="demo-header">
+      <h1>Pràctica de planificació</h1>
+      <p class="demo-lead">
+        PDDL model of a travel agency: flights, hotels, stay duration, and a numeric metric. Browse the
+        Extension&nbsp;2 domain and problem, download <code>.pddl</code> files, or use <strong>Run planner</strong>
+        when <code>PUBLIC_PLANNER_URL</code> points at a deployed solver API (see repo README).
+      </p>
+    </div>
+
+    <PlanificacionDemo client:load />
+
+    <div class="demo-info">
+      <h3>About this project</h3>
+      <p>
+        Coursework for automated planning (FIB-UPC): incremental extensions from basic STRIPS-style city
+        visits to numeric fluents, minimum trip length, per-city “interest”, and metric minimization.
+        Includes Python instance generators and benchmark suites per extension.
+      </p>
+      <p>
+        <strong>Live solving</strong> on this page is optional: GitHub Pages only serves static files. The
+        planner runs in a separate service (<code>planner-api/</code> in this monorepo: FastAPI + ENHSP in
+        Docker). Set <code>PUBLIC_PLANNER_URL</code> at build time and deploy the API (e.g. Fly.io, Railway)
+        with <code>CORS_ORIGINS</code> matching your site.
+      </p>
+      <a
+        href="https://github.com/cuberhaus/Practica_de_Planificacion"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="demo-link"
+      >
+        View source on GitHub
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</DemoLayout>
+
+<style>
+  .demo-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .demo-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin-bottom: 1rem;
+  }
+  .demo-lead {
+    color: var(--text-secondary, #a1a1aa);
+    max-width: 42rem;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+  .demo-lead code {
+    font-size: 0.9em;
+    background: rgba(99, 102, 241, 0.12);
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+  }
+  .demo-info {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    background: var(--bg-card, #16161f);
+    border: 1px solid var(--border, #27272a);
+    border-radius: 0.75rem;
+  }
+  .demo-info h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+  }
+  .demo-info p {
+    color: var(--text-secondary, #a1a1aa);
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+  .demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent, #6366f1);
+    font-weight: 500;
+  }
+</style>

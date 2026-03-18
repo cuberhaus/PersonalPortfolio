@@ -54,5 +54,12 @@
     "description": "Explore percolation and connectivity phase transitions on binomial, geometric, and grid graphs.",
     "tags": ["Algorithms", "Graph Theory", "NetworkX"],
     "icon": "scatter"
+  },
+  {
+    "slug": "planificacion",
+    "title": "Travel agency (PDDL)",
+    "description": "Automated planning practice: PDDL domain for trips with flights, hotels, numeric constraints, and metric minimization.",
+    "tags": ["PDDL", "Planning", "UPC"],
+    "icon": "map"
   }
 ]
