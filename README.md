@@ -107,6 +107,10 @@ Dev: embedded Flutter. Production: React mock.
 
 [`/demos/bitsx-marato`](https://cuberhaus.github.io/PersonalPortfolio/demos/bitsx-marato) includes an **Interactive** tab with a real rat-aorta B-mode frame bundled as [`public/demos/bitsx-aorta-frame.jpg`](public/demos/bitsx-aorta-frame.jpg) (mock overlay + diameter explorer). Full Mask R-CNN runs in Python/Tkinter + GPU in [`bitsXlaMarato`](https://github.com/cuberhaus/bitsXlaMarato).
 
+### APA practica (static)
+
+[`/demos/apa-practica`](https://cuberhaus.github.io/PersonalPortfolio/demos/apa-practica) — k-NN demo framed as **N/P** (like `binaryClass`) on a 2D slice; Nbviewer + GitHub. Code: [`APA_Practica`](https://github.com/cuberhaus/APA_Practica).
+
 ## Project layout
 
 ```

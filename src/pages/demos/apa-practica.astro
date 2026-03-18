@@ -1,0 +1,49 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+import ApaPracticaDemo from '../../components/demos/ApaPracticaDemo';
+---
+
+<DemoLayout
+  title="APA practica — hypothyroid classification"
+  description="FIB-UPC APA: Jupyter pipeline for binary classification on the hypothyroid dataset (sklearn, EDA, many models)."
+>
+  <div class="container">
+    <div class="demo-header">
+      <h1>APA practica</h1>
+      <p class="demo-lead">
+        Machine learning practica: <strong>hypothyroidism detection</strong> from clinical data.{" "}
+        <strong>k-NN demo</strong>: same algorithm as in the notebooks (N/P vote on a synthetic 2D slice).{" "}
+        <strong>Notebook preview</strong> embeds Jupyter via Nbviewer. Repo:{" "}
+        <a href="https://github.com/cuberhaus/APA_Practica" target="_blank" rel="noopener noreferrer">GitHub</a>.
+      </p>
+    </div>
+
+    <ApaPracticaDemo client:load />
+  </div>
+</DemoLayout>
+
+<style>
+  .demo-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .demo-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    background: linear-gradient(135deg, #14b8a6, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .demo-lead {
+    color: #a1a1aa;
+    font-size: 1rem;
+    line-height: 1.65;
+    max-width: 38rem;
+    margin: 0 auto;
+  }
+  .demo-lead a {
+    color: #2dd4bf;
+  }
+</style>

@@ -15,20 +15,6 @@
     "live": ""
   },
   {
-    "title": "Data Governance Platform",
-    "description": "Enterprise data governance solution integrating Informatica, AWS, and Azure services for large-scale data management.",
-    "tags": ["Informatica", "AWS", "Azure", "Data Governance"],
-    "github": "",
-    "live": ""
-  },
-  {
-    "title": "Real-Time KPI Dashboards",
-    "description": "Dynamic dashboards for monitoring business metrics and KPIs in real time, driving strategic decision-making at an insurance company.",
-    "tags": ["PowerBI", "SQL Server", "Python", "R"],
-    "github": "",
-    "live": ""
-  },
-  {
     "title": "Predictive Analytics Pipeline",
     "description": "End-to-end ETL and predictive analytics pipeline that improved report accuracy by 20% through automated data quality processes.",
     "tags": ["Python", "SQL", "ETL", "Machine Learning"],
