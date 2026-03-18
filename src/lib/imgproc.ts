@@ -382,6 +382,158 @@ export function computeRegionStats(bin: GrayImage, labels: Int32Array, labelId: 
   };
 }
 
+/**
+ * One-pass stats for many components — avoids O(components × pixels) hangs on high-res photos.
+ */
+export function allRegionStatsEfficient(
+  bin: GrayImage,
+  labels: Int32Array,
+  count: number,
+  mode: "plate" | "char"
+): RegionStats[] {
+  const w = bin.width;
+  const h = bin.height;
+  const imArea = w * h;
+  const n = count + 1;
+  const INF = 0x7fffffff;
+  const area = new Int32Array(n);
+  const minX = new Int32Array(n);
+  const maxX = new Int32Array(n);
+  const minY = new Int32Array(n);
+  const maxY = new Int32Array(n);
+  minX.fill(INF);
+  maxX.fill(-1);
+  minY.fill(INF);
+  maxY.fill(-1);
+  const sumX = new Float64Array(n);
+  const sumY = new Float64Array(n);
+
+  for (let i = 0; i < labels.length; i++) {
+    const L = labels[i];
+    if (L <= 0) continue;
+    const x = i % w;
+    const y = (i / w) | 0;
+    area[L]++;
+    if (x < minX[L]) minX[L] = x;
+    if (x > maxX[L]) maxX[L] = x;
+    if (y < minY[L]) minY[L] = y;
+    if (y > maxY[L]) maxY[L] = y;
+    sumX[L] += x;
+    sumY[L] += y;
+  }
+
+  const candidates = new Set<number>();
+  for (let L = 1; L <= count; L++) {
+    const a = area[L];
+    if (a < (mode === "plate" ? 250 : 15)) continue;
+    const bw = maxX[L] - minX[L] + 1;
+    const bh = maxY[L] - minY[L] + 1;
+    const asp = bw / Math.max(bh, 1);
+    if (mode === "plate") {
+      if (asp < 1.25 || asp > 16) continue;
+      if (a > imArea * 0.42) continue;
+    } else {
+      if (a > imArea * 0.5) continue;
+      if (asp > 30 || asp < 0.02) continue;
+    }
+    candidates.add(L);
+  }
+
+  const mu20s = new Float64Array(n);
+  const mu02s = new Float64Array(n);
+  const mu11s = new Float64Array(n);
+  const borders: { x: number; y: number }[][] = new Array(n);
+  for (let L = 0; L < n; L++) borders[L] = [];
+
+  for (let i = 0; i < labels.length; i++) {
+    const L = labels[i];
+    if (!candidates.has(L)) continue;
+    const x = i % w;
+    const y = (i / w) | 0;
+    const cx = sumX[L] / area[L];
+    const cy = sumY[L] / area[L];
+    const dx = x - cx;
+    const dy = y - cy;
+    mu20s[L] += dx * dx;
+    mu02s[L] += dy * dy;
+    mu11s[L] += dx * dy;
+    const isBorder =
+      x === 0 ||
+      x === w - 1 ||
+      y === 0 ||
+      y === h - 1 ||
+      labels[i - 1] !== L ||
+      labels[i + 1] !== L ||
+      labels[i - w] !== L ||
+      labels[i + w] !== L;
+    if (isBorder) borders[L].push({ x, y });
+  }
+
+  const out: RegionStats[] = [];
+
+  for (const L of candidates) {
+    const a = area[L];
+    if (a < 1) continue;
+    const mu20 = mu20s[L] / a;
+    const mu02 = mu02s[L] / a;
+    const mu11 = mu11s[L] / a;
+    const diff = mu20 - mu02;
+    const sq = Math.sqrt(diff * diff + 4 * mu11 * mu11);
+    const l1 = (mu20 + mu02 + sq) / 2;
+    const l2 = (mu20 + mu02 - sq) / 2;
+    const major = 4 * Math.sqrt(Math.max(l1, 0));
+    const minor = 4 * Math.sqrt(Math.max(l2, 0));
+    const bbox: Rect = {
+      x: minX[L],
+      y: minY[L],
+      w: maxX[L] - minX[L] + 1,
+      h: maxY[L] - minY[L] + 1,
+    };
+    const hullArea = convexHullArea(borders[L]);
+    const bboxArea = bbox.w * bbox.h;
+    out.push({
+      bbox,
+      area: a,
+      solidity: hullArea > 0 ? a / hullArea : 0,
+      extent: bboxArea > 0 ? a / bboxArea : 0,
+      eccentricity: major > 0 ? Math.sqrt(Math.max(0, 1 - (minor * minor) / (major * major))) : 0,
+      orientation: (0.5 * Math.atan2(2 * mu11, diff) * 180) / Math.PI,
+      majorAxisLength: major,
+      minorAxisLength: minor,
+    });
+  }
+
+  return out;
+}
+
+export function resizeRGBA(src: RGBAImage, tw: number, th: number): RGBAImage {
+  const out = new Uint8ClampedArray(tw * th * 4);
+  const xr = src.width / tw;
+  const yr = src.height / th;
+  for (let y = 0; y < th; y++) {
+    const sy = y * yr;
+    const y0 = Math.min(Math.floor(sy), src.height - 1);
+    const y1 = Math.min(y0 + 1, src.height - 1);
+    const fy = sy - y0;
+    for (let x = 0; x < tw; x++) {
+      const sx = x * xr;
+      const x0 = Math.min(Math.floor(sx), src.width - 1);
+      const x1 = Math.min(x0 + 1, src.width - 1);
+      const fx = sx - x0;
+      const o = (y * tw + x) * 4;
+      for (let c = 0; c < 4; c++) {
+        const v =
+          src.data[(y0 * src.width + x0) * 4 + c] * (1 - fx) * (1 - fy) +
+          src.data[(y0 * src.width + x1) * 4 + c] * fx * (1 - fy) +
+          src.data[(y1 * src.width + x0) * 4 + c] * (1 - fx) * fy +
+          src.data[(y1 * src.width + x1) * 4 + c] * fx * fy;
+        out[o + c] = Math.round(v);
+      }
+    }
+  }
+  return { data: out, width: tw, height: th };
+}
+
 // ─── Image manipulation ───
 
 export function cropGray(src: GrayImage, r: Rect): GrayImage {

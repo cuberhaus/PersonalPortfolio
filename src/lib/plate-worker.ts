@@ -11,7 +11,9 @@ import {
   thresholdOtsu,
   labelConnectedComponents,
   computeRegionStats,
+  allRegionStatsEfficient,
   resizeGray,
+  resizeRGBA,
   matchTemplateNCC,
   cropGray,
   cropRGBA,
@@ -21,6 +23,8 @@ import {
   type RegionStats,
   type Rect,
 } from "./imgproc";
+
+const MAX_INPUT_DIM = 1400;
 
 const CHAR_LABELS = [
   "1","2","3","4","5","6","7","8","9","0",
@@ -86,25 +90,48 @@ function rgbaToBuffer(img: RGBAImage, label: string): ImageBuffer {
 
 function getPlateRegions(bin: GrayImage, relaxExtent: boolean): RegionStats[] {
   const { labels, count } = labelConnectedComponents(bin);
-  const regions: RegionStats[] = [];
-  for (let id = 1; id <= count; id++) {
-    const stats = computeRegionStats(bin, labels, id);
-    if (stats.area < 10) continue;
-    if (stats.majorAxisLength >= 450 || stats.minorAxisLength < 24) continue;
-    if (stats.eccentricity < 0.9) continue;
-    if (!relaxExtent && (stats.extent < 0.6 || stats.extent > 1)) continue;
-    if (stats.orientation < -15 || stats.orientation > 15) continue;
-    if (stats.solidity < 0.6) continue;
-    regions.push(stats);
+  const m = Math.max(bin.width, bin.height);
+  const maxMajor = Math.min(450, Math.max(320, m * 0.38));
+  const minMinor = Math.max(14, Math.min(24, Math.floor(m / 55)));
+
+  let regions = allRegionStatsEfficient(bin, labels, count, "plate");
+  const filter = (stats: RegionStats) => {
+    if (stats.area < 10) return false;
+    if (stats.majorAxisLength >= maxMajor || stats.minorAxisLength < minMinor) return false;
+    if (stats.eccentricity < 0.9) return false;
+    if (!relaxExtent && (stats.extent < 0.6 || stats.extent > 1)) return false;
+    if (stats.orientation < -15 || stats.orientation > 15) return false;
+    return stats.solidity >= 0.6;
+  };
+  regions = regions.filter(filter);
+
+  if (regions.length === 0 && count > 0) {
+    const ac = new Int32Array(count + 1);
+    for (let i = 0; i < labels.length; i++) {
+      const L = labels[i];
+      if (L > 0) ac[L]++;
+    }
+    const ids = Array.from({ length: count }, (_, i) => i + 1)
+      .filter((L) => ac[L] >= 180)
+      .sort((a, b) => ac[b] - ac[a])
+      .slice(0, 50);
+    for (const id of ids) {
+      const stats = computeRegionStats(bin, labels, id);
+      if (filter(stats)) regions.push(stats);
+    }
   }
   return regions;
 }
 
 function getCharCandidates(bin: GrayImage): { bbox: Rect }[] {
   const { labels, count } = labelConnectedComponents(bin);
+  const stats =
+    count > 400
+      ? allRegionStatsEfficient(bin, labels, count, "char")
+      : Array.from({ length: count }, (_, i) => computeRegionStats(bin, labels, i + 1)).filter((p) => p.area > 0);
+
   const cands: { bbox: Rect }[] = [];
-  for (let id = 1; id <= count; id++) {
-    const p = computeRegionStats(bin, labels, id);
+  for (const p of stats) {
     if (p.area < 30) continue;
     if (p.majorAxisLength < 12 || p.majorAxisLength > 180) continue;
     if (p.area < 50 || p.extent < 0.25 || p.eccentricity > 0.99) continue;
@@ -243,7 +270,12 @@ function processImage(
   imgBuf: { data: Uint8ClampedArray; width: number; height: number },
   fontBuf: { data: Uint8ClampedArray; width: number; height: number }
 ) {
-  const src: RGBAImage = { data: new Uint8ClampedArray(imgBuf.data), width: imgBuf.width, height: imgBuf.height };
+  let src: RGBAImage = { data: new Uint8ClampedArray(imgBuf.data), width: imgBuf.width, height: imgBuf.height };
+  const M = Math.max(src.width, src.height);
+  if (M > MAX_INPUT_DIM) {
+    const s = MAX_INPUT_DIM / M;
+    src = resizeRGBA(src, Math.round(src.width * s), Math.round(src.height * s));
+  }
   const fontRGBA: RGBAImage = { data: new Uint8ClampedArray(fontBuf.data), width: fontBuf.width, height: fontBuf.height };
   const templates = prepareTemplates(fontRGBA);
 

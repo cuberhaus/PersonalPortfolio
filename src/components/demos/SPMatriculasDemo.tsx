@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import {
   initWorker,
   runWorkerPipeline,
-  type LoadProgress,
   type ImageBuffer,
   type WorkerPipelineResult,
 } from "../../lib/opencv-loader";
@@ -20,7 +19,7 @@ const SAMPLES = [
 
 const FONT_PATH = "demos/matriculas/Greek-License-Plate-Font-2004.jpg";
 
-type Status = "idle" | "loading-cv" | "processing" | "done" | "error";
+type Status = "idle" | "processing" | "done" | "error";
 
 const s = {
   wrapper: {
@@ -227,39 +226,6 @@ function PulsingDots() {
   );
 }
 
-function ProgressBar({ progress }: { progress: LoadProgress }) {
-  const label =
-    progress.phase === "downloading"
-      ? progress.totalMB
-        ? `Downloading OpenCV.js (${progress.loadedMB} / ${progress.totalMB} MB)`
-        : `Downloading OpenCV.js${progress.loadedMB ? ` (${progress.loadedMB} MB)` : ""}…`
-      : progress.phase === "initializing"
-        ? "Initializing WebAssembly runtime…"
-        : "Ready";
-
-  return (
-    <div style={s.loadingCard}>
-      <div style={s.loadingHeader}>
-        <span style={{ color: "#e4e4e7" }}>
-          {label}
-          {progress.phase !== "ready" && <PulsingDots />}
-        </span>
-        <span style={{ color: "#6366f1", fontWeight: 600, fontFamily: "monospace" }}>
-          {progress.percent}%
-        </span>
-      </div>
-      <div style={s.progressOuter}>
-        <div style={s.progressInner(progress.percent)} />
-      </div>
-      {progress.phase === "downloading" && (
-        <div style={{ fontSize: "0.75rem", color: "#71717a", marginTop: "0.4rem" }}>
-          First load only — cached by your browser after this.
-        </div>
-      )}
-    </div>
-  );
-}
-
 function bufferToDataURL(buf: ImageBuffer): string {
   const canvas = document.createElement("canvas");
   canvas.width = buf.width;
@@ -291,24 +257,13 @@ export default function SPMatriculasDemo() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
   const [result, setResult] = useState<WorkerPipelineResult | null>(null);
-  const [progress, setProgress] = useState<LoadProgress>({ phase: "downloading", percent: 0 });
-  const [cvReady, setCvReady] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const rawBase = (typeof import.meta !== "undefined" && (import.meta as any).env?.BASE_URL) || "/";
   const basePath = rawBase.endsWith("/") ? rawBase : rawBase + "/";
 
   useEffect(() => {
-    setStatus("loading-cv");
-    initWorker((p) => setProgress(p))
-      .then(() => {
-        setCvReady(true);
-        setStatus((prev) => (prev === "loading-cv" ? "idle" : prev));
-      })
-      .catch((err) => {
-        setError(err.message || "Failed to load OpenCV.js");
-        setStatus("error");
-      });
+    initWorker().catch(() => {});
   }, []);
 
   const selectSample = useCallback((sample: (typeof SAMPLES)[number]) => {
@@ -334,6 +289,7 @@ export default function SPMatriculasDemo() {
     setStatus("processing");
 
     try {
+      await initWorker();
       const fontPath = `${basePath}${FONT_PATH}`;
       const res = await runWorkerPipeline(selectedImage, fontPath);
       setResult(res);
@@ -351,8 +307,8 @@ export default function SPMatriculasDemo() {
         The pipeline has 3 stages: <strong>1)</strong> locate the plate region using adaptive
         binarization and morphological filtering, <strong>2)</strong> segment individual characters
         via connected component analysis, <strong>3)</strong> recognize each character by template
-        matching against a reference plate font. All processing runs locally in your browser using
-        OpenCV.js (WebAssembly).
+        matching against a reference plate font. Processing runs in a Web Worker so the page stays
+        responsive — pure TypeScript, no OpenCV download.
       </div>
 
       <div style={s.card}>
@@ -387,21 +343,16 @@ export default function SPMatriculasDemo() {
             style={{
               ...s.runBtn,
               marginTop: 0,
-              ...(!selectedImage || !cvReady || status === "processing" ? s.disabledBtn : {}),
+              ...(!selectedImage || status === "processing" ? s.disabledBtn : {}),
             }}
-            disabled={!selectedImage || !cvReady || status === "processing"}
+            disabled={!selectedImage || status === "processing"}
             onClick={run}
           >
-            {status === "processing"
-              ? "Detecting..."
-              : !cvReady
-                ? "Loading OpenCV.js..."
-                : "Detect plate"}
+            {status === "processing" ? "Detecting…" : "Detect plate"}
           </button>
         </div>
       </div>
 
-      {!cvReady && status !== "error" && <ProgressBar progress={progress} />}
       {status === "processing" && (
         <div style={s.loadingCard}>
           <div style={{ ...s.loadingHeader, justifyContent: "flex-start" }}>
