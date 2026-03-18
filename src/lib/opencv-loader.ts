@@ -30,7 +30,7 @@ let readyPromise: Promise<void> | null = null;
 
 function getWorker(): Worker {
   if (!worker) {
-    worker = new Worker(new URL("./plate-worker.ts", import.meta.url));
+    worker = new Worker(new URL("./plate-worker.ts", import.meta.url), { type: "module" });
   }
   return worker;
 }
@@ -59,17 +59,38 @@ export function initWorker(onProgress?: ProgressCb): Promise<void> {
   return readyPromise;
 }
 
+/** Max dimension before sending to worker (matches plate pipeline; avoids huge postMessage in dev). */
+const MAX_PIPELINE_DIM = 1400;
+
+function needsCrossOrigin(src: string): boolean {
+  if (src.startsWith("blob:") || src.startsWith("data:")) return false;
+  try {
+    const u = new URL(src, typeof window !== "undefined" ? window.location.href : "http://localhost/");
+    return u.origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
 function loadImageData(src: string): Promise<{ data: Uint8ClampedArray; width: number; height: number }> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    if (needsCrossOrigin(src)) img.crossOrigin = "anonymous";
     img.onload = () => {
+      let w = img.naturalWidth;
+      let h = img.naturalHeight;
+      const M = Math.max(w, h);
+      if (M > MAX_PIPELINE_DIM) {
+        const s = MAX_PIPELINE_DIM / M;
+        w = Math.round(w * s);
+        h = Math.round(h * s);
+      }
       const c = document.createElement("canvas");
-      c.width = img.naturalWidth;
-      c.height = img.naturalHeight;
+      c.width = w;
+      c.height = h;
       const ctx = c.getContext("2d")!;
-      ctx.drawImage(img, 0, 0);
-      const id = ctx.getImageData(0, 0, c.width, c.height);
+      ctx.drawImage(img, 0, 0, w, h);
+      const id = ctx.getImageData(0, 0, w, h);
       resolve({ data: id.data, width: id.width, height: id.height });
     };
     img.onerror = () => reject(new Error(`Failed to load: ${src}`));
@@ -85,6 +106,12 @@ export async function runWorkerPipeline(
   const [image, font] = await Promise.all([loadImageData(imageSrc), loadImageData(fontSrc)]);
 
   const w = getWorker();
+  const payload = {
+    type: "process" as const,
+    image: { data: image.data, width: image.width, height: image.height },
+    font: { data: font.data, width: font.width, height: font.height },
+  };
+
   return new Promise((resolve, reject) => {
     const handler = (e: MessageEvent) => {
       const msg = e.data;
@@ -97,6 +124,10 @@ export async function runWorkerPipeline(
       }
     };
     w.addEventListener("message", handler);
-    w.postMessage({ type: "process", image, font });
+    try {
+      w.postMessage(payload, [image.data.buffer, font.data.buffer]);
+    } catch {
+      w.postMessage(payload);
+    }
   });
 }
