@@ -4,12 +4,19 @@ import {
   heuristicSum,
   hillClimbing,
   mulberry32,
+  perHelicopterTimes,
   randomInitialAssignment,
   simulatedAnnealing,
   type Assignment,
 } from "../../lib/desastresSearch";
+import {
+  AssignmentMapFigure,
+  PerHeliBreakdown,
+  QueueStrips,
+  RunExplainer,
+} from "./DesastresVisual";
 
-const tabs = ["Problem", "Schematic", "Operators", "Heuristics", "Run HC / SA", "Experiments"] as const;
+const tabs = ["Problem", "Schematic", "Operators", "Heuristics", "Experiments"] as const;
 type Tab = (typeof tabs)[number];
 
 const s = {
@@ -159,11 +166,13 @@ export default function DesastresIADemo() {
   const [seed, setSeed] = useState(42);
   const [running, setRunning] = useState(false);
   const [runOut, setRunOut] = useState<{
+    seed: number;
     cost: number;
-    assignment: string;
+    initialCost: number;
+    initial: Assignment;
+    final: Assignment;
     log: string[];
     algo: string;
-    initialCost: number;
   } | null>(null);
 
   const runSearch = useCallback(() => {
@@ -176,16 +185,19 @@ export default function DesastresIADemo() {
         const { board, nHelis, nGroups } = defaultToyScenario(seedVal);
         const rngInit = mulberry32(seedVal ^ 0x9e3779b9);
         const initial = randomInitialAssignment(nGroups, nHelis, rngInit);
+        const initialSnap = initial.map((q) => [...q]);
         const initialCost = heuristicSum(board, initial);
 
         if (algoVal === "HC") {
           const r = hillClimbing(board, initial, 400);
           setRunOut({
+            seed: seedVal,
             algo: "Hill climbing (full SWAP neighborhood)",
             cost: r.cost,
-            assignment: formatAssign(r.assignment),
-            log: r.log,
             initialCost,
+            initial: initialSnap,
+            final: r.assignment.map((q) => [...q]),
+            log: r.log,
           });
         } else {
           const r = simulatedAnnealing(board, initial, {
@@ -195,11 +207,13 @@ export default function DesastresIADemo() {
             rng: mulberry32((seedVal + 1) * 0xdeadbeef),
           });
           setRunOut({
+            seed: seedVal,
             algo: "Simulated annealing (random SWAP moves)",
             cost: r.cost,
-            assignment: formatAssign(r.assignment),
-            log: r.log,
             initialCost,
+            initial: initialSnap,
+            final: r.assignment.map((q) => [...q]),
+            log: r.log,
           });
         }
       } finally {
@@ -229,10 +243,57 @@ export default function DesastresIADemo() {
               explores that assignment space to reduce total / weighted <strong>rescue time</strong> (travel,
               capacity 15 people per trip, cooldown between flights, etc.—see Java domain).
             </p>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+                gap: "0.65rem",
+                marginBottom: "1rem",
+              }}
+            >
+              {[
+                { n: "1", t: "State", d: "Each helicopter has a queue of group IDs (visit order)." },
+                { n: "2", t: "SWAP", d: "Exchange any two groups in any two positions → new neighbor state." },
+                { n: "3", t: "Score", d: "Heuristic H2 = sum of simulated finish times for all helicopters." },
+                { n: "4", t: "Search", d: "HC climbs; SA can worsen to escape plateaus." },
+              ].map((x) => (
+                <div
+                  key={x.n}
+                  style={{
+                    padding: "0.75rem",
+                    background: "#12121a",
+                    borderRadius: "0.5rem",
+                    border: "1px solid #27272a",
+                  }}
+                >
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: 26,
+                      height: 26,
+                      lineHeight: "26px",
+                      textAlign: "center",
+                      borderRadius: "50%",
+                      background: "linear-gradient(135deg, #6366f1, #a855f7)",
+                      color: "#fff",
+                      fontWeight: 700,
+                      fontSize: "0.8rem",
+                      marginBottom: "0.35rem",
+                    }}
+                  >
+                    {x.n}
+                  </span>
+                  <div style={{ color: "#e4e4e7", fontWeight: 600, fontSize: "0.85rem" }}>{x.t}</div>
+                  <div style={{ color: "#71717a", fontSize: "0.74rem", lineHeight: 1.45, marginTop: "0.25rem" }}>{x.d}</div>
+                </div>
+              ))}
+            </div>
             <p style={s.p}>
               This is <strong>local search</strong> on a large neighborhood: not explicit graph BFS, but HC/SA
               moving between assignments via <strong>successor operators</strong> (swap groups, move groups
-              between helicopters, …), scored by <strong>heuristic functions</strong>.
+              between helicopters, …), scored by <strong>heuristic functions</strong>.{" "}
+              <strong style={{ color: "#a5b4fc" }}>Scroll down</strong> to <strong>Run the demo</strong> and execute
+              hill climbing or simulated annealing in the browser.
             </p>
           </div>
         )}
@@ -371,79 +432,6 @@ export default function DesastresIADemo() {
           </div>
         )}
 
-        {tab === "Run HC / SA" && (
-          <div>
-            <p style={s.p}>
-              <strong style={{ color: "#e4e4e7" }}>Browser toy instance</strong> — 7 groups, 3 helicopters (2 at
-              center&nbsp;0, 1 at center&nbsp;1), random Euclidean distances. <strong>Heuristic</strong> matches
-              Java <code style={s.code}>DesastresHeuristicFunction2</code> (sum of helicopter completion times:
-              capacity 15, max 3 groups per sortie, 10&nbsp;min cooldown, priority doubles pickup time per person).
-              <strong> Neighborhood:</strong> <code style={s.code}>SWAP</code> between any two queue positions
-              (same idea as SuccessorFunction1).
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center", marginBottom: "1rem" }}>
-              <label style={{ color: "#a1a1aa", fontSize: "0.85rem" }}>
-                Algorithm{" "}
-                <select
-                  value={algo}
-                  onChange={(e) => setAlgo(e.target.value as "HC" | "SA")}
-                  style={{ ...s.input, width: "auto", marginLeft: "0.35rem" }}
-                >
-                  <option value="HC">Hill climbing</option>
-                  <option value="SA">Simulated annealing</option>
-                </select>
-              </label>
-              <label style={{ color: "#a1a1aa", fontSize: "0.85rem" }}>
-                Seed{" "}
-                <input
-                  type="number"
-                  value={seed}
-                  onChange={(e) => setSeed(parseInt(e.target.value, 10) || 0)}
-                  style={{ ...s.input, width: 90, marginLeft: "0.35rem" }}
-                />
-              </label>
-              <button type="button" style={{ ...s.btn, opacity: running ? 0.6 : 1 }} disabled={running} onClick={runSearch}>
-                {running ? "Running…" : "Run search"}
-              </button>
-            </div>
-            {runOut && (
-              <div
-                style={{
-                  padding: "1rem",
-                  background: "#0c0c12",
-                  borderRadius: "0.5rem",
-                  border: "1px solid #27272a",
-                  fontSize: "0.82rem",
-                }}
-              >
-                <p style={{ margin: "0 0 0.5rem", color: "#86efac" }}>
-                  <strong>{runOut.algo}</strong>
-                </p>
-                <p style={{ margin: "0 0 0.35rem", color: "#a1a1aa" }}>
-                  Initial heuristic: <strong style={{ color: "#fde047" }}>{runOut.initialCost.toFixed(2)}</strong> →
-                  Final: <strong style={{ color: "#7dd3fc" }}>{runOut.cost.toFixed(2)}</strong>
-                </p>
-                <p style={{ margin: "0.5rem 0", color: "#d4d4d8", fontFamily: "ui-monospace, monospace", fontSize: "0.78rem", wordBreak: "break-all" as const }}>
-                  {runOut.assignment}
-                </p>
-                <p style={{ margin: "0.5rem 0 0.25rem", color: "#71717a", fontSize: "0.75rem" }}>Log</p>
-                <pre
-                  style={{
-                    margin: 0,
-                    maxHeight: 200,
-                    overflow: "auto",
-                    color: "#a1a1aa",
-                    fontSize: "0.72rem",
-                    lineHeight: 1.45,
-                  }}
-                >
-                  {runOut.log.join("\n")}
-                </pre>
-              </div>
-            )}
-          </div>
-        )}
-
         {tab === "Experiments" && (
           <div>
             <p style={s.p}>
@@ -452,11 +440,151 @@ export default function DesastresIADemo() {
               heuristics, and initial-state generators (random, all-to-one, greedy).
             </p>
             <p style={s.p}>
-              Use the <strong>Run HC / SA</strong> tab for an in-browser comparison on a small instance. Batch
-              plots still come from the Java/Python pipeline locally.
+              Use the <strong>Run the demo</strong> section below for an in-browser comparison. Batch plots still
+              come from the Java/Python pipeline locally.
             </p>
           </div>
         )}
+      </div>
+
+      <div
+        id="desastres-run-demo"
+        style={{
+          background: "linear-gradient(180deg, #1a1a24 0%, #16161f 100%)",
+          border: "1px solid #4c4c6a",
+          borderRadius: "0.85rem",
+          padding: "1.35rem 1.25rem",
+          marginBottom: "1.25rem",
+          boxShadow: "0 4px 24px rgba(99, 102, 241, 0.12)",
+          scrollMarginTop: "1rem",
+        }}
+      >
+        <div style={{ display: "flex", flexWrap: "wrap" as const, alignItems: "center", gap: "0.65rem", marginBottom: "0.85rem" }}>
+          <h2 style={{ margin: 0, fontSize: "clamp(1.1rem, 2.5vw, 1.35rem)", color: "#f4f4f5", fontWeight: 700 }}>
+            Run the demo
+          </h2>
+          <span
+            style={{
+              fontSize: "0.68rem",
+              fontWeight: 700,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase" as const,
+              padding: "0.25rem 0.5rem",
+              borderRadius: "0.35rem",
+              background: "linear-gradient(135deg, #22c55e, #6366f1)",
+              color: "#fff",
+            }}
+          >
+            Hill climbing · Simulated annealing
+          </span>
+        </div>
+        <p style={{ margin: "0 0 1rem", color: "#a1a1aa", fontSize: "0.9rem", lineHeight: 1.6 }}>
+          Choose an algorithm and seed, then press <strong style={{ color: "#e4e4e7" }}>Run search</strong> to see
+          before/after maps and timings. Everything runs in your browser.
+        </p>
+        <RunExplainer />
+        <p style={s.p}>
+          <strong style={{ color: "#e4e4e7" }}>Toy instance</strong> — 7 groups, 3 helicopters (H0,H1 @ C0 · H2 @ C1).
+          Layout is <strong>seeded random</strong>. Heuristic = Java{" "}
+          <code style={s.code}>DesastresHeuristicFunction2</code>. Moves = <code style={s.code}>SWAP</code>.
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center", marginBottom: "1rem" }}>
+          <label style={{ color: "#a1a1aa", fontSize: "0.85rem" }}>
+            Algorithm{" "}
+            <select
+              value={algo}
+              onChange={(e) => setAlgo(e.target.value as "HC" | "SA")}
+              style={{ ...s.input, width: "auto", marginLeft: "0.35rem" }}
+            >
+              <option value="HC">Hill climbing</option>
+              <option value="SA">Simulated annealing</option>
+            </select>
+          </label>
+          <label style={{ color: "#a1a1aa", fontSize: "0.85rem" }}>
+            Seed{" "}
+            <input
+              type="number"
+              value={seed}
+              onChange={(e) => setSeed(parseInt(e.target.value, 10) || 0)}
+              style={{ ...s.input, width: 90, marginLeft: "0.35rem" }}
+            />
+          </label>
+          <button type="button" style={{ ...s.btn, opacity: running ? 0.6 : 1 }} disabled={running} onClick={runSearch}>
+            {running ? "Running…" : "Run search"}
+          </button>
+        </div>
+        {runOut && (() => {
+          const { board, layout } = defaultToyScenario(runOut.seed);
+          const ti = perHelicopterTimes(board, runOut.initial);
+          const tf = perHelicopterTimes(board, runOut.final);
+          return (
+            <div style={{ fontSize: "0.82rem" }}>
+              <p style={{ margin: "0 0 0.75rem", color: "#86efac" }}>
+                <strong>{runOut.algo}</strong> · seed {runOut.seed}
+              </p>
+              <p style={{ margin: "0 0 1rem", color: "#a1a1aa" }}>
+                Total H2:{" "}
+                <strong style={{ color: "#fde047" }}>{runOut.initialCost.toFixed(2)}</strong>
+                {" → "}
+                <strong style={{ color: "#7dd3fc" }}>{runOut.cost.toFixed(2)}</strong>
+                {runOut.cost < runOut.initialCost - 1e-6 && (
+                  <span style={{ color: "#86efac", marginLeft: "0.5rem" }}>
+                    (−{((1 - runOut.cost / runOut.initialCost) * 100).toFixed(1)}%)
+                  </span>
+                )}
+              </p>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                  gap: "1rem",
+                  marginBottom: "1.25rem",
+                }}
+              >
+                <AssignmentMapFigure
+                  layout={layout}
+                  board={board}
+                  assignment={runOut.initial}
+                  title="Before search — random initial queues (dashed paths = visit order)"
+                />
+                <AssignmentMapFigure
+                  layout={layout}
+                  board={board}
+                  assignment={runOut.final}
+                  title="After search — optimized assignment (same map, new colors / routes)"
+                />
+              </div>
+              <h4 style={{ margin: "0 0 0.35rem", color: "#e4e4e7", fontSize: "0.88rem" }}>Final queues</h4>
+              <QueueStrips assignment={runOut.final} board={board} />
+              <PerHeliBreakdown times={tf} total={runOut.cost} />
+              <details style={{ marginTop: "1rem" }}>
+                <summary style={{ cursor: "pointer", color: "#a78bfa", fontSize: "0.82rem" }}>
+                  Initial state breakdown & raw log
+                </summary>
+                <PerHeliBreakdown times={ti} total={runOut.initialCost} />
+                <p style={{ margin: "0.5rem 0 0.25rem", color: "#71717a", fontSize: "0.75rem" }}>Compact encoding</p>
+                <p style={{ margin: "0 0 0.5rem", fontFamily: "ui-monospace, monospace", fontSize: "0.72rem", color: "#a1a1aa" }}>
+                  {formatAssign(runOut.initial)} → {formatAssign(runOut.final)}
+                </p>
+                <pre
+                  style={{
+                    margin: 0,
+                    maxHeight: 160,
+                    overflow: "auto",
+                    color: "#a1a1aa",
+                    fontSize: "0.7rem",
+                    lineHeight: 1.45,
+                    background: "#0c0c12",
+                    padding: "0.65rem",
+                    borderRadius: "0.35rem",
+                  }}
+                >
+                  {runOut.log.join("\n")}
+                </pre>
+              </details>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
