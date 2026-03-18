@@ -578,6 +578,29 @@ export function resizeGray(src: GrayImage, tw: number, th: number): GrayImage {
   return { data: out, width: tw, height: th };
 }
 
+/** Uniform scale to fit inside tw×th, pad with `fill` (keeps aspect — avoids squashing z into y). */
+export function letterboxGray(src: GrayImage, tw: number, th: number, fill: number): GrayImage {
+  if (src.width <= 0 || src.height <= 0) {
+    const out = new Uint8Array(tw * th);
+    out.fill(fill);
+    return { data: out, width: tw, height: th };
+  }
+  const scale = Math.min(tw / src.width, th / src.height);
+  const nw = Math.max(1, Math.round(src.width * scale));
+  const nh = Math.max(1, Math.round(src.height * scale));
+  const scaled = resizeGray(src, nw, nh);
+  const out = new Uint8Array(tw * th);
+  out.fill(fill);
+  const ox = Math.floor((tw - nw) / 2);
+  const oy = Math.floor((th - nh) / 2);
+  for (let y = 0; y < nh; y++) {
+    for (let x = 0; x < nw; x++) {
+      out[(oy + y) * tw + (ox + x)] = scaled.data[y * nw + x];
+    }
+  }
+  return { data: out, width: tw, height: th };
+}
+
 // ─── Template matching (normalized cross-correlation) ───
 
 export function matchTemplateNCC(src: GrayImage, tmpl: GrayImage): number {
@@ -595,6 +618,29 @@ export function matchTemplateNCC(src: GrayImage, tmpl: GrayImage): number {
   }
   const den = Math.sqrt(denS * denT);
   return den > 0 ? num / den : 0;
+}
+
+/** IoU of “ink” pixels (value > 127), both images same size. */
+export function inkIoU(a: GrayImage, b: GrayImage): number {
+  if (a.width !== b.width || a.height !== b.height) return 0;
+  let inter = 0, aInk = 0, bInk = 0;
+  const n = a.data.length;
+  for (let i = 0; i < n; i++) {
+    const fa = a.data[i] > 127;
+    const fb = b.data[i] > 127;
+    if (fa) aInk++;
+    if (fb) bInk++;
+    if (fa && fb) inter++;
+  }
+  const union = aInk + bInk - inter;
+  return union > 0 ? inter / union : 0;
+}
+
+/** NCC + ink overlap — better than NCC alone on binarized glyphs. */
+export function glyphMatchScore(a: GrayImage, b: GrayImage): number {
+  const ncc = matchTemplateNCC(a, b);
+  const iou = inkIoU(a, b);
+  return 0.38 * ncc + 0.62 * iou;
 }
 
 // ─── Drawing ───

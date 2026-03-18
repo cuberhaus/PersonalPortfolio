@@ -59,8 +59,10 @@ export function initWorker(onProgress?: ProgressCb): Promise<void> {
   return readyPromise;
 }
 
-/** Max dimension before sending to worker (matches plate pipeline; avoids huge postMessage in dev). */
-const MAX_PIPELINE_DIM = 1400;
+/** Plate localization only — keeps graph/CC work fast. */
+const MAX_DETECT_DIM = 1400;
+/** Character segmentation + template matching need sharper plate pixels. */
+const MAX_OCR_DIM = 4200;
 
 function needsCrossOrigin(src: string): boolean {
   if (src.startsWith("blob:") || src.startsWith("data:")) return false;
@@ -72,27 +74,44 @@ function needsCrossOrigin(src: string): boolean {
   }
 }
 
-function loadImageData(src: string): Promise<{ data: Uint8ClampedArray; width: number; height: number }> {
+type Raster = { data: Uint8ClampedArray; width: number; height: number };
+
+function drawScaled(img: HTMLImageElement, maxDim: number): Raster {
+  const nw = img.naturalWidth;
+  const nh = img.naturalHeight;
+  const M = Math.max(nw, nh);
+  const s = M > maxDim ? maxDim / M : 1;
+  const w = Math.round(nw * s);
+  const h = Math.round(nh * s);
+  const c = document.createElement("canvas");
+  c.width = w;
+  c.height = h;
+  const ctx = c.getContext("2d")!;
+  ctx.drawImage(img, 0, 0, w, h);
+  const id = ctx.getImageData(0, 0, w, h);
+  return { data: id.data, width: id.width, height: id.height };
+}
+
+/** One decode, two scales: fast plate find + sharp OCR crop. */
+function loadDetectAndOcr(src: string): Promise<{ detect: Raster; ocr: Raster }> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     if (needsCrossOrigin(src)) img.crossOrigin = "anonymous";
     img.onload = () => {
-      let w = img.naturalWidth;
-      let h = img.naturalHeight;
-      const M = Math.max(w, h);
-      if (M > MAX_PIPELINE_DIM) {
-        const s = MAX_PIPELINE_DIM / M;
-        w = Math.round(w * s);
-        h = Math.round(h * s);
-      }
-      const c = document.createElement("canvas");
-      c.width = w;
-      c.height = h;
-      const ctx = c.getContext("2d")!;
-      ctx.drawImage(img, 0, 0, w, h);
-      const id = ctx.getImageData(0, 0, w, h);
-      resolve({ data: id.data, width: id.width, height: id.height });
+      const detect = drawScaled(img, MAX_DETECT_DIM);
+      const ocr = drawScaled(img, MAX_OCR_DIM);
+      resolve({ detect, ocr });
     };
+    img.onerror = () => reject(new Error(`Failed to load: ${src}`));
+    img.src = src;
+  });
+}
+
+function loadFontRaster(src: string): Promise<Raster> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    if (needsCrossOrigin(src)) img.crossOrigin = "anonymous";
+    img.onload = () => resolve(drawScaled(img, 4096));
     img.onerror = () => reject(new Error(`Failed to load: ${src}`));
     img.src = src;
   });
@@ -103,12 +122,13 @@ export async function runWorkerPipeline(
   fontSrc: string
 ): Promise<WorkerPipelineResult> {
   await initWorker();
-  const [image, font] = await Promise.all([loadImageData(imageSrc), loadImageData(fontSrc)]);
+  const [{ detect, ocr }, font] = await Promise.all([loadDetectAndOcr(imageSrc), loadFontRaster(fontSrc)]);
 
   const w = getWorker();
   const payload = {
     type: "process" as const,
-    image: { data: image.data, width: image.width, height: image.height },
+    detect: { data: detect.data, width: detect.width, height: detect.height },
+    ocr: { data: ocr.data, width: ocr.width, height: ocr.height },
     font: { data: font.data, width: font.width, height: font.height },
   };
 
@@ -125,7 +145,7 @@ export async function runWorkerPipeline(
     };
     w.addEventListener("message", handler);
     try {
-      w.postMessage(payload, [image.data.buffer, font.data.buffer]);
+      w.postMessage(payload, [detect.data.buffer, ocr.data.buffer, font.data.buffer]);
     } catch {
       w.postMessage(payload);
     }

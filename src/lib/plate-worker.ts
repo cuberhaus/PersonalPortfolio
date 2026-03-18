@@ -12,9 +12,8 @@ import {
   labelConnectedComponents,
   computeRegionStats,
   allRegionStatsEfficient,
-  resizeGray,
-  resizeRGBA,
-  matchTemplateNCC,
+  letterboxGray,
+  glyphMatchScore,
   cropGray,
   cropRGBA,
   drawRectRGBA,
@@ -24,7 +23,6 @@ import {
   type Rect,
 } from "./imgproc";
 
-const MAX_INPUT_DIM = 1400;
 
 const CHAR_LABELS = [
   "1","2","3","4","5","6","7","8","9","0",
@@ -64,6 +62,21 @@ function fontCellRects(cropWidth: number): { x: number; w: number }[] {
     { x: 464, w: Math.max(0, W - 464) },
   ];
   return rects.filter((r) => r.w > 2);
+}
+
+/** Greek plates: AAA-1234 → 3 letters + 4 digits (no separator in OCR). */
+function isPlateDigitLabel(s: string): boolean {
+  return s.length === 1 && s >= "0" && s <= "9";
+}
+function isPlateLetterLabel(s: string): boolean {
+  return s.length === 1 && s >= "a" && s <= "z";
+}
+
+interface GlyphTemplate {
+  label: string;
+  tmpl: GrayImage;
+  /** Trimmed ink bbox aspect width/height (font glyph). */
+  ar: number;
 }
 
 interface ImageBuffer {
@@ -189,26 +202,7 @@ function findChars(plate: RGBAImage): { charRects: Rect[]; stages: ImageBuffer[]
   return { charRects: cands.map((c) => c.bbox), stages };
 }
 
-/** Trim horizontal padding on binary glyph (ink bounding box). */
-function trimGlyphHorizontal(bin: GrayImage): GrayImage {
-  let minX = bin.width, maxX = -1;
-  for (let y = 0; y < bin.height; y++) {
-    const row = y * bin.width;
-    for (let x = 0; x < bin.width; x++) {
-      if (bin.data[row + x] < 128) {
-        if (x < minX) minX = x;
-        if (x > maxX) maxX = x;
-      }
-    }
-  }
-  if (maxX < minX) return bin;
-  const pad = 1;
-  minX = Math.max(0, minX - pad);
-  maxX = Math.min(bin.width - 1, maxX + pad);
-  return cropGray(bin, { x: minX, y: 0, w: maxX - minX + 1, h: bin.height });
-}
-
-function prepareTemplates(fontRGBA: RGBAImage): { label: string; tmpl: GrayImage }[] {
+function prepareTemplates(fontRGBA: RGBAImage): GlyphTemplate[] {
   const gray = rgbaToGray(fontRGBA);
   const cropH = Math.min(70, gray.height);
   const cw = Math.min(500, Math.max(0, gray.width - 15));
@@ -222,43 +216,98 @@ function prepareTemplates(fontRGBA: RGBAImage): { label: string; tmpl: GrayImage
 
   const binFull = thresholdOtsu(cropped, true);
   const rects = fontCellRects(cropped.width);
-  const tmpls: { label: string; tmpl: GrayImage }[] = [];
+  const tmpls: GlyphTemplate[] = [];
 
   for (let i = 0; i < rects.length && i < CHAR_LABELS.length; i++) {
     const { x, w } = rects[i];
     if (x + w > cropped.width || w < 3) continue;
     const cell = cropGray(binFull, { x, y: 0, w, h: cropped.height });
-    const trimmed = trimGlyphHorizontal(cell);
+    const trimmed = trimInkBox(cell, 2);
     if (trimmed.width < 2 || trimmed.height < 4) continue;
-    tmpls.push({ label: CHAR_LABELS[i], tmpl: resizeGray(trimmed, 20, 30) });
+    const ar = trimmed.width / Math.max(1, trimmed.height);
+    tmpls.push({
+      label: CHAR_LABELS[i],
+      tmpl: letterboxGray(trimmed, 20, 30, 0),
+      ar,
+    });
   }
   return tmpls;
+}
+
+/** Gaussian in log-aspect space; helps M (wide) vs n (narrow). */
+function letterAspectBonus(qw: number, qh: number, tmplAr: number): number {
+  const rq = qw / Math.max(1, qh);
+  const d = Math.log((rq + 1e-6) / (tmplAr + 1e-6));
+  return Math.exp(-(d * d) / (2 * 0.28 * 0.28));
+}
+
+function trimInkBox(bin: GrayImage, pad: number): GrayImage {
+  const { width: w, height: h, data: d } = bin;
+  let minX = w, maxX = -1, minY = h, maxY = -1;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (d[y * w + x] > 127) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+  if (maxX < minX) return bin;
+  minX = Math.max(0, minX - pad);
+  maxX = Math.min(w - 1, maxX + pad);
+  minY = Math.max(0, minY - pad);
+  maxY = Math.min(h - 1, maxY + pad);
+  return cropGray(bin, { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 });
 }
 
 function identifyChars(
   plate: RGBAImage,
   charRects: Rect[],
-  templates: { label: string; tmpl: GrayImage }[]
+  templates: GlyphTemplate[]
 ): { text: string; charImages: ImageBuffer[] } {
   const charImages: ImageBuffer[] = [];
   let text = "";
+  const greek7 = charRects.length === 7;
 
-  for (const r of charRects) {
+  for (let si = 0; si < charRects.length; si++) {
+    const r = charRects[si];
     const cx = Math.max(0, r.x), cy = Math.max(0, r.y);
     const cw = Math.min(r.w, plate.width - cx), ch = Math.min(r.h, plate.height - cy);
     if (cw <= 0 || ch <= 0) continue;
 
+    const letterOnly = greek7 && si < 3;
+    const digitOnly = greek7 && si >= 3;
+
     const charRGBA = cropRGBA(plate, { x: cx, y: cy, w: cw, h: ch });
     const gray = rgbaToGray(charRGBA);
-    const bin = thresholdOtsu(gray, true);
-    const resized = resizeGray(bin, 20, 30);
-    charImages.push(grayToBuffer(resized, ""));
+    const binAdapt = bitwiseNot(adaptiveThresholdMean(gray, 0.7));
+    const binOtsu = thresholdOtsu(gray, true);
 
-    let bestScore = -Infinity, bestLabel = "?";
-    for (const t of templates) {
-      const sc = matchTemplateNCC(resized, t.tmpl);
-      if (sc > bestScore) { bestScore = sc; bestLabel = t.label; }
+    let bestScore = -Infinity;
+    let bestLabel = "?";
+    let displayLb = letterboxGray(trimInkBox(binAdapt, 2), 20, 30, 0);
+
+    const candidates = [binAdapt, binOtsu, bitwiseNot(binOtsu)];
+    for (const cand of candidates) {
+      const trimmed = trimInkBox(cand, 2);
+      if (trimmed.width < 1 || trimmed.height < 1) continue;
+      const lb = letterboxGray(trimmed, 20, 30, 0);
+      for (const t of templates) {
+        if (letterOnly && !isPlateLetterLabel(t.label)) continue;
+        if (digitOnly && !isPlateDigitLabel(t.label)) continue;
+        let sc = glyphMatchScore(lb, t.tmpl);
+        if (letterOnly) sc += 0.12 * letterAspectBonus(trimmed.width, trimmed.height, t.ar);
+        if (sc > bestScore) {
+          bestScore = sc;
+          bestLabel = t.label;
+          displayLb = lb;
+        }
+      }
     }
+
+    charImages.push(grayToBuffer(displayLb, ""));
     text += bestLabel;
   }
   return { text, charImages };
@@ -266,50 +315,89 @@ function identifyChars(
 
 // ─── Main processing entry ───
 
+function toRGBA(buf: { data: Uint8ClampedArray; width: number; height: number }): RGBAImage {
+  return { data: new Uint8ClampedArray(buf.data), width: buf.width, height: buf.height };
+}
+
+/** Plate bbox on `detect` scaled to `ocr`, with padding so glyphs aren’t clipped. */
+function mapPlateRectToOcr(
+  r: Rect,
+  detectW: number,
+  detectH: number,
+  ocr: RGBAImage
+): Rect {
+  const sx = ocr.width / detectW;
+  const sy = ocr.height / detectH;
+  const padX = Math.max(6, Math.round(r.w * sx * 0.05));
+  const padY = Math.max(6, Math.round(r.h * sy * 0.15));
+  let x = Math.floor(r.x * sx) - padX;
+  let y = Math.floor(r.y * sy) - padY;
+  let w = Math.ceil(r.w * sx) + 2 * padX;
+  let h = Math.ceil(r.h * sy) + 2 * padY;
+  x = Math.max(0, x);
+  y = Math.max(0, y);
+  w = Math.min(w, ocr.width - x);
+  h = Math.min(h, ocr.height - y);
+  return { x, y, w: Math.max(1, w), h: Math.max(1, h) };
+}
+
 function processImage(
-  imgBuf: { data: Uint8ClampedArray; width: number; height: number },
+  detectBuf: { data: Uint8ClampedArray; width: number; height: number },
+  ocrBuf: { data: Uint8ClampedArray; width: number; height: number },
   fontBuf: { data: Uint8ClampedArray; width: number; height: number }
 ) {
-  let src: RGBAImage = { data: new Uint8ClampedArray(imgBuf.data), width: imgBuf.width, height: imgBuf.height };
-  const M = Math.max(src.width, src.height);
-  if (M > MAX_INPUT_DIM) {
-    const s = MAX_INPUT_DIM / M;
-    src = resizeRGBA(src, Math.round(src.width * s), Math.round(src.height * s));
-  }
-  const fontRGBA: RGBAImage = { data: new Uint8ClampedArray(fontBuf.data), width: fontBuf.width, height: fontBuf.height };
+  const detect = toRGBA(detectBuf);
+  const ocr = toRGBA(ocrBuf);
+  const fontRGBA = toRGBA(fontBuf);
   const templates = prepareTemplates(fontRGBA);
 
-  const plateRes = findPlate(src);
+  const plateRes = findPlate(detect);
   if (!plateRes) {
     return {
       plateText: "(no plate found)",
-      stage1: [rgbaToBuffer(src, "Original — no plate detected")],
+      stage1: [rgbaToBuffer(detect, "Original — no plate detected")],
       stage2: [] as ImageBuffer[],
       stage3: [] as ImageBuffer[],
       charImages: [] as ImageBuffer[],
     };
   }
 
-  const plateCrop = cropRGBA(src, plateRes.plateRect);
+  const plateRectOcr = mapPlateRectToOcr(plateRes.plateRect, detect.width, detect.height, ocr);
+  const plateCrop = cropRGBA(ocr, plateRectOcr);
+
+  let stage1 = plateRes.stages;
+  const last = stage1[stage1.length - 1];
+  if (last?.label === "Plate crop") {
+    stage1 = [...stage1.slice(0, -1), rgbaToBuffer(plateCrop, "Plate crop")];
+  }
+
   const charRes = findChars(plateCrop);
   if (!charRes || !charRes.charRects.length) {
     return {
       plateText: "(no characters found)",
-      stage1: plateRes.stages,
+      stage1,
       stage2: [rgbaToBuffer(plateCrop, "Plate — no characters detected")],
       stage3: [] as ImageBuffer[],
       charImages: [] as ImageBuffer[],
     };
   }
 
-  const ocr = identifyChars(plateCrop, charRes.charRects, templates);
+  const ocrOut = identifyChars(plateCrop, charRes.charRects, templates);
   return {
-    plateText: ocr.text,
-    stage1: plateRes.stages,
+    plateText: ocrOut.text,
+    stage1,
     stage2: charRes.stages,
     stage3: [] as ImageBuffer[],
-    charImages: ocr.charImages,
+    charImages: ocrOut.charImages,
   };
+}
+
+/** Legacy single-buffer path (small images). */
+function processImageSingle(
+  imgBuf: { data: Uint8ClampedArray; width: number; height: number },
+  fontBuf: { data: Uint8ClampedArray; width: number; height: number }
+) {
+  return processImage(imgBuf, imgBuf, fontBuf);
 }
 
 // ─── Worker message handler ───
@@ -322,7 +410,10 @@ self.onmessage = async (e: MessageEvent) => {
     report({ type: "ready" });
   } else if (msg.type === "process") {
     try {
-      const result = processImage(msg.image, msg.font);
+      const result =
+        msg.ocr && msg.detect
+          ? processImage(msg.detect, msg.ocr, msg.font)
+          : processImageSingle(msg.image, msg.font);
       report({ type: "result", ...result });
     } catch (err: any) {
       report({ type: "error", message: err.message });
