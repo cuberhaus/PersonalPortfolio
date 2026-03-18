@@ -1,3 +1,6 @@
+// Main-thread API for the plate-detection Web Worker.
+// The worker now uses pure JS image processing — no external downloads needed.
+
 export type LoadProgress = {
   phase: "downloading" | "initializing" | "ready";
   percent: number;
