@@ -136,6 +136,66 @@ function getPlateRegions(bin: GrayImage, relaxExtent: boolean): RegionStats[] {
   return regions;
 }
 
+/** Favor real plates over floor cracks: aspect, vertical band, area; penalize bottom strip. */
+function scorePlateGeometry(s: RegionStats, iw: number, ih: number): number {
+  const { bbox } = s;
+  const cy = (bbox.y + bbox.h * 0.5) / ih;
+  const ar = bbox.w / Math.max(1, bbox.h);
+  const relA = s.area / Math.max(1, iw * ih);
+
+  if (ar < 2.1 || ar > 8) return -1e9;
+  if (relA < 0.0006 || relA > 0.14) return -1e9;
+
+  let score = s.solidity * 2.1 + s.extent * 1.1;
+  const arFit = Math.exp(-Math.pow((Math.log(ar + 1e-6) - Math.log(4.0)) / 0.42, 2));
+  score += arFit * 1.6;
+  const vertPeak = Math.exp(-Math.pow((cy - 0.56) / 0.24, 2));
+  score += vertPeak * 2.2;
+  if (cy > 0.9) score -= 14;
+  else if (cy > 0.86) score -= 9;
+  else if (cy > 0.83) score -= 4;
+  else if (cy > 0.82) score -= 1.2;
+  if (cy < 0.22) score -= 1.8;
+  const bottomFrac = (bbox.y + bbox.h) / ih;
+  if (bottomFrac > 0.96) score -= 10;
+  else if (bottomFrac > 0.93) score -= 4;
+  else if (bottomFrac > 0.91) score -= 1.5;
+  const cx = (bbox.x + bbox.w * 0.5) / iw;
+  const cxFit = Math.exp(-Math.pow((cx - 0.5) / 0.55, 2));
+  score += cxFit * 0.35;
+  return score;
+}
+
+function expandRect(r: Rect, frac: number, iw: number, ih: number): Rect {
+  const px = Math.max(2, Math.round(r.w * frac));
+  const py = Math.max(2, Math.round(r.h * frac));
+  const x = Math.max(0, r.x - px);
+  const y = Math.max(0, r.y - py);
+  const w = Math.min(iw - x, r.w + 2 * px);
+  const h = Math.min(ih - y, r.h + 2 * py);
+  return { x, y, w: Math.max(1, w), h: Math.max(1, h) };
+}
+
+/** Rough count of char-sized components (true plate → ~7). */
+function countCharLikeBlobs(plateRGBA: RGBAImage): number {
+  const gray = rgbaToGray(plateRGBA);
+  const inv = bitwiseNot(adaptiveThresholdMean(gray, 0.7));
+  const cleared = clearBorder(inv);
+  const { labels, count } = labelConnectedComponents(cleared);
+  let n = 0;
+  const ph = cleared.height;
+  for (let id = 1; id <= count; id++) {
+    const st = computeRegionStats(cleared, labels, id);
+    if (st.area < 35 || st.area > 3500) continue;
+    if (st.bbox.w < 4 || st.bbox.h < Math.max(10, ph * 0.12)) continue;
+    if (st.bbox.h > Math.min(120, ph * 0.92)) continue;
+    if (st.extent < 0.18 || st.eccentricity > 0.995) continue;
+    if (Math.abs(st.orientation) < 55 && st.eccentricity > 0.9) continue;
+    n++;
+  }
+  return n;
+}
+
 function getCharCandidates(bin: GrayImage): { bbox: Rect }[] {
   const { labels, count } = labelConnectedComponents(bin);
   const stats =
@@ -156,50 +216,247 @@ function getCharCandidates(bin: GrayImage): { bbox: Rect }[] {
 
 // ─── Pipeline stages ───
 
-function findPlate(src: RGBAImage): { plateRect: Rect; stages: ImageBuffer[] } | null {
+function bboxDist2(a: Rect, b: Rect): number {
+  const ax = a.x + a.w * 0.5, ay = a.y + a.h * 0.5;
+  const bx = b.x + b.w * 0.5, by = b.y + b.h * 0.5;
+  const dx = ax - bx, dy = ay - by;
+  return dx * dx + dy * dy;
+}
+
+type FindPlateResult = { plateRect: Rect | null; stages: ImageBuffer[] };
+
+function pushMorphDebugStages(stages: ImageBuffer[], gray: GrayImage): void {
+  for (const sens of [0.55, 0.65, 0.75, 0.85]) {
+    const bin = adaptiveThresholdMean(gray, sens);
+    const filled = fillHoles(clearBorder(bin));
+    stages.push(
+      grayToBuffer(filled, `Morph input (s=${sens}) — clear-border + fill-holes`)
+    );
+  }
+}
+
+function findPlate(src: RGBAImage): FindPlateResult {
   const stages: ImageBuffer[] = [];
   const gray = rgbaToGray(src);
+  const iw = src.width, ih = src.height;
   stages.push(grayToBuffer(gray, "Grayscale"));
 
-  let sens = 0.4;
-  let best: RegionStats | null = null;
-  while (sens <= 1.0 && !best) {
+  type Item = { stats: RegionStats; g: number };
+  const pool: Item[] = [];
+
+  for (let sens = 0.4; sens <= 1.0 + 1e-6; sens += 0.1) {
     const bin = adaptiveThresholdMean(gray, sens);
     if (sens <= 0.5) stages.push(grayToBuffer(bin, `Binarized (s=${sens.toFixed(1)})`));
     const cleared = clearBorder(bin);
     const filled = fillHoles(cleared);
     const filtered = getPlateRegions(filled, sens > 0.4);
-    if (filtered.length > 0) {
-      best = filtered.reduce((a, b) => a.solidity > b.solidity ? a : b);
-      const vis: RGBAImage = { data: new Uint8ClampedArray(src.data), width: src.width, height: src.height };
-      drawRectRGBA(vis, best.bbox, [0, 255, 0], 3);
-      stages.push(rgbaToBuffer(vis, "Plate detected"));
+    for (const s of filtered) {
+      const g = scorePlateGeometry(s, iw, ih);
+      if (g > -1e8) pool.push({ stats: s, g });
     }
-    sens += 0.1;
   }
-  if (!best) return null;
+
+  if (pool.length === 0) {
+    for (let sens = 0.4; sens <= 1.0 + 1e-6; sens += 0.1) {
+      const bin = adaptiveThresholdMean(gray, sens);
+      const cleared = clearBorder(bin);
+      const filled = fillHoles(cleared);
+      const filtered = getPlateRegions(filled, true);
+      for (const s of filtered) pool.push({ stats: s, g: scorePlateGeometry(s, iw, ih) });
+    }
+  }
+  if (pool.length === 0) {
+    pushMorphDebugStages(stages, gray);
+    stages.push(
+      grayToBuffer(
+        gray,
+        "No elongated high-aspect CC found (check lighting / plate contrast vs body)"
+      )
+    );
+    return { plateRect: null, stages };
+  }
+
+  pool.sort((a, b) => b.g - a.g);
+  const minD2 = Math.min(iw, ih) * 0.08;
+  const minD2Sq = minD2 * minD2;
+  const diverse: Item[] = [];
+  for (const it of pool) {
+    if (diverse.some((d) => bboxDist2(d.stats.bbox, it.stats.bbox) < minD2Sq)) continue;
+    diverse.push(it);
+    if (diverse.length >= 18) break;
+  }
+  while (diverse.length < 8 && diverse.length < pool.length) {
+    const next = pool.find((p) => !diverse.some((d) => bboxDist2(d.stats.bbox, p.stats.bbox) < minD2Sq * 0.25));
+    if (!next) break;
+    diverse.push(next);
+  }
+
+  const cyOf = (st: RegionStats) => (st.bbox.y + st.bbox.h * 0.5) / ih;
+  const hasUpperCandidate = diverse.some((it) => {
+    const cy = cyOf(it.stats);
+    return cy >= 0.32 && cy <= 0.81;
+  });
+  const plateCandidates = hasUpperCandidate
+    ? diverse.filter((it) => cyOf(it.stats) <= 0.855)
+    : diverse;
+  let workList = plateCandidates.length > 0 ? plateCandidates : diverse;
+
+  /** Front plates sit ~center; false positives sit on pavement corners (IMG_0380). */
+  const isFloorLikePlateBox = (bbox: Rect) => {
+    const cx = (bbox.x + bbox.w * 0.5) / iw;
+    const cy = (bbox.y + bbox.h * 0.5) / ih;
+    if (cy > 0.798) return true;
+    if (cy > 0.7 && cx < 0.345) return true;
+    if (cy > 0.715 && cx > 0.655) return true;
+    return false;
+  };
+  const notFloor = workList.filter((it) => !isFloorLikePlateBox(it.stats.bbox));
+  if (notFloor.length > 0) workList = notFloor;
+  else {
+    pushMorphDebugStages(stages, gray);
+    const vis: RGBAImage = { data: new Uint8ClampedArray(src.data), width: iw, height: ih };
+    const show = workList.slice(0, 14);
+    for (const it of show) drawRectRGBA(vis, it.stats.bbox, [255, 115, 35], 2);
+    stages.push(
+      rgbaToBuffer(
+        vis,
+        `Orange boxes: ${workList.length} candidate(s) — all rejected as floor-like (low/corner)`
+      )
+    );
+    stages.push(
+      grayToBuffer(
+        fillHoles(clearBorder(adaptiveThresholdMean(gray, 0.7))),
+        "Same binary as above @ s=0.7 (where CCs are extracted)"
+      )
+    );
+    return { plateRect: null, stages };
+  }
+
+  let best = workList[0].stats;
+  let bestTotal = workList[0].g;
+
+  for (const it of workList) {
+    const cy = cyOf(it.stats);
+    const exp = expandRect(it.stats.bbox, 0.06, iw, ih);
+    const crop = cropRGBA(src, exp);
+    const nb = countCharLikeBlobs(crop);
+    let bonus = 0;
+    if (cy <= 0.84) {
+      if (nb >= 6 && nb <= 8) bonus = 8;
+      else if (nb >= 5 && nb <= 9) bonus = 5;
+      else if (nb >= 4 && nb <= 10) bonus = 2;
+    } else if (cy <= 0.88 && nb >= 6 && nb <= 8) bonus = 1;
+    if (nb > 22) bonus -= 4;
+    const total = it.g + bonus;
+    if (total > bestTotal) {
+      bestTotal = total;
+      best = it.stats;
+    }
+  }
+
+  const vis: RGBAImage = { data: new Uint8ClampedArray(src.data), width: iw, height: ih };
+  drawRectRGBA(vis, best.bbox, [0, 255, 0], 3);
+  stages.push(rgbaToBuffer(vis, "Plate detected"));
 
   const plateCrop = cropRGBA(src, best.bbox);
   stages.push(rgbaToBuffer(plateCrop, "Plate crop"));
   return { plateRect: best.bbox, stages };
 }
 
+function scoreCharCount(n: number): number {
+  if (n >= 7 && n <= 8) return 220 + n;
+  if (n === 6 || n === 9) return 180;
+  if (n === 5 || n === 10) return 130;
+  if (n === 4 || n === 11) return 70;
+  return n;
+}
+
+function medianNums(a: number[]): number {
+  if (!a.length) return 0;
+  const s = [...a].sort((x, y) => x - y);
+  const m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+
+/**
+ * Rejects pavement speckle “7 characters” (random sizes, no shared baseline, tiny span).
+ */
+function isPlausiblePlateCharRow(cands: { bbox: Rect }[], pw: number, ph: number): boolean {
+  if (cands.length < 6 || cands.length > 11) return false;
+  const sorted = [...cands].sort((a, b) => a.bbox.x - b.bbox.x);
+  const hs = sorted.map((c) => c.bbox.h);
+  const hm = medianNums(hs);
+  if (hm < ph * 0.062 || hm > ph * 0.9) return false;
+
+  let badH = 0;
+  for (const h of hs) if (h < hm * 0.42 || h > hm * 2.05) badH++;
+  if (badH > Math.max(1, Math.floor(cands.length * 0.32))) return false;
+
+  const cys = sorted.map((c) => c.bbox.y + c.bbox.h * 0.5);
+  if (Math.max(...cys) - Math.min(...cys) > Math.min(ph * 0.36, hm * 2.35)) return false;
+
+  const x0 = sorted[0].bbox.x;
+  const x1 = sorted[sorted.length - 1].bbox.x + sorted[sorted.length - 1].bbox.w;
+  const span = x1 - x0;
+  if (span < pw * (cands.length >= 7 ? 0.36 : 0.44)) return false;
+
+  const gaps: number[] = [];
+  let overlaps = 0;
+  for (let i = 1; i < sorted.length; i++) {
+    const g = sorted[i].bbox.x - (sorted[i - 1].bbox.x + sorted[i - 1].bbox.w);
+    if (g < -4) overlaps++;
+    else if (g >= 0) gaps.push(g);
+  }
+  if (overlaps > 1) return false;
+  if (gaps.length >= 4) {
+    const mg = gaps.reduce((u, v) => u + v, 0) / gaps.length;
+    if (mg < pw * 0.004) return false;
+    const vr = gaps.reduce((u, g) => u + (g - mg) ** 2, 0) / gaps.length;
+    const sd = Math.sqrt(vr);
+    if (mg > 1e-6 && sd / mg > 1.18) return false;
+  }
+  return true;
+}
+
 function findChars(plate: RGBAImage): { charRects: Rect[]; stages: ImageBuffer[] } | null {
-  const stages: ImageBuffer[] = [];
   const gray = rgbaToGray(plate);
-  const bin = adaptiveThresholdMean(gray, 0.7);
-  const inv = bitwiseNot(bin);
-  stages.push(grayToBuffer(inv, "Inverted threshold"));
-  const cleared = clearBorder(inv);
+  const pw = plate.width, ph = plate.height;
+  type Row = { sc: number; n: number; bin: GrayImage; cands: { bbox: Rect }[] };
+  const rows: Row[] = [];
 
-  const cands = getCharCandidates(cleared);
-  if (!cands.length) return null;
+  const tryBin = (bin: GrayImage) => {
+    const cleared = clearBorder(bin);
+    const cands = getCharCandidates(cleared);
+    const n = cands.length;
+    if (n < 6 || n > 14) return;
+    rows.push({ sc: scoreCharCount(n), n, bin, cands });
+  };
 
-  const vis: RGBAImage = { data: new Uint8ClampedArray(plate.data), width: plate.width, height: plate.height };
-  for (const c of cands) drawRectRGBA(vis, c.bbox, [0, 255, 0], 2);
-  stages.push(rgbaToBuffer(vis, `${cands.length} characters found`));
+  for (const sens of [0.48, 0.55, 0.62, 0.7, 0.78, 0.85, 0.92]) {
+    const b = adaptiveThresholdMean(gray, sens);
+    tryBin(bitwiseNot(b));
+    tryBin(b);
+  }
+  const o1 = thresholdOtsu(gray, true);
+  const o0 = thresholdOtsu(gray, false);
+  tryBin(o1);
+  tryBin(bitwiseNot(o1));
+  tryBin(o0);
+  tryBin(bitwiseNot(o0));
 
-  return { charRects: cands.map((c) => c.bbox), stages };
+  rows.sort((a, b) => b.sc - a.sc || Math.abs(a.n - 7) - Math.abs(b.n - 7));
+  for (const r of rows) {
+    if (r.n < 6) continue;
+    if (!isPlausiblePlateCharRow(r.cands, pw, ph)) continue;
+
+    const stages: ImageBuffer[] = [];
+    stages.push(grayToBuffer(r.bin, "Binarization (segmentation)"));
+    const vis: RGBAImage = { data: new Uint8ClampedArray(plate.data), width: pw, height: ph };
+    for (const c of r.cands) drawRectRGBA(vis, c.bbox, [0, 255, 0], 2);
+    stages.push(rgbaToBuffer(vis, `${r.n} characters found`));
+    return { charRects: r.cands.map((c) => c.bbox), stages };
+  }
+  return null;
 }
 
 function prepareTemplates(fontRGBA: RGBAImage): GlyphTemplate[] {
@@ -328,8 +585,8 @@ function mapPlateRectToOcr(
 ): Rect {
   const sx = ocr.width / detectW;
   const sy = ocr.height / detectH;
-  const padX = Math.max(6, Math.round(r.w * sx * 0.05));
-  const padY = Math.max(6, Math.round(r.h * sy * 0.15));
+  const padX = Math.max(10, Math.round(r.w * sx * 0.1));
+  const padY = Math.max(8, Math.round(r.h * sy * 0.28));
   let x = Math.floor(r.x * sx) - padX;
   let y = Math.floor(r.y * sy) - padY;
   let w = Math.ceil(r.w * sx) + 2 * padX;
@@ -339,6 +596,77 @@ function mapPlateRectToOcr(
   w = Math.min(w, ocr.width - x);
   h = Math.min(h, ocr.height - y);
   return { x, y, w: Math.max(1, w), h: Math.max(1, h) };
+}
+
+/**
+ * CC plate hits are often a fragment; widen to plausible Greek plate size so OCR
+ * has enough pixels and ~7 char blobs can appear.
+ */
+function normalizePlateRectOcr(r: Rect, ocrW: number, ocrH: number): Rect {
+  let w = r.w, h = r.h;
+  const cx = r.x + w * 0.5, cy = r.y + h * 0.5;
+  const ar = w / Math.max(1, h);
+  const minW = Math.round(ocrW * 0.095);
+  const minH = Math.round(ocrH * 0.016);
+  if (ar < 2.35) w = Math.max(minW, Math.min(Math.round(ocrW * 0.52), Math.round(h * 4.35)));
+  else w = Math.max(w, minW);
+  h = Math.max(h, minH);
+  w = Math.min(w, Math.round(ocrW * 0.58));
+  h = Math.min(h, Math.round(ocrH * 0.09));
+  let x = Math.round(cx - w * 0.5);
+  let y = Math.round(cy - h * 0.5);
+  x = Math.max(0, Math.min(x, ocrW - 1));
+  y = Math.max(0, Math.min(y, ocrH - 1));
+  w = Math.min(w, ocrW - x);
+  h = Math.min(h, ocrH - y);
+  return { x, y, w: Math.max(32, w), h: Math.max(14, h) };
+}
+
+function expandRectCentered(r: Rect, scale: number, ocrW: number, ocrH: number): Rect {
+  const cx = r.x + r.w * 0.5, cy = r.y + r.h * 0.5;
+  let w = Math.min(Math.round(r.w * scale), ocrW);
+  let h = Math.min(Math.round(r.h * scale), ocrH);
+  let x = Math.round(cx - w * 0.5);
+  let y = Math.round(cy - h * 0.5);
+  x = Math.max(0, Math.min(x, ocrW - w));
+  y = Math.max(0, Math.min(y, ocrH - h));
+  w = Math.min(w, ocrW - x);
+  h = Math.min(h, ocrH - y);
+  return { x, y, w: Math.max(32, w), h: Math.max(14, h) };
+}
+
+/** Slide crop vertically (bumper vs floor on dark garage shots like IMG_0380). */
+function bestPlateWindowBySegmentation(
+  ocr: RGBAImage,
+  base: Rect
+): { crop: RGBAImage; rect: Rect; charRes: NonNullable<ReturnType<typeof findChars>> } | null {
+  const W = ocr.width, H = ocr.height;
+  const shifts = [-0.17, -0.12, -0.075, -0.038, 0, 0.045, 0.09];
+  let best: { crop: RGBAImage; rect: Rect; charRes: NonNullable<ReturnType<typeof findChars>>; sc: number } | null =
+    null;
+
+  for (const f of shifts) {
+    const dy = Math.round(f * H);
+    let y = base.y + dy;
+    let h = base.h;
+    if (y < 0) {
+      h += y;
+      y = 0;
+    }
+    if (h < 20) continue;
+    if (y + h > H) h = H - y;
+    const x = Math.max(0, Math.min(base.x, W - base.w));
+    const w = Math.min(base.w, W - x);
+    if (w < 28) continue;
+    const rect = { x, y, w, h };
+    const crop = cropRGBA(ocr, rect);
+    const charRes = findChars(crop);
+    const n = charRes?.charRects.length ?? 0;
+    if (n < 5) continue;
+    const sc = scoreCharCount(n) - Math.abs(n - 7) * 8;
+    if (!best || sc > best.sc) best = { crop, rect, charRes: charRes!, sc };
+  }
+  return best;
 }
 
 function processImage(
@@ -352,35 +680,65 @@ function processImage(
   const templates = prepareTemplates(fontRGBA);
 
   const plateRes = findPlate(detect);
-  if (!plateRes) {
+  if (!plateRes.plateRect) {
     return {
       plateText: "(no plate found)",
-      stage1: [rgbaToBuffer(detect, "Original — no plate detected")],
+      stage1: plateRes.stages,
       stage2: [] as ImageBuffer[],
       stage3: [] as ImageBuffer[],
       charImages: [] as ImageBuffer[],
     };
   }
 
-  const plateRectOcr = mapPlateRectToOcr(plateRes.plateRect, detect.width, detect.height, ocr);
-  const plateCrop = cropRGBA(ocr, plateRectOcr);
+  const W = ocr.width, H = ocr.height;
+  const rect0 = normalizePlateRectOcr(
+    mapPlateRectToOcr(plateRes.plateRect, detect.width, detect.height, ocr),
+    W,
+    H
+  );
+  const yUp = Math.max(0, rect0.y - Math.round(0.11 * H));
+  const rectUp: Rect = { ...rect0, y: yUp, h: Math.min(rect0.h, H - yUp) };
 
-  let stage1 = plateRes.stages;
-  const last = stage1[stage1.length - 1];
-  if (last?.label === "Plate crop") {
-    stage1 = [...stage1.slice(0, -1), rgbaToBuffer(plateCrop, "Plate crop")];
+  let win =
+    bestPlateWindowBySegmentation(ocr, rect0) ||
+    bestPlateWindowBySegmentation(ocr, expandRectCentered(rect0, 1.42, W, H)) ||
+    bestPlateWindowBySegmentation(ocr, rectUp) ||
+    bestPlateWindowBySegmentation(ocr, expandRectCentered(rectUp, 1.38, W, H));
+
+  let plateCrop: RGBAImage;
+  let charRes: NonNullable<ReturnType<typeof findChars>>;
+  if (win) {
+    plateCrop = win.crop;
+    charRes = win.charRes;
+  } else {
+    plateCrop = cropRGBA(ocr, rect0);
+    const last = findChars(plateCrop);
+    if (!last?.charRects.length) {
+      return {
+        plateText: "(no characters found)",
+        stage1: (() => {
+          const st = plateRes.stages;
+          const i = st.length - 1;
+          const buf = rgbaToBuffer(plateCrop, "Plate crop");
+          return i >= 0 && st[i].label === "Plate crop" ? [...st.slice(0, -1), buf] : [...st, buf];
+        })(),
+        stage2: [rgbaToBuffer(plateCrop, "Plate — no characters detected")],
+        stage3: [] as ImageBuffer[],
+        charImages: [] as ImageBuffer[],
+      };
+    }
+    charRes = last;
   }
 
-  const charRes = findChars(plateCrop);
-  if (!charRes || !charRes.charRects.length) {
-    return {
-      plateText: "(no characters found)",
-      stage1,
-      stage2: [rgbaToBuffer(plateCrop, "Plate — no characters detected")],
-      stage3: [] as ImageBuffer[],
-      charImages: [] as ImageBuffer[],
-    };
-  }
+  const stage1WithPlateCrop = () => {
+    const st = plateRes.stages;
+    const i = st.length - 1;
+    if (i >= 0 && st[i].label === "Plate crop") {
+      return [...st.slice(0, -1), rgbaToBuffer(plateCrop, "Plate crop")];
+    }
+    return [...st, rgbaToBuffer(plateCrop, "Plate crop")];
+  };
+  const stage1 = stage1WithPlateCrop();
 
   const ocrOut = identifyChars(plateCrop, charRes.charRects, templates);
   return {
