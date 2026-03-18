@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 
 const basePath =
   typeof import.meta !== "undefined" && import.meta.env?.BASE_URL != null
@@ -117,6 +117,364 @@ type PlanResponse = {
   error?: string;
   time_sec?: number;
 };
+
+/** Parsed step from (anadir_ciudad from to flight hotel diasN) */
+type TripStep = {
+  from: string;
+  to: string;
+  flight: string;
+  hotel: string;
+  diasToken: string;
+  days: number | null;
+};
+
+function parseDiasFromProblem(problem: string): Record<string, number> {
+  const m: Record<string, number> = {};
+  const re = /\(=\s*\(dias_por_ciudad\s+(\w+)\)\s+(\d+)\)/g;
+  let x: RegExpExecArray | null;
+  while ((x = re.exec(problem))) {
+    m[x[1]] = parseInt(x[2], 10);
+  }
+  return m;
+}
+
+function parseInteresFromProblem(problem: string): Record<string, number> {
+  const m: Record<string, number> = {};
+  const re = /\(=\s*\(interes_ciudad\s+(\w+)\)\s+(\d+)\)/g;
+  let x: RegExpExecArray | null;
+  while ((x = re.exec(problem))) {
+    m[x[1]] = parseInt(x[2], 10);
+  }
+  return m;
+}
+
+function parseTripSteps(plan: string[], diasMap: Record<string, number>): TripStep[] {
+  const out: TripStep[] = [];
+  for (const line of plan) {
+    const t = line.trim();
+    if (!t.startsWith("(anadir_ciudad ") || !t.endsWith(")")) continue;
+    const inner = t.slice("(anadir_ciudad ".length, -1).trim().split(/\s+/);
+    if (inner.length < 5) continue;
+    const [from, to, flight, hotel, diasToken] = inner;
+    const days = diasMap[diasToken] ?? null;
+    out.push({ from, to, flight, hotel, diasToken, days });
+  }
+  return out;
+}
+
+const CITY_COLORS = ["#6366f1", "#a855f7", "#22c55e", "#f59e0b", "#ec4899", "#06b6d4", "#f472b6"];
+
+function cityColor(id: string): string {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0;
+  return CITY_COLORS[Math.abs(h) % CITY_COLORS.length] ?? "#6366f1";
+}
+
+function PlanRouteSvg({
+  steps,
+  interes,
+  arrowMarkerId,
+}: {
+  steps: TripStep[];
+  interes: Record<string, number>;
+  arrowMarkerId: string;
+}) {
+  if (steps.length === 0) return null;
+  const cities: string[] = [steps[0].from];
+  for (const s of steps) cities.push(s.to);
+  const n = cities.length;
+  const w = Math.min(640, Math.max(320, 48 + (n - 1) * 88));
+  const svgH = 108;
+  const pad = 40;
+  const usable = w - 2 * pad;
+  const dx = n > 1 ? usable / (n - 1) : 0;
+  const cy = 44;
+  const r = 18;
+
+  const pos = (i: number) => pad + i * dx;
+
+  return (
+    <div style={{ overflowX: "auto" as const, marginBottom: "1.25rem", WebkitOverflowScrolling: "touch" }}>
+      <svg
+        width={w}
+        height={svgH}
+        viewBox={`0 0 ${w} ${svgH}`}
+        style={{ display: "block", minWidth: w }}
+        aria-label="Trip route across cities"
+      >
+        <defs>
+          <marker id={arrowMarkerId} markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#52525b" />
+          </marker>
+        </defs>
+        {steps.map((s, i) => {
+          const x1 = pos(i);
+          const x2 = pos(i + 1);
+          const mid = (x1 + x2) / 2;
+          return (
+            <g key={i}>
+              <line
+                x1={x1 + r * 0.7}
+                y1={cy}
+                x2={x2 - r * 0.7}
+                y2={cy}
+                stroke="#3f3f46"
+                strokeWidth={3}
+                markerEnd={`url(#${arrowMarkerId})`}
+              />
+              <text
+                x={mid}
+                y={cy - 10}
+                textAnchor="middle"
+                fill="#a1a1aa"
+                fontSize="10"
+                fontFamily="ui-monospace, monospace"
+              >
+                {s.flight}
+              </text>
+            </g>
+          );
+        })}
+        {cities.map((c, i) => {
+          const x = pos(i);
+          const fill = cityColor(c);
+          const interest = interes[c];
+          return (
+            <g key={`${c}-${i}`}>
+              <circle cx={x} cy={cy} r={r} fill={fill} opacity={0.92} stroke="#18181b" strokeWidth={2} />
+              <text
+                x={x}
+                y={cy + 5}
+                textAnchor="middle"
+                fill="#fafafa"
+                fontSize="11"
+                fontWeight={700}
+                fontFamily="ui-monospace, monospace"
+              >
+                {c}
+              </text>
+              {interest != null && (
+                <text x={x} y={cy + r + 16} textAnchor="middle" fill="#71717a" fontSize="9">
+                  interest {interest}
+                </text>
+              )}
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+function PlanTimeline({ steps, diasMap }: { steps: TripStep[]; diasMap: Record<string, number> }) {
+  if (steps.length === 0) return null;
+  let cumDays = 0;
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column" as const,
+        gap: "0.65rem",
+        marginBottom: "1.25rem",
+      }}
+    >
+      {steps.map((s, i) => {
+        const d = s.days ?? diasMap[s.diasToken] ?? null;
+        if (d != null) cumDays += d;
+        return (
+          <div
+            key={i}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "2rem 1fr",
+              gap: "0.75rem",
+              alignItems: "start",
+            }}
+          >
+            <div
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #6366f1, #7c3aed)",
+                color: "#fff",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {i + 1}
+            </div>
+            <div
+              style={{
+                background: "#12121a",
+                border: "1px solid #27272a",
+                borderRadius: "0.5rem",
+                padding: "0.65rem 0.85rem",
+              }}
+            >
+              <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "#e4e4e7", marginBottom: "0.35rem" }}>
+                <span style={{ color: cityColor(s.from) }}>{s.from}</span>
+                <span style={{ color: "#71717a", margin: "0 0.35rem" }}>→</span>
+                <span style={{ color: cityColor(s.to) }}>{s.to}</span>
+              </div>
+              <div style={{ fontSize: "0.78rem", color: "#a1a1aa", lineHeight: 1.5 }}>
+                <span title="Flight">✈️</span> {s.flight} &nbsp;·&nbsp; <span title="Hotel">🏨</span> {s.hotel}{" "}
+                &nbsp;·&nbsp; <span title="Stay">📅</span> {d != null ? `${d} days` : s.diasToken}
+                {d != null && (
+                  <span style={{ color: "#71717a", marginLeft: "0.5rem" }}>
+                    (cumulative trip days: {cumDays})
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function citiesFirstAppearanceAlongRoute(steps: TripStep[]): string[] {
+  const out: string[] = [];
+  for (const s of steps) {
+    if (!out.includes(s.from)) out.push(s.from);
+    if (!out.includes(s.to)) out.push(s.to);
+  }
+  return out;
+}
+
+function TripLegend({ steps, interes }: { steps: TripStep[]; interes: Record<string, number> }) {
+  const cities = citiesFirstAppearanceAlongRoute(steps);
+  const legStyle = { fontSize: "0.76rem" as const, color: "#a1a1aa", lineHeight: 1.55, margin: "0.2rem 0" };
+  return (
+    <div
+      style={{
+        marginBottom: "1rem",
+        padding: "0.75rem 0.9rem",
+        background: "#12121a",
+        border: "1px solid #2e2e38",
+        borderRadius: "0.5rem",
+      }}
+    >
+      <p style={{ margin: "0 0 0.5rem", fontSize: "0.72rem", fontWeight: 700, color: "#c4b5fd", letterSpacing: "0.04em" }}>
+        LEGEND
+      </p>
+      <div
+        style={{
+          display: "grid",
+          gap: "0.85rem",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        }}
+      >
+        <div>
+          <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 600, color: "#d4d4d8" }}>Diagram</p>
+          <ul style={{ margin: 0, paddingLeft: "1.1rem", color: "#a1a1aa", fontSize: "0.74rem", lineHeight: 1.5 }}>
+            <li style={legStyle}>
+              <strong style={{ color: "#e4e4e7" }}>Colored circles</strong> — cities (<code>ciudad</code> objects).
+              Label on the circle is the PDDL name (<code>cg1</code>, <code>c1</code>, …).
+            </li>
+            <li style={legStyle}>
+              <strong style={{ color: "#e4e4e7" }}>Arrows</strong> — one trip leg. Text above the arrow is the{" "}
+              <strong>flight</strong> id (<code>vuelo</code>).
+            </li>
+            <li style={legStyle}>
+              <strong style={{ color: "#e4e4e7" }}>interest N</strong> (under a city) — fluent{" "}
+              <code>(interes_ciudad c)</code> from your problem; the planner minimizes the sum added when visiting
+              new cities.
+            </li>
+          </ul>
+        </div>
+        <div>
+          <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 600, color: "#d4d4d8" }}>
+            Action <code style={{ fontSize: "0.68rem", color: "#c4b5fd" }}>(anadir_ciudad …)</code>
+          </p>
+          <dl
+            style={{
+              margin: 0,
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: "0.25rem 0.65rem",
+              fontSize: "0.74rem",
+              color: "#a1a1aa",
+              lineHeight: 1.45,
+            }}
+          >
+            <dt style={{ fontFamily: "ui-monospace, monospace", color: "#c4b5fd" }}>c₁</dt>
+            <dd style={{ margin: 0 }}>From city (must be current location).</dd>
+            <dt style={{ fontFamily: "ui-monospace, monospace", color: "#c4b5fd" }}>c₂</dt>
+            <dd style={{ margin: 0 }}>City you fly to (must not be visited yet).</dd>
+            <dt style={{ fontFamily: "ui-monospace, monospace", color: "#c4b5fd" }}>v</dt>
+            <dd style={{ margin: 0 }}>Flight <code>va_a</code> from c₁ to c₂.</dd>
+            <dt style={{ fontFamily: "ui-monospace, monospace", color: "#c4b5fd" }}>h</dt>
+            <dd style={{ margin: 0 }}>Hotel at c₂ (<code>esta_en</code>).</dd>
+            <dt style={{ fontFamily: "ui-monospace, monospace", color: "#c4b5fd" }}>d</dt>
+            <dd style={{ margin: 0 }}>
+              Stay token; nights = <code>(dias_por_ciudad d)</code> in the problem.
+            </dd>
+          </dl>
+        </div>
+        <div>
+          <p style={{ margin: "0 0 0.35rem", fontSize: "0.72rem", fontWeight: 600, color: "#d4d4d8" }}>Timeline row</p>
+          <ul style={{ margin: 0, paddingLeft: "1.1rem", color: "#a1a1aa", fontSize: "0.74rem", lineHeight: 1.5 }}>
+            <li style={legStyle}>
+              ✈️ / 🏨 / 📅 — flight id, hotel id, nights in that city.
+            </li>
+            <li style={legStyle}>
+              <strong style={{ color: "#e4e4e7" }}>Cumulative trip days</strong> — running sum of nights (must reach{" "}
+              <code>min_dias_recorrido</code> by the goal).
+            </li>
+            <li style={legStyle}>
+              <strong style={{ color: "#e4e4e7" }}>Step number</strong> (purple badge) — position in the plan (1, 2, 3…).
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div style={{ marginTop: "0.85rem", paddingTop: "0.65rem", borderTop: "1px solid #2e2e38" }}>
+        <p style={{ margin: "0 0 0.45rem", fontSize: "0.72rem", fontWeight: 600, color: "#d4d4d8" }}>
+          City colors (same id → same hue)
+        </p>
+        <p style={{ margin: "0 0 0.5rem", fontSize: "0.7rem", color: "#71717a", lineHeight: 1.45 }}>
+          Colors are fixed per city name so you can match the map, timeline, and PDDL objects. They are not interest
+          values or optimality.
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap" as const, gap: "0.5rem 0.85rem", alignItems: "center" }}>
+          {cities.map((c) => (
+            <div
+              key={c}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                fontSize: "0.76rem",
+                fontFamily: "ui-monospace, monospace",
+                color: "#d4d4d8",
+              }}
+            >
+              <span
+                style={{
+                  width: 14,
+                  height: 14,
+                  borderRadius: "50%",
+                  background: cityColor(c),
+                  border: "2px solid #18181b",
+                  flexShrink: 0,
+                }}
+                aria-hidden
+              />
+              <span>{c}</span>
+              {interes[c] != null && (
+                <span style={{ color: "#71717a", fontSize: "0.7rem" }}>(interest {interes[c]})</span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const s = {
   wrap: { fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "#e4e4e7" } as const,
@@ -242,6 +600,7 @@ const s = {
 };
 
 export default function PlanificacionDemo() {
+  const routeArrowId = useId().replace(/:/g, "");
   const [tab, setTab] = useState<Tab>("Overview");
   const plannerExplicit = useMemo(() => explicitPlannerUrl(), []);
   const plannerUrl = useMemo(() => plannerBaseUrl(), []);
@@ -259,6 +618,18 @@ export default function PlanificacionDemo() {
   const [result, setResult] = useState<PlanResponse | null>(null);
   const [fetchErr, setFetchErr] = useState<string | null>(null);
   const [showLog, setShowLog] = useState(false);
+
+  const visualTrip = useMemo(() => {
+    if (!result?.ok || !result.plan?.length) return null;
+    const diasMap = parseDiasFromProblem(problemEdit);
+    const steps = parseTripSteps(result.plan, diasMap);
+    if (steps.length === 0) return null;
+    return {
+      steps,
+      diasMap,
+      interes: parseInteresFromProblem(problemEdit),
+    };
+  }, [result, problemEdit]);
 
   async function runPlanner() {
     setFetchErr(null);
@@ -452,6 +823,38 @@ export default function PlanificacionDemo() {
                   Plan ({result.plan.length} steps
                   {result.time_sec != null ? ` · ${result.time_sec}s` : ""})
                 </h4>
+                {visualTrip && (
+                  <div
+                    style={{
+                      marginBottom: "1.25rem",
+                      padding: "1rem",
+                      background: "#0c0c12",
+                      border: "1px solid #27272a",
+                      borderRadius: "0.65rem",
+                    }}
+                  >
+                    <p
+                      style={{
+                        margin: "0 0 0.75rem",
+                        fontSize: "0.8rem",
+                        color: "#a1a1aa",
+                        fontWeight: 600,
+                        textTransform: "uppercase" as const,
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      Trip visualization
+                    </p>
+                    <TripLegend steps={visualTrip.steps} interes={visualTrip.interes} />
+                    <PlanRouteSvg
+                      steps={visualTrip.steps}
+                      interes={visualTrip.interes}
+                      arrowMarkerId={routeArrowId}
+                    />
+                    <PlanTimeline steps={visualTrip.steps} diasMap={visualTrip.diasMap} />
+                  </div>
+                )}
+                <p style={{ margin: "0 0 0.35rem", fontSize: "0.8rem", color: "#71717a" }}>Raw actions</p>
                 <ol
                   style={{
                     margin: 0,
