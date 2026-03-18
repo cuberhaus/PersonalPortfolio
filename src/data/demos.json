@@ -37,8 +37,22 @@
   {
     "slug": "matriculas",
     "title": "License Plate Detection",
-    "description": "Detect and read license plates from car images using computer vision — a MATLAB pipeline ported to the browser with OpenCV.js.",
-    "tags": ["OpenCV.js", "Computer Vision", "WASM"],
+    "description": "Detect and read license plates from car images using computer vision — a MATLAB pipeline ported to the browser.",
+    "tags": ["Computer Vision", "TypeScript"],
     "icon": "camera"
+  },
+  {
+    "slug": "mpids",
+    "title": "MPIDS Solver",
+    "description": "Find the minimum dominating set in a graph using greedy and local search algorithms, with interactive visualization.",
+    "tags": ["Algorithms", "Graph Theory", "TypeScript"],
+    "icon": "graph"
+  },
+  {
+    "slug": "phase-transitions",
+    "title": "Graph Phase Transitions",
+    "description": "Explore percolation and connectivity phase transitions on binomial, geometric, and grid graphs.",
+    "tags": ["Algorithms", "Graph Theory", "NetworkX"],
+    "icon": "scatter"
   }
 ]

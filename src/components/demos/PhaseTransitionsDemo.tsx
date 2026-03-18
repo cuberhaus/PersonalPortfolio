@@ -1,0 +1,398 @@
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
+import {
+  binomialGraph,
+  geometricGraph,
+  gridGraph,
+  nodePercolation,
+  edgePercolation,
+  connectedComponents,
+  analyzeGraph,
+  runSweep,
+  type SimpleGraph,
+  type GraphStats,
+  type GraphFamily,
+  type PercolationType,
+  type SweepPoint,
+} from "../../lib/graph-phase";
+import { forceLayout } from "../../lib/mpids";
+
+// ─── Palette for connected components ───
+
+const COMP_COLORS = [
+  "#6366f1","#22c55e","#ef4444","#f59e0b","#06b6d4","#ec4899",
+  "#8b5cf6","#14b8a6","#f97316","#84cc16","#e879f9","#0ea5e9",
+  "#a3e635","#fb923c","#c084fc","#2dd4bf","#fbbf24","#f43f5e",
+];
+
+function compColor(i: number): string {
+  return COMP_COLORS[i % COMP_COLORS.length];
+}
+
+// ─── Styles ───
+
+const s = {
+  wrapper: { fontFamily: "'Inter', system-ui, sans-serif", maxWidth: 900, margin: "0 auto" } as const,
+  card: {
+    background: "linear-gradient(135deg, rgba(30,30,40,0.9), rgba(20,20,30,0.95))",
+    borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)",
+    padding: "1.5rem", marginBottom: "1.25rem",
+  } as const,
+  infoCard: {
+    background: "linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05))",
+    borderRadius: 16, border: "1px solid rgba(99,102,241,0.15)",
+    padding: "1.25rem 1.5rem", marginBottom: "1.25rem",
+  } as const,
+  row: { display: "flex", gap: "0.75rem", flexWrap: "wrap" as const, alignItems: "center", marginBottom: "0.75rem" },
+  btn: (active = false) => ({
+    padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
+    background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "rgba(255,255,255,0.05)",
+    color: "#e4e4e7", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
+    transition: "all 0.15s",
+  }),
+  btnPrimary: {
+    padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",
+    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    color: "#fff", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600,
+  } as const,
+  label: { color: "#a1a1aa", fontSize: "0.8rem", fontWeight: 500 } as const,
+  value: { color: "#e4e4e7", fontSize: "0.9rem", fontWeight: 600 } as const,
+  slider: { flex: 1, minWidth: 80, accentColor: "#6366f1" } as const,
+  input: {
+    padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
+    background: "rgba(255,255,255,0.05)", color: "#e4e4e7", fontSize: "0.85rem", width: 55,
+  } as const,
+  statBadge: (color: string) => ({
+    display: "inline-flex", alignItems: "center", gap: "0.35rem",
+    padding: "0.3rem 0.75rem", borderRadius: 8,
+    background: `${color}15`, border: `1px solid ${color}30`,
+    color, fontSize: "0.85rem", fontWeight: 600,
+  }),
+  svgContainer: {
+    borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)",
+    background: "rgba(0,0,0,0.3)", overflow: "hidden",
+  } as const,
+  chartContainer: {
+    borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)",
+    background: "rgba(0,0,0,0.3)", padding: "1rem", marginTop: "1rem",
+  } as const,
+} as const;
+
+const SVG_W = 860;
+const SVG_H = 480;
+const PAD = 25;
+
+// ─── Graph visualization as SVG ───
+
+function GraphVis({ graph, comps }: { graph: SimpleGraph; comps: number[][] }) {
+  const positions = useMemo(() => {
+    if (graph.n === 0) return [];
+    if (graph.positions) {
+      return graph.positions.map((p) => ({
+        x: PAD + p.x * (SVG_W - 2 * PAD),
+        y: PAD + p.y * (SVG_H - 2 * PAD),
+      }));
+    }
+    // Binomial: use force-directed layout
+    const fakeGraph = {
+      n: graph.n,
+      edges: [] as [number, number][],
+      adj: graph.adj.map((s) => Array.from(s)),
+    };
+    for (let i = 0; i < graph.n; i++) {
+      for (const j of graph.adj[i]) {
+        if (j > i) fakeGraph.edges.push([i, j]);
+      }
+    }
+    return forceLayout(fakeGraph, SVG_W, SVG_H, Math.min(200, Math.max(80, 3000 / graph.n)));
+  }, [graph]);
+
+  const nodeColor = useMemo(() => {
+    const map = new Array<string>(graph.n).fill("#555");
+    comps.forEach((comp, ci) => {
+      const c = compColor(ci);
+      for (const v of comp) map[v] = c;
+    });
+    return map;
+  }, [graph, comps]);
+
+  if (graph.n === 0) {
+    return (
+      <div style={{ ...s.svgContainer, display: "flex", alignItems: "center", justifyContent: "center", height: 200 }}>
+        <span style={{ color: "#a1a1aa" }}>No nodes remaining after percolation</span>
+      </div>
+    );
+  }
+
+  const r = graph.n <= 30 ? 10 : graph.n <= 100 ? 6 : graph.n <= 300 ? 4 : 2.5;
+  const edgeW = graph.n <= 100 ? 1 : 0.5;
+
+  const edges: JSX.Element[] = [];
+  for (let i = 0; i < graph.n; i++) {
+    for (const j of graph.adj[i]) {
+      if (j > i && positions[i] && positions[j]) {
+        edges.push(
+          <line key={`${i}-${j}`}
+            x1={positions[i].x} y1={positions[i].y}
+            x2={positions[j].x} y2={positions[j].y}
+            stroke="rgba(255,255,255,0.1)" strokeWidth={edgeW}
+          />
+        );
+      }
+    }
+  }
+
+  return (
+    <div style={s.svgContainer}>
+      <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} style={{ width: "100%", height: "auto", display: "block" }}>
+        {edges}
+        {positions.map((pos, i) => (
+          <circle key={i} cx={pos.x} cy={pos.y} r={r}
+            fill={nodeColor[i]} stroke={nodeColor[i]} strokeWidth={0.5}
+            opacity={0.85}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+// ─── Mini SVG chart for sweep results ───
+
+function SweepChart({ points }: { points: SweepPoint[] }) {
+  if (points.length === 0) return null;
+  const W = 800, H = 250, padL = 50, padR = 20, padT = 20, padB = 40;
+  const chartW = W - padL - padR, chartH = H - padT - padB;
+
+  function toX(v: number) { return padL + v * chartW; }
+  function toY(v: number) { return padT + (1 - v) * chartH; }
+
+  const connLine = points.map((p, i) =>
+    `${i === 0 ? "M" : "L"}${toX(p.param).toFixed(1)},${toY(p.pConnected).toFixed(1)}`
+  ).join(" ");
+  const compLine = points.map((p, i) =>
+    `${i === 0 ? "M" : "L"}${toX(p.param).toFixed(1)},${toY(p.pComplex).toFixed(1)}`
+  ).join(" ");
+
+  return (
+    <div style={s.chartContainer}>
+      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", display: "block" }}>
+        {/* Grid lines */}
+        {[0, 0.25, 0.5, 0.75, 1].map((v) => (
+          <g key={v}>
+            <line x1={padL} x2={W - padR} y1={toY(v)} y2={toY(v)} stroke="rgba(255,255,255,0.06)" />
+            <text x={padL - 8} y={toY(v) + 4} textAnchor="end" fill="#71717a" fontSize={11}>{v.toFixed(2)}</text>
+          </g>
+        ))}
+        {[0, 0.25, 0.5, 0.75, 1].map((v) => (
+          <g key={`x${v}`}>
+            <line x1={toX(v)} x2={toX(v)} y1={padT} y2={H - padB} stroke="rgba(255,255,255,0.06)" />
+            <text x={toX(v)} y={H - padB + 16} textAnchor="middle" fill="#71717a" fontSize={11}>{v.toFixed(2)}</text>
+          </g>
+        ))}
+        {/* Axes */}
+        <line x1={padL} x2={W - padR} y1={H - padB} y2={H - padB} stroke="rgba(255,255,255,0.15)" />
+        <line x1={padL} x2={padL} y1={padT} y2={H - padB} stroke="rgba(255,255,255,0.15)" />
+        <text x={W / 2} y={H - 4} textAnchor="middle" fill="#a1a1aa" fontSize={12}>Retention probability (p)</text>
+        <text x={14} y={H / 2} textAnchor="middle" fill="#a1a1aa" fontSize={12}
+          transform={`rotate(-90, 14, ${H / 2})`}>P(property)</text>
+        {/* Lines */}
+        <path d={connLine} fill="none" stroke="#22c55e" strokeWidth={2.5} />
+        <path d={compLine} fill="none" stroke="#6366f1" strokeWidth={2.5} />
+        {/* Dots */}
+        {points.map((p, i) => (
+          <g key={i}>
+            <circle cx={toX(p.param)} cy={toY(p.pConnected)} r={3.5} fill="#22c55e" />
+            <circle cx={toX(p.param)} cy={toY(p.pComplex)} r={3.5} fill="#6366f1" />
+          </g>
+        ))}
+        {/* Legend */}
+        <circle cx={W - padR - 150} cy={padT + 10} r={5} fill="#22c55e" />
+        <text x={W - padR - 140} y={padT + 14} fill="#e4e4e7" fontSize={12}>P(connected)</text>
+        <circle cx={W - padR - 150} cy={padT + 30} r={5} fill="#6366f1" />
+        <text x={W - padR - 140} y={padT + 34} fill="#e4e4e7" fontSize={12}>P(all components complex)</text>
+      </svg>
+    </div>
+  );
+}
+
+// ─── Main component ───
+
+export default function PhaseTransitionsDemo() {
+  const [family, setFamily] = useState<GraphFamily>("grid");
+  const [percolation, setPercolation] = useState<PercolationType>("edge");
+  const [nodeCount, setNodeCount] = useState(100);
+  const [param, setParam] = useState(0.5); // p for binomial, r for geometric, unused for grid
+  const [percProb, setPercProb] = useState(1.0); // retention probability
+  const [gridSide, setGridSide] = useState(10);
+
+  const [baseGraph, setBaseGraph] = useState<SimpleGraph | null>(null);
+  const [percGraph, setPercGraph] = useState<SimpleGraph | null>(null);
+  const [stats, setStats] = useState<GraphStats | null>(null);
+  const [comps, setComps] = useState<number[][]>([]);
+
+  const [sweepResults, setSweepResults] = useState<SweepPoint[]>([]);
+  const [sweeping, setSweeping] = useState(false);
+
+  // Generate a new base graph
+  const generate = useCallback(() => {
+    let g: SimpleGraph;
+    if (family === "binomial") {
+      g = binomialGraph(nodeCount, param);
+    } else if (family === "geometric") {
+      g = geometricGraph(nodeCount, param);
+    } else {
+      g = gridGraph(gridSide);
+    }
+    setBaseGraph(g);
+    setPercProb(1.0);
+    setSweepResults([]);
+
+    const st = analyzeGraph(g);
+    setStats(st);
+    setComps(connectedComponents(g));
+    setPercGraph(g);
+  }, [family, nodeCount, param, gridSide]);
+
+  // Generate on mount and when family changes
+  useEffect(() => { generate(); }, [family]);
+
+  // Apply percolation when slider changes
+  useEffect(() => {
+    if (!baseGraph) return;
+    let g = baseGraph;
+    if (percProb < 1) {
+      if (percolation === "node") {
+        g = nodePercolation(baseGraph, percProb);
+      } else if (percolation === "edge") {
+        g = edgePercolation(baseGraph, percProb);
+      } else {
+        g = nodePercolation(baseGraph, percProb);
+        g = edgePercolation(g, percProb);
+      }
+    }
+    setPercGraph(g);
+    setStats(analyzeGraph(g));
+    setComps(connectedComponents(g));
+  }, [baseGraph, percProb, percolation]);
+
+  // Run sweep
+  const handleSweep = useCallback(() => {
+    setSweeping(true);
+    setTimeout(() => {
+      const n = family === "grid" ? gridSide * gridSide : nodeCount;
+      const trials = n <= 100 ? 20 : n <= 500 ? 10 : 5;
+      const steps = 20;
+      const pts = runSweep(family, n, percolation, steps, trials);
+      setSweepResults(pts);
+      setSweeping(false);
+    }, 16);
+  }, [family, nodeCount, gridSide, percolation]);
+
+  return (
+    <div style={s.wrapper}>
+      {/* Info */}
+      <div style={s.infoCard}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+          <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>📊</span>
+          <div>
+            <strong style={{ color: "#e4e4e7" }}>Phase Transitions in Random Graphs</strong>
+            <p style={{ color: "#a1a1aa", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
+              Generate random graphs and apply percolation (random removal of nodes or edges) to observe
+              phase transitions — the sharp change from connected to disconnected as the retention probability drops.
+              Each connected component is shown in a different color.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Graph family */}
+      <div style={s.card}>
+        <div style={s.row}>
+          <span style={s.label}>Graph family:</span>
+          <button style={s.btn(family === "binomial")} onClick={() => setFamily("binomial")}>
+            Binomial (Erdős–Rényi)
+          </button>
+          <button style={s.btn(family === "geometric")} onClick={() => setFamily("geometric")}>
+            Geometric
+          </button>
+          <button style={s.btn(family === "grid")} onClick={() => setFamily("grid")}>
+            Grid
+          </button>
+        </div>
+
+        <div style={s.row}>
+          {family === "grid" ? (
+            <>
+              <span style={s.label}>Grid side:</span>
+              <input type="range" min={3} max={30} step={1} value={gridSide}
+                onChange={(e) => setGridSide(+e.target.value)} style={s.slider} />
+              <span style={s.value}>{gridSide}×{gridSide} = {gridSide * gridSide} nodes</span>
+            </>
+          ) : (
+            <>
+              <span style={s.label}>Nodes:</span>
+              <input type="range" min={10} max={500} step={10} value={nodeCount}
+                onChange={(e) => setNodeCount(+e.target.value)} style={s.slider} />
+              <span style={s.value}>{nodeCount}</span>
+              <span style={s.label}>{family === "binomial" ? "p:" : "r:"}</span>
+              <input type="range" min={0.01} max={family === "geometric" ? 1.0 : 1} step={0.01}
+                value={param} onChange={(e) => setParam(+e.target.value)} style={s.slider} />
+              <span style={s.value}>{param.toFixed(2)}</span>
+            </>
+          )}
+          <button style={s.btn()} onClick={generate}>Generate</button>
+        </div>
+      </div>
+
+      {/* Percolation controls */}
+      <div style={s.card}>
+        <div style={s.row}>
+          <span style={s.label}>Percolation:</span>
+          <button style={s.btn(percolation === "node")} onClick={() => setPercolation("node")}>Node</button>
+          <button style={s.btn(percolation === "edge")} onClick={() => setPercolation("edge")}>Edge</button>
+          <button style={s.btn(percolation === "both")} onClick={() => setPercolation("both")}>Both</button>
+        </div>
+
+        <div style={s.row}>
+          <span style={s.label}>Retention probability:</span>
+          <input type="range" min={0} max={1} step={0.01} value={percProb}
+            onChange={(e) => setPercProb(+e.target.value)} style={s.slider} />
+          <span style={s.value}>{percProb.toFixed(2)}</span>
+        </div>
+
+        {stats && (
+          <div style={{ ...s.row, marginBottom: 0 }}>
+            <span style={s.statBadge("#a78bfa")}>{stats.nodes} nodes</span>
+            <span style={s.statBadge("#a78bfa")}>{stats.edges} edges</span>
+            <span style={s.statBadge(stats.connected ? "#22c55e" : "#ef4444")}>
+              {stats.connected ? "Connected" : `${stats.components} components`}
+            </span>
+            <span style={s.statBadge(stats.complex ? "#6366f1" : "#f59e0b")}>
+              {stats.complex ? "All complex" : "Not all complex"}
+            </span>
+            {!stats.connected && (
+              <span style={s.statBadge("#06b6d4")}>Largest: {stats.largestComponent}</span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Graph visualization */}
+      {percGraph && <GraphVis graph={percGraph} comps={comps} />}
+
+      {/* Phase transition sweep */}
+      <div style={{ ...s.card, marginTop: "1.25rem" }}>
+        <div style={s.row}>
+          <span style={s.label}>Phase transition curve:</span>
+          <span style={{ color: "#a1a1aa", fontSize: "0.78rem", flex: 1 }}>
+            Sweeps retention probability 0→1, measuring P(connected) and P(all complex) over multiple trials.
+          </span>
+          <button style={s.btn()} onClick={handleSweep} disabled={sweeping}>
+            {sweeping ? "Computing…" : "Run sweep"}
+          </button>
+        </div>
+        {sweepResults.length > 0 && <SweepChart points={sweepResults} />}
+      </div>
+    </div>
+  );
+}

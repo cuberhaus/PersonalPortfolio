@@ -1,30 +1,29 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
-import SPMatriculasDemo from '../../components/demos/SPMatriculasDemo';
+import PhaseTransitionsDemo from '../../components/demos/PhaseTransitionsDemo';
 ---
 
-<DemoLayout title="License Plate Detection" description="License plate detector ported from MATLAB to JavaScript.">
+<DemoLayout title="Graph Phase Transitions" description="Interactive percolation and phase transition explorer for random graphs.">
   <div class="container">
     <div class="demo-header">
-      <h1>License Plate Detection</h1>
+      <h1>Graph Phase Transitions</h1>
       <p class="demo-lead">
-        Detect and read license plates from car images using computer vision.
-        Select a sample image or upload your own, then watch the 3-stage pipeline
-        (plate detection, character segmentation, OCR) process it in real time — entirely in your browser.
+        Explore how random graphs transition from connected to disconnected as you remove nodes or edges.
+        Generate binomial (Erdős–Rényi), geometric, or grid graphs, apply percolation, and watch the
+        phase transition happen in real time.
       </p>
     </div>
 
-    <SPMatriculasDemo client:load />
+    <PhaseTransitionsDemo client:load />
 
     <div class="demo-info">
       <h3>About this project</h3>
       <p>
-        Originally a MATLAB project for the Computer Vision course at FIB-UPC. This browser demo is
-        a port of the original pipeline to JavaScript — it uses adaptive binarization, morphological
-        filtering, connected component analysis, and template matching to detect license plates and
-        read their characters, all running client-side with no external dependencies.
+        Originally a Python project for the Algorithmics course at FIB-UPC, studying phase transitions
+        in random graphs using NetworkX. This browser demo is a port of the graph generation,
+        percolation, and connectivity/complexity analysis to TypeScript with interactive visualization.
       </p>
-      <a href="https://github.com/cuberhaus/SPMatriculas" target="_blank" rel="noopener noreferrer" class="demo-link">
+      <a href="https://github.com/cuberhaus/projectA2" target="_blank" rel="noopener noreferrer" class="demo-link">
         View source on GitHub
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
