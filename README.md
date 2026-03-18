@@ -15,10 +15,31 @@ Dark-themed portfolio built with **[Astro](https://astro.build)** (static export
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321
-npm run build      # Output: dist/
-npm run preview    # Serve production build locally
+npm run dev              # Astro only — http://localhost:4321
+npm run dev:all          # All local demo backends + Astro (see below)
+npm run dev:with-planner # planner-api + Astro only (no Docker)
+npm run build
+npm run preview
 ```
+
+### `npm run dev:all`
+
+One command starts everything the demos can use locally (then **Ctrl+C** tears it down):
+
+| Service | Port | Demo | Folder (sibling of `PersonalPortfolio`) |
+|---------|------|------|----------------------------------------|
+| **Tenda** | 8888 | `/demos/tenda` iframe | `../tenda_online` — `docker compose up -d` |
+| **Draculin** | 8890 (web), 8889 (API) | `/demos/draculin` | `../Draculin-Backend` — `docker compose up -d` |
+| **planner-api** | 8765 | `/demos/planificacion` **Run planner** | `../planner-api` — Python + **Java 17+** |
+| **Astro** | 4321 | Site | this repo |
+
+Requires **bash**, **Docker** (for Tenda + Draculin), **Python 3** + Java for the planner. Missing folders are skipped with a message (e.g. no `planner-api` → planificación still browses PDDL, live solve needs the API).
+
+Flags (advanced): `bash scripts/dev-all-demos.sh --skip-docker` or `--skip-planner`.
+
+**`npm run dev:with-planner`** — only **planner-api** + Astro; **fails** if `../planner-api` is absent. Use when you don’t want to run Docker.
+
+**Windows:** use **WSL** or **Git Bash**, or start each stack manually (README sections below).
 
 Optional env (copy from `.env.example`):
 
