@@ -60,6 +60,7 @@ Routes live under `/demos/<slug>/`. Not everything runs fully on GitHub Pages wi
 | `mpids` | MPIDS solver | Yes | Graph MDS + greedy / local search |
 | `phase-transitions` | Graph phase transitions | Yes | Percolation / connectivity experiments |
 | `planificacion` | Travel agency (PDDL) | Partially | Browse PDDL + **Run planner** if API is up |
+| `desastres-ia` | Desastres IA | Yes | HC + SA on toy instance in browser; full solver in Java |
 | `tenda` | Tenda Online | Dev only | Real app in iframe when backend runs |
 | `draculin` | Draculin | Dev + mock | Flutter embed in dev; mock on Pages |
 

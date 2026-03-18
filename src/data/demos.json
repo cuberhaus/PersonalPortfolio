@@ -61,5 +61,12 @@
     "description": "Automated planning practice: PDDL domain for trips with flights, hotels, numeric constraints, and metric minimization.",
     "tags": ["PDDL", "Planning", "UPC"],
     "icon": "map"
+  },
+  {
+    "slug": "desastres-ia",
+    "title": "Desastres IA",
+    "description": "Disaster relief as local search: helicopters rescue groups from centers using hill climbing and simulated annealing (AIMA).",
+    "tags": ["Java", "AIMA", "Local search", "UPC"],
+    "icon": "helicopter"
   }
 ]
