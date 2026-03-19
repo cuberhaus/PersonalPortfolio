@@ -1,4 +1,6 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+
 interface Props {
   title?: string;
   description?: string;
@@ -23,54 +25,46 @@ const {
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(`${import.meta.env.BASE_URL}og-image.jpg`, Astro.site || Astro.url)} />
+    <meta property="og:image" content={new URL(import.meta.env.BASE_URL + "og-image.jpg", Astro.site || Astro.url)} />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(`${import.meta.env.BASE_URL}og-image.jpg`, Astro.site || Astro.url)} />
+    <meta property="twitter:image" content={new URL(import.meta.env.BASE_URL + "og-image.jpg", Astro.site || Astro.url)} />
 
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="icon" type="image/svg+xml" href={import.meta.env.BASE_URL + "favicon.svg"} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Preload font to prevent FOIT -->
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
     />
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    </noscript>
 
     <title>{title}</title>
+    <ViewTransitions />
   </head>
   <body>
     <slot />
 
     <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-            }
-          });
-        },
-        { threshold: 0.1 }
-      );
+      document.addEventListener('astro:page-load', () => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
 
-      document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => {
-        observer.observe(el);
+        document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => {
+          observer.observe(el);
+        });
       });
     </script>
   </body>

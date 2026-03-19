@@ -184,42 +184,56 @@ const links = [
 </style>
 
 <script>
-  const navbar = document.getElementById('navbar')!;
-  const toggle = navbar.querySelector('.nav-toggle')!;
-  const links = document.getElementById('nav-links')!;
+  let scrollHandler;
 
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
-  });
+  document.addEventListener('astro:page-load', () => {
+    const navbar = document.getElementById('navbar');
+    if (!navbar) return; // Only run on pages with the main navbar
 
-  toggle.addEventListener('click', () => {
-    const expanded = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!expanded));
-    links.classList.toggle('open');
-  });
+    const toggle = navbar.querySelector('.nav-toggle');
+    const links = document.getElementById('nav-links');
 
-  links.querySelectorAll('.nav-link').forEach((link) => {
-    link.addEventListener('click', () => {
-      toggle.setAttribute('aria-expanded', 'false');
-      links.classList.remove('open');
+    // Prevent duplicate scroll listeners on multiple navigation events
+    if (scrollHandler) {
+      window.removeEventListener('scroll', scrollHandler);
+    }
+    scrollHandler = () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    };
+    window.addEventListener('scroll', scrollHandler);
+
+    // Initial check
+    scrollHandler();
+
+    toggle?.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      links?.classList.toggle('open');
     });
-  });
 
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
-
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          navLinks.forEach((l) => l.classList.remove('active'));
-          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
-          active?.classList.add('active');
-        }
+    links?.querySelectorAll('.nav-link').forEach((link) => {
+      link.addEventListener('click', () => {
+        toggle?.setAttribute('aria-expanded', 'false');
+        links?.classList.remove('open');
       });
-    },
-    { rootMargin: '-40% 0px -60% 0px' }
-  );
+    });
 
-  sections.forEach((s) => sectionObserver.observe(s));
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            navLinks.forEach((l) => l.classList.remove('active'));
+            const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+            active?.classList.add('active');
+          }
+        });
+      },
+      { rootMargin: '-40% 0px -60% 0px' }
+    );
+
+    sections.forEach((s) => sectionObserver.observe(s));
+  });
 </script>

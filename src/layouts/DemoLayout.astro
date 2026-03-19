@@ -19,43 +19,33 @@ const base = import.meta.env.BASE_URL;
     <!-- OpenGraph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
-    <meta property="og:title" content={`${title} — Pol Casacuberta`} />
+    <meta property="og:title" content={title + " — Pol Casacuberta"} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(`${base}/og-image.jpg`, Astro.site || Astro.url)} />
+    <meta property="og:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={`${title} — Pol Casacuberta`} />
+    <meta property="twitter:title" content={title + " — Pol Casacuberta"} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(`${base}/og-image.jpg`, Astro.site || Astro.url)} />
+    <meta property="twitter:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
 
-    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+
+    <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Preload font to prevent FOIT -->
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
     />
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    </noscript>
 
     <title>{title} — Pol Casacuberta</title>
   </head>
   <body>
     <nav class="demo-nav">
       <div class="demo-nav-inner container">
-        <a href={base} class="demo-back">
+        <a href={base} class="demo-back" data-astro-reload>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>

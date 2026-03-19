@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 — Page Not Found" description="The page you are looking for does not exist.">
+  <main class="error-page">
+    <div class="container text-center">
+      <h1 class="error-code gradient-text">404</h1>
+      <h2 class="error-title">Page Not Found</h2>
+      <p class="error-message">
+        Looks like you've ventured into uncharted territory. The page you're
+        looking for doesn't exist or has been moved.
+      </p>
+      <a href={`${import.meta.env.BASE_URL}`} class="back-btn">
+        Return to Portfolio
+      </a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .error-page {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .text-center {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .error-code {
+    font-size: clamp(6rem, 15vw, 10rem);
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 1rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .error-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .error-message {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    padding: 0.85rem 2.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--bg-primary);
+    background: var(--accent-start);
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .back-btn:hover {
+    background: var(--accent-end);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--glow-color);
+  }
+</style>
