@@ -1,3 +1,10 @@
+---
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+const hasProfileImage = existsSync(resolve('public/profile.jpg'));
+---
+
 <section class="section about" id="about">
   <div class="container">
     <div class="reveal">
@@ -5,7 +12,7 @@
       <h2 class="section-title">A bit about me</h2>
     </div>
 
-    <div class="about-grid reveal">
+    <div class={`about-grid reveal ${hasProfileImage ? '' : 'no-image'}`}>
       <div class="about-text">
         <p>
           Hello! I'm Pol — a Computer Science Engineer from Barcelona with a passion
@@ -32,16 +39,20 @@
         </ul>
       </div>
 
-      <div class="about-image-wrapper">
-        <div class="about-image-placeholder">
-          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Profile avatar placeholder">
-            <rect width="200" height="200" rx="12" fill="var(--bg-card)"/>
-            <circle cx="100" cy="80" r="35" stroke="var(--accent-start)" stroke-width="2" fill="none" opacity="0.5"/>
-            <path d="M50 175c0-30 22-55 50-55s50 25 50 55" stroke="var(--accent-start)" stroke-width="2" fill="none" opacity="0.5"/>
-          </svg>
+      {hasProfileImage && (
+        <div class="about-image-wrapper">
+          <div class="about-image-placeholder">
+            <img
+              src={`${import.meta.env.BASE_URL}profile.jpg`}
+              alt="Pol Casacuberta"
+              width="300"
+              height="300"
+              loading="lazy"
+            />
+          </div>
+          <div class="about-image-border" aria-hidden="true"></div>
         </div>
-        <div class="about-image-border" aria-hidden="true"></div>
-      </div>
+      )}
     </div>
   </div>
 </section>
@@ -96,6 +107,20 @@
     overflow: hidden;
   }
 
+  .about-image-placeholder img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    filter: grayscale(20%);
+    transition: filter var(--transition-base);
+  }
+
+  .about-image-wrapper:hover .about-image-placeholder img {
+    filter: grayscale(0%);
+  }
+
   .about-image-border {
     position: absolute;
     top: 16px;
@@ -110,6 +135,10 @@
 
   .about-image-wrapper:hover .about-image-border {
     transform: translate(-4px, -4px);
+  }
+
+  .about-grid.no-image {
+    grid-template-columns: 1fr;
   }
 
   @media (max-width: 768px) {
