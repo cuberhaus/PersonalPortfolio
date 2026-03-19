@@ -1,5 +1,7 @@
 # Personal Portfolio
 
+**Live Webpage:** [https://cuberhaus.github.io/PersonalPortfolio/](https://cuberhaus.github.io/PersonalPortfolio/)
+
 Dark-themed portfolio built with **[Astro](https://astro.build)** (static export) and **React** islands for interactive demos. Deployed to **GitHub Pages** via Actions.
 
 ## Stack
