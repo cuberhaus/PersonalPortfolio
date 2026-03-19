@@ -6,10 +6,11 @@ import PhaseTransitionsDemo from '../../components/demos/PhaseTransitionsDemo';
 <DemoLayout title="Graph Phase Transitions" description="Interactive percolation and phase transition explorer for random graphs.">
   <div class="container">
     <div class="demo-header">
+      <div class="badge">Algorithmics · FIB-UPC</div>
       <h1>Graph Phase Transitions</h1>
       <p class="demo-lead">
-        Explore how random graphs transition from connected to disconnected as you remove nodes or edges.
-        Generate binomial (Erdős–Rényi), geometric, or grid graphs, apply percolation, and watch the
+        Explore how <strong>random graphs</strong> transition from connected to disconnected as you remove nodes or edges.
+        Generate <strong>binomial</strong> (Erdős–Rényi), <strong>geometric</strong>, or <strong>grid</strong> graphs, apply percolation, and watch the
         phase transition happen in real time.
       </p>
     </div>
@@ -36,20 +37,38 @@ import PhaseTransitionsDemo from '../../components/demos/PhaseTransitionsDemo';
 <style>
   .demo-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
-
-  .demo-header h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(20,184,166,0.15), rgba(34,197,94,0.1));
+    border: 1px solid rgba(20,184,166,0.25);
+    color: #14b8a6;
     margin-bottom: 1rem;
   }
-
+  .demo-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #14b8a6, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
   .demo-lead {
     color: var(--text-secondary);
-    max-width: 680px;
+    max-width: 40rem;
     margin: 0 auto 1.5rem;
     line-height: 1.7;
+    font-size: 1rem;
   }
+  .demo-lead strong { color: var(--text-primary, #e4e4e7); }
 
   .demo-info {
     margin-top: 2.5rem;

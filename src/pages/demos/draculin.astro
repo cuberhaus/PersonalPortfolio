@@ -8,10 +8,11 @@ const isDev = import.meta.env.DEV;
 <DemoLayout title="Draculin" description="Health tracking app with AI chatbot and computer vision, built with Flutter.">
   <div class="container">
     <div class="demo-header">
+      <div class="badge">Mobile Health · Hackathon</div>
       <h1>Draculin</h1>
       <p class="demo-lead">
-        A mobile health app combining an AI chatbot with computer vision for menstrual health tracking.
-        Finalist at BitsXLaMarató 2023.
+        A mobile health app combining an <strong>AI chatbot</strong> with <strong>computer vision</strong> for menstrual health tracking.
+        Finalist at <strong>BitsXLaMarató 2023</strong>.
       </p>
     </div>
 
@@ -85,20 +86,39 @@ const isDev = import.meta.env.DEV;
 <style>
   .demo-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
-
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(168,85,247,0.1));
+    border: 1px solid rgba(236,72,153,0.25);
+    color: #ec4899;
+    margin-bottom: 1rem;
+  }
   .demo-header h1 {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
-    margin-bottom: 1rem;
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #ec4899, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .demo-lead {
     color: var(--text-secondary);
-    max-width: 680px;
-    margin: 0 auto 1.5rem;
+    max-width: 40rem;
+    margin: 0 auto;
     line-height: 1.7;
+    font-size: 1rem;
   }
+  .demo-lead strong { color: var(--text-primary, #e4e4e7); }
 
   .draculin-demo-wrapper {
     border-radius: var(--radius-lg);

@@ -6,10 +6,11 @@ import Pro2Demo from '../../components/demos/Pro2Demo';
 <DemoLayout title="WPGMA Clustering" description="Interactive phylogenetic tree builder using the WPGMA algorithm.">
   <div class="container">
     <div class="demo-header">
+      <div class="badge">Programming II · FIB-UPC</div>
       <h1>WPGMA Phylogenetic Clustering</h1>
       <p class="demo-lead">
-        Build phylogenetic trees step by step. Add species with gene sequences, view the k-mer distance matrix,
-        then watch the WPGMA algorithm merge the closest clusters into a dendrogram.
+        Build <strong>phylogenetic trees</strong> step by step. Add species with gene sequences, view the <strong>k-mer distance matrix</strong>,
+        then watch the <strong>WPGMA algorithm</strong> merge the closest clusters into a dendrogram.
       </p>
     </div>
 
@@ -35,20 +36,38 @@ import Pro2Demo from '../../components/demos/Pro2Demo';
 <style>
   .demo-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
-
-  .demo-header h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(34,197,94,0.15), rgba(6,182,212,0.1));
+    border: 1px solid rgba(34,197,94,0.25);
+    color: #22c55e;
     margin-bottom: 1rem;
   }
-
+  .demo-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #22c55e, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
   .demo-lead {
     color: var(--text-secondary);
-    max-width: 680px;
+    max-width: 40rem;
     margin: 0 auto 1.5rem;
     line-height: 1.7;
+    font-size: 1rem;
   }
+  .demo-lead strong { color: var(--text-primary, #e4e4e7); }
 
   .demo-info {
     margin-top: 2.5rem;

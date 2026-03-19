@@ -6,10 +6,11 @@ const base = import.meta.env.BASE_URL;
 <DemoLayout title="EDA Game Viewer" description="Watch AI bots battle on a grid — replay viewer for the EDA programming game competition.">
   <div class="container joc-eda-page">
     <div class="demo-header">
+      <div class="badge">Data Structures · FIB-UPC</div>
       <h1>EDA Game Viewer</h1>
       <p class="demo-lead">
-        Watch AI bots compete in "The Purge" — a grid-based strategy game from the EDA
-        (Data Structures and Algorithms) course at FIB-UPC.
+        Watch <strong>AI bots</strong> compete in "The Purge" — a grid-based strategy game from the
+        <strong>EDA</strong> (Data Structures and Algorithms) course at FIB-UPC.
       </p>
     </div>
 
@@ -147,18 +148,36 @@ const base = import.meta.env.BASE_URL;
     text-align: center;
     margin-bottom: 2.5rem;
   }
-
-  .joc-eda-page .demo-header h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  .joc-eda-page .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(245,158,11,0.1));
+    border: 1px solid rgba(99,102,241,0.25);
+    color: #6366f1;
     margin-bottom: 1rem;
   }
-
+  .joc-eda-page .demo-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #6366f1, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
   .joc-eda-page .demo-lead {
     color: var(--text-secondary);
-    max-width: 600px;
+    max-width: 40rem;
     margin: 0 auto;
     line-height: 1.7;
+    font-size: 1rem;
   }
+  .joc-eda-page .demo-lead strong { color: var(--text-primary, #e4e4e7); }
 
   .joc-eda-page .cards-row {
     display: grid;
