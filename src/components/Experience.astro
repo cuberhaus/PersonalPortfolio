@@ -12,9 +12,9 @@ import experience from '../data/experience.json';
       </p>
     </div>
 
-    <div class="timeline">
+    <ul class="timeline">
       {experience.map((job, index) => (
-        <div class="timeline-item reveal">
+        <li class="timeline-item reveal">
           <div class="timeline-marker" aria-hidden="true">
             <div class="timeline-dot"></div>
           </div>
@@ -30,9 +30,9 @@ import experience from '../data/experience.json';
               ))}
             </ul>
           </div>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   </div>
 </section>
 
@@ -40,6 +40,8 @@ import experience from '../data/experience.json';
   .timeline {
     position: relative;
     padding-left: 2.5rem;
+    list-style: none;
+    margin: 0;
   }
 
   .timeline::before {

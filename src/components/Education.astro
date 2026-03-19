@@ -9,9 +9,9 @@ import education from '../data/education.json';
       <h2 class="section-title">Where I studied</h2>
     </div>
 
-    <div class="education-grid reveal-stagger">
+    <ul class="education-grid reveal-stagger">
       {education.map((entry) => (
-        <div class="education-card">
+        <li class="education-card">
           <div class="education-icon" aria-hidden="true">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -23,9 +23,9 @@ import education from '../data/education.json';
           <h3 class="education-degree">{entry.degree}</h3>
           <p class="education-institution">{entry.institution}</p>
           <p class="education-location">{entry.location}</p>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   </div>
 </section>
 
@@ -34,6 +34,9 @@ import education from '../data/education.json';
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
 
   .education-card {

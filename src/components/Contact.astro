@@ -75,11 +75,12 @@
 
   .contact-socials a {
     color: var(--text-muted);
-    transition: color var(--transition-fast), transform var(--transition-fast);
+    transition: color var(--transition-fast), transform var(--transition-fast), filter var(--transition-fast);
   }
 
   .contact-socials a:hover {
     color: var(--accent-start);
     transform: translateY(-3px);
+    filter: drop-shadow(0 0 8px var(--glow-color));
   }
 </style>
