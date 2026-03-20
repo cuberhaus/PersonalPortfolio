@@ -1,5 +1,12 @@
 [
   {
+    "slug": "tfg-polyps",
+    "title": "TFG — Polyp Detection",
+    "description": "Deep learning polyp detection with generative data augmentation (CycleGAN/SPADE). Explore model results and the training pipeline.",
+    "tags": ["PyTorch", "CycleGAN", "Object Detection", "UPC"],
+    "icon": "microscope"
+  },
+  {
     "slug": "draculin",
     "title": "Draculin",
     "description": "Health tracking app with AI chatbot and computer vision, built with Flutter. Finalist at BitsXLaMarató 2023.",

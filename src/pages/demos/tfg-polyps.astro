@@ -1,0 +1,64 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+import TfgPolypDemo from '../../components/demos/TfgPolypDemo';
+---
+
+<DemoLayout
+  title="TFG — Polyp Detection"
+  description="Bachelor's thesis: deep learning polyp detection in colonoscopy videos with CycleGAN/SPADE data augmentation and Faster R-CNN object detection."
+>
+  <div class="container">
+    <div class="demo-header">
+      <div class="badge">Deep Learning · Bachelor's Thesis · FIB-UPC</div>
+      <h1>Polyp Detection with Generative Data Augmentation</h1>
+      <p class="demo-lead">
+        Train <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong>, and <strong>SSD</strong> detectors
+        on colonoscopy data, augmented with synthetic images from
+        <strong>CycleGAN</strong> and <strong>SPADE</strong> generative models.
+        Hyperparameter search via <strong>Optuna</strong> &amp; <strong>Ray Tune</strong>.
+      </p>
+    </div>
+
+    <TfgPolypDemo client:load />
+  </div>
+</DemoLayout>
+
+<style>
+  .demo-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(14,165,233,0.1));
+    border: 1px solid rgba(16,185,129,0.25);
+    color: #10b981;
+    margin-bottom: 1rem;
+  }
+  .demo-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #10b981, #0ea5e9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .demo-lead {
+    color: #a1a1aa;
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+  .demo-lead strong { color: #e4e4e7; }
+  .demo-lead a { color: #0ea5e9; text-decoration: none; }
+  .demo-lead a:hover { text-decoration: underline; }
+</style>
