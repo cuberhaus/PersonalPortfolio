@@ -1,0 +1,233 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+
+const isDev = import.meta.env.DEV;
+---
+
+<DemoLayout title="PROP Recommendation System" description="A Java Spring Boot content-based recommendation system.">
+  <div class="container">
+    <div class="demo-header">
+      <div class="badge">Java · Spring Boot · FIB-UPC</div>
+      <h1>PROP Recommendation System</h1>
+      <p class="demo-lead">
+        A content-based recommendation system built with <strong>Java</strong>, <strong>Spring Boot</strong>, and <strong>Thymeleaf</strong>. 
+        It models users, items, and ratings to provide personalized recommendations.
+      </p>
+    </div>
+
+    {isDev ? (
+      <div class="demo-local-section">
+        <div class="demo-local-header">
+          <h3>Live app (runs locally)</h3>
+          <p class="demo-local-hint">
+            Start the Spring Boot app: <code>cd subgrup-prop7.1 && make web</code>
+          </p>
+          <a href="http://localhost:8081" target="_blank" rel="noopener noreferrer" class="demo-open-btn">
+            Open in new tab
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+            </svg>
+          </a>
+        </div>
+        <iframe
+          src="http://localhost:8081"
+          title="PROP Recommendation System"
+          class="demo-iframe"
+        />
+      </div>
+    ) : (
+      <div class="demo-local-section">
+        <div class="demo-local-header">
+          <h3>Demo unavailable</h3>
+        </div>
+        <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+          This Java Spring Boot application only runs locally during development. <br/>
+          Check out the source code below to run it yourself!
+        </div>
+      </div>
+    )}
+
+    <div class="demo-info">
+      <h3>About this project</h3>
+      <p>
+        A university project for the "Projectes de Programació" course at FIB-UPC. 
+        The core domain logic is written in pure Java and features complex data structures and algorithms 
+        for filtering and recommending items based on past user ratings and item attributes (K-Nearest Neighbors and Collaborative Filtering concepts). 
+        The web interface is powered by Spring Boot and server-side rendered with Thymeleaf and Bootstrap 5.
+      </p>
+      {isDev && (
+        <div class="run-local-box">
+          <h4>Run the real app locally</h4>
+          <ol>
+            <li><code>cd subgrup-prop7.1</code></li>
+            <li><code>make web</code> — compiles and starts the Spring Boot server</li>
+            <li>The app will run at <a href="http://localhost:8081" target="_blank" rel="noopener">localhost:8081</a></li>
+          </ol>
+        </div>
+      )}
+      <a href="https://github.com/cuberhaus/subgrup-prop7.1" target="_blank" rel="noopener noreferrer" class="demo-link">
+        View source on GitHub
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</DemoLayout>
+
+<style>
+  .demo-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(135deg, rgba(234, 88, 12, 0.15), rgba(249, 115, 22, 0.1));
+    border: 1px solid rgba(234, 88, 12, 0.25);
+    color: #f97316;
+    margin-bottom: 1rem;
+  }
+  .demo-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    background: linear-gradient(135deg, #ea580c, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .demo-lead {
+    color: var(--text-secondary);
+    max-width: 40rem;
+    margin: 0 auto 1.5rem;
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+  .demo-lead strong { color: var(--text-primary, #e4e4e7); }
+
+  .demo-local-section {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    background: var(--bg-card);
+    margin-bottom: 0;
+  }
+
+  .demo-local-header {
+    padding: 1rem 1.5rem;
+    background: rgba(234, 88, 12, 0.08);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .demo-local-header h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .demo-local-hint {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .demo-local-hint code {
+    font-size: 0.75rem;
+    background: var(--bg-secondary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+  }
+
+  .demo-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-start);
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--bg-secondary);
+    transition: color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .demo-open-btn:hover {
+    color: var(--accent-end);
+    background: var(--bg-card-hover);
+  }
+
+  .demo-iframe {
+    width: 100%;
+    height: 600px;
+    min-height: 500px;
+    border: none;
+    display: block;
+  }
+
+  .run-local-box {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--accent-start);
+  }
+
+  .run-local-box h4 { margin-bottom: 0.5rem; font-size: 0.95rem; }
+
+  .run-local-box ol {
+    margin: 0.5rem 0 0 1.25rem;
+    padding: 0;
+  }
+
+  .run-local-box li {
+    margin-bottom: 0.35rem;
+    color: var(--text-secondary);
+  }
+
+  .run-local-box code {
+    background: var(--bg-card);
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+  }
+
+  .demo-info {
+    margin-top: 2.5rem;
+    padding: 2rem;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+  }
+
+  .demo-info h3 { margin-bottom: 0.75rem; }
+
+  .demo-info p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+
+  .demo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent-start);
+    transition: color var(--transition-fast);
+  }
+
+  .demo-link:hover { color: var(--accent-end); }
+</style>

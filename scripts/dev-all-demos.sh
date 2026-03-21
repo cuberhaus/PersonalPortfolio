@@ -24,10 +24,12 @@ PORTFOLIO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TENDA_DIR="$(cd "$PORTFOLIO/../tenda_online" 2>/dev/null && pwd)" || TENDA_DIR=""
 DRAC_DIR="$(cd "$PORTFOLIO/../Draculin-Backend" 2>/dev/null && pwd)" || DRAC_DIR=""
 PLANNER_DIR="$(cd "$PORTFOLIO/planner-api" 2>/dev/null && pwd)" || PLANNER_DIR=""
+PROP_DIR="$(cd "$PORTFOLIO/../subgrup-prop7.1" 2>/dev/null && pwd)" || PROP_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
 PLANNER_PID=""
+PROP_PID=""
 
 cleanup() {
   local ec=${1:-0}
@@ -37,9 +39,16 @@ cleanup() {
     kill "$PLANNER_PID" 2>/dev/null || true
     wait "$PLANNER_PID" 2>/dev/null || true
   fi
-  if [[ "$TENDA_UP" == 1 ]] && [[ -f "${TENDA_DIR}/docker-compose.yml" ]]; then
+  if [[ -n "${PROP_PID}" ]] && kill -0 "$PROP_PID" 2>/dev/null; then
+    echo ""
+    echo "Stopping PROP (pid $PROP_PID)..."
+    kill "$PROP_PID" 2>/dev/null || true
+    wait "$PROP_PID" 2>/dev/null || true
+    fuser -k 8081/tcp 2>/dev/null || true
+  fi
+  if [[ "$TENDA_UP" == 1 ]] && [[ -f "${TENDA_DIR}/docker/docker-compose.yml" ]]; then
     echo "Stopping Tenda stack (docker compose down)..."
-    (cd "$TENDA_DIR" && docker compose down) >/dev/null 2>&1 || true
+    (cd "$TENDA_DIR" && docker compose -f docker/docker-compose.yml down) >/dev/null 2>&1 || true
   fi
   if [[ "$DRAC_UP" == 1 ]] && [[ -f "${DRAC_DIR}/docker-compose.yml" ]]; then
     echo "Stopping Draculin stack (docker compose down)..."
@@ -54,15 +63,15 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
   if ! command -v docker >/dev/null 2>&1; then
     echo "==> Docker not installed — skipping Tenda (:8888) & Draculin (:8890)"
   else
-    if [[ -f "${TENDA_DIR}/docker-compose.yml" ]]; then
+    if [[ -f "${TENDA_DIR}/docker/docker-compose.yml" ]]; then
       echo "==> Tenda Online     http://localhost:8888  (docker compose)"
-      if (cd "$TENDA_DIR" && docker compose up -d); then
+      if (cd "$TENDA_DIR" && docker compose -f docker/docker-compose.yml up -d); then
         TENDA_UP=1
       else
         echo "    warning: Tenda docker compose failed (is Docker running?)" >&2
       fi
     else
-      echo "==> Tenda skipped    (no ../tenda_online/docker-compose.yml)"
+      echo "==> Tenda skipped    (no ../tenda_online/docker/docker-compose.yml)"
     fi
     if [[ -f "${DRAC_DIR}/docker-compose.yml" ]]; then
       echo "==> Draculin         http://localhost:8890  (Flutter)  API :8889"
@@ -78,6 +87,18 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
   echo ""
 else
   echo "==> Docker stacks skipped (--skip-docker)"
+  echo ""
+fi
+
+# --- PROP Spring Boot ---
+if [[ -f "${PROP_DIR}/Makefile" ]]; then
+  echo "==> PROP Web           http://localhost:8081  (Spring Boot)"
+  (cd "${PROP_DIR}/web" && ./mvnw spring-boot:run > web_run.log 2>&1) &
+  PROP_PID=$!
+  sleep 2
+  echo ""
+else
+  echo "==> PROP Web skipped (no ../subgrup-prop7.1/Makefile)"
   echo ""
 fi
 
