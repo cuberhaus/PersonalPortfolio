@@ -1,14 +1,21 @@
 ---
-import skills from '../data/skills.json';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import skillsEn from '../data/skills.json';
+import skillsEs from '../data/skills.es.json';
+import skillsCa from '../data/skills.ca.json';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const skills = lang === 'es' ? skillsEs : lang === 'ca' ? skillsCa : skillsEn;
 ---
 
 <section class="section skills" id="skills">
   <div class="container">
     <div class="reveal">
-      <span class="section-label">Skills</span>
-      <h2 class="section-title">Tech I work with</h2>
+      <span class="section-label">{t('skills.label')}</span>
+      <h2 class="section-title">{t('skills.title')}</h2>
       <p class="section-subtitle">
-        Technologies and tools I use to bring ideas to life.
+        {t('skills.subtitle')}
       </p>
     </div>
 

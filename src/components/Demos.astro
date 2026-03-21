@@ -1,15 +1,23 @@
 ---
-import demos from '../data/demos.json';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import demosEn from '../data/demos.json';
+import demosEs from '../data/demos.es.json';
+import demosCa from '../data/demos.ca.json';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const demos = lang === 'es' ? demosEs : lang === 'ca' ? demosCa : demosEn;
+
 const base = import.meta.env.BASE_URL;
 ---
 
 <section class="section demos" id="demos">
   <div class="container">
     <div class="reveal">
-      <span class="section-label">Interactive</span>
-      <h2 class="section-title">Try my projects</h2>
+      <span class="section-label">{t('demos.label')}</span>
+      <h2 class="section-title">{t('demos.title')}</h2>
       <p class="section-subtitle">
-        Live, interactive demos you can play with right in your browser.
+        {t('demos.subtitle')}
       </p>
     </div>
 
@@ -121,7 +129,7 @@ const base = import.meta.env.BASE_URL;
             </div>
 
             <div class="demo-badge">
-              <span>Live Demo</span>
+              <span>{t('demos.badge')}</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>

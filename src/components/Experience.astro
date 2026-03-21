@@ -1,14 +1,21 @@
 ---
-import experience from '../data/experience.json';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import experienceEn from '../data/experience.json';
+import experienceEs from '../data/experience.es.json';
+import experienceCa from '../data/experience.ca.json';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa : experienceEn;
 ---
 
 <section class="section experience" id="experience">
   <div class="container">
     <div class="reveal">
-      <span class="section-label">Experience</span>
-      <h2 class="section-title">Where I've worked</h2>
+      <span class="section-label">{t('experience.label')}</span>
+      <h2 class="section-title">{t('experience.title')}</h2>
       <p class="section-subtitle">
-        A timeline of my professional journey so far.
+        {t('experience.subtitle')}
       </p>
     </div>
 

@@ -1,15 +1,21 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
 <section class="section contact" id="contact">
   <div class="container contact-inner">
     <div class="reveal">
-      <span class="section-label">Contact</span>
-      <h2 class="section-title">Get in touch</h2>
+      <span class="section-label">{t('contact.label')}</span>
+      <h2 class="section-title">{t('contact.title')}</h2>
       <p class="contact-text">
-        I'm currently open to new opportunities and collaborations. Whether you have
-        a question, a project idea, or just want to say hi — my inbox is always open.
+        {t('contact.text')}
       </p>
 
       <a href="mailto:polcg10@gmail.com" class="contact-cta">
-        Say Hello
+        {t('contact.cta')}
       </a>
     </div>
 

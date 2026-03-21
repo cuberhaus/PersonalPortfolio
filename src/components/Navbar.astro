@@ -1,14 +1,18 @@
 ---
 import LanguagePicker from './LanguagePicker.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const links = [
-  { label: 'About', href: '#about' },
-  { label: 'Demos', href: '#demos' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Education', href: '#education' },
-  { label: 'Contact', href: '#contact' },
+  { label: t('nav.about'), href: '#about' },
+  { label: t('nav.demos'), href: '#demos' },
+  { label: t('nav.projects'), href: '#projects' },
+  { label: t('nav.skills'), href: '#skills' },
+  { label: t('nav.experience'), href: '#experience' },
+  { label: t('nav.education'), href: '#education' },
+  { label: t('nav.contact'), href: '#contact' },
 ];
 ---
 

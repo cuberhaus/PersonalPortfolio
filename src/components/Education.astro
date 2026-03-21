@@ -1,12 +1,19 @@
 ---
-import education from '../data/education.json';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import educationEn from '../data/education.json';
+import educationEs from '../data/education.es.json';
+import educationCa from '../data/education.ca.json';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const education = lang === 'es' ? educationEs : lang === 'ca' ? educationCa : educationEn;
 ---
 
 <section class="section education" id="education">
   <div class="container">
     <div class="reveal">
-      <span class="section-label">Education</span>
-      <h2 class="section-title">Where I studied</h2>
+      <span class="section-label">{t('education.label')}</span>
+      <h2 class="section-title">{t('education.title')}</h2>
     </div>
 
     <ul class="education-grid reveal-stagger">

@@ -1,34 +1,25 @@
 ---
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 const hasProfileImage = existsSync(resolve('public/profile.jpg'));
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section class="section about" id="about">
   <div class="container">
     <div class="reveal">
-      <span class="section-label">About</span>
-      <h2 class="section-title">A bit about me</h2>
+      <span class="section-label">{t('about.label')}</span>
+      <h2 class="section-title">{t('about.title')}</h2>
     </div>
 
     <div class={`about-grid reveal ${hasProfileImage ? '' : 'no-image'}`}>
       <div class="about-text">
-        <p>
-          Hello! I'm Pol — a Computer Science Engineer from Barcelona with a passion
-          for AI, data science, and machine learning. I graduated from UPC's Facultat
-          d'Informàtica de Barcelona (FIB) and have been working at the intersection
-          of data and intelligent systems ever since.
-        </p>
-        <p>
-          I believe in standing on the shoulders of giants — leveraging the best of
-          existing knowledge and technology to build innovative solutions. From
-          predictive analytics and data governance to computer vision and neural
-          networks, I enjoy tackling complex problems that drive real impact.
-        </p>
-        <p>
-          Here are some technologies I've been working with recently:
-        </p>
+        <p>{t('about.p1')}</p>
+        <p>{t('about.p2')}</p>
+        <p>{t('about.p3')}</p>
         <ul class="about-tech-list">
           <li>Python</li>
           <li>SQL & PowerBI</li>

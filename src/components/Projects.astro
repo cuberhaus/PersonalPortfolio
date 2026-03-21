@@ -1,14 +1,21 @@
 ---
-import projects from '../data/projects.json';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import projectsEn from '../data/projects.json';
+import projectsEs from '../data/projects.es.json';
+import projectsCa from '../data/projects.ca.json';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : projectsEn;
 ---
 
 <section class="section projects" id="projects">
   <div class="container">
     <div class="reveal">
-      <span class="section-label">Work</span>
-      <h2 class="section-title">Things I've built</h2>
+      <span class="section-label">{t('projects.label')}</span>
+      <h2 class="section-title">{t('projects.title')}</h2>
       <p class="section-subtitle">
-        Professional &amp; production projects — deployed applications and real-world tools.
+        {t('projects.subtitle')}
       </p>
     </div>
 
