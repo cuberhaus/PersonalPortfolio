@@ -40,7 +40,7 @@ const styles = {
   linkHover: { color: "#6366f1" },
   cartBadge: {
     background: "linear-gradient(135deg, #6366f1, #a855f7)",
-    color: "#fff",
+    color: "var(--text-primary)",
     fontSize: "0.7rem",
     padding: "0.15rem 0.45rem",
     borderRadius: "999px",
@@ -100,7 +100,7 @@ const styles = {
   },
   primaryBtn: {
     background: "linear-gradient(135deg, #6366f1, #a855f7)",
-    color: "#fff",
+    color: "var(--text-primary)",
   },
   secondaryBtn: { background: "#27272a", color: "#a1a1aa" },
   table: {

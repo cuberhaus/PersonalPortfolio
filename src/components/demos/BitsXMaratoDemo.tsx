@@ -29,7 +29,7 @@ const PIPELINE = [
 
 /* ── shared styles ── */
 const card = {
-  background: "#111119",
+  background: "var(--bg-card)",
   border: "1px solid #1e1e2a",
   borderRadius: "1rem",
   padding: "1.5rem",
@@ -118,7 +118,7 @@ function SimulatedInference() {
           <button type="button" onClick={runInference} style={{
             padding: "0.45rem 1rem", borderRadius: "0.5rem", border: "none", fontWeight: 600,
             fontSize: "0.82rem", cursor: "pointer",
-            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
+            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
           }}>Run demo inference</button>
         )}
         {phase === "running" && <span style={{ fontSize: "0.82rem", color: "#a1a1aa" }}>{stepLabel}</span>}
@@ -212,13 +212,13 @@ export default function BitsXMaratoDemo() {
       {/* ── PIPELINE STRIP ── */}
       <div style={{
         ...card, marginBottom: "1.25rem",
-        background: "linear-gradient(135deg, #111119 0%, #0f0f1a 100%)",
+        background: "var(--bg-card)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
           <div style={{
             padding: "0.2rem 0.55rem", borderRadius: "0.35rem", fontSize: "0.65rem", fontWeight: 700,
             letterSpacing: "0.06em", textTransform: "uppercase" as const,
-            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
+            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
           }}>CV Pipeline</div>
           <span style={{ fontSize: "0.82rem", color: "#71717a" }}>BitsXLaMarató hackathon · TV3 La Marató</span>
         </div>
@@ -321,12 +321,12 @@ export default function BitsXMaratoDemo() {
           <a href="https://github.com/cuberhaus/bitsXlaMarato" target="_blank" rel="noopener noreferrer" style={{
             display: "inline-flex", alignItems: "center", gap: "0.35rem",
             padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff", textDecoration: "none",
+            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)", textDecoration: "none",
           }}>GitHub ↗</a>
           <a href="https://devpost.com/software/aneurism-detection-with-markrcnn" target="_blank" rel="noopener noreferrer" style={{
             display: "inline-flex", alignItems: "center", gap: "0.35rem",
             padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-            background: "#1c1c26", border: "1px solid #27272a", color: "#a1a1aa", textDecoration: "none",
+            background: "var(--bg-card-hover)", border: "1px solid #27272a", color: "#a1a1aa", textDecoration: "none",
           }}>Devpost ↗</a>
         </div>
       </div>
@@ -335,7 +335,7 @@ export default function BitsXMaratoDemo() {
       <details>
         <summary style={{
           cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "#71717a",
-          padding: "0.65rem 1rem", background: "#111119", borderRadius: "0.75rem",
+          padding: "0.65rem 1rem", background: "var(--bg-card)", borderRadius: "0.75rem",
           border: "1px solid #1e1e2a", listStyle: "none",
         }}>
           ▸ Run the original project locally

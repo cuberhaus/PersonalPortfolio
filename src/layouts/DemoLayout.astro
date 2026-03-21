@@ -1,4 +1,8 @@
 ---
+import ThemeToggle from '../components/ThemeToggle.astro';
+import LanguagePicker from '../components/LanguagePicker.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
 interface Props {
   title: string;
   description: string;
@@ -6,10 +10,12 @@ interface Props {
 
 const { title, description } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,6 +36,24 @@ const base = import.meta.env.BASE_URL;
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
 
+    <script is:inline>
+      // Apply theme before render to prevent FOUC
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+          return 'light';
+        }
+        return 'dark';
+      })();
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    </script>
+
 
     <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
 
@@ -40,25 +64,92 @@ const base = import.meta.env.BASE_URL;
       rel="stylesheet"
     />
 
+    <script is:inline>
+      // Apply theme before render to prevent FOUC
+      const theme = (() => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+          return 'light';
+        }
+        return 'dark';
+      })();
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    </script>
+    
     <title>{title} — Pol Casacuberta</title>
   </head>
   <body>
     <nav class="demo-nav">
       <div class="demo-nav-inner container">
-        <a href={base} class="demo-back" data-astro-reload>
+        <a href={base + (lang === 'en' ? '' : `/${lang}`)} class="demo-back" data-astro-reload>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          Portfolio
+          {t('demo.portfolio')}
         </a>
         <span class="demo-nav-title gradient-text">{title}</span>
+        
+        <div class="demo-controls">
+          <ThemeToggle />
+          <LanguagePicker />
+          <button class="demo-copy-btn" id="copy-demo-link" aria-label={t('demo.copyLink')} title={t('demo.copyLink')} data-copied-text={t('demo.copied')}>
+            <svg class="icon-copy" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none; color: var(--accent-start);">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+        </div>
       </div>
     </nav>
 
     <main class="demo-main">
       <slot />
     </main>
+
+    <script>
+      const initCopyBtn = () => {
+        const copyBtn = document.getElementById('copy-demo-link');
+        if (copyBtn && !copyBtn.hasAttribute('data-initialized')) {
+          copyBtn.setAttribute('data-initialized', 'true');
+          copyBtn.addEventListener('click', async () => {
+            try {
+              await navigator.clipboard.writeText(window.location.href);
+              const iconCopy = copyBtn.querySelector('.icon-copy');
+              const iconCheck = copyBtn.querySelector('.icon-check');
+              
+              if (iconCopy && iconCheck) {
+                iconCopy.style.display = 'none';
+                iconCheck.style.display = 'block';
+                const originalTitle = copyBtn.getAttribute('title');
+                const copiedText = copyBtn.getAttribute('data-copied-text') || 'Copied!';
+                copyBtn.setAttribute('title', copiedText);
+                
+                setTimeout(() => {
+                  iconCopy.style.display = 'block';
+                  iconCheck.style.display = 'none';
+                  copyBtn.setAttribute('title', originalTitle || 'Copy link');
+                }, 2000);
+              }
+            } catch (err) {
+              console.error('Failed to copy text: ', err);
+            }
+          });
+        }
+      };
+
+      initCopyBtn();
+      document.addEventListener('astro:page-load', initCopyBtn);
+    </script>
   </body>
 </html>
 
@@ -69,16 +160,16 @@ const base = import.meta.env.BASE_URL;
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(10, 10, 15, 0.85);
+    background: var(--bg-nav);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border-color);
   }
 
   .demo-nav-inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
     height: var(--nav-height);
   }
 
@@ -90,6 +181,7 @@ const base = import.meta.env.BASE_URL;
     font-weight: 500;
     color: var(--text-secondary);
     transition: color var(--transition-fast);
+    justify-self: start;
   }
 
   .demo-back:hover {
@@ -99,10 +191,44 @@ const base = import.meta.env.BASE_URL;
   .demo-nav-title {
     font-size: 1rem;
     font-weight: 700;
+    justify-self: center;
+  }
+
+  .demo-controls {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .demo-copy-btn {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .demo-copy-btn:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
   }
 
   .demo-main {
     min-height: calc(100vh - var(--nav-height));
     padding: 2rem 0;
+    color: var(--text-primary);
+  }
+
+  .demo-main p, .demo-main span:not(.demo-nav-title) {
+    color: var(--text-primary);
+  }
+
+  .demo-main .stats-grid p, .demo-main .stats-grid span {
+    color: var(--text-primary);
   }
 </style>

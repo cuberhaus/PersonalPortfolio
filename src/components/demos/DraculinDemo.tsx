@@ -32,10 +32,10 @@ const s = {
   wrapper: { fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "#e4e4e7", minHeight: "500px" },
   tabs: { display: "flex" as const, gap: "0.25rem", padding: "0.75rem 1rem", background: "#16161f", borderRadius: "0.75rem", marginBottom: "1.5rem", flexWrap: "wrap" as const, justifyContent: "center" as const },
   tab: { padding: "0.5rem 1rem", borderRadius: "0.5rem", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", transition: "all 0.15s", background: "transparent", color: "#71717a" },
-  tabActive: { background: "linear-gradient(135deg, #6366f1, #a855f7)", color: "#fff" },
+  tabActive: { background: "linear-gradient(135deg, #6366f1, #a855f7)", color: "var(--text-primary)" },
   card: { background: "#16161f", border: "1px solid #27272a", borderRadius: "0.75rem", padding: "1.5rem" },
   btn: { padding: "0.5rem 1.25rem", borderRadius: "0.5rem", border: "none", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" },
-  primaryBtn: { background: "linear-gradient(135deg, #6366f1, #a855f7)", color: "#fff" },
+  primaryBtn: { background: "linear-gradient(135deg, #6366f1, #a855f7)", color: "var(--text-primary)" },
   secondaryBtn: { background: "#27272a", color: "#a1a1aa" },
   input: { background: "#12121a", border: "1px solid #27272a", borderRadius: "0.5rem", padding: "0.5rem 0.75rem", color: "#e4e4e7", fontSize: "0.9rem", width: "100%", outline: "none" },
   mockBanner: { background: "linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.08))", border: "1px solid rgba(99,102,241,0.3)", borderRadius: "0.5rem", padding: "0.5rem 1rem", fontSize: "0.75rem", color: "#a1a1aa", marginBottom: "1rem", textAlign: "center" as const },
@@ -192,7 +192,7 @@ function QuizTab() {
           <p style={{ fontSize: "0.75rem", color: "#71717a", marginBottom: "1rem" }}>Pregunta {idx + 1} de {QUESTIONS.length}</p>
           <p style={{ fontSize: "1rem", marginBottom: "2rem", lineHeight: 1.6 }}>{QUESTIONS[idx].text}</p>
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
-            <button style={{ ...s.btn, background: "#ec4899", color: "#fff", minWidth: "80px" }} onClick={() => answer(true)}>Sí</button>
+            <button style={{ ...s.btn, background: "#ec4899", color: "var(--text-primary)", minWidth: "80px" }} onClick={() => answer(true)}>Sí</button>
             <button style={{ ...s.btn, ...s.secondaryBtn, minWidth: "80px" }} onClick={() => answer(false)}>No</button>
           </div>
         </>

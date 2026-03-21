@@ -17,7 +17,7 @@ import {
 const s = {
   wrapper: { fontFamily: "'Inter', system-ui, sans-serif", maxWidth: 900, margin: "0 auto" } as const,
   card: {
-    background: "linear-gradient(135deg, rgba(30,30,40,0.9), rgba(20,20,30,0.95))",
+    background: "var(--bg-card)",
     borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)",
     padding: "1.5rem", marginBottom: "1.25rem",
   } as const,
@@ -36,7 +36,7 @@ const s = {
   btnPrimary: {
     padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",
     background: "linear-gradient(135deg, #6366f1, #a855f7)",
-    color: "#fff", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600,
+    color: "var(--text-primary)", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600,
   } as const,
   btnDisabled: {
     padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",

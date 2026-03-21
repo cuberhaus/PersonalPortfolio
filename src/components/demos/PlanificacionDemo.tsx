@@ -147,7 +147,7 @@ function cityColor(id: string): string {
 
 /* ── shared styles ── */
 const card = {
-  background: "#111119", border: "1px solid #1e1e2a", borderRadius: "1rem", padding: "1.5rem",
+  background: "var(--bg-card)", border: "1px solid #1e1e2a", borderRadius: "1rem", padding: "1.5rem",
 } as const;
 
 const accent1 = "#6366f1";
@@ -235,7 +235,7 @@ function PlanResult({ plan, problem, timeSec }: { plan: string[]; problem: strin
                 <div style={{
                   width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
                   background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-                  color: "#fff", fontSize: "0.7rem", fontWeight: 700,
+                  color: "var(--text-primary)", fontSize: "0.7rem", fontWeight: 700,
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>{i + 1}</div>
                 <div style={{ fontSize: "0.82rem" }}>
@@ -356,7 +356,7 @@ export default function PlanificacionDemo() {
           {EXTENSIONS.map((e) => (
             <span key={e.name} style={{
               padding: "0.3rem 0.6rem", borderRadius: "0.4rem", fontSize: "0.72rem", fontWeight: 600,
-              background: e.active ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "#1c1c26",
+              background: e.active ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "var(--bg-card-hover)",
               border: e.active ? "none" : "1px solid #27272a",
               color: e.active ? "#fff" : "#71717a",
             }}>{e.name}</span>
@@ -456,7 +456,7 @@ export default function PlanificacionDemo() {
             style={{
               padding: "0.5rem 1.1rem", borderRadius: "0.5rem", border: "none", cursor: running || !plannerUrl ? "not-allowed" : "pointer",
               fontWeight: 600, fontSize: "0.85rem",
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
+              background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
               opacity: running || !plannerUrl ? 0.5 : 1,
             }}>
             {running ? "Running…" : "Run planner"}
@@ -464,7 +464,7 @@ export default function PlanificacionDemo() {
           <button type="button" onClick={() => { setDomainEdit(DOMAIN_EXT2); setProblemEdit(PROBLEM_EXT2); setResult(null); setFetchErr(null); }}
             style={{
               padding: "0.45rem 0.85rem", borderRadius: "0.5rem", border: "1px solid #27272a",
-              cursor: "pointer", fontSize: "0.78rem", background: "#1c1c26", color: "#a1a1aa",
+              cursor: "pointer", fontSize: "0.78rem", background: "var(--bg-card-hover)", color: "#a1a1aa",
             }}>Reset to defaults</button>
         </div>
 
@@ -502,17 +502,17 @@ export default function PlanificacionDemo() {
         <a href={GH} target="_blank" rel="noopener noreferrer" style={{
           display: "inline-flex", alignItems: "center", gap: "0.35rem",
           padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff", textDecoration: "none",
+          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)", textDecoration: "none",
         }}>GitHub repo ↗</a>
         <a href={pDomain} download style={{
           display: "inline-flex", alignItems: "center", gap: "0.35rem",
           padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-          background: "#1c1c26", border: "1px solid #27272a", color: "#a1a1aa", textDecoration: "none",
+          background: "var(--bg-card-hover)", border: "1px solid #27272a", color: "#a1a1aa", textDecoration: "none",
         }}>domain.pddl ↓</a>
         <a href={pProblem} download style={{
           display: "inline-flex", alignItems: "center", gap: "0.35rem",
           padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-          background: "#1c1c26", border: "1px solid #27272a", color: "#a1a1aa", textDecoration: "none",
+          background: "var(--bg-card-hover)", border: "1px solid #27272a", color: "#a1a1aa", textDecoration: "none",
         }}>problem.pddl ↓</a>
       </div>
     </div>

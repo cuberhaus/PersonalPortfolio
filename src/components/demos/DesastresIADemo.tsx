@@ -17,7 +17,7 @@ import {
 
 /* ── shared styles ── */
 const card = {
-  background: "#111119", border: "1px solid #1e1e2a", borderRadius: "1rem", padding: "1.5rem",
+  background: "var(--bg-card)", border: "1px solid #1e1e2a", borderRadius: "1rem", padding: "1.5rem",
 } as const;
 
 const accent1 = "#6366f1";
@@ -132,12 +132,12 @@ export default function DesastresIADemo() {
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "#e4e4e7" }}>
 
       {/* ── PIPELINE STRIP ── */}
-      <div style={{ ...card, marginBottom: "1.25rem", background: "linear-gradient(135deg, #111119 0%, #0f0f1a 100%)" }}>
+      <div style={{ ...card, marginBottom: "1.25rem", background: "var(--bg-card)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
           <div style={{
             padding: "0.2rem 0.55rem", borderRadius: "0.35rem", fontSize: "0.65rem", fontWeight: 700,
             letterSpacing: "0.06em", textTransform: "uppercase" as const,
-            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
+            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
           }}>Local Search</div>
           <span style={{ fontSize: "0.82rem", color: "#71717a" }}>AIMA · Java + Python</span>
         </div>
@@ -199,7 +199,7 @@ export default function DesastresIADemo() {
             {OPERATORS.map((o) => (
               <span key={o.fn} title={o.desc} style={{
                 padding: "0.25rem 0.5rem", borderRadius: "0.35rem", fontSize: "0.68rem", fontWeight: 600,
-                background: o.name === "SWAP" ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "#1c1c26",
+                background: o.name === "SWAP" ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "var(--bg-card-hover)",
                 border: o.name === "SWAP" ? "none" : "1px solid #27272a",
                 color: o.name === "SWAP" ? "#fff" : "#71717a", cursor: "help",
               }}>{o.name}</span>
@@ -215,7 +215,7 @@ export default function DesastresIADemo() {
       {/* ── RUN THE DEMO ── */}
       <div style={{
         ...card, marginBottom: "1.25rem",
-        background: "linear-gradient(180deg, #131320 0%, #111119 100%)",
+        background: "linear-gradient(180deg, #131320 0%, var(--bg-card) 100%)",
         border: "1px solid #2a2a3a",
         boxShadow: "0 4px 24px rgba(99, 102, 241, 0.08)",
       }}>
@@ -267,7 +267,7 @@ export default function DesastresIADemo() {
             style={{
               padding: "0.5rem 1.1rem", borderRadius: "0.5rem", border: "none", fontWeight: 600,
               fontSize: "0.88rem", cursor: running ? "not-allowed" : "pointer",
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
+              background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
               opacity: running ? 0.5 : 1,
             }}>
             {running ? "Running…" : "Run search"}
@@ -330,7 +330,7 @@ export default function DesastresIADemo() {
         <a href="https://github.com/cuberhaus/desastresIA" target="_blank" rel="noopener noreferrer" style={{
           display: "inline-flex", alignItems: "center", gap: "0.35rem",
           padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff", textDecoration: "none",
+          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)", textDecoration: "none",
         }}>GitHub repo ↗</a>
       </div>
     </div>

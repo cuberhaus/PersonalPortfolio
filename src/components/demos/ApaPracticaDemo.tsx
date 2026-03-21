@@ -62,7 +62,7 @@ const maxCoef = Math.max(...absCoefs);
 
 /* ── shared styles ── */
 const card = {
-  background: "#111119",
+  background: "var(--bg-card)",
   border: "1px solid #1e1e2a",
   borderRadius: "1rem",
   padding: "1.5rem",
@@ -191,7 +191,7 @@ function KnnCanvas() {
           <button key={kv} type="button" onClick={() => setK(kv)} style={{
             padding: "0.3rem 0.65rem", borderRadius: "0.4rem", border: "none",
             fontSize: "0.78rem", fontWeight: 700, cursor: "pointer",
-            background: k === kv ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "#1c1c26",
+            background: k === kv ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "var(--bg-card-hover)",
             color: k === kv ? "#fff" : "#71717a",
             transition: "all 0.15s",
           }}>{kv}</button>
@@ -275,7 +275,7 @@ function Predictor() {
           </div>
         </div>
         {/* confidence bar */}
-        <div style={{ marginTop: "0.85rem", height: 6, borderRadius: 3, background: "#1c1c26", overflow: "hidden" }}>
+        <div style={{ marginTop: "0.85rem", height: 6, borderRadius: 3, background: "var(--bg-card-hover)", overflow: "hidden" }}>
           <div style={{
             width: `${conf}%`, height: "100%", borderRadius: 3,
             background: isHypo
@@ -319,7 +319,7 @@ function FeatureImportance() {
       {FEATURE_META.map((f, i) => (
         <div key={f.key} style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <span style={{ width: 36, fontSize: "0.78rem", fontWeight: 700, color: f.color, textAlign: "right" }}>{f.label}</span>
-          <div style={{ flex: 1, height: 8, borderRadius: 4, background: "#1c1c26", overflow: "hidden" }}>
+          <div style={{ flex: 1, height: 8, borderRadius: 4, background: "var(--bg-card-hover)", overflow: "hidden" }}>
             <div style={{
               width: `${(absCoefs[i] / maxCoef) * 100}%`, height: "100%", borderRadius: 4,
               background: `linear-gradient(90deg, ${f.color}80, ${f.color})`,
@@ -351,13 +351,13 @@ export default function ApaPracticaDemo() {
       {/* ── PIPELINE STRIP ── */}
       <div style={{
         ...card, marginBottom: "1.25rem",
-        background: "linear-gradient(135deg, #111119 0%, #0f0f1a 100%)",
+        background: "var(--bg-card)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
           <div style={{
             padding: "0.2rem 0.55rem", borderRadius: "0.35rem", fontSize: "0.65rem", fontWeight: 700,
             letterSpacing: "0.06em", textTransform: "uppercase" as const,
-            background: "linear-gradient(135deg, #818cf8, #2dd4bf)", color: "#fff",
+            background: "linear-gradient(135deg, #818cf8, #2dd4bf)", color: "var(--text-primary)",
           }}>ML Pipeline</div>
           <span style={{ fontSize: "0.82rem", color: "#71717a" }}>FIB-UPC · APA course</span>
           <span style={{ fontSize: "0.82rem", color: "#3f3f46" }}>·</span>
@@ -466,13 +466,13 @@ export default function ApaPracticaDemo() {
             <a href={GH} target="_blank" rel="noopener noreferrer" style={{
               display: "inline-flex", alignItems: "center", gap: "0.35rem",
               padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-              background: "linear-gradient(135deg, #818cf8, #2dd4bf)", color: "#fff",
+              background: "linear-gradient(135deg, #818cf8, #2dd4bf)", color: "var(--text-primary)",
               textDecoration: "none",
             }}>GitHub repo ↗</a>
             <a href={`${GH}/blob/main/hypothyroid.arff`} target="_blank" rel="noopener noreferrer" style={{
               display: "inline-flex", alignItems: "center", gap: "0.35rem",
               padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-              background: "#1c1c26", border: "1px solid #27272a", color: "#a1a1aa",
+              background: "var(--bg-card-hover)", border: "1px solid #27272a", color: "#a1a1aa",
               textDecoration: "none",
             }}>hypothyroid.arff ↗</a>
           </div>
@@ -498,7 +498,7 @@ export default function ApaPracticaDemo() {
                 style={{
                   padding: "0.25rem 0.6rem", borderRadius: "0.35rem", border: "none",
                   fontSize: "0.72rem", fontWeight: 600, cursor: "pointer",
-                  background: nbFile === nb.file && showNb ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "#1c1c26",
+                  background: nbFile === nb.file && showNb ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "var(--bg-card-hover)",
                   color: nbFile === nb.file && showNb ? "#fff" : "#71717a",
                 }}>{nb.label}</button>
             ))}
@@ -529,7 +529,7 @@ export default function ApaPracticaDemo() {
       <details style={{ marginTop: "1.25rem" }}>
         <summary style={{
           cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "#71717a",
-          padding: "0.65rem 1rem", background: "#111119", borderRadius: "0.75rem",
+          padding: "0.65rem 1rem", background: "var(--bg-card)", borderRadius: "0.75rem",
           border: "1px solid #1e1e2a", listStyle: "none",
         }}>
           ▸ Run the notebooks locally

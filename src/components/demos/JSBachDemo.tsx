@@ -41,7 +41,7 @@ const styles = {
   },
   primaryBtn: {
     background: "linear-gradient(135deg, #6366f1, #a855f7)",
-    color: "#fff",
+    color: "var(--text-primary)",
   },
   secondaryBtn: {
     background: "#27272a",

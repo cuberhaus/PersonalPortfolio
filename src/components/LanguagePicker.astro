@@ -10,12 +10,9 @@ const cleanBase = base === '/' ? '' : base;
 ---
 <div class="language-picker">
   {Object.entries(languages).map(([key, label]) => {
-    // If we are in a demo page, switching languages takes us to the localized home page.
-    const baseRoute = route.startsWith('/demos') ? '/' : route;
-    
     // If English, we use the root route. Otherwise, prefix with /es or /ca.
     // Also include the base path if we are in production
-    const targetRoute = key === 'en' ? baseRoute : `/${key}${baseRoute === '/' ? '' : baseRoute}`;
+    const targetRoute = key === 'en' ? route : `/${key}${route === '/' ? '' : route}`;
     const href = `${cleanBase}${targetRoute}`;
     
     return (
@@ -36,8 +33,8 @@ const cleanBase = base === '/' ? '' : base;
     display: flex;
     gap: 0.75rem;
     align-items: center;
-    margin-left: 1rem;
-    padding-left: 1.5rem;
+    margin-left: 0.5rem;
+    padding-left: 1rem;
     border-left: 1px solid var(--border-color);
   }
   .lang-link {

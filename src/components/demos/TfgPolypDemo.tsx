@@ -6,7 +6,7 @@ const accent1 = "#10b981"; // emerald
 const accent2 = "#0ea5e9"; // sky
 
 const card = {
-  background: "#111119",
+  background: "var(--bg-card)",
   border: "1px solid #1e1e2a",
   borderRadius: "1rem",
   padding: "1.5rem",
@@ -34,12 +34,12 @@ type ModelResult = (typeof modelData)[number];
 /* ════════════════════════════════════════════════════════════════════════ */
 function PipelineStrip() {
   return (
-    <div style={{ ...card, marginBottom: "1.25rem", background: "linear-gradient(135deg, #111119 0%, #0f0f1a 100%)" }}>
+    <div style={{ ...card, marginBottom: "1.25rem", background: "var(--bg-card)" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
         <div style={{
           padding: "0.2rem 0.55rem", borderRadius: "0.35rem", fontSize: "0.65rem", fontWeight: 700,
           letterSpacing: "0.06em", textTransform: "uppercase" as const,
-          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
+          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
         }}>End-to-End Pipeline</div>
         <span style={{ fontSize: "0.82rem", color: "#71717a" }}>Bachelor's Thesis &middot; FIB-UPC</span>
       </div>
@@ -259,7 +259,7 @@ function MockInference() {
           <button type="button" onClick={run} style={{
             padding: "0.45rem 1rem", borderRadius: "0.5rem", border: "none", fontWeight: 600,
             fontSize: "0.82rem", cursor: "pointer",
-            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
+            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
           }}>Run demo inference</button>
         )}
         {phase === "running" && <span style={{ fontSize: "0.82rem", color: "#a1a1aa" }}>{step}</span>}
@@ -491,7 +491,7 @@ export default function TfgPolypDemo() {
               <a href="https://github.com/cuberhaus/TFG" target="_blank" rel="noopener noreferrer" style={{
                 display: "inline-flex", alignItems: "center", gap: "0.35rem",
                 padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-                background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff", textDecoration: "none",
+                background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)", textDecoration: "none",
               }}>GitHub {"\u2197"}</a>
             </div>
             <p style={{ margin: "0.75rem 0 0", fontSize: "0.78rem", color: "#71717a", lineHeight: 1.5 }}>
@@ -512,7 +512,7 @@ export default function TfgPolypDemo() {
       <details>
         <summary style={{
           cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "#71717a",
-          padding: "0.65rem 1rem", background: "#111119", borderRadius: "0.75rem",
+          padding: "0.65rem 1rem", background: "var(--bg-card)", borderRadius: "0.75rem",
           border: "1px solid #1e1e2a", listStyle: "none",
         }}>
           {"\u25B8"} Run the project locally
