@@ -1,0 +1,100 @@
+[
+  {
+    "slug": "tfg-polyps",
+    "title": "TFG — Detección de Pólipos",
+    "description": "Detección de pólipos mediante aprendizaje profundo con aumento de datos generativo (CycleGAN/SPADE). Explora los resultados del modelo y el pipeline de entrenamiento.",
+    "tags": ["PyTorch", "CycleGAN", "Object Detection", "UPC"],
+    "icon": "microscope"
+  },
+  {
+    "slug": "draculin",
+    "title": "Draculin",
+    "description": "Aplicación de seguimiento de salud con chatbot de IA y visión por computadora, desarrollada con Flutter. Finalista en BitsXLaMarató 2023.",
+    "tags": ["Flutter", "Django", "AI"],
+    "icon": "heart"
+  },
+  {
+    "slug": "bitsx-marato",
+    "title": "BitsXLaMarató — Aorta",
+    "description": "Ecografía → Segmentación de aorta con Mask R-CNN y reconstrucción 3D; inferencia simulada en navegador + explorador de diámetro.",
+    "tags": ["PyTorch", "OpenCV", "3D", "CV"],
+    "icon": "aorta"
+  },
+  {
+    "slug": "joc-eda",
+    "title": "Visor de Juego EDA",
+    "description": "Observa a bots de IA luchar en una cuadrícula — guerreros, constructores, armas y estrategia. Visor de repeticiones para la competición de programación EDA.",
+    "tags": ["C++", "Canvas", "AI"],
+    "icon": "gamepad"
+  },
+  {
+    "slug": "pro2",
+    "title": "Clustering WPGMA",
+    "description": "Construye árboles filogenéticos paso a paso. Introduce especies con secuencias genéticas y observa cómo el algoritmo WPGMA fusiona clústeres en un dendrograma.",
+    "tags": ["TypeScript", "Algorithms", "D3"],
+    "icon": "tree"
+  },
+  {
+    "slug": "jsbach",
+    "title": "Intérprete de JSBach",
+    "description": "Escribe y reproduce música con un lenguaje de programación personalizado. Un intérprete basado en navegador para el lenguaje musical JSBach.",
+    "tags": ["ANTLR4", "Web Audio", "Language"],
+    "icon": "music"
+  },
+  {
+    "slug": "tenda",
+    "title": "Tienda Online",
+    "description": "Una tienda e-commerce completa con navegación de productos, carrito de compras y proceso de pago.",
+    "tags": ["PHP", "MySQL", "E-Commerce"],
+    "icon": "store"
+  },
+  {
+    "slug": "matriculas",
+    "title": "Detección de Matrículas",
+    "description": "Detecta y lee matrículas de coches a partir de imágenes usando visión por computadora — un pipeline de MATLAB portado al navegador.",
+    "tags": ["Computer Vision", "TypeScript"],
+    "icon": "camera"
+  },
+  {
+    "slug": "mpids",
+    "title": "Solver MPIDS",
+    "description": "Encuentra el conjunto dominante mínimo en un grafo utilizando algoritmos de búsqueda local y voraz, con visualización interactiva.",
+    "tags": ["Algorithms", "Graph Theory", "TypeScript"],
+    "icon": "graph"
+  },
+  {
+    "slug": "phase-transitions",
+    "title": "Transiciones de Fase en Grafos",
+    "description": "Explora transiciones de fase de percolación y conectividad en grafos binomiales, geométricos y de cuadrícula.",
+    "tags": ["Algorithms", "Graph Theory", "NetworkX"],
+    "icon": "scatter"
+  },
+  {
+    "slug": "planificacion",
+    "title": "Agencia de viajes (PDDL)",
+    "description": "Práctica de planificación automática: dominio PDDL para viajes con vuelos, hoteles, restricciones numéricas y minimización de métricas.",
+    "tags": ["PDDL", "Planning", "UPC"],
+    "icon": "map"
+  },
+  {
+    "slug": "desastres-ia",
+    "title": "Desastres IA",
+    "description": "Asistencia en desastres como búsqueda local: helicópteros rescatan grupos de centros usando escalada de colinas y recocido simulado (AIMA).",
+    "tags": ["Java", "AIMA", "Local search", "UPC"],
+    "icon": "helicopter"
+  },
+  {
+    "slug": "apa-practica",
+    "title": "Práctica APA",
+    "description": "Práctica APA sobre hipotiroidismo: Nbviewer, enlaces a GitHub, demo de clic de k-NN vinculada a N/P de clase binaria (FIB-UPC).",
+    "tags": ["Python", "Jupyter", "sklearn", "UPC"],
+    "icon": "ml"
+  },
+  {
+    "slug": "prop",
+    "title": "Sistema de Recomendación PROP",
+    "description": "Una interfaz web para un sistema de recomendación basado en contenido, construido con Java, Spring Boot y Thymeleaf.",
+    "tags": ["Java", "Spring Boot", "Recommendation"],
+    "icon": "server"
+  }
+]

@@ -1,4 +1,6 @@
 ---
+import LanguagePicker from './LanguagePicker.astro';
+
 const links = [
   { label: 'About', href: '#about' },
   { label: 'Demos', href: '#demos' },
@@ -22,6 +24,7 @@ const links = [
       {links.map((link) => (
         <li><a href={link.href} class="nav-link">{link.label}</a></li>
       ))}
+      <li><LanguagePicker /></li>
     </ul>
   </div>
 </nav>

@@ -1,0 +1,65 @@
+---
+import { languages } from '../i18n/ui';
+import { getRouteFromUrl, getLangFromUrl } from '../i18n/utils';
+
+const currentLang = getLangFromUrl(Astro.url);
+const route = getRouteFromUrl(Astro.url);
+
+const base = import.meta.env.BASE_URL;
+const cleanBase = base === '/' ? '' : base;
+---
+<div class="language-picker">
+  {Object.entries(languages).map(([key, label]) => {
+    // If we are in a demo page, switching languages takes us to the localized home page.
+    const baseRoute = route.startsWith('/demos') ? '/' : route;
+    
+    // If English, we use the root route. Otherwise, prefix with /es or /ca.
+    // Also include the base path if we are in production
+    const targetRoute = key === 'en' ? baseRoute : `/${key}${baseRoute === '/' ? '' : baseRoute}`;
+    const href = `${cleanBase}${targetRoute}`;
+    
+    return (
+      <a 
+        href={href} 
+        class={`lang-link ${key === currentLang ? 'active' : ''}`}
+        title={label}
+        data-astro-reload
+      >
+        {key.toUpperCase()}
+      </a>
+    );
+  })}
+</div>
+
+<style>
+  .language-picker {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-left: 1rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--border-color);
+  }
+  .lang-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+  }
+  .lang-link:hover, .lang-link.active {
+    color: var(--accent-start);
+  }
+  
+  @media (max-width: 768px) {
+    .language-picker {
+      margin-left: 0;
+      padding-left: 0;
+      border-left: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

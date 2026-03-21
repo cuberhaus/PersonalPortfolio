@@ -1,0 +1,32 @@
+[
+  {
+    "role": "Consultor de IA y Datos",
+    "company": "Deloitte",
+    "period": "Sep 2025 — Presente",
+    "bullets": [
+      "Lideré un equipo multidisciplinario para diseñar y entregar casos de uso de IA y datos para iniciativas del sector público",
+      "Trabajé en el proyecto de la Generalitat de Catalunya, centrándome en la Gobernanza de Datos, gestión de relaciones con clientes y estrategia de consultoría",
+      "Experiencia práctica con Informatica, AWS y Azure en soluciones de gestión de datos del mundo real"
+    ]
+  },
+  {
+    "role": "Ingeniero de Datos",
+    "company": "MGS, Seguros y Reaseguros S.A.",
+    "period": "Sep 2023 — Sep 2024",
+    "bullets": [
+      "Impulsé el análisis predictivo, una sólida gobernanza de datos y procesos ETL optimizados, mejorando la calidad y eficiencia de los datos",
+      "Logré un aumento del 20% en la precisión de los informes con visualizaciones impactantes usando Python, R, SQL Server y PowerBI",
+      "Creé cuadros de mando dinámicos para el seguimiento en tiempo real de KPI y métricas de negocio, permitiendo decisiones estratégicas informadas"
+    ]
+  },
+  {
+    "role": "Ingeniero de Desarrollo de Software",
+    "company": "Hackathon bitsxlaMarató TV3 (Ganador)",
+    "period": "Ene 2022",
+    "bullets": [
+      "Desarrollé un detector de aneurismas utilizando una red neuronal convolucional con MaskRCNN para la salud cardiovascular",
+      "Gané el Hackathon bitsxlaMarató TV3 2022 por este proyecto",
+      "Diseñé una interfaz fácil de usar para cargar videos, detectar la aorta y visualizar modelos en 3D"
+    ]
+  }
+]

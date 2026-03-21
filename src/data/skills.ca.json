@@ -1,0 +1,18 @@
+[
+  {
+    "category": "Llenguatges de Programació",
+    "items": ["Python", "C", "C++", "Java", "SQL", "Haskell", "Prolog", "JavaScript", "PowerShell"]
+  },
+  {
+    "category": "IA i Ciència de Dades",
+    "items": ["Machine Learning", "Computer Vision", "Data Mining", "Supervised Learning", "Big Data", "Statistics", "Knowledge-Based Systems"]
+  },
+  {
+    "category": "Eines i Plataformes",
+    "items": ["AWS", "Azure", "Informatica", "PowerBI", "SQL Server", "Git", "Docker", "Jupyter", "Google Colab"]
+  },
+  {
+    "category": "Fonaments d'Informàtica",
+    "items": ["Algorithms", "Dynamic Programming", "Software Architecture", "Parallel Processing", "Cybersecurity", "Network Administration"]
+  }
+]

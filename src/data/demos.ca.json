@@ -1,0 +1,100 @@
+[
+  {
+    "slug": "tfg-polyps",
+    "title": "TFG — Detecció de Pòlips",
+    "description": "Detecció de pòlips mitjançant aprenentatge profund amb augment de dades generatiu (CycleGAN/SPADE). Explora els resultats del model i el pipeline d'entrenament.",
+    "tags": ["PyTorch", "CycleGAN", "Object Detection", "UPC"],
+    "icon": "microscope"
+  },
+  {
+    "slug": "draculin",
+    "title": "Draculin",
+    "description": "Aplicació de seguiment de salut amb xatbot d'IA i visió per computador, desenvolupada amb Flutter. Finalista a BitsXLaMarató 2023.",
+    "tags": ["Flutter", "Django", "AI"],
+    "icon": "heart"
+  },
+  {
+    "slug": "bitsx-marato",
+    "title": "BitsXLaMarató — Aorta",
+    "description": "Ecografia → Segmentació d'aorta amb Mask R-CNN i reconstrucció 3D; inferència simulada en navegador + explorador de diàmetre.",
+    "tags": ["PyTorch", "OpenCV", "3D", "CV"],
+    "icon": "aorta"
+  },
+  {
+    "slug": "joc-eda",
+    "title": "Visor de Joc EDA",
+    "description": "Observa a bots d'IA lluitar en una quadrícula — guerrers, constructors, armes i estratègia. Visor de repeticions per a la competició de programació EDA.",
+    "tags": ["C++", "Canvas", "AI"],
+    "icon": "gamepad"
+  },
+  {
+    "slug": "pro2",
+    "title": "Clustering WPGMA",
+    "description": "Construeix arbres filogenètics pas a pas. Introdueix espècies amb seqüències genètiques i observa com l'algorisme WPGMA fusiona clústers en un dendrograma.",
+    "tags": ["TypeScript", "Algorithms", "D3"],
+    "icon": "tree"
+  },
+  {
+    "slug": "jsbach",
+    "title": "Intèrpret de JSBach",
+    "description": "Escriu i reprodueix música amb un llenguatge de programació personalitzat. Un intèrpret basat en navegador per al llenguatge musical JSBach.",
+    "tags": ["ANTLR4", "Web Audio", "Language"],
+    "icon": "music"
+  },
+  {
+    "slug": "tenda",
+    "title": "Botiga Online",
+    "description": "Una botiga e-commerce completa amb navegació de productes, carret de compres i procés de pagament.",
+    "tags": ["PHP", "MySQL", "E-Commerce"],
+    "icon": "store"
+  },
+  {
+    "slug": "matriculas",
+    "title": "Detecció de Matrícules",
+    "description": "Detecta i llegeix matrícules de cotxes a partir d'imatges utilitzant visió per computador — un pipeline de MATLAB portat al navegador.",
+    "tags": ["Computer Vision", "TypeScript"],
+    "icon": "camera"
+  },
+  {
+    "slug": "mpids",
+    "title": "Solver MPIDS",
+    "description": "Troba el conjunt dominant mínim en un graf utilitzant algorismes de cerca local i voraç, amb visualització interactiva.",
+    "tags": ["Algorithms", "Graph Theory", "TypeScript"],
+    "icon": "graph"
+  },
+  {
+    "slug": "phase-transitions",
+    "title": "Transicions de Fase en Grafs",
+    "description": "Explora transicions de fase de percolació i connectivitat en grafs binomials, geomètrics i de quadrícula.",
+    "tags": ["Algorithms", "Graph Theory", "NetworkX"],
+    "icon": "scatter"
+  },
+  {
+    "slug": "planificacion",
+    "title": "Agència de viatges (PDDL)",
+    "description": "Pràctica de planificació automàtica: domini PDDL per a viatges amb vols, hotels, restriccions numèriques i minimització de mètriques.",
+    "tags": ["PDDL", "Planning", "UPC"],
+    "icon": "map"
+  },
+  {
+    "slug": "desastres-ia",
+    "title": "Desastres IA",
+    "description": "Assistència en desastres com a cerca local: helicòpters rescaten grups de centres utilitzant escalada de turons i recuit simulat (AIMA).",
+    "tags": ["Java", "AIMA", "Local search", "UPC"],
+    "icon": "helicopter"
+  },
+  {
+    "slug": "apa-practica",
+    "title": "Pràctica APA",
+    "description": "Pràctica APA sobre hipotiroïdisme: Nbviewer, enllaços a GitHub, demo de clic de k-NN vinculada a N/P de classe binària (FIB-UPC).",
+    "tags": ["Python", "Jupyter", "sklearn", "UPC"],
+    "icon": "ml"
+  },
+  {
+    "slug": "prop",
+    "title": "Sistema de Recomanació PROP",
+    "description": "Una interfície web per a un sistema de recomanació basat en contingut, construït amb Java, Spring Boot i Thymeleaf.",
+    "tags": ["Java", "Spring Boot", "Recommendation"],
+    "icon": "server"
+  }
+]

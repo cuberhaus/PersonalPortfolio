@@ -7,4 +7,11 @@ export default defineConfig({
   site: 'https://cuberhaus.github.io',
   base: '/PersonalPortfolio',
   integrations: [react(), sitemap()],
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'es', 'ca'],
+    routing: {
+      prefixDefaultLocale: false
+    }
+  }
 });
