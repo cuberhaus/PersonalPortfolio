@@ -1,6 +1,41 @@
 import { useState, useRef, useCallback } from "react";
 import { interpret, playNotes, SAMPLE_PROGRAMS, type JSBachResult } from "../../lib/jsbach/interpreter";
 
+type Lang = "en" | "es" | "ca";
+
+const TRANSLATIONS = {
+  en: {
+    examples: "Examples",
+    codeEditor: "Code Editor",
+    run: "Run",
+    playing: "Playing...",
+    playMusic: "Play Music",
+    output: "Output",
+    notesGenerated: "{0} note{s} generated",
+    noOutput: "Program ran successfully with no output."
+  },
+  es: {
+    examples: "Ejemplos",
+    codeEditor: "Editor de Código",
+    run: "Ejecutar",
+    playing: "Reproduciendo...",
+    playMusic: "Reproducir Música",
+    output: "Salida",
+    notesGenerated: "{0} nota{s} generada{s}",
+    noOutput: "El programa se ejecutó correctamente sin salida."
+  },
+  ca: {
+    examples: "Exemples",
+    codeEditor: "Editor de Codi",
+    run: "Executar",
+    playing: "Reproduint...",
+    playMusic: "Reproduir Música",
+    output: "Sortida",
+    notesGenerated: "{0} nota{s} generada{s}",
+    noOutput: "El programa s'ha executat correctament sense sortida."
+  }
+};
+
 const styles = {
   card: {
     background: "var(--bg-card)",
@@ -114,7 +149,8 @@ function noteToColor(n: number): string {
   return `hsl(${hue}, 70%, 55%)`;
 }
 
-export default function JSBachDemo() {
+export default function JSBachDemo({ lang = "en" }: { lang?: Lang }) {
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   const [code, setCode] = useState(SAMPLE_PROGRAMS[0].code);
   const [result, setResult] = useState<JSBachResult | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -159,7 +195,7 @@ export default function JSBachDemo() {
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
       {/* Sample programs */}
       <div style={styles.card}>
-        <h3 style={styles.h3}>Examples</h3>
+        <h3 style={styles.h3}>{t.examples}</h3>
         <div style={styles.sampleBtns}>
           {SAMPLE_PROGRAMS.map((prog) => (
             <button
@@ -175,7 +211,7 @@ export default function JSBachDemo() {
 
       {/* Editor */}
       <div style={styles.card}>
-        <h3 style={styles.h3}>Code Editor</h3>
+        <h3 style={styles.h3}>{t.codeEditor}</h3>
         <textarea
           ref={textareaRef}
           style={styles.textarea}
@@ -186,7 +222,7 @@ export default function JSBachDemo() {
         />
         <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
           <button style={{ ...styles.button, ...styles.primaryBtn }} onClick={run}>
-            Run
+            {t.run}
           </button>
           {result && result.notes.length > 0 && (
             <button
@@ -194,7 +230,7 @@ export default function JSBachDemo() {
               onClick={play}
               disabled={playing}
             >
-              {playing ? "Playing..." : "Play Music"}
+              {playing ? t.playing : t.playMusic}
             </button>
           )}
         </div>
@@ -203,7 +239,7 @@ export default function JSBachDemo() {
       {/* Results */}
       {result && (
         <div style={styles.card}>
-          <h3 style={styles.h3}>Output</h3>
+          <h3 style={styles.h3}>{t.output}</h3>
 
           {result.error && <div style={styles.error}>{result.error}</div>}
 
@@ -218,7 +254,7 @@ export default function JSBachDemo() {
           {result.notes.length > 0 && (
             <>
               <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: "0.5rem" }}>
-                {result.notes.length} note{result.notes.length !== 1 ? "s" : ""} generated
+                {t.notesGenerated.replace("{0}", String(result.notes.length)).replace("{s}", result.notes.length !== 1 ? "s" : "")}
               </div>
               <div style={styles.noteBar}>
                 {result.notes.map((n, i) => (
@@ -256,7 +292,7 @@ export default function JSBachDemo() {
 
           {!result.error && result.output.length === 0 && result.notes.length === 0 && (
             <div style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
-              Program ran successfully with no output.
+              {t.noOutput}
             </div>
           )}
         </div>

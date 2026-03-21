@@ -1,32 +1,66 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import SPMatriculasDemo from '../../components/demos/SPMatriculasDemo';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const titles = {
+  en: "License Plate Detection",
+  es: "Detección de Matrículas",
+  ca: "Detecció de Matrícules"
+};
+
+const leads = {
+  en: "Detect and read <strong>license plates</strong> from car images using computer vision. Select a sample image or upload your own, then watch the 3-stage pipeline (<strong>plate detection</strong>, <strong>character segmentation</strong>, <strong>OCR</strong>) process it in real time \u2014 entirely in your browser.",
+  es: "Detecta y lee <strong>matrículas</strong> de imágenes de coches usando visión por computador. Selecciona una imagen de muestra o sube la tuya, luego observa cómo el pipeline de 3 etapas (<strong>detección de matrícula</strong>, <strong>segmentación de caracteres</strong>, <strong>OCR</strong>) la procesa en tiempo real \u2014 completamente en tu navegador.",
+  ca: "Detecta i llegeix <strong>matrícules</strong> d'imatges de cotxes usant visió per computador. Selecciona una imatge de mostra o puja la teva, després observa com el pipeline de 3 etapes (<strong>detecció de matrícula</strong>, <strong>segmentació de caràcters</strong>, <strong>OCR</strong>) la processa en temps real \u2014 completament al teu navegador."
+};
+
+const badges = {
+  en: "Computer Vision \u00b7 FIB-UPC",
+  es: "Visión por Computador \u00b7 FIB-UPC",
+  ca: "Visió per Computador \u00b7 FIB-UPC"
+};
+
+const aboutTitles = {
+  en: "About this project",
+  es: "Sobre este proyecto",
+  ca: "Sobre aquest projecte"
+};
+
+const aboutDescs = {
+  en: "Originally a MATLAB project for the Computer Vision course at FIB-UPC. This browser demo is a port of the original pipeline to JavaScript \u2014 it uses adaptive binarization, morphological filtering, connected component analysis, and template matching to detect license plates and read their characters, all running client-side with no external dependencies.",
+  es: "Originalmente un proyecto de MATLAB para el curso de Visión por Computador en la FIB-UPC. Esta demo de navegador es un port del pipeline original a JavaScript \u2014 utiliza binarización adaptativa, filtrado morfológico, análisis de componentes conectadas y coincidencia de plantillas para detectar matrículas y leer sus caracteres, ejecutándose completamente en el cliente sin dependencias externas.",
+  ca: "Originalment un projecte de MATLAB per al curs de Visió per Computador a la FIB-UPC. Aquesta demo de navegador és un port del pipeline original a JavaScript \u2014 utilitza binarització adaptativa, filtrat morfològic, anàlisi de components connectades i coincidència de plantilles per detectar matrícules i llegir els seus caràcters, executant-se completament al client sense dependències externes."
+};
+
+const viewSource = {
+  en: "View source on GitHub",
+  es: "Ver código en GitHub",
+  ca: "Veure codi a GitHub"
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title="License Plate Detection" description="License plate detector ported from MATLAB to JavaScript.">
+<DemoLayout title={title} description="License plate detector ported from MATLAB to JavaScript.">
   <div class="container">
     <div class="demo-header">
-      <div class="badge">Computer Vision · FIB-UPC</div>
-      <h1>License Plate Detection</h1>
-      <p class="demo-lead">
-        Detect and read <strong>license plates</strong> from car images using computer vision.
-        Select a sample image or upload your own, then watch the 3-stage pipeline
-        (<strong>plate detection</strong>, <strong>character segmentation</strong>, <strong>OCR</strong>) process it in real time — entirely in your browser.
-      </p>
+      <div class="badge">{badge}</div>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
     </div>
 
-    <SPMatriculasDemo client:load />
+    <SPMatriculasDemo lang={lang} client:load />
 
     <div class="demo-info">
-      <h3>About this project</h3>
-      <p>
-        Originally a MATLAB project for the Computer Vision course at FIB-UPC. This browser demo is
-        a port of the original pipeline to JavaScript — it uses adaptive binarization, morphological
-        filtering, connected component analysis, and template matching to detect license plates and
-        read their characters, all running client-side with no external dependencies.
-      </p>
+      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
+      <p>{aboutDescs[lang] || aboutDescs.en}</p>
       <a href="https://github.com/cuberhaus/SPMatriculas" target="_blank" rel="noopener noreferrer" class="demo-link">
-        View source on GitHub
+        {viewSource[lang] || viewSource.en}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
         </svg>

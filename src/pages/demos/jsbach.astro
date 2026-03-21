@@ -1,36 +1,79 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import JSBachDemo from '../../components/demos/JSBachDemo';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const titles = {
+  en: "JSBach Interpreter",
+  es: "Intérprete JSBach",
+  ca: "Intèrpret JSBach"
+};
+
+const leads = {
+  en: "Write <strong>music with code</strong>. JSBach is a custom programming language where you can define procedures, use variables, loops, and conditionals \u2014 and play <strong>musical notes</strong>. Try the examples or write your own!",
+  es: "Escribe <strong>música con código</strong>. JSBach es un lenguaje de programación personalizado donde puedes definir procedimientos, usar variables, bucles y condicionales \u2014 y reproducir <strong>notas musicales</strong>. \u00a1Prueba los ejemplos o escribe el tuyo propio!",
+  ca: "Escriu <strong>música amb codi</strong>. JSBach és un llenguatge de programació personalitzat on pots definir procediments, utilitzar variables, bucles i condicionals \u2014 i reproduir <strong>notes musicals</strong>. Prova els exemples o escriu el teu propi!"
+};
+
+const badges = {
+  en: "Compilers \u00b7 FIB-UPC",
+  es: "Compiladores \u00b7 FIB-UPC",
+  ca: "Compiladors \u00b7 FIB-UPC"
+};
+
+const hints = {
+  en: ["play a note", "print", "assign", "block"],
+  es: ["toca una nota", "imprimir", "asignar", "bloque"],
+  ca: ["toca una nota", "imprimir", "assignar", "bloc"]
+};
+
+const aboutTitle = {
+  en: "About this project",
+  es: "Sobre este proyecto",
+  ca: "Sobre aquest projecte"
+};
+
+const aboutDesc = {
+  en: "Originally built with ANTLR4 and Python for a compilers course at FIB-UPC. The language supports procedures, recursion, arithmetic, lists, conditionals, loops, and musical note playback. This browser version uses a hand-written parser and the Web Audio API for sound synthesis.",
+  es: "Originalmente construido con ANTLR4 y Python para un curso de compiladores en la FIB-UPC. El lenguaje soporta procedimientos, recursión, aritmética, listas, condicionales, bucles y reproducción de notas musicales. Esta versión para navegador utiliza un parser escrito a mano y la Web Audio API para la síntesis de sonido.",
+  ca: "Originalment construït amb ANTLR4 i Python per a un curs de compiladors a la FIB-UPC. El llenguatge suporta procediments, recursió, aritmètica, llistes, condicionals, bucles i reproducció de notes musicals. Aquesta versió per a navegador utilitza un parser escrit a mà i la Web Audio API per a la síntesi de so."
+};
+
+const viewSource = {
+  en: "View source on GitHub",
+  es: "Ver código en GitHub",
+  ca: "Veure codi a GitHub"
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
+const hint = hints[lang] || hints.en;
 ---
 
-<DemoLayout title="JSBach Interpreter" description="Write and play music with the JSBach programming language, right in your browser.">
+<DemoLayout title={title} description="Write and play music with the JSBach programming language, right in your browser.">
   <div class="container">
     <div class="demo-header">
-      <div class="badge">Compilers · FIB-UPC</div>
-      <h1>JSBach Interpreter</h1>
-      <p class="demo-lead">
-        Write <strong>music with code</strong>. JSBach is a custom programming language where you can define procedures,
-        use variables, loops, and conditionals — and play <strong>musical notes</strong>. Try the examples or write your own!
-      </p>
+      <div class="badge">{badge}</div>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
       <div class="syntax-hints">
-        <code>&lt;:&gt; C4</code> play a note &nbsp;
-        <code>&lt;!&gt; "text"</code> print &nbsp;
-        <code>x &lt;- 5</code> assign &nbsp;
-        <code>|: ... :|</code> block
+        <code>&lt;:&gt; C4</code> {hint[0]} &nbsp;
+        <code>&lt;!&gt; "text"</code> {hint[1]} &nbsp;
+        <code>x &lt;- 5</code> {hint[2]} &nbsp;
+        <code>|: ... :|</code> {hint[3]}
       </div>
     </div>
 
-    <JSBachDemo client:load />
+    <JSBachDemo lang={lang} client:load />
 
     <div class="demo-info">
-      <h3>About this project</h3>
-      <p>
-        Originally built with ANTLR4 and Python for a compilers course at FIB-UPC. The language supports
-        procedures, recursion, arithmetic, lists, conditionals, loops, and musical note playback.
-        This browser version uses a hand-written parser and the Web Audio API for sound synthesis.
-      </p>
+      <h3>{aboutTitle[lang] || aboutTitle.en}</h3>
+      <p>{aboutDesc[lang] || aboutDesc.en}</p>
       <a href="https://github.com/cuberhaus/ANTLR4_JSBach" target="_blank" rel="noopener noreferrer" class="demo-link">
-        View source on GitHub
+        {viewSource[lang] || viewSource.en}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
         </svg>

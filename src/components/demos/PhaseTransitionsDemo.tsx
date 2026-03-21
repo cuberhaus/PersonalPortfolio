@@ -16,6 +16,107 @@ import {
 } from "../../lib/graph-phase";
 import { forceLayout } from "../../lib/mpids";
 
+type Lang = "en" | "es" | "ca";
+
+const TRANSLATIONS = {
+  en: {
+    noNodes: "No nodes remaining after percolation",
+    retentionProb: "Retention probability (p)",
+    pProperty: "P(property)",
+    pConnected: "P(connected)",
+    pComplex: "P(all components complex)",
+    title: "Phase Transitions in Random Graphs",
+    desc: "Generate random graphs and apply percolation (random removal of nodes or edges) to observe phase transitions \u2014 the sharp change from connected to disconnected as the retention probability drops. Each connected component is shown in a different color.",
+    graphFamily: "Graph family:",
+    binomial: "Binomial (Erd\u0151s\u2013R\u00e9nyi)",
+    geometric: "Geometric",
+    grid: "Grid",
+    gridSide: "Grid side:",
+    nodes: "Nodes:",
+    nodesCount: "{0} nodes",
+    generate: "Generate",
+    percolation: "Percolation:",
+    node: "Node",
+    edge: "Edge",
+    both: "Both",
+    retention: "Retention probability:",
+    edgesCount: "{0} edges",
+    connected: "Connected",
+    components: "{0} components",
+    allComplex: "All complex",
+    notAllComplex: "Not all complex",
+    largest: "Largest: {0}",
+    ptCurve: "Phase transition curve:",
+    ptDesc: "Sweeps retention probability 0\u21921, measuring P(connected) and P(all complex) over multiple trials.",
+    computing: "Computing\u2026",
+    runSweep: "Run sweep"
+  },
+  es: {
+    noNodes: "No quedan nodos después de la percolación",
+    retentionProb: "Probabilidad de retención (p)",
+    pProperty: "P(propiedad)",
+    pConnected: "P(conectado)",
+    pComplex: "P(todas comp. complejas)",
+    title: "Transiciones de Fase en Grafos Aleatorios",
+    desc: "Genera grafos aleatorios y aplica percolación (eliminación aleatoria de nodos o aristas) para observar transiciones de fase \u2014 el cambio brusco de conectado a desconectado a medida que la probabilidad de retención disminuye. Cada componente conectada se muestra en un color diferente.",
+    graphFamily: "Familia de grafos:",
+    binomial: "Binomial (Erd\u0151s\u2013R\u00e9nyi)",
+    geometric: "Geométrico",
+    grid: "Cuadrícula",
+    gridSide: "Lado cuadrícula:",
+    nodes: "Nodos:",
+    nodesCount: "{0} nodos",
+    generate: "Generar",
+    percolation: "Percolación:",
+    node: "Nodo",
+    edge: "Arista",
+    both: "Ambos",
+    retention: "Probabilidad de retención:",
+    edgesCount: "{0} aristas",
+    connected: "Conectado",
+    components: "{0} componentes",
+    allComplex: "Todas complejas",
+    notAllComplex: "No todas complejas",
+    largest: "Mayor: {0}",
+    ptCurve: "Curva de transición de fase:",
+    ptDesc: "Realiza un barrido de la probabilidad de retención de 0\u21921, midiendo P(conectado) y P(todas complejas) en múltiples ensayos.",
+    computing: "Calculando\u2026",
+    runSweep: "Ejecutar barrido"
+  },
+  ca: {
+    noNodes: "No queden nodes després de la percolació",
+    retentionProb: "Probabilitat de retenció (p)",
+    pProperty: "P(propietat)",
+    pConnected: "P(connectat)",
+    pComplex: "P(totes comp. complexes)",
+    title: "Transicions de Fase en Grafs Aleatoris",
+    desc: "Genera grafs aleatoris i aplica percolació (eliminació aleatòria de nodes o arestes) per observar transicions de fase \u2014 el canvi brusc de connectat a desconnectat a mesura que la probabilitat de retenció disminueix. Cada component connectada es mostra en un color diferent.",
+    graphFamily: "Família de grafs:",
+    binomial: "Binomial (Erd\u0151s\u2013R\u00e9nyi)",
+    geometric: "Geomètric",
+    grid: "Quadrícula",
+    gridSide: "Costat quadrícula:",
+    nodes: "Nodes:",
+    nodesCount: "{0} nodes",
+    generate: "Generar",
+    percolation: "Percolació:",
+    node: "Node",
+    edge: "Aresta",
+    both: "Ambdós",
+    retention: "Probabilitat de retenció:",
+    edgesCount: "{0} arestes",
+    connected: "Connectat",
+    components: "{0} components",
+    allComplex: "Totes complexes",
+    notAllComplex: "No totes complexes",
+    largest: "Major: {0}",
+    ptCurve: "Corba de transició de fase:",
+    ptDesc: "Realitza un escombrat de la probabilitat de retenció de 0\u21921, mesurant P(connectat) i P(totes complexes) en múltiples assajos.",
+    computing: "Calculant\u2026",
+    runSweep: "Executar escombrat"
+  }
+};
+
 // ─── Palette for connected components ───
 
 const COMP_COLORS = [
@@ -83,7 +184,7 @@ const PAD = 25;
 
 // ─── Graph visualization as SVG ───
 
-function GraphVis({ graph, comps }: { graph: SimpleGraph; comps: number[][] }) {
+function GraphVis({ graph, comps, t }: { graph: SimpleGraph; comps: number[][]; t: typeof TRANSLATIONS.en }) {
   const positions = useMemo(() => {
     if (graph.n === 0) return [];
     if (graph.positions) {
@@ -118,7 +219,7 @@ function GraphVis({ graph, comps }: { graph: SimpleGraph; comps: number[][] }) {
   if (graph.n === 0) {
     return (
       <div style={{ ...s.svgContainer, display: "flex", alignItems: "center", justifyContent: "center", height: 200 }}>
-        <span style={{ color: "var(--text-secondary)" }}>No nodes remaining after percolation</span>
+        <span style={{ color: "var(--text-secondary)" }}>{t.noNodes}</span>
       </div>
     );
   }
@@ -158,7 +259,7 @@ function GraphVis({ graph, comps }: { graph: SimpleGraph; comps: number[][] }) {
 
 // ─── Mini SVG chart for sweep results ───
 
-function SweepChart({ points }: { points: SweepPoint[] }) {
+function SweepChart({ points, t }: { points: SweepPoint[]; t: typeof TRANSLATIONS.en }) {
   if (points.length === 0) return null;
   const W = 800, H = 250, padL = 50, padR = 20, padT = 20, padB = 40;
   const chartW = W - padL - padR, chartH = H - padT - padB;
@@ -192,9 +293,9 @@ function SweepChart({ points }: { points: SweepPoint[] }) {
         {/* Axes */}
         <line x1={padL} x2={W - padR} y1={H - padB} y2={H - padB} stroke="rgba(255,255,255,0.15)" />
         <line x1={padL} x2={padL} y1={padT} y2={H - padB} stroke="rgba(255,255,255,0.15)" />
-        <text x={W / 2} y={H - 4} textAnchor="middle" fill="var(--text-secondary)" fontSize={12}>Retention probability (p)</text>
+        <text x={W / 2} y={H - 4} textAnchor="middle" fill="var(--text-secondary)" fontSize={12}>{t.retentionProb}</text>
         <text x={14} y={H / 2} textAnchor="middle" fill="var(--text-secondary)" fontSize={12}
-          transform={`rotate(-90, 14, ${H / 2})`}>P(property)</text>
+          transform={`rotate(-90, 14, ${H / 2})`}>{t.pProperty}</text>
         {/* Lines */}
         <path d={connLine} fill="none" stroke="#22c55e" strokeWidth={2.5} />
         <path d={compLine} fill="none" stroke="#6366f1" strokeWidth={2.5} />
@@ -207,9 +308,9 @@ function SweepChart({ points }: { points: SweepPoint[] }) {
         ))}
         {/* Legend */}
         <circle cx={W - padR - 150} cy={padT + 10} r={5} fill="#22c55e" />
-        <text x={W - padR - 140} y={padT + 14} fill="var(--text-primary)" fontSize={12}>P(connected)</text>
+        <text x={W - padR - 140} y={padT + 14} fill="var(--text-primary)" fontSize={12}>{t.pConnected}</text>
         <circle cx={W - padR - 150} cy={padT + 30} r={5} fill="#6366f1" />
-        <text x={W - padR - 140} y={padT + 34} fill="var(--text-primary)" fontSize={12}>P(all components complex)</text>
+        <text x={W - padR - 140} y={padT + 34} fill="var(--text-primary)" fontSize={12}>{t.pComplex}</text>
       </svg>
     </div>
   );
@@ -217,7 +318,8 @@ function SweepChart({ points }: { points: SweepPoint[] }) {
 
 // ─── Main component ───
 
-export default function PhaseTransitionsDemo() {
+export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   const [family, setFamily] = useState<GraphFamily>("grid");
   const [percolation, setPercolation] = useState<PercolationType>("edge");
   const [nodeCount, setNodeCount] = useState(100);
@@ -295,11 +397,9 @@ export default function PhaseTransitionsDemo() {
         <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
           <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>📊</span>
           <div>
-            <strong style={{ color: "var(--text-primary)" }}>Phase Transitions in Random Graphs</strong>
+            <strong style={{ color: "var(--text-primary)" }}>{t.title}</strong>
             <p style={{ color: "var(--text-secondary)", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
-              Generate random graphs and apply percolation (random removal of nodes or edges) to observe
-              phase transitions — the sharp change from connected to disconnected as the retention probability drops.
-              Each connected component is shown in a different color.
+              {t.desc}
             </p>
           </div>
         </div>
@@ -308,29 +408,29 @@ export default function PhaseTransitionsDemo() {
       {/* Graph family */}
       <div style={s.card}>
         <div style={s.row}>
-          <span style={s.label}>Graph family:</span>
+          <span style={s.label}>{t.graphFamily}</span>
           <button style={s.btn(family === "binomial")} onClick={() => setFamily("binomial")}>
-            Binomial (Erdős–Rényi)
+            {t.binomial}
           </button>
           <button style={s.btn(family === "geometric")} onClick={() => setFamily("geometric")}>
-            Geometric
+            {t.geometric}
           </button>
           <button style={s.btn(family === "grid")} onClick={() => setFamily("grid")}>
-            Grid
+            {t.grid}
           </button>
         </div>
 
         <div style={s.row}>
           {family === "grid" ? (
             <>
-              <span style={s.label}>Grid side:</span>
+              <span style={s.label}>{t.gridSide}</span>
               <input type="range" min={3} max={30} step={1} value={gridSide}
                 onChange={(e) => setGridSide(+e.target.value)} style={s.slider} />
-              <span style={s.value}>{gridSide}×{gridSide} = {gridSide * gridSide} nodes</span>
+              <span style={s.value}>{gridSide}×{gridSide} = {t.nodesCount.replace("{0}", String(gridSide * gridSide))}</span>
             </>
           ) : (
             <>
-              <span style={s.label}>Nodes:</span>
+              <span style={s.label}>{t.nodes}</span>
               <input type="range" min={10} max={500} step={10} value={nodeCount}
                 onChange={(e) => setNodeCount(+e.target.value)} style={s.slider} />
               <span style={s.value}>{nodeCount}</span>
@@ -340,21 +440,21 @@ export default function PhaseTransitionsDemo() {
               <span style={s.value}>{param.toFixed(2)}</span>
             </>
           )}
-          <button style={s.btn()} onClick={generate}>Generate</button>
+          <button style={s.btn()} onClick={generate}>{t.generate}</button>
         </div>
       </div>
 
       {/* Percolation controls */}
       <div style={s.card}>
         <div style={s.row}>
-          <span style={s.label}>Percolation:</span>
-          <button style={s.btn(percolation === "node")} onClick={() => setPercolation("node")}>Node</button>
-          <button style={s.btn(percolation === "edge")} onClick={() => setPercolation("edge")}>Edge</button>
-          <button style={s.btn(percolation === "both")} onClick={() => setPercolation("both")}>Both</button>
+          <span style={s.label}>{t.percolation}</span>
+          <button style={s.btn(percolation === "node")} onClick={() => setPercolation("node")}>{t.node}</button>
+          <button style={s.btn(percolation === "edge")} onClick={() => setPercolation("edge")}>{t.edge}</button>
+          <button style={s.btn(percolation === "both")} onClick={() => setPercolation("both")}>{t.both}</button>
         </div>
 
         <div style={s.row}>
-          <span style={s.label}>Retention probability:</span>
+          <span style={s.label}>{t.retention}</span>
           <input type="range" min={0} max={1} step={0.01} value={percProb}
             onChange={(e) => setPercProb(+e.target.value)} style={s.slider} />
           <span style={s.value}>{percProb.toFixed(2)}</span>
@@ -362,36 +462,36 @@ export default function PhaseTransitionsDemo() {
 
         {stats && (
           <div style={{ ...s.row, marginBottom: 0 }}>
-            <span style={s.statBadge("#a78bfa")}>{stats.nodes} nodes</span>
-            <span style={s.statBadge("#a78bfa")}>{stats.edges} edges</span>
+            <span style={s.statBadge("#a78bfa")}>{t.nodesCount.replace("{0}", String(stats.nodes))}</span>
+            <span style={s.statBadge("#a78bfa")}>{t.edgesCount.replace("{0}", String(stats.edges))}</span>
             <span style={s.statBadge(stats.connected ? "#22c55e" : "#ef4444")}>
-              {stats.connected ? "Connected" : `${stats.components} components`}
+              {stats.connected ? t.connected : t.components.replace("{0}", String(stats.components))}
             </span>
             <span style={s.statBadge(stats.complex ? "#6366f1" : "#f59e0b")}>
-              {stats.complex ? "All complex" : "Not all complex"}
+              {stats.complex ? t.allComplex : t.notAllComplex}
             </span>
             {!stats.connected && (
-              <span style={s.statBadge("#06b6d4")}>Largest: {stats.largestComponent}</span>
+              <span style={s.statBadge("#06b6d4")}>{t.largest.replace("{0}", String(stats.largestComponent))}</span>
             )}
           </div>
         )}
       </div>
 
       {/* Graph visualization */}
-      {percGraph && <GraphVis graph={percGraph} comps={comps} />}
+      {percGraph && <GraphVis graph={percGraph} comps={comps} t={t} />}
 
       {/* Phase transition sweep */}
       <div style={{ ...s.card, marginTop: "1.25rem" }}>
         <div style={s.row}>
-          <span style={s.label}>Phase transition curve:</span>
+          <span style={s.label}>{t.ptCurve}</span>
           <span style={{ color: "var(--text-secondary)", fontSize: "0.78rem", flex: 1 }}>
-            Sweeps retention probability 0→1, measuring P(connected) and P(all complex) over multiple trials.
+            {t.ptDesc}
           </span>
           <button style={s.btn()} onClick={handleSweep} disabled={sweeping}>
-            {sweeping ? "Computing…" : "Run sweep"}
+            {sweeping ? t.computing : t.runSweep}
           </button>
         </div>
-        {sweepResults.length > 0 && <SweepChart points={sweepResults} />}
+        {sweepResults.length > 0 && <SweepChart points={sweepResults} t={t} />}
       </div>
     </div>
   );

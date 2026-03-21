@@ -1,19 +1,40 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DraculinDemo from '../../components/demos/DraculinDemo';
+import { getLangFromUrl } from '../../i18n/utils';
 
+const lang = getLangFromUrl(Astro.url);
 const isDev = import.meta.env.DEV;
+
+const titles = {
+  en: "Draculin",
+  es: "Draculin",
+  ca: "Draculin"
+};
+
+const leads = {
+  en: "A mobile health app combining an <strong>AI chatbot</strong> with <strong>computer vision</strong> for menstrual health tracking. Finalist at <strong>BitsXLaMarató 2023</strong>.",
+  es: "Una app de salud móvil que combina un <strong>chatbot de IA</strong> con <strong>visión por computador</strong> para el seguimiento de la salud menstrual. Finalista en <strong>BitsXLaMarató 2023</strong>.",
+  ca: "Una app de salut mòbil que combina un <strong>chatbot d'IA</strong> amb <strong>visió per computador</strong> per al seguiment de la salut menstrual. Finalista a <strong>BitsXLaMarató 2023</strong>."
+};
+
+const badges = {
+  en: "Mobile Health \u00b7 Hackathon",
+  es: "Salud Móvil \u00b7 Hackathon",
+  ca: "Salut Mòbil \u00b7 Hackathon"
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
 ---
 
 <DemoLayout title="Draculin" description="Health tracking app with AI chatbot and computer vision, built with Flutter.">
   <div class="container">
     <div class="demo-header">
-      <div class="badge">Mobile Health · Hackathon</div>
-      <h1>Draculin</h1>
-      <p class="demo-lead">
-        A mobile health app combining an <strong>AI chatbot</strong> with <strong>computer vision</strong> for menstrual health tracking.
-        Finalist at <strong>BitsXLaMarató 2023</strong>.
-      </p>
+      <div class="badge">{badge}</div>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
     </div>
 
     {isDev ? (
@@ -43,7 +64,7 @@ const isDev = import.meta.env.DEV;
       </div>
     ) : (
       <div class="draculin-demo-wrapper">
-        <DraculinDemo client:load />
+        <DraculinDemo lang={lang} client:load />
       </div>
     )}
 

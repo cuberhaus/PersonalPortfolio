@@ -6,6 +6,80 @@ import {
   type WorkerPipelineResult,
 } from "../../lib/opencv-loader";
 
+type Lang = "en" | "es" | "ca";
+
+const TRANSLATIONS = {
+  en: {
+    howItWorks: "How it works:",
+    howDesc1: " This is a browser port of a MATLAB license plate detector. The pipeline has 3 stages: ",
+    howDesc2: "1) ",
+    howDesc3: "locate the plate region using adaptive binarization and morphological filtering, ",
+    howDesc4: "2) ",
+    howDesc5: "segment individual characters via connected component analysis, ",
+    howDesc6: "3) ",
+    howDesc7: "recognize each character by template matching against a reference plate font. Processing runs in a Web Worker so the page stays responsive \u2014 pure TypeScript, no OpenCV download.",
+    selectImage: "Select an image",
+    uploadOwn: "Upload your own",
+    detecting: "Detecting\u2026",
+    detectPlate: "Detect plate",
+    analyzing: "Analyzing image",
+    detectedPlate: "Detected plate",
+    groundTruth: "Ground truth",
+    match: "Match",
+    mismatch: "Mismatch",
+    stage1: "Plate Detection",
+    stage2: "Character Segmentation",
+    stage3: "Character Recognition",
+    error: "Error:"
+  },
+  es: {
+    howItWorks: "Cómo funciona:",
+    howDesc1: " Este es un port para navegador de un detector de matrículas en MATLAB. El pipeline tiene 3 etapas: ",
+    howDesc2: "1) ",
+    howDesc3: "localizar la región de la matrícula usando binarización adaptativa y filtrado morfológico, ",
+    howDesc4: "2) ",
+    howDesc5: "segmentar caracteres individuales mediante análisis de componentes conectadas, ",
+    howDesc6: "3) ",
+    howDesc7: "reconocer cada carácter mediante coincidencia de plantillas contra una fuente de referencia. El procesamiento se ejecuta en un Web Worker para que la página siga respondiendo \u2014 TypeScript puro, sin descarga de OpenCV.",
+    selectImage: "Selecciona una imagen",
+    uploadOwn: "Sube la tuya",
+    detecting: "Detectando\u2026",
+    detectPlate: "Detectar matrícula",
+    analyzing: "Analizando imagen",
+    detectedPlate: "Matrícula detectada",
+    groundTruth: "Valor real",
+    match: "Coincide",
+    mismatch: "No coincide",
+    stage1: "Detección de Matrícula",
+    stage2: "Segmentación de Caracteres",
+    stage3: "Reconocimiento de Caracteres",
+    error: "Error:"
+  },
+  ca: {
+    howItWorks: "Com funciona:",
+    howDesc1: " Aquest és un port per a navegador d'un detector de matrícules en MATLAB. El pipeline té 3 etapes: ",
+    howDesc2: "1) ",
+    howDesc3: "localitzar la regió de la matrícula usant binarització adaptativa i filtrat morfològic, ",
+    howDesc4: "2) ",
+    howDesc5: "segmentar caràcters individuals mitjançant anàlisi de components connectades, ",
+    howDesc6: "3) ",
+    howDesc7: "reconèixer cada caràcter mitjançant coincidència de plantilles contra una font de referència. El processament s'executa en un Web Worker perquè la pàgina segueixi responent \u2014 TypeScript pur, sense descàrrega d'OpenCV.",
+    selectImage: "Selecciona una imatge",
+    uploadOwn: "Puja la teva",
+    detecting: "Detectant\u2026",
+    detectPlate: "Detectar matrícula",
+    analyzing: "Analitzant imatge",
+    detectedPlate: "Matrícula detectada",
+    groundTruth: "Valor real",
+    match: "Coincideix",
+    mismatch: "No coincideix",
+    stage1: "Detecció de Matrícula",
+    stage2: "Segmentació de Caràcters",
+    stage3: "Reconeixement de Caràcters",
+    error: "Error:"
+  }
+};
+
 const SAMPLES = [
   { file: "DSCN0408.jpg", plate: "zmz9157" },
   { file: "DSCN0412.jpg", plate: "yep7236" },
@@ -251,7 +325,8 @@ function StageVis({ items }: { items: ImageBuffer[] }) {
   );
 }
 
-export default function SPMatriculasDemo() {
+export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedGT, setSelectedGT] = useState<string>("");
   const [status, setStatus] = useState<Status>("idle");
@@ -303,16 +378,14 @@ export default function SPMatriculasDemo() {
   return (
     <div style={s.wrapper}>
       <div style={s.infoCard}>
-        <strong>How it works:</strong> This is a browser port of a MATLAB license plate detector.
-        The pipeline has 3 stages: <strong>1)</strong> locate the plate region using adaptive
-        binarization and morphological filtering, <strong>2)</strong> segment individual characters
-        via connected component analysis, <strong>3)</strong> recognize each character by template
-        matching against a reference plate font. Processing runs in a Web Worker so the page stays
-        responsive — pure TypeScript, no OpenCV download.
+        <strong>{t.howItWorks}</strong>{t.howDesc1}
+        <strong>{t.howDesc2}</strong>{t.howDesc3}
+        <strong>{t.howDesc4}</strong>{t.howDesc5}
+        <strong>{t.howDesc6}</strong>{t.howDesc7}
       </div>
 
       <div style={s.card}>
-        <h3 style={s.h3}>Select an image</h3>
+        <h3 style={s.h3}>{t.selectImage}</h3>
         <div style={s.sampleGrid}>
           {SAMPLES.map((sample) => {
             const path = `${basePath}demos/matriculas/samples/${sample.file}`;
@@ -330,7 +403,7 @@ export default function SPMatriculasDemo() {
         </div>
         <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
           <button style={s.uploadBtn} onClick={() => fileInputRef.current?.click()}>
-            Upload your own
+            {t.uploadOwn}
           </button>
           <input
             ref={fileInputRef}
@@ -348,7 +421,7 @@ export default function SPMatriculasDemo() {
             disabled={!selectedImage || status === "processing"}
             onClick={run}
           >
-            {status === "processing" ? "Detecting…" : "Detect plate"}
+            {status === "processing" ? t.detecting : t.detectPlate}
           </button>
         </div>
       </div>
@@ -357,7 +430,7 @@ export default function SPMatriculasDemo() {
         <div style={s.loadingCard}>
           <div style={{ ...s.loadingHeader, justifyContent: "flex-start" }}>
             <span style={{ color: "var(--text-primary)" }}>
-              Analyzing image
+              {t.analyzing}
               <PulsingDots />
             </span>
           </div>
@@ -387,7 +460,7 @@ export default function SPMatriculasDemo() {
             color: "#f87171",
           }}
         >
-          Error: {error}
+          {t.error} {error}
         </div>
       )}
 
@@ -396,20 +469,20 @@ export default function SPMatriculasDemo() {
           <div style={s.resultBox}>
             <div>
               <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "0.25rem" }}>
-                Detected plate
+                {t.detectedPlate}
               </div>
               <div style={s.plateText}>{result.plateText}</div>
             </div>
             {selectedGT && (
               <div>
                 <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "0.25rem" }}>
-                  Ground truth
+                  {t.groundTruth}
                 </div>
                 <div style={s.truthText}>{selectedGT.toUpperCase()}</div>
                 {result.plateText.toLowerCase() === selectedGT.toLowerCase() ? (
-                  <span style={{ color: "#4ade80", fontSize: "0.8rem" }}>Match</span>
+                  <span style={{ color: "#4ade80", fontSize: "0.8rem" }}>{t.match}</span>
                 ) : (
-                  <span style={{ color: "#f87171", fontSize: "0.8rem" }}>Mismatch</span>
+                  <span style={{ color: "#f87171", fontSize: "0.8rem" }}>{t.mismatch}</span>
                 )}
               </div>
             )}
@@ -417,7 +490,7 @@ export default function SPMatriculasDemo() {
 
           <div style={s.card}>
             <div style={s.stageHeader}>
-              <span style={s.stepNum}>1</span> Plate Detection
+              <span style={s.stepNum}>1</span> {t.stage1}
             </div>
             <StageVis items={result.stage1} />
           </div>
@@ -425,7 +498,7 @@ export default function SPMatriculasDemo() {
           {result.stage2.length > 0 && (
             <div style={s.card}>
               <div style={s.stageHeader}>
-                <span style={s.stepNum}>2</span> Character Segmentation
+                <span style={s.stepNum}>2</span> {t.stage2}
               </div>
               <StageVis items={result.stage2} />
             </div>
@@ -434,7 +507,7 @@ export default function SPMatriculasDemo() {
           {result.charImages.length > 0 && (
             <div style={s.card}>
               <div style={s.stageHeader}>
-                <span style={s.stepNum}>3</span> Character Recognition
+                <span style={s.stepNum}>3</span> {t.stage3}
               </div>
               <div style={s.charRow}>
                 {result.charImages.map((buf, i) => (

@@ -1,6 +1,31 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import PlanificacionDemo from '../../components/demos/PlanificacionDemo';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const titles = {
+  en: "Pràctica de Planificació",
+  es: "Práctica de Planificación",
+  ca: "Pràctica de Planificació"
+};
+
+const leads = {
+  en: "A <strong>PDDL</strong> model of a travel agency: flights, hotels, stay duration, and a numeric <strong>interest metric</strong> to minimize. Browse the Extension 2 domain, download <code>.pddl</code> files, or run the planner when an ENHSP backend is deployed.",
+  es: "Un modelo en <strong>PDDL</strong> de una agencia de viajes: vuelos, hoteles, duración de estancia y una <strong>métrica de interés</strong> numérica a minimizar. Explora el dominio de la Extensión 2, descarga archivos <code>.pddl</code> o ejecuta el planificador cuando haya un backend ENHSP desplegado.",
+  ca: "Un model en <strong>PDDL</strong> d'una agència de viatges: vols, hotels, durada d'estada i una <strong>mètrica d'interès</strong> numèrica a minimitzar. Explora el domini de l'Extensió 2, descarrega fitxers <code>.pddl</code> o executa el planificador quan hi hagi un backend ENHSP desplegat."
+};
+
+const badges = {
+  en: "Automated Planning \u00b7 FIB-UPC",
+  es: "Planificación Automática \u00b7 FIB-UPC",
+  ca: "Planificació Automàtica \u00b7 FIB-UPC"
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
 ---
 
 <DemoLayout
@@ -9,16 +34,12 @@ import PlanificacionDemo from '../../components/demos/PlanificacionDemo';
 >
   <div class="container">
     <div class="demo-header">
-      <div class="badge">Automated Planning · FIB-UPC</div>
-      <h1>Pràctica de Planificació</h1>
-      <p class="demo-lead">
-        A <strong>PDDL</strong> model of a travel agency: flights, hotels, stay duration, and a numeric
-        <strong>interest metric</strong> to minimize. Browse the Extension 2 domain, download
-        <code>.pddl</code> files, or run the planner when an ENHSP backend is deployed.
-      </p>
+      <div class="badge">{badge}</div>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
     </div>
 
-    <PlanificacionDemo client:load />
+    <PlanificacionDemo lang={lang} client:load />
   </div>
 </DemoLayout>
 

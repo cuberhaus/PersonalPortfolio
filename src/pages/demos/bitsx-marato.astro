@@ -1,24 +1,38 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import BitsXMaratoDemo from '../../components/demos/BitsXMaratoDemo';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const titles = {
+  en: "Aorta Detection",
+  es: "Detección de Aorta",
+  ca: "Detecció d'Aorta"
+};
+
+const leads = {
+  en: "Abdominal ultrasound \u2192 <strong>Mask R-CNN</strong> segmentation \u2192 <strong>3D mesh</strong> reconstruction \u2192 aortic <strong>diameter</strong> estimation. Built for the <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a> hackathon.",
+  es: "Ecografía abdominal \u2192 segmentación <strong>Mask R-CNN</strong> \u2192 reconstrucción <strong>malla 3D</strong> \u2192 estimación del <strong>diámetro</strong> aórtico. Construido para la hackathon <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a>.",
+  ca: "Ecografia abdominal \u2192 segmentació <strong>Mask R-CNN</strong> \u2192 reconstrucció <strong>malla 3D</strong> \u2192 estimació del <strong>diàmetre</strong> aòrtic. Construït per a la hackató <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a>."
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
 ---
 
 <DemoLayout
-  title="BitsXLaMarató — Aorta / AAA (Mask R-CNN)"
+  title="BitsXLaMarató \u2014 Aorta / AAA (Mask R-CNN)"
   description="Hackathon project: abdominal ultrasound → Mask R-CNN aorta masks → 3D mesh and diameter heuristics. Interactive browser mock of the inference pipeline."
 >
   <div class="container">
     <div class="demo-header">
       <div class="badge">Computer Vision · Hackathon</div>
-      <h1>Aorta Detection</h1>
-      <p class="demo-lead">
-        Abdominal ultrasound → <strong>Mask R-CNN</strong> segmentation → <strong>3D mesh</strong> reconstruction
-        → aortic <strong>diameter</strong> estimation. Built for the
-        <a href="https://www.ccma.cat/tv3/marato/" target="_blank" rel="noopener noreferrer">BitsXLaMarató</a> hackathon.
-      </p>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
     </div>
 
-    <BitsXMaratoDemo client:load />
+    <BitsXMaratoDemo lang={lang} client:load />
   </div>
 </DemoLayout>
 

@@ -1,24 +1,45 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import ApaPracticaDemo from '../../components/demos/ApaPracticaDemo';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const titles = {
+  en: "Hypothyroid Classification",
+  es: "Clasificación de Hipotiroidismo",
+  ca: "Classificació d'Hipotiroïdisme"
+};
+
+const leads = {
+  en: "End-to-end binary classification pipeline \u2014 predict hypothyroidism from clinical data using <strong>9 model families</strong> in sklearn. The interactive demos below run <strong>real trained models</strong> directly in your browser.",
+  es: "Pipeline de clasificación binaria de principio a fin \u2014 predice el hipotiroidismo a partir de datos clínicos utilizando <strong>9 familias de modelos</strong> en sklearn. Las demostraciones interactivas a continuación ejecutan <strong>modelos entrenados reales</strong> directamente en tu navegador.",
+  ca: "Pipeline de classificació binària de principi a fi \u2014 prediu l'hipotiroïdisme a partir de dades clíniques utilitzant <strong>9 famílies de models</strong> en sklearn. Les demostracions interactives a continuació executen <strong>models entrenats reals</strong> directament al teu navegador."
+};
+
+const badges = {
+  en: "Machine Learning \u00b7 FIB-UPC",
+  es: "Machine Learning \u00b7 FIB-UPC",
+  ca: "Machine Learning \u00b7 FIB-UPC"
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
 ---
 
 <DemoLayout
-  title="Hypothyroid Classification — APA Practica"
+  title="Hypothyroid Classification \u2014 APA Practica"
   description="End-to-end ML pipeline for hypothyroidism detection: EDA, imputation, 9 sklearn model families compared. Interactive browser demo with real trained model."
 >
   <div class="container">
     <div class="demo-header">
-      <div class="badge">Machine Learning · FIB-UPC</div>
-      <h1>Hypothyroid Classification</h1>
-      <p class="demo-lead">
-        End-to-end binary classification pipeline — predict hypothyroidism from clinical data
-        using <strong>9 model families</strong> in sklearn.
-        The interactive demos below run <strong>real trained models</strong> directly in your browser.
-      </p>
+      <div class="badge">{badge}</div>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
     </div>
 
-    <ApaPracticaDemo client:load />
+    <ApaPracticaDemo lang={lang} client:load />
   </div>
 </DemoLayout>
 
