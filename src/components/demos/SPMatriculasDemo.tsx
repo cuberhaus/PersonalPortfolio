@@ -24,11 +24,11 @@ type Status = "idle" | "processing" | "done" | "error";
 const s = {
   wrapper: {
     fontFamily: "var(--font-sans, 'Inter', sans-serif)",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
   },
   card: {
-    background: "#16161f",
-    border: "1px solid #27272a",
+    background: "var(--bg-card)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.75rem",
     padding: "1.5rem",
     marginBottom: "1.5rem",
@@ -37,7 +37,7 @@ const s = {
     fontSize: "1.1rem",
     fontWeight: 600,
     marginBottom: "1rem",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
   } as React.CSSProperties,
   sampleGrid: {
     display: "grid",
@@ -51,7 +51,7 @@ const s = {
       aspectRatio: "4/3",
       objectFit: "cover",
       borderRadius: "0.5rem",
-      border: selected ? "2px solid #6366f1" : "2px solid #27272a",
+      border: selected ? "2px solid #6366f1" : "2px solid var(--border-color)",
       cursor: "pointer",
       transition: "border-color 0.2s, transform 0.2s",
       transform: selected ? "scale(1.03)" : "none",
@@ -94,11 +94,11 @@ const s = {
   stageImg: {
     maxHeight: "160px",
     borderRadius: "0.5rem",
-    border: "1px solid #27272a",
+    border: "1px solid var(--border-color)",
   },
   stageLabel: {
     fontSize: "0.75rem",
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
     marginTop: "0.3rem",
     textAlign: "center" as const,
   },
@@ -123,7 +123,7 @@ const s = {
   truthText: {
     fontFamily: "monospace",
     fontSize: "1rem",
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
   },
   charRow: {
     display: "flex",
@@ -134,13 +134,13 @@ const s = {
   charImg: {
     height: "40px",
     borderRadius: "0.25rem",
-    border: "1px solid #27272a",
+    border: "1px solid var(--border-color)",
     background: "#000",
   },
   progressOuter: {
     width: "100%",
     height: "8px",
-    background: "#27272a",
+    background: "var(--border-color)",
     borderRadius: "4px",
     overflow: "hidden",
     marginTop: "0.5rem",
@@ -154,8 +154,8 @@ const s = {
       transition: "width 0.3s ease",
     }) as React.CSSProperties,
   loadingCard: {
-    background: "#16161f",
-    border: "1px solid #27272a",
+    background: "var(--bg-card)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.75rem",
     padding: "1.25rem 1.5rem",
     marginBottom: "1.5rem",
@@ -181,12 +181,12 @@ const s = {
     marginBottom: "1.5rem",
     fontSize: "0.85rem",
     lineHeight: 1.7,
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
   },
   stageHeader: {
     fontSize: "0.9rem",
     fontWeight: 600,
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
     marginBottom: "0.5rem",
     display: "flex",
     alignItems: "center",
@@ -356,7 +356,7 @@ export default function SPMatriculasDemo() {
       {status === "processing" && (
         <div style={s.loadingCard}>
           <div style={{ ...s.loadingHeader, justifyContent: "flex-start" }}>
-            <span style={{ color: "#e4e4e7" }}>
+            <span style={{ color: "var(--text-primary)" }}>
               Analyzing image
               <PulsingDots />
             </span>
@@ -395,14 +395,14 @@ export default function SPMatriculasDemo() {
         <>
           <div style={s.resultBox}>
             <div>
-              <div style={{ fontSize: "0.75rem", color: "#a1a1aa", marginBottom: "0.25rem" }}>
+              <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "0.25rem" }}>
                 Detected plate
               </div>
               <div style={s.plateText}>{result.plateText}</div>
             </div>
             {selectedGT && (
               <div>
-                <div style={{ fontSize: "0.75rem", color: "#a1a1aa", marginBottom: "0.25rem" }}>
+                <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "0.25rem" }}>
                   Ground truth
                 </div>
                 <div style={s.truthText}>{selectedGT.toUpperCase()}</div>

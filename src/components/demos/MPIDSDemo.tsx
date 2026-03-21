@@ -30,7 +30,7 @@ const s = {
   btn: (active = false) => ({
     padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
     background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "rgba(255,255,255,0.05)",
-    color: "#e4e4e7", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
+    color: "var(--text-primary)", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
     transition: "all 0.15s",
   }),
   btnPrimary: {
@@ -43,13 +43,13 @@ const s = {
     background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.3)",
     cursor: "not-allowed", fontSize: "0.9rem", fontWeight: 600,
   } as const,
-  label: { color: "#a1a1aa", fontSize: "0.8rem", fontWeight: 500 } as const,
-  value: { color: "#e4e4e7", fontSize: "0.9rem", fontWeight: 600 } as const,
+  label: { color: "var(--text-secondary)", fontSize: "0.8rem", fontWeight: 500 } as const,
+  value: { color: "var(--text-primary)", fontSize: "0.9rem", fontWeight: 600 } as const,
   svgContainer: {
     borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)",
     background: "rgba(0,0,0,0.3)", overflow: "hidden", position: "relative" as const,
   },
-  legend: { display: "flex", gap: "1rem", flexWrap: "wrap" as const, marginTop: "0.75rem", fontSize: "0.8rem", color: "#a1a1aa" },
+  legend: { display: "flex", gap: "1rem", flexWrap: "wrap" as const, marginTop: "0.75rem", fontSize: "0.8rem", color: "var(--text-secondary)" },
   legendDot: (color: string) => ({
     width: 10, height: 10, borderRadius: "50%", background: color, display: "inline-block", marginRight: 4,
   }),
@@ -63,16 +63,16 @@ const s = {
     position: "absolute" as const, pointerEvents: "none" as const,
     background: "rgba(15,15,25,0.95)", border: "1px solid rgba(255,255,255,0.15)",
     borderRadius: 10, padding: "0.6rem 0.8rem", fontSize: "0.78rem",
-    color: "#e4e4e7", lineHeight: 1.6, zIndex: 100, whiteSpace: "nowrap" as const,
+    color: "var(--text-primary)", lineHeight: 1.6, zIndex: 100, whiteSpace: "nowrap" as const,
     backdropFilter: "blur(8px)",
   },
   select: {
     padding: "0.5rem 0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.05)", color: "#e4e4e7", fontSize: "0.85rem",
+    background: "rgba(255,255,255,0.05)", color: "var(--text-primary)", fontSize: "0.85rem",
   } as const,
   input: {
     padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.05)", color: "#e4e4e7", fontSize: "0.85rem", width: 60,
+    background: "rgba(255,255,255,0.05)", color: "var(--text-primary)", fontSize: "0.85rem", width: 60,
   } as const,
 } as const;
 
@@ -213,8 +213,8 @@ export default function MPIDSDemo() {
         <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
           <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>🔵</span>
           <div>
-            <strong style={{ color: "#e4e4e7" }}>Minimum Positive Influence Dominating Set</strong>
-            <p style={{ color: "#a1a1aa", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
+            <strong style={{ color: "var(--text-primary)" }}>Minimum Positive Influence Dominating Set</strong>
+            <p style={{ color: "var(--text-secondary)", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
               Find the smallest set S of nodes such that every vertex v has at least
               ⌈deg(v)/2⌉ neighbors in S. Nodes in the set are <span style={{ color: COLORS.inSet, fontWeight: 600 }}>purple</span>,
               dominated nodes are <span style={{ color: COLORS.dominated, fontWeight: 600 }}>green</span>,
@@ -255,7 +255,7 @@ export default function MPIDSDemo() {
         <div style={s.row}>
           <span style={s.label}>Upload:</span>
           <input type="file" accept=".txt" onChange={handleFileUpload}
-            style={{ color: "#a1a1aa", fontSize: "0.8rem" }} />
+            style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }} />
         </div>
       </div>
 

@@ -30,7 +30,7 @@ const PIPELINE = [
 /* ── shared styles ── */
 const card = {
   background: "var(--bg-card)",
-  border: "1px solid #1e1e2a",
+  border: "1px solid var(--border-color)",
   borderRadius: "1rem",
   padding: "1.5rem",
 } as const;
@@ -89,13 +89,13 @@ function SimulatedInference() {
 
   return (
     <div>
-      <p style={{ color: "#a1a1aa", fontSize: "0.82rem", lineHeight: 1.55, margin: "0 0 0.75rem" }}>
-        Mimics the real Mask R-CNN inference on a <strong style={{ color: "#e4e4e7" }}>B-mode frame</strong> from
-        the rat aorta dataset. The red overlay is a <strong style={{ color: "#e4e4e7" }}>browser mock</strong>,
+      <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.55, margin: "0 0 0.75rem" }}>
+        Mimics the real Mask R-CNN inference on a <strong style={{ color: "var(--text-primary)" }}>B-mode frame</strong> from
+        the rat aorta dataset. The red overlay is a <strong style={{ color: "var(--text-primary)" }}>browser mock</strong>,
         not model output.
       </p>
 
-      <div style={{ position: "relative", borderRadius: "0.5rem", overflow: "hidden", background: "#0c0c12", lineHeight: 0 }}>
+      <div style={{ position: "relative", borderRadius: "0.5rem", overflow: "hidden", background: "var(--bg-secondary)", lineHeight: 0 }}>
         <img src={frameSrc} alt="B-mode ultrasound frame" width={FRAME.w} height={FRAME.h}
           style={{
             width: "100%", height: "auto", display: "block",
@@ -121,14 +121,14 @@ function SimulatedInference() {
             background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
           }}>Run demo inference</button>
         )}
-        {phase === "running" && <span style={{ fontSize: "0.82rem", color: "#a1a1aa" }}>{stepLabel}</span>}
+        {phase === "running" && <span style={{ fontSize: "0.82rem", color: "var(--text-secondary)" }}>{stepLabel}</span>}
         {phase === "done" && (
           <>
             <button type="button" onClick={reset} style={{
-              padding: "0.4rem 0.85rem", borderRadius: "0.5rem", border: "1px solid #3f3f46",
-              fontWeight: 600, fontSize: "0.82rem", cursor: "pointer", background: "#27272a", color: "#e4e4e7",
+              padding: "0.4rem 0.85rem", borderRadius: "0.5rem", border: "1px solid var(--border-color-hover)",
+              fontWeight: 600, fontSize: "0.82rem", cursor: "pointer", background: "var(--border-color)", color: "var(--text-primary)",
             }}>Reset</button>
-            <label style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "#71717a" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "var(--text-muted)" }}>
               Opacity
               <input type="range" min={0.15} max={0.85} step={0.05} value={overlayOpacity}
                 onChange={(e) => setOverlayOpacity(Number(e.target.value))} style={{ width: "80px" }} />
@@ -138,7 +138,7 @@ function SimulatedInference() {
       </div>
 
       {(phase === "running" || phase === "done") && (
-        <div style={{ height: 5, background: "#27272a", borderRadius: 3, overflow: "hidden", marginTop: "0.5rem" }}>
+        <div style={{ height: 5, background: "var(--border-color)", borderRadius: 3, overflow: "hidden", marginTop: "0.5rem" }}>
           <div style={{
             height: "100%", width: `${progress}%`,
             background: `linear-gradient(90deg, ${accent1}, ${accent2})`,
@@ -159,14 +159,14 @@ function DiameterExplorer() {
 
   return (
     <div>
-      <p style={{ color: "#a1a1aa", fontSize: "0.82rem", lineHeight: 1.55, margin: "0 0 0.75rem" }}>
+      <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.55, margin: "0 0 0.75rem" }}>
         The app estimates aortic diameter from segmented contours. Drag to see how a measurement
-        maps to <strong style={{ color: "#e4e4e7" }}>educational</strong> risk buckets — not for diagnosis.
+        maps to <strong style={{ color: "var(--text-primary)" }}>educational</strong> risk buckets — not for diagnosis.
       </p>
 
       <div style={{ marginBottom: "0.75rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.25rem" }}>
-          <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#d4d4d8" }}>Max outer diameter</span>
+          <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-primary)" }}>Max outer diameter</span>
           <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "#f4f4f5", fontFamily: "ui-monospace, monospace" }}>{mm} mm</span>
         </div>
         <input type="range" min={18} max={65} value={mm}
@@ -192,10 +192,10 @@ function DiameterExplorer() {
         border: `1px solid ${zone.color}44`, background: `${zone.color}10`,
       }}>
         <div style={{ fontWeight: 600, color: zone.color, marginBottom: "0.25rem", fontSize: "0.88rem" }}>{zone.label}</div>
-        <p style={{ margin: 0, fontSize: "0.8rem", color: "#d4d4d8", lineHeight: 1.5 }}>{zone.detail}</p>
+        <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--text-primary)", lineHeight: 1.5 }}>{zone.detail}</p>
       </div>
 
-      <p style={{ margin: "0.5rem 0 0", fontSize: "0.68rem", color: "#3f3f46" }}>
+      <p style={{ margin: "0.5rem 0 0", fontSize: "0.68rem", color: "var(--border-color-hover)" }}>
         Illustration only. AAA management follows local guidelines and imaging context.
       </p>
     </div>
@@ -207,7 +207,7 @@ function DiameterExplorer() {
 /* ════════════════════════════════════════════════════════════════════════ */
 export default function BitsXMaratoDemo() {
   return (
-    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "#e4e4e7" }}>
+    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
 
       {/* ── PIPELINE STRIP ── */}
       <div style={{
@@ -220,18 +220,18 @@ export default function BitsXMaratoDemo() {
             letterSpacing: "0.06em", textTransform: "uppercase" as const,
             background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
           }}>CV Pipeline</div>
-          <span style={{ fontSize: "0.82rem", color: "#71717a" }}>BitsXLaMarató hackathon · TV3 La Marató</span>
+          <span style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>BitsXLaMarató hackathon · TV3 La Marató</span>
         </div>
 
         <div style={{ display: "flex", gap: "0.35rem", overflowX: "auto", paddingBottom: "0.25rem" }}>
           {PIPELINE.map((step, i) => (
             <div key={i} style={{
               flex: "1 0 auto", minWidth: 85, padding: "0.6rem 0.7rem",
-              background: "#0c0c14", borderRadius: "0.5rem", border: "1px solid #1e1e2a", textAlign: "center",
+              background: "var(--bg-secondary)", borderRadius: "0.5rem", border: "1px solid var(--border-color)", textAlign: "center",
             }}>
               <div style={{ fontSize: "1.1rem", marginBottom: "0.2rem" }}>{step.icon}</div>
-              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#e4e4e7" }}>{step.title}</div>
-              <div style={{ fontSize: "0.62rem", color: "#52525b", marginTop: "0.1rem" }}>{step.desc}</div>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-primary)" }}>{step.title}</div>
+              <div style={{ fontSize: "0.62rem", color: "var(--text-muted)", marginTop: "0.1rem" }}>{step.desc}</div>
             </div>
           ))}
         </div>
@@ -240,7 +240,7 @@ export default function BitsXMaratoDemo() {
           {["Mask R-CNN (PyTorch)", "OpenCV", "Meshlib / Open3D", "Tkinter GUI", "Custom annotations", "CUDA inference"].map((t) => (
             <span key={t} style={{
               padding: "0.2rem 0.5rem", borderRadius: "1rem", fontSize: "0.65rem", fontWeight: 600,
-              background: "#1c1c28", border: "1px solid #27272a", color: "#a1a1aa",
+              background: "var(--bg-card-hover)", border: "1px solid var(--border-color)", color: "var(--text-secondary)",
             }}>{t}</span>
           ))}
         </div>
@@ -262,7 +262,7 @@ export default function BitsXMaratoDemo() {
             }}>🔬</div>
             <div>
               <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>Simulated inference</h3>
-              <p style={{ margin: 0, fontSize: "0.72rem", color: "#52525b" }}>Browser mock · real B-mode frame</p>
+              <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>Browser mock · real B-mode frame</p>
             </div>
           </div>
           <SimulatedInference />
@@ -278,7 +278,7 @@ export default function BitsXMaratoDemo() {
             }}>📏</div>
             <div>
               <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>Diameter explorer</h3>
-              <p style={{ margin: 0, fontSize: "0.72rem", color: "#52525b" }}>Educational risk visualization</p>
+              <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>Educational risk visualization</p>
             </div>
           </div>
           <DiameterExplorer />
@@ -287,7 +287,7 @@ export default function BitsXMaratoDemo() {
 
       {/* ── SCREENSHOTS ── */}
       <div style={{ ...card, marginBottom: "1.25rem" }}>
-        <h4 style={{ margin: "0 0 1rem", fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>
+        <h4 style={{ margin: "0 0 1rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
           Project screenshots
         </h4>
         <div style={{
@@ -298,9 +298,9 @@ export default function BitsXMaratoDemo() {
           {SCREENSHOTS.map((img, i) => (
             <figure key={i} style={{ margin: 0 }}>
               <img src={img.src} alt={img.caption}
-                style={{ width: "100%", borderRadius: "0.5rem", display: "block", background: "#0c0c12" }}
+                style={{ width: "100%", borderRadius: "0.5rem", display: "block", background: "var(--bg-secondary)" }}
               />
-              <figcaption style={{ marginTop: "0.5rem", fontSize: "0.72rem", color: "#71717a", lineHeight: 1.4 }}>
+              <figcaption style={{ marginTop: "0.5rem", fontSize: "0.72rem", color: "var(--text-muted)", lineHeight: 1.4 }}>
                 {img.caption}
               </figcaption>
             </figure>
@@ -314,8 +314,8 @@ export default function BitsXMaratoDemo() {
         display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center", justifyContent: "space-between",
       }}>
         <div>
-          <div style={{ fontSize: "0.68rem", color: "#52525b", textTransform: "uppercase" as const, letterSpacing: "0.05em", marginBottom: "0.2rem" }}>Team</div>
-          <div style={{ fontSize: "0.85rem", color: "#d4d4d8" }}>{TEAM.join(" · ")}</div>
+          <div style={{ fontSize: "0.68rem", color: "var(--text-muted)", textTransform: "uppercase" as const, letterSpacing: "0.05em", marginBottom: "0.2rem" }}>Team</div>
+          <div style={{ fontSize: "0.85rem", color: "var(--text-primary)" }}>{TEAM.join(" · ")}</div>
         </div>
         <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
           <a href="https://github.com/cuberhaus/bitsXlaMarato" target="_blank" rel="noopener noreferrer" style={{
@@ -326,7 +326,7 @@ export default function BitsXMaratoDemo() {
           <a href="https://devpost.com/software/aneurism-detection-with-markrcnn" target="_blank" rel="noopener noreferrer" style={{
             display: "inline-flex", alignItems: "center", gap: "0.35rem",
             padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-            background: "var(--bg-card-hover)", border: "1px solid #27272a", color: "#a1a1aa", textDecoration: "none",
+            background: "var(--bg-card-hover)", border: "1px solid var(--border-color)", color: "var(--text-secondary)", textDecoration: "none",
           }}>Devpost ↗</a>
         </div>
       </div>
@@ -334,28 +334,28 @@ export default function BitsXMaratoDemo() {
       {/* ── RUN LOCALLY ── */}
       <details>
         <summary style={{
-          cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "#71717a",
+          cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "var(--text-muted)",
           padding: "0.65rem 1rem", background: "var(--bg-card)", borderRadius: "0.75rem",
-          border: "1px solid #1e1e2a", listStyle: "none",
+          border: "1px solid var(--border-color)", listStyle: "none",
         }}>
           ▸ Run the original project locally
         </summary>
         <div style={{ ...card, marginTop: "0.75rem" }}>
-          <p style={{ color: "#a1a1aa", fontSize: "0.82rem", lineHeight: 1.6, margin: "0 0 0.75rem" }}>
-            The app is a <strong style={{ color: "#e4e4e7" }}>Python + Tkinter</strong> GUI
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.6, margin: "0 0 0.75rem" }}>
+            The app is a <strong style={{ color: "var(--text-primary)" }}>Python + Tkinter</strong> GUI
             (<code style={{ color: "#94a3b8" }}>src/ImageViewer.py</code>). You need a CUDA-capable setup for
             Mask R-CNN inference (PyTorch 1.13 stack).
           </p>
           <pre style={{
-            margin: 0, padding: "1rem", background: "#0a0a11", border: "1px solid #1e1e2a",
+            margin: 0, padding: "1rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
             borderRadius: "0.5rem", fontSize: "0.78rem", fontFamily: "ui-monospace, monospace",
-            color: "#a1a1aa", lineHeight: 1.6, overflowX: "auto",
+            color: "var(--text-secondary)", lineHeight: 1.6, overflowX: "auto",
           }}>{`git clone https://github.com/cuberhaus/bitsXlaMarato.git
 cd bitsXlaMarato
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cd src && python ImageViewer.py`}</pre>
-          <p style={{ fontSize: "0.72rem", color: "#52525b", margin: "0.75rem 0 0" }}>
+          <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", margin: "0.75rem 0 0" }}>
             Place trained weights under <code style={{ color: "#64748b" }}>models/</code> (e.g. <code style={{ color: "#64748b" }}>marato.pt</code>).
           </p>
         </div>

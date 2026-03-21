@@ -63,7 +63,7 @@ const maxCoef = Math.max(...absCoefs);
 /* ── shared styles ── */
 const card = {
   background: "var(--bg-card)",
-  border: "1px solid #1e1e2a",
+  border: "1px solid var(--border-color)",
   borderRadius: "1rem",
   padding: "1.5rem",
 } as const;
@@ -110,7 +110,7 @@ function KnnCanvas() {
     ctx.scale(dpr, dpr);
 
     // bg
-    ctx.fillStyle = "#0a0a11";
+    ctx.fillStyle = "var(--bg-secondary)";
     ctx.fillRect(0, 0, CW, CH);
 
     // grid
@@ -121,7 +121,7 @@ function KnnCanvas() {
 
     // axis labels
     ctx.font = "11px ui-monospace, monospace";
-    ctx.fillStyle = "#3f3f46";
+    ctx.fillStyle = "var(--border-color-hover)";
     ctx.fillText("PC1 →", CW - 50, CH - 8);
     ctx.save(); ctx.translate(12, 50); ctx.rotate(-Math.PI / 2); ctx.fillText("PC2 →", 0, 0); ctx.restore();
 
@@ -186,20 +186,20 @@ function KnnCanvas() {
   return (
     <div>
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem", flexWrap: "wrap" }}>
-        <span style={{ fontSize: "0.8rem", color: "#71717a", fontWeight: 600 }}>k =</span>
+        <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600 }}>k =</span>
         {[3, 5, 7, 11].map((kv) => (
           <button key={kv} type="button" onClick={() => setK(kv)} style={{
             padding: "0.3rem 0.65rem", borderRadius: "0.4rem", border: "none",
             fontSize: "0.78rem", fontWeight: 700, cursor: "pointer",
             background: k === kv ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "var(--bg-card-hover)",
-            color: k === kv ? "#fff" : "#71717a",
+            color: k === kv ? "#fff" : "var(--text-muted)",
             transition: "all 0.15s",
           }}>{kv}</button>
         ))}
         {query && (
           <button type="button" onClick={() => setQuery(null)} style={{
             marginLeft: "auto", padding: "0.3rem 0.65rem", borderRadius: "0.4rem",
-            border: "1px solid #27272a", background: "transparent", color: "#71717a",
+            border: "1px solid var(--border-color)", background: "transparent", color: "var(--text-muted)",
             fontSize: "0.75rem", cursor: "pointer",
           }}>Clear</button>
         )}
@@ -207,7 +207,7 @@ function KnnCanvas() {
       <canvas
         ref={canvasRef} onClick={onCanvasClick} width={CW} height={CH}
         style={{
-          display: "block", borderRadius: "0.75rem", border: "1px solid #1e1e2a",
+          display: "block", borderRadius: "0.75rem", border: "1px solid var(--border-color)",
           cursor: "crosshair", width: "100%", aspectRatio: `${CW}/${CH}`,
         }}
         aria-label="k-NN PCA demo — click to classify"
@@ -219,10 +219,10 @@ function KnnCanvas() {
             <strong style={{ color: pred === 0 ? negative : positive }}>
               {pred === 0 ? "N (negative)" : "P (positive)"}
             </strong>
-            <span style={{ color: "#52525b", marginLeft: "0.5rem" }}>· {k} nearest neighbors</span>
+            <span style={{ color: "var(--text-muted)", marginLeft: "0.5rem" }}>· {k} nearest neighbors</span>
           </span>
         ) : (
-          <span style={{ color: "#3f3f46" }}>Click the plot to classify a point</span>
+          <span style={{ color: "var(--border-color-hover)" }}>Click the plot to classify a point</span>
         )}
       </div>
     </div>
@@ -269,7 +269,7 @@ function Predictor() {
             <div style={{ fontSize: "1.1rem", fontWeight: 700, color: isHypo ? positive : negative }}>
               {isHypo ? "Hypothyroidism likely" : "Negative — healthy"}
             </div>
-            <div style={{ fontSize: "0.78rem", color: "#71717a", marginTop: "0.15rem" }}>
+            <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "0.15rem" }}>
               Logistic Regression · {conf.toFixed(1)}% confidence
             </div>
           </div>
@@ -296,9 +296,9 @@ function FeatureSlider({ label, value, set, min, max, step, unit, color }: {
   return (
     <div style={{ marginBottom: "1rem" }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.3rem" }}>
-        <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "#d4d4d8" }}>{label}</span>
+        <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--text-primary)" }}>{label}</span>
         <span style={{ fontSize: "0.82rem", fontFamily: "ui-monospace, monospace", color }}>
-          {value} <span style={{ color: "#52525b", fontSize: "0.72rem" }}>{unit}</span>
+          {value} <span style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>{unit}</span>
         </span>
       </div>
       <input type="range" value={value}
@@ -326,12 +326,12 @@ function FeatureImportance() {
               transition: "width 0.5s ease",
             }} />
           </div>
-          <span style={{ width: 45, fontSize: "0.7rem", fontFamily: "ui-monospace, monospace", color: "#71717a", textAlign: "right" }}>
+          <span style={{ width: 45, fontSize: "0.7rem", fontFamily: "ui-monospace, monospace", color: "var(--text-muted)", textAlign: "right" }}>
             {absCoefs[i].toFixed(2)}
           </span>
         </div>
       ))}
-      <p style={{ margin: "0.25rem 0 0", fontSize: "0.68rem", color: "#3f3f46" }}>
+      <p style={{ margin: "0.25rem 0 0", fontSize: "0.68rem", color: "var(--border-color-hover)" }}>
         |coeff| from Logistic Regression on standardized features — TSH dominates prediction.
       </p>
     </div>
@@ -346,7 +346,7 @@ export default function ApaPracticaDemo() {
   const [nbFile, setNbFile] = useState(MAIN_NB);
 
   return (
-    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "#e4e4e7" }}>
+    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
 
       {/* ── PIPELINE STRIP ── */}
       <div style={{
@@ -359,9 +359,9 @@ export default function ApaPracticaDemo() {
             letterSpacing: "0.06em", textTransform: "uppercase" as const,
             background: "linear-gradient(135deg, #818cf8, #2dd4bf)", color: "var(--text-primary)",
           }}>ML Pipeline</div>
-          <span style={{ fontSize: "0.82rem", color: "#71717a" }}>FIB-UPC · APA course</span>
-          <span style={{ fontSize: "0.82rem", color: "#3f3f46" }}>·</span>
-          <span style={{ fontSize: "0.82rem", color: "#71717a" }}>
+          <span style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>FIB-UPC · APA course</span>
+          <span style={{ fontSize: "0.82rem", color: "var(--border-color-hover)" }}>·</span>
+          <span style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>
             with <a href="https://github.com/martagranero" target="_blank" rel="noopener noreferrer" style={{ color: accent2, textDecoration: "none" }}>Marta Granero</a>
           </span>
         </div>
@@ -372,12 +372,12 @@ export default function ApaPracticaDemo() {
           {PIPELINE.map((step, i) => (
             <div key={i} style={{
               flex: "1 0 auto", minWidth: 90, padding: "0.65rem 0.75rem",
-              background: "#0c0c14", borderRadius: "0.5rem", border: "1px solid #1e1e2a",
+              background: "var(--bg-secondary)", borderRadius: "0.5rem", border: "1px solid var(--border-color)",
               textAlign: "center",
             }}>
               <div style={{ fontSize: "1.15rem", marginBottom: "0.25rem" }}>{step.icon}</div>
-              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#e4e4e7" }}>{step.title}</div>
-              <div style={{ fontSize: "0.65rem", color: "#52525b", marginTop: "0.15rem" }}>{step.desc}</div>
+              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-primary)" }}>{step.title}</div>
+              <div style={{ fontSize: "0.65rem", color: "var(--text-muted)", marginTop: "0.15rem" }}>{step.desc}</div>
             </div>
           ))}
         </div>
@@ -388,7 +388,7 @@ export default function ApaPracticaDemo() {
           {MODELS_LIST.map((m) => (
             <span key={m} style={{
               padding: "0.2rem 0.5rem", borderRadius: "1rem", fontSize: "0.68rem", fontWeight: 600,
-              background: "#1c1c28", border: "1px solid #27272a", color: "#a1a1aa",
+              background: "var(--bg-card-hover)", border: "1px solid var(--border-color)", color: "var(--text-secondary)",
             }}>{m}</span>
           ))}
         </div>
@@ -411,7 +411,7 @@ export default function ApaPracticaDemo() {
             }}>🏥</div>
             <div>
               <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>Hypothyroid predictor</h3>
-              <p style={{ margin: 0, fontSize: "0.72rem", color: "#52525b" }}>Real LogReg model · runs in browser</p>
+              <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>Real LogReg model · runs in browser</p>
             </div>
           </div>
           <Predictor />
@@ -427,7 +427,7 @@ export default function ApaPracticaDemo() {
             }}>📍</div>
             <div>
               <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>k-NN on PCA projection</h3>
-              <p style={{ margin: 0, fontSize: "0.72rem", color: "#52525b" }}>200 real test-set points · click to classify</p>
+              <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>200 real test-set points · click to classify</p>
             </div>
           </div>
           <KnnCanvas />
@@ -442,23 +442,23 @@ export default function ApaPracticaDemo() {
         marginBottom: "1.25rem",
       }}>
         <div style={card}>
-          <h4 style={{ margin: "0 0 0.85rem", fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>
+          <h4 style={{ margin: "0 0 0.85rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
             Feature importance
           </h4>
           <FeatureImportance />
         </div>
         <div style={card}>
-          <h4 style={{ margin: "0 0 0.85rem", fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>
+          <h4 style={{ margin: "0 0 0.85rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
             Dataset summary
           </h4>
-          <div style={{ fontSize: "0.82rem", color: "#a1a1aa", lineHeight: 1.65 }}>
+          <div style={{ fontSize: "0.82rem", color: "var(--text-secondary)", lineHeight: 1.65 }}>
             <p style={{ margin: "0 0 0.5rem" }}>
               <code style={{ color: "#94a3b8" }}>hypothyroid.arff</code> — UCI-style with numeric (age, TSH, T3, TT4, FTI, T4U) and
-              categorical attributes. Target: <strong style={{ color: "#e4e4e7" }}>binaryClass</strong> (P/N).
+              categorical attributes. Target: <strong style={{ color: "var(--text-primary)" }}>binaryClass</strong> (P/N).
             </p>
             <p style={{ margin: "0 0 0.5rem" }}>
-              Challenges: heavy <strong style={{ color: "#e4e4e7" }}>NaN</strong>, outliers in age,
-              dropped TBG, class <strong style={{ color: "#e4e4e7" }}>imbalance</strong> — handled via imputation,
+              Challenges: heavy <strong style={{ color: "var(--text-primary)" }}>NaN</strong>, outliers in age,
+              dropped TBG, class <strong style={{ color: "var(--text-primary)" }}>imbalance</strong> — handled via imputation,
               appropriate metrics (F1, ROC-AUC).
             </p>
           </div>
@@ -472,7 +472,7 @@ export default function ApaPracticaDemo() {
             <a href={`${GH}/blob/main/hypothyroid.arff`} target="_blank" rel="noopener noreferrer" style={{
               display: "inline-flex", alignItems: "center", gap: "0.35rem",
               padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-              background: "var(--bg-card-hover)", border: "1px solid #27272a", color: "#a1a1aa",
+              background: "var(--bg-card-hover)", border: "1px solid var(--border-color)", color: "var(--text-secondary)",
               textDecoration: "none",
             }}>hypothyroid.arff ↗</a>
           </div>
@@ -485,7 +485,7 @@ export default function ApaPracticaDemo() {
           display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap",
           cursor: "pointer",
         }} onClick={() => setShowNb(!showNb)}>
-          <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>
+          <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
             {showNb ? "▾" : "▸"} Jupyter notebook preview
           </h4>
           <div style={{ display: "flex", gap: "0.35rem" }}>
@@ -499,7 +499,7 @@ export default function ApaPracticaDemo() {
                   padding: "0.25rem 0.6rem", borderRadius: "0.35rem", border: "none",
                   fontSize: "0.72rem", fontWeight: 600, cursor: "pointer",
                   background: nbFile === nb.file && showNb ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "var(--bg-card-hover)",
-                  color: nbFile === nb.file && showNb ? "#fff" : "#71717a",
+                  color: nbFile === nb.file && showNb ? "#fff" : "var(--text-muted)",
                 }}>{nb.label}</button>
             ))}
           </div>
@@ -512,7 +512,7 @@ export default function ApaPracticaDemo() {
         {showNb && (
           <div style={{
             marginTop: "1rem", borderRadius: "0.5rem", overflow: "hidden",
-            border: "1px solid #1e1e2a", background: "#0a0a11",
+            border: "1px solid var(--border-color)", background: "var(--bg-secondary)",
           }}>
             <iframe
               key={nbFile}
@@ -528,17 +528,17 @@ export default function ApaPracticaDemo() {
       {/* ── RUN LOCALLY ── */}
       <details style={{ marginTop: "1.25rem" }}>
         <summary style={{
-          cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "#71717a",
+          cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "var(--text-muted)",
           padding: "0.65rem 1rem", background: "var(--bg-card)", borderRadius: "0.75rem",
-          border: "1px solid #1e1e2a", listStyle: "none",
+          border: "1px solid var(--border-color)", listStyle: "none",
         }}>
           ▸ Run the notebooks locally
         </summary>
         <pre style={{
-          margin: "0.75rem 0 0", padding: "1rem", background: "#0a0a11",
-          border: "1px solid #1e1e2a", borderRadius: "0.5rem",
+          margin: "0.75rem 0 0", padding: "1rem", background: "var(--bg-secondary)",
+          border: "1px solid var(--border-color)", borderRadius: "0.5rem",
           fontSize: "0.78rem", fontFamily: "ui-monospace, monospace",
-          color: "#a1a1aa", lineHeight: 1.6, overflowX: "auto",
+          color: "var(--text-secondary)", lineHeight: 1.6, overflowX: "auto",
         }}>{`git clone ${GH}.git
 cd APA_Practica
 python -m venv .venv && source .venv/bin/activate

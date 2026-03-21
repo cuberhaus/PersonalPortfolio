@@ -56,12 +56,12 @@ export function AssignmentMapFigure({
 
   return (
     <figure style={{ margin: 0 }}>
-      <figcaption style={{ color: "#a1a1aa", fontSize: "0.78rem", marginBottom: "0.5rem", lineHeight: 1.45 }}>
+      <figcaption style={{ color: "var(--text-secondary)", fontSize: "0.78rem", marginBottom: "0.5rem", lineHeight: 1.45 }}>
         {title}
       </figcaption>
       <svg
         viewBox={`0 0 ${W} ${H}`}
-        style={{ width: "100%", maxWidth: W, display: "block", background: "#0c0c12", borderRadius: "0.5rem", border: "1px solid #27272a" }}
+        style={{ width: "100%", maxWidth: W, display: "block", background: "var(--bg-secondary)", borderRadius: "0.5rem", border: "1px solid var(--border-color)" }}
         aria-hidden
       >
         {assignment.map((queue, h) => {
@@ -97,7 +97,7 @@ export function AssignmentMapFigure({
                 stroke="#a78bfa"
                 strokeWidth={2}
               />
-              <text x={p.px} y={p.py + 5} textAnchor="middle" fill="#e4e4e7" fontSize="11" fontWeight={700}>
+              <text x={p.px} y={p.py + 5} textAnchor="middle" fill="var(--text-primary)" fontSize="11" fontWeight={700}>
                 C{c}
               </text>
             </g>
@@ -115,22 +115,22 @@ export function AssignmentMapFigure({
               <text x={p.px} y={p.py + 4} textAnchor="middle" fill="#fafafa" fontSize="10" fontWeight={700}>
                 {gid}
               </text>
-              <text x={p.px} y={p.py + 26} textAnchor="middle" fill="#71717a" fontSize="8">
+              <text x={p.px} y={p.py + 26} textAnchor="middle" fill="var(--text-muted)" fontSize="8">
                 {g.nPersonas}p{pri ? "·P" : ""}
               </text>
             </g>
           );
         })}
       </svg>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.65rem", marginTop: "0.5rem", fontSize: "0.72rem", color: "#71717a" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.65rem", marginTop: "0.5rem", fontSize: "0.72rem", color: "var(--text-muted)" }}>
         <span>
-          <strong style={{ color: "#e4e4e7" }}>Squares</strong> bases (C0: H0,H1 · C1: H2)
+          <strong style={{ color: "var(--text-primary)" }}>Squares</strong> bases (C0: H0,H1 · C1: H2)
         </span>
         <span>
-          <strong style={{ color: "#e4e4e7" }}>Circles</strong> groups (id, people, P=priority)
+          <strong style={{ color: "var(--text-primary)" }}>Circles</strong> groups (id, people, P=priority)
         </span>
         <span>
-          <strong style={{ color: "#e4e4e7" }}>Dashed lines</strong> planned visit order per helicopter (queue)
+          <strong style={{ color: "var(--text-primary)" }}>Dashed lines</strong> planned visit order per helicopter (queue)
         </span>
       </div>
     </figure>
@@ -152,25 +152,25 @@ export function QueueStrips({ assignment, board }: { assignment: Assignment; boa
               flexWrap: "wrap" as const,
               gap: "0.35rem",
               padding: "0.5rem 0.65rem",
-              background: "#12121a",
+              background: "var(--bg-secondary)",
               borderRadius: "0.4rem",
               borderLeft: `4px solid ${col}`,
               fontSize: "0.8rem",
             }}
           >
-            <span style={{ color: "#e4e4e7", fontWeight: 600, minWidth: "5.5rem" }}>
+            <span style={{ color: "var(--text-primary)", fontWeight: 600, minWidth: "5.5rem" }}>
               H{h} @ C{c}
             </span>
             {q.length === 0 ? (
-              <span style={{ color: "#71717a" }}>(no groups)</span>
+              <span style={{ color: "var(--text-muted)" }}>(no groups)</span>
             ) : (
               q.map((gid, i) => (
                 <span key={`${h}-${i}`} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                  {i > 0 && <span style={{ color: "#52525b" }}>→</span>}
+                  {i > 0 && <span style={{ color: "var(--text-muted)" }}>→</span>}
                   <span
                     style={{
                       background: `${col}33`,
-                      color: "#e4e4e7",
+                      color: "var(--text-primary)",
                       padding: "0.15rem 0.45rem",
                       borderRadius: "0.25rem",
                       fontFamily: "ui-monospace, monospace",
@@ -196,10 +196,10 @@ export function PerHeliBreakdown({ times, total }: { times: number[]; total: num
       style={{
         marginTop: "0.75rem",
         padding: "0.65rem 0.85rem",
-        background: "#12121a",
+        background: "var(--bg-secondary)",
         borderRadius: "0.45rem",
         fontSize: "0.78rem",
-        color: "#a1a1aa",
+        color: "var(--text-secondary)",
       }}
     >
       <strong style={{ color: "#c4b5fd" }}>Heuristic H2</strong> — sum of per-helicopter completion times
@@ -209,7 +209,7 @@ export function PerHeliBreakdown({ times, total }: { times: number[]; total: num
         {times.map((t, h) => (
           <li key={h}>
             <span style={{ color: HELI_COLORS[h % HELI_COLORS.length] }}>H{h}</span> →{" "}
-            <strong style={{ color: "#e4e4e7" }}>{t.toFixed(1)}</strong> min (simulated)
+            <strong style={{ color: "var(--text-primary)" }}>{t.toFixed(1)}</strong> min (simulated)
           </li>
         ))}
       </ul>
@@ -237,16 +237,16 @@ export function RunExplainer() {
       <strong style={{ color: "#e0e7ff" }}>How this demo works</strong>
       <ol style={{ margin: "0.45rem 0 0", paddingLeft: "1.15rem", color: "#a5b4fc" }}>
         <li style={{ marginBottom: "0.35rem" }}>
-          <strong style={{ color: "#e4e4e7" }}>Map</strong> — Random 2D layout (seed-fixed): two bases and seven
+          <strong style={{ color: "var(--text-primary)" }}>Map</strong> — Random 2D layout (seed-fixed): two bases and seven
           groups. Colors show which helicopter owns each group after assignment.
         </li>
         <li style={{ marginBottom: "0.35rem" }}>
-          <strong style={{ color: "#e4e4e7" }}>Queues</strong> — Each helicopter has an ordered list: rescue G2,
+          <strong style={{ color: "var(--text-primary)" }}>Queues</strong> — Each helicopter has an ordered list: rescue G2,
           then G5, … Swapping two groups anywhere changes the state.
         </li>
         <li>
-          <strong style={{ color: "#e4e4e7" }}>HC</strong> picks the best SWAP neighbor until stuck;{" "}
-          <strong style={{ color: "#e4e4e7" }}>SA</strong> sometimes accepts worse moves to escape local minima.
+          <strong style={{ color: "var(--text-primary)" }}>HC</strong> picks the best SWAP neighbor until stuck;{" "}
+          <strong style={{ color: "var(--text-primary)" }}>SA</strong> sometimes accepts worse moves to escape local minima.
         </li>
       </ol>
     </div>

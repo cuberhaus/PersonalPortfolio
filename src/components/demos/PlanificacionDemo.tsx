@@ -147,7 +147,7 @@ function cityColor(id: string): string {
 
 /* ── shared styles ── */
 const card = {
-  background: "var(--bg-card)", border: "1px solid #1e1e2a", borderRadius: "1rem", padding: "1.5rem",
+  background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "1rem", padding: "1.5rem",
 } as const;
 
 const accent1 = "#6366f1";
@@ -179,7 +179,7 @@ function FlightNetwork() {
     <svg viewBox="0 0 340 180" style={{ width: "100%", maxWidth: 400, display: "block" }} aria-label="Flight network">
       <defs>
         <marker id={arrowId} markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
-          <polygon points="0 0, 7 2.5, 0 5" fill="#3f3f46" />
+          <polygon points="0 0, 7 2.5, 0 5" fill="var(--border-color-hover)" />
         </marker>
       </defs>
       {flights.map((f, i) => {
@@ -191,9 +191,9 @@ function FlightNetwork() {
         return (
           <g key={i}>
             <line x1={a.x + nx * r} y1={a.y + ny * r} x2={b.x - nx * r} y2={b.y - ny * r}
-              stroke="#27272a" strokeWidth={2} markerEnd={`url(#${arrowId})`} />
+              stroke="var(--border-color)" strokeWidth={2} markerEnd={`url(#${arrowId})`} />
             <text x={(a.x + b.x) / 2 + ny * 10} y={(a.y + b.y) / 2 - nx * 10}
-              textAnchor="middle" fill="#52525b" fontSize="8" fontFamily="ui-monospace, monospace">{f.label}</text>
+              textAnchor="middle" fill="var(--text-muted)" fontSize="8" fontFamily="ui-monospace, monospace">{f.label}</text>
           </g>
         );
       })}
@@ -201,7 +201,7 @@ function FlightNetwork() {
         <g key={c.id}>
           <circle cx={c.x} cy={c.y} r={18} fill={cityColor(c.id)} opacity={0.9} stroke="#18181b" strokeWidth={2} />
           <text x={c.x} y={c.y + 4} textAnchor="middle" fill="#fff" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">{c.id}</text>
-          <text x={c.x} y={c.y + 30} textAnchor="middle" fill="#52525b" fontSize="8">★{c.interest}</text>
+          <text x={c.x} y={c.y + 30} textAnchor="middle" fill="var(--text-muted)" fontSize="8">★{c.interest}</text>
         </g>
       ))}
     </svg>
@@ -218,7 +218,7 @@ function PlanResult({ plan, problem, timeSec }: { plan: string[]; problem: strin
 
   return (
     <div style={{ marginTop: "1rem" }}>
-      <h4 style={{ margin: "0 0 0.75rem", fontSize: "0.95rem", fontWeight: 700, color: "#e4e4e7" }}>
+      <h4 style={{ margin: "0 0 0.75rem", fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary)" }}>
         ✅ Plan ({plan.length} steps{timeSec != null ? ` · ${timeSec}s` : ""})
       </h4>
 
@@ -230,7 +230,7 @@ function PlanResult({ plan, problem, timeSec }: { plan: string[]; problem: strin
             return (
               <div key={i} style={{
                 display: "flex", gap: "0.75rem", alignItems: "flex-start",
-                padding: "0.6rem 0.85rem", background: "#0c0c14", borderRadius: "0.5rem", border: "1px solid #1e1e2a",
+                padding: "0.6rem 0.85rem", background: "var(--bg-secondary)", borderRadius: "0.5rem", border: "1px solid var(--border-color)",
               }}>
                 <div style={{
                   width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
@@ -240,11 +240,11 @@ function PlanResult({ plan, problem, timeSec }: { plan: string[]; problem: strin
                 }}>{i + 1}</div>
                 <div style={{ fontSize: "0.82rem" }}>
                   <span style={{ color: cityColor(s.from), fontWeight: 600 }}>{s.from}</span>
-                  <span style={{ color: "#52525b", margin: "0 0.3rem" }}>→</span>
+                  <span style={{ color: "var(--text-muted)", margin: "0 0.3rem" }}>→</span>
                   <span style={{ color: cityColor(s.to), fontWeight: 600 }}>{s.to}</span>
-                  <span style={{ color: "#71717a", marginLeft: "0.5rem", fontSize: "0.75rem" }}>
+                  <span style={{ color: "var(--text-muted)", marginLeft: "0.5rem", fontSize: "0.75rem" }}>
                     ✈️ {s.flight} · 🏨 {s.hotel} · 📅 {d != null ? `${d}d` : s.diasToken}
-                    {cumDays > 0 && <span style={{ color: "#52525b" }}> (total: {cumDays}d)</span>}
+                    {cumDays > 0 && <span style={{ color: "var(--text-muted)" }}> (total: {cumDays}d)</span>}
                   </span>
                 </div>
               </div>
@@ -254,9 +254,9 @@ function PlanResult({ plan, problem, timeSec }: { plan: string[]; problem: strin
       )}
 
       <details>
-        <summary style={{ fontSize: "0.75rem", color: "#52525b", cursor: "pointer" }}>Raw plan actions</summary>
+        <summary style={{ fontSize: "0.75rem", color: "var(--text-muted)", cursor: "pointer" }}>Raw plan actions</summary>
         <ol style={{
-          margin: "0.5rem 0 0", paddingLeft: "1.25rem", color: "#a1a1aa",
+          margin: "0.5rem 0 0", paddingLeft: "1.25rem", color: "var(--text-secondary)",
           fontFamily: "ui-monospace, monospace", fontSize: "0.72rem", lineHeight: 1.8,
         }}>
           {plan.map((a, i) => <li key={i}>{a}</li>)}
@@ -301,7 +301,7 @@ export default function PlanificacionDemo() {
   }
 
   return (
-    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "#e4e4e7" }}>
+    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
 
       {/* ── PROBLEM OVERVIEW ── */}
       <div style={{
@@ -311,36 +311,36 @@ export default function PlanificacionDemo() {
       }}>
         {/* Flight network */}
         <div style={card}>
-          <h4 style={{ margin: "0 0 0.85rem", fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>
+          <h4 style={{ margin: "0 0 0.85rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
             Flight network
           </h4>
           <FlightNetwork />
-          <p style={{ margin: "0.75rem 0 0", fontSize: "0.72rem", color: "#52525b", lineHeight: 1.5 }}>
-            Hub <code style={{ color: "#71717a" }}>cg1</code> connects to three cities forming a triangle.
+          <p style={{ margin: "0.75rem 0 0", fontSize: "0.72rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
+            Hub <code style={{ color: "var(--text-muted)" }}>cg1</code> connects to three cities forming a triangle.
             Each city has a hotel. Stars = interest value (planner minimizes the sum).
           </p>
         </div>
 
         {/* Constraints */}
         <div style={card}>
-          <h4 style={{ margin: "0 0 0.85rem", fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>
+          <h4 style={{ margin: "0 0 0.85rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
             Constraints & objective
           </h4>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {CONSTRAINTS.map((c) => (
               <div key={c.key} style={{
                 display: "flex", alignItems: "center", gap: "0.65rem",
-                padding: "0.55rem 0.75rem", background: "#0c0c14", borderRadius: "0.5rem", border: "1px solid #1e1e2a",
+                padding: "0.55rem 0.75rem", background: "var(--bg-secondary)", borderRadius: "0.5rem", border: "1px solid var(--border-color)",
               }}>
                 <span style={{ fontSize: "1.1rem" }}>{c.icon}</span>
                 <div>
-                  <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "#e4e4e7" }}>{c.label}</div>
-                  <div style={{ fontSize: "0.68rem", color: "#52525b", fontFamily: "ui-monospace, monospace" }}>{c.key}</div>
+                  <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--text-primary)" }}>{c.label}</div>
+                  <div style={{ fontSize: "0.68rem", color: "var(--text-muted)", fontFamily: "ui-monospace, monospace" }}>{c.key}</div>
                 </div>
               </div>
             ))}
           </div>
-          <p style={{ margin: "0.85rem 0 0", fontSize: "0.72rem", color: "#52525b", lineHeight: 1.5 }}>
+          <p style={{ margin: "0.85rem 0 0", fontSize: "0.72rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
             Single action: <code style={{ color: "#c4b5fd" }}>anadir_ciudad</code> — fly to new city, book hotel,
             choose stay duration (1–4 days). Requires a numeric PDDL planner (ENHSP, LPG).
           </p>
@@ -349,7 +349,7 @@ export default function PlanificacionDemo() {
 
       {/* ── EXTENSIONS ── */}
       <div style={{ ...card, marginBottom: "1.25rem" }}>
-        <h4 style={{ margin: "0 0 0.75rem", fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>
+        <h4 style={{ margin: "0 0 0.75rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
           Extensions
         </h4>
         <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
@@ -357,16 +357,16 @@ export default function PlanificacionDemo() {
             <span key={e.name} style={{
               padding: "0.3rem 0.6rem", borderRadius: "0.4rem", fontSize: "0.72rem", fontWeight: 600,
               background: e.active ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "var(--bg-card-hover)",
-              border: e.active ? "none" : "1px solid #27272a",
-              color: e.active ? "#fff" : "#71717a",
+              border: e.active ? "none" : "1px solid var(--border-color)",
+              color: e.active ? "#fff" : "var(--text-muted)",
             }}>{e.name}</span>
           ))}
         </div>
-        <div style={{ marginTop: "0.75rem", fontSize: "0.78rem", color: "#a1a1aa", lineHeight: 1.6 }}>
+        <div style={{ marginTop: "0.75rem", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
           {EXTENSIONS.map((e) => (
             <div key={e.name} style={{ marginBottom: "0.25rem" }}>
-              <strong style={{ color: e.active ? "#c4b5fd" : "#71717a" }}>{e.name}:</strong>{" "}
-              <span style={{ color: e.active ? "#d4d4d8" : "#52525b" }}>{e.desc}</span>
+              <strong style={{ color: e.active ? "#c4b5fd" : "var(--text-muted)" }}>{e.name}:</strong>{" "}
+              <span style={{ color: e.active ? "var(--text-primary)" : "var(--text-muted)" }}>{e.desc}</span>
             </div>
           ))}
         </div>
@@ -380,24 +380,24 @@ export default function PlanificacionDemo() {
       }}>
         <div style={card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>Domain (Ext 2)</h4>
+            <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>Domain (Ext 2)</h4>
             <a href={pDomain} download style={{ fontSize: "0.72rem", color: "#a5b4fc", textDecoration: "none" }}>Download ↓</a>
           </div>
           <pre style={{
-            margin: 0, padding: "0.85rem", background: "#0a0a11", border: "1px solid #1e1e2a",
+            margin: 0, padding: "0.85rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
             borderRadius: "0.5rem", fontSize: "0.65rem", fontFamily: "ui-monospace, monospace",
-            color: "#a1a1aa", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(360px, 40vh)",
+            color: "var(--text-secondary)", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(360px, 40vh)",
           }}><code>{DOMAIN_EXT2}</code></pre>
         </div>
         <div style={card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>Problem (Ext 2)</h4>
+            <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>Problem (Ext 2)</h4>
             <a href={pProblem} download style={{ fontSize: "0.72rem", color: "#a5b4fc", textDecoration: "none" }}>Download ↓</a>
           </div>
           <pre style={{
-            margin: 0, padding: "0.85rem", background: "#0a0a11", border: "1px solid #1e1e2a",
+            margin: 0, padding: "0.85rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
             borderRadius: "0.5rem", fontSize: "0.65rem", fontFamily: "ui-monospace, monospace",
-            color: "#a1a1aa", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(360px, 40vh)",
+            color: "var(--text-secondary)", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(360px, 40vh)",
           }}><code>{PROBLEM_EXT2}</code></pre>
         </div>
       </div>
@@ -412,7 +412,7 @@ export default function PlanificacionDemo() {
           }}>⚡</div>
           <div>
             <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>Run planner</h3>
-            <p style={{ margin: 0, fontSize: "0.72rem", color: "#52525b" }}>
+            <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>
               {plannerUrl ? `ENHSP backend · ${plannerUrl}` : "Requires deployed planner API"}
             </p>
           </div>
@@ -430,22 +430,22 @@ export default function PlanificacionDemo() {
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
           <div>
-            <label style={{ display: "block", color: "#71717a", fontSize: "0.75rem", marginBottom: "0.25rem" }}>Domain</label>
+            <label style={{ display: "block", color: "var(--text-muted)", fontSize: "0.75rem", marginBottom: "0.25rem" }}>Domain</label>
             <textarea value={domainEdit} onChange={(e) => setDomainEdit(e.target.value)} spellCheck={false} rows={8}
               style={{
                 width: "100%", padding: "0.65rem", fontSize: "0.68rem", lineHeight: 1.4,
-                fontFamily: "ui-monospace, monospace", background: "#0a0a11", color: "#d4d4d8",
-                border: "1px solid #1e1e2a", borderRadius: "0.5rem", resize: "vertical", boxSizing: "border-box",
+                fontFamily: "ui-monospace, monospace", background: "var(--bg-secondary)", color: "var(--text-primary)",
+                border: "1px solid var(--border-color)", borderRadius: "0.5rem", resize: "vertical", boxSizing: "border-box",
               }}
             />
           </div>
           <div>
-            <label style={{ display: "block", color: "#71717a", fontSize: "0.75rem", marginBottom: "0.25rem" }}>Problem</label>
+            <label style={{ display: "block", color: "var(--text-muted)", fontSize: "0.75rem", marginBottom: "0.25rem" }}>Problem</label>
             <textarea value={problemEdit} onChange={(e) => setProblemEdit(e.target.value)} spellCheck={false} rows={8}
               style={{
                 width: "100%", padding: "0.65rem", fontSize: "0.68rem", lineHeight: 1.4,
-                fontFamily: "ui-monospace, monospace", background: "#0a0a11", color: "#d4d4d8",
-                border: "1px solid #1e1e2a", borderRadius: "0.5rem", resize: "vertical", boxSizing: "border-box",
+                fontFamily: "ui-monospace, monospace", background: "var(--bg-secondary)", color: "var(--text-primary)",
+                border: "1px solid var(--border-color)", borderRadius: "0.5rem", resize: "vertical", boxSizing: "border-box",
               }}
             />
           </div>
@@ -463,8 +463,8 @@ export default function PlanificacionDemo() {
           </button>
           <button type="button" onClick={() => { setDomainEdit(DOMAIN_EXT2); setProblemEdit(PROBLEM_EXT2); setResult(null); setFetchErr(null); }}
             style={{
-              padding: "0.45rem 0.85rem", borderRadius: "0.5rem", border: "1px solid #27272a",
-              cursor: "pointer", fontSize: "0.78rem", background: "var(--bg-card-hover)", color: "#a1a1aa",
+              padding: "0.45rem 0.85rem", borderRadius: "0.5rem", border: "1px solid var(--border-color)",
+              cursor: "pointer", fontSize: "0.78rem", background: "var(--bg-card-hover)", color: "var(--text-secondary)",
             }}>Reset to defaults</button>
         </div>
 
@@ -483,14 +483,14 @@ export default function PlanificacionDemo() {
         {result?.stdout && (
           <div style={{ marginTop: "0.75rem" }}>
             <button type="button" onClick={() => setShowLog((v) => !v)} style={{
-              fontSize: "0.75rem", color: "#52525b", cursor: "pointer",
+              fontSize: "0.75rem", color: "var(--text-muted)", cursor: "pointer",
               background: "none", border: "none", padding: 0, textDecoration: "underline",
             }}>{showLog ? "Hide" : "Show"} solver log</button>
             {showLog && (
               <pre style={{
-                marginTop: "0.5rem", padding: "0.75rem", background: "#0a0a11", border: "1px solid #1e1e2a",
+                marginTop: "0.5rem", padding: "0.75rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
                 borderRadius: "0.5rem", fontSize: "0.65rem", fontFamily: "ui-monospace, monospace",
-                color: "#71717a", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(300px, 35vh)",
+                color: "var(--text-muted)", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(300px, 35vh)",
               }}><code>{result.stdout}</code></pre>
             )}
           </div>
@@ -507,12 +507,12 @@ export default function PlanificacionDemo() {
         <a href={pDomain} download style={{
           display: "inline-flex", alignItems: "center", gap: "0.35rem",
           padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-          background: "var(--bg-card-hover)", border: "1px solid #27272a", color: "#a1a1aa", textDecoration: "none",
+          background: "var(--bg-card-hover)", border: "1px solid var(--border-color)", color: "var(--text-secondary)", textDecoration: "none",
         }}>domain.pddl ↓</a>
         <a href={pProblem} download style={{
           display: "inline-flex", alignItems: "center", gap: "0.35rem",
           padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-          background: "var(--bg-card-hover)", border: "1px solid #27272a", color: "#a1a1aa", textDecoration: "none",
+          background: "var(--bg-card-hover)", border: "1px solid var(--border-color)", color: "var(--text-secondary)", textDecoration: "none",
         }}>problem.pddl ↓</a>
       </div>
     </div>

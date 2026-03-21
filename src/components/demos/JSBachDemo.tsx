@@ -3,8 +3,8 @@ import { interpret, playNotes, SAMPLE_PROGRAMS, type JSBachResult } from "../../
 
 const styles = {
   card: {
-    background: "#16161f",
-    border: "1px solid #27272a",
+    background: "var(--bg-card)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.75rem",
     padding: "1.5rem",
     marginBottom: "1.5rem",
@@ -13,16 +13,16 @@ const styles = {
     fontSize: "1.1rem",
     fontWeight: 600,
     marginBottom: "1rem",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
   },
   textarea: {
     width: "100%",
     minHeight: "280px",
-    background: "#12121a",
-    border: "1px solid #27272a",
+    background: "var(--bg-secondary)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.5rem",
     padding: "1rem",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
     fontSize: "0.85rem",
     fontFamily: "'JetBrains Mono', monospace",
     lineHeight: 1.6,
@@ -44,11 +44,11 @@ const styles = {
     color: "var(--text-primary)",
   },
   secondaryBtn: {
-    background: "#27272a",
-    color: "#a1a1aa",
+    background: "var(--border-color)",
+    color: "var(--text-secondary)",
   },
   output: {
-    background: "#12121a",
+    background: "var(--bg-secondary)",
     borderRadius: "0.5rem",
     padding: "1rem",
     fontFamily: "'JetBrains Mono', monospace",
@@ -56,7 +56,7 @@ const styles = {
     lineHeight: 1.6,
     maxHeight: "200px",
     overflowY: "auto" as const,
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
   },
   error: {
     color: "#f87171",
@@ -88,9 +88,9 @@ const styles = {
   sampleBtn: {
     padding: "0.35rem 0.75rem",
     borderRadius: "0.5rem",
-    border: "1px solid #27272a",
+    border: "1px solid var(--border-color)",
     background: "transparent",
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
     fontSize: "0.75rem",
     cursor: "pointer",
     transition: "all 0.15s ease",
@@ -156,7 +156,7 @@ export default function JSBachDemo() {
   }, [code]);
 
   return (
-    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "#e4e4e7" }}>
+    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
       {/* Sample programs */}
       <div style={styles.card}>
         <h3 style={styles.h3}>Examples</h3>
@@ -217,7 +217,7 @@ export default function JSBachDemo() {
 
           {result.notes.length > 0 && (
             <>
-              <div style={{ fontSize: "0.8rem", color: "#71717a", marginBottom: "0.5rem" }}>
+              <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: "0.5rem" }}>
                 {result.notes.length} note{result.notes.length !== 1 ? "s" : ""} generated
               </div>
               <div style={styles.noteBar}>
@@ -243,7 +243,7 @@ export default function JSBachDemo() {
                     style={{
                       fontFamily: "monospace",
                       fontSize: "0.65rem",
-                      color: activeNote === i ? "#e4e4e7" : "#71717a",
+                      color: activeNote === i ? "var(--text-primary)" : "var(--text-muted)",
                       transition: "color 0.15s ease",
                     }}
                   >
@@ -255,7 +255,7 @@ export default function JSBachDemo() {
           )}
 
           {!result.error && result.output.length === 0 && result.notes.length === 0 && (
-            <div style={{ color: "#71717a", fontSize: "0.85rem" }}>
+            <div style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
               Program ran successfully with no output.
             </div>
           )}

@@ -15,11 +15,11 @@ import {
 const styles = {
   wrapper: {
     fontFamily: "var(--font-sans, 'Inter', sans-serif)",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
   },
   card: {
-    background: "#16161f",
-    border: "1px solid #27272a",
+    background: "var(--bg-card)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.75rem",
     padding: "1.5rem",
     marginBottom: "1.5rem",
@@ -28,7 +28,7 @@ const styles = {
     fontSize: "1.1rem",
     fontWeight: 600,
     marginBottom: "1rem",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
   },
   inputGroup: {
     display: "flex" as const,
@@ -37,11 +37,11 @@ const styles = {
     flexWrap: "wrap" as const,
   },
   input: {
-    background: "#12121a",
-    border: "1px solid #27272a",
+    background: "var(--bg-secondary)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.5rem",
     padding: "0.5rem 0.75rem",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
     fontSize: "0.85rem",
     fontFamily: "monospace",
     outline: "none",
@@ -60,8 +60,8 @@ const styles = {
     color: "var(--text-primary)",
   },
   secondaryBtn: {
-    background: "#27272a",
-    color: "#a1a1aa",
+    background: "var(--border-color)",
+    color: "var(--text-secondary)",
   },
   dangerBtn: {
     background: "#371520",
@@ -71,8 +71,8 @@ const styles = {
     display: "inline-block",
     fontFamily: "monospace",
     fontSize: "0.75rem",
-    color: "#a1a1aa",
-    background: "#12121a",
+    color: "var(--text-secondary)",
+    background: "var(--bg-secondary)",
     padding: "0.2rem 0.6rem",
     borderRadius: "0.5rem",
     marginRight: "0.35rem",
@@ -86,23 +86,23 @@ const styles = {
   },
   th: {
     padding: "0.5rem",
-    borderBottom: "1px solid #27272a",
-    color: "#a1a1aa",
+    borderBottom: "1px solid var(--border-color)",
+    color: "var(--text-secondary)",
     fontWeight: 500,
     textAlign: "left" as const,
   },
   td: {
     padding: "0.5rem",
-    borderBottom: "1px solid #1c1c28",
-    color: "#e4e4e7",
+    borderBottom: "1px solid var(--bg-card-hover)",
+    color: "var(--text-primary)",
   },
   tdMuted: {
     padding: "0.5rem",
-    borderBottom: "1px solid #1c1c28",
-    color: "#71717a",
+    borderBottom: "1px solid var(--bg-card-hover)",
+    color: "var(--text-muted)",
   },
   stepInfo: {
-    background: "#12121a",
+    background: "var(--bg-secondary)",
     borderRadius: "0.5rem",
     padding: "0.75rem 1rem",
     fontSize: "0.85rem",
@@ -212,18 +212,18 @@ export default function Pro2Demo() {
         background: "linear-gradient(135deg, rgba(99,102,241,0.05), rgba(168,85,247,0.03))",
       }}>
         <h3 style={{ ...styles.h3, marginBottom: "0.75rem" }}>How it works</h3>
-        <div style={{ fontSize: "0.85rem", color: "#a1a1aa", lineHeight: 1.8 }}>
+        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.8 }}>
           <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "#e4e4e7" }}>1. Add species</strong> — each species has an <strong style={{ color: "#a855f7" }}>ID</strong> (a short name) and a <strong style={{ color: "#a855f7" }}>gene sequence</strong> made of nucleotides (A, C, G, T).
+            <strong style={{ color: "var(--text-primary)" }}>1. Add species</strong> — each species has an <strong style={{ color: "#a855f7" }}>ID</strong> (a short name) and a <strong style={{ color: "#a855f7" }}>gene sequence</strong> made of nucleotides (A, C, G, T).
           </p>
           <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "#e4e4e7" }}>2. Distance table</strong> — distances between species are computed using <strong style={{ color: "#a855f7" }}>k-mer analysis</strong>: the gene is split into overlapping subsequences of length <em>k</em>, and species are compared by how many k-mers they share.
+            <strong style={{ color: "var(--text-primary)" }}>2. Distance table</strong> — distances between species are computed using <strong style={{ color: "#a855f7" }}>k-mer analysis</strong>: the gene is split into overlapping subsequences of length <em>k</em>, and species are compared by how many k-mers they share.
           </p>
           <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "#e4e4e7" }}>3. WPGMA clustering</strong> — the algorithm repeatedly merges the two closest clusters, averaging their distances to all other clusters. Click <em>Next Step</em> to watch it happen, or <em>Run All</em> to jump to the final tree.
+            <strong style={{ color: "var(--text-primary)" }}>3. WPGMA clustering</strong> — the algorithm repeatedly merges the two closest clusters, averaging their distances to all other clusters. Click <em>Next Step</em> to watch it happen, or <em>Run All</em> to jump to the final tree.
           </p>
           <p style={{ marginBottom: 0 }}>
-            <strong style={{ color: "#e4e4e7" }}>4. Dendrogram</strong> — the resulting phylogenetic tree shows how species are related. Closer branches = more similar genes.
+            <strong style={{ color: "var(--text-primary)" }}>4. Dendrogram</strong> — the resulting phylogenetic tree shows how species are related. Closer branches = more similar genes.
           </p>
         </div>
       </div>
@@ -232,7 +232,7 @@ export default function Pro2Demo() {
       <div style={styles.card}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
           <h3 style={{ ...styles.h3, marginBottom: 0 }}>Species</h3>
-          <span style={{ fontSize: "0.75rem", color: "#71717a" }}>
+          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
             {species.length} species loaded
           </span>
         </div>
@@ -270,7 +270,7 @@ export default function Pro2Demo() {
                         style={{
                           background: "none",
                           border: "none",
-                          color: "#71717a",
+                          color: "var(--text-muted)",
                           cursor: "pointer",
                           padding: "0.2rem 0.4rem",
                           fontSize: "0.85rem",
@@ -279,7 +279,7 @@ export default function Pro2Demo() {
                         }}
                         title="Remove species"
                         onMouseOver={(e) => (e.currentTarget.style.color = "#f87171")}
-                        onMouseOut={(e) => (e.currentTarget.style.color = "#71717a")}
+                        onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
                       >
                         ×
                       </button>
@@ -295,7 +295,7 @@ export default function Pro2Demo() {
           <div style={{
             padding: "2rem",
             textAlign: "center" as const,
-            color: "#71717a",
+            color: "var(--text-muted)",
             fontSize: "0.85rem",
             marginBottom: "1rem",
           }}>
@@ -304,11 +304,11 @@ export default function Pro2Demo() {
         )}
 
         <div style={{
-          background: "#12121a",
+          background: "var(--bg-secondary)",
           borderRadius: "0.5rem",
           padding: "1rem",
         }}>
-          <div style={{ fontSize: "0.75rem", color: "#71717a", marginBottom: "0.65rem" }}>
+          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "0.65rem" }}>
             Add a new species — ID is a short name, Gene is a sequence of A, C, G, T nucleotides
           </div>
           <div style={styles.inputGroup}>
@@ -327,7 +327,7 @@ export default function Pro2Demo() {
               onKeyDown={(e) => e.key === "Enter" && addSpecies()}
             />
             <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
-              <label style={{ fontSize: "0.75rem", color: "#71717a" }} title="k-mer length: longer k means more precise distance but needs longer genes">k=</label>
+              <label style={{ fontSize: "0.75rem", color: "var(--text-muted)" }} title="k-mer length: longer k means more precise distance but needs longer genes">k=</label>
               <input
                 type="number"
                 style={{ ...styles.input, width: "55px" }}
@@ -473,7 +473,7 @@ export default function Pro2Demo() {
               <span
                 style={{
                   fontSize: "0.8rem",
-                  color: "#71717a",
+                  color: "var(--text-muted)",
                   alignSelf: "center",
                 }}
               >
@@ -587,7 +587,7 @@ function Dendrogram({ tree }: { tree: TreeNode }) {
           x={l.x}
           y={l.y}
           textAnchor="middle"
-          fill="#e4e4e7"
+          fill="var(--text-primary)"
           fontSize={13}
           fontWeight={600}
           fontFamily="'Inter', sans-serif"
@@ -601,7 +601,7 @@ function Dendrogram({ tree }: { tree: TreeNode }) {
           x={l.x}
           y={l.y}
           textAnchor="middle"
-          fill="#71717a"
+          fill="var(--text-muted)"
           fontSize={10}
           fontFamily="monospace"
         >

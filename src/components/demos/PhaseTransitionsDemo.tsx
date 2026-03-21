@@ -46,7 +46,7 @@ const s = {
   btn: (active = false) => ({
     padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
     background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "rgba(255,255,255,0.05)",
-    color: "#e4e4e7", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
+    color: "var(--text-primary)", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
     transition: "all 0.15s",
   }),
   btnPrimary: {
@@ -54,12 +54,12 @@ const s = {
     background: "linear-gradient(135deg, #6366f1, #a855f7)",
     color: "var(--text-primary)", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600,
   } as const,
-  label: { color: "#a1a1aa", fontSize: "0.8rem", fontWeight: 500 } as const,
-  value: { color: "#e4e4e7", fontSize: "0.9rem", fontWeight: 600 } as const,
+  label: { color: "var(--text-secondary)", fontSize: "0.8rem", fontWeight: 500 } as const,
+  value: { color: "var(--text-primary)", fontSize: "0.9rem", fontWeight: 600 } as const,
   slider: { flex: 1, minWidth: 80, accentColor: "#6366f1" } as const,
   input: {
     padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.05)", color: "#e4e4e7", fontSize: "0.85rem", width: 55,
+    background: "rgba(255,255,255,0.05)", color: "var(--text-primary)", fontSize: "0.85rem", width: 55,
   } as const,
   statBadge: (color: string) => ({
     display: "inline-flex", alignItems: "center", gap: "0.35rem",
@@ -118,7 +118,7 @@ function GraphVis({ graph, comps }: { graph: SimpleGraph; comps: number[][] }) {
   if (graph.n === 0) {
     return (
       <div style={{ ...s.svgContainer, display: "flex", alignItems: "center", justifyContent: "center", height: 200 }}>
-        <span style={{ color: "#a1a1aa" }}>No nodes remaining after percolation</span>
+        <span style={{ color: "var(--text-secondary)" }}>No nodes remaining after percolation</span>
       </div>
     );
   }
@@ -180,20 +180,20 @@ function SweepChart({ points }: { points: SweepPoint[] }) {
         {[0, 0.25, 0.5, 0.75, 1].map((v) => (
           <g key={v}>
             <line x1={padL} x2={W - padR} y1={toY(v)} y2={toY(v)} stroke="rgba(255,255,255,0.06)" />
-            <text x={padL - 8} y={toY(v) + 4} textAnchor="end" fill="#71717a" fontSize={11}>{v.toFixed(2)}</text>
+            <text x={padL - 8} y={toY(v) + 4} textAnchor="end" fill="var(--text-muted)" fontSize={11}>{v.toFixed(2)}</text>
           </g>
         ))}
         {[0, 0.25, 0.5, 0.75, 1].map((v) => (
           <g key={`x${v}`}>
             <line x1={toX(v)} x2={toX(v)} y1={padT} y2={H - padB} stroke="rgba(255,255,255,0.06)" />
-            <text x={toX(v)} y={H - padB + 16} textAnchor="middle" fill="#71717a" fontSize={11}>{v.toFixed(2)}</text>
+            <text x={toX(v)} y={H - padB + 16} textAnchor="middle" fill="var(--text-muted)" fontSize={11}>{v.toFixed(2)}</text>
           </g>
         ))}
         {/* Axes */}
         <line x1={padL} x2={W - padR} y1={H - padB} y2={H - padB} stroke="rgba(255,255,255,0.15)" />
         <line x1={padL} x2={padL} y1={padT} y2={H - padB} stroke="rgba(255,255,255,0.15)" />
-        <text x={W / 2} y={H - 4} textAnchor="middle" fill="#a1a1aa" fontSize={12}>Retention probability (p)</text>
-        <text x={14} y={H / 2} textAnchor="middle" fill="#a1a1aa" fontSize={12}
+        <text x={W / 2} y={H - 4} textAnchor="middle" fill="var(--text-secondary)" fontSize={12}>Retention probability (p)</text>
+        <text x={14} y={H / 2} textAnchor="middle" fill="var(--text-secondary)" fontSize={12}
           transform={`rotate(-90, 14, ${H / 2})`}>P(property)</text>
         {/* Lines */}
         <path d={connLine} fill="none" stroke="#22c55e" strokeWidth={2.5} />
@@ -207,9 +207,9 @@ function SweepChart({ points }: { points: SweepPoint[] }) {
         ))}
         {/* Legend */}
         <circle cx={W - padR - 150} cy={padT + 10} r={5} fill="#22c55e" />
-        <text x={W - padR - 140} y={padT + 14} fill="#e4e4e7" fontSize={12}>P(connected)</text>
+        <text x={W - padR - 140} y={padT + 14} fill="var(--text-primary)" fontSize={12}>P(connected)</text>
         <circle cx={W - padR - 150} cy={padT + 30} r={5} fill="#6366f1" />
-        <text x={W - padR - 140} y={padT + 34} fill="#e4e4e7" fontSize={12}>P(all components complex)</text>
+        <text x={W - padR - 140} y={padT + 34} fill="var(--text-primary)" fontSize={12}>P(all components complex)</text>
       </svg>
     </div>
   );
@@ -295,8 +295,8 @@ export default function PhaseTransitionsDemo() {
         <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
           <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>📊</span>
           <div>
-            <strong style={{ color: "#e4e4e7" }}>Phase Transitions in Random Graphs</strong>
-            <p style={{ color: "#a1a1aa", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
+            <strong style={{ color: "var(--text-primary)" }}>Phase Transitions in Random Graphs</strong>
+            <p style={{ color: "var(--text-secondary)", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
               Generate random graphs and apply percolation (random removal of nodes or edges) to observe
               phase transitions — the sharp change from connected to disconnected as the retention probability drops.
               Each connected component is shown in a different color.
@@ -384,7 +384,7 @@ export default function PhaseTransitionsDemo() {
       <div style={{ ...s.card, marginTop: "1.25rem" }}>
         <div style={s.row}>
           <span style={s.label}>Phase transition curve:</span>
-          <span style={{ color: "#a1a1aa", fontSize: "0.78rem", flex: 1 }}>
+          <span style={{ color: "var(--text-secondary)", fontSize: "0.78rem", flex: 1 }}>
             Sweeps retention probability 0→1, measuring P(connected) and P(all complex) over multiple trials.
           </span>
           <button style={s.btn()} onClick={handleSweep} disabled={sweeping}>

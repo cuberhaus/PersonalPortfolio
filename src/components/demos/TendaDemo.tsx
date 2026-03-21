@@ -11,7 +11,7 @@ type View = "home" | "category" | "product" | "cart" | "checkout";
 const styles = {
   wrapper: {
     fontFamily: "var(--font-sans, 'Inter', sans-serif)",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
     minHeight: "500px",
   },
   nav: {
@@ -19,17 +19,17 @@ const styles = {
     alignItems: "center" as const,
     justifyContent: "space-between" as const,
     padding: "0.75rem 1rem",
-    background: "#16161f",
-    border: "1px solid #27272a",
+    background: "var(--bg-card)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.75rem",
     marginBottom: "1.5rem",
     flexWrap: "wrap" as const,
     gap: "0.5rem",
   },
-  navTitle: { fontSize: "1rem", fontWeight: 700, color: "#e4e4e7" },
+  navTitle: { fontSize: "1rem", fontWeight: 700, color: "var(--text-primary)" },
   navLinks: { display: "flex" as const, gap: "0.75rem", alignItems: "center" as const },
   link: {
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
     fontSize: "0.85rem",
     cursor: "pointer",
     textDecoration: "none",
@@ -47,8 +47,8 @@ const styles = {
     marginLeft: "0.25rem",
   },
   card: {
-    background: "#16161f",
-    border: "1px solid #27272a",
+    background: "var(--bg-card)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.75rem",
     padding: "1.25rem",
     transition: "all 0.2s",
@@ -59,8 +59,8 @@ const styles = {
     gap: "1rem",
   },
   productCard: {
-    background: "#16161f",
-    border: "1px solid #27272a",
+    background: "var(--bg-card)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.75rem",
     overflow: "hidden" as const,
     cursor: "pointer",
@@ -69,7 +69,7 @@ const styles = {
   productImg: {
     width: "100%",
     aspectRatio: "1",
-    background: "linear-gradient(135deg, #1e1e2e 0%, #27272a 100%)",
+    background: "linear-gradient(135deg, #1e1e2e 0%, var(--border-color) 100%)",
     display: "flex" as const,
     alignItems: "center" as const,
     justifyContent: "center" as const,
@@ -80,11 +80,11 @@ const styles = {
   productName: { fontWeight: 600, marginBottom: "0.35rem", fontSize: "0.95rem" },
   productPrice: { color: "#a855f7", fontWeight: 600, fontSize: "1rem" },
   input: {
-    background: "#12121a",
-    border: "1px solid #27272a",
+    background: "var(--bg-secondary)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.5rem",
     padding: "0.5rem 0.75rem",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
     fontSize: "0.9rem",
     width: "100%",
     outline: "none",
@@ -102,7 +102,7 @@ const styles = {
     background: "linear-gradient(135deg, #6366f1, #a855f7)",
     color: "var(--text-primary)",
   },
-  secondaryBtn: { background: "#27272a", color: "#a1a1aa" },
+  secondaryBtn: { background: "var(--border-color)", color: "var(--text-secondary)" },
   table: {
     width: "100%",
     borderCollapse: "collapse" as const,
@@ -110,20 +110,20 @@ const styles = {
   },
   th: {
     padding: "0.75rem",
-    borderBottom: "1px solid #27272a",
-    color: "#a1a1aa",
+    borderBottom: "1px solid var(--border-color)",
+    color: "var(--text-secondary)",
     fontWeight: 500,
     textAlign: "left" as const,
   },
   td: {
     padding: "0.75rem",
-    borderBottom: "1px solid #1c1c28",
-    color: "#e4e4e7",
+    borderBottom: "1px solid var(--bg-card-hover)",
+    color: "var(--text-primary)",
   },
   emptyState: {
     textAlign: "center" as const,
     padding: "3rem 2rem",
-    color: "#71717a",
+    color: "var(--text-muted)",
   },
   mockBanner: {
     background: "linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.08))",
@@ -131,7 +131,7 @@ const styles = {
     borderRadius: "0.5rem",
     padding: "0.5rem 1rem",
     fontSize: "0.75rem",
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
     marginBottom: "1rem",
     textAlign: "center" as const,
   },
@@ -230,7 +230,7 @@ export default function TendaDemo() {
             style={styles.link}
             onClick={goHome}
             onMouseOver={(e) => (e.currentTarget.style.color = "#6366f1")}
-            onMouseOut={(e) => (e.currentTarget.style.color = "#a1a1aa")}
+            onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
           >
             Inici
           </span>
@@ -240,7 +240,7 @@ export default function TendaDemo() {
               style={styles.link}
               onClick={() => openCategory(c)}
               onMouseOver={(e) => (e.currentTarget.style.color = "#6366f1")}
-              onMouseOut={(e) => (e.currentTarget.style.color = "#a1a1aa")}
+              onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
             >
               {c.name}
             </span>
@@ -249,7 +249,7 @@ export default function TendaDemo() {
             style={styles.link}
             onClick={() => setView("cart")}
             onMouseOver={(e) => (e.currentTarget.style.color = "#6366f1")}
-            onMouseOut={(e) => (e.currentTarget.style.color = "#a1a1aa")}
+            onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
           >
             Cistella {cartCount > 0 && <span style={styles.cartBadge}>{cartCount}</span>}
           </span>
@@ -270,11 +270,11 @@ export default function TendaDemo() {
                   onClick={() => openCategory(c)}
                   onMouseOver={(e) => {
                     e.currentTarget.style.borderColor = "#6366f1";
-                    e.currentTarget.style.background = "#1c1c28";
+                    e.currentTarget.style.background = "var(--bg-card-hover)";
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.borderColor = "#27272a";
-                    e.currentTarget.style.background = "#16161f";
+                    e.currentTarget.style.borderColor = "var(--border-color)";
+                    e.currentTarget.style.background = "var(--bg-card)";
                   }}
                 >
                   <div style={styles.productImg}>
@@ -308,7 +308,7 @@ export default function TendaDemo() {
                   e.currentTarget.style.transform = "translateY(-2px)";
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.borderColor = "#27272a";
+                  e.currentTarget.style.borderColor = "var(--border-color)";
                   e.currentTarget.style.transform = "none";
                 }}
               >
@@ -317,7 +317,7 @@ export default function TendaDemo() {
                 </div>
                 <div style={styles.productInfo}>
                   <div style={styles.productName}>{p.name}</div>
-                  <p style={{ fontSize: "0.8rem", color: "#71717a", margin: "0.35rem 0", lineHeight: 1.4 }}>
+                  <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", margin: "0.35rem 0", lineHeight: 1.4 }}>
                     {p.description.slice(0, 50)}...
                   </p>
                   <div style={styles.productPrice}>{p.price.toFixed(2)} €</div>
@@ -341,9 +341,9 @@ export default function TendaDemo() {
               </div>
               <div style={{ flex: 1, minWidth: "200px" }}>
                 <h2 style={{ marginBottom: "0.5rem" }}>{product.name}</h2>
-                <p style={{ color: "#a1a1aa", marginBottom: "1rem", lineHeight: 1.6 }}>{product.description}</p>
+                <p style={{ color: "var(--text-secondary)", marginBottom: "1rem", lineHeight: 1.6 }}>{product.description}</p>
                 <p style={{ marginBottom: "0.5rem" }}>Preu: <strong style={{ color: "#a855f7" }}>{product.price.toFixed(2)} €</strong></p>
-                <p style={{ marginBottom: "1rem", fontSize: "0.9rem", color: "#71717a" }}>Stock: {product.stock}</p>
+                <p style={{ marginBottom: "1rem", fontSize: "0.9rem", color: "var(--text-muted)" }}>Stock: {product.stock}</p>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   <input
                     type="number"
@@ -452,7 +452,7 @@ export default function TendaDemo() {
             <div style={{ ...styles.card, textAlign: "center" as const, padding: "3rem" }}>
               <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✓</div>
               <h3 style={{ marginBottom: "0.5rem", color: "#4ade80" }}>Comanda rebuda!</h3>
-              <p style={{ color: "#a1a1aa" }}>Això és només una simulació. Cap comanda real s'ha enviat.</p>
+              <p style={{ color: "var(--text-secondary)" }}>Això és només una simulació. Cap comanda real s'ha enviat.</p>
             </div>
           ) : (
             <>
@@ -462,7 +462,7 @@ export default function TendaDemo() {
               <div style={styles.card}>
                 <h2 style={{ marginBottom: "1rem", fontSize: "1.25rem" }}>Checkout</h2>
                 <div style={{ marginBottom: "1rem" }}>
-                  <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "#a1a1aa" }}>
+                  <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
                     <input
                       type="radio"
                       name="userType"
@@ -472,7 +472,7 @@ export default function TendaDemo() {
                     />
                     Usuari registrat
                   </label>
-                  <label style={{ display: "block", marginBottom: "0.75rem", fontSize: "0.85rem", color: "#a1a1aa" }}>
+                  <label style={{ display: "block", marginBottom: "0.75rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
                     <input
                       type="radio"
                       name="userType"
@@ -485,7 +485,7 @@ export default function TendaDemo() {
                 </div>
                 <div style={{ display: "grid", gap: "1rem", marginBottom: "1rem" }}>
                   <div>
-                    <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "#a1a1aa" }}>Nom complet</label>
+                    <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>Nom complet</label>
                     <input
                       style={styles.input}
                       placeholder="El teu nom"
@@ -494,7 +494,7 @@ export default function TendaDemo() {
                     />
                   </div>
                   <div>
-                    <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "#a1a1aa" }}>Correu electrònic</label>
+                    <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>Correu electrònic</label>
                     <input
                       type="email"
                       style={styles.input}
@@ -504,7 +504,7 @@ export default function TendaDemo() {
                     />
                   </div>
                   <div>
-                    <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "#a1a1aa" }}>Adreça d'enviament</label>
+                    <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>Adreça d'enviament</label>
                     <input
                       style={styles.input}
                       placeholder="Carrer, número, ciutat, CP"
@@ -514,7 +514,7 @@ export default function TendaDemo() {
                   </div>
                   {checkoutForm.userType === "registered" && (
                     <div>
-                      <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "#a1a1aa" }}>Contrasenya</label>
+                      <label style={{ display: "block", marginBottom: "0.35rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>Contrasenya</label>
                       <input
                         type="password"
                         style={styles.input}
@@ -525,8 +525,8 @@ export default function TendaDemo() {
                     </div>
                   )}
                 </div>
-                <div style={{ marginTop: "1.5rem", paddingTop: "1rem", borderTop: "1px solid #27272a" }}>
-                  <p style={{ marginBottom: "0.5rem", color: "#a1a1aa" }}>Total: <strong style={{ color: "#a855f7" }}>{cartTotal.toFixed(2)} €</strong></p>
+                <div style={{ marginTop: "1.5rem", paddingTop: "1rem", borderTop: "1px solid var(--border-color)" }}>
+                  <p style={{ marginBottom: "0.5rem", color: "var(--text-secondary)" }}>Total: <strong style={{ color: "#a855f7" }}>{cartTotal.toFixed(2)} €</strong></p>
                   <button style={{ ...styles.button, ...styles.primaryBtn }} onClick={placeOrder}>
                     Confirmar comanda
                   </button>
