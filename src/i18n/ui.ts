@@ -29,6 +29,7 @@ export const ui = {
     'about.p1': "Hello! I'm Pol — a Computer Science Engineer from Barcelona with a passion for AI, data science, and machine learning. I graduated from UPC's Facultat d'Informàtica de Barcelona (FIB) and have been working at the intersection of data and intelligent systems ever since.",
     'about.p2': "I believe in standing on the shoulders of giants — leveraging the best of existing knowledge and technology to build innovative solutions. From predictive analytics and data governance to computer vision and neural networks, I enjoy tackling complex problems that drive real impact.",
     'about.p3': "Here are some technologies I've been working with recently:",
+    'about.cv': 'Download CV',
     
     // Projects
     'projects.label': 'Interactive',
@@ -54,7 +55,15 @@ export const ui = {
     'contact.label': 'Contact',
     'contact.title': 'Get in touch',
     'contact.text': "I'm currently open to new opportunities and collaborations. Whether you have a question, a project idea, or just want to say hi — my inbox is always open.",
-    'contact.cta': 'Say Hello',
+    'contact.cta': 'Send Message',
+    'contact.name': 'Name',
+    'contact.namePlaceholder': 'Your name',
+    'contact.email': 'Email',
+    'contact.emailPlaceholder': 'your.email@example.com',
+    'contact.message': 'Message',
+    'contact.messagePlaceholder': 'Your message...',
+    'contact.success': 'Thanks! Your message has been sent.',
+    'contact.error': 'Oops! Something went wrong. Please try again.',
     
     // Demos Layout
     'demo.portfolio': 'Portfolio',
@@ -83,6 +92,7 @@ export const ui = {
     'about.p1': "¡Hola! Soy Pol, un Ingeniero Informático de Barcelona apasionado por la IA, la ciencia de datos y el aprendizaje automático. Me gradué en la Facultat d'Informàtica de Barcelona (FIB) de la UPC y desde entonces he trabajado en la intersección de los datos y los sistemas inteligentes.",
     'about.p2': "Creo en subirse a hombros de gigantes, aprovechando lo mejor del conocimiento y la tecnología existentes para construir soluciones innovadoras. Desde el análisis predictivo y la gobernanza de datos hasta la visión por computadora y las redes neuronales, disfruto resolviendo problemas complejos con impacto real.",
     'about.p3': "Aquí hay algunas tecnologías con las que he trabajado recientemente:",
+    'about.cv': 'Descargar CV',
     
     // Projects
     'projects.label': 'Interactivo',
@@ -108,7 +118,15 @@ export const ui = {
     'contact.label': 'Contacto',
     'contact.title': 'Ponte en contacto',
     'contact.text': "Actualmente estoy abierto a nuevas oportunidades y colaboraciones. Ya sea que tengas una pregunta, una idea para un proyecto o simplemente quieras saludar, mi bandeja de entrada siempre está abierta.",
-    'contact.cta': 'Di Hola',
+    'contact.cta': 'Enviar Mensaje',
+    'contact.name': 'Nombre',
+    'contact.namePlaceholder': 'Tu nombre',
+    'contact.email': 'Correo electrónico',
+    'contact.emailPlaceholder': 'tu.correo@ejemplo.com',
+    'contact.message': 'Mensaje',
+    'contact.messagePlaceholder': 'Tu mensaje...',
+    'contact.success': '¡Gracias! Tu mensaje ha sido enviado.',
+    'contact.error': '¡Ups! Algo salió mal. Por favor, inténtalo de nuevo.',
     
     // Demos Layout
     'demo.portfolio': 'Portafolio',
@@ -137,6 +155,7 @@ export const ui = {
     'about.p1': "Hola! Soc el Pol, un Enginyer Informàtic de Barcelona apassionat per la IA, la ciència de dades i l'aprenentatge automàtic. Em vaig graduar a la Facultat d'Informàtica de Barcelona (FIB) de la UPC i des de llavors he treballat a la intersecció de les dades i els sistemes intel·ligents.",
     'about.p2': "Crec en pujar a espatlles de gegants, aprofitant el millor del coneixement i la tecnologia existents per construir solucions innovadores. Des de l'anàlisi predictiu i la governança de dades fins a la visió per computador i les xarxes neuronals, gaudeixo resolent problemes complexos amb impacte real.",
     'about.p3': "Aquí hi ha algunes tecnologies amb les quals he treballat recentment:",
+    'about.cv': 'Descarregar CV',
     
     // Demos
     'projects.label': 'Interactiu',
@@ -162,7 +181,15 @@ export const ui = {
     'contact.label': 'Contacte',
     'contact.title': "Posa't en contacte",
     'contact.text': "Actualment estic obert a noves oportunitats i col·laboracions. Tant si tens una pregunta, una idea per a un projecte o simplement vols saludar, la meva bústia sempre està oberta.",
-    'contact.cta': 'Digues Hola',
+    'contact.cta': 'Enviar Missatge',
+    'contact.name': 'Nom',
+    'contact.namePlaceholder': 'El teu nom',
+    'contact.email': 'Correu electrònic',
+    'contact.emailPlaceholder': 'el.teu.correu@exemple.com',
+    'contact.message': 'Missatge',
+    'contact.messagePlaceholder': 'El teu missatge...',
+    'contact.success': 'Gràcies! El teu missatge ha estat enviat.',
+    'contact.error': 'Ui! Alguna cosa ha anat malament. Si us plau, torna-ho a provar.',
     
     // Demos Layout
     'demo.portfolio': 'Portafolis',

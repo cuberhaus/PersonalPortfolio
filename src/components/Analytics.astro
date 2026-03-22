@@ -1,0 +1,18 @@
+---
+// To activate Google Analytics, replace 'G-XXXXXXXXXX' with your actual Measurement ID.
+// You can also move this to an environment variable (.env) like import.meta.env.PUBLIC_GA_ID
+const measurementId = 'G-XXXXXXXXXX';
+---
+
+{measurementId !== 'G-XXXXXXXXXX' && measurementId && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`} is:inline></script>
+    <script define:vars={{ measurementId }} is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', measurementId);
+    </script>
+  </>
+)}

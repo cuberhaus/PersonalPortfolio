@@ -10,7 +10,8 @@
       "UPC"
     ],
     "icon": "microscope",
-    "github": "https://github.com/cuberhaus/TFG"
+    "github": "https://github.com/cuberhaus/TFG",
+    "image": ""
   },
   {
     "slug": "draculin",
@@ -25,7 +26,8 @@
     "github": [
       "https://github.com/cuberhaus/Draculin-Front",
       "https://github.com/cuberhaus/Draculin-Backend"
-    ]
+    ],
+    "image": ""
   },
   {
     "slug": "bitsx-marato",
@@ -38,7 +40,8 @@
       "CV"
     ],
     "icon": "aorta",
-    "github": "https://github.com/cuberhaus/bitsXlaMarato"
+    "github": "https://github.com/cuberhaus/bitsXlaMarato",
+    "image": ""
   },
   {
     "slug": "joc-eda",
@@ -50,7 +53,8 @@
       "AI"
     ],
     "icon": "gamepad",
-    "github": "https://github.com/cuberhaus/joc_eda"
+    "github": "https://github.com/cuberhaus/joc_eda",
+    "image": ""
   },
   {
     "slug": "pro2",
@@ -62,7 +66,8 @@
       "D3"
     ],
     "icon": "tree",
-    "github": "https://github.com/cuberhaus/pracpro2"
+    "github": "https://github.com/cuberhaus/pracpro2",
+    "image": ""
   },
   {
     "slug": "jsbach",
@@ -74,7 +79,8 @@
       "Language"
     ],
     "icon": "music",
-    "github": "https://github.com/cuberhaus/ANTLR4_JSBach"
+    "github": "https://github.com/cuberhaus/ANTLR4_JSBach",
+    "image": ""
   },
   {
     "slug": "tenda",
@@ -86,7 +92,8 @@
       "E-Commerce"
     ],
     "icon": "store",
-    "github": "https://github.com/cuberhaus/tenda_online"
+    "github": "https://github.com/cuberhaus/tenda_online",
+    "image": ""
   },
   {
     "slug": "matriculas",
@@ -97,7 +104,8 @@
       "TypeScript"
     ],
     "icon": "camera",
-    "github": "https://github.com/cuberhaus/SPMatriculas"
+    "github": "https://github.com/cuberhaus/SPMatriculas",
+    "image": ""
   },
   {
     "slug": "mpids",
@@ -109,7 +117,8 @@
       "TypeScript"
     ],
     "icon": "graph",
-    "github": "https://github.com/cuberhaus/projectA"
+    "github": "https://github.com/cuberhaus/projectA",
+    "image": ""
   },
   {
     "slug": "phase-transitions",
@@ -121,7 +130,8 @@
       "NetworkX"
     ],
     "icon": "scatter",
-    "github": "https://github.com/cuberhaus/projectA2"
+    "github": "https://github.com/cuberhaus/projectA2",
+    "image": ""
   },
   {
     "slug": "planificacion",
@@ -133,7 +143,8 @@
       "UPC"
     ],
     "icon": "map",
-    "github": "https://github.com/cuberhaus/Practica_de_Planificacion"
+    "github": "https://github.com/cuberhaus/Practica_de_Planificacion",
+    "image": ""
   },
   {
     "slug": "desastres-ia",
@@ -146,7 +157,8 @@
       "UPC"
     ],
     "icon": "helicopter",
-    "github": "https://github.com/cuberhaus/desastresIA"
+    "github": "https://github.com/cuberhaus/desastresIA",
+    "image": ""
   },
   {
     "slug": "apa-practica",
@@ -159,7 +171,8 @@
       "UPC"
     ],
     "icon": "ml",
-    "github": "https://github.com/cuberhaus/APA_Practica"
+    "github": "https://github.com/cuberhaus/APA_Practica",
+    "image": ""
   },
   {
     "slug": "prop",
@@ -171,6 +184,7 @@
       "Recommendation"
     ],
     "icon": "server",
-    "github": "https://github.com/cuberhaus/subgrup-prop7.1"
+    "github": "https://github.com/cuberhaus/subgrup-prop7.1",
+    "image": ""
   }
 ]
