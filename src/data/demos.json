@@ -22,8 +22,8 @@
   },
   {
     "slug": "joc-eda",
-    "title": "EDA Game Viewer",
-    "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Replay viewer for the EDA programming game competition.",
+    "title": "Programming Game Viewer",
+    "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Replay viewer for the Data Structures and Algorithms programming game competition.",
     "tags": ["C++", "Canvas", "AI"],
     "icon": "gamepad"
   },
@@ -85,14 +85,14 @@
   },
   {
     "slug": "apa-practica",
-    "title": "APA practica",
-    "description": "Hypothyroid APA practica: Nbviewer, GitHub links, k-NN click demo tied to binaryClass N/P (FIB-UPC).",
+    "title": "Machine Learning \u2014 Hypothyroid",
+    "description": "Hypothyroid classification task: Nbviewer, GitHub links, k-NN click demo tied to binaryClass N/P (FIB-UPC).",
     "tags": ["Python", "Jupyter", "sklearn", "UPC"],
     "icon": "ml"
   },
   {
     "slug": "prop",
-    "title": "PROP Recommendation System",
+    "title": "Recommendation System",
     "description": "A web interface for a content-based recommendation system built with Java, Spring Boot, and Thymeleaf.",
     "tags": ["Java", "Spring Boot", "Recommendation"],
     "icon": "server"

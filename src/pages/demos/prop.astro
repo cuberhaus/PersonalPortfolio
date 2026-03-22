@@ -7,7 +7,7 @@ const isDev = import.meta.env.DEV;
 
 const TRANSLATIONS = {
   en: {
-    title: "PROP Recommendation System",
+    title: "Recommendation System",
     desc: "A Java Spring Boot content-based recommendation system.",
     badge: "Java \u00b7 Spring Boot \u00b7 FIB-UPC",
     lead: "A content-based recommendation system built with <strong>Java</strong>, <strong>Spring Boot</strong>, and <strong>Thymeleaf</strong>. It models users, items, and ratings to provide personalized recommendations.",
@@ -25,7 +25,7 @@ const TRANSLATIONS = {
     viewSource: "View source on GitHub"
   },
   es: {
-    title: "Sistema de Recomendaci\u00f3n PROP",
+    title: "Sistema de Recomendaci\u00f3n",
     desc: "Un sistema de recomendaci\u00f3n basado en contenido con Java Spring Boot.",
     badge: "Java \u00b7 Spring Boot \u00b7 FIB-UPC",
     lead: "Un sistema de recomendaci\u00f3n basado en contenido construido con <strong>Java</strong>, <strong>Spring Boot</strong> y <strong>Thymeleaf</strong>. Modela usuarios, \u00edtems y valoraciones para proporcionar recomendaciones personalizadas.",
@@ -43,7 +43,7 @@ const TRANSLATIONS = {
     viewSource: "Ver c\u00f3digo en GitHub"
   },
   ca: {
-    title: "Sistema de Recomanaci\u00f3 PROP",
+    title: "Sistema de Recomanaci\u00f3",
     desc: "Un sistema de recomanaci\u00f3 basat en contingut amb Java Spring Boot.",
     badge: "Java \u00b7 Spring Boot \u00b7 FIB-UPC",
     lead: "Un sistema de recomanaci\u00f3 basat en contingut constru\u00eft amb <strong>Java</strong>, <strong>Spring Boot</strong> i <strong>Thymeleaf</strong>. Modela usuaris, \u00edtems i valoracions per proporcionar recomanacions personalitzades.",
@@ -87,7 +87,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
         </div>
         <iframe
           src="http://localhost:8081"
-          title="PROP Recommendation System"
+          title={t.title}
           class="demo-iframe"
         />
       </div>

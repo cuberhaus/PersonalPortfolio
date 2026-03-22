@@ -22,8 +22,8 @@
   },
   {
     "slug": "joc-eda",
-    "title": "Visor de Juego EDA",
-    "description": "Observa a bots de IA luchar en una cuadrícula — guerreros, constructores, armas y estrategia. Visor de repeticiones para la competición de programación EDA.",
+    "title": "Visor de Juego de Programación",
+    "description": "Observa a bots de IA luchar en una cuadrícula — guerreros, constructores, armas y estrategia. Visor de repeticiones para la competición de juego de programación de Estructuras de Datos y Algoritmos.",
     "tags": ["C++", "Canvas", "AI"],
     "icon": "gamepad"
   },
@@ -85,14 +85,14 @@
   },
   {
     "slug": "apa-practica",
-    "title": "Práctica APA",
-    "description": "Práctica APA sobre hipotiroidismo: Nbviewer, enlaces a GitHub, demo de clic de k-NN vinculada a N/P de clase binaria (FIB-UPC).",
+    "title": "Aprendizaje Automático \u2014 Hipotiroidismo",
+    "description": "Tarea de clasificación de hipotiroidismo: Nbviewer, enlaces a GitHub, demo de clic de k-NN vinculada a N/P de clase binaria (FIB-UPC).",
     "tags": ["Python", "Jupyter", "sklearn", "UPC"],
     "icon": "ml"
   },
   {
     "slug": "prop",
-    "title": "Sistema de Recomendación PROP",
+    "title": "Sistema de Recomendación",
     "description": "Una interfaz web para un sistema de recomendación basado en contenido, construido con Java, Spring Boot y Thymeleaf.",
     "tags": ["Java", "Spring Boot", "Recommendation"],
     "icon": "server"

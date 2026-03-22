@@ -22,8 +22,8 @@
   },
   {
     "slug": "joc-eda",
-    "title": "Visor de Joc EDA",
-    "description": "Observa a bots d'IA lluitar en una quadrícula — guerrers, constructors, armes i estratègia. Visor de repeticions per a la competició de programació EDA.",
+    "title": "Visor de Joc de Programació",
+    "description": "Observa a bots d'IA lluitar en una quadrícula — guerrers, constructors, armes i estratègia. Visor de repeticions per a la competició de joc de programació d'Estructures de Dades i Algorismes.",
     "tags": ["C++", "Canvas", "AI"],
     "icon": "gamepad"
   },
@@ -85,14 +85,14 @@
   },
   {
     "slug": "apa-practica",
-    "title": "Pràctica APA",
-    "description": "Pràctica APA sobre hipotiroïdisme: Nbviewer, enllaços a GitHub, demo de clic de k-NN vinculada a N/P de classe binària (FIB-UPC).",
+    "title": "Aprenentatge Automàtic \u2014 Hipotiroïdisme",
+    "description": "Tasca de classificació d'hipotiroïdisme: Nbviewer, enllaços a GitHub, demo de clic de k-NN vinculada a N/P de classe binària (FIB-UPC).",
     "tags": ["Python", "Jupyter", "sklearn", "UPC"],
     "icon": "ml"
   },
   {
     "slug": "prop",
-    "title": "Sistema de Recomanació PROP",
+    "title": "Sistema de Recomanació",
     "description": "Una interfície web per a un sistema de recomanació basat en contingut, construït amb Java, Spring Boot i Thymeleaf.",
     "tags": ["Java", "Spring Boot", "Recommendation"],
     "icon": "server"

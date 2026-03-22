@@ -15,7 +15,7 @@ type Lang = "en" | "es" | "ca";
 const TRANSLATIONS = {
   en: {
     mlPipeline: "ML Pipeline",
-    course: "FIB-UPC \u00b7 APA course",
+    course: "FIB-UPC \u00b7 Machine Learning",
     with: "with",
     pipelineSteps: [
       { icon: "📂", title: "ARFF data", desc: "hypothyroid.arff" },
@@ -67,7 +67,7 @@ const TRANSLATIONS = {
   },
   es: {
     mlPipeline: "Pipeline ML",
-    course: "FIB-UPC \u00b7 Asignatura APA",
+    course: "FIB-UPC \u00b7 Aprendizaje Automático",
     with: "con",
     pipelineSteps: [
       { icon: "📂", title: "Datos ARFF", desc: "hypothyroid.arff" },
@@ -119,7 +119,7 @@ const TRANSLATIONS = {
   },
   ca: {
     mlPipeline: "Pipeline ML",
-    course: "FIB-UPC \u00b7 Assignatura APA",
+    course: "FIB-UPC \u00b7 Aprenentatge Automàtic",
     with: "amb",
     pipelineSteps: [
       { icon: "📂", title: "Dades ARFF", desc: "hypothyroid.arff" },
