@@ -5,7 +5,7 @@ import { getRouteFromUrl, getLangFromUrl } from '../i18n/utils';
 const currentLang = getLangFromUrl(Astro.url);
 const route = getRouteFromUrl(Astro.url);
 
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const cleanBase = base === '/' ? '' : base;
 ---
 <div class="language-picker">

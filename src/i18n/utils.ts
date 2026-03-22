@@ -18,7 +18,7 @@ export function useTranslations(lang: keyof typeof ui) {
 
 export function getRouteFromUrl(url: URL): string {
   const path = url.pathname;
-  const basePath = import.meta.env.BASE_URL;
+  const basePath = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
   let cleanPath = path;
   if (basePath && basePath !== '/' && path.startsWith(basePath)) {
     cleanPath = path.slice(basePath.length);
