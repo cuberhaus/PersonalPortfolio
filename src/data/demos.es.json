@@ -16,7 +16,7 @@
   {
     "slug": "bitsx-marato",
     "title": "BitsXLaMarató — Aorta",
-    "description": "Ecografía → Segmentación de aorta con Mask R-CNN y reconstrucción 3D; inferencia simulada en navegador + explorador de diámetro.",
+    "description": "Ganador de BitsXLaMarató 2022 — Ecografía → Segmentación de aorta con Mask R-CNN y reconstrucción 3D; inferencia simulada en navegador + explorador de diámetro.",
     "tags": ["PyTorch", "OpenCV", "3D", "CV"],
     "icon": "aorta"
   },
