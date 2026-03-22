@@ -184,11 +184,11 @@ const styles = {
   productImg: {
     width: "100%",
     aspectRatio: "1",
-    background: "linear-gradient(135deg, #1e1e2e 0%, var(--border-color) 100%)",
+    background: "var(--bg-secondary)",
     display: "flex" as const,
     alignItems: "center" as const,
     justifyContent: "center" as const,
-    color: "#4b5563",
+    color: "var(--text-muted)",
     fontSize: "2rem",
   },
   productInfo: { padding: "1rem" },
@@ -531,7 +531,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
                         <td style={styles.td}>{(p.price * qty).toFixed(2)} €</td>
                         <td style={styles.td}>
                           <button
-                            style={{ ...styles.button, background: "#371520", color: "#f87171", padding: "0.25rem 0.5rem", fontSize: "0.8rem" }}
+                            style={{ ...styles.button, background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", padding: "0.25rem 0.5rem", fontSize: "0.8rem" }}
                             onClick={() => removeFromCart(p.id)}
                           >
                             {t.remove}

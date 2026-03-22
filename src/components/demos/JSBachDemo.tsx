@@ -94,8 +94,9 @@ const styles = {
     color: "var(--text-secondary)",
   },
   error: {
-    color: "#f87171",
-    background: "#371520",
+    color: "#ef4444",
+    background: "rgba(239, 68, 68, 0.1)",
+    border: "1px solid rgba(239, 68, 68, 0.2)",
     borderRadius: "0.5rem",
     padding: "0.75rem 1rem",
     fontSize: "0.85rem",

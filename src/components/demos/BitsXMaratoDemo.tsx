@@ -329,7 +329,7 @@ function DiameterExplorer({ t }: { t: typeof TRANSLATIONS.en }) {
       <div style={{ marginBottom: "0.75rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.25rem" }}>
           <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-primary)" }}>{t.maxOuter}</span>
-          <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "#f4f4f5", fontFamily: "ui-monospace, monospace" }}>{mm} mm</span>
+          <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-primary)", fontFamily: "ui-monospace, monospace" }}>{mm} mm</span>
         </div>
         <input type="range" min={18} max={65} value={mm}
           onChange={(e) => setMm(Number(e.target.value))}
@@ -345,7 +345,7 @@ function DiameterExplorer({ t }: { t: typeof TRANSLATIONS.en }) {
         <div style={{
           position: "absolute", top: -3, left: `${((mm - 18) / (65 - 18)) * 100}%`,
           transform: "translateX(-50%)", width: 4, height: 16, background: "#fff",
-          borderRadius: 2, boxShadow: "0 0 0 2px #18181b",
+          borderRadius: 2, boxShadow: "0 0 0 2px var(--bg-card)",
         }} />
       </div>
 
@@ -482,11 +482,6 @@ export default function BitsXMaratoDemo({ lang = "en" }: { lang?: Lang }) {
           <div style={{ fontSize: "0.85rem", color: "var(--text-primary)" }}>{TEAM.join(" · ")}</div>
         </div>
         <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-          <a href="https://github.com/cuberhaus/bitsXlaMarato" target="_blank" rel="noopener noreferrer" style={{
-            display: "inline-flex", alignItems: "center", gap: "0.35rem",
-            padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)", textDecoration: "none",
-          }}>GitHub ↗</a>
           <a href="https://devpost.com/software/aneurism-detection-with-markrcnn" target="_blank" rel="noopener noreferrer" style={{
             display: "inline-flex", alignItems: "center", gap: "0.35rem",
             padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
@@ -495,34 +490,6 @@ export default function BitsXMaratoDemo({ lang = "en" }: { lang?: Lang }) {
         </div>
       </div>
 
-      {/* ── RUN LOCALLY ── */}
-      <details>
-        <summary style={{
-          cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "var(--text-muted)",
-          padding: "0.65rem 1rem", background: "var(--bg-card)", borderRadius: "0.75rem",
-          border: "1px solid var(--border-color)", listStyle: "none",
-        }}>
-          {t.runLocal}
-        </summary>
-        <div style={{ ...card, marginTop: "0.75rem" }}>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.6, margin: "0 0 0.75rem" }}>
-            {t.localDesc1}<strong style={{ color: "var(--text-primary)" }}>{t.localDesc2}</strong>
-            {t.localDesc3}<code style={{ color: "#94a3b8" }}>src/ImageViewer.py</code>{t.localDesc4}
-          </p>
-          <pre style={{
-            margin: 0, padding: "1rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
-            borderRadius: "0.5rem", fontSize: "0.78rem", fontFamily: "ui-monospace, monospace",
-            color: "var(--text-secondary)", lineHeight: 1.6, overflowX: "auto",
-          }}>{`git clone https://github.com/cuberhaus/bitsXlaMarato.git
-cd bitsXlaMarato
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cd src && python ImageViewer.py`}</pre>
-          <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", margin: "0.75rem 0 0" }}>
-            {t.localNote1}<code style={{ color: "#64748b" }}>models/</code>{t.localNote2}<code style={{ color: "#64748b" }}>marato.pt</code>).
-          </p>
-        </div>
-      </details>
     </div>
   );
 }

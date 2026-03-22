@@ -212,11 +212,11 @@ function SchematicSvg({ t }: { t: typeof TRANSLATIONS.en }) {
         </linearGradient>
       </defs>
       {/* Bases */}
-      <rect x="30" y="40" width="72" height="45" rx="6" fill="#1e1e2e" stroke="var(--text-muted)" strokeWidth="1.5" />
+      <rect x="30" y="40" width="72" height="45" rx="6" fill="var(--bg-card)" stroke="var(--text-muted)" strokeWidth="1.5" />
       <text x="66" y="64" textAnchor="middle" fill="var(--text-primary)" fontSize="11" fontWeight="600">{t.base} A</text>
       <text x="66" y="78" textAnchor="middle" fill="var(--text-muted)" fontSize="8">H0, H1</text>
 
-      <rect x="30" y="110" width="72" height="45" rx="6" fill="#1e1e2e" stroke="var(--text-muted)" strokeWidth="1.5" />
+      <rect x="30" y="110" width="72" height="45" rx="6" fill="var(--bg-card)" stroke="var(--text-muted)" strokeWidth="1.5" />
       <text x="66" y="134" textAnchor="middle" fill="var(--text-primary)" fontSize="11" fontWeight="600">{t.base} B</text>
       <text x="66" y="148" textAnchor="middle" fill="var(--text-muted)" fontSize="8">H2</text>
 
@@ -234,11 +234,11 @@ function SchematicSvg({ t }: { t: typeof TRANSLATIONS.en }) {
 
       {/* Helicopter routes */}
       <circle cx="105" cy="62" r="12" fill="url(#helipad-g)" opacity={0.9} />
-      <text x="105" y="66" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="700">H0</text>
+      <text x="105" y="66" textAnchor="middle" fill="var(--text-primary)" fontSize="9" fontWeight="700">H0</text>
       <path d="M 120 62 Q 170 30 240 52" fill="none" stroke="#22c55e" strokeWidth="2" strokeDasharray="5 3" opacity={0.8} />
 
       <circle cx="105" cy="132" r="12" fill="url(#helipad-g)" opacity={0.9} />
-      <text x="105" y="136" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="700">H2</text>
+      <text x="105" y="136" textAnchor="middle" fill="var(--text-primary)" fontSize="9" fontWeight="700">H2</text>
       <path d="M 120 132 Q 200 145 330 112" fill="none" stroke="#f59e0b" strokeWidth="2" strokeDasharray="5 3" opacity={0.8} />
 
       <text x="200" y="95" fill="var(--text-muted)" fontSize="9" fontFamily="ui-monospace">{t.rescueOrder}</text>
@@ -365,8 +365,8 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
       {/* ── RUN THE DEMO ── */}
       <div style={{
         ...card, marginBottom: "1.25rem",
-        background: "linear-gradient(180deg, #131320 0%, var(--bg-card) 100%)",
-        border: "1px solid #2a2a3a",
+        background: "linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-card) 100%)",
+        border: "1px solid var(--border-color)",
         boxShadow: "0 4px 24px rgba(99, 102, 241, 0.08)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
@@ -385,9 +385,9 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
 
         <div style={{
           padding: "0.75rem 0.85rem", background: "rgba(99,102,241,0.06)", border: "1px solid rgba(129,140,248,0.2)",
-          borderRadius: "0.5rem", marginBottom: "1rem", fontSize: "0.78rem", lineHeight: 1.55, color: "#a5b4fc",
+          borderRadius: "0.5rem", marginBottom: "1rem", fontSize: "0.78rem", lineHeight: 1.55, color: "var(--text-secondary)",
         }}>
-          <strong style={{ color: "#e0e7ff" }}>{t.howItWorks}</strong>{t.howDesc1}
+          <strong style={{ color: "var(--text-primary)" }}>{t.howItWorks}</strong>{t.howDesc1}
           <strong style={{ color: "var(--text-primary)" }}>{t.howDesc2}</strong>{t.howDesc3}
           <strong style={{ color: "var(--text-primary)" }}>{t.howDesc4}</strong>{t.howDesc5}
         </div>
@@ -429,16 +429,16 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
           const ti = perHelicopterTimes(board, runOut.initial);
           return (
             <div style={{ fontSize: "0.82rem" }}>
-              <p style={{ margin: "0 0 0.5rem", color: "#86efac" }}>
+              <p style={{ margin: "0 0 0.5rem", color: "var(--text-primary)" }}>
                 <strong>{runOut.algo}</strong> · seed {runOut.seed}
               </p>
               <p style={{ margin: "0 0 1rem", color: "var(--text-secondary)" }}>
                 {t.cost}{" "}
-                <strong style={{ color: "#fde047" }}>{runOut.initialCost.toFixed(2)}</strong>
+                <strong style={{ color: "var(--text-primary)" }}>{runOut.initialCost.toFixed(2)}</strong>
                 {" → "}
-                <strong style={{ color: "#7dd3fc" }}>{runOut.cost.toFixed(2)}</strong>
+                <strong style={{ color: "var(--text-primary)" }}>{runOut.cost.toFixed(2)}</strong>
                 {runOut.cost < runOut.initialCost - 1e-6 && (
-                  <span style={{ color: "#86efac", marginLeft: "0.5rem" }}>
+                  <span style={{ color: "#22c55e", marginLeft: "0.5rem" }}>
                     (−{((1 - runOut.cost / runOut.initialCost) * 100).toFixed(1)}%)
                   </span>
                 )}
@@ -474,14 +474,6 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
         })()}
       </div>
 
-      {/* ── LINKS ── */}
-      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-        <a href="https://github.com/cuberhaus/desastresIA" target="_blank" rel="noopener noreferrer" style={{
-          display: "inline-flex", alignItems: "center", gap: "0.35rem",
-          padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)", textDecoration: "none",
-        }}>{t.ghRepo}</a>
-      </div>
     </div>
   );
 }

@@ -3,7 +3,9 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
-const hasProfileImage = existsSync(resolve('public/profile.jpg'));
+// We calculate the path dynamically so it evaluates correctly at build time
+const hasProfileImage = existsSync(resolve('./public/profile.jpg'));
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
@@ -34,7 +36,7 @@ const t = useTranslations(lang);
         <div class="about-image-wrapper">
           <div class="about-image-placeholder">
             <img
-              src={`${import.meta.env.BASE_URL}profile.jpg`}
+              src={import.meta.env.BASE_URL === '/' ? '/profile.jpg' : `${import.meta.env.BASE_URL}/profile.jpg`}
               alt="Pol Casacuberta"
               width="300"
               height="300"

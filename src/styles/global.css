@@ -1,5 +1,6 @@
 /* ── Custom Properties ─────────────────────────────────────── */
 :root {
+  color-scheme: dark;
   /* Default Dark Theme Colors */
   --bg-primary: #0a0a0f;
   --bg-primary-rgb: 10, 10, 15;
@@ -41,6 +42,7 @@
 }
 
 [data-theme='light'] {
+  color-scheme: light;
   --bg-primary: #f8fafc;
   --bg-primary-rgb: 248, 250, 252;
   --bg-secondary: #f1f5f9;
@@ -265,3 +267,33 @@ p {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--border-color-hover);
 }
+
+/* ── Demo Shared Utilities ────────────────────────────────── */
+.demo-header-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+.demo-header-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+.demo-header-github:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+

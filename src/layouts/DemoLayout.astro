@@ -97,8 +97,8 @@ const t = useTranslations(lang);
         <span class="demo-nav-title gradient-text">{title}</span>
         
         <div class="demo-controls">
-          <ThemeToggle />
           <LanguagePicker />
+          <ThemeToggle />
           <button class="demo-copy-btn" id="copy-demo-link" aria-label={t('demo.copyLink')} title={t('demo.copyLink')} data-copied-text={t('demo.copied')}>
             <svg class="icon-copy" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -198,7 +198,7 @@ const t = useTranslations(lang);
     justify-self: end;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
   .demo-copy-btn {
