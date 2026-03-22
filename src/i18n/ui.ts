@@ -61,6 +61,11 @@ export const ui = {
     'contact.title': 'Get in touch',
     'contact.text': "I'm currently open to new opportunities and collaborations. Whether you have a question, a project idea, or just want to say hi — my inbox is always open.",
     'contact.cta': 'Say Hello',
+    
+    // Demos Layout
+    'demo.portfolio': 'Portfolio',
+    'demo.copyLink': 'Copy link',
+    'demo.copied': 'Copied!',
   },
   es: {
     // Nav
@@ -116,6 +121,11 @@ export const ui = {
     'contact.title': 'Ponte en contacto',
     'contact.text': "Actualmente estoy abierto a nuevas oportunidades y colaboraciones. Ya sea que tengas una pregunta, una idea para un proyecto o simplemente quieras saludar, mi bandeja de entrada siempre está abierta.",
     'contact.cta': 'Di Hola',
+    
+    // Demos Layout
+    'demo.portfolio': 'Portafolio',
+    'demo.copyLink': 'Copiar enlace',
+    'demo.copied': '¡Copiado!',
   },
   ca: {
     // Nav
@@ -171,5 +181,10 @@ export const ui = {
     'contact.title': "Posa't en contacte",
     'contact.text': "Actualment estic obert a noves oportunitats i col·laboracions. Tant si tens una pregunta, una idea per a un projecte o simplement vols saludar, la meva bústia sempre està oberta.",
     'contact.cta': 'Digues Hola',
+    
+    // Demos Layout
+    'demo.portfolio': 'Portafolis',
+    'demo.copyLink': 'Copiar enllaç',
+    'demo.copied': 'Copiat!',
   },
 } as const;

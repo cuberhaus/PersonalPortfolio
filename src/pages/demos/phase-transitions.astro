@@ -1,31 +1,66 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import PhaseTransitionsDemo from '../../components/demos/PhaseTransitionsDemo';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const titles = {
+  en: "Graph Phase Transitions",
+  es: "Transiciones de Fase en Grafos",
+  ca: "Transicions de Fase en Grafs"
+};
+
+const leads = {
+  en: "Explore how <strong>random graphs</strong> transition from connected to disconnected as you remove nodes or edges. Generate <strong>binomial</strong> (Erdős–Rényi), <strong>geometric</strong>, or <strong>grid</strong> graphs, apply percolation, and watch the phase transition happen in real time.",
+  es: "Explora cómo los <strong>grafos aleatorios</strong> transicionan de conectados a desconectados a medida que eliminas nodos o aristas. Genera grafos <strong>binomiales</strong> (Erdős–Rényi), <strong>geométricos</strong> o de <strong>cuadrícula</strong>, aplica percolación y observa cómo ocurre la transición de fase en tiempo real.",
+  ca: "Explora com els <strong>grafs aleatoris</strong> transicionen de connectats a desconnectats a mesura que elimines nodes o arestes. Genera grafs <strong>binomials</strong> (Erdős–Rényi), <strong>geomètrics</strong> o de <strong>quadrícula</strong>, aplica percolació i observa com ocorre la transició de fase en temps real."
+};
+
+const badges = {
+  en: "Algorithmics \u00b7 FIB-UPC",
+  es: "Algoritmia \u00b7 FIB-UPC",
+  ca: "Algorísmia \u00b7 FIB-UPC"
+};
+
+const aboutTitles = {
+  en: "About this project",
+  es: "Sobre este proyecto",
+  ca: "Sobre aquest projecte"
+};
+
+const aboutDescs = {
+  en: "Originally a Python project for the Algorithmics course at FIB-UPC, studying phase transitions in random graphs using NetworkX. This browser demo is a port of the graph generation, percolation, and connectivity/complexity analysis to TypeScript with interactive visualization.",
+  es: "Originalmente un proyecto de Python para el curso de Algoritmia en la FIB-UPC, estudiando transiciones de fase en grafos aleatorios usando NetworkX. Esta demo de navegador es un port de la generación de grafos, percolación y análisis de conectividad/complejidad a TypeScript con visualización interactiva.",
+  ca: "Originalment un projecte de Python per al curs d'Algorísmia a la FIB-UPC, estudiant transicions de fase en grafs aleatoris usant NetworkX. Aquesta demo de navegador és un port de la generació de grafs, percolació i anàlisi de connectivitat/complexitat a TypeScript amb visualització interactiva."
+};
+
+const viewSource = {
+  en: "View source on GitHub",
+  es: "Ver código en GitHub",
+  ca: "Veure codi a GitHub"
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title="Graph Phase Transitions" description="Interactive percolation and phase transition explorer for random graphs.">
+<DemoLayout title={title} description="Interactive percolation and phase transition explorer for random graphs.">
   <div class="container">
     <div class="demo-header">
-      <div class="badge">Algorithmics · FIB-UPC</div>
-      <h1>Graph Phase Transitions</h1>
-      <p class="demo-lead">
-        Explore how <strong>random graphs</strong> transition from connected to disconnected as you remove nodes or edges.
-        Generate <strong>binomial</strong> (Erdős–Rényi), <strong>geometric</strong>, or <strong>grid</strong> graphs, apply percolation, and watch the
-        phase transition happen in real time.
-      </p>
+      <div class="badge">{badge}</div>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
     </div>
 
-    <PhaseTransitionsDemo client:load />
+    <PhaseTransitionsDemo lang={lang} client:load />
 
     <div class="demo-info">
-      <h3>About this project</h3>
-      <p>
-        Originally a Python project for the Algorithmics course at FIB-UPC, studying phase transitions
-        in random graphs using NetworkX. This browser demo is a port of the graph generation,
-        percolation, and connectivity/complexity analysis to TypeScript with interactive visualization.
-      </p>
+      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
+      <p>{aboutDescs[lang] || aboutDescs.en}</p>
       <a href="https://github.com/cuberhaus/projectA2" target="_blank" rel="noopener noreferrer" class="demo-link">
-        View source on GitHub
+        {viewSource[lang] || viewSource.en}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
         </svg>

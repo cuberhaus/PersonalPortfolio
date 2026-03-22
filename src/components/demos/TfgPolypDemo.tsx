@@ -6,61 +6,243 @@ const accent1 = "#10b981"; // emerald
 const accent2 = "#0ea5e9"; // sky
 
 const card = {
-  background: "#111119",
-  border: "1px solid #1e1e2a",
+  background: "var(--bg-card)",
+  border: "1px solid var(--border-color)",
   borderRadius: "1rem",
   padding: "1.5rem",
 } as const;
 
-const PIPELINE = [
-  { icon: "\u{1F4CB}", title: "LDPolypVideo", desc: "Colonoscopy frames + bbox annotations" },
-  { icon: "\u{1F3AD}", title: "CycleGAN / SPADE", desc: "Mask \u2192 synthetic polyp images" },
-  { icon: "\u{1F4CA}", title: "Augmented dataset", desc: "Real + generated training data" },
-  { icon: "\u{1F9E0}", title: "Faster R-CNN", desc: "Object detection training" },
-  { icon: "\u{1F50D}", title: "Optuna / Ray Tune", desc: "Hyperparameter optimization" },
-  { icon: "\u2705", title: "COCO evaluation", desc: "AP / AR / F1 metrics" },
-];
+type Lang = "en" | "es" | "ca";
 
-const DETECTORS = [
-  { name: "Faster R-CNN", backbone: "ResNet-50 FPN", note: "Primary detector, best results" },
-  { name: "RetinaNet", backbone: "ResNet-50 FPN v2", note: "Single-stage anchor-based" },
-  { name: "SSD Lite", backbone: "MobileNet V3", note: "Lightweight / mobile" },
-];
+const TRANSLATIONS = {
+  en: {
+    pipelineTitle: "End-to-End Pipeline",
+    thesis: "Bachelor's Thesis \u00b7 FIB-UPC",
+    pipelineSteps: [
+      { icon: "\u{1F4CB}", title: "LDPolypVideo", desc: "Colonoscopy frames + bbox annotations" },
+      { icon: "\u{1F3AD}", title: "CycleGAN / SPADE", desc: "Mask \u2192 synthetic polyp images" },
+      { icon: "\u{1F4CA}", title: "Augmented dataset", desc: "Real + generated training data" },
+      { icon: "\u{1F9E0}", title: "Faster R-CNN", desc: "Object detection training" },
+      { icon: "\u{1F50D}", title: "Optuna / Ray Tune", desc: "Hyperparameter optimization" },
+      { icon: "\u2705", title: "COCO evaluation", desc: "AP / AR / F1 metrics" },
+    ],
+    modelComp: "Model comparison",
+    modelCompSub: "10 Faster R-CNN configurations from Optuna HPO",
+    metrics: { ap50: "AP @IoU=0.50", ap5095: "AP @IoU=[.50:.95]", ar100: "AR maxDets=100", f1: "F1 score" },
+    sort: "Sort:",
+    allModels: "All models are Faster R-CNN (ResNet-50 FPN). Metrics from COCO evaluation on the LDPolypVideo test set.",
+    simInference: "Simulated inference",
+    browserMock: "Browser mock \u00b7 Faster R-CNN",
+    simDesc1: "Simulates Faster R-CNN inference on a colonoscopy frame.",
+    simDesc2: "The bounding boxes are a ",
+    simDesc3: "browser mock",
+    simDesc4: ", not model output.",
+    runDemo: "Run demo inference",
+    reset: "Reset",
+    confidence: "Confidence",
+    detection: "detection",
+    detections: "detections",
+    loading: "Loading model weights\u2026",
+    preprocessing: "Preprocessing frame\u2026",
+    forwardPass: "Faster R-CNN forward pass\u2026",
+    nms: "NMS & post-processing\u2026",
+    complete: "Detection complete (browser mock)",
+    cgTrans: "CycleGAN translation",
+    unpaired: "Unpaired image-to-image",
+    cgDesc1: "CycleGAN learns unpaired ",
+    cgDesc2: "mask \u2194 polyp",
+    cgDesc3: " translation. SPADE uses spatially-adaptive normalization for mask \u2192 polyp synthesis.",
+    m2p: "Mask \u2192 Polyp",
+    p2m: "Polyp \u2192 Mask",
+    binMask: "Binary mask",
+    colFrame: "Colonoscopy frame",
+    genPolyp: "Generated polyp",
+    predMask: "Predicted mask",
+    cgNote: "Illustrations are schematic. Real CycleGAN outputs are photorealistic colonoscopy images.",
+    detArch: "Detection architectures",
+    thModel: "Model", thBackbone: "Backbone", thNotes: "Notes",
+    detectors: [
+      { name: "Faster R-CNN", backbone: "ResNet-50 FPN", note: "Primary detector, best results" },
+      { name: "RetinaNet", backbone: "ResNet-50 FPN v2", note: "Single-stage anchor-based" },
+      { name: "SSD Lite", backbone: "MobileNet V3", note: "Lightweight / mobile" },
+    ],
+    links: "Links",
+    dashboard1: "The project includes a ",
+    dashboard2: "Streamlit dashboard",
+    dashboard3: " for interactive model exploration and inference. Clone the repo and run ",
+    dashboard4: " from ",
+    author: "Author",
+    runLocal: "\u25B8 Run the project locally",
+    projDesc1: "The project is ",
+    projDesc2: "Python + PyTorch",
+    projDesc3: ". A CUDA GPU is recommended for training. The Streamlit dashboard works on CPU.",
+    datasetNote1: "Place the LDPolypVideo dataset under ",
+    datasetNote2: " and ",
+  },
+  es: {
+    pipelineTitle: "Pipeline de Principio a Fin",
+    thesis: "Trabajo de Fin de Grado \u00b7 FIB-UPC",
+    pipelineSteps: [
+      { icon: "\u{1F4CB}", title: "LDPolypVideo", desc: "Frames de colonoscopia + bounding boxes" },
+      { icon: "\u{1F3AD}", title: "CycleGAN / SPADE", desc: "Máscara \u2192 imágenes de pólipos sintéticas" },
+      { icon: "\u{1F4CA}", title: "Dataset aumentado", desc: "Datos de entrenamiento reales + generados" },
+      { icon: "\u{1F9E0}", title: "Faster R-CNN", desc: "Entrenamiento de detección de objetos" },
+      { icon: "\u{1F50D}", title: "Optuna / Ray Tune", desc: "Optimización de hiperparámetros" },
+      { icon: "\u2705", title: "Evaluación COCO", desc: "Métricas AP / AR / F1" },
+    ],
+    modelComp: "Comparación de modelos",
+    modelCompSub: "10 configuraciones de Faster R-CNN desde Optuna HPO",
+    metrics: { ap50: "AP @IoU=0.50", ap5095: "AP @IoU=[.50:.95]", ar100: "AR maxDets=100", f1: "Puntuación F1" },
+    sort: "Ordenar:",
+    allModels: "Todos los modelos son Faster R-CNN (ResNet-50 FPN). Métricas de evaluación COCO en el test set LDPolypVideo.",
+    simInference: "Inferencia simulada",
+    browserMock: "Mock de navegador \u00b7 Faster R-CNN",
+    simDesc1: "Simula inferencia de Faster R-CNN en un frame de colonoscopia.",
+    simDesc2: "Las bounding boxes son un ",
+    simDesc3: "mock del navegador",
+    simDesc4: ", no la salida real del modelo.",
+    runDemo: "Ejecutar inferencia de demo",
+    reset: "Reiniciar",
+    confidence: "Confianza",
+    detection: "detección",
+    detections: "detecciones",
+    loading: "Cargando pesos del modelo\u2026",
+    preprocessing: "Preprocesando frame\u2026",
+    forwardPass: "Pase hacia adelante de Faster R-CNN\u2026",
+    nms: "NMS y post-procesamiento\u2026",
+    complete: "Detección completa (mock del navegador)",
+    cgTrans: "Traducción CycleGAN",
+    unpaired: "Imagen a imagen no emparejada",
+    cgDesc1: "CycleGAN aprende una traducción no emparejada ",
+    cgDesc2: "máscara \u2194 pólipo",
+    cgDesc3: ". SPADE usa normalización espacial adaptativa para síntesis máscara \u2192 pólipo.",
+    m2p: "Máscara \u2192 Pólipo",
+    p2m: "Pólipo \u2192 Máscara",
+    binMask: "Máscara binaria",
+    colFrame: "Frame de colonoscopia",
+    genPolyp: "Pólipo generado",
+    predMask: "Máscara predicha",
+    cgNote: "Las ilustraciones son esquemáticas. Las salidas reales de CycleGAN son imágenes fotorrealistas.",
+    detArch: "Arquitecturas de detección",
+    thModel: "Modelo", thBackbone: "Backbone", thNotes: "Notas",
+    detectors: [
+      { name: "Faster R-CNN", backbone: "ResNet-50 FPN", note: "Detector principal, mejores resultados" },
+      { name: "RetinaNet", backbone: "ResNet-50 FPN v2", note: "Basado en anclajes de una etapa" },
+      { name: "SSD Lite", backbone: "MobileNet V3", note: "Ligero / móvil" },
+    ],
+    links: "Enlaces",
+    dashboard1: "El proyecto incluye un ",
+    dashboard2: "dashboard de Streamlit",
+    dashboard3: " para exploración e inferencia interactiva. Clona el repo y ejecuta ",
+    dashboard4: " desde ",
+    author: "Autor",
+    runLocal: "\u25B8 Ejecutar el proyecto localmente",
+    projDesc1: "El proyecto es ",
+    projDesc2: "Python + PyTorch",
+    projDesc3: ". Se recomienda una GPU CUDA para entrenamiento. El dashboard funciona en CPU.",
+    datasetNote1: "Coloca el dataset LDPolypVideo bajo ",
+    datasetNote2: " y ",
+  },
+  ca: {
+    pipelineTitle: "Pipeline de Principi a Fi",
+    thesis: "Treball de Fi de Grau \u00b7 FIB-UPC",
+    pipelineSteps: [
+      { icon: "\u{1F4CB}", title: "LDPolypVideo", desc: "Frames de colonoscòpia + bounding boxes" },
+      { icon: "\u{1F3AD}", title: "CycleGAN / SPADE", desc: "Màscara \u2192 imatges de pòlips sintètiques" },
+      { icon: "\u{1F4CA}", title: "Dataset augmentat", desc: "Dades d'entrenament reals + generades" },
+      { icon: "\u{1F9E0}", title: "Faster R-CNN", desc: "Entrenament de detecció d'objectes" },
+      { icon: "\u{1F50D}", title: "Optuna / Ray Tune", desc: "Optimització d'hiperparàmetres" },
+      { icon: "\u2705", title: "Avaluació COCO", desc: "Mètriques AP / AR / F1" },
+    ],
+    modelComp: "Comparació de models",
+    modelCompSub: "10 configuracions de Faster R-CNN des d'Optuna HPO",
+    metrics: { ap50: "AP @IoU=0.50", ap5095: "AP @IoU=[.50:.95]", ar100: "AR maxDets=100", f1: "Puntuació F1" },
+    sort: "Ordenar:",
+    allModels: "Tots els models són Faster R-CNN (ResNet-50 FPN). Mètriques d'avaluació COCO en el test set LDPolypVideo.",
+    simInference: "Inferència simulada",
+    browserMock: "Mock de navegador \u00b7 Faster R-CNN",
+    simDesc1: "Simula inferència de Faster R-CNN en un frame de colonoscòpia.",
+    simDesc2: "Les bounding boxes són un ",
+    simDesc3: "mock del navegador",
+    simDesc4: ", no la sortida real del model.",
+    runDemo: "Executar inferència de demo",
+    reset: "Reiniciar",
+    confidence: "Confiança",
+    detection: "detecció",
+    detections: "deteccions",
+    loading: "Carregant pesos del model\u2026",
+    preprocessing: "Preprocessant frame\u2026",
+    forwardPass: "Pas cap endavant de Faster R-CNN\u2026",
+    nms: "NMS i post-processament\u2026",
+    complete: "Detecció completa (mock del navegador)",
+    cgTrans: "Traducció CycleGAN",
+    unpaired: "Imatge a imatge no emparellada",
+    cgDesc1: "CycleGAN aprèn una traducció no emparellada ",
+    cgDesc2: "màscara \u2194 pòlip",
+    cgDesc3: ". SPADE utilitza normalització espacial adaptativa per síntesi màscara \u2192 pòlip.",
+    m2p: "Màscara \u2192 Pòlip",
+    p2m: "Pòlip \u2192 Màscara",
+    binMask: "Màscara binària",
+    colFrame: "Frame de colonoscòpia",
+    genPolyp: "Pòlip generat",
+    predMask: "Màscara predita",
+    cgNote: "Les il·lustracions són esquemàtiques. Les sortides reals de CycleGAN són imatges fotorrealistes.",
+    detArch: "Arquitectures de detecció",
+    thModel: "Model", thBackbone: "Backbone", thNotes: "Notes",
+    detectors: [
+      { name: "Faster R-CNN", backbone: "ResNet-50 FPN", note: "Detector principal, millors resultats" },
+      { name: "RetinaNet", backbone: "ResNet-50 FPN v2", note: "Basat en ancoratges d'una etapa" },
+      { name: "SSD Lite", backbone: "MobileNet V3", note: "Lleuger / mòbil" },
+    ],
+    links: "Enllaços",
+    dashboard1: "El projecte inclou un ",
+    dashboard2: "dashboard de Streamlit",
+    dashboard3: " per exploració i inferència interactiva. Clona el repo i executa ",
+    dashboard4: " des de ",
+    author: "Autor",
+    runLocal: "\u25B8 Executar el projecte localment",
+    projDesc1: "El projecte és ",
+    projDesc2: "Python + PyTorch",
+    projDesc3: ". Es recomana una GPU CUDA per entrenament. El dashboard funciona en CPU.",
+    datasetNote1: "Col·loca el dataset LDPolypVideo sota ",
+    datasetNote2: " i ",
+  }
+};
 
 type ModelResult = (typeof modelData)[number];
 
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  PIPELINE STRIP                                                        */
 /* ════════════════════════════════════════════════════════════════════════ */
-function PipelineStrip() {
+function PipelineStrip({ t }: { t: typeof TRANSLATIONS.en }) {
   return (
-    <div style={{ ...card, marginBottom: "1.25rem", background: "linear-gradient(135deg, #111119 0%, #0f0f1a 100%)" }}>
+    <div style={{ ...card, marginBottom: "1.25rem", background: "var(--bg-card)" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
         <div style={{
           padding: "0.2rem 0.55rem", borderRadius: "0.35rem", fontSize: "0.65rem", fontWeight: 700,
           letterSpacing: "0.06em", textTransform: "uppercase" as const,
-          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
-        }}>End-to-End Pipeline</div>
-        <span style={{ fontSize: "0.82rem", color: "#71717a" }}>Bachelor's Thesis &middot; FIB-UPC</span>
+          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
+        }}>{t.pipelineTitle}</div>
+        <span style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>{t.thesis}</span>
       </div>
       <div style={{ display: "flex", gap: "0.35rem", overflowX: "auto", paddingBottom: "0.25rem" }}>
-        {PIPELINE.map((step, i) => (
+        {t.pipelineSteps.map((step, i) => (
           <div key={i} style={{
             flex: "1 0 auto", minWidth: 100, padding: "0.6rem 0.7rem",
-            background: "#0c0c14", borderRadius: "0.5rem", border: "1px solid #1e1e2a", textAlign: "center",
+            background: "var(--bg-secondary)", borderRadius: "0.5rem", border: "1px solid var(--border-color)", textAlign: "center",
           }}>
             <div style={{ fontSize: "1.1rem", marginBottom: "0.2rem" }}>{step.icon}</div>
-            <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#e4e4e7" }}>{step.title}</div>
-            <div style={{ fontSize: "0.62rem", color: "#52525b", marginTop: "0.1rem" }}>{step.desc}</div>
+            <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-primary)" }}>{step.title}</div>
+            <div style={{ fontSize: "0.62rem", color: "var(--text-muted)", marginTop: "0.1rem" }}>{step.desc}</div>
           </div>
         ))}
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.85rem" }}>
-        {["PyTorch 2.1", "Faster R-CNN", "CycleGAN", "SPADE", "Optuna", "Ray Tune", "COCO eval", "LDPolypVideo"].map((t) => (
-          <span key={t} style={{
+        {["PyTorch 2.1", "Faster R-CNN", "CycleGAN", "SPADE", "Optuna", "Ray Tune", "COCO eval", "LDPolypVideo"].map((tag) => (
+          <span key={tag} style={{
             padding: "0.2rem 0.5rem", borderRadius: "1rem", fontSize: "0.65rem", fontWeight: 600,
-            background: "#1c1c28", border: "1px solid #27272a", color: "#a1a1aa",
-          }}>{t}</span>
+            background: "var(--bg-card-hover)", border: "1px solid var(--border-color)", color: "var(--text-secondary)",
+          }}>{tag}</span>
         ))}
       </div>
     </div>
@@ -70,16 +252,9 @@ function PipelineStrip() {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  MODEL COMPARISON CHART                                                */
 /* ════════════════════════════════════════════════════════════════════════ */
-function ModelComparison() {
+function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
   const [metric, setMetric] = useState<"ap50" | "ap5095" | "ar100" | "f1">("f1");
   const [sortBy, setSortBy] = useState<"metric" | "lr" | "epochs">("metric");
-
-  const metricLabels: Record<string, string> = {
-    ap50: "AP @IoU=0.50",
-    ap5095: "AP @IoU=[.50:.95]",
-    ar100: "AR maxDets=100",
-    f1: "F1 score",
-  };
 
   const sorted = useMemo(() => {
     const arr = [...modelData];
@@ -100,8 +275,8 @@ function ModelComparison() {
           background: `linear-gradient(135deg, rgba(16,185,129,0.15), rgba(14,165,233,0.1))`,
         }}>{"\u{1F4CA}"}</div>
         <div>
-          <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>Model comparison</h3>
-          <p style={{ margin: 0, fontSize: "0.72rem", color: "#52525b" }}>10 Faster R-CNN configurations from Optuna HPO</p>
+          <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.modelComp}</h3>
+          <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>{t.modelCompSub}</p>
         </div>
       </div>
 
@@ -109,17 +284,17 @@ function ModelComparison() {
         {(["f1", "ap50", "ap5095", "ar100"] as const).map((m) => (
           <button key={m} type="button" onClick={() => setMetric(m)} style={{
             padding: "0.3rem 0.65rem", borderRadius: "0.4rem", fontSize: "0.72rem", fontWeight: 600, cursor: "pointer",
-            border: metric === m ? `1px solid ${accent1}` : "1px solid #27272a",
-            background: metric === m ? `${accent1}18` : "#1c1c28",
-            color: metric === m ? accent1 : "#a1a1aa",
-          }}>{metricLabels[m]}</button>
+            border: metric === m ? `1px solid ${accent1}` : "1px solid var(--border-color)",
+            background: metric === m ? `${accent1}18` : "var(--bg-card-hover)",
+            color: metric === m ? accent1 : "var(--text-secondary)",
+          }}>{t.metrics[m]}</button>
         ))}
-        <span style={{ margin: "auto 0 auto auto", fontSize: "0.68rem", color: "#3f3f46" }}>Sort:</span>
+        <span style={{ margin: "auto 0 auto auto", fontSize: "0.68rem", color: "var(--border-color-hover)" }}>{t.sort}</span>
         {(["metric", "lr", "epochs"] as const).map((s) => (
           <button key={s} type="button" onClick={() => setSortBy(s)} style={{
             padding: "0.25rem 0.5rem", borderRadius: "0.35rem", fontSize: "0.65rem", fontWeight: 600, cursor: "pointer",
-            border: "none", background: sortBy === s ? "#27272a" : "transparent",
-            color: sortBy === s ? "#e4e4e7" : "#52525b",
+            border: "none", background: sortBy === s ? "var(--border-color)" : "transparent",
+            color: sortBy === s ? "var(--text-primary)" : "var(--text-muted)",
           }}>{s}</button>
         ))}
       </div>
@@ -130,17 +305,17 @@ function ModelComparison() {
           const pct = (val / maxVal) * 100;
           return (
             <div key={m.id} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <div style={{ minWidth: 155, fontSize: "0.7rem", color: "#a1a1aa", fontFamily: "ui-monospace, monospace" }}>
+              <div style={{ minWidth: 155, fontSize: "0.7rem", color: "var(--text-secondary)", fontFamily: "ui-monospace, monospace" }}>
                 bs={m.batchSize} lr={m.lr.toExponential(1)} ep={m.epochs}
               </div>
-              <div style={{ flex: 1, height: 18, background: "#0c0c14", borderRadius: 4, overflow: "hidden", position: "relative" }}>
+              <div style={{ flex: 1, height: 18, background: "var(--bg-secondary)", borderRadius: 4, overflow: "hidden", position: "relative" }}>
                 <div style={{
                   height: "100%", width: `${pct}%`, borderRadius: 4,
                   background: `linear-gradient(90deg, ${accent1}, ${accent2})`,
                   transition: "width 0.4s ease",
                 }} />
               </div>
-              <span style={{ minWidth: 52, textAlign: "right", fontSize: "0.75rem", fontWeight: 700, color: "#e4e4e7", fontFamily: "ui-monospace, monospace" }}>
+              <span style={{ minWidth: 52, textAlign: "right", fontSize: "0.75rem", fontWeight: 700, color: "var(--text-primary)", fontFamily: "ui-monospace, monospace" }}>
                 {val.toFixed(4)}
               </span>
             </div>
@@ -148,8 +323,8 @@ function ModelComparison() {
         })}
       </div>
 
-      <p style={{ margin: "0.75rem 0 0", fontSize: "0.68rem", color: "#3f3f46" }}>
-        All models are Faster R-CNN (ResNet-50 FPN). Metrics from COCO evaluation on the LDPolypVideo test set.
+      <p style={{ margin: "0.75rem 0 0", fontSize: "0.68rem", color: "var(--border-color-hover)" }}>
+        {t.allModels}
       </p>
     </div>
   );
@@ -163,7 +338,7 @@ const MOCK_BOXES = [
   { x: 62, y: 55, w: 15, h: 18, score: 0.71, label: "polyp" },
 ];
 
-function MockInference() {
+function MockInference({ t }: { t: typeof TRANSLATIONS.en }) {
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
   const [progress, setProgress] = useState(0);
   const [step, setStep] = useState("");
@@ -177,18 +352,18 @@ function MockInference() {
 
   const run = useCallback(() => {
     clear();
-    setPhase("running"); setProgress(0); setStep("Loading model weights\u2026");
+    setPhase("running"); setProgress(0); setStep(t.loading);
     const t0 = Date.now(), total = 2400;
     timerRef.current = setInterval(() => {
       const p = Math.min(100, ((Date.now() - t0) / total) * 100);
       setProgress(p);
-      if (p < 25) setStep("Loading model weights\u2026");
-      else if (p < 55) setStep("Preprocessing frame\u2026");
-      else if (p < 80) setStep("Faster R-CNN forward pass\u2026");
-      else setStep("NMS & post-processing\u2026");
-      if (Date.now() - t0 >= total) { clear(); setPhase("done"); setStep("Detection complete (browser mock)"); setProgress(100); }
+      if (p < 25) setStep(t.loading);
+      else if (p < 55) setStep(t.preprocessing);
+      else if (p < 80) setStep(t.forwardPass);
+      else setStep(t.nms);
+      if (Date.now() - t0 >= total) { clear(); setPhase("done"); setStep(t.complete); setProgress(100); }
     }, 50);
-  }, [clear]);
+  }, [clear, t]);
 
   const reset = useCallback(() => { clear(); setPhase("idle"); setProgress(0); setStep(""); }, [clear]);
   const showBoxes = phase === "done";
@@ -196,12 +371,12 @@ function MockInference() {
 
   return (
     <div>
-      <p style={{ color: "#a1a1aa", fontSize: "0.82rem", lineHeight: 1.55, margin: "0 0 0.75rem" }}>
-        Simulates Faster R-CNN inference on a colonoscopy frame.
-        The bounding boxes are a <strong style={{ color: "#e4e4e7" }}>browser mock</strong>, not model output.
+      <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.55, margin: "0 0 0.75rem" }}>
+        {t.simDesc1}
+        <br/>{t.simDesc2}<strong style={{ color: "var(--text-primary)" }}>{t.simDesc3}</strong>{t.simDesc4}
       </p>
 
-      <div style={{ position: "relative", borderRadius: "0.5rem", overflow: "hidden", background: "#0c0c12", lineHeight: 0 }}>
+      <div style={{ position: "relative", borderRadius: "0.5rem", overflow: "hidden", background: "var(--bg-secondary)", lineHeight: 0 }}>
         {/* Procedural colonoscopy-like frame */}
         <svg viewBox="0 0 480 320" style={{ width: "100%", height: "auto", display: "block" }}>
           <defs>
@@ -259,31 +434,31 @@ function MockInference() {
           <button type="button" onClick={run} style={{
             padding: "0.45rem 1rem", borderRadius: "0.5rem", border: "none", fontWeight: 600,
             fontSize: "0.82rem", cursor: "pointer",
-            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
-          }}>Run demo inference</button>
+            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
+          }}>{t.runDemo}</button>
         )}
-        {phase === "running" && <span style={{ fontSize: "0.82rem", color: "#a1a1aa" }}>{step}</span>}
+        {phase === "running" && <span style={{ fontSize: "0.82rem", color: "var(--text-secondary)" }}>{step}</span>}
         {phase === "done" && (
           <>
             <button type="button" onClick={reset} style={{
-              padding: "0.4rem 0.85rem", borderRadius: "0.5rem", border: "1px solid #3f3f46",
-              fontWeight: 600, fontSize: "0.82rem", cursor: "pointer", background: "#27272a", color: "#e4e4e7",
-            }}>Reset</button>
-            <label style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "#71717a" }}>
-              Confidence
+              padding: "0.4rem 0.85rem", borderRadius: "0.5rem", border: "1px solid var(--border-color-hover)",
+              fontWeight: 600, fontSize: "0.82rem", cursor: "pointer", background: "var(--border-color)", color: "var(--text-primary)",
+            }}>{t.reset}</button>
+            <label style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.75rem", color: "var(--text-muted)" }}>
+              {t.confidence}
               <input type="range" min={0.1} max={1.0} step={0.05} value={confidence}
                 onChange={(e) => setConfidence(Number(e.target.value))} style={{ width: "80px" }} />
-              <span style={{ fontFamily: "ui-monospace, monospace", fontSize: "0.72rem", color: "#a1a1aa" }}>{(confidence * 100).toFixed(0)}%</span>
+              <span style={{ fontFamily: "ui-monospace, monospace", fontSize: "0.72rem", color: "var(--text-secondary)" }}>{(confidence * 100).toFixed(0)}%</span>
             </label>
-            <span style={{ fontSize: "0.75rem", color: "#52525b" }}>
-              {visibleBoxes.length} detection{visibleBoxes.length !== 1 ? "s" : ""}
+            <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+              {visibleBoxes.length} {visibleBoxes.length !== 1 ? t.detections : t.detection}
             </span>
           </>
         )}
       </div>
 
       {(phase === "running" || phase === "done") && (
-        <div style={{ height: 5, background: "#27272a", borderRadius: 3, overflow: "hidden", marginTop: "0.5rem" }}>
+        <div style={{ height: 5, background: "var(--border-color)", borderRadius: 3, overflow: "hidden", marginTop: "0.5rem" }}>
           <div style={{
             height: "100%", width: `${progress}%`,
             background: `linear-gradient(90deg, ${accent1}, ${accent2})`,
@@ -298,37 +473,36 @@ function MockInference() {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  CYCLEGAN VISUALIZER                                                   */
 /* ════════════════════════════════════════════════════════════════════════ */
-function CycleGanVisualizer() {
+function CycleGanVisualizer({ t }: { t: typeof TRANSLATIONS.en }) {
   const [direction, setDirection] = useState<"mask2polyp" | "polyp2mask">("mask2polyp");
 
   return (
     <div>
-      <p style={{ color: "#a1a1aa", fontSize: "0.82rem", lineHeight: 1.55, margin: "0 0 0.75rem" }}>
-        CycleGAN learns unpaired <strong style={{ color: "#e4e4e7" }}>mask \u2194 polyp</strong> translation.
-        SPADE uses spatially-adaptive normalization for mask \u2192 polyp synthesis.
+      <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.55, margin: "0 0 0.75rem" }}>
+        {t.cgDesc1}<strong style={{ color: "var(--text-primary)" }}>{t.cgDesc2}</strong>{t.cgDesc3}
       </p>
 
       <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.75rem" }}>
         {(["mask2polyp", "polyp2mask"] as const).map((d) => (
           <button key={d} type="button" onClick={() => setDirection(d)} style={{
             padding: "0.3rem 0.65rem", borderRadius: "0.4rem", fontSize: "0.72rem", fontWeight: 600, cursor: "pointer",
-            border: direction === d ? `1px solid ${accent1}` : "1px solid #27272a",
-            background: direction === d ? `${accent1}18` : "#1c1c28",
-            color: direction === d ? accent1 : "#a1a1aa",
-          }}>{d === "mask2polyp" ? "Mask \u2192 Polyp" : "Polyp \u2192 Mask"}</button>
+            border: direction === d ? `1px solid ${accent1}` : "1px solid var(--border-color)",
+            background: direction === d ? `${accent1}18` : "var(--bg-card-hover)",
+            color: direction === d ? accent1 : "var(--text-secondary)",
+          }}>{d === "mask2polyp" ? t.m2p : t.p2m}</button>
         ))}
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: "0.75rem", alignItems: "center" }}>
         {/* Input */}
-        <div style={{ background: "#0c0c14", borderRadius: "0.5rem", overflow: "hidden", border: "1px solid #1e1e2a" }}>
+        <div style={{ background: "var(--bg-secondary)", borderRadius: "0.5rem", overflow: "hidden", border: "1px solid var(--border-color)" }}>
           <svg viewBox="0 0 200 160" style={{ width: "100%", height: "auto", display: "block" }}>
             {direction === "mask2polyp" ? (
               <>
                 <rect width="200" height="160" fill="#0a0a0a" />
                 <ellipse cx="100" cy="70" rx="45" ry="35" fill="#ffffff" />
                 <ellipse cx="145" cy="110" rx="25" ry="20" fill="#ffffff" />
-                <text x="100" y="150" textAnchor="middle" fill="#52525b" fontSize="10">Binary mask</text>
+                <text x="100" y="150" textAnchor="middle" fill="var(--text-muted)" fontSize="10">{t.binMask}</text>
               </>
             ) : (
               <>
@@ -345,7 +519,7 @@ function CycleGanVisualizer() {
                 <rect width="200" height="160" fill="url(#cg-src)" />
                 <ellipse cx="100" cy="70" rx="45" ry="35" fill="url(#cg-p1)" />
                 <ellipse cx="95" cy="62" rx="15" ry="10" fill="#d4635c" opacity="0.3" />
-                <text x="100" y="150" textAnchor="middle" fill="#52525b" fontSize="10">Colonoscopy frame</text>
+                <text x="100" y="150" textAnchor="middle" fill="var(--text-muted)" fontSize="10">{t.colFrame}</text>
               </>
             )}
           </svg>
@@ -355,7 +529,7 @@ function CycleGanVisualizer() {
         <div style={{ color: accent1, fontSize: "1.5rem", fontWeight: 700 }}>{"\u2192"}</div>
 
         {/* Output */}
-        <div style={{ background: "#0c0c14", borderRadius: "0.5rem", overflow: "hidden", border: "1px solid #1e1e2a" }}>
+        <div style={{ background: "var(--bg-secondary)", borderRadius: "0.5rem", overflow: "hidden", border: "1px solid var(--border-color)" }}>
           <svg viewBox="0 0 200 160" style={{ width: "100%", height: "auto", display: "block" }}>
             {direction === "mask2polyp" ? (
               <>
@@ -373,21 +547,21 @@ function CycleGanVisualizer() {
                 <ellipse cx="100" cy="70" rx="45" ry="35" fill="url(#cg-gen)" />
                 <ellipse cx="95" cy="62" rx="15" ry="10" fill="#d4635c" opacity="0.3" />
                 <ellipse cx="145" cy="110" rx="25" ry="20" fill="#7a2a24" opacity="0.7" />
-                <text x="100" y="150" textAnchor="middle" fill="#52525b" fontSize="10">Generated polyp</text>
+                <text x="100" y="150" textAnchor="middle" fill="var(--text-muted)" fontSize="10">{t.genPolyp}</text>
               </>
             ) : (
               <>
                 <rect width="200" height="160" fill="#0a0a0a" />
                 <ellipse cx="100" cy="70" rx="45" ry="35" fill="#ffffff" />
-                <text x="100" y="150" textAnchor="middle" fill="#52525b" fontSize="10">Predicted mask</text>
+                <text x="100" y="150" textAnchor="middle" fill="var(--text-muted)" fontSize="10">{t.predMask}</text>
               </>
             )}
           </svg>
         </div>
       </div>
 
-      <p style={{ margin: "0.6rem 0 0", fontSize: "0.68rem", color: "#3f3f46" }}>
-        Illustrations are schematic. Real CycleGAN outputs are photorealistic colonoscopy images.
+      <p style={{ margin: "0.6rem 0 0", fontSize: "0.68rem", color: "var(--border-color-hover)" }}>
+        {t.cgNote}
       </p>
     </div>
   );
@@ -396,23 +570,23 @@ function CycleGanVisualizer() {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  DETECTOR TABLE                                                        */
 /* ════════════════════════════════════════════════════════════════════════ */
-function DetectorTable() {
+function DetectorTable({ t }: { t: typeof TRANSLATIONS.en }) {
   return (
     <div style={{ overflowX: "auto" }}>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.82rem" }}>
         <thead>
-          <tr style={{ borderBottom: "1px solid #27272a" }}>
-            {["Model", "Backbone", "Notes"].map((h) => (
-              <th key={h} style={{ padding: "0.5rem 0.75rem", textAlign: "left", color: "#71717a", fontWeight: 600, fontSize: "0.72rem", textTransform: "uppercase" as const, letterSpacing: "0.04em" }}>{h}</th>
+          <tr style={{ borderBottom: "1px solid var(--border-color)" }}>
+            {[t.thModel, t.thBackbone, t.thNotes].map((h) => (
+              <th key={h} style={{ padding: "0.5rem 0.75rem", textAlign: "left", color: "var(--text-muted)", fontWeight: 600, fontSize: "0.72rem", textTransform: "uppercase" as const, letterSpacing: "0.04em" }}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {DETECTORS.map((d) => (
-            <tr key={d.name} style={{ borderBottom: "1px solid #1e1e2a" }}>
-              <td style={{ padding: "0.5rem 0.75rem", fontWeight: 600, color: "#e4e4e7" }}>{d.name}</td>
-              <td style={{ padding: "0.5rem 0.75rem", color: "#a1a1aa", fontFamily: "ui-monospace, monospace", fontSize: "0.78rem" }}>{d.backbone}</td>
-              <td style={{ padding: "0.5rem 0.75rem", color: "#71717a" }}>{d.note}</td>
+          {t.detectors.map((d) => (
+            <tr key={d.name} style={{ borderBottom: "1px solid var(--border-color)" }}>
+              <td style={{ padding: "0.5rem 0.75rem", fontWeight: 600, color: "var(--text-primary)" }}>{d.name}</td>
+              <td style={{ padding: "0.5rem 0.75rem", color: "var(--text-secondary)", fontFamily: "ui-monospace, monospace", fontSize: "0.78rem" }}>{d.backbone}</td>
+              <td style={{ padding: "0.5rem 0.75rem", color: "var(--text-muted)" }}>{d.note}</td>
             </tr>
           ))}
         </tbody>
@@ -424,11 +598,13 @@ function DetectorTable() {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  MAIN EXPORT                                                           */
 /* ════════════════════════════════════════════════════════════════════════ */
-export default function TfgPolypDemo() {
+export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
   return (
-    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "#e4e4e7" }}>
+    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
       {/* Pipeline */}
-      <PipelineStrip />
+      <PipelineStrip t={t} />
 
       {/* Interactive dual panel */}
       <div style={{
@@ -445,11 +621,11 @@ export default function TfgPolypDemo() {
               background: `linear-gradient(135deg, rgba(16,185,129,0.15), rgba(14,165,233,0.1))`,
             }}>{"\u{1F52C}"}</div>
             <div>
-              <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>Simulated inference</h3>
-              <p style={{ margin: 0, fontSize: "0.72rem", color: "#52525b" }}>Browser mock &middot; Faster R-CNN</p>
+              <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.simInference}</h3>
+              <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>{t.browserMock}</p>
             </div>
           </div>
-          <MockInference />
+          <MockInference t={t} />
         </div>
 
         {/* CycleGAN viz */}
@@ -461,17 +637,17 @@ export default function TfgPolypDemo() {
               background: `linear-gradient(135deg, rgba(14,165,233,0.15), rgba(16,185,129,0.1))`,
             }}>{"\u{1F3AD}"}</div>
             <div>
-              <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>CycleGAN translation</h3>
-              <p style={{ margin: 0, fontSize: "0.72rem", color: "#52525b" }}>Unpaired image-to-image</p>
+              <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.cgTrans}</h3>
+              <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>{t.unpaired}</p>
             </div>
           </div>
-          <CycleGanVisualizer />
+          <CycleGanVisualizer t={t} />
         </div>
       </div>
 
       {/* Model comparison */}
       <div style={{ marginBottom: "1.25rem" }}>
-        <ModelComparison />
+        <ModelComparison t={t} />
       </div>
 
       {/* Detector table + links */}
@@ -481,29 +657,28 @@ export default function TfgPolypDemo() {
         gap: "1.25rem", marginBottom: "1.25rem",
       }}>
         <div style={card}>
-          <h4 style={{ margin: "0 0 0.75rem", fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>Detection architectures</h4>
-          <DetectorTable />
+          <h4 style={{ margin: "0 0 0.75rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.detArch}</h4>
+          <DetectorTable t={t} />
         </div>
         <div style={{ ...card, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <div>
-            <h4 style={{ margin: "0 0 0.5rem", fontSize: "0.88rem", fontWeight: 700, color: "#d4d4d8" }}>Links</h4>
+            <h4 style={{ margin: "0 0 0.5rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.links}</h4>
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
               <a href="https://github.com/cuberhaus/TFG" target="_blank" rel="noopener noreferrer" style={{
                 display: "inline-flex", alignItems: "center", gap: "0.35rem",
                 padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-                background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff", textDecoration: "none",
+                background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)", textDecoration: "none",
               }}>GitHub {"\u2197"}</a>
             </div>
-            <p style={{ margin: "0.75rem 0 0", fontSize: "0.78rem", color: "#71717a", lineHeight: 1.5 }}>
-              The project includes a <strong style={{ color: "#a1a1aa" }}>Streamlit dashboard</strong> for
-              interactive model exploration and inference. Clone the repo and run{" "}
-              <code style={{ color: "#94a3b8", fontSize: "0.72rem" }}>streamlit run src/app.py</code> from{" "}
+            <p style={{ margin: "0.75rem 0 0", fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
+              {t.dashboard1}<strong style={{ color: "var(--text-secondary)" }}>{t.dashboard2}</strong>{t.dashboard3}
+              <code style={{ color: "#94a3b8", fontSize: "0.72rem" }}>streamlit run src/app.py</code>{t.dashboard4}
               <code style={{ color: "#94a3b8", fontSize: "0.72rem" }}>code/</code>.
             </p>
           </div>
           <div style={{ marginTop: "0.75rem" }}>
-            <div style={{ fontSize: "0.68rem", color: "#52525b", textTransform: "uppercase" as const, letterSpacing: "0.05em", marginBottom: "0.2rem" }}>Author</div>
-            <div style={{ fontSize: "0.85rem", color: "#d4d4d8" }}>Pol Casacuberta &middot; FIB-UPC</div>
+            <div style={{ fontSize: "0.68rem", color: "var(--text-muted)", textTransform: "uppercase" as const, letterSpacing: "0.05em", marginBottom: "0.2rem" }}>{t.author}</div>
+            <div style={{ fontSize: "0.85rem", color: "var(--text-primary)" }}>Pol Casacuberta &middot; FIB-UPC</div>
           </div>
         </div>
       </div>
@@ -511,21 +686,20 @@ export default function TfgPolypDemo() {
       {/* Run locally */}
       <details>
         <summary style={{
-          cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "#71717a",
-          padding: "0.65rem 1rem", background: "#111119", borderRadius: "0.75rem",
-          border: "1px solid #1e1e2a", listStyle: "none",
+          cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "var(--text-muted)",
+          padding: "0.65rem 1rem", background: "var(--bg-card)", borderRadius: "0.75rem",
+          border: "1px solid var(--border-color)", listStyle: "none",
         }}>
-          {"\u25B8"} Run the project locally
+          {t.runLocal}
         </summary>
         <div style={{ ...card, marginTop: "0.75rem" }}>
-          <p style={{ color: "#a1a1aa", fontSize: "0.82rem", lineHeight: 1.6, margin: "0 0 0.75rem" }}>
-            The project is <strong style={{ color: "#e4e4e7" }}>Python + PyTorch</strong>.
-            A CUDA GPU is recommended for training. The Streamlit dashboard works on CPU.
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.6, margin: "0 0 0.75rem" }}>
+            {t.projDesc1}<strong style={{ color: "var(--text-primary)" }}>{t.projDesc2}</strong>{t.projDesc3}
           </p>
           <pre style={{
-            margin: 0, padding: "1rem", background: "#0a0a11", border: "1px solid #1e1e2a",
+            margin: 0, padding: "1rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
             borderRadius: "0.5rem", fontSize: "0.78rem", fontFamily: "ui-monospace, monospace",
-            color: "#a1a1aa", lineHeight: 1.6, overflowX: "auto",
+            color: "var(--text-secondary)", lineHeight: 1.6, overflowX: "auto",
           }}>{`git clone https://github.com/cuberhaus/TFG.git
 cd TFG/code
 python -m venv .venv && source .venv/bin/activate
@@ -538,8 +712,8 @@ streamlit run src/app.py
 python src/train_and_save_model.py FasterRCNN \\
   '{"BATCH_SIZE":4,"LR":0.005,"WEIGHT_DECAY":0.0005,"NUM_EPOCHS":10}' \\
   --debug`}</pre>
-          <p style={{ fontSize: "0.72rem", color: "#52525b", margin: "0.75rem 0 0" }}>
-            Place the LDPolypVideo dataset under <code style={{ color: "#64748b" }}>data/TrainValid/</code> and{" "}
+          <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", margin: "0.75rem 0 0" }}>
+            {t.datasetNote1}<code style={{ color: "#64748b" }}>data/TrainValid/</code>{t.datasetNote2}
             <code style={{ color: "#64748b" }}>data/Test/</code>.
           </p>
         </div>

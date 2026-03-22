@@ -1,37 +1,150 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
 const base = import.meta.env.BASE_URL;
+
+const TRANSLATIONS = {
+  en: {
+    title: "EDA Game Viewer",
+    desc: "Watch AI bots battle on a grid \u2014 replay viewer for the EDA programming game competition.",
+    badge: "Data Structures \u00b7 FIB-UPC",
+    lead: 'Watch <strong>AI bots</strong> compete in "The Purge" \u2014 a grid-based strategy game from the <strong>EDA</strong> (Data Structures and Algorithms) course at FIB-UPC.',
+    preloaded: "Preloaded",
+    sampleTitle: "Sample Game",
+    sampleDesc: "4 AI players battle across 250 rounds on a 15\u00d730 grid. Includes warriors, builders, weapons, barricades, and resource gathering.",
+    map: "Map:",
+    rounds: "Rounds:",
+    players: "Players:",
+    watchReplay: "Watch Replay",
+    ownGame: "Your Own Game",
+    uploadDesc: "Compile and run the game locally, then upload the <code>.out</code> replay file to watch it here.",
+    uploadBtn: "Upload Replay File",
+    readingFile: "Reading file...",
+    invalidFile: "This doesn't look like a valid game file (missing \"ThePurge\" header).",
+    loadedFile: "Loaded \"{0}\" \u2014 opening viewer...",
+    fileTooLarge: "File too large for session storage. Try a smaller replay.",
+    controls: "Viewer Controls",
+    playPause: "Play / Pause",
+    prevNext: "Previous / Next round",
+    startEnd: "Go to start / end",
+    zoom: "Zoom in / out",
+    scrub: "Scrub through rounds",
+    help: "Help overlay",
+    about: "About this project",
+    aboutDesc: "Written in C++11, the game engine runs 4 AI players simultaneously on a 2D grid. The custom AI (<code>AIJohnnyMelavo</code>) uses BFS pathfinding to prioritize weapon collection, enemy hunting, and resource gathering. Each player controls warriors (fighters) and builders (constructors) who compete for money, food, guns, and bazookas across day/night cycles.",
+    howTo: "How to generate your own replays",
+    step1: "Clone the <a href=\"https://github.com/cuberhaus/joc_eda\" target=\"_blank\" rel=\"noopener noreferrer\">repository</a>",
+    step2: "Write your own AI in a file like <code>AIMyBot.cc</code> (extend the <code>Player</code> class)",
+    step3: "Run <code>make</code> to compile",
+    step4: "Run <code>./Game -i default.cnf &gt; replay.out</code> to generate a replay",
+    step5: "Upload the <code>replay.out</code> file here to watch it!",
+    viewSource: "View source on GitHub"
+  },
+  es: {
+    title: "Visor de Juego EDA",
+    desc: "Mira bots de IA luchar en una cuadrícula \u2014 visor de repeticiones para la competición de programación de EDA.",
+    badge: "Estructuras de Datos \u00b7 FIB-UPC",
+    lead: 'Mira <strong>bots de IA</strong> competir en "The Purge" \u2014 un juego de estrategia en cuadrícula de la asignatura <strong>EDA</strong> (Estructuras de Datos y Algoritmos) en FIB-UPC.',
+    preloaded: "Precargado",
+    sampleTitle: "Juego de Ejemplo",
+    sampleDesc: "4 jugadores IA luchan durante 250 rondas en una cuadrícula de 15\u00d730. Incluye guerreros, constructores, armas, barricadas y recolección de recursos.",
+    map: "Mapa:",
+    rounds: "Rondas:",
+    players: "Jugadores:",
+    watchReplay: "Ver Repetición",
+    ownGame: "Tu Propio Juego",
+    uploadDesc: "Compila y ejecuta el juego localmente, luego sube el archivo de repetición <code>.out</code> para verlo aquí.",
+    uploadBtn: "Subir Archivo de Repetición",
+    readingFile: "Leyendo archivo...",
+    invalidFile: "Este no parece un archivo de juego válido (falta la cabecera \"ThePurge\").",
+    loadedFile: "Cargado \"{0}\" \u2014 abriendo visor...",
+    fileTooLarge: "Archivo demasiado grande para el almacenamiento de la sesión. Intenta con una repetición más pequeña.",
+    controls: "Controles del Visor",
+    playPause: "Reproducir / Pausa",
+    prevNext: "Ronda anterior / siguiente",
+    startEnd: "Ir al inicio / final",
+    zoom: "Acercar / Alejar",
+    scrub: "Avanzar por las rondas",
+    help: "Capa de ayuda",
+    about: "Sobre este proyecto",
+    aboutDesc: "Escrito en C++11, el motor del juego ejecuta 4 jugadores IA simultáneamente en una cuadrícula 2D. La IA personalizada (<code>AIJohnnyMelavo</code>) utiliza búsqueda BFS para priorizar la recolección de armas, cazar enemigos y recolectar recursos. Cada jugador controla guerreros (luchadores) y constructores que compiten por dinero, comida, pistolas y bazucas a través de ciclos de día/noche.",
+    howTo: "Cómo generar tus propias repeticiones",
+    step1: "Clona el <a href=\"https://github.com/cuberhaus/joc_eda\" target=\"_blank\" rel=\"noopener noreferrer\">repositorio</a>",
+    step2: "Escribe tu propia IA en un archivo como <code>AIMyBot.cc</code> (extiende la clase <code>Player</code>)",
+    step3: "Ejecuta <code>make</code> para compilar",
+    step4: "Ejecuta <code>./Game -i default.cnf &gt; replay.out</code> para generar una repetición",
+    step5: "Sube el archivo <code>replay.out</code> aquí para verlo!",
+    viewSource: "Ver código en GitHub"
+  },
+  ca: {
+    title: "Visor de Joc EDA",
+    desc: "Mira bots d'IA lluitar en una quadrícula \u2014 visor de repeticions per a la competició de programació d'EDA.",
+    badge: "Estructures de Dades \u00b7 FIB-UPC",
+    lead: 'Mira <strong>bots d\'IA</strong> competir a "The Purge" \u2014 un joc d\'estratègia en quadrícula de l\'assignatura <strong>EDA</strong> (Estructures de Dades i Algorismes) a la FIB-UPC.',
+    preloaded: "Precarregat",
+    sampleTitle: "Joc d'Exemple",
+    sampleDesc: "4 jugadors IA lluiten durant 250 rondes en una quadrícula de 15\u00d730. Inclou guerrers, constructors, armes, barricades i recol·lecció de recursos.",
+    map: "Mapa:",
+    rounds: "Rondes:",
+    players: "Jugadors:",
+    watchReplay: "Veure Repetició",
+    ownGame: "El Teu Propi Joc",
+    uploadDesc: "Compila i executa el joc localment, després puja l'arxiu de repetició <code>.out</code> per veure'l aquí.",
+    uploadBtn: "Pujar Arxiu de Repetició",
+    readingFile: "Llegint arxiu...",
+    invalidFile: "Aquest no sembla un arxiu de joc vàlid (falta la capçalera \"ThePurge\").",
+    loadedFile: "Carregat \"{0}\" \u2014 obrint visor...",
+    fileTooLarge: "Arxiu massa gran per a l'emmagatzematge de la sessió. Prova amb una repetició més petita.",
+    controls: "Controls del Visor",
+    playPause: "Reproduir / Pausa",
+    prevNext: "Ronda anterior / següent",
+    startEnd: "Anar a l'inici / final",
+    zoom: "Apropar / Allunyar",
+    scrub: "Avançar per les rondes",
+    help: "Capa d'ajuda",
+    about: "Sobre aquest projecte",
+    aboutDesc: "Escrit en C++11, el motor del joc executa 4 jugadors IA simultàniament en una quadrícula 2D. La IA personalitzada (<code>AIJohnnyMelavo</code>) utilitza cerca BFS per prioritzar la recol·lecció d'armes, caçar enemics i recol·lectar recursos. Cada jugador controla guerrers (lluitadors) i constructors que competeixen per diners, menjar, pistoles i bazucs a través de cicles de dia/nit.",
+    howTo: "Com generar les teves pròpies repeticions",
+    step1: "Clona el <a href=\"https://github.com/cuberhaus/joc_eda\" target=\"_blank\" rel=\"noopener noreferrer\">repositori</a>",
+    step2: "Escriu la teva pròpia IA en un arxiu com <code>AIMyBot.cc</code> (estén la classe <code>Player</code>)",
+    step3: "Executa <code>make</code> per compilar",
+    step4: "Executa <code>./Game -i default.cnf &gt; replay.out</code> per generar una repetició",
+    step5: "Puja l'arxiu <code>replay.out</code> aquí per veure'l!",
+    viewSource: "Veure codi a GitHub"
+  }
+};
+
+const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 ---
 
-<DemoLayout title="EDA Game Viewer" description="Watch AI bots battle on a grid — replay viewer for the EDA programming game competition.">
+<DemoLayout title={t.title} description={t.desc}>
   <div class="container joc-eda-page">
     <div class="demo-header">
-      <div class="badge">Data Structures · FIB-UPC</div>
-      <h1>EDA Game Viewer</h1>
-      <p class="demo-lead">
-        Watch <strong>AI bots</strong> compete in "The Purge" — a grid-based strategy game from the
-        <strong>EDA</strong> (Data Structures and Algorithms) course at FIB-UPC.
-      </p>
+      <div class="badge">{t.badge}</div>
+      <h1>{t.title}</h1>
+      <p class="demo-lead" set:html={t.lead}></p>
     </div>
 
     <div class="cards-row">
       <!-- Sample game card -->
       <div class="game-card">
-        <div class="game-card-badge">Preloaded</div>
+        <div class="game-card-badge">{t.preloaded}</div>
         <div class="game-card-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="5 3 19 12 5 21 5 3"/>
           </svg>
         </div>
-        <h3>Sample Game</h3>
-        <p>4 AI players battle across 250 rounds on a 15×30 grid. Includes warriors, builders, weapons, barricades, and resource gathering.</p>
+        <h3>{t.sampleTitle}</h3>
+        <p>{t.sampleDesc}</p>
         <div class="game-meta">
-          <span><strong>Map:</strong> 15 × 30</span>
-          <span><strong>Rounds:</strong> 250</span>
-          <span><strong>Players:</strong> 4</span>
+          <span><strong>{t.map}</strong> 15 × 30</span>
+          <span><strong>{t.rounds}</strong> 250</span>
+          <span><strong>{t.players}</strong> 4</span>
         </div>
         <a id="launch-sample" class="launch-btn" href="#" target="_blank" rel="noopener noreferrer">
-          Watch Replay
+          {t.watchReplay}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
           </svg>
@@ -45,55 +158,53 @@ const base = import.meta.env.BASE_URL;
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
           </svg>
         </div>
-        <h3>Your Own Game</h3>
-        <p>Compile and run the game locally, then upload the <code>.out</code> replay file to watch it here.</p>
+        <h3>{t.ownGame}</h3>
+        <p set:html={t.uploadDesc}></p>
         <div class="upload-instructions">
           <code>make && ./Game &lt; default.cnf &gt; replay.out</code>
         </div>
         <label class="launch-btn upload-btn" for="file-upload">
-          Upload Replay File
+          {t.uploadBtn}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
           </svg>
         </label>
         <input type="file" id="file-upload" accept=".out,.txt" style="display:none" />
-        <div id="upload-status" class="upload-status"></div>
+        <div id="upload-status" class="upload-status" 
+             data-msg-reading={t.readingFile} 
+             data-msg-invalid={t.invalidFile} 
+             data-msg-loaded={t.loadedFile} 
+             data-msg-toolarge={t.fileTooLarge}></div>
       </div>
     </div>
 
     <!-- Controls reference -->
     <div class="controls-card">
-      <h3>Viewer Controls</h3>
+      <h3>{t.controls}</h3>
       <div class="controls-grid">
-        <div class="control-item"><kbd>Space</kbd><span>Play / Pause</span></div>
-        <div class="control-item"><kbd>←</kbd> <kbd>→</kbd><span>Previous / Next round</span></div>
-        <div class="control-item"><kbd>Home</kbd> <kbd>End</kbd><span>Go to start / end</span></div>
-        <div class="control-item"><kbd>Mouse wheel</kbd><span>Zoom in / out</span></div>
-        <div class="control-item"><kbd>Slider</kbd><span>Scrub through rounds</span></div>
-        <div class="control-item"><kbd>H</kbd><span>Help overlay</span></div>
+        <div class="control-item"><kbd>Space</kbd><span>{t.playPause}</span></div>
+        <div class="control-item"><kbd>←</kbd> <kbd>→</kbd><span>{t.prevNext}</span></div>
+        <div class="control-item"><kbd>Home</kbd> <kbd>End</kbd><span>{t.startEnd}</span></div>
+        <div class="control-item"><kbd>Mouse wheel</kbd><span>{t.zoom}</span></div>
+        <div class="control-item"><kbd>Slider</kbd><span>{t.scrub}</span></div>
+        <div class="control-item"><kbd>H</kbd><span>{t.help}</span></div>
       </div>
     </div>
 
     <!-- About -->
     <div class="demo-info">
-      <h3>About this project</h3>
-      <p>
-        Written in C++11, the game engine runs 4 AI players simultaneously on a 2D grid.
-        The custom AI (<code>AIJohnnyMelavo</code>) uses BFS pathfinding to prioritize
-        weapon collection, enemy hunting, and resource gathering. Each player controls
-        warriors (fighters) and builders (constructors) who compete for money, food, guns,
-        and bazookas across day/night cycles.
-      </p>
-      <h4>How to generate your own replays</h4>
+      <h3>{t.about}</h3>
+      <p set:html={t.aboutDesc}></p>
+      <h4>{t.howTo}</h4>
       <ol class="steps-list">
-        <li>Clone the <a href="https://github.com/cuberhaus/joc_eda" target="_blank" rel="noopener noreferrer">repository</a></li>
-        <li>Write your own AI in a file like <code>AIMyBot.cc</code> (extend the <code>Player</code> class)</li>
-        <li>Run <code>make</code> to compile</li>
-        <li>Run <code>./Game -i default.cnf &gt; replay.out</code> to generate a replay</li>
-        <li>Upload the <code>replay.out</code> file here to watch it!</li>
+        <li set:html={t.step1}></li>
+        <li set:html={t.step2}></li>
+        <li set:html={t.step3}></li>
+        <li set:html={t.step4}></li>
+        <li set:html={t.step5}></li>
       </ol>
       <a href="https://github.com/cuberhaus/joc_eda" target="_blank" rel="noopener noreferrer" class="demo-link">
-        View source on GitHub
+        {t.viewSource}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
         </svg>
@@ -117,25 +228,26 @@ const base = import.meta.env.BASE_URL;
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
-    statusEl.textContent = 'Reading file...';
+    statusEl.textContent = statusEl.dataset.msgReading || 'Reading file...';
     statusEl.style.color = '#a1a1aa';
 
     const reader = new FileReader();
     reader.onload = () => {
       const text = reader.result as string;
       if (!text.includes('ThePurge')) {
-        statusEl.textContent = 'This doesn\'t look like a valid game file (missing "ThePurge" header).';
+        statusEl.textContent = statusEl.dataset.msgInvalid || 'Invalid file.';
         statusEl.style.color = '#f87171';
         return;
       }
       // Store in sessionStorage and open viewer with a flag
       try {
         sessionStorage.setItem('joc_eda_custom_game', text);
-        statusEl.textContent = `Loaded "${file.name}" — opening viewer...`;
+        const msgTpl = statusEl.dataset.msgLoaded || 'Loaded "{0}"';
+        statusEl.textContent = msgTpl.replace('{0}', file.name);
         statusEl.style.color = '#4ade80';
         window.open(`${viewerBase}?custom=1`, '_blank');
       } catch (err) {
-        statusEl.textContent = 'File too large for session storage. Try a smaller replay.';
+        statusEl.textContent = statusEl.dataset.msgToolarge || 'File too large.';
         statusEl.style.color = '#f87171';
       }
     };

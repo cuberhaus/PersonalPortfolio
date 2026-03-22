@@ -1,32 +1,66 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import MPIDSDemo from '../../components/demos/MPIDSDemo';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const titles = {
+  en: "MPIDS Solver",
+  es: "Solver MPIDS",
+  ca: "Solver MPIDS"
+};
+
+const leads = {
+  en: "Find the <strong>Minimum Positive Influence Dominating Set</strong> in a graph \u2014 the smallest set of nodes where every vertex has at least half its neighbors in the set. Pick a sample graph or load your own, then run <strong>greedy</strong> or <strong>local search</strong>.",
+  es: "Encuentra el <strong>Minimum Positive Influence Dominating Set</strong> en un grafo \u2014 el conjunto más pequeño de nodos donde cada vértice tiene al menos la mitad de sus vecinos en el conjunto. Elige un grafo de muestra o carga el tuyo, luego ejecuta búsqueda <strong>voraz (greedy)</strong> o <strong>local</strong>.",
+  ca: "Troba el <strong>Minimum Positive Influence Dominating Set</strong> en un graf \u2014 el conjunt més petit de nodes on cada vèrtex té almenys la meitat dels seus veïns al conjunt. Tria un graf de mostra o carrega el teu, després executa cerca <strong>voraç (greedy)</strong> o <strong>local</strong>."
+};
+
+const badges = {
+  en: "Algorithmics \u00b7 FIB-UPC",
+  es: "Algoritmia \u00b7 FIB-UPC",
+  ca: "Algorísmia \u00b7 FIB-UPC"
+};
+
+const aboutTitles = {
+  en: "About this project",
+  es: "Sobre este proyecto",
+  ca: "Sobre aquest projecte"
+};
+
+const aboutDescs = {
+  en: "Originally a C++ project for the Algorithmics course at FIB-UPC, solving the MPIDS problem with greedy heuristics, simulated annealing, and CPLEX ILP. This browser demo is a port of the greedy and local search algorithms to TypeScript with an interactive force-directed graph visualization.",
+  es: "Originalmente un proyecto en C++ para el curso de Algoritmia en la FIB-UPC, resolviendo el problema MPIDS con heurísticas voraces, simulated annealing e ILP con CPLEX. Esta demo de navegador es un port de los algoritmos de búsqueda voraz y local a TypeScript con una visualización interactiva de grafos dirigida por fuerzas.",
+  ca: "Originalment un projecte en C++ per al curs d'Algorísmia a la FIB-UPC, resolent el problema MPIDS amb heurístiques voraces, simulated annealing i ILP amb CPLEX. Aquesta demo de navegador és un port dels algorismes de cerca voraç i local a TypeScript amb una visualització interactiva de grafs dirigida per forces."
+};
+
+const viewSource = {
+  en: "View source on GitHub",
+  es: "Ver código en GitHub",
+  ca: "Veure codi a GitHub"
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title="MPIDS Solver" description="Interactive Minimum Positive Influence Dominating Set solver with graph visualization.">
+<DemoLayout title={title} description="Interactive Minimum Positive Influence Dominating Set solver with graph visualization.">
   <div class="container">
     <div class="demo-header">
-      <div class="badge">Algorithmics · FIB-UPC</div>
-      <h1>MPIDS Solver</h1>
-      <p class="demo-lead">
-        Find the <strong>Minimum Positive Influence Dominating Set</strong> in a graph — the smallest set of nodes
-        where every vertex has at least half its neighbors in the set. Pick a sample graph or load
-        your own, then run <strong>greedy</strong> or <strong>local search</strong>.
-      </p>
+      <div class="badge">{badge}</div>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
     </div>
 
-    <MPIDSDemo client:load />
+    <MPIDSDemo lang={lang} client:load />
 
     <div class="demo-info">
-      <h3>About this project</h3>
-      <p>
-        Originally a C++ project for the Algorithmics course at FIB-UPC, solving the MPIDS problem
-        with greedy heuristics, simulated annealing, and CPLEX ILP. This browser demo is a port of
-        the greedy and local search algorithms to TypeScript with an interactive force-directed
-        graph visualization.
-      </p>
+      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
+      <p>{aboutDescs[lang] || aboutDescs.en}</p>
       <a href="https://github.com/cuberhaus/projectA" target="_blank" rel="noopener noreferrer" class="demo-link">
-        View source on GitHub
+        {viewSource[lang] || viewSource.en}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
         </svg>

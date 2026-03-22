@@ -1,10 +1,45 @@
 import { useState, useRef, useCallback } from "react";
 import { interpret, playNotes, SAMPLE_PROGRAMS, type JSBachResult } from "../../lib/jsbach/interpreter";
 
+type Lang = "en" | "es" | "ca";
+
+const TRANSLATIONS = {
+  en: {
+    examples: "Examples",
+    codeEditor: "Code Editor",
+    run: "Run",
+    playing: "Playing...",
+    playMusic: "Play Music",
+    output: "Output",
+    notesGenerated: "{0} note{s} generated",
+    noOutput: "Program ran successfully with no output."
+  },
+  es: {
+    examples: "Ejemplos",
+    codeEditor: "Editor de Código",
+    run: "Ejecutar",
+    playing: "Reproduciendo...",
+    playMusic: "Reproducir Música",
+    output: "Salida",
+    notesGenerated: "{0} nota{s} generada{s}",
+    noOutput: "El programa se ejecutó correctamente sin salida."
+  },
+  ca: {
+    examples: "Exemples",
+    codeEditor: "Editor de Codi",
+    run: "Executar",
+    playing: "Reproduint...",
+    playMusic: "Reproduir Música",
+    output: "Sortida",
+    notesGenerated: "{0} nota{s} generada{s}",
+    noOutput: "El programa s'ha executat correctament sense sortida."
+  }
+};
+
 const styles = {
   card: {
-    background: "#16161f",
-    border: "1px solid #27272a",
+    background: "var(--bg-card)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.75rem",
     padding: "1.5rem",
     marginBottom: "1.5rem",
@@ -13,16 +48,16 @@ const styles = {
     fontSize: "1.1rem",
     fontWeight: 600,
     marginBottom: "1rem",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
   },
   textarea: {
     width: "100%",
     minHeight: "280px",
-    background: "#12121a",
-    border: "1px solid #27272a",
+    background: "var(--bg-secondary)",
+    border: "1px solid var(--border-color)",
     borderRadius: "0.5rem",
     padding: "1rem",
-    color: "#e4e4e7",
+    color: "var(--text-primary)",
     fontSize: "0.85rem",
     fontFamily: "'JetBrains Mono', monospace",
     lineHeight: 1.6,
@@ -41,14 +76,14 @@ const styles = {
   },
   primaryBtn: {
     background: "linear-gradient(135deg, #6366f1, #a855f7)",
-    color: "#fff",
+    color: "var(--text-primary)",
   },
   secondaryBtn: {
-    background: "#27272a",
-    color: "#a1a1aa",
+    background: "var(--border-color)",
+    color: "var(--text-secondary)",
   },
   output: {
-    background: "#12121a",
+    background: "var(--bg-secondary)",
     borderRadius: "0.5rem",
     padding: "1rem",
     fontFamily: "'JetBrains Mono', monospace",
@@ -56,7 +91,7 @@ const styles = {
     lineHeight: 1.6,
     maxHeight: "200px",
     overflowY: "auto" as const,
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
   },
   error: {
     color: "#f87171",
@@ -88,9 +123,9 @@ const styles = {
   sampleBtn: {
     padding: "0.35rem 0.75rem",
     borderRadius: "0.5rem",
-    border: "1px solid #27272a",
+    border: "1px solid var(--border-color)",
     background: "transparent",
-    color: "#a1a1aa",
+    color: "var(--text-secondary)",
     fontSize: "0.75rem",
     cursor: "pointer",
     transition: "all 0.15s ease",
@@ -114,7 +149,8 @@ function noteToColor(n: number): string {
   return `hsl(${hue}, 70%, 55%)`;
 }
 
-export default function JSBachDemo() {
+export default function JSBachDemo({ lang = "en" }: { lang?: Lang }) {
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   const [code, setCode] = useState(SAMPLE_PROGRAMS[0].code);
   const [result, setResult] = useState<JSBachResult | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -156,10 +192,10 @@ export default function JSBachDemo() {
   }, [code]);
 
   return (
-    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "#e4e4e7" }}>
+    <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
       {/* Sample programs */}
       <div style={styles.card}>
-        <h3 style={styles.h3}>Examples</h3>
+        <h3 style={styles.h3}>{t.examples}</h3>
         <div style={styles.sampleBtns}>
           {SAMPLE_PROGRAMS.map((prog) => (
             <button
@@ -175,7 +211,7 @@ export default function JSBachDemo() {
 
       {/* Editor */}
       <div style={styles.card}>
-        <h3 style={styles.h3}>Code Editor</h3>
+        <h3 style={styles.h3}>{t.codeEditor}</h3>
         <textarea
           ref={textareaRef}
           style={styles.textarea}
@@ -186,7 +222,7 @@ export default function JSBachDemo() {
         />
         <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
           <button style={{ ...styles.button, ...styles.primaryBtn }} onClick={run}>
-            Run
+            {t.run}
           </button>
           {result && result.notes.length > 0 && (
             <button
@@ -194,7 +230,7 @@ export default function JSBachDemo() {
               onClick={play}
               disabled={playing}
             >
-              {playing ? "Playing..." : "Play Music"}
+              {playing ? t.playing : t.playMusic}
             </button>
           )}
         </div>
@@ -203,7 +239,7 @@ export default function JSBachDemo() {
       {/* Results */}
       {result && (
         <div style={styles.card}>
-          <h3 style={styles.h3}>Output</h3>
+          <h3 style={styles.h3}>{t.output}</h3>
 
           {result.error && <div style={styles.error}>{result.error}</div>}
 
@@ -217,8 +253,8 @@ export default function JSBachDemo() {
 
           {result.notes.length > 0 && (
             <>
-              <div style={{ fontSize: "0.8rem", color: "#71717a", marginBottom: "0.5rem" }}>
-                {result.notes.length} note{result.notes.length !== 1 ? "s" : ""} generated
+              <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginBottom: "0.5rem" }}>
+                {t.notesGenerated.replace("{0}", String(result.notes.length)).replace("{s}", result.notes.length !== 1 ? "s" : "")}
               </div>
               <div style={styles.noteBar}>
                 {result.notes.map((n, i) => (
@@ -243,7 +279,7 @@ export default function JSBachDemo() {
                     style={{
                       fontFamily: "monospace",
                       fontSize: "0.65rem",
-                      color: activeNote === i ? "#e4e4e7" : "#71717a",
+                      color: activeNote === i ? "var(--text-primary)" : "var(--text-muted)",
                       transition: "color 0.15s ease",
                     }}
                   >
@@ -255,8 +291,8 @@ export default function JSBachDemo() {
           )}
 
           {!result.error && result.output.length === 0 && result.notes.length === 0 && (
-            <div style={{ color: "#71717a", fontSize: "0.85rem" }}>
-              Program ran successfully with no output.
+            <div style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+              {t.noOutput}
             </div>
           )}
         </div>

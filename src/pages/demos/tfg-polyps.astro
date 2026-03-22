@@ -1,6 +1,32 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import TfgPolypDemo from '../../components/demos/TfgPolypDemo';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const titles = {
+  en: "Polyp Detection with Generative Data Augmentation",
+  es: "Detección de Pólipos con Aumento de Datos Generativo",
+  ca: "Detecció de Pòlips amb Augment de Dades Generatiu"
+};
+
+const leads = {
+  en: "Train <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong>, and <strong>SSD</strong> detectors on colonoscopy data, augmented with synthetic images from <strong>CycleGAN</strong> and <strong>SPADE</strong> generative models. Hyperparameter search via <strong>Optuna</strong> &amp; <strong>Ray Tune</strong>.",
+  es: "Entrena detectores <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong> y <strong>SSD</strong> en datos de colonoscopia, aumentados con imágenes sintéticas de modelos generativos <strong>CycleGAN</strong> y <strong>SPADE</strong>. Búsqueda de hiperparámetros vía <strong>Optuna</strong> y <strong>Ray Tune</strong>.",
+  ca: "Entrena detectors <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong> i <strong>SSD</strong> en dades de colonoscòpia, augmentades amb imatges sintètiques de models generatius <strong>CycleGAN</strong> i <strong>SPADE</strong>. Cerca d'hiperparàmetres via <strong>Optuna</strong> i <strong>Ray Tune</strong>."
+};
+
+const badges = {
+  en: "Deep Learning · Bachelor's Thesis · FIB-UPC",
+  es: "Deep Learning · Trabajo de Fin de Grado · FIB-UPC",
+  ca: "Deep Learning · Treball de Fi de Grau · FIB-UPC"
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
 ---
 
 <DemoLayout
@@ -9,17 +35,12 @@ import TfgPolypDemo from '../../components/demos/TfgPolypDemo';
 >
   <div class="container">
     <div class="demo-header">
-      <div class="badge">Deep Learning · Bachelor's Thesis · FIB-UPC</div>
-      <h1>Polyp Detection with Generative Data Augmentation</h1>
-      <p class="demo-lead">
-        Train <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong>, and <strong>SSD</strong> detectors
-        on colonoscopy data, augmented with synthetic images from
-        <strong>CycleGAN</strong> and <strong>SPADE</strong> generative models.
-        Hyperparameter search via <strong>Optuna</strong> &amp; <strong>Ray Tune</strong>.
-      </p>
+      <div class="badge">{badge}</div>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
     </div>
 
-    <TfgPolypDemo client:load />
+    <TfgPolypDemo lang={lang} client:load />
   </div>
 </DemoLayout>
 
@@ -52,13 +73,13 @@ import TfgPolypDemo from '../../components/demos/TfgPolypDemo';
     color: transparent;
   }
   .demo-lead {
-    color: #a1a1aa;
+    color: var(--text-secondary);
     font-size: 1rem;
     line-height: 1.7;
     max-width: 42rem;
     margin: 0 auto;
   }
-  .demo-lead strong { color: #e4e4e7; }
+  .demo-lead strong { color: var(--text-primary); }
   .demo-lead a { color: #0ea5e9; text-decoration: none; }
   .demo-lead a:hover { text-decoration: underline; }
 </style>

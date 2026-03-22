@@ -1,30 +1,66 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import Pro2Demo from '../../components/demos/Pro2Demo';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+
+const titles = {
+  en: "WPGMA Phylogenetic Clustering",
+  es: "Clustering Filogenético WPGMA",
+  ca: "Clustering Filogenètic WPGMA"
+};
+
+const leads = {
+  en: "Build <strong>phylogenetic trees</strong> step by step. Add species with gene sequences, view the <strong>k-mer distance matrix</strong>, then watch the <strong>WPGMA algorithm</strong> merge the closest clusters into a dendrogram.",
+  es: "Construye <strong>árboles filogenéticos</strong> paso a paso. Añade especies con secuencias de genes, mira la <strong>matriz de distancias k-mer</strong>, luego observa cómo el <strong>algoritmo WPGMA</strong> fusiona los clústeres más cercanos en un dendrograma.",
+  ca: "Construeix <strong>arbres filogenètics</strong> pas a pas. Afegeix espècies amb seqüències de gens, mira la <strong>matriu de distàncies k-mer</strong>, després observa com l'<strong>algorisme WPGMA</strong> fusiona els clústers més propers en un dendrograma."
+};
+
+const badges = {
+  en: "Programming II \u00b7 FIB-UPC",
+  es: "Programación II \u00b7 FIB-UPC",
+  ca: "Programació II \u00b7 FIB-UPC"
+};
+
+const aboutTitles = {
+  en: "About this project",
+  es: "Sobre este proyecto",
+  ca: "Sobre aquest projecte"
+};
+
+const aboutDescs = {
+  en: "Originally a C++17 project for the PRO2 course at FIB-UPC. The algorithm computes pairwise distances between species using k-mer frequency analysis, then iteratively merges the closest pair using Weighted Pair Group Method with Arithmetic Mean (WPGMA) to build a phylogenetic tree.",
+  es: "Originalmente un proyecto de C++17 para el curso de PRO2 en la FIB-UPC. El algoritmo calcula las distancias entre pares de especies utilizando análisis de frecuencia k-mer, luego fusiona iterativamente el par más cercano utilizando el Método del Grupo de Pares Ponderados con Media Aritmética (WPGMA) para construir un árbol filogenético.",
+  ca: "Originalment un projecte de C++17 per al curs de PRO2 a la FIB-UPC. L'algorisme calcula les distàncies entre parells d'espècies utilitzant anàlisi de freqüència k-mer, després fusiona iterativament el parell més proper utilitzant el Mètode del Grup de Parells Ponderats amb Mitjana Aritmètica (WPGMA) per construir un arbre filogenètic."
+};
+
+const viewSource = {
+  en: "View source on GitHub",
+  es: "Ver código en GitHub",
+  ca: "Veure codi a GitHub"
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title="WPGMA Clustering" description="Interactive phylogenetic tree builder using the WPGMA algorithm.">
+<DemoLayout title={title} description="Interactive phylogenetic tree builder using the WPGMA algorithm.">
   <div class="container">
     <div class="demo-header">
-      <div class="badge">Programming II · FIB-UPC</div>
-      <h1>WPGMA Phylogenetic Clustering</h1>
-      <p class="demo-lead">
-        Build <strong>phylogenetic trees</strong> step by step. Add species with gene sequences, view the <strong>k-mer distance matrix</strong>,
-        then watch the <strong>WPGMA algorithm</strong> merge the closest clusters into a dendrogram.
-      </p>
+      <div class="badge">{badge}</div>
+      <h1>{title}</h1>
+      <p class="demo-lead" set:html={lead} />
     </div>
 
-    <Pro2Demo client:load />
+    <Pro2Demo lang={lang} client:load />
 
     <div class="demo-info">
-      <h3>About this project</h3>
-      <p>
-        Originally a C++17 project for the PRO2 course at FIB-UPC. The algorithm computes pairwise distances
-        between species using k-mer frequency analysis, then iteratively merges the closest pair using
-        Weighted Pair Group Method with Arithmetic Mean (WPGMA) to build a phylogenetic tree.
-      </p>
+      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
+      <p>{aboutDescs[lang] || aboutDescs.en}</p>
       <a href="https://github.com/cuberhaus/pracpro2" target="_blank" rel="noopener noreferrer" class="demo-link">
-        View source on GitHub
+        {viewSource[lang] || viewSource.en}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
         </svg>

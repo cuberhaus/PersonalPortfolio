@@ -12,12 +12,116 @@ import {
   type MPIDSResult,
 } from "../../lib/mpids";
 
+type Lang = "en" | "es" | "ca";
+
+const TRANSLATIONS = {
+  en: {
+    mpidsTitle: "Minimum Positive Influence Dominating Set",
+    mpidsDesc1: "Find the smallest set S of nodes such that every vertex v has at least \u2308deg(v)/2\u2309 neighbors in S. Nodes in the set are ",
+    mpidsDesc2: "purple",
+    mpidsDesc3: ", dominated nodes are ",
+    mpidsDesc4: "green",
+    mpidsDesc5: ", and undominated nodes are ",
+    mpidsDesc6: "red",
+    builtin: "Built-in:",
+    random: "Random:",
+    generate: "Generate",
+    upload: "Upload:",
+    algorithm: "Algorithm:",
+    greedy: "Greedy",
+    localSearch: "Local Search (SA)",
+    solve: "Solve MPIDS",
+    computing: "Computing\u2026",
+    setSize: "Set size:",
+    validDom: "Valid dominating set",
+    invalidDom: "Not a valid dominating set",
+    inSet: "In set",
+    dominated: "Dominated",
+    undominated: "Undominated",
+    selectAlgo: "Select an algorithm and click \"Solve MPIDS\" to find the dominating set.",
+    nodes: "nodes",
+    edges: "edges",
+    node: "Node",
+    degree: "degree:",
+    inDomSet: "In dominating set",
+    neighborsInSet: "neighbors in set",
+    domYes: " \u2014 dominated \u2713",
+    domNo: " \u2014 NOT dominated \u2717"
+  },
+  es: {
+    mpidsTitle: "Minimum Positive Influence Dominating Set",
+    mpidsDesc1: "Encuentra el conjunto S más pequeño de nodos tal que cada vértice v tenga al menos \u2308deg(v)/2\u2309 vecinos en S. Los nodos en el conjunto son ",
+    mpidsDesc2: "morados",
+    mpidsDesc3: ", los nodos dominados son ",
+    mpidsDesc4: "verdes",
+    mpidsDesc5: ", y los nodos no dominados son ",
+    mpidsDesc6: "rojos",
+    builtin: "Incluidos:",
+    random: "Aleatorio:",
+    generate: "Generar",
+    upload: "Subir:",
+    algorithm: "Algoritmo:",
+    greedy: "Voraz (Greedy)",
+    localSearch: "Búsqueda Local (SA)",
+    solve: "Resolver MPIDS",
+    computing: "Calculando\u2026",
+    setSize: "Tamaño conjunto:",
+    validDom: "Conjunto dominador válido",
+    invalidDom: "No es un conjunto dominador válido",
+    inSet: "En conjunto",
+    dominated: "Dominado",
+    undominated: "No dominado",
+    selectAlgo: "Selecciona un algoritmo y haz clic en \"Resolver MPIDS\" para encontrar el conjunto dominador.",
+    nodes: "nodos",
+    edges: "aristas",
+    node: "Nodo",
+    degree: "grado:",
+    inDomSet: "En conjunto dominador",
+    neighborsInSet: "vecinos en conjunto",
+    domYes: " \u2014 dominado \u2713",
+    domNo: " \u2014 NO dominado \u2717"
+  },
+  ca: {
+    mpidsTitle: "Minimum Positive Influence Dominating Set",
+    mpidsDesc1: "Troba el conjunt S més petit de nodes tal que cada vèrtex v tingui almenys \u2308deg(v)/2\u2309 veïns a S. Els nodes en el conjunt són ",
+    mpidsDesc2: "morats",
+    mpidsDesc3: ", els nodes dominats són ",
+    mpidsDesc4: "verds",
+    mpidsDesc5: ", i els nodes no dominats són ",
+    mpidsDesc6: "vermells",
+    builtin: "Inclosos:",
+    random: "Aleatori:",
+    generate: "Generar",
+    upload: "Pujar:",
+    algorithm: "Algorisme:",
+    greedy: "Voraç (Greedy)",
+    localSearch: "Cerca Local (SA)",
+    solve: "Resoldre MPIDS",
+    computing: "Calculant\u2026",
+    setSize: "Mida conjunt:",
+    validDom: "Conjunt dominador vàlid",
+    invalidDom: "No és un conjunt dominador vàlid",
+    inSet: "En conjunt",
+    dominated: "Dominat",
+    undominated: "No dominat",
+    selectAlgo: "Selecciona un algorisme i fes clic a \"Resoldre MPIDS\" per trobar el conjunt dominador.",
+    nodes: "nodes",
+    edges: "arestes",
+    node: "Node",
+    degree: "grau:",
+    inDomSet: "En conjunt dominador",
+    neighborsInSet: "veïns en conjunt",
+    domYes: " \u2014 dominat \u2713",
+    domNo: " \u2014 NO dominat \u2717"
+  }
+};
+
 // ─── Styles ───
 
 const s = {
   wrapper: { fontFamily: "'Inter', system-ui, sans-serif", maxWidth: 900, margin: "0 auto" } as const,
   card: {
-    background: "linear-gradient(135deg, rgba(30,30,40,0.9), rgba(20,20,30,0.95))",
+    background: "var(--bg-card)",
     borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)",
     padding: "1.5rem", marginBottom: "1.25rem",
   } as const,
@@ -30,26 +134,26 @@ const s = {
   btn: (active = false) => ({
     padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
     background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "rgba(255,255,255,0.05)",
-    color: "#e4e4e7", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
+    color: "var(--text-primary)", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
     transition: "all 0.15s",
   }),
   btnPrimary: {
     padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",
     background: "linear-gradient(135deg, #6366f1, #a855f7)",
-    color: "#fff", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600,
+    color: "var(--text-primary)", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600,
   } as const,
   btnDisabled: {
     padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",
     background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.3)",
     cursor: "not-allowed", fontSize: "0.9rem", fontWeight: 600,
   } as const,
-  label: { color: "#a1a1aa", fontSize: "0.8rem", fontWeight: 500 } as const,
-  value: { color: "#e4e4e7", fontSize: "0.9rem", fontWeight: 600 } as const,
+  label: { color: "var(--text-secondary)", fontSize: "0.8rem", fontWeight: 500 } as const,
+  value: { color: "var(--text-primary)", fontSize: "0.9rem", fontWeight: 600 } as const,
   svgContainer: {
     borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)",
     background: "rgba(0,0,0,0.3)", overflow: "hidden", position: "relative" as const,
   },
-  legend: { display: "flex", gap: "1rem", flexWrap: "wrap" as const, marginTop: "0.75rem", fontSize: "0.8rem", color: "#a1a1aa" },
+  legend: { display: "flex", gap: "1rem", flexWrap: "wrap" as const, marginTop: "0.75rem", fontSize: "0.8rem", color: "var(--text-secondary)" },
   legendDot: (color: string) => ({
     width: 10, height: 10, borderRadius: "50%", background: color, display: "inline-block", marginRight: 4,
   }),
@@ -63,16 +167,16 @@ const s = {
     position: "absolute" as const, pointerEvents: "none" as const,
     background: "rgba(15,15,25,0.95)", border: "1px solid rgba(255,255,255,0.15)",
     borderRadius: 10, padding: "0.6rem 0.8rem", fontSize: "0.78rem",
-    color: "#e4e4e7", lineHeight: 1.6, zIndex: 100, whiteSpace: "nowrap" as const,
+    color: "var(--text-primary)", lineHeight: 1.6, zIndex: 100, whiteSpace: "nowrap" as const,
     backdropFilter: "blur(8px)",
   },
   select: {
     padding: "0.5rem 0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.05)", color: "#e4e4e7", fontSize: "0.85rem",
+    background: "rgba(255,255,255,0.05)", color: "var(--text-primary)", fontSize: "0.85rem",
   } as const,
   input: {
     padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.05)", color: "#e4e4e7", fontSize: "0.85rem", width: 60,
+    background: "rgba(255,255,255,0.05)", color: "var(--text-primary)", fontSize: "0.85rem", width: 60,
   } as const,
 } as const;
 
@@ -94,7 +198,8 @@ interface Tooltip {
 
 // ─── Component ───
 
-export default function MPIDSDemo() {
+export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   const [graphText, setGraphText] = useState<string | null>(null);
   const [graph, setGraph] = useState<Graph | null>(null);
   const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
@@ -213,12 +318,11 @@ export default function MPIDSDemo() {
         <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
           <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>🔵</span>
           <div>
-            <strong style={{ color: "#e4e4e7" }}>Minimum Positive Influence Dominating Set</strong>
-            <p style={{ color: "#a1a1aa", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
-              Find the smallest set S of nodes such that every vertex v has at least
-              ⌈deg(v)/2⌉ neighbors in S. Nodes in the set are <span style={{ color: COLORS.inSet, fontWeight: 600 }}>purple</span>,
-              dominated nodes are <span style={{ color: COLORS.dominated, fontWeight: 600 }}>green</span>,
-              and undominated nodes are <span style={{ color: COLORS.undominated, fontWeight: 600 }}>red</span>.
+            <strong style={{ color: "var(--text-primary)" }}>{t.mpidsTitle}</strong>
+            <p style={{ color: "var(--text-secondary)", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
+              {t.mpidsDesc1}<span style={{ color: COLORS.inSet, fontWeight: 600 }}>{t.mpidsDesc2}</span>
+              {t.mpidsDesc3}<span style={{ color: COLORS.dominated, fontWeight: 600 }}>{t.mpidsDesc4}</span>
+              {t.mpidsDesc5}<span style={{ color: COLORS.undominated, fontWeight: 600 }}>{t.mpidsDesc6}</span>.
             </p>
           </div>
         </div>
@@ -227,7 +331,7 @@ export default function MPIDSDemo() {
       {/* Graph selection */}
       <div style={s.card}>
         <div style={s.row}>
-          <span style={s.label}>Built-in:</span>
+          <span style={s.label}>{t.builtin}</span>
           {SAMPLE_GRAPHS.map((sg, i) => (
             <button key={i} style={s.btn(selectedSample === i)} onClick={() => handleSampleSelect(i)}>
               {sg.name}
@@ -242,32 +346,32 @@ export default function MPIDSDemo() {
         </div>
 
         <div style={s.row}>
-          <span style={s.label}>Random:</span>
+          <span style={s.label}>{t.random}</span>
           <label style={s.label}>N=</label>
           <input type="number" min={3} max={300} value={randomN}
             onChange={(e) => setRandomN(Math.min(300, Math.max(3, +e.target.value)))} style={s.input} />
           <label style={s.label}>p=</label>
           <input type="number" min={0.01} max={1} step={0.01} value={randomP}
             onChange={(e) => setRandomP(Math.min(1, Math.max(0.01, +e.target.value)))} style={s.input} />
-          <button style={s.btn()} onClick={handleRandom}>Generate</button>
+          <button style={s.btn()} onClick={handleRandom}>{t.generate}</button>
         </div>
 
         <div style={s.row}>
-          <span style={s.label}>Upload:</span>
+          <span style={s.label}>{t.upload}</span>
           <input type="file" accept=".txt" onChange={handleFileUpload}
-            style={{ color: "#a1a1aa", fontSize: "0.8rem" }} />
+            style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }} />
         </div>
       </div>
 
       {/* Algorithm controls */}
       <div style={s.card}>
         <div style={s.row}>
-          <span style={s.label}>Algorithm:</span>
+          <span style={s.label}>{t.algorithm}</span>
           <button style={s.btn(algorithm === "greedy")} onClick={() => setAlgorithm("greedy")}>
-            Greedy
+            {t.greedy}
           </button>
           <button style={s.btn(algorithm === "local-search")} onClick={() => setAlgorithm("local-search")}>
-            Local Search (SA)
+            {t.localSearch}
           </button>
           <div style={{ flex: 1 }} />
           <button
@@ -275,15 +379,15 @@ export default function MPIDSDemo() {
             onClick={solve}
             disabled={!graph || computing}
           >
-            {computing ? "Computing…" : "Solve MPIDS"}
+            {computing ? t.computing : t.solve}
           </button>
         </div>
 
         {result && (
           <div style={{ ...s.row, marginTop: "0.5rem", marginBottom: 0 }}>
-            <span style={s.statBadge(COLORS.inSet)}>Set size: {result.size} / {graph?.n}</span>
+            <span style={s.statBadge(COLORS.inSet)}>{t.setSize} {result.size} / {graph?.n}</span>
             <span style={s.statBadge(isValid ? COLORS.dominated : COLORS.undominated)}>
-              {isValid ? "Valid dominating set" : "Not a valid dominating set"}
+              {isValid ? t.validDom : t.invalidDom}
             </span>
             <span style={s.statBadge("#a78bfa")}>{result.timeMs.toFixed(1)} ms</span>
           </div>
@@ -348,15 +452,15 @@ export default function MPIDSDemo() {
             {/* Tooltip */}
             {tooltip && graph && (
               <div style={{ ...s.tooltip, left: tooltip.x, top: tooltip.y }}>
-                <div><strong>Node {tooltip.node + 1}</strong> (degree: {graph.adj[tooltip.node].length})</div>
+                <div><strong>{t.node} {tooltip.node + 1}</strong> ({t.degree} {graph.adj[tooltip.node].length})</div>
                 {result && domInfo && (
                   <>
                     {result.set.has(tooltip.node) ? (
-                      <div style={{ color: COLORS.inSet }}>In dominating set</div>
+                      <div style={{ color: COLORS.inSet }}>{t.inDomSet}</div>
                     ) : (
                       <div style={{ color: domInfo[tooltip.node].dominated ? COLORS.dominated : COLORS.undominated }}>
-                        {domInfo[tooltip.node].count}/{domInfo[tooltip.node].needed} neighbors in set
-                        {domInfo[tooltip.node].dominated ? " — dominated ✓" : " — NOT dominated ✗"}
+                        {domInfo[tooltip.node].count}/{domInfo[tooltip.node].needed} {t.neighborsInSet}
+                        {domInfo[tooltip.node].dominated ? t.domYes : t.domNo}
                       </div>
                     )}
                   </>
@@ -368,14 +472,14 @@ export default function MPIDSDemo() {
           <div style={s.legend}>
             {result ? (
               <>
-                <span><span style={s.legendDot(COLORS.inSet)} /> In set ({result.size})</span>
-                <span><span style={s.legendDot(COLORS.dominated)} /> Dominated</span>
-                <span><span style={s.legendDot(COLORS.undominated)} /> Undominated</span>
+                <span><span style={s.legendDot(COLORS.inSet)} /> {t.inSet} ({result.size})</span>
+                <span><span style={s.legendDot(COLORS.dominated)} /> {t.dominated}</span>
+                <span><span style={s.legendDot(COLORS.undominated)} /> {t.undominated}</span>
               </>
             ) : (
-              <span>Select an algorithm and click "Solve MPIDS" to find the dominating set.</span>
+              <span>{t.selectAlgo}</span>
             )}
-            <span style={{ marginLeft: "auto" }}>{graph.n} nodes, {graph.edges.length} edges</span>
+            <span style={{ marginLeft: "auto" }}>{graph.n} {t.nodes}, {graph.edges.length} {t.edges}</span>
           </div>
         </div>
       )}
