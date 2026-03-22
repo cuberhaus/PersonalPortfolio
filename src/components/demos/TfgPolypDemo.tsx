@@ -66,7 +66,7 @@ const TRANSLATIONS = {
       { name: "RetinaNet", backbone: "ResNet-50 FPN v2", note: "Single-stage anchor-based" },
       { name: "SSD Lite", backbone: "MobileNet V3", note: "Lightweight / mobile" },
     ],
-    links: "Links",
+    links: "Local Dashboard",
     dashboard1: "The project includes a ",
     dashboard2: "Streamlit dashboard",
     dashboard3: " for interactive model exploration and inference. Clone the repo and run ",
@@ -130,7 +130,7 @@ const TRANSLATIONS = {
       { name: "RetinaNet", backbone: "ResNet-50 FPN v2", note: "Basado en anclajes de una etapa" },
       { name: "SSD Lite", backbone: "MobileNet V3", note: "Ligero / móvil" },
     ],
-    links: "Enlaces",
+    links: "Dashboard local",
     dashboard1: "El proyecto incluye un ",
     dashboard2: "dashboard de Streamlit",
     dashboard3: " para exploración e inferencia interactiva. Clona el repo y ejecuta ",
@@ -194,7 +194,7 @@ const TRANSLATIONS = {
       { name: "RetinaNet", backbone: "ResNet-50 FPN v2", note: "Basat en ancoratges d'una etapa" },
       { name: "SSD Lite", backbone: "MobileNet V3", note: "Lleuger / mòbil" },
     ],
-    links: "Enllaços",
+    links: "Tauler local",
     dashboard1: "El projecte inclou un ",
     dashboard2: "dashboard de Streamlit",
     dashboard3: " per exploració i inferència interactiva. Clona el repo i executa ",
@@ -663,61 +663,19 @@ export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
         <div style={{ ...card, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <div>
             <h4 style={{ margin: "0 0 0.5rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.links}</h4>
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-              <a href="https://github.com/cuberhaus/TFG" target="_blank" rel="noopener noreferrer" style={{
-                display: "inline-flex", alignItems: "center", gap: "0.35rem",
-                padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-                background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)", textDecoration: "none",
-              }}>GitHub {"\u2197"}</a>
-            </div>
-            <p style={{ margin: "0.75rem 0 0", fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
+            <p style={{ margin: "0.5rem 0 0", fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
               {t.dashboard1}<strong style={{ color: "var(--text-secondary)" }}>{t.dashboard2}</strong>{t.dashboard3}
               <code style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>streamlit run src/app.py</code>{t.dashboard4}
               <code style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>code/</code>.
             </p>
           </div>
-          <div style={{ marginTop: "0.75rem" }}>
+          <div style={{ marginTop: "1.25rem" }}>
             <div style={{ fontSize: "0.68rem", color: "var(--text-muted)", textTransform: "uppercase" as const, letterSpacing: "0.05em", marginBottom: "0.2rem" }}>{t.author}</div>
             <div style={{ fontSize: "0.85rem", color: "var(--text-primary)" }}>Pol Casacuberta &middot; FIB-UPC</div>
           </div>
         </div>
       </div>
 
-      {/* Run locally */}
-      <details>
-        <summary style={{
-          cursor: "pointer", fontSize: "0.82rem", fontWeight: 600, color: "var(--text-muted)",
-          padding: "0.65rem 1rem", background: "var(--bg-card)", borderRadius: "0.75rem",
-          border: "1px solid var(--border-color)", listStyle: "none",
-        }}>
-          {t.runLocal}
-        </summary>
-        <div style={{ ...card, marginTop: "0.75rem" }}>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.6, margin: "0 0 0.75rem" }}>
-            {t.projDesc1}<strong style={{ color: "var(--text-primary)" }}>{t.projDesc2}</strong>{t.projDesc3}
-          </p>
-          <pre style={{
-            margin: 0, padding: "1rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
-            borderRadius: "0.5rem", fontSize: "0.78rem", fontFamily: "ui-monospace, monospace",
-            color: "var(--text-secondary)", lineHeight: 1.6, overflowX: "auto",
-          }}>{`git clone https://github.com/cuberhaus/TFG.git
-cd TFG/code
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-
-# Launch the Streamlit dashboard
-streamlit run src/app.py
-
-# Or train a model
-python src/train_and_save_model.py FasterRCNN \\
-  '{"BATCH_SIZE":4,"LR":0.005,"WEIGHT_DECAY":0.0005,"NUM_EPOCHS":10}' \\
-  --debug`}</pre>
-          <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", margin: "0.75rem 0 0" }}>
-            {t.datasetNote1}<code style={{ color: "var(--text-muted)" }}>data/TrainValid/</code>{t.datasetNote2}
-            <code style={{ color: "var(--text-muted)" }}>data/Test/</code>.
-          </p>
-        </div>
-      </details>
     </div>
   );
 }

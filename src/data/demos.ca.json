@@ -3,98 +3,171 @@
     "slug": "tfg-polyps",
     "title": "Treball de Fi de Grau — Detecció de Pòlips",
     "description": "Detecció de pòlips mitjançant aprenentatge profund amb augment de dades generatiu (CycleGAN/SPADE). Explora els resultats del model i el pipeline d'entrenament.",
-    "tags": ["PyTorch", "CycleGAN", "Object Detection", "UPC"],
-    "icon": "microscope"
+    "tags": [
+      "PyTorch",
+      "CycleGAN",
+      "Object Detection",
+      "UPC"
+    ],
+    "icon": "microscope",
+    "github": "https://github.com/cuberhaus/TFG"
   },
   {
     "slug": "draculin",
     "title": "Draculin",
     "description": "Aplicació de seguiment de salut amb xatbot d'IA i visió per computador, desenvolupada amb Flutter. Finalista a BitsXLaMarató 2023.",
-    "tags": ["Flutter", "Django", "AI"],
-    "icon": "heart"
+    "tags": [
+      "Flutter",
+      "Django",
+      "AI"
+    ],
+    "icon": "heart",
+    "github": "https://github.com/cuberhaus/Draculin-Front"
   },
   {
     "slug": "bitsx-marato",
     "title": "BitsXLaMarató — Aorta",
     "description": "Guanyador de BitsXLaMarató 2022 — Ecografia → Segmentació d'aorta amb Mask R-CNN i reconstrucció 3D; inferència simulada en navegador + explorador de diàmetre.",
-    "tags": ["PyTorch", "OpenCV", "3D", "CV"],
-    "icon": "aorta"
+    "tags": [
+      "PyTorch",
+      "OpenCV",
+      "3D",
+      "CV"
+    ],
+    "icon": "aorta",
+    "github": "https://github.com/cuberhaus/bitsXlaMarato"
   },
   {
     "slug": "joc-eda",
     "title": "Visor de Joc de Programació",
     "description": "Observa a bots d'IA lluitar en una quadrícula — guerrers, constructors, armes i estratègia. Visor de repeticions per a la competició de joc de programació d'Estructures de Dades i Algorismes.",
-    "tags": ["C++", "Canvas", "AI"],
-    "icon": "gamepad"
+    "tags": [
+      "C++",
+      "Canvas",
+      "AI"
+    ],
+    "icon": "gamepad",
+    "github": "https://github.com/cuberhaus/joc_eda"
   },
   {
     "slug": "pro2",
     "title": "Clustering WPGMA",
     "description": "Construeix arbres filogenètics pas a pas. Introdueix espècies amb seqüències genètiques i observa com l'algorisme WPGMA fusiona clústers en un dendrograma.",
-    "tags": ["TypeScript", "Algorithms", "D3"],
-    "icon": "tree"
+    "tags": [
+      "TypeScript",
+      "Algorithms",
+      "D3"
+    ],
+    "icon": "tree",
+    "github": "https://github.com/cuberhaus/pracpro2"
   },
   {
     "slug": "jsbach",
     "title": "Intèrpret de JSBach",
     "description": "Escriu i reprodueix música amb un llenguatge de programació personalitzat. Un intèrpret basat en navegador per al llenguatge musical JSBach.",
-    "tags": ["ANTLR4", "Web Audio", "Language"],
-    "icon": "music"
+    "tags": [
+      "ANTLR4",
+      "Web Audio",
+      "Language"
+    ],
+    "icon": "music",
+    "github": "https://github.com/cuberhaus/ANTLR4_JSBach"
   },
   {
     "slug": "tenda",
     "title": "Botiga Online",
     "description": "Una botiga e-commerce completa amb navegació de productes, carret de compres i procés de pagament.",
-    "tags": ["PHP", "MySQL", "E-Commerce"],
-    "icon": "store"
+    "tags": [
+      "PHP",
+      "MySQL",
+      "E-Commerce"
+    ],
+    "icon": "store",
+    "github": "https://github.com/cuberhaus/tenda_online"
   },
   {
     "slug": "matriculas",
     "title": "Detecció de Matrícules",
     "description": "Detecta i llegeix matrícules de cotxes a partir d'imatges utilitzant visió per computador — un pipeline de MATLAB portat al navegador.",
-    "tags": ["Computer Vision", "TypeScript"],
-    "icon": "camera"
+    "tags": [
+      "Computer Vision",
+      "TypeScript"
+    ],
+    "icon": "camera",
+    "github": "https://github.com/cuberhaus/SPMatriculas"
   },
   {
     "slug": "mpids",
     "title": "Solver MPIDS",
     "description": "Troba el conjunt dominant mínim en un graf utilitzant algorismes de cerca local i voraç, amb visualització interactiva.",
-    "tags": ["Algorithms", "Graph Theory", "TypeScript"],
-    "icon": "graph"
+    "tags": [
+      "Algorithms",
+      "Graph Theory",
+      "TypeScript"
+    ],
+    "icon": "graph",
+    "github": "https://github.com/cuberhaus/projectA"
   },
   {
     "slug": "phase-transitions",
     "title": "Transicions de Fase en Grafs",
     "description": "Explora transicions de fase de percolació i connectivitat en grafs binomials, geomètrics i de quadrícula.",
-    "tags": ["Algorithms", "Graph Theory", "NetworkX"],
-    "icon": "scatter"
+    "tags": [
+      "Algorithms",
+      "Graph Theory",
+      "NetworkX"
+    ],
+    "icon": "scatter",
+    "github": "https://github.com/cuberhaus/projectA2"
   },
   {
     "slug": "planificacion",
     "title": "Agència de viatges (PDDL)",
     "description": "Pràctica de planificació automàtica: domini PDDL per a viatges amb vols, hotels, restriccions numèriques i minimització de mètriques.",
-    "tags": ["PDDL", "Planning", "UPC"],
-    "icon": "map"
+    "tags": [
+      "PDDL",
+      "Planning",
+      "UPC"
+    ],
+    "icon": "map",
+    "github": "https://github.com/cuberhaus/Practica_de_Planificacion"
   },
   {
     "slug": "desastres-ia",
     "title": "Desastres IA",
     "description": "Assistència en desastres com a cerca local: helicòpters rescaten grups de centres utilitzant escalada de turons i recuit simulat (AIMA).",
-    "tags": ["Java", "AIMA", "Local search", "UPC"],
-    "icon": "helicopter"
+    "tags": [
+      "Java",
+      "AIMA",
+      "Local search",
+      "UPC"
+    ],
+    "icon": "helicopter",
+    "github": "https://github.com/cuberhaus/desastresIA"
   },
   {
     "slug": "apa-practica",
-    "title": "Aprenentatge Automàtic \u2014 Hipotiroïdisme",
+    "title": "Aprenentatge Automàtic — Hipotiroïdisme",
     "description": "Tasca de classificació d'hipotiroïdisme: Nbviewer, enllaços a GitHub, demo de clic de k-NN vinculada a N/P de classe binària (FIB-UPC).",
-    "tags": ["Python", "Jupyter", "sklearn", "UPC"],
-    "icon": "ml"
+    "tags": [
+      "Python",
+      "Jupyter",
+      "sklearn",
+      "UPC"
+    ],
+    "icon": "ml",
+    "github": "https://github.com/cuberhaus/APA_Practica"
   },
   {
     "slug": "prop",
     "title": "Sistema de Recomanació",
     "description": "Una interfície web per a un sistema de recomanació basat en contingut, construït amb Java, Spring Boot i Thymeleaf.",
-    "tags": ["Java", "Spring Boot", "Recommendation"],
-    "icon": "server"
+    "tags": [
+      "Java",
+      "Spring Boot",
+      "Recommendation"
+    ],
+    "icon": "server",
+    "github": "https://github.com/cuberhaus/subgrup-prop7.1"
   }
 ]

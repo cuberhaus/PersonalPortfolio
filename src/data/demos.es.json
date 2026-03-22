@@ -3,98 +3,171 @@
     "slug": "tfg-polyps",
     "title": "Trabajo de Fin de Grado — Detección de Pólipos",
     "description": "Detección de pólipos mediante aprendizaje profundo con aumento de datos generativo (CycleGAN/SPADE). Explora los resultados del modelo y el pipeline de entrenamiento.",
-    "tags": ["PyTorch", "CycleGAN", "Object Detection", "UPC"],
-    "icon": "microscope"
+    "tags": [
+      "PyTorch",
+      "CycleGAN",
+      "Object Detection",
+      "UPC"
+    ],
+    "icon": "microscope",
+    "github": "https://github.com/cuberhaus/TFG"
   },
   {
     "slug": "draculin",
     "title": "Draculin",
     "description": "Aplicación de seguimiento de salud con chatbot de IA y visión por computadora, desarrollada con Flutter. Finalista en BitsXLaMarató 2023.",
-    "tags": ["Flutter", "Django", "AI"],
-    "icon": "heart"
+    "tags": [
+      "Flutter",
+      "Django",
+      "AI"
+    ],
+    "icon": "heart",
+    "github": "https://github.com/cuberhaus/Draculin-Front"
   },
   {
     "slug": "bitsx-marato",
     "title": "BitsXLaMarató — Aorta",
     "description": "Ganador de BitsXLaMarató 2022 — Ecografía → Segmentación de aorta con Mask R-CNN y reconstrucción 3D; inferencia simulada en navegador + explorador de diámetro.",
-    "tags": ["PyTorch", "OpenCV", "3D", "CV"],
-    "icon": "aorta"
+    "tags": [
+      "PyTorch",
+      "OpenCV",
+      "3D",
+      "CV"
+    ],
+    "icon": "aorta",
+    "github": "https://github.com/cuberhaus/bitsXlaMarato"
   },
   {
     "slug": "joc-eda",
     "title": "Visor de Juego de Programación",
     "description": "Observa a bots de IA luchar en una cuadrícula — guerreros, constructores, armas y estrategia. Visor de repeticiones para la competición de juego de programación de Estructuras de Datos y Algoritmos.",
-    "tags": ["C++", "Canvas", "AI"],
-    "icon": "gamepad"
+    "tags": [
+      "C++",
+      "Canvas",
+      "AI"
+    ],
+    "icon": "gamepad",
+    "github": "https://github.com/cuberhaus/joc_eda"
   },
   {
     "slug": "pro2",
     "title": "Clustering WPGMA",
     "description": "Construye árboles filogenéticos paso a paso. Introduce especies con secuencias genéticas y observa cómo el algoritmo WPGMA fusiona clústeres en un dendrograma.",
-    "tags": ["TypeScript", "Algorithms", "D3"],
-    "icon": "tree"
+    "tags": [
+      "TypeScript",
+      "Algorithms",
+      "D3"
+    ],
+    "icon": "tree",
+    "github": "https://github.com/cuberhaus/pracpro2"
   },
   {
     "slug": "jsbach",
     "title": "Intérprete de JSBach",
     "description": "Escribe y reproduce música con un lenguaje de programación personalizado. Un intérprete basado en navegador para el lenguaje musical JSBach.",
-    "tags": ["ANTLR4", "Web Audio", "Language"],
-    "icon": "music"
+    "tags": [
+      "ANTLR4",
+      "Web Audio",
+      "Language"
+    ],
+    "icon": "music",
+    "github": "https://github.com/cuberhaus/ANTLR4_JSBach"
   },
   {
     "slug": "tenda",
     "title": "Tienda Online",
     "description": "Una tienda e-commerce completa con navegación de productos, carrito de compras y proceso de pago.",
-    "tags": ["PHP", "MySQL", "E-Commerce"],
-    "icon": "store"
+    "tags": [
+      "PHP",
+      "MySQL",
+      "E-Commerce"
+    ],
+    "icon": "store",
+    "github": "https://github.com/cuberhaus/tenda_online"
   },
   {
     "slug": "matriculas",
     "title": "Detección de Matrículas",
     "description": "Detecta y lee matrículas de coches a partir de imágenes usando visión por computadora — un pipeline de MATLAB portado al navegador.",
-    "tags": ["Computer Vision", "TypeScript"],
-    "icon": "camera"
+    "tags": [
+      "Computer Vision",
+      "TypeScript"
+    ],
+    "icon": "camera",
+    "github": "https://github.com/cuberhaus/SPMatriculas"
   },
   {
     "slug": "mpids",
     "title": "Solver MPIDS",
     "description": "Encuentra el conjunto dominante mínimo en un grafo utilizando algoritmos de búsqueda local y voraz, con visualización interactiva.",
-    "tags": ["Algorithms", "Graph Theory", "TypeScript"],
-    "icon": "graph"
+    "tags": [
+      "Algorithms",
+      "Graph Theory",
+      "TypeScript"
+    ],
+    "icon": "graph",
+    "github": "https://github.com/cuberhaus/projectA"
   },
   {
     "slug": "phase-transitions",
     "title": "Transiciones de Fase en Grafos",
     "description": "Explora transiciones de fase de percolación y conectividad en grafos binomiales, geométricos y de cuadrícula.",
-    "tags": ["Algorithms", "Graph Theory", "NetworkX"],
-    "icon": "scatter"
+    "tags": [
+      "Algorithms",
+      "Graph Theory",
+      "NetworkX"
+    ],
+    "icon": "scatter",
+    "github": "https://github.com/cuberhaus/projectA2"
   },
   {
     "slug": "planificacion",
     "title": "Agencia de viajes (PDDL)",
     "description": "Práctica de planificación automática: dominio PDDL para viajes con vuelos, hoteles, restricciones numéricas y minimización de métricas.",
-    "tags": ["PDDL", "Planning", "UPC"],
-    "icon": "map"
+    "tags": [
+      "PDDL",
+      "Planning",
+      "UPC"
+    ],
+    "icon": "map",
+    "github": "https://github.com/cuberhaus/Practica_de_Planificacion"
   },
   {
     "slug": "desastres-ia",
     "title": "Desastres IA",
     "description": "Asistencia en desastres como búsqueda local: helicópteros rescatan grupos de centros usando escalada de colinas y recocido simulado (AIMA).",
-    "tags": ["Java", "AIMA", "Local search", "UPC"],
-    "icon": "helicopter"
+    "tags": [
+      "Java",
+      "AIMA",
+      "Local search",
+      "UPC"
+    ],
+    "icon": "helicopter",
+    "github": "https://github.com/cuberhaus/desastresIA"
   },
   {
     "slug": "apa-practica",
-    "title": "Aprendizaje Automático \u2014 Hipotiroidismo",
+    "title": "Aprendizaje Automático — Hipotiroidismo",
     "description": "Tarea de clasificación de hipotiroidismo: Nbviewer, enlaces a GitHub, demo de clic de k-NN vinculada a N/P de clase binaria (FIB-UPC).",
-    "tags": ["Python", "Jupyter", "sklearn", "UPC"],
-    "icon": "ml"
+    "tags": [
+      "Python",
+      "Jupyter",
+      "sklearn",
+      "UPC"
+    ],
+    "icon": "ml",
+    "github": "https://github.com/cuberhaus/APA_Practica"
   },
   {
     "slug": "prop",
     "title": "Sistema de Recomendación",
     "description": "Una interfaz web para un sistema de recomendación basado en contenido, construido con Java, Spring Boot y Thymeleaf.",
-    "tags": ["Java", "Spring Boot", "Recommendation"],
-    "icon": "server"
+    "tags": [
+      "Java",
+      "Spring Boot",
+      "Recommendation"
+    ],
+    "icon": "server",
+    "github": "https://github.com/cuberhaus/subgrup-prop7.1"
   }
 ]

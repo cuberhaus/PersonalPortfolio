@@ -474,14 +474,6 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
         })()}
       </div>
 
-      {/* ── LINKS ── */}
-      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-        <a href="https://github.com/cuberhaus/desastresIA" target="_blank" rel="noopener noreferrer" style={{
-          display: "inline-flex", alignItems: "center", gap: "0.35rem",
-          padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-          background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)", textDecoration: "none",
-        }}>{t.ghRepo}</a>
-      </div>
     </div>
   );
 }

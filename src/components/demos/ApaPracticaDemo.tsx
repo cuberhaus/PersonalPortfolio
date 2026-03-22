@@ -602,20 +602,6 @@ export default function ApaPracticaDemo({ lang = "en" }: { lang?: Lang }) {
               {t.dataP2c}
             </p>
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.85rem" }}>
-            <a href={GH} target="_blank" rel="noopener noreferrer" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.35rem",
-              padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-              background: "linear-gradient(135deg, #818cf8, #2dd4bf)", color: "var(--text-primary)",
-              textDecoration: "none",
-            }}>{t.ghRepo}</a>
-            <a href={`${GH}/blob/main/hypothyroid.arff`} target="_blank" rel="noopener noreferrer" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.35rem",
-              padding: "0.4rem 0.85rem", borderRadius: "0.5rem", fontSize: "0.78rem", fontWeight: 600,
-              background: "var(--bg-card-hover)", border: "1px solid var(--border-color)", color: "var(--text-secondary)",
-              textDecoration: "none",
-            }}>hypothyroid.arff ↗</a>
-          </div>
         </div>
       </div>
 
