@@ -30,11 +30,11 @@ export const ui = {
     'about.p2': "I believe in standing on the shoulders of giants — leveraging the best of existing knowledge and technology to build innovative solutions. From predictive analytics and data governance to computer vision and neural networks, I enjoy tackling complex problems that drive real impact.",
     'about.p3': "Here are some technologies I've been working with recently:",
     
-    // Demos
-    'demos.label': 'Interactive',
-    'demos.title': 'Try my projects',
-    'demos.subtitle': 'Live, interactive demos you can play with right in your browser.',
-    'demos.badge': 'Live Demo',
+    // Projects
+    'projects.label': 'Interactive',
+    'projects.title': 'Try my projects',
+    'projects.subtitle': 'Live, interactive demos you can play with right in your browser.',
+    'projects.badge': 'Live Demo',
     
     // Skills
     'skills.label': 'Skills',
@@ -84,11 +84,11 @@ export const ui = {
     'about.p2': "Creo en subirse a hombros de gigantes, aprovechando lo mejor del conocimiento y la tecnología existentes para construir soluciones innovadoras. Desde el análisis predictivo y la gobernanza de datos hasta la visión por computadora y las redes neuronales, disfruto resolviendo problemas complejos con impacto real.",
     'about.p3': "Aquí hay algunas tecnologías con las que he trabajado recientemente:",
     
-    // Demos
-    'demos.label': 'Interactivo',
-    'demos.title': 'Prueba mis proyectos',
-    'demos.subtitle': 'Demos interactivas y en vivo que puedes probar directamente en tu navegador.',
-    'demos.badge': 'Demo en vivo',
+    // Projects
+    'projects.label': 'Interactivo',
+    'projects.title': 'Prueba mis proyectos',
+    'projects.subtitle': 'Demos interactivas y en vivo que puedes probar directamente en tu navegador.',
+    'projects.badge': 'Demo en vivo',
     
     // Skills
     'skills.label': 'Habilidades',
@@ -139,10 +139,10 @@ export const ui = {
     'about.p3': "Aquí hi ha algunes tecnologies amb les quals he treballat recentment:",
     
     // Demos
-    'demos.label': 'Interactiu',
-    'demos.title': 'Prova els meus projectes',
-    'demos.subtitle': 'Demos interactives i en viu que pots provar directament al teu navegador.',
-    'demos.badge': 'Demo en viu',
+    'projects.label': 'Interactiu',
+    'projects.title': 'Prova els meus projectes',
+    'projects.subtitle': 'Demos interactives i en viu que pots provar directament al teu navegador.',
+    'projects.badge': 'Demo en viu',
     
     // Skills
     'skills.label': 'Habilitats',
