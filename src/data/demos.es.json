@@ -1,7 +1,7 @@
 [
   {
     "slug": "tfg-polyps",
-    "title": "TFG — Detección de Pólipos",
+    "title": "Trabajo de Fin de Grado — Detección de Pólipos",
     "description": "Detección de pólipos mediante aprendizaje profundo con aumento de datos generativo (CycleGAN/SPADE). Explora los resultados del modelo y el pipeline de entrenamiento.",
     "tags": ["PyTorch", "CycleGAN", "Object Detection", "UPC"],
     "icon": "microscope"

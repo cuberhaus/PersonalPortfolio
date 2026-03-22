@@ -1,7 +1,7 @@
 [
   {
     "slug": "tfg-polyps",
-    "title": "TFG — Detecció de Pòlips",
+    "title": "Treball de Fi de Grau — Detecció de Pòlips",
     "description": "Detecció de pòlips mitjançant aprenentatge profund amb augment de dades generatiu (CycleGAN/SPADE). Explora els resultats del model i el pipeline d'entrenament.",
     "tags": ["PyTorch", "CycleGAN", "Object Detection", "UPC"],
     "icon": "microscope"

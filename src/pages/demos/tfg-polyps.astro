@@ -24,13 +24,20 @@ const badges = {
   ca: "Deep Learning · Treball de Fi de Grau · FIB-UPC"
 };
 
+const metaTitles = {
+  en: "Bachelor's Thesis — Polyp Detection",
+  es: "Trabajo de Fin de Grado — Detección de Pólipos",
+  ca: "Treball de Fi de Grau — Detecció de Pòlips"
+};
+
 const title = titles[lang] || titles.en;
 const lead = leads[lang] || leads.en;
 const badge = badges[lang] || badges.en;
+const metaTitle = metaTitles[lang] || metaTitles.en;
 ---
 
 <DemoLayout
-  title="TFG — Polyp Detection"
+  title={metaTitle}
   description="Bachelor's thesis: deep learning polyp detection in colonoscopy videos with CycleGAN/SPADE data augmentation and Faster R-CNN object detection."
 >
   <div class="container">
