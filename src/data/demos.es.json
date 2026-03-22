@@ -22,7 +22,10 @@
       "AI"
     ],
     "icon": "heart",
-    "github": "https://github.com/cuberhaus/Draculin-Front"
+    "github": [
+      "https://github.com/cuberhaus/Draculin-Front",
+      "https://github.com/cuberhaus/Draculin-Backend"
+    ]
   },
   {
     "slug": "bitsx-marato",
