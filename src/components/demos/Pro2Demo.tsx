@@ -201,8 +201,8 @@ const styles = {
     color: "var(--text-secondary)",
   },
   dangerBtn: {
-    background: "#371520",
-    color: "#f87171",
+    background: "rgba(239, 68, 68, 0.1)",
+    color: "#ef4444",
   },
   tag: {
     display: "inline-block",

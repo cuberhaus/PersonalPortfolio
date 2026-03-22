@@ -672,8 +672,8 @@ export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
             </div>
             <p style={{ margin: "0.75rem 0 0", fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
               {t.dashboard1}<strong style={{ color: "var(--text-secondary)" }}>{t.dashboard2}</strong>{t.dashboard3}
-              <code style={{ color: "#94a3b8", fontSize: "0.72rem" }}>streamlit run src/app.py</code>{t.dashboard4}
-              <code style={{ color: "#94a3b8", fontSize: "0.72rem" }}>code/</code>.
+              <code style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>streamlit run src/app.py</code>{t.dashboard4}
+              <code style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>code/</code>.
             </p>
           </div>
           <div style={{ marginTop: "0.75rem" }}>
@@ -713,8 +713,8 @@ python src/train_and_save_model.py FasterRCNN \\
   '{"BATCH_SIZE":4,"LR":0.005,"WEIGHT_DECAY":0.0005,"NUM_EPOCHS":10}' \\
   --debug`}</pre>
           <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", margin: "0.75rem 0 0" }}>
-            {t.datasetNote1}<code style={{ color: "#64748b" }}>data/TrainValid/</code>{t.datasetNote2}
-            <code style={{ color: "#64748b" }}>data/Test/</code>.
+            {t.datasetNote1}<code style={{ color: "var(--text-muted)" }}>data/TrainValid/</code>{t.datasetNote2}
+            <code style={{ color: "var(--text-muted)" }}>data/Test/</code>.
           </p>
         </div>
       </details>

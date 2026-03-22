@@ -250,18 +250,17 @@ function KnnCanvas({ t }: { t: typeof TRANSLATIONS.en }) {
     ctx.scale(dpr, dpr);
 
     // bg
-    ctx.fillStyle = "var(--bg-secondary)";
-    ctx.fillRect(0, 0, CW, CH);
+    ctx.clearRect(0, 0, CW, CH);
 
     // grid
-    ctx.strokeStyle = "#16162240";
+    ctx.strokeStyle = "rgba(128,128,128,0.2)";
     ctx.lineWidth = 1;
     for (let g = 0; g <= CW; g += 40) { ctx.beginPath(); ctx.moveTo(g, 0); ctx.lineTo(g, CH); ctx.stroke(); }
     for (let g = 0; g <= CH; g += 40) { ctx.beginPath(); ctx.moveTo(0, g); ctx.lineTo(CW, g); ctx.stroke(); }
 
     // axis labels
     ctx.font = "11px ui-monospace, monospace";
-    ctx.fillStyle = "var(--border-color-hover)";
+    ctx.fillStyle = "rgba(128,128,128,0.8)";
     ctx.fillText("PC1 →", CW - 50, CH - 8);
     ctx.save(); ctx.translate(12, 50); ctx.rotate(-Math.PI / 2); ctx.fillText("PC2 →", 0, 0); ctx.restore();
 
@@ -302,7 +301,7 @@ function KnnCanvas({ t }: { t: typeof TRANSLATIONS.en }) {
       ctx.fillStyle = grd;
       ctx.beginPath(); ctx.arc(query.x, query.y, 22, 0, Math.PI * 2); ctx.fill();
       // crosshair
-      ctx.strokeStyle = "#fafafa";
+      ctx.strokeStyle = "rgba(128,128,128,0.8)";
       ctx.lineWidth = 2;
       ctx.beginPath(); ctx.arc(query.x, query.y, 8, 0, Math.PI * 2); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(query.x - 12, query.y); ctx.lineTo(query.x + 12, query.y); ctx.stroke();
@@ -332,7 +331,7 @@ function KnnCanvas({ t }: { t: typeof TRANSLATIONS.en }) {
             padding: "0.3rem 0.65rem", borderRadius: "0.4rem", border: "none",
             fontSize: "0.78rem", fontWeight: 700, cursor: "pointer",
             background: k === kv ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "var(--bg-card-hover)",
-            color: k === kv ? "#fff" : "var(--text-muted)",
+            color: k === kv ? "var(--text-primary)" : "var(--text-muted)",
             transition: "all 0.15s",
           }}>{kv}</button>
         ))}
@@ -349,6 +348,7 @@ function KnnCanvas({ t }: { t: typeof TRANSLATIONS.en }) {
         style={{
           display: "block", borderRadius: "0.75rem", border: "1px solid var(--border-color)",
           cursor: "crosshair", width: "100%", aspectRatio: `${CW}/${CH}`,
+          background: "var(--bg-secondary)"
         }}
         aria-label="k-NN PCA demo"
       />

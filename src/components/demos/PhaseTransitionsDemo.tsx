@@ -135,7 +135,7 @@ const s = {
   wrapper: { fontFamily: "'Inter', system-ui, sans-serif", maxWidth: 900, margin: "0 auto" } as const,
   card: {
     background: "var(--bg-card)",
-    borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: 16, border: "1px solid var(--border-color)",
     padding: "1.5rem", marginBottom: "1.25rem",
   } as const,
   infoCard: {
@@ -145,8 +145,8 @@ const s = {
   } as const,
   row: { display: "flex", gap: "0.75rem", flexWrap: "wrap" as const, alignItems: "center", marginBottom: "0.75rem" },
   btn: (active = false) => ({
-    padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "rgba(255,255,255,0.05)",
+    padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid var(--border-color)",
+    background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "var(--bg-secondary)",
     color: "var(--text-primary)", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
     transition: "all 0.15s",
   }),
@@ -159,8 +159,8 @@ const s = {
   value: { color: "var(--text-primary)", fontSize: "0.9rem", fontWeight: 600 } as const,
   slider: { flex: 1, minWidth: 80, accentColor: "#6366f1" } as const,
   input: {
-    padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.05)", color: "var(--text-primary)", fontSize: "0.85rem", width: 55,
+    padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid var(--border-color)",
+    background: "var(--bg-secondary)", color: "var(--text-primary)", fontSize: "0.85rem", width: 55,
   } as const,
   statBadge: (color: string) => ({
     display: "inline-flex", alignItems: "center", gap: "0.35rem",
@@ -169,12 +169,12 @@ const s = {
     color, fontSize: "0.85rem", fontWeight: 600,
   }),
   svgContainer: {
-    borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)",
-    background: "rgba(0,0,0,0.3)", overflow: "hidden",
+    borderRadius: 12, border: "1px solid var(--border-color)",
+    background: "var(--bg-secondary)", overflow: "hidden",
   } as const,
   chartContainer: {
-    borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)",
-    background: "rgba(0,0,0,0.3)", padding: "1rem", marginTop: "1rem",
+    borderRadius: 12, border: "1px solid var(--border-color)",
+    background: "var(--bg-secondary)", padding: "1rem", marginTop: "1rem",
   } as const,
 } as const;
 
@@ -235,7 +235,7 @@ function GraphVis({ graph, comps, t }: { graph: SimpleGraph; comps: number[][]; 
           <line key={`${i}-${j}`}
             x1={positions[i].x} y1={positions[i].y}
             x2={positions[j].x} y2={positions[j].y}
-            stroke="rgba(255,255,255,0.1)" strokeWidth={edgeW}
+            stroke="var(--border-color)" strokeWidth={edgeW}
           />
         );
       }
@@ -280,19 +280,19 @@ function SweepChart({ points, t }: { points: SweepPoint[]; t: typeof TRANSLATION
         {/* Grid lines */}
         {[0, 0.25, 0.5, 0.75, 1].map((v) => (
           <g key={v}>
-            <line x1={padL} x2={W - padR} y1={toY(v)} y2={toY(v)} stroke="rgba(255,255,255,0.06)" />
+            <line x1={padL} x2={W - padR} y1={toY(v)} y2={toY(v)} stroke="var(--border-color)" />
             <text x={padL - 8} y={toY(v) + 4} textAnchor="end" fill="var(--text-muted)" fontSize={11}>{v.toFixed(2)}</text>
           </g>
         ))}
         {[0, 0.25, 0.5, 0.75, 1].map((v) => (
           <g key={`x${v}`}>
-            <line x1={toX(v)} x2={toX(v)} y1={padT} y2={H - padB} stroke="rgba(255,255,255,0.06)" />
+            <line x1={toX(v)} x2={toX(v)} y1={padT} y2={H - padB} stroke="var(--border-color)" />
             <text x={toX(v)} y={H - padB + 16} textAnchor="middle" fill="var(--text-muted)" fontSize={11}>{v.toFixed(2)}</text>
           </g>
         ))}
         {/* Axes */}
-        <line x1={padL} x2={W - padR} y1={H - padB} y2={H - padB} stroke="rgba(255,255,255,0.15)" />
-        <line x1={padL} x2={padL} y1={padT} y2={H - padB} stroke="rgba(255,255,255,0.15)" />
+        <line x1={padL} x2={W - padR} y1={H - padB} y2={H - padB} stroke="var(--border-color)" />
+        <line x1={padL} x2={padL} y1={padT} y2={H - padB} stroke="var(--border-color)" />
         <text x={W / 2} y={H - 4} textAnchor="middle" fill="var(--text-secondary)" fontSize={12}>{t.retentionProb}</text>
         <text x={14} y={H / 2} textAnchor="middle" fill="var(--text-secondary)" fontSize={12}
           transform={`rotate(-90, 14, ${H / 2})`}>{t.pProperty}</text>

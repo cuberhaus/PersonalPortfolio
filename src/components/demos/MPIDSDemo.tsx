@@ -122,7 +122,7 @@ const s = {
   wrapper: { fontFamily: "'Inter', system-ui, sans-serif", maxWidth: 900, margin: "0 auto" } as const,
   card: {
     background: "var(--bg-card)",
-    borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: 16, border: "1px solid var(--border-color)",
     padding: "1.5rem", marginBottom: "1.25rem",
   } as const,
   infoCard: {
@@ -132,8 +132,8 @@ const s = {
   } as const,
   row: { display: "flex", gap: "0.75rem", flexWrap: "wrap" as const, alignItems: "center", marginBottom: "0.75rem" },
   btn: (active = false) => ({
-    padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "rgba(255,255,255,0.05)",
+    padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid var(--border-color)",
+    background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "var(--bg-secondary)",
     color: "var(--text-primary)", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
     transition: "all 0.15s",
   }),
@@ -144,14 +144,14 @@ const s = {
   } as const,
   btnDisabled: {
     padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",
-    background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.3)",
+    background: "var(--border-color)", color: "var(--text-muted)",
     cursor: "not-allowed", fontSize: "0.9rem", fontWeight: 600,
   } as const,
   label: { color: "var(--text-secondary)", fontSize: "0.8rem", fontWeight: 500 } as const,
   value: { color: "var(--text-primary)", fontSize: "0.9rem", fontWeight: 600 } as const,
   svgContainer: {
-    borderRadius: 12, border: "1px solid rgba(255,255,255,0.08)",
-    background: "rgba(0,0,0,0.3)", overflow: "hidden", position: "relative" as const,
+    borderRadius: 12, border: "1px solid var(--border-color)",
+    background: "var(--bg-secondary)", overflow: "hidden", position: "relative" as const,
   },
   legend: { display: "flex", gap: "1rem", flexWrap: "wrap" as const, marginTop: "0.75rem", fontSize: "0.8rem", color: "var(--text-secondary)" },
   legendDot: (color: string) => ({
@@ -165,18 +165,18 @@ const s = {
   }),
   tooltip: {
     position: "absolute" as const, pointerEvents: "none" as const,
-    background: "rgba(15,15,25,0.95)", border: "1px solid rgba(255,255,255,0.15)",
+    background: "var(--bg-card)", border: "1px solid var(--border-color)",
     borderRadius: 10, padding: "0.6rem 0.8rem", fontSize: "0.78rem",
     color: "var(--text-primary)", lineHeight: 1.6, zIndex: 100, whiteSpace: "nowrap" as const,
     backdropFilter: "blur(8px)",
   },
   select: {
-    padding: "0.5rem 0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.05)", color: "var(--text-primary)", fontSize: "0.85rem",
+    padding: "0.5rem 0.75rem", borderRadius: 8, border: "1px solid var(--border-color)",
+    background: "var(--bg-secondary)", color: "var(--text-primary)", fontSize: "0.85rem",
   } as const,
   input: {
-    padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.05)", color: "var(--text-primary)", fontSize: "0.85rem", width: 60,
+    padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid var(--border-color)",
+    background: "var(--bg-secondary)", color: "var(--text-primary)", fontSize: "0.85rem", width: 60,
   } as const,
 } as const;
 
@@ -184,7 +184,7 @@ const COLORS = {
   inSet: "#6366f1",
   dominated: "#22c55e",
   undominated: "#ef4444",
-  edge: "rgba(255,255,255,0.08)",
+  edge: "var(--border-color)",
   edgeHighlight: "rgba(99,102,241,0.3)",
 };
 
@@ -418,8 +418,8 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
 
               {/* Nodes */}
               {positions.map((pos, i) => {
-                let fill = "rgba(255,255,255,0.2)";
-                let stroke = "rgba(255,255,255,0.15)";
+                let fill = "var(--border-color-hover)";
+                let stroke = "var(--border-color)";
                 if (result) {
                   if (result.set.has(i)) {
                     fill = COLORS.inSet;
@@ -440,7 +440,7 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
                     />
                     {showLabels && (
                       <text x={pos.x} y={pos.y + 1} textAnchor="middle" dominantBaseline="middle"
-                        fill="#fff" fontSize={nodeR > 8 ? 8 : 6} fontWeight="bold" pointerEvents="none">
+                        fill="var(--text-primary)" fontSize={nodeR > 8 ? 8 : 6} fontWeight="bold" pointerEvents="none">
                         {i + 1}
                       </text>
                     )}

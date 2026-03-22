@@ -152,7 +152,7 @@ export function AssignmentMapFigure({
                 width={36}
                 height={36}
                 rx={6}
-                fill="#1e1e2e"
+                fill="var(--bg-card)"
                 stroke="#a78bfa"
                 strokeWidth={2}
               />
@@ -171,7 +171,7 @@ export function AssignmentMapFigure({
           return (
             <g key={`g${gid}`}>
               <circle cx={p.px} cy={p.py} r={16} fill={col} fillOpacity={0.35} stroke={col} strokeWidth={2} />
-              <text x={p.px} y={p.py + 4} textAnchor="middle" fill="#fafafa" fontSize="10" fontWeight={700}>
+              <text x={p.px} y={p.py + 4} textAnchor="middle" fill="var(--text-primary)" fontSize="10" fontWeight={700}>
                 {gid}
               </text>
               <text x={p.px} y={p.py + 26} textAnchor="middle" fill="var(--text-muted)" fontSize="8">
@@ -263,7 +263,7 @@ export function PerHeliBreakdown({ times, total, lang = "en" }: { times: number[
         color: "var(--text-secondary)",
       }}
     >
-      <strong style={{ color: "#c4b5fd" }}>{t.heuristicH2}</strong>{t.h2Desc}
+      <strong style={{ color: "var(--text-primary)" }}>{t.heuristicH2}</strong>{t.h2Desc}
       <ul style={{ margin: "0.4rem 0 0", paddingLeft: "1.2rem" }}>
         {times.map((time, h) => (
           <li key={h}>
@@ -272,7 +272,7 @@ export function PerHeliBreakdown({ times, total, lang = "en" }: { times: number[
           </li>
         ))}
       </ul>
-      <p style={{ margin: "0.5rem 0 0", color: "#7dd3fc" }}>
+      <p style={{ margin: "0.5rem 0 0", color: "var(--text-primary)" }}>
         {t.sum} <strong>{total.toFixed(2)}</strong>{t.minimize}
       </p>
     </div>
@@ -286,16 +286,16 @@ export function RunExplainer({ lang = "en" }: { lang?: Lang }) {
       style={{
         padding: "0.85rem 1rem",
         background: "rgba(99, 102, 241, 0.08)",
-        border: "1px solid rgba(129, 140, 248, 0.25)",
+        border: "1px solid var(--border-color)",
         borderRadius: "0.5rem",
         marginBottom: "1rem",
         fontSize: "0.8rem",
         lineHeight: 1.55,
-        color: "#c7d2fe",
+        color: "var(--text-secondary)",
       }}
     >
-      <strong style={{ color: "#e0e7ff" }}>{t.howItWorks}</strong>
-      <ol style={{ margin: "0.45rem 0 0", paddingLeft: "1.15rem", color: "#a5b4fc" }}>
+      <strong style={{ color: "var(--text-primary)" }}>{t.howItWorks}</strong>
+      <ol style={{ margin: "0.45rem 0 0", paddingLeft: "1.15rem", color: "var(--text-muted)" }}>
         <li style={{ marginBottom: "0.35rem" }}>
           <strong style={{ color: "var(--text-primary)" }}>{t.map}</strong>{t.mapDesc}
         </li>

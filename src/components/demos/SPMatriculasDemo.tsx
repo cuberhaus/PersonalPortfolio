@@ -181,7 +181,7 @@ const s = {
     alignItems: "center",
     gap: "1rem",
     padding: "1rem 1.5rem",
-    background: "#1a1a2e",
+    background: "var(--bg-secondary)",
     border: "1px solid #6366f1",
     borderRadius: "0.75rem",
     marginBottom: "1rem",
@@ -456,7 +456,7 @@ export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
             padding: "0.5rem 1rem",
             borderRadius: "0.5rem",
             fontSize: "0.85rem",
-            background: "#1a1a2e",
+            background: "var(--bg-secondary)",
             color: "#f87171",
           }}
         >
