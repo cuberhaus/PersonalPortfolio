@@ -36,6 +36,8 @@ export const ui = {
     'projects.title': 'Try my projects',
     'projects.subtitle': 'Live, interactive demos you can play with right in your browser.',
     'projects.badge': 'Live Demo',
+    'projects.showMore': 'Show more',
+    'projects.showLess': 'Show less',
     
     // Skills
     'skills.label': 'Skills',
@@ -104,6 +106,8 @@ export const ui = {
     'projects.title': 'Prueba mis proyectos',
     'projects.subtitle': 'Demos interactivas y en vivo que puedes probar directamente en tu navegador.',
     'projects.badge': 'Demo en vivo',
+    'projects.showMore': 'Mostrar más',
+    'projects.showLess': 'Mostrar menos',
     
     // Skills
     'skills.label': 'Habilidades',
@@ -172,6 +176,8 @@ export const ui = {
     'projects.title': 'Prova els meus projectes',
     'projects.subtitle': 'Demos interactives i en viu que pots provar directament al teu navegador.',
     'projects.badge': 'Demo en viu',
+    'projects.showMore': 'Mostra més',
+    'projects.showLess': 'Mostra menys',
     
     // Skills
     'skills.label': 'Habilitats',

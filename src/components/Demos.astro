@@ -22,8 +22,8 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     </div>
 
     <div class="demo-grid reveal-stagger">
-      {demos.map((demo) => (
-        <article class="demo-card">
+      {demos.map((demo, index) => (
+        <article class={`demo-card ${index >= 6 ? 'hidden-demo extra-demo' : ''}`}>
           <div class="demo-card-inner">
             <div class="demo-icon">
               {demo.icon === 'gamepad' && (
@@ -166,8 +166,55 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
         </article>
       ))}
     </div>
+
+    {demos.length > 6 && (
+      <div class="show-more-container reveal">
+        <button id="show-more-demos" class="show-more-btn" data-more={t('projects.showMore')} data-less={t('projects.showLess')}>
+          {t('projects.showMore')}
+        </button>
+      </div>
+    )}
   </div>
 </section>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const btn = document.getElementById('show-more-demos');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      const isExpanded = btn.classList.toggle('expanded');
+      const extraDemos = document.querySelectorAll('.extra-demo');
+      
+      extraDemos.forEach(demo => {
+        if (isExpanded) {
+          demo.classList.remove('hidden-demo');
+          // Add a small delay for staggered animation effect
+          setTimeout(() => {
+            demo.classList.add('visible');
+          }, 50);
+        } else {
+          demo.classList.remove('visible');
+          // Wait for transition before hiding
+          setTimeout(() => {
+            demo.classList.add('hidden-demo');
+          }, 300); // matches transition time
+        }
+      });
+
+      if (isExpanded) {
+        btn.textContent = btn.getAttribute('data-less');
+      } else {
+        btn.textContent = btn.getAttribute('data-more');
+        // Scroll back to top of projects section smoothly
+        const section = document.getElementById('projects');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
+</script>
 
 <style>
   .demo-grid {
@@ -329,5 +376,49 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     .demo-grid {
       grid-template-columns: 1fr;
     }
+  }
+
+  .hidden-demo {
+    display: none !important;
+  }
+
+  .extra-demo {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .extra-demo.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .show-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+
+  .show-more-btn {
+    background: transparent;
+    border: 1px solid var(--accent-start);
+    color: var(--accent-start);
+    padding: 0.75rem 2rem;
+    border-radius: 2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .show-more-btn:hover {
+    background: rgba(88, 166, 255, 0.1);
+    box-shadow: 0 0 15px rgba(88, 166, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .show-more-btn:active {
+    transform: translateY(0);
   }
 </style>
