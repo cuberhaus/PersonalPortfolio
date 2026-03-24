@@ -47,6 +47,11 @@ export const ui = {
     'experience.title': "Where I've worked",
     'experience.subtitle': 'A timeline of my professional journey so far.',
     
+    // Work Projects
+    'work.label': 'Professional Work',
+    'work.title': 'Featured Projects',
+    'work.subtitle': 'Key milestones and AI initiatives delivered in the real world.',
+    
     // Education
     'education.label': 'Education',
     'education.title': 'Where I studied',
@@ -110,6 +115,11 @@ export const ui = {
     'experience.title': 'Dónde he trabajado',
     'experience.subtitle': 'Una línea de tiempo de mi trayectoria profesional hasta ahora.',
     
+    // Work Projects
+    'work.label': 'Trabajo Profesional',
+    'work.title': 'Proyectos Destacados',
+    'work.subtitle': 'Hitos clave e iniciativas de IA entregadas en el mundo real.',
+    
     // Education
     'education.label': 'Educación',
     'education.title': 'Dónde estudié',
@@ -172,6 +182,11 @@ export const ui = {
     'experience.label': 'Experiència',
     'experience.title': 'On he treballat',
     'experience.subtitle': 'Una línia de temps de la meva trajectòria professional fins ara.',
+    
+    // Work Projects
+    'work.label': 'Treball Professional',
+    'work.title': 'Projectes Destacats',
+    'work.subtitle': "Fites clau i iniciatives d'IA entregades al món real.",
     
     // Education
     'education.label': 'Educació',
