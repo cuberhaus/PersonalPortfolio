@@ -347,10 +347,12 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
               <div class="mock-recs-grid">
                 <div class="mock-card">
                   <h3 style="margin-top: 0; font-size: 1rem; margin-bottom: 1rem; color: #fff;">Mètode de recomanació</h3>
-                  <select class="mock-select" disabled>
+                  <select class="mock-select" style="margin-bottom: 1rem;">
                     <option>Collaborative</option>
+                    <option>Content Based</option>
+                    <option>Hybrid</option>
                   </select>
-                  <button class="mock-btn mock-btn-primary" style="width: 100%; margin-top: 1rem;" onclick="alert('In the live demo, this computes recommendations based on your profile.')">Obté recomanació</button>
+                  <button class="mock-btn mock-btn-primary" style="width: 100%;" onclick="alert('In the live demo, this computes recommendations based on your profile.')">Obté recomanació</button>
                 </div>
                 <div class="mock-card">
                   <div class="mock-table-responsive">
