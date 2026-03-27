@@ -73,7 +73,7 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
   </div>
 </section>
 
-<script define:vars={{ successMsg: t('contact.success'), errorMsg: t('contact.error'), sendMsg: t('contact.cta') }}>
+<script define:vars={{ successMsg: t('contact.success'), errorMsg: t('contact.error'), invalidEmailMsg: t('contact.invalidEmail'), sendMsg: t('contact.cta') }}>
   const initForm = () => {
     const form = document.getElementById('contact-form');
     const result = document.getElementById('form-result');
@@ -86,6 +86,36 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
         e.preventDefault();
         const formData = new FormData(form);
         const object = Object.fromEntries(formData);
+        
+        // Email validation
+        const email = object.email.toString().trim().toLowerCase();
+        // Check standard valid format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        // Common typo domains
+        const typos = {
+          'ail.com': 'gmail.com', 'gmil.com': 'gmail.com', 'gamil.com': 'gmail.com', 'gmai.com': 'gmail.com',
+          'gmail.co': 'gmail.com', 'gmail.con': 'gmail.com',
+          'hotmai.com': 'hotmail.com', 'hotmil.com': 'hotmail.com',
+          'yaho.com': 'yahoo.com', 'outloo.com': 'outlook.com'
+        };
+        
+        const domain = email.split('@')[1];
+
+        if (!emailRegex.test(email) || typos[domain]) {
+          if (result) {
+            if (typos[domain]) {
+               result.innerHTML = `Did you mean <b>${email.split('@')[0]}@${typos[domain]}</b>?`;
+            } else {
+               result.innerHTML = invalidEmailMsg;
+            }
+            result.classList.remove("success");
+            result.classList.add("error");
+            result.style.display = "block";
+          }
+          return;
+        }
+
         const json = JSON.stringify(object);
 
         if (result) result.style.display = "none";
@@ -197,6 +227,11 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
     font-family: var(--font-sans);
     font-size: 1rem;
     transition: all var(--transition-base);
+  }
+
+  .form-group textarea {
+    resize: none;
+    min-height: 140px;
   }
 
   .form-group input::placeholder,

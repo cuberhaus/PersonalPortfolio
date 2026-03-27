@@ -71,6 +71,7 @@ export const ui = {
     'contact.messagePlaceholder': 'Your message...',
     'contact.success': 'Thanks! Your message has been sent.',
     'contact.error': 'Oops! Something went wrong. Please try again.',
+    'contact.invalidEmail': 'Please enter a valid email address (e.g., name@gmail.com).',
     
     // Demos Layout
     'demo.portfolio': 'Portfolio',
@@ -141,6 +142,7 @@ export const ui = {
     'contact.messagePlaceholder': 'Tu mensaje...',
     'contact.success': '¡Gracias! Tu mensaje ha sido enviado.',
     'contact.error': '¡Ups! Algo salió mal. Por favor, inténtalo de nuevo.',
+    'contact.invalidEmail': 'Por favor, introduce un correo válido (ej. nombre@gmail.com).',
     
     // Demos Layout
     'demo.portfolio': 'Portafolio',
@@ -211,6 +213,7 @@ export const ui = {
     'contact.messagePlaceholder': 'El teu missatge...',
     'contact.success': 'Gràcies! El teu missatge ha estat enviat.',
     'contact.error': 'Ui! Alguna cosa ha anat malament. Si us plau, torna-ho a provar.',
+    'contact.invalidEmail': 'Si us plau, introdueix un correu vàlid (ex. nom@gmail.com).',
     
     // Demos Layout
     'demo.portfolio': 'Portafolis',

@@ -44,6 +44,18 @@
     "image": ""
   },
   {
+    "slug": "matriculas",
+    "title": "License Plate Detection",
+    "description": "Detect and read license plates from car images using computer vision — a MATLAB pipeline ported to the browser.",
+    "tags": [
+      "Computer Vision",
+      "TypeScript"
+    ],
+    "icon": "camera",
+    "github": "https://github.com/cuberhaus/SPMatriculas",
+    "image": ""
+  },
+  {
     "slug": "joc-eda",
     "title": "Programming Game Viewer",
     "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Replay viewer for the Data Structures and Algorithms programming game competition.",
@@ -54,19 +66,6 @@
     ],
     "icon": "gamepad",
     "github": "https://github.com/cuberhaus/joc_eda",
-    "image": ""
-  },
-  {
-    "slug": "pro2",
-    "title": "WPGMA Clustering",
-    "description": "Build phylogenetic trees step by step. Input species with gene sequences and watch the WPGMA algorithm merge clusters into a dendrogram.",
-    "tags": [
-      "TypeScript",
-      "Algorithms",
-      "D3"
-    ],
-    "icon": "tree",
-    "github": "https://github.com/cuberhaus/pracpro2",
     "image": ""
   },
   {
@@ -96,15 +95,16 @@
     "image": ""
   },
   {
-    "slug": "matriculas",
-    "title": "License Plate Detection",
-    "description": "Detect and read license plates from car images using computer vision — a MATLAB pipeline ported to the browser.",
+    "slug": "pro2",
+    "title": "WPGMA Clustering",
+    "description": "Build phylogenetic trees step by step. Input species with gene sequences and watch the WPGMA algorithm merge clusters into a dendrogram.",
     "tags": [
-      "Computer Vision",
-      "TypeScript"
+      "TypeScript",
+      "Algorithms",
+      "D3"
     ],
-    "icon": "camera",
-    "github": "https://github.com/cuberhaus/SPMatriculas",
+    "icon": "tree",
+    "github": "https://github.com/cuberhaus/pracpro2",
     "image": ""
   },
   {

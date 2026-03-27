@@ -44,6 +44,18 @@
     "image": ""
   },
   {
+    "slug": "matriculas",
+    "title": "Detecció de Matrícules",
+    "description": "Detecta i llegeix matrícules de cotxes a partir d'imatges utilitzant visió per computador — un pipeline de MATLAB portat al navegador.",
+    "tags": [
+      "Computer Vision",
+      "TypeScript"
+    ],
+    "icon": "camera",
+    "github": "https://github.com/cuberhaus/SPMatriculas",
+    "image": ""
+  },
+  {
     "slug": "joc-eda",
     "title": "Visor de Joc de Programació",
     "description": "Observa a bots d'IA lluitar en una quadrícula — guerrers, constructors, armes i estratègia. Visor de repeticions per a la competició de joc de programació d'Estructures de Dades i Algorismes.",
@@ -54,19 +66,6 @@
     ],
     "icon": "gamepad",
     "github": "https://github.com/cuberhaus/joc_eda",
-    "image": ""
-  },
-  {
-    "slug": "pro2",
-    "title": "Clustering WPGMA",
-    "description": "Construeix arbres filogenètics pas a pas. Introdueix espècies amb seqüències genètiques i observa com l'algorisme WPGMA fusiona clústers en un dendrograma.",
-    "tags": [
-      "TypeScript",
-      "Algorithms",
-      "D3"
-    ],
-    "icon": "tree",
-    "github": "https://github.com/cuberhaus/pracpro2",
     "image": ""
   },
   {
@@ -96,15 +95,16 @@
     "image": ""
   },
   {
-    "slug": "matriculas",
-    "title": "Detecció de Matrícules",
-    "description": "Detecta i llegeix matrícules de cotxes a partir d'imatges utilitzant visió per computador — un pipeline de MATLAB portat al navegador.",
+    "slug": "pro2",
+    "title": "Clustering WPGMA",
+    "description": "Construeix arbres filogenètics pas a pas. Introdueix espècies amb seqüències genètiques i observa com l'algorisme WPGMA fusiona clústers en un dendrograma.",
     "tags": [
-      "Computer Vision",
-      "TypeScript"
+      "TypeScript",
+      "Algorithms",
+      "D3"
     ],
-    "icon": "camera",
-    "github": "https://github.com/cuberhaus/SPMatriculas",
+    "icon": "tree",
+    "github": "https://github.com/cuberhaus/pracpro2",
     "image": ""
   },
   {
