@@ -2,21 +2,36 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="404 — Page Not Found" description="The page you are looking for does not exist.">
+<Layout title="404" description="Page not found.">
   <main class="error-page">
     <div class="container text-center">
       <h1 class="error-code gradient-text">404</h1>
-      <h2 class="error-title">Page Not Found</h2>
-      <p class="error-message">
-        Looks like you've ventured into uncharted territory. The page you're
-        looking for doesn't exist or has been moved.
+      <h2 class="error-title" id="error-title">Page Not Found</h2>
+      <p class="error-message" id="error-message">
+        The page you're looking for doesn't exist or has been moved.
       </p>
-      <a href={import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL} class="back-btn">
-        Return to Portfolio
+      <a href={import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL} class="back-btn" id="back-btn">
+        &larr; Portfolio
       </a>
     </div>
   </main>
 </Layout>
+
+<script>
+  const lang = window.location.pathname.split('/')[1];
+  const title = document.getElementById('error-title');
+  const msg = document.getElementById('error-message');
+  const btn = document.getElementById('back-btn');
+  if (lang === 'es' && title && msg && btn) {
+    title.textContent = 'Página no encontrada';
+    msg.textContent = 'La página que buscas no existe o ha sido movida.';
+    btn.innerHTML = '&larr; Portafolio';
+  } else if (lang === 'ca' && title && msg && btn) {
+    title.textContent = 'Pàgina no trobada';
+    msg.textContent = 'La pàgina que busques no existeix o ha estat moguda.';
+    btn.innerHTML = '&larr; Portafolis';
+  }
+</script>
 
 <style>
   .error-page {

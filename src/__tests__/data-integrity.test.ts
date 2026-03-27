@@ -102,6 +102,24 @@ describe('Demo pages match demo data', () => {
   });
 });
 
+// ─── Homepage section parity ─────────────────────────────────────
+
+describe('Homepage sections match across locales', () => {
+  const enHomePath = join(__dirname, '..', 'pages', 'index.astro');
+  const langHomePath = join(__dirname, '..', 'pages', '[lang]', 'index.astro');
+  const enHome = require('fs').readFileSync(enHomePath, 'utf-8') as string;
+  const langHome = require('fs').readFileSync(langHomePath, 'utf-8') as string;
+
+  const extractComponents = (src: string) =>
+    [...src.matchAll(/<([A-Z]\w+)\s*\/>/g)].map(m => m[1]).sort();
+
+  it('[lang]/index.astro renders the same components as index.astro', () => {
+    const enComponents = extractComponents(enHome);
+    const langComponents = extractComponents(langHome);
+    expect(langComponents).toEqual(enComponents);
+  });
+});
+
 // ─── i18n completeness ──────────────────────────────────────────
 
 describe('i18n translations', () => {

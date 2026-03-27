@@ -2,6 +2,11 @@ node_modules/
 dist/
 .astro/
 verification-screenshots/
+coverage/
+
+.env
+.env.*
+.DS_Store
 
 # planner-api (Python)
 planner-api/.venv/

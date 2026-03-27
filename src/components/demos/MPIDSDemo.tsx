@@ -269,7 +269,7 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     fetch(`${basePath}demos/mpids/${name}`)
       .then((r) => r.text())
       .then((text) => { setSelectedSample(-1); loadGraph(text); })
-      .catch(console.error);
+      .catch(() => {});
   }, [loadGraph]);
 
   const handleRandom = useCallback(() => {

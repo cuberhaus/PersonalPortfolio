@@ -34,11 +34,13 @@ const t = useTranslations(lang);
     <meta property="og:image" content={new URL(ogImage || (base + "/og-image.jpg"), Astro.site || Astro.url)} />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={title + " — Pol Casacuberta"} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(ogImage || (base + "/og-image.jpg"), Astro.site || Astro.url)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={Astro.url} />
+    <meta name="twitter:title" content={title + " — Pol Casacuberta"} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage || (base + "/og-image.jpg"), Astro.site || Astro.url)} />
+
+    <link rel="canonical" href={Astro.url} />
 
     <script is:inline>
       // Apply theme before render to prevent FOUC
@@ -128,8 +130,8 @@ const t = useTranslations(lang);
                   copyBtn.setAttribute('title', originalTitle || 'Copy link');
                 }, 2000);
               }
-            } catch (err) {
-              console.error('Failed to copy text: ', err);
+            } catch {
+              // Clipboard API not available
             }
           });
         }

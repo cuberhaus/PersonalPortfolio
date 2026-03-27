@@ -58,7 +58,7 @@
   {
     "slug": "joc-eda",
     "title": "Visor de Joc de Programació",
-    "description": "Observa a bots d'IA lluitar en una quadrícula — guerrers, constructors, armes i estratègia. Visor de repeticions per a la competició de joc de programació d'Estructures de Dades i Algorismes.",
+    "description": "Observa com els bots d'IA lluiten en una quadrícula — guerrers, constructors, armes i estratègia. Visor de repeticions per a la competició de joc de programació d'Estructures de Dades i Algorismes.",
     "tags": [
       "C++",
       "Canvas",

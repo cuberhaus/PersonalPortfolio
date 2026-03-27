@@ -35,17 +35,17 @@ describe('getLangFromUrl', () => {
 describe('useTranslations', () => {
   it('returns English value for "en"', () => {
     const t = useTranslations('en');
-    expect(t('nav.home')).toBe(ui.en['nav.home']);
+    expect(t('nav.about')).toBe(ui.en['nav.about']);
   });
 
   it('returns Spanish value for "es"', () => {
     const t = useTranslations('es');
-    expect(t('nav.home')).toBe(ui.es['nav.home']);
+    expect(t('nav.about')).toBe(ui.es['nav.about']);
   });
 
   it('returns Catalan value for "ca"', () => {
     const t = useTranslations('ca');
-    expect(t('nav.home')).toBe(ui.ca['nav.home']);
+    expect(t('nav.about')).toBe(ui.ca['nav.about']);
   });
 
   it('falls back to defaultLang if key is empty in target language', () => {
