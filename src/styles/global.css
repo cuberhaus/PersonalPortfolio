@@ -41,7 +41,7 @@
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-[data-theme='light'] {
+html[data-theme='light'] {
   color-scheme: light;
   --bg-primary: #f8fafc;
   --bg-primary-rgb: 248, 250, 252;

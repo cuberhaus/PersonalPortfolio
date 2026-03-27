@@ -1,3 +1,13 @@
+/**
+ * Structural: do separate source files that should agree with each other
+ * actually agree? (file-level source parsing)
+ *
+ * These tests read raw .astro/.ts source files and parse them to verify
+ * cross-file invariants — e.g. that the icon set used by Demos.astro,
+ * DemoNav.astro, and demo-icons.ts all match the slugs in demos.json;
+ * that navbar anchors correspond to real section IDs; and that every demo
+ * page passes its correct slug to DemoLayout.
+ */
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';

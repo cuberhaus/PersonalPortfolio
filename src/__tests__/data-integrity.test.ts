@@ -1,3 +1,11 @@
+/**
+ * Data integrity: is the demo/i18n data valid and does it match the pages?
+ *
+ * These tests validate the JSON data files that feed the site (demos, skills,
+ * experience, education, work projects) — checking required fields, value
+ * constraints, cross-language array lengths, and consistency between the data
+ * and the actual Astro page files on disk.
+ */
 import { describe, it, expect } from 'vitest';
 import { readdirSync } from 'fs';
 import { join } from 'path';

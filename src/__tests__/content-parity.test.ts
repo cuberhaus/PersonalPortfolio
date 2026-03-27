@@ -1,3 +1,12 @@
+/**
+ * Content parity: do the non-demo content JSON files have the same shape
+ * across languages?
+ *
+ * These tests compare the English, Spanish, and Catalan versions of each
+ * content data file (skills, experience, education, work projects) to ensure
+ * they have matching array lengths, identical structural keys, and consistent
+ * untranslated fields (e.g. tags, icon names, company identifiers).
+ */
 import { describe, it, expect } from 'vitest';
 
 import skillsEn from '../data/skills.json';
