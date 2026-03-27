@@ -77,6 +77,7 @@ export const ui = {
     'demo.portfolio': 'Portfolio',
     'demo.copyLink': 'Copy link',
     'demo.copied': 'Copied!',
+    'demo.moreProjects': 'More Projects',
   },
   es: {
     // Nav
@@ -148,6 +149,7 @@ export const ui = {
     'demo.portfolio': 'Portafolio',
     'demo.copyLink': 'Copiar enlace',
     'demo.copied': '¡Copiado!',
+    'demo.moreProjects': 'Más Proyectos',
   },
   ca: {
     // Nav
@@ -219,5 +221,6 @@ export const ui = {
     'demo.portfolio': 'Portafolis',
     'demo.copyLink': 'Copiar enllaç',
     'demo.copied': 'Copiat!',
+    'demo.moreProjects': 'Més Projectes',
   },
 } as const;

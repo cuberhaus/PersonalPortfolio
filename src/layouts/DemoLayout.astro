@@ -1,6 +1,7 @@
 ---
 import ThemeToggle from '../components/ThemeToggle.astro';
 import LanguagePicker from '../components/LanguagePicker.astro';
+import DemoNav from '../components/DemoNav.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import Analytics from '../components/Analytics.astro';
 
@@ -8,9 +9,10 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  slug?: string;
 }
 
-const { title, description, ogImage } = Astro.props;
+const { title, description, ogImage, slug } = Astro.props;
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -99,6 +101,7 @@ const t = useTranslations(lang);
 
     <main class="demo-main">
       <slot />
+      {slug && <DemoNav currentSlug={slug} />}
     </main>
 
     <script>
