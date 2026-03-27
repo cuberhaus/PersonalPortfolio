@@ -5,17 +5,14 @@ import demosEn from '../data/demos.json';
 import demosEs from '../data/demos.es.json';
 import demosCa from '../data/demos.ca.json';
 import { ui, languages } from '../i18n/ui';
+import { ICON_PATHS } from '../lib/demo-icons';
 
 const DEMO_PAGES_DIR = join(__dirname, '..', 'pages', 'demos');
 const demoPageFiles = readdirSync(DEMO_PAGES_DIR)
   .filter(f => f.endsWith('.astro'))
   .map(f => f.replace('.astro', ''));
 
-const VALID_ICONS = [
-  'gamepad', 'tree', 'music', 'store', 'heart', 'camera',
-  'graph', 'scatter', 'map', 'helicopter', 'aorta', 'ml',
-  'microscope', 'server',
-];
+const VALID_ICONS = Object.keys(ICON_PATHS);
 
 // ─── Demo data consistency ──────────────────────────────────────
 
