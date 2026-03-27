@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Detecció d'Anomalies amb IA Física",
+    "company": "Horse",
+    "role": "AI & Data Consultant @ Deloitte",
+    "description": "El primer projecte d'IA Física entregat a nivell mundial a Deloitte. Detecció d'anomalies de fabricació en línies de producció de motors en viu i en temps real. També es va desenvolupar un bessó digital del magatzem amb seguiment de paquets per càmera.",
+    "tags": ["IA Física", "Visió per Computador", "Bessó Digital", "IoT", "Temps Real"],
+    "icon": "cpu"
+  },
+  {
+    "title": "Plataforma E2E d'Emparellament de Talent IA",
+    "company": "Govern d'Aragó",
+    "role": "AI & Data Consultant @ Deloitte",
+    "description": "Programari integral que analitza currículums en PDF, els estandarditza en JSON estructurat i els indexa en una base de dades RAG. Permet fer cerques semàntiques per trobar els millors candidats per a una oferta de feina i viceversa.",
+    "tags": ["LLMs", "RAG", "Cerca Vectorial", "Parsing PDF"],
+    "icon": "users"
+  }
+]

@@ -2,13 +2,15 @@
 import ThemeToggle from '../components/ThemeToggle.astro';
 import LanguagePicker from '../components/LanguagePicker.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   title: string;
   description: string;
+  ogImage?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, ogImage } = Astro.props;
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -27,14 +29,14 @@ const t = useTranslations(lang);
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title + " — Pol Casacuberta"} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
+    <meta property="og:image" content={new URL(ogImage || (base + "/og-image.jpg"), Astro.site || Astro.url)} />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
     <meta property="twitter:title" content={title + " — Pol Casacuberta"} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
+    <meta property="twitter:image" content={new URL(ogImage || (base + "/og-image.jpg"), Astro.site || Astro.url)} />
 
     <script is:inline>
       // Apply theme before render to prevent FOUC
@@ -65,6 +67,7 @@ const t = useTranslations(lang);
     />
     
     <title>{title} — Pol Casacuberta</title>
+    <Analytics />
   </head>
   <body>
     <nav class="demo-nav">

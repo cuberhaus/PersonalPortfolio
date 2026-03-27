@@ -1,0 +1,187 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import projectsEn from '../data/work_projects.json';
+import projectsEs from '../data/work_projects.es.json';
+import projectsCa from '../data/work_projects.ca.json';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : projectsEn;
+---
+
+<section class="section work-projects" id="work">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">{t('work.label')}</span>
+      <h2 class="section-title">{t('work.title')}</h2>
+      <p class="section-subtitle">
+        {t('work.subtitle')}
+      </p>
+    </div>
+
+    <div class="work-grid reveal-stagger">
+      {projects.map((project) => (
+        <div class="work-card">
+          <div class="work-card-inner">
+            <div class="work-icon">
+              {project.icon === 'cpu' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                  <rect x="9" y="9" width="6" height="6"></rect>
+                  <line x1="9" y1="1" x2="9" y2="4"></line>
+                  <line x1="15" y1="1" x2="15" y2="4"></line>
+                  <line x1="9" y1="20" x2="9" y2="23"></line>
+                  <line x1="15" y1="20" x2="15" y2="23"></line>
+                  <line x1="20" y1="9" x2="23" y2="9"></line>
+                  <line x1="20" y1="14" x2="23" y2="14"></line>
+                  <line x1="1" y1="9" x2="4" y2="9"></line>
+                  <line x1="1" y1="14" x2="4" y2="14"></line>
+                </svg>
+              )}
+              {project.icon === 'users' && (
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              )}
+            </div>
+
+            <div class="work-badge">
+              <span>{project.company}</span>
+            </div>
+
+            <h3 class="work-title">{project.title}</h3>
+            <p class="work-role">{project.role}</p>
+            <p class="work-desc">{project.description}</p>
+
+            <ul class="work-tags">
+              {project.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .work-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-base), border-color var(--transition-base),
+                box-shadow var(--transition-base);
+    overflow: hidden;
+    display: flex;
+  }
+
+  .work-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
+  .work-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-start);
+    box-shadow: 0 12px 40px var(--glow-color);
+  }
+
+  .work-card:hover::before {
+    opacity: 1;
+  }
+
+  .work-card-inner {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+
+  .work-icon {
+    color: var(--accent-start);
+    margin-bottom: 1.25rem;
+  }
+
+  .work-badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    opacity: 0.8;
+  }
+
+  .work-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+  }
+
+  .work-role {
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    color: var(--accent-start);
+    margin-bottom: 1rem;
+  }
+
+  .work-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    flex: 1;
+    margin-bottom: 1.5rem;
+  }
+
+  .work-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .work-tags li {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (max-width: 1024px) {
+    .work-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

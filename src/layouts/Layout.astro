@@ -2,6 +2,7 @@
 import { ViewTransitions } from 'astro:transitions';
 import { getLangFromUrl } from '../i18n/utils';
 import ScrollToTop from '../components/ScrollToTop.astro';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   title?: string;
@@ -68,6 +69,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
     <title>{title}</title>
     <ViewTransitions />
+    <Analytics />
   </head>
   <body>
     <a href="#main-content" class="skip-to-content">Skip to content</a>

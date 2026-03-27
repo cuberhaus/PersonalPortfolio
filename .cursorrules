@@ -1,0 +1,30 @@
+You are working on the `PersonalPortfolio` repository.
+
+# Project Stack
+- **Framework**: Astro (Static Site Generator / Web Framework)
+- **Language**: TypeScript / JavaScript
+- **Styling**: Scoped CSS within `.astro` components, utilizing global CSS variables (`var(--bg-color)`, etc.) for theming.
+
+# Development Rules & Guidelines
+1. **Astro Components**:
+   - Use `.astro` files for UI components and layouts.
+   - When adding client-side interactivity, use standard `<script>` tags. 
+   - **Important for Client Scripts**: Since the site uses Astro ViewTransitions, standard `DOMContentLoaded` events might not fire on navigation. Always bind initialization logic to both `DOMContentLoaded` (for initial load) and `astro:page-load` (for client-side navigation).
+   - If a script requires bypassing Astro's bundler, use the `<script is:inline>` directive.
+
+2. **Internationalization (i18n)**:
+   - The site supports multiple languages (English, Spanish, Catalan).
+   - All static text strings must be added to the dictionaries in `src/i18n/ui.ts` (or equivalent translation files). Do not hardcode raw English text directly into `.astro` templates unless it's strictly structural or a temporary mock.
+
+3. **Styling Conventions**:
+   - Prefer writing scoped CSS directly inside the `<style>` block of the `.astro` component.
+   - Use existing CSS variables for colors, spacing, and typography to maintain dark mode / light mode consistency.
+   - Avoid adding heavy CSS frameworks (like Tailwind or Bootstrap) unless explicitly requested, as the project relies on custom lightweight CSS.
+
+4. **Demos & Backends**:
+   - The portfolio features "Live Demos" that rely on external backend projects (like `tenda_online` and `subgrup-prop7.1`).
+   - When modifying demo pages (in `src/pages/demos/`), account for the fact that the backend might be offline in production. Always include a fallback "Interactive Mock" or unavailable state (like the conditional `showIframe` logic).
+   - To run the full stack locally, developers use `scripts/dev-all-demos.sh`.
+
+5. **Data Files**:
+   - Project metadata (demos, work projects) are stored in `src/data/` as JSON files (e.g., `demos.json`, `work_projects.json`). Update these files instead of hardcoding data blocks into UI components.

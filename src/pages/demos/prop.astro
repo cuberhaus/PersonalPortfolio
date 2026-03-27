@@ -5,6 +5,25 @@ import { getLangFromUrl } from '../../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const isDev = import.meta.env.DEV;
 
+// Comprovar si el backend local està actiu intentant fer un fetch
+let backendActive = false;
+if (isDev) {
+  try {
+    const response = await fetch('http://localhost:8081/', {
+      method: 'HEAD',
+      // Un timeout curt perquè no pengi la càrrega de la pàgina
+      signal: AbortSignal.timeout(500)
+    });
+    backendActive = response.ok;
+  } catch (error) {
+    // Si hi ha un error (connexió refusada, timeout, etc.), el backend no està actiu
+    backendActive = false;
+  }
+}
+
+// Mostra la iframe si estem en DEV I el backend està actiu
+const showIframe = isDev && backendActive;
+
 const TRANSLATIONS = {
   en: {
     title: "Recommendation System",
@@ -22,7 +41,23 @@ const TRANSLATIONS = {
     step1: "<code>cd subgrup-prop7.1</code>",
     step2: "<code>make web</code> \u2014 compiles and starts the Spring Boot server",
     step3: "The app will run at <a href=\"http://localhost:8081\" target=\"_blank\" rel=\"noopener\">localhost:8081</a>",
-    viewSource: "View source on GitHub"
+    viewSource: "View source on GitHub",
+    mockNavBrand: "Recommendation System",
+    mockNavHome: "Home",
+    mockNavTypes: "Item Types",
+    mockNavItems: "Items",
+    mockNavUsers: "Users",
+    mockNavRatings: "Ratings",
+    mockNavRecs: "Recommendations",
+    mockDashTitle: "System Status",
+    mockDashType: "Active item type",
+    mockDashUsers: "System users",
+    mockDashItems: "Loaded items",
+    mockDashRatings: "Total ratings",
+    mockDashSession: "Session Status",
+    mockSessionActive: "Session active",
+    mockNoSelection: "None selected",
+    mockHint: "This is an interactive mock of the Spring Boot application interface."
   },
   es: {
     title: "Sistema de Recomendaci\u00f3n",
@@ -40,7 +75,23 @@ const TRANSLATIONS = {
     step1: "<code>cd subgrup-prop7.1</code>",
     step2: "<code>make web</code> \u2014 compila e inicia el servidor Spring Boot",
     step3: "La app se ejecutar\u00e1 en <a href=\"http://localhost:8081\" target=\"_blank\" rel=\"noopener\">localhost:8081</a>",
-    viewSource: "Ver c\u00f3digo en GitHub"
+    viewSource: "Ver c\u00f3digo en GitHub",
+    mockNavBrand: "Sistema de Recomendaci\u00f3n",
+    mockNavHome: "Inicio",
+    mockNavTypes: "Tipos de \u00edtem",
+    mockNavItems: "\u00cdtems",
+    mockNavUsers: "Usuarios",
+    mockNavRatings: "Valoraciones",
+    mockNavRecs: "Recomendaciones",
+    mockDashTitle: "Estado del Sistema",
+    mockDashType: "Tipo de \u00edtem actual",
+    mockDashUsers: "Usuarios del sistema",
+    mockDashItems: "\u00cdtems cargados",
+    mockDashRatings: "Valoraciones totales",
+    mockDashSession: "Estado de la Sesi\u00f3n",
+    mockSessionActive: "Sesi\u00f3n iniciada",
+    mockNoSelection: "Ninguno seleccionado",
+    mockHint: "Este es un mock interactivo de la interfaz de la aplicaci\u00f3n Spring Boot."
   },
   ca: {
     title: "Sistema de Recomanaci\u00f3",
@@ -58,7 +109,23 @@ const TRANSLATIONS = {
     step1: "<code>cd subgrup-prop7.1</code>",
     step2: "<code>make web</code> \u2014 compila i inicia el servidor Spring Boot",
     step3: "L'app s'executar\u00e0 a <a href=\"http://localhost:8081\" target=\"_blank\" rel=\"noopener\">localhost:8081</a>",
-    viewSource: "Veure codi a GitHub"
+    viewSource: "Veure codi a GitHub",
+    mockNavBrand: "Sistema de Recomanaci\u00f3",
+    mockNavHome: "Inici",
+    mockNavTypes: "Tipus d'\u00edtem",
+    mockNavItems: "\u00cdtems",
+    mockNavUsers: "Usuaris",
+    mockNavRatings: "Valoracions",
+    mockNavRecs: "Recomanacions",
+    mockDashTitle: "Estat del Sistema",
+    mockDashType: "Tipus d'\u00edtem actual",
+    mockDashUsers: "Usuaris al sistema",
+    mockDashItems: "\u00cdtems carregats",
+    mockDashRatings: "Valoracions totals",
+    mockDashSession: "Estat de la Sessi\u00f3",
+    mockSessionActive: "Sessi\u00f3 iniciada",
+    mockNoSelection: "Cap seleccionat",
+    mockHint: "Aquest \u00e9s un mock interactiu de la interf\u00edcie de l'aplicaci\u00f3 Spring Boot."
   }
 };
 
@@ -87,7 +154,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
       </div>
     </div>
 
-    {isDev ? (
+    {showIframe ? (
       <div class="demo-local-section">
         <div class="demo-local-header">
           <h3>{t.liveApp}</h3>
@@ -107,10 +174,215 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
       </div>
     ) : (
       <div class="demo-local-section">
-        <div class="demo-local-header">
-          <h3>{t.demoUnavail}</h3>
+        <div class="demo-local-header" style="justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <h3>{t.demoUnavail}</h3>
+          </div>
+          <span class="badge" style="margin: 0; font-size: 0.65rem;">Interactive Mock</span>
         </div>
-        <div style="padding: 2rem; text-align: center; color: var(--text-muted);" set:html={t.unavailDesc}></div>
+        <div class="mock-browser">
+          <div class="mock-nav">
+            <div class="mock-nav-brand">{t.mockNavBrand}</div>
+            <div class="mock-nav-links">
+              <button class="mock-nav-link active" data-mock-tab="home">{t.mockNavHome}</button>
+              <button class="mock-nav-link" data-mock-tab="types">{t.mockNavTypes}</button>
+              <button class="mock-nav-link" data-mock-tab="items">{t.mockNavItems}</button>
+              <button class="mock-nav-link" data-mock-tab="users">{t.mockNavUsers}</button>
+              <button class="mock-nav-link" data-mock-tab="ratings">{t.mockNavRatings}</button>
+              <button class="mock-nav-link" data-mock-tab="recs">{t.mockNavRecs}</button>
+            </div>
+          </div>
+          <div class="mock-content">
+            <div class="mock-tab-content active" id="mock-home">
+              <h2 class="mock-page-title">{t.mockDashTitle}</h2>
+              <div class="mock-alert">
+                <strong>Hint:</strong> {t.mockHint}
+              </div>
+              <div class="mock-dashboard-grid">
+                <div class="mock-card">
+                  <div class="mock-card-title">{t.mockDashType}</div>
+                  <div class="mock-card-value text-accent">Films</div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card-title">{t.mockDashUsers}</div>
+                  <div class="mock-card-value">2</div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card-title">{t.mockDashItems}</div>
+                  <div class="mock-card-value">250</div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card-title">{t.mockDashRatings}</div>
+                  <div class="mock-card-value">878</div>
+                </div>
+              </div>
+              <div class="mock-card mock-session-card">
+                <div class="mock-card-title">{t.mockDashSession}</div>
+                <div class="mock-card-value text-success">{t.mockSessionActive}</div>
+              </div>
+            </div>
+
+            <div class="mock-tab-content" id="mock-types">
+              <h2 class="mock-page-title">{t.mockNavTypes}</h2>
+              <div class="mock-card">
+                <table class="mock-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Accions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Films</td>
+                      <td>
+                        <button class="mock-btn mock-btn-outline" onclick="alert('In the live demo, this selects the dataset.')">Selecciona</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Books</td>
+                      <td>
+                        <button class="mock-btn mock-btn-outline" onclick="alert('In the live demo, this selects the dataset.')">Selecciona</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="mock-tab-content" id="mock-items">
+              <h2 class="mock-page-title">{t.mockNavItems}</h2>
+              <div class="mock-card">
+                <div class="mock-table-responsive">
+                  <table class="mock-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Director</th>
+                        <th>Genre</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>101</td>
+                        <td>Inception</td>
+                        <td>Nolan</td>
+                        <td>Sci-Fi</td>
+                      </tr>
+                      <tr>
+                        <td>102</td>
+                        <td>Interstellar</td>
+                        <td>Nolan</td>
+                        <td>Sci-Fi</td>
+                      </tr>
+                      <tr>
+                        <td>103</td>
+                        <td>The Godfather</td>
+                        <td>Coppola</td>
+                        <td>Crime</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mock-tab-content" id="mock-users">
+              <h2 class="mock-page-title">{t.mockNavUsers}</h2>
+              <div class="mock-card">
+                <table class="mock-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>ID</th>
+                      <th>Actiu</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>admin</td>
+                      <td>1</td>
+                      <td>true</td>
+                    </tr>
+                    <tr>
+                      <td>test_user</td>
+                      <td>2</td>
+                      <td>true</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="mock-tab-content" id="mock-ratings">
+              <h2 class="mock-page-title">{t.mockNavRatings}</h2>
+              <div class="mock-card">
+                <table class="mock-table">
+                  <thead>
+                    <tr>
+                      <th>Usuari</th>
+                      <th>Ítem</th>
+                      <th>Valoració</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>101</td>
+                      <td>5.0</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>102</td>
+                      <td>4.5</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="mock-tab-content" id="mock-recs">
+              <h2 class="mock-page-title">{t.mockNavRecs}</h2>
+              <div class="mock-recs-grid">
+                <div class="mock-card">
+                  <h3 style="margin-top: 0; font-size: 1rem; margin-bottom: 1rem; color: #fff;">Mètode de recomanació</h3>
+                  <select class="mock-select" style="margin-bottom: 1rem;">
+                    <option>Collaborative</option>
+                    <option>Content Based</option>
+                    <option>Hybrid</option>
+                  </select>
+                  <button class="mock-btn mock-btn-primary" style="width: 100%;" onclick="alert('In the live demo, this computes recommendations based on your profile.')">Obté recomanació</button>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-table-responsive">
+                    <table class="mock-table">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Title</th>
+                          <th>Genre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>104</td>
+                          <td>Pulp Fiction</td>
+                          <td>Crime</td>
+                        </tr>
+                        <tr>
+                          <td>105</td>
+                          <td>Spirited Away</td>
+                          <td>Animation</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )}
 
@@ -129,6 +401,46 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
       )}
       
     </div>
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const initTabs = () => {
+          const tabs = document.querySelectorAll('.mock-nav-link');
+          const contents = document.querySelectorAll('.mock-tab-content');
+
+          if (tabs.length === 0 || contents.length === 0) return;
+
+          tabs.forEach(tab => {
+            // Remove old listeners to prevent duplicates if initTabs runs multiple times
+            const newTab = tab.cloneNode(true);
+            tab.parentNode.replaceChild(newTab, tab);
+
+            newTab.addEventListener('click', (e) => {
+              e.preventDefault();
+              
+              const allTabs = document.querySelectorAll('.mock-nav-link');
+              const allContents = document.querySelectorAll('.mock-tab-content');
+
+              allTabs.forEach(t => t.classList.remove('active'));
+              allContents.forEach(c => c.classList.remove('active'));
+
+              newTab.classList.add('active');
+
+              const targetId = `mock-${newTab.getAttribute('data-mock-tab')}`;
+              const targetContent = document.getElementById(targetId);
+              if (targetContent) {
+                targetContent.classList.add('active');
+              }
+            });
+          });
+        };
+
+        // Run on initial load
+        initTabs();
+        
+        // Also run on Astro page load events if using ViewTransitions
+        document.addEventListener('astro:page-load', initTabs);
+      });
+    </script>
   </div>
 </DemoLayout>
 
@@ -276,4 +588,228 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
     margin-bottom: 1.25rem;
   }
 
-    </style>
+  /* Mock UI Styles */
+  .mock-browser {
+    background-color: #212529; /* Bootstrap dark background */
+    color: #dee2e6; /* Bootstrap dark text */
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+    min-height: 500px;
+    width: 100%;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .mock-nav {
+    background-color: #2b3035; /* Bootstrap bg-dark subtle */
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #495057;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .mock-nav-brand {
+    font-size: 1.25rem;
+    color: #fff;
+    margin-right: 1.5rem;
+  }
+
+  .mock-nav-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .mock-nav-link {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,.55);
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  }
+
+  .mock-nav-link:hover {
+    color: rgba(255,255,255,.75);
+  }
+
+  .mock-nav-link.active {
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .mock-content {
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .mock-tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .mock-tab-content.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .mock-page-title {
+    font-size: 1.75rem;
+    color: #fff;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .mock-alert {
+    background-color: rgba(88, 166, 255, 0.1);
+    color: #dee2e6;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  .mock-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mock-recs-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .mock-recs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .mock-card {
+    background-color: #2b3035;
+    border: 1px solid #495057;
+    border-radius: 0.375rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mock-session-card {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .mock-card-title {
+    font-size: 0.875rem;
+    color: #adb5bd;
+    margin-bottom: 0.5rem;
+  }
+
+  .mock-card-value {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .text-accent { color: #0d6efd; }
+  .text-success { color: #198754; }
+
+  .mock-table-responsive {
+    overflow-x: auto;
+    margin: -1.5rem;
+  }
+
+  .mock-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+  }
+
+  .mock-table th,
+  .mock-table td {
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid #495057;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .mock-table th {
+    color: #fff;
+    font-weight: bold;
+    border-bottom-width: 2px;
+  }
+
+  .mock-table tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
+
+  .mock-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .mock-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .mock-btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+  }
+
+  .mock-btn-outline {
+    color: #0d6efd;
+    border-color: #0d6efd;
+  }
+
+  .mock-btn-primary {
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+  }
+
+  .mock-select {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #dee2e6;
+    background-color: #212529;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dee2e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #495057;
+    border-radius: 0.375rem;
+    appearance: none;
+  }
+</style>

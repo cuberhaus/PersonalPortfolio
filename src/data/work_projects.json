@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Physical AI Anomalies Detection",
+    "company": "Horse",
+    "role": "AI & Data Consultant @ Deloitte",
+    "description": "The world's first Physical AI project delivered at Deloitte. Detected manufacturing anomalies on live motor production lines in real-time. Also developed a digital twin of the warehouse with camera tracking for packages.",
+    "tags": ["Physical AI", "Computer Vision", "Digital Twin", "IoT", "Real-time"],
+    "icon": "cpu"
+  },
+  {
+    "title": "E2E AI Talent Matching Platform",
+    "company": "Gobierno de Aragón",
+    "role": "AI & Data Consultant @ Deloitte",
+    "description": "End-to-end software that parses PDF resumes, standardizes them into structured JSON, and indexes them in a RAG database. Allows semantic querying to find the best candidates for a job description and vice versa.",
+    "tags": ["LLMs", "RAG", "Vector Search", "PDF Parsing"],
+    "icon": "users"
+  }
+]
