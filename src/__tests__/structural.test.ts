@@ -59,8 +59,7 @@ describe('Navbar anchors match homepage section IDs', () => {
 
   const sectionIds = sectionComponents
     .map(f => read(f))
-    .flatMap(src => [...src.matchAll(/\bid="([a-z][\w-]*)"/g)].map(m => m[1]))
-    .filter(id => !['name', 'email', 'message', 'navbar'].includes(id))
+    .flatMap(src => [...src.matchAll(/<section[\s][^>]*\bid="([a-z][\w-]*)"/g)].map(m => m[1]))
     .sort();
 
   it('every navbar anchor points to a real section ID', () => {
@@ -71,6 +70,14 @@ describe('Navbar anchors match homepage section IDs', () => {
 
   it('hero section ID exists (logo links to #hero)', () => {
     expect(sectionIds).toContain('hero');
+  });
+
+  const mainSectionIds = sectionIds.filter(id => id !== 'hero');
+
+  it('every main section is reachable from the navbar', () => {
+    for (const id of mainSectionIds) {
+      expect(navAnchors, `section #${id} exists but navbar has no link to it`).toContain(id);
+    }
   });
 });
 
