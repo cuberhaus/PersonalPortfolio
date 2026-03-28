@@ -50,7 +50,7 @@ const siteBase = Astro.site || Astro.url;
     <link rel="alternate" hreflang="ca" href={new URL(base + '/ca' + demoPath, siteBase)} />
     <link rel="alternate" hreflang="x-default" href={new URL(base + demoPath, siteBase)} />
 
-    <ThemeInit />
+    <ThemeInit position="head" />
 
 
     <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
@@ -74,6 +74,8 @@ const siteBase = Astro.site || Astro.url;
     <Analytics />
   </head>
   <body>
+    <ThemeInit position="body" />
+    <a href="#main-content" class="skip-to-content">{t('demo.portfolio')}</a>
     <nav class="demo-nav">
       <div class="demo-nav-inner container">
         <a href={base + (lang === 'en' ? '/' : `/${lang}`)} class="demo-back" data-astro-reload>

@@ -1,16 +1,21 @@
 ---
-import { THEMES } from '../lib/themes';
+import { THEMES, THEME_IDS } from '../lib/themes';
 
+interface Props {
+  position: 'head' | 'body';
+}
+
+const { position } = Astro.props;
 const darkThemes = THEMES.filter(t => t.colorScheme === 'dark');
 const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
 ---
 
-<script is:inline define:vars={{ darkThemes, lightThemes }}>
+{position === 'head' && (
+<script is:inline>
   // Apply theme before render to prevent FOUC
   const VALID = ['dark','dracula','nord','tokyo-night','catppuccin-mocha','one-dark','light','nord-light','catppuccin-latte','solarized-light'];
 
   const __theme = (() => {
-    // 1. URL parameter takes highest priority (and persists to localStorage)
     const url = new URL(window.location.href);
     const param = url.searchParams.get('theme');
     if (param && VALID.includes(param)) {
@@ -19,12 +24,10 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
       history.replaceState(null, '', url.pathname + url.search + url.hash);
       return param;
     }
-    // 2. localStorage
     if (typeof localStorage !== 'undefined') {
       const saved = localStorage.getItem('theme');
       if (saved && VALID.includes(saved)) return saved;
     }
-    // 3. System preference
     if (window.matchMedia('(prefers-color-scheme: light)').matches) {
       return 'light';
     }
@@ -32,31 +35,30 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
   })();
   document.documentElement.setAttribute('data-theme', __theme);
 
-  // Console API: window.setTheme('dracula')
   window.setTheme = function(id) {
     if (!VALID.includes(id)) {
       console.error(
         'Unknown theme "' + id + '". Available themes:\n' +
-        VALID.map(function(t) { return '  • ' + t; }).join('\n')
+        VALID.map(function(t) { return '  \u2022 ' + t; }).join('\n')
       );
       return;
     }
     document.documentElement.setAttribute('data-theme', id);
     localStorage.setItem('theme', id);
-    console.log('Theme set to "' + id + '"');
   };
 </script>
+)}
 
-<!-- Theme picker modal (Ctrl+K) -->
+{position === 'body' && (
 <div id="theme-modal" class="theme-modal" aria-hidden="true">
   <div class="theme-modal-backdrop"></div>
   <div class="theme-modal-panel" role="dialog" aria-modal="true" aria-label="Theme picker">
     <div class="theme-modal-header">
-      <span class="theme-modal-title">Choose a theme</span>
+      <span class="theme-modal-title" data-i18n-title></span>
       <kbd class="theme-modal-hint">Ctrl+K</kbd>
     </div>
     <div class="theme-modal-group">
-      <span class="theme-modal-label">Dark</span>
+      <span class="theme-modal-label" data-i18n-dark></span>
       <div class="theme-modal-grid">
         {darkThemes.map(theme => (
           <button class="theme-modal-swatch" data-theme-id={theme.id}>
@@ -68,7 +70,7 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     </div>
     <div class="theme-modal-divider"></div>
     <div class="theme-modal-group">
-      <span class="theme-modal-label">Light</span>
+      <span class="theme-modal-label" data-i18n-light></span>
       <div class="theme-modal-grid">
         {lightThemes.map(theme => (
           <button class="theme-modal-swatch" data-theme-id={theme.id}>
@@ -79,10 +81,11 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
       </div>
     </div>
     <div class="theme-modal-footer">
-      <span>Press <kbd>Esc</kbd> to close</span>
+      <span data-i18n-footer></span>
     </div>
   </div>
 </div>
+)}
 
 <style is:global>
   .theme-modal {
@@ -237,10 +240,27 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
 </style>
 
 <script>
+  const TM_I18N: Record<string, { title: string; dark: string; light: string; footer: string }> = {
+    en: { title: 'Choose a theme', dark: 'Dark', light: 'Light', footer: 'Press <kbd>Esc</kbd> to close' },
+    es: { title: 'Elige un tema', dark: 'Oscuro', light: 'Claro', footer: 'Pulsa <kbd>Esc</kbd> para cerrar' },
+    ca: { title: 'Tria un tema', dark: 'Fosc', light: 'Clar', footer: 'Prem <kbd>Esc</kbd> per tancar' },
+  };
+
   const initThemeModal = () => {
     const modal = document.getElementById('theme-modal');
     if (!modal || modal.hasAttribute('data-tm-init')) return;
     modal.setAttribute('data-tm-init', 'true');
+
+    const lang = document.documentElement.getAttribute('lang') || 'en';
+    const strings = TM_I18N[lang] || TM_I18N.en;
+    const titleEl = modal.querySelector('[data-i18n-title]');
+    const darkEl = modal.querySelector('[data-i18n-dark]');
+    const lightEl = modal.querySelector('[data-i18n-light]');
+    const footerEl = modal.querySelector('[data-i18n-footer]');
+    if (titleEl) titleEl.textContent = strings.title;
+    if (darkEl) darkEl.textContent = strings.dark;
+    if (lightEl) lightEl.textContent = strings.light;
+    if (footerEl) footerEl.innerHTML = strings.footer;
 
     let previouslyFocused: Element | null = null;
 

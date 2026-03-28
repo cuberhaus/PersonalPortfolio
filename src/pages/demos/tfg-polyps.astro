@@ -2,9 +2,10 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import TfgPolypDemo from '../../components/demos/TfgPolypDemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const titles = {
   en: "Polyp Detection with Generative Data Augmentation",
@@ -24,16 +25,16 @@ const badges = {
   ca: "Deep Learning · Treball de Fi de Grau · FIB-UPC"
 };
 
-const viewSource = {
-  en: "View Source on GitHub",
-  es: "Ver código en GitHub",
-  ca: "Veure codi a GitHub"
-};
-
 const metaTitles = {
   en: "Bachelor's Thesis — Polyp Detection",
   es: "Trabajo de Fin de Grado — Detección de Pólipos",
   ca: "Treball de Fi de Grau — Detecció de Pòlips"
+};
+
+const metaDescs = {
+  en: "Bachelor's thesis: deep learning polyp detection in colonoscopy videos with CycleGAN/SPADE data augmentation and Faster R-CNN object detection.",
+  es: "Trabajo de fin de grado: detección de pólipos con deep learning en vídeos de colonoscopia con aumento de datos CycleGAN/SPADE y detección de objetos Faster R-CNN.",
+  ca: "Treball de fi de grau: detecció de pòlips amb deep learning en vídeos de colonoscòpia amb augment de dades CycleGAN/SPADE i detecció d'objectes Faster R-CNN."
 };
 
 const title = titles[lang] || titles.en;
@@ -44,7 +45,7 @@ const metaTitle = metaTitles[lang] || metaTitles.en;
 
 <DemoLayout
   title={metaTitle}
-  description="Bachelor's thesis: deep learning polyp detection in colonoscopy videos with CycleGAN/SPADE data augmentation and Faster R-CNN object detection."
+  description={metaDescs[lang] || metaDescs.en}
   slug="tfg-polyps"
 >
   <div class="container">
@@ -53,7 +54,7 @@ const metaTitle = metaTitles[lang] || metaTitles.en;
       title={title}
       lead={lead}
       githubUrl="https://github.com/cuberhaus/TFG"
-      githubLabel={viewSource[lang] || viewSource.en}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#10b981"
       accentTo="#0ea5e9"
     />

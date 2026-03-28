@@ -1,7 +1,11 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme (Ctrl+K for more themes)">
+<button id="theme-toggle" aria-label={t('aria.toggleTheme')} title={t('aria.toggleTheme')}>
   <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="5"></circle>
     <line x1="12" y1="1" x2="12" y2="3"></line>

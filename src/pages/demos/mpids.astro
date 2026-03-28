@@ -2,9 +2,10 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import MPIDSDemo from '../../components/demos/MPIDSDemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const titles = {
   en: "MPIDS Solver",
@@ -36,10 +37,10 @@ const aboutDescs = {
   ca: "Originalment un projecte en C++ per al curs d'Algorísmia a la FIB-UPC, resolent el problema MPIDS amb heurístiques voraces, simulated annealing i ILP amb CPLEX. Aquesta demo de navegador és un port dels algorismes de cerca voraç i local a TypeScript amb una visualització interactiva de grafs dirigida per forces."
 };
 
-const viewSource = {
-  en: "View source on GitHub",
-  es: "Ver código en GitHub",
-  ca: "Veure codi a GitHub"
+const metaDescs = {
+  en: "Interactive Minimum Positive Influence Dominating Set solver with graph visualization.",
+  es: "Solver interactivo del Minimum Positive Influence Dominating Set con visualización de grafos.",
+  ca: "Solver interactiu del Minimum Positive Influence Dominating Set amb visualització de grafs."
 };
 
 const title = titles[lang] || titles.en;
@@ -47,14 +48,14 @@ const lead = leads[lang] || leads.en;
 const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title={title} description="Interactive Minimum Positive Influence Dominating Set solver with graph visualization." slug="mpids">
+<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="mpids">
   <div class="container">
     <DemoHeader
       badge={badge}
       title={title}
       lead={lead}
       githubUrl="https://github.com/cuberhaus/projectA"
-      githubLabel={viewSource[lang] || viewSource.en}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"
       accentTo="#a855f7"
     />

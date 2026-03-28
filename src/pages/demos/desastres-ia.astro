@@ -2,16 +2,10 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import DesastresIADemo from '../../components/demos/DesastresIADemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
-
-const viewSource = {
-  en: 'View Source on GitHub',
-  es: 'Ver código en GitHub',
-  ca: 'Veure codi a GitHub',
-};
-const githubLabel = viewSource[lang] || 'View Source on GitHub';
+const t = useTranslations(lang);
 
 const titles = {
   en: "Desastres IA",
@@ -43,7 +37,7 @@ const badge = badges[lang] || badges.en;
 ---
 
 <DemoLayout
-  title={`Desastres IA — ${title}`}
+  title={title}
   description={metaDescs[lang] || metaDescs.en}
   slug="desastres-ia"
 >
@@ -53,7 +47,7 @@ const badge = badges[lang] || badges.en;
       title={title}
       lead={lead}
       githubUrl="https://github.com/cuberhaus/desastresIA"
-      githubLabel={githubLabel}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"
       accentTo="#22c55e"
     />

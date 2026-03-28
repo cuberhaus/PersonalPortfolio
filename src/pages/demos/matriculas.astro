@@ -2,9 +2,10 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import SPMatriculasDemo from '../../components/demos/SPMatriculasDemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const titles = {
   en: "License Plate Detection",
@@ -36,10 +37,10 @@ const aboutDescs = {
   ca: "Originalment un projecte de MATLAB per al curs de Visió per Computador a la FIB-UPC. Aquesta demo de navegador és un port del pipeline original a JavaScript \u2014 utilitza binarització adaptativa, filtrat morfològic, anàlisi de components connectades i coincidència de plantilles per detectar matrícules i llegir els seus caràcters, executant-se completament al client sense dependències externes."
 };
 
-const viewSource = {
-  en: "View source on GitHub",
-  es: "Ver código en GitHub",
-  ca: "Veure codi a GitHub"
+const metaDescs = {
+  en: "License plate detector ported from MATLAB to JavaScript.",
+  es: "Detector de matrículas portado de MATLAB a JavaScript.",
+  ca: "Detector de matrícules portat de MATLAB a JavaScript."
 };
 
 const title = titles[lang] || titles.en;
@@ -47,14 +48,14 @@ const lead = leads[lang] || leads.en;
 const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title={title} description="License plate detector ported from MATLAB to JavaScript." slug="matriculas">
+<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="matriculas">
   <div class="container">
     <DemoHeader
       badge={badge}
       title={title}
       lead={lead}
       githubUrl="https://github.com/cuberhaus/SPMatriculas"
-      githubLabel={viewSource[lang] || viewSource.en}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#0ea5e9"
       accentTo="#6366f1"
     />

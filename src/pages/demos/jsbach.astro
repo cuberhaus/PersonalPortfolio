@@ -2,9 +2,10 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import JSBachDemo from '../../components/demos/JSBachDemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const titles = {
   en: "JSBach Interpreter",
@@ -42,10 +43,10 @@ const aboutDesc = {
   ca: "Originalment construït amb ANTLR4 i Python per a un curs de compiladors a la FIB-UPC. El llenguatge suporta procediments, recursió, aritmètica, llistes, condicionals, bucles i reproducció de notes musicals. Aquesta versió per a navegador utilitza un parser escrit a mà i la Web Audio API per a la síntesi de so."
 };
 
-const viewSource = {
-  en: "View source on GitHub",
-  es: "Ver código en GitHub",
-  ca: "Veure codi a GitHub"
+const metaDescs = {
+  en: "Write and play music with the JSBach programming language, right in your browser.",
+  es: "Escribe y reproduce música con el lenguaje de programación JSBach, directamente en tu navegador.",
+  ca: "Escriu i reprodueix música amb el llenguatge de programació JSBach, directament al teu navegador."
 };
 
 const title = titles[lang] || titles.en;
@@ -54,14 +55,14 @@ const badge = badges[lang] || badges.en;
 const hint = hints[lang] || hints.en;
 ---
 
-<DemoLayout title={title} description="Write and play music with the JSBach programming language, right in your browser." slug="jsbach">
+<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="jsbach">
   <div class="container">
     <DemoHeader
       badge={badge}
       title={title}
       lead={lead}
       githubUrl="https://github.com/cuberhaus/ANTLR4_JSBach"
-      githubLabel={viewSource[lang] || viewSource.en}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#f59e0b"
       accentTo="#f97316"
     >

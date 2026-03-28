@@ -27,7 +27,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
 
-    <ThemeInit />
+    <ThemeInit position="head" />
 
     <!-- OpenGraph -->
     <meta property="og:type" content="website" />
@@ -45,8 +45,8 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
     <link rel="canonical" href={Astro.url} />
     <link rel="alternate" hreflang="en" href={new URL(base + '/', Astro.site || Astro.url)} />
-    <link rel="alternate" hreflang="es" href={new URL(base + '/es', Astro.site || Astro.url)} />
-    <link rel="alternate" hreflang="ca" href={new URL(base + '/ca', Astro.site || Astro.url)} />
+    <link rel="alternate" hreflang="es" href={new URL(base + '/es/', Astro.site || Astro.url)} />
+    <link rel="alternate" hreflang="ca" href={new URL(base + '/ca/', Astro.site || Astro.url)} />
     <link rel="alternate" hreflang="x-default" href={new URL(base + '/', Astro.site || Astro.url)} />
     <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
 
@@ -81,6 +81,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     <Analytics />
   </head>
   <body>
+    <ThemeInit position="body" />
     <a href="#main-content" class="skip-to-content">Skip to content</a>
     <slot />
     <ScrollToTop />

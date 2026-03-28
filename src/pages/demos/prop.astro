@@ -1,7 +1,7 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const isDev = import.meta.env.DEV;
@@ -42,7 +42,6 @@ const TRANSLATIONS = {
     step1: "<code>cd subgrup-prop7.1</code>",
     step2: "<code>make web</code> \u2014 compiles and starts the Spring Boot server",
     step3: "The app will run at <a href=\"http://localhost:8081\" target=\"_blank\" rel=\"noopener\">localhost:8081</a>",
-    viewSource: "View source on GitHub",
     mockNavBrand: "Recommendation System",
     mockNavHome: "Home",
     mockNavTypes: "Item Types",
@@ -76,7 +75,6 @@ const TRANSLATIONS = {
     step1: "<code>cd subgrup-prop7.1</code>",
     step2: "<code>make web</code> \u2014 compila e inicia el servidor Spring Boot",
     step3: "La app se ejecutar\u00e1 en <a href=\"http://localhost:8081\" target=\"_blank\" rel=\"noopener\">localhost:8081</a>",
-    viewSource: "Ver c\u00f3digo en GitHub",
     mockNavBrand: "Sistema de Recomendaci\u00f3n",
     mockNavHome: "Inicio",
     mockNavTypes: "Tipos de \u00edtem",
@@ -110,7 +108,6 @@ const TRANSLATIONS = {
     step1: "<code>cd subgrup-prop7.1</code>",
     step2: "<code>make web</code> \u2014 compila i inicia el servidor Spring Boot",
     step3: "L'app s'executar\u00e0 a <a href=\"http://localhost:8081\" target=\"_blank\" rel=\"noopener\">localhost:8081</a>",
-    viewSource: "Veure codi a GitHub",
     mockNavBrand: "Sistema de Recomanaci\u00f3",
     mockNavHome: "Inici",
     mockNavTypes: "Tipus d'\u00edtem",
@@ -130,17 +127,18 @@ const TRANSLATIONS = {
   }
 };
 
-const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+const tr = TRANSLATIONS[lang] || TRANSLATIONS.en;
+const t = useTranslations(lang);
 ---
 
-<DemoLayout title={t.title} description={t.desc} slug="prop">
+<DemoLayout title={tr.title} description={tr.desc} slug="prop">
   <div class="container">
     <DemoHeader
-      badge={t.badge}
-      title={t.title}
-      lead={t.lead}
+      badge={tr.badge}
+      title={tr.title}
+      lead={tr.lead}
       githubUrl="https://github.com/cuberhaus/subgrup-prop7.1"
-      githubLabel={t.viewSource}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#ea580c"
       accentTo="#f97316"
     />
@@ -148,10 +146,10 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
     {showIframe ? (
       <div class="demo-local-section">
         <div class="demo-local-header">
-          <h3>{t.liveApp}</h3>
-          <p class="demo-local-hint" set:html={t.startHint}></p>
+          <h3>{tr.liveApp}</h3>
+          <p class="demo-local-hint" set:html={tr.startHint}></p>
           <a href="http://localhost:8081" target="_blank" rel="noopener noreferrer" class="demo-open-btn">
-            {t.openNewTab}
+            {tr.openNewTab}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
             </svg>
@@ -159,7 +157,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
         </div>
         <iframe
           src="http://localhost:8081"
-          title={t.title}
+          title={tr.title}
           class="demo-iframe"
           loading="lazy"
         />
@@ -168,54 +166,54 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
       <div class="demo-local-section">
         <div class="demo-local-header" style="justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <h3>{t.demoUnavail}</h3>
+            <h3>{tr.demoUnavail}</h3>
           </div>
           <span class="badge" style="margin: 0; font-size: 0.65rem;">Interactive Mock</span>
         </div>
         <div class="mock-browser">
           <div class="mock-nav">
-            <div class="mock-nav-brand">{t.mockNavBrand}</div>
+            <div class="mock-nav-brand">{tr.mockNavBrand}</div>
             <div class="mock-nav-links">
-              <button class="mock-nav-link active" data-mock-tab="home">{t.mockNavHome}</button>
-              <button class="mock-nav-link" data-mock-tab="types">{t.mockNavTypes}</button>
-              <button class="mock-nav-link" data-mock-tab="items">{t.mockNavItems}</button>
-              <button class="mock-nav-link" data-mock-tab="users">{t.mockNavUsers}</button>
-              <button class="mock-nav-link" data-mock-tab="ratings">{t.mockNavRatings}</button>
-              <button class="mock-nav-link" data-mock-tab="recs">{t.mockNavRecs}</button>
+              <button class="mock-nav-link active" data-mock-tab="home">{tr.mockNavHome}</button>
+              <button class="mock-nav-link" data-mock-tab="types">{tr.mockNavTypes}</button>
+              <button class="mock-nav-link" data-mock-tab="items">{tr.mockNavItems}</button>
+              <button class="mock-nav-link" data-mock-tab="users">{tr.mockNavUsers}</button>
+              <button class="mock-nav-link" data-mock-tab="ratings">{tr.mockNavRatings}</button>
+              <button class="mock-nav-link" data-mock-tab="recs">{tr.mockNavRecs}</button>
             </div>
           </div>
           <div class="mock-content">
             <div class="mock-tab-content active" id="mock-home">
-              <h2 class="mock-page-title">{t.mockDashTitle}</h2>
+              <h2 class="mock-page-title">{tr.mockDashTitle}</h2>
               <div class="mock-alert">
-                <strong>Hint:</strong> {t.mockHint}
+                <strong>Hint:</strong> {tr.mockHint}
               </div>
               <div class="mock-dashboard-grid">
                 <div class="mock-card">
-                  <div class="mock-card-title">{t.mockDashType}</div>
+                  <div class="mock-card-title">{tr.mockDashType}</div>
                   <div class="mock-card-value text-accent">Films</div>
                 </div>
                 <div class="mock-card">
-                  <div class="mock-card-title">{t.mockDashUsers}</div>
+                  <div class="mock-card-title">{tr.mockDashUsers}</div>
                   <div class="mock-card-value">2</div>
                 </div>
                 <div class="mock-card">
-                  <div class="mock-card-title">{t.mockDashItems}</div>
+                  <div class="mock-card-title">{tr.mockDashItems}</div>
                   <div class="mock-card-value">250</div>
                 </div>
                 <div class="mock-card">
-                  <div class="mock-card-title">{t.mockDashRatings}</div>
+                  <div class="mock-card-title">{tr.mockDashRatings}</div>
                   <div class="mock-card-value">878</div>
                 </div>
               </div>
               <div class="mock-card mock-session-card">
-                <div class="mock-card-title">{t.mockDashSession}</div>
-                <div class="mock-card-value text-success">{t.mockSessionActive}</div>
+                <div class="mock-card-title">{tr.mockDashSession}</div>
+                <div class="mock-card-value text-success">{tr.mockSessionActive}</div>
               </div>
             </div>
 
             <div class="mock-tab-content" id="mock-types">
-              <h2 class="mock-page-title">{t.mockNavTypes}</h2>
+              <h2 class="mock-page-title">{tr.mockNavTypes}</h2>
               <div class="mock-card">
                 <table class="mock-table">
                   <thead>
@@ -243,7 +241,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
             </div>
 
             <div class="mock-tab-content" id="mock-items">
-              <h2 class="mock-page-title">{t.mockNavItems}</h2>
+              <h2 class="mock-page-title">{tr.mockNavItems}</h2>
               <div class="mock-card">
                 <div class="mock-table-responsive">
                   <table class="mock-table">
@@ -281,7 +279,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
             </div>
             
             <div class="mock-tab-content" id="mock-users">
-              <h2 class="mock-page-title">{t.mockNavUsers}</h2>
+              <h2 class="mock-page-title">{tr.mockNavUsers}</h2>
               <div class="mock-card">
                 <table class="mock-table">
                   <thead>
@@ -308,7 +306,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
             </div>
             
             <div class="mock-tab-content" id="mock-ratings">
-              <h2 class="mock-page-title">{t.mockNavRatings}</h2>
+              <h2 class="mock-page-title">{tr.mockNavRatings}</h2>
               <div class="mock-card">
                 <table class="mock-table">
                   <thead>
@@ -335,7 +333,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
             </div>
 
             <div class="mock-tab-content" id="mock-recs">
-              <h2 class="mock-page-title">{t.mockNavRecs}</h2>
+              <h2 class="mock-page-title">{tr.mockNavRecs}</h2>
               <div class="mock-recs-grid">
                 <div class="mock-card">
                   <h3 style="margin-top: 0; font-size: 1rem; margin-bottom: 1rem; color: #fff;">Mètode de recomanació</h3>
@@ -379,15 +377,15 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
     )}
 
     <div class="demo-info">
-      <h3>{t.aboutTitle}</h3>
-      <p>{t.aboutDesc}</p>
+      <h3>{tr.aboutTitle}</h3>
+      <p>{tr.aboutDesc}</p>
       {isDev && (
         <div class="run-local-box">
-          <h4>{t.runLocal}</h4>
+          <h4>{tr.runLocal}</h4>
           <ol>
-            <li set:html={t.step1}></li>
-            <li set:html={t.step2}></li>
-            <li set:html={t.step3}></li>
+            <li set:html={tr.step1}></li>
+            <li set:html={tr.step2}></li>
+            <li set:html={tr.step3}></li>
           </ol>
         </div>
       )}

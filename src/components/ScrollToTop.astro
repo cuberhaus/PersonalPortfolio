@@ -1,11 +1,16 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <button
   id="scroll-to-top"
   class="scroll-to-top"
-  aria-label="Scroll to top of page"
-  title="Scroll to top"
+  aria-label={t('aria.scrollTop')}
+  title={t('aria.scrollTop')}
+  tabindex="-1"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -82,8 +87,10 @@
     scrollTopHandler = () => {
       if (window.scrollY > 300) {
         scrollBtn.classList.add('visible');
+        scrollBtn.removeAttribute('tabindex');
       } else {
         scrollBtn.classList.remove('visible');
+        scrollBtn.setAttribute('tabindex', '-1');
       }
     };
 

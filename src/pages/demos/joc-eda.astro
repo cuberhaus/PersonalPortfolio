@@ -1,7 +1,7 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
@@ -41,7 +41,6 @@ const TRANSLATIONS = {
     step3: "Run <code>make</code> to compile",
     step4: "Run <code>./Game -i default.cnf &gt; replay.out</code> to generate a replay",
     step5: "Upload the <code>replay.out</code> file here to watch it!",
-    viewSource: "View source on GitHub"
   },
   es: {
     title: "Visor de Juego de Programación",
@@ -77,7 +76,6 @@ const TRANSLATIONS = {
     step3: "Ejecuta <code>make</code> para compilar",
     step4: "Ejecuta <code>./Game -i default.cnf &gt; replay.out</code> para generar una repetición",
     step5: "Sube el archivo <code>replay.out</code> aquí para verlo!",
-    viewSource: "Ver código en GitHub"
   },
   ca: {
     title: "Visor de Joc de Programació",
@@ -113,21 +111,27 @@ const TRANSLATIONS = {
     step3: "Executa <code>make</code> per compilar",
     step4: "Executa <code>./Game -i default.cnf &gt; replay.out</code> per generar una repetició",
     step5: "Puja l'arxiu <code>replay.out</code> aquí per veure'l!",
-    viewSource: "Veure codi a GitHub"
   }
 };
 
-const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+const tr = TRANSLATIONS[lang] || TRANSLATIONS.en;
+const t = useTranslations(lang);
+
+const metaDescs = {
+  en: TRANSLATIONS.en.desc,
+  es: TRANSLATIONS.es.desc,
+  ca: TRANSLATIONS.ca.desc
+};
 ---
 
-<DemoLayout title={t.title} description={t.desc} slug="joc-eda">
+<DemoLayout title={tr.title} description={metaDescs[lang] || metaDescs.en} slug="joc-eda">
   <div class="container joc-eda-page">
     <DemoHeader
-      badge={t.badge}
-      title={t.title}
-      lead={t.lead}
+      badge={tr.badge}
+      title={tr.title}
+      lead={tr.lead}
       githubUrl="https://github.com/cuberhaus/joc_eda"
-      githubLabel={t.viewSource}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"
       accentTo="#f59e0b"
     />
@@ -135,21 +139,21 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
     <div class="cards-row">
       <!-- Sample game card -->
       <div class="game-card">
-        <div class="game-card-badge">{t.preloaded}</div>
+        <div class="game-card-badge">{tr.preloaded}</div>
         <div class="game-card-icon">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="5 3 19 12 5 21 5 3"/>
           </svg>
         </div>
-        <h3>{t.sampleTitle}</h3>
-        <p>{t.sampleDesc}</p>
+        <h3>{tr.sampleTitle}</h3>
+        <p>{tr.sampleDesc}</p>
         <div class="game-meta">
-          <span><strong>{t.map}</strong> 15 × 30</span>
-          <span><strong>{t.rounds}</strong> 250</span>
-          <span><strong>{t.players}</strong> 4</span>
+          <span><strong>{tr.map}</strong> 15 × 30</span>
+          <span><strong>{tr.rounds}</strong> 250</span>
+          <span><strong>{tr.players}</strong> 4</span>
         </div>
         <a id="launch-sample" class="launch-btn" href="#" target="_blank" rel="noopener noreferrer">
-          {t.watchReplay}
+          {tr.watchReplay}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
           </svg>
@@ -163,50 +167,50 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
           </svg>
         </div>
-        <h3>{t.ownGame}</h3>
-        <p set:html={t.uploadDesc}></p>
+        <h3>{tr.ownGame}</h3>
+        <p set:html={tr.uploadDesc}></p>
         <div class="upload-instructions">
           <code>make && ./Game &lt; default.cnf &gt; replay.out</code>
         </div>
         <label class="launch-btn upload-btn" for="file-upload">
-          {t.uploadBtn}
+          {tr.uploadBtn}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
           </svg>
         </label>
         <input type="file" id="file-upload" accept=".out,.txt" style="display:none" />
         <div id="upload-status" class="upload-status" 
-             data-msg-reading={t.readingFile} 
-             data-msg-invalid={t.invalidFile} 
-             data-msg-loaded={t.loadedFile} 
-             data-msg-toolarge={t.fileTooLarge}></div>
+             data-msg-reading={tr.readingFile} 
+             data-msg-invalid={tr.invalidFile} 
+             data-msg-loaded={tr.loadedFile} 
+             data-msg-toolarge={tr.fileTooLarge}></div>
       </div>
     </div>
 
     <!-- Controls reference -->
     <div class="controls-card">
-      <h3>{t.controls}</h3>
+      <h3>{tr.controls}</h3>
       <div class="controls-grid">
-        <div class="control-item"><kbd>Space</kbd><span>{t.playPause}</span></div>
-        <div class="control-item"><kbd>←</kbd> <kbd>→</kbd><span>{t.prevNext}</span></div>
-        <div class="control-item"><kbd>Home</kbd> <kbd>End</kbd><span>{t.startEnd}</span></div>
-        <div class="control-item"><kbd>Mouse wheel</kbd><span>{t.zoom}</span></div>
-        <div class="control-item"><kbd>Slider</kbd><span>{t.scrub}</span></div>
-        <div class="control-item"><kbd>H</kbd><span>{t.help}</span></div>
+        <div class="control-item"><kbd>Space</kbd><span>{tr.playPause}</span></div>
+        <div class="control-item"><kbd>←</kbd> <kbd>→</kbd><span>{tr.prevNext}</span></div>
+        <div class="control-item"><kbd>Home</kbd> <kbd>End</kbd><span>{tr.startEnd}</span></div>
+        <div class="control-item"><kbd>Mouse wheel</kbd><span>{tr.zoom}</span></div>
+        <div class="control-item"><kbd>Slider</kbd><span>{tr.scrub}</span></div>
+        <div class="control-item"><kbd>H</kbd><span>{tr.help}</span></div>
       </div>
     </div>
 
     <!-- About -->
     <div class="demo-info">
-      <h3>{t.about}</h3>
-      <p set:html={t.aboutDesc}></p>
-      <h4>{t.howTo}</h4>
+      <h3>{tr.about}</h3>
+      <p set:html={tr.aboutDesc}></p>
+      <h4>{tr.howTo}</h4>
       <ol class="steps-list">
-        <li set:html={t.step1}></li>
-        <li set:html={t.step2}></li>
-        <li set:html={t.step3}></li>
-        <li set:html={t.step4}></li>
-        <li set:html={t.step5}></li>
+        <li set:html={tr.step1}></li>
+        <li set:html={tr.step2}></li>
+        <li set:html={tr.step3}></li>
+        <li set:html={tr.step4}></li>
+        <li set:html={tr.step5}></li>
       </ol>
       
     </div>

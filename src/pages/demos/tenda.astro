@@ -2,7 +2,7 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import TendaDemo from '../../components/demos/TendaDemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const isDev = import.meta.env.DEV;
@@ -23,7 +23,6 @@ const TRANSLATIONS = {
     step2: "<code>docker compose up -d</code> \u2014 starts MySQL and loads the schema",
     step3: "<code>./start.sh</code> \u2014 starts the PHP server at <a href=\"http://localhost:8888\" target=\"_blank\" rel=\"noopener\">localhost:8888</a>",
     runNote: "Requires: PHP, Docker (for MySQL). The iframe above shows the live app when it's running.",
-    viewSource: "View source on GitHub"
   },
   es: {
     title: "Tienda Online",
@@ -40,7 +39,6 @@ const TRANSLATIONS = {
     step2: "<code>docker compose up -d</code> \u2014 inicia MySQL y carga el esquema",
     step3: "<code>./start.sh</code> \u2014 inicia el servidor PHP en <a href=\"http://localhost:8888\" target=\"_blank\" rel=\"noopener\">localhost:8888</a>",
     runNote: "Requiere: PHP, Docker (para MySQL). El iframe de arriba muestra la app en vivo cuando se est\u00e1 ejecutando.",
-    viewSource: "Ver c\u00f3digo en GitHub"
   },
   ca: {
     title: "Botiga Online",
@@ -57,21 +55,21 @@ const TRANSLATIONS = {
     step2: "<code>docker compose up -d</code> \u2014 inicia MySQL i carrega l'esquema",
     step3: "<code>./start.sh</code> \u2014 inicia el servidor PHP a <a href=\"http://localhost:8888\" target=\"_blank\" rel=\"noopener\">localhost:8888</a>",
     runNote: "Requereix: PHP, Docker (per a MySQL). L'iframe de dalt mostra l'app en viu quan s'est\u00e0 executant.",
-    viewSource: "Veure codi a GitHub"
   }
 };
 
-const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+const tr = TRANSLATIONS[lang] || TRANSLATIONS.en;
+const t = useTranslations(lang);
 ---
 
-<DemoLayout title={t.title} description={t.desc} slug="tenda">
+<DemoLayout title={tr.title} description={tr.desc} slug="tenda">
   <div class="container">
     <DemoHeader
-      badge={t.badge}
-      title={t.title}
-      lead={t.lead}
+      badge={tr.badge}
+      title={tr.title}
+      lead={tr.lead}
       githubUrl="https://github.com/cuberhaus/tenda_online"
-      githubLabel={t.viewSource}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#10b981"
       accentTo="#06b6d4"
     />
@@ -79,10 +77,10 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
     {isDev ? (
       <div class="tenda-local-section">
         <div class="tenda-local-header">
-          <h3>{t.liveApp}</h3>
-          <p class="tenda-local-hint" set:html={t.startHint}></p>
+          <h3>{tr.liveApp}</h3>
+          <p class="tenda-local-hint" set:html={tr.startHint}></p>
           <a href="http://localhost:8888" target="_blank" rel="noopener noreferrer" class="tenda-open-btn">
-            {t.openNewTab}
+            {tr.openNewTab}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
             </svg>
@@ -102,17 +100,17 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
     )}
 
     <div class="demo-info">
-      <h3>{t.aboutTitle}</h3>
-      <p>{t.aboutDesc}</p>
+      <h3>{tr.aboutTitle}</h3>
+      <p>{tr.aboutDesc}</p>
       {isDev && (
         <div class="run-local-box">
-          <h4>{t.runLocal}</h4>
+          <h4>{tr.runLocal}</h4>
           <ol>
-            <li set:html={t.step1}></li>
-            <li set:html={t.step2}></li>
-            <li set:html={t.step3}></li>
+            <li set:html={tr.step1}></li>
+            <li set:html={tr.step2}></li>
+            <li set:html={tr.step3}></li>
           </ol>
-          <p class="run-local-note">{t.runNote}</p>
+          <p class="run-local-note">{tr.runNote}</p>
         </div>
       )}
       

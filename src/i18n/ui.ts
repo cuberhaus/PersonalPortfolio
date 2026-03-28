@@ -82,13 +82,13 @@ export const ui = {
     'demo.moreProjects': 'More Projects',
     'demo.previous': 'Previous',
     'demo.next': 'Next',
+    'demo.viewSource': 'View Source on GitHub',
     'meta.title': 'Pol Casacuberta — Portfolio',
     'meta.description': 'Computer Science Engineer specializing in AI, data science, and machine learning.',
     'aria.toggleMenu': 'Toggle menu',
     'aria.toggleTheme': 'Toggle theme (Ctrl+K for more themes)',
     'aria.scrollTop': 'Scroll to top of page',
     'aria.viewGithub': 'View on GitHub',
-    'footer.builtWith': 'Designed & built with',
   },
   es: {
     // Nav
@@ -165,13 +165,13 @@ export const ui = {
     'demo.moreProjects': 'Más Proyectos',
     'demo.previous': 'Anterior',
     'demo.next': 'Siguiente',
+    'demo.viewSource': 'Ver código en GitHub',
     'meta.title': 'Pol Casacuberta — Portafolio',
     'meta.description': 'Ingeniero Informático especializado en IA, ciencia de datos y aprendizaje automático.',
     'aria.toggleMenu': 'Abrir menú',
     'aria.toggleTheme': 'Cambiar tema (Ctrl+K para más temas)',
     'aria.scrollTop': 'Ir arriba',
     'aria.viewGithub': 'Ver en GitHub',
-    'footer.builtWith': 'Diseñado y construido con',
   },
   ca: {
     // Nav
@@ -248,12 +248,12 @@ export const ui = {
     'demo.moreProjects': 'Més Projectes',
     'demo.previous': 'Anterior',
     'demo.next': 'Següent',
+    'demo.viewSource': 'Veure codi a GitHub',
     'meta.title': 'Pol Casacuberta — Portafolis',
     'meta.description': "Enginyer Informàtic especialitzat en IA, ciència de dades i aprenentatge automàtic.",
     'aria.toggleMenu': 'Obrir menú',
     'aria.toggleTheme': 'Canviar tema (Ctrl+K per a més temes)',
     'aria.scrollTop': 'Anar a dalt',
     'aria.viewGithub': 'Veure a GitHub',
-    'footer.builtWith': 'Dissenyat i construït amb',
   },
 } as const;

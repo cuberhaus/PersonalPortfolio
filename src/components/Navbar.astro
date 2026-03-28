@@ -170,8 +170,9 @@ const links = [
       padding: 1rem 0;
       transform: translateY(-100%);
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
-      transition: transform var(--transition-base), opacity var(--transition-base);
+      transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s var(--transition-base);
     }
     
     .nav-theme-toggle {
@@ -186,7 +187,9 @@ const links = [
     .nav-links.open {
       transform: translateY(0);
       opacity: 1;
+      visibility: visible;
       pointer-events: auto;
+      transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s;
     }
 
     .nav-links li {

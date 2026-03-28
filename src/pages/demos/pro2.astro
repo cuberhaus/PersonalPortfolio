@@ -2,9 +2,10 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import Pro2Demo from '../../components/demos/Pro2Demo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const titles = {
   en: "WPGMA Phylogenetic Clustering",
@@ -36,10 +37,10 @@ const aboutDescs = {
   ca: "Originalment un projecte de C++17 per al curs de PRO2 a la FIB-UPC. L'algorisme calcula les distàncies entre parells d'espècies utilitzant anàlisi de freqüència k-mer, després fusiona iterativament el parell més proper utilitzant el Mètode del Grup de Parells Ponderats amb Mitjana Aritmètica (WPGMA) per construir un arbre filogenètic."
 };
 
-const viewSource = {
-  en: "View source on GitHub",
-  es: "Ver código en GitHub",
-  ca: "Veure codi a GitHub"
+const metaDescs = {
+  en: "Interactive phylogenetic tree builder using the WPGMA algorithm.",
+  es: "Constructor interactivo de árboles filogenéticos usando el algoritmo WPGMA.",
+  ca: "Constructor interactiu d'arbres filogenètics usant l'algorisme WPGMA."
 };
 
 const title = titles[lang] || titles.en;
@@ -47,14 +48,14 @@ const lead = leads[lang] || leads.en;
 const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title={title} description="Interactive phylogenetic tree builder using the WPGMA algorithm." slug="pro2">
+<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="pro2">
   <div class="container">
     <DemoHeader
       badge={badge}
       title={title}
       lead={lead}
       githubUrl="https://github.com/cuberhaus/pracpro2"
-      githubLabel={viewSource[lang] || viewSource.en}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#22c55e"
       accentTo="#06b6d4"
     />

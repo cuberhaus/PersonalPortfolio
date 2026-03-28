@@ -2,9 +2,10 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import PhaseTransitionsDemo from '../../components/demos/PhaseTransitionsDemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const titles = {
   en: "Graph Phase Transitions",
@@ -36,10 +37,10 @@ const aboutDescs = {
   ca: "Originalment un projecte de Python per al curs d'Algorísmia a la FIB-UPC, estudiant transicions de fase en grafs aleatoris usant NetworkX. Aquesta demo de navegador és un port de la generació de grafs, percolació i anàlisi de connectivitat/complexitat a TypeScript amb visualització interactiva."
 };
 
-const viewSource = {
-  en: "View source on GitHub",
-  es: "Ver código en GitHub",
-  ca: "Veure codi a GitHub"
+const metaDescs = {
+  en: "Interactive percolation and phase transition explorer for random graphs.",
+  es: "Explorador interactivo de percolación y transiciones de fase en grafos aleatorios.",
+  ca: "Explorador interactiu de percolació i transicions de fase en grafs aleatoris."
 };
 
 const title = titles[lang] || titles.en;
@@ -47,14 +48,14 @@ const lead = leads[lang] || leads.en;
 const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title={title} description="Interactive percolation and phase transition explorer for random graphs." slug="phase-transitions">
+<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="phase-transitions">
   <div class="container">
     <DemoHeader
       badge={badge}
       title={title}
       lead={lead}
       githubUrl="https://github.com/cuberhaus/projectA2"
-      githubLabel={viewSource[lang] || viewSource.en}
+      githubLabel={t('demo.viewSource')}
       accentFrom="#14b8a6"
       accentTo="#22c55e"
     />
