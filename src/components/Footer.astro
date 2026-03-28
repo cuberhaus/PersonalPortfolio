@@ -1,16 +1,5 @@
----
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
----
-
 <footer class="footer">
   <div class="container footer-inner">
-    <p class="footer-text">
-      {t('footer.builtWith')}
-      <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="footer-link">Astro</a>
-    </p>
     <p class="footer-copy">&copy; {new Date().getFullYear()} Pol Casacuberta</p>
   </div>
 </footer>
@@ -23,30 +12,12 @@ const t = useTranslations(lang);
 
   .footer-inner {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
   }
 
-  .footer-text,
   .footer-copy {
     font-size: 0.85rem;
     color: var(--text-muted);
-  }
-
-  .footer-link {
-    color: var(--accent-start);
-    transition: color var(--transition-fast);
-  }
-
-  .footer-link:hover {
-    color: var(--accent-end);
-  }
-
-  @media (max-width: 768px) {
-    .footer-inner {
-      flex-direction: column;
-      gap: 0.5rem;
-      text-align: center;
-    }
   }
 </style>
