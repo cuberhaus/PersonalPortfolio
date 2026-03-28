@@ -22,7 +22,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
       </p>
     </div>
 
-    <div class="demo-grid reveal-stagger">
+    <div class="demo-grid reveal-stagger" id="demo-grid">
       {demos.map((demo, index) => (
         <article class={`demo-card ${index >= 6 ? 'hidden-demo extra-demo' : ''}`}>
           <div class="demo-card-inner">
@@ -69,7 +69,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
     {demos.length > 6 && (
       <div class="show-more-container reveal">
-        <button id="show-more-demos" class="show-more-btn" data-more={t('projects.showMore')} data-less={t('projects.showLess')}>
+        <button id="show-more-demos" class="show-more-btn" aria-expanded="false" aria-controls="demo-grid" data-more={t('projects.showMore')} data-less={t('projects.showLess')}>
           {t('projects.showMore')}
         </button>
       </div>
@@ -80,10 +80,12 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 <script>
   document.addEventListener('astro:page-load', () => {
     const btn = document.getElementById('show-more-demos');
-    if (!btn) return;
+    if (!btn || btn.hasAttribute('data-initialized')) return;
+    btn.setAttribute('data-initialized', 'true');
 
     btn.addEventListener('click', () => {
       const isExpanded = btn.classList.toggle('expanded');
+      btn.setAttribute('aria-expanded', String(isExpanded));
       const extraDemos = document.querySelectorAll('.extra-demo');
       
       extraDemos.forEach((demo, index) => {

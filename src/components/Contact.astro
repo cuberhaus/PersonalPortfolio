@@ -47,7 +47,7 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
           </svg>
         </button>
-        <p id="form-result" class="form-result"></p>
+        <p id="form-result" class="form-result" role="status" aria-live="polite"></p>
       </form>
     </div>
 
@@ -241,7 +241,7 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
   .form-group textarea:focus {
     outline: none;
     border-color: var(--accent-start);
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 0 2px var(--glow-color);
   }
 
   .contact-submit {
@@ -263,7 +263,7 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
 
   .contact-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px var(--glow-color-strong);
   }
 
   .contact-submit svg {

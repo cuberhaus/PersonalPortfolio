@@ -50,7 +50,7 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
 <!-- Theme picker modal (Ctrl+K) -->
 <div id="theme-modal" class="theme-modal" aria-hidden="true">
   <div class="theme-modal-backdrop"></div>
-  <div class="theme-modal-panel" role="dialog" aria-label="Theme picker">
+  <div class="theme-modal-panel" role="dialog" aria-modal="true" aria-label="Theme picker">
     <div class="theme-modal-header">
       <span class="theme-modal-title">Choose a theme</span>
       <kbd class="theme-modal-hint">Ctrl+K</kbd>
@@ -242,18 +242,42 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     if (!modal || modal.hasAttribute('data-tm-init')) return;
     modal.setAttribute('data-tm-init', 'true');
 
+    let previouslyFocused: Element | null = null;
+
+    const trapFocus = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const focusable = modal.querySelectorAll<HTMLElement>('button, [tabindex]:not([tabindex="-1"])');
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
     const open = () => {
+      previouslyFocused = document.activeElement;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       const current = document.documentElement.getAttribute('data-theme') || 'dark';
       modal.querySelectorAll('.theme-modal-swatch').forEach(s => {
         s.classList.toggle('active', s.getAttribute('data-theme-id') === current);
       });
+      const activeSwatch = modal.querySelector('.theme-modal-swatch.active') as HTMLElement;
+      if (activeSwatch) activeSwatch.focus();
+      else (modal.querySelector('.theme-modal-swatch') as HTMLElement)?.focus();
+      modal.addEventListener('keydown', trapFocus);
     };
 
     const close = () => {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
+      modal.removeEventListener('keydown', trapFocus);
+      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
     };
 
     modal.querySelector('.theme-modal-backdrop')?.addEventListener('click', close);

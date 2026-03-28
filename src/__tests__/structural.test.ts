@@ -52,13 +52,14 @@ describe('Navbar anchors match homepage section IDs', () => {
     'components/Demos.astro',
     'components/Skills.astro',
     'components/Experience.astro',
+    'components/WorkProjects.astro',
     'components/Education.astro',
     'components/Contact.astro',
   ];
 
   const sectionIds = sectionComponents
     .map(f => read(f))
-    .flatMap(src => [...src.matchAll(/\bid="([a-z]+)"/g)].map(m => m[1]))
+    .flatMap(src => [...src.matchAll(/\bid="([a-z][\w-]*)"/g)].map(m => m[1]))
     .filter(id => !['name', 'email', 'message', 'navbar'].includes(id))
     .sort();
 

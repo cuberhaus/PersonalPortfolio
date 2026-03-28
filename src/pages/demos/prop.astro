@@ -161,6 +161,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
           src="http://localhost:8081"
           title={t.title}
           class="demo-iframe"
+          loading="lazy"
         />
       </div>
     ) : (
@@ -446,7 +447,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   .demo-local-header {
     padding: 1rem 1.5rem;
-    background: rgba(234, 88, 12, 0.08);
+    background: color-mix(in srgb, var(--accent-start) 8%, transparent);
     border-bottom: 1px solid var(--border-color);
     display: flex;
     flex-wrap: wrap;

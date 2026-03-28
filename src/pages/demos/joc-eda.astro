@@ -288,7 +288,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--accent-start);
-    background: rgba(99, 102, 241, 0.1);
+    background: color-mix(in srgb, var(--accent-start) 10%, transparent);
     padding: 0.2rem 0.6rem;
     border-radius: var(--radius-sm);
   }
@@ -368,7 +368,7 @@ const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   .joc-eda-page .launch-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 6px 20px var(--glow-color-strong);
   }
 
   .joc-eda-page .upload-btn {

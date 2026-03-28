@@ -20,23 +20,36 @@ const titles = {
 };
 
 const leads = {
-  en: "Local search on a <strong>disaster-relief</strong> model: helicopters rescue <strong>groups</strong> at <strong>centers</strong> in an optimized order. Compare <strong>hill climbing</strong> vs <strong>simulated annealing</strong> \u2014 runs entirely in your browser.",
-  es: "Búsqueda local en un modelo de <strong>ayuda en desastres</strong>: helicópteros rescatan <strong>grupos</strong> en <strong>centros</strong> en un orden optimizado. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> \u2014 se ejecuta completamente en tu navegador.",
-  ca: "Cerca local en un model d'<strong>ajuda en desastres</strong>: helicòpters rescaten <strong>grups</strong> en <strong>centres</strong> en un ordre optimitzat. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> \u2014 s'executa completament al teu navegador."
+  en: "Local search on a <strong>disaster-relief</strong> model: helicopters rescue <strong>groups</strong> at <strong>centers</strong> in an optimized order. Compare <strong>hill climbing</strong> vs <strong>simulated annealing</strong> — runs entirely in your browser.",
+  es: "Búsqueda local en un modelo de <strong>ayuda en desastres</strong>: helicópteros rescatan <strong>grupos</strong> en <strong>centros</strong> en un orden optimizado. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> — se ejecuta completamente en tu navegador.",
+  ca: "Cerca local en un model d'<strong>ajuda en desastres</strong>: helicòpters rescaten <strong>grups</strong> en <strong>centres</strong> en un ordre optimitzat. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> — s'executa completament al teu navegador."
+};
+
+const badges = {
+  en: "Artificial Intelligence · FIB-UPC",
+  es: "Inteligencia Artificial · FIB-UPC",
+  ca: "Intel·ligència Artificial · FIB-UPC"
+};
+
+const metaDescs = {
+  en: "Helicopter assignment for disaster rescue operations using hill climbing and simulated annealing with AIMA (Java).",
+  es: "Asignación de helicópteros para operaciones de rescate en desastres usando hill climbing y simulated annealing con AIMA (Java).",
+  ca: "Assignació d'helicòpters per a operacions de rescat en desastres usant hill climbing i simulated annealing amb AIMA (Java)."
 };
 
 const title = titles[lang] || titles.en;
 const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
 ---
 
 <DemoLayout
-  title="Desastres IA \u2014 disaster relief local search"
-  description="Helicopter assignment for disaster rescue operations using hill climbing and simulated annealing with AIMA (Java)."
+  title={`Desastres IA — ${title}`}
+  description={metaDescs[lang] || metaDescs.en}
   slug="desastres-ia"
 >
   <div class="container">
     <DemoHeader
-      badge="Artificial Intelligence · FIB-UPC"
+      badge={badge}
       title={title}
       lead={lead}
       githubUrl="https://github.com/cuberhaus/desastresIA"

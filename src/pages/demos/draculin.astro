@@ -28,12 +28,18 @@ const badges = {
 const vsFront = { en: "Frontend Code (GitHub)", es: "Código Frontend (GitHub)", ca: "Codi Frontend (GitHub)" };
 const vsBack = { en: "Backend Code (GitHub)", es: "Código Backend (GitHub)", ca: "Codi Backend (GitHub)" };
 
+const metaDescs = {
+  en: "Health tracking app with AI chatbot and computer vision, built with Flutter.",
+  es: "App de seguimiento de salud con chatbot de IA y visión por computador, construida con Flutter.",
+  ca: "App de seguiment de salut amb chatbot d'IA i visió per computador, construïda amb Flutter."
+};
+
 const title = titles[lang] || titles.en;
 const lead = leads[lang] || leads.en;
 const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title="Draculin" description="Health tracking app with AI chatbot and computer vision, built with Flutter." slug="draculin">
+<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="draculin">
   <div class="container">
     <DemoHeader
       badge={badge}
@@ -66,6 +72,7 @@ const badge = badges[lang] || badges.en;
               src="http://localhost:8890"
               title="Draculin Flutter App"
               class="draculin-iframe"
+              loading="lazy"
             />
           </div>
         </div>
@@ -119,7 +126,7 @@ const badge = badges[lang] || badges.en;
 
   .draculin-local-header {
     padding: 1rem 1.5rem;
-    background: rgba(99, 102, 241, 0.08);
+    background: color-mix(in srgb, var(--accent-start) 8%, transparent);
     border-bottom: 1px solid var(--border-color);
     display: flex;
     flex-wrap: wrap;
@@ -169,7 +176,7 @@ const badge = badges[lang] || badges.en;
     display: flex;
     justify-content: center;
     padding: 2rem 1rem;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 5%, transparent), color-mix(in srgb, var(--accent-end) 5%, transparent));
   }
 
   .phone-frame {
@@ -177,8 +184,8 @@ const badge = badges[lang] || badges.en;
     width: 375px;
     height: 750px;
     border-radius: 2.5rem;
-    border: 4px solid #333;
-    background: #000;
+    border: 4px solid var(--border-color-hover);
+    background: var(--bg-primary);
     box-shadow:
       0 0 0 2px var(--border-color),
       0 20px 60px rgba(0, 0, 0, 0.5);
@@ -192,7 +199,7 @@ const badge = badges[lang] || badges.en;
     transform: translateX(-50%);
     width: 140px;
     height: 28px;
-    background: #000;
+    background: var(--bg-primary);
     border-radius: 0 0 1.25rem 1.25rem;
     z-index: 10;
   }

@@ -11,6 +11,7 @@ const links = [
   { label: t('nav.projects'), href: '#projects' },
   { label: t('nav.skills'), href: '#skills' },
   { label: t('nav.experience'), href: '#experience' },
+  { label: t('work.label'), href: '#work' },
   { label: t('nav.education'), href: '#education' },
   { label: t('nav.contact'), href: '#contact' },
 ];
@@ -223,18 +224,24 @@ const links = [
     // Initial check
     scrollHandler();
 
-    toggle?.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!expanded));
-      links?.classList.toggle('open');
-    });
-
-    links?.querySelectorAll('.nav-link').forEach((link) => {
-      link.addEventListener('click', () => {
-        toggle?.setAttribute('aria-expanded', 'false');
-        links?.classList.remove('open');
+    if (toggle && !toggle.hasAttribute('data-initialized')) {
+      toggle.setAttribute('data-initialized', 'true');
+      toggle.addEventListener('click', () => {
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        links?.classList.toggle('open');
       });
-    });
+    }
+
+    if (links && !links.hasAttribute('data-links-init')) {
+      links.setAttribute('data-links-init', 'true');
+      links.querySelectorAll('.nav-link').forEach((link) => {
+        link.addEventListener('click', () => {
+          toggle?.setAttribute('aria-expanded', 'false');
+          links?.classList.remove('open');
+        });
+      });
+    }
 
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');

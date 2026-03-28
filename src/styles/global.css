@@ -213,6 +213,20 @@ p {
 .reveal-stagger.visible > *:nth-child(9)  { transition-delay: 640ms; }
 .reveal-stagger.visible > *:nth-child(10) { transition-delay: 720ms; }
 
+/* ── Reduced Motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > * {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 /* ── Selection ────────────────────────────────────────────── */
 ::selection {
   background: rgba(99, 102, 241, 0.3);

@@ -80,6 +80,10 @@ export const ui = {
     'demo.copyLink': 'Copy link',
     'demo.copied': 'Copied!',
     'demo.moreProjects': 'More Projects',
+    'demo.previous': 'Previous',
+    'demo.next': 'Next',
+    'meta.title': 'Pol Casacuberta — Portfolio',
+    'meta.description': 'Computer Science Engineer specializing in AI, data science, and machine learning.',
   },
   es: {
     // Nav
@@ -154,6 +158,10 @@ export const ui = {
     'demo.copyLink': 'Copiar enlace',
     'demo.copied': '¡Copiado!',
     'demo.moreProjects': 'Más Proyectos',
+    'demo.previous': 'Anterior',
+    'demo.next': 'Siguiente',
+    'meta.title': 'Pol Casacuberta — Portafolio',
+    'meta.description': 'Ingeniero Informático especializado en IA, ciencia de datos y aprendizaje automático.',
   },
   ca: {
     // Nav
@@ -228,5 +236,9 @@ export const ui = {
     'demo.copyLink': 'Copiar enllaç',
     'demo.copied': 'Copiat!',
     'demo.moreProjects': 'Més Projectes',
+    'demo.previous': 'Anterior',
+    'demo.next': 'Següent',
+    'meta.title': 'Pol Casacuberta — Portafolis',
+    'meta.description': "Enginyer Informàtic especialitzat en IA, ciència de dades i aprenentatge automàtic.",
   },
 } as const;

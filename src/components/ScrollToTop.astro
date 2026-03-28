@@ -69,11 +69,17 @@
 </style>
 
 <script>
+  let scrollTopHandler: (() => void) | undefined;
+
   document.addEventListener('astro:page-load', () => {
     const scrollBtn = document.getElementById('scroll-to-top');
     if (!scrollBtn) return;
 
-    const toggleVisibility = () => {
+    if (scrollTopHandler) {
+      window.removeEventListener('scroll', scrollTopHandler);
+    }
+
+    scrollTopHandler = () => {
       if (window.scrollY > 300) {
         scrollBtn.classList.add('visible');
       } else {
@@ -81,14 +87,17 @@
       }
     };
 
-    window.addEventListener('scroll', toggleVisibility, { passive: true });
-    toggleVisibility(); // Initial check
+    window.addEventListener('scroll', scrollTopHandler, { passive: true });
+    scrollTopHandler();
 
-    scrollBtn.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+    if (!scrollBtn.hasAttribute('data-initialized')) {
+      scrollBtn.setAttribute('data-initialized', 'true');
+      scrollBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
       });
-    });
+    }
   });
 </script>

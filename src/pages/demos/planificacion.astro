@@ -26,9 +26,21 @@ const leads = {
 };
 
 const badges = {
-  en: "Automated Planning \u00b7 FIB-UPC",
-  es: "Planificación Automática \u00b7 FIB-UPC",
-  ca: "Planificació Automàtica \u00b7 FIB-UPC"
+  en: "Automated Planning · FIB-UPC",
+  es: "Planificación Automática · FIB-UPC",
+  ca: "Planificació Automàtica · FIB-UPC"
+};
+
+const metaTitles = {
+  en: "Travel Agency Planning (PDDL)",
+  es: "Planificación de Agencia de Viajes (PDDL)",
+  ca: "Planificació d'Agència de Viatges (PDDL)"
+};
+
+const metaDescs = {
+  en: "PDDL domain for automated travel planning: flights, hotels, duration constraints, and numeric optimization. Interactive planner demo.",
+  es: "Dominio PDDL para planificación automatizada de viajes: vuelos, hoteles, restricciones de duración y optimización numérica. Demo interactiva del planificador.",
+  ca: "Domini PDDL per a planificació automatitzada de viatges: vols, hotels, restriccions de durada i optimització numèrica. Demo interactiva del planificador."
 };
 
 const title = titles[lang] || titles.en;
@@ -37,8 +49,8 @@ const badge = badges[lang] || badges.en;
 ---
 
 <DemoLayout
-  title="Travel Agency Planning (PDDL)"
-  description="PDDL domain for automated travel planning: flights, hotels, duration constraints, and numeric optimization. Interactive planner demo."
+  title={metaTitles[lang] || metaTitles.en}
+  description={metaDescs[lang] || metaDescs.en}
   slug="planificacion"
 >
   <div class="container">
@@ -59,7 +71,7 @@ const badge = badges[lang] || badges.en;
 <style>
   :global(.demo-hdr-lead code) {
     font-size: 0.9em;
-    background: rgba(99, 102, 241, 0.12);
+    background: var(--bg-secondary);
     padding: 0.15em 0.4em;
     border-radius: 0.25rem;
   }

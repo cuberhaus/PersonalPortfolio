@@ -46,7 +46,7 @@ const exploreDemos = shuffled.slice(0, 4);
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
-            Previous
+            {t('demo.previous')}
           </span>
           <span class="prevnext-icon" set:html={renderIconSvg(prevDemo.icon, 24)} />
           <span class="prevnext-title">{prevDemo.title}</span>
@@ -59,7 +59,7 @@ const exploreDemos = shuffled.slice(0, 4);
       {nextDemo ? (
         <a href={demoHref(nextDemo.slug)} class="prevnext-card prevnext-next" data-astro-reload>
           <span class="prevnext-dir">
-            Next
+            {t('demo.next')}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>

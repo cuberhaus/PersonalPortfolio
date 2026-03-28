@@ -44,16 +44,39 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     <meta name="twitter:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
 
     <link rel="canonical" href={Astro.url} />
+    <link rel="alternate" hreflang="en" href={new URL(base + '/', Astro.site || Astro.url)} />
+    <link rel="alternate" hreflang="es" href={new URL(base + '/es', Astro.site || Astro.url)} />
+    <link rel="alternate" hreflang="ca" href={new URL(base + '/ca', Astro.site || Astro.url)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(base + '/', Astro.site || Astro.url)} />
     <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Pol Casacuberta",
+      "url": Astro.site?.toString() || Astro.url.origin,
+      "jobTitle": "AI & Data Consultant",
+      "sameAs": [
+        "https://github.com/cuberhaus",
+        "https://linkedin.com/in/polcasacubertagil"
+      ]
+    })} />
     <ViewTransitions />
     <Analytics />
   </head>
