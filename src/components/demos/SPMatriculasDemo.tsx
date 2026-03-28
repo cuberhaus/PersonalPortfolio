@@ -338,7 +338,7 @@ export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
   const basePath = rawBase.endsWith("/") ? rawBase : rawBase + "/";
 
   useEffect(() => {
-    initWorker().catch(() => {});
+    initWorker().catch(() => { setError('Failed to initialize worker'); });
   }, []);
 
   const selectSample = useCallback((sample: (typeof SAMPLES)[number]) => {

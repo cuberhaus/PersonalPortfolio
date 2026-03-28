@@ -208,11 +208,19 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
   const [computing, setComputing] = useState(false);
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
   const [selectedSample, setSelectedSample] = useState(0);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [randomN, setRandomN] = useState(30);
   const [randomP, setRandomP] = useState(0.15);
   const [layoutIter, setLayoutIter] = useState(0);
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const solveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (solveTimeoutRef.current) clearTimeout(solveTimeoutRef.current);
+    };
+  }, []);
 
   const SVG_W = 860;
   const SVG_H = 500;
@@ -248,8 +256,7 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     if (!graph) return;
     setComputing(true);
     setTooltip(null);
-    // Use setTimeout to let the UI update
-    setTimeout(() => {
+    solveTimeoutRef.current = setTimeout(() => {
       const r = algorithm === "greedy"
         ? greedySolver(graph)
         : localSearchSolver(graph, Math.max(2000, graph.n * 10));
@@ -268,8 +275,8 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     const basePath = rawBase.endsWith("/") ? rawBase : rawBase + "/";
     fetch(`${basePath}demos/mpids/${name}`)
       .then((r) => r.text())
-      .then((text) => { setSelectedSample(-1); loadGraph(text); })
-      .catch(() => {});
+      .then((text) => { setSelectedSample(-1); setLoadError(null); loadGraph(text); })
+      .catch(() => { setLoadError('Failed to load sample graph'); });
   }, [loadGraph]);
 
   const handleRandom = useCallback(() => {
@@ -327,6 +334,12 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
           </div>
         </div>
       </div>
+
+      {loadError && (
+        <div style={{ padding: "0.5rem 1rem", marginBottom: "1rem", borderRadius: 8, background: "#ef444415", border: "1px solid #ef444430", color: "#ef4444", fontSize: "0.85rem" }}>
+          {loadError}
+        </div>
+      )}
 
       {/* Graph selection */}
       <div style={s.card}>

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   MOCK_CATEGORIES,
   MOCK_PRODUCTS,
@@ -268,6 +268,13 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
   const [cart, setCart] = useState<Record<number, number>>({});
   const [checkoutForm, setCheckoutForm] = useState({ name: "", email: "", address: "", userType: "guest" as "guest" | "registered", password: "" });
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const orderTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (orderTimeoutRef.current) clearTimeout(orderTimeoutRef.current);
+    };
+  }, []);
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
 
@@ -314,7 +321,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
   const placeOrder = useCallback(() => {
     setOrderPlaced(true);
     setCart({});
-    setTimeout(() => {
+    orderTimeoutRef.current = setTimeout(() => {
       setOrderPlaced(false);
       setView("home");
       setCheckoutForm({ name: "", email: "", address: "", userType: "guest", password: "" });

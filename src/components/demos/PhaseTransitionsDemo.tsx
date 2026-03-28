@@ -334,6 +334,13 @@ export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
 
   const [sweepResults, setSweepResults] = useState<SweepPoint[]>([]);
   const [sweeping, setSweeping] = useState(false);
+  const sweepTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (sweepTimeoutRef.current) clearTimeout(sweepTimeoutRef.current);
+    };
+  }, []);
 
   // Generate a new base graph
   const generate = useCallback(() => {
@@ -380,7 +387,7 @@ export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
   // Run sweep
   const handleSweep = useCallback(() => {
     setSweeping(true);
-    setTimeout(() => {
+    sweepTimeoutRef.current = setTimeout(() => {
       const n = family === "grid" ? gridSide * gridSide : nodeCount;
       const trials = n <= 100 ? 20 : n <= 500 ? 10 : 5;
       const steps = 20;

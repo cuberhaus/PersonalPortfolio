@@ -131,14 +131,17 @@ function NewsTab({ t }: { t: typeof TRANSLATIONS.en }) {
   const [backendUp, setBackendUp] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     fetch(`${BACKEND_URL}/api/news/`)
       .then((r) => r.json())
       .then((data) => {
+        if (cancelled) return;
         const items = Object.values(data.news as Record<string, { title: string; link: string; img: string }>);
         setNews(items);
         setBackendUp(true);
       })
-      .catch(() => setBackendUp(false));
+      .catch(() => { if (!cancelled) setBackendUp(false); });
+    return () => { cancelled = true; };
   }, []);
 
   return (
@@ -167,16 +170,19 @@ function ChatTab({ t }: { t: typeof TRANSLATIONS.en }) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let cancelled = false;
     fetch(`${BACKEND_URL}/api/chat/`)
       .then((r) => r.json())
       .then((data) => {
+        if (cancelled) return;
         const msgs = Object.values(data.messages_dict as Record<string, string>);
         setMessages(msgs);
         setBackendUp(true);
       })
       .catch(() => {
-        setMessages([t.mockChatInit]);
+        if (!cancelled) setMessages([t.mockChatInit]);
       });
+    return () => { cancelled = true; };
   }, [t.mockChatInit]);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
