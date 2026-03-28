@@ -18,7 +18,8 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-  const lang = window.location.pathname.split('/')[1];
+  const segments = window.location.pathname.replace(/^\/+/, '').split('/');
+  const lang = ['es', 'ca'].find(l => segments.includes(l));
   const title = document.getElementById('error-title');
   const msg = document.getElementById('error-message');
   const btn = document.getElementById('back-btn');

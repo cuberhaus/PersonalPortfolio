@@ -26,13 +26,16 @@ const nextDemo = currentIdx < allDemos.length - 1 ? allDemos[currentIdx + 1] : n
 const excludeSlugs = new Set([currentSlug, prevDemo?.slug, nextDemo?.slug].filter(Boolean));
 const candidates = allDemos.filter(d => !excludeSlugs.has(d.slug));
 
-// Deterministic shuffle seeded by slug so it's stable per page but varies between pages
+// Seeded Fisher-Yates shuffle — stable per page, varies between pages
 let seed = 0;
 for (const ch of currentSlug) seed = ((seed << 5) - seed + ch.charCodeAt(0)) | 0;
-const shuffled = [...candidates].sort(() => {
-  seed = (seed * 16807 + 0) % 2147483647;
-  return seed % 2 === 0 ? -1 : 1;
-});
+seed = ((seed % 2147483646) + 2147483646) % 2147483646 + 1;
+function nextRand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+const shuffled = [...candidates];
+for (let i = shuffled.length - 1; i > 0; i--) {
+  const j = Math.floor(nextRand() * (i + 1));
+  [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+}
 const exploreDemos = shuffled.slice(0, 4);
 ---
 

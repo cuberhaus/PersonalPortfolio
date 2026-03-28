@@ -105,7 +105,8 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
         if (!emailRegex.test(email) || typos[domain]) {
           if (result) {
             if (typos[domain]) {
-               result.innerHTML = `${didYouMeanMsg} <b>${email.split('@')[0]}@${typos[domain]}</b>?`;
+               const safeLocal = email.split('@')[0].replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+               result.innerHTML = `${didYouMeanMsg} <b>${safeLocal}@${typos[domain]}</b>?`;
             } else {
                result.innerHTML = invalidEmailMsg;
             }

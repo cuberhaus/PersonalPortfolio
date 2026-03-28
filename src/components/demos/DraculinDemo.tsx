@@ -117,13 +117,13 @@ const s = {
   wrapper: { fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)", minHeight: "500px" },
   tabs: { display: "flex" as const, gap: "0.25rem", padding: "0.75rem 1rem", background: "var(--bg-card)", borderRadius: "0.75rem", marginBottom: "1.5rem", flexWrap: "wrap" as const, justifyContent: "center" as const },
   tab: { padding: "0.5rem 1rem", borderRadius: "0.5rem", border: "none", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", transition: "all 0.15s", background: "transparent", color: "var(--text-muted)" },
-  tabActive: { background: "linear-gradient(135deg, #6366f1, #a855f7)", color: "var(--text-primary)" },
+  tabActive: { background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))", color: "var(--text-primary)" },
   card: { background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "0.75rem", padding: "1.5rem" },
   btn: { padding: "0.5rem 1.25rem", borderRadius: "0.5rem", border: "none", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.15s" },
-  primaryBtn: { background: "linear-gradient(135deg, #6366f1, #a855f7)", color: "var(--text-primary)" },
+  primaryBtn: { background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))", color: "var(--text-primary)" },
   secondaryBtn: { background: "var(--border-color)", color: "var(--text-secondary)" },
   input: { background: "var(--bg-secondary)", border: "1px solid var(--border-color)", borderRadius: "0.5rem", padding: "0.5rem 0.75rem", color: "var(--text-primary)", fontSize: "0.9rem", width: "100%", outline: "none" },
-  mockBanner: { background: "linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.08))", border: "1px solid rgba(99,102,241,0.3)", borderRadius: "0.5rem", padding: "0.5rem 1rem", fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "1rem", textAlign: "center" as const },
+  mockBanner: { background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 10%, transparent), color-mix(in srgb, var(--accent-end) 8%, transparent))", border: "1px solid var(--glow-color-strong)", borderRadius: "0.5rem", padding: "0.5rem 1rem", fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "1rem", textAlign: "center" as const },
 } as const;
 
 function NewsTab({ t }: { t: typeof TRANSLATIONS.en }) {
@@ -148,7 +148,7 @@ function NewsTab({ t }: { t: typeof TRANSLATIONS.en }) {
       <div style={{ display: "flex", flexDirection: "column" as const, gap: "0.75rem" }}>
         {news.map((n, i) => (
           <a key={i} href={n.link} target="_blank" rel="noopener noreferrer" style={{ ...s.card, display: "flex", gap: "1rem", alignItems: "center", textDecoration: "none", transition: "border-color 0.15s" }}
-            onMouseOver={(e) => (e.currentTarget.style.borderColor = "#6366f1")}
+            onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--accent-start)")}
             onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--border-color)")}>
             {n.img && <img src={n.img} alt="" style={{ width: "80px", height: "60px", objectFit: "cover" as const, borderRadius: "0.5rem", flexShrink: 0 }} onError={(e) => (e.currentTarget.style.display = "none")} />}
             <span style={{ color: "var(--text-primary)", fontSize: "0.9rem" }}>{n.title}</span>
@@ -218,7 +218,7 @@ function ChatTab({ t }: { t: typeof TRANSLATIONS.en }) {
             padding: "0.5rem 0.75rem",
             marginBottom: "0.5rem",
             borderRadius: "0.5rem",
-            background: i % 2 === 0 ? "rgba(99,102,241,0.1)" : "var(--bg-secondary)",
+            background: i % 2 === 0 ? "color-mix(in srgb, var(--accent-start) 10%, transparent)" : "var(--bg-secondary)",
             fontSize: "0.85rem",
             lineHeight: 1.5,
           }}>{m}</div>
@@ -324,7 +324,7 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
           <div style={{ display: "flex", alignItems: "flex-end", gap: "0.5rem", height: "120px" }}>
             {Object.entries(BLOOD_DATA).map(([day, val]) => (
               <div key={day} style={{ flex: 1, display: "flex", flexDirection: "column" as const, alignItems: "center", gap: "0.25rem" }}>
-                <div style={{ width: "100%", maxWidth: "24px", height: `${(val / maxBlood) * 100}px`, background: "linear-gradient(180deg, #6366f1, #a855f7)", borderRadius: "3px 3px 0 0", transition: "height 0.3s" }}
+                <div style={{ width: "100%", maxWidth: "24px", height: `${(val / maxBlood) * 100}px`, background: "linear-gradient(180deg, var(--accent-start), var(--accent-end))", borderRadius: "3px 3px 0 0", transition: "height 0.3s" }}
                   title={`${val} ml`} />
                 <span style={{ fontSize: "0.65rem", color: "var(--text-muted)" }}>{day}</span>
               </div>

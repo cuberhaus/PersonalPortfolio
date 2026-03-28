@@ -54,8 +54,8 @@ const t = useTranslations(lang);
     height: 80%;
     background: radial-gradient(
       ellipse at center,
-      rgba(99, 102, 241, 0.12) 0%,
-      rgba(168, 85, 247, 0.06) 40%,
+      color-mix(in srgb, var(--accent-start) 12%, transparent) 0%,
+      color-mix(in srgb, var(--accent-end) 6%, transparent) 40%,
       transparent 70%
     );
     animation: pulse 8s ease-in-out infinite alternate;
@@ -70,7 +70,7 @@ const t = useTranslations(lang);
     position: absolute;
     inset: 0;
     background-image:
-      radial-gradient(circle, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
+      radial-gradient(circle, color-mix(in srgb, var(--accent-start) 8%, transparent) 1px, transparent 1px);
     background-size: 40px 40px;
     mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent);
     -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent);
@@ -126,7 +126,7 @@ const t = useTranslations(lang);
 
   .hero-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px var(--glow-color-strong);
   }
 
   .hero-cta svg {
@@ -136,5 +136,15 @@ const t = useTranslations(lang);
   @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50%      { transform: translateY(3px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-gradient {
+      animation: none;
+    }
+
+    .hero-cta svg {
+      animation: none;
+    }
   }
 </style>

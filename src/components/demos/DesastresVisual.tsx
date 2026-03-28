@@ -56,7 +56,7 @@ const TRANSLATIONS = {
   }
 };
 
-const HELI_COLORS = ["#6366f1", "#22c55e", "#f59e0b"];
+const HELI_COLORS = ["var(--accent-start)", "#22c55e", "#f59e0b"];
 
 function project(
   x: number,
@@ -285,7 +285,7 @@ export function RunExplainer({ lang = "en" }: { lang?: Lang }) {
     <div
       style={{
         padding: "0.85rem 1rem",
-        background: "rgba(99, 102, 241, 0.08)",
+        background: "color-mix(in srgb, var(--accent-start) 8%, transparent)",
         border: "1px solid var(--border-color)",
         borderRadius: "0.5rem",
         marginBottom: "1rem",

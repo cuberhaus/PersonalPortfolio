@@ -19,6 +19,9 @@ const cleanBase = base === '/' ? '' : base;
       <a 
         href={href} 
         class={`lang-link ${key === currentLang ? 'active' : ''}`}
+        hreflang={key}
+        aria-label={label}
+        aria-current={key === currentLang ? 'page' : undefined}
         title={label}
         data-astro-reload
       >

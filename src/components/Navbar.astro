@@ -21,7 +21,7 @@ const links = [
   <div class="nav-inner container">
     <a href="#hero" class="nav-logo gradient-text">Pol C.</a>
 
-    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+    <button class="nav-toggle" aria-label={t('aria.toggleMenu')} aria-expanded="false" aria-controls="nav-links">
       <span class="hamburger"></span>
     </button>
 
@@ -224,6 +224,11 @@ const links = [
     // Initial check
     scrollHandler();
 
+    const closeMenu = () => {
+      toggle?.setAttribute('aria-expanded', 'false');
+      links?.classList.remove('open');
+    };
+
     if (toggle && !toggle.hasAttribute('data-initialized')) {
       toggle.setAttribute('data-initialized', 'true');
       toggle.addEventListener('click', () => {
@@ -236,10 +241,17 @@ const links = [
     if (links && !links.hasAttribute('data-links-init')) {
       links.setAttribute('data-links-init', 'true');
       links.querySelectorAll('.nav-link').forEach((link) => {
-        link.addEventListener('click', () => {
-          toggle?.setAttribute('aria-expanded', 'false');
-          links?.classList.remove('open');
-        });
+        link.addEventListener('click', closeMenu);
+      });
+    }
+
+    if (navbar && !navbar.hasAttribute('data-esc-init')) {
+      navbar.setAttribute('data-esc-init', 'true');
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && links?.classList.contains('open')) {
+          closeMenu();
+          toggle?.focus();
+        }
       });
     }
 

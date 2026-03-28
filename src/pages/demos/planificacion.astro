@@ -14,7 +14,7 @@ const viewSource = {
 const githubLabel = viewSource[lang] || 'View Source on GitHub';
 
 const titles = {
-  en: "Pràctica de Planificació",
+  en: "Planning Practice",
   es: "Práctica de Planificación",
   ca: "Pràctica de Planificació"
 };
@@ -64,7 +64,7 @@ const badge = badges[lang] || badges.en;
       accentTo="#a855f7"
     />
 
-    <PlanificacionDemo lang={lang} client:load />
+    <PlanificacionDemo lang={lang} client:visible />
   </div>
 </DemoLayout>
 

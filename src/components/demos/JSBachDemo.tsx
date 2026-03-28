@@ -75,7 +75,7 @@ const styles = {
     transition: "all 0.15s ease",
   },
   primaryBtn: {
-    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
     color: "var(--text-primary)",
   },
   secondaryBtn: {

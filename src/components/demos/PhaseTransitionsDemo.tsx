@@ -120,7 +120,7 @@ const TRANSLATIONS = {
 // ─── Palette for connected components ───
 
 const COMP_COLORS = [
-  "#6366f1","#22c55e","#ef4444","#f59e0b","#06b6d4","#ec4899",
+  "var(--accent-start)","#22c55e","#ef4444","#f59e0b","#06b6d4","#ec4899",
   "#8b5cf6","#14b8a6","#f97316","#84cc16","#e879f9","#0ea5e9",
   "#a3e635","#fb923c","#c084fc","#2dd4bf","#fbbf24","#f43f5e",
 ];
@@ -139,25 +139,25 @@ const s = {
     padding: "1.5rem", marginBottom: "1.25rem",
   } as const,
   infoCard: {
-    background: "linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05))",
-    borderRadius: 16, border: "1px solid rgba(99,102,241,0.15)",
+    background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 8%, transparent), color-mix(in srgb, var(--accent-end) 5%, transparent))",
+    borderRadius: 16, border: "1px solid color-mix(in srgb, var(--accent-start) 15%, transparent)",
     padding: "1.25rem 1.5rem", marginBottom: "1.25rem",
   } as const,
   row: { display: "flex", gap: "0.75rem", flexWrap: "wrap" as const, alignItems: "center", marginBottom: "0.75rem" },
   btn: (active = false) => ({
     padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid var(--border-color)",
-    background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "var(--bg-secondary)",
+    background: active ? "linear-gradient(135deg, var(--accent-start), var(--accent-end))" : "var(--bg-secondary)",
     color: "var(--text-primary)", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
     transition: "all 0.15s",
   }),
   btnPrimary: {
     padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",
-    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
     color: "var(--text-primary)", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600,
   } as const,
   label: { color: "var(--text-secondary)", fontSize: "0.8rem", fontWeight: 500 } as const,
   value: { color: "var(--text-primary)", fontSize: "0.9rem", fontWeight: 600 } as const,
-  slider: { flex: 1, minWidth: 80, accentColor: "#6366f1" } as const,
+  slider: { flex: 1, minWidth: 80, accentColor: "var(--accent-start)" } as const,
   input: {
     padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid var(--border-color)",
     background: "var(--bg-secondary)", color: "var(--text-primary)", fontSize: "0.85rem", width: 55,
@@ -298,18 +298,18 @@ function SweepChart({ points, t }: { points: SweepPoint[]; t: typeof TRANSLATION
           transform={`rotate(-90, 14, ${H / 2})`}>{t.pProperty}</text>
         {/* Lines */}
         <path d={connLine} fill="none" stroke="#22c55e" strokeWidth={2.5} />
-        <path d={compLine} fill="none" stroke="#6366f1" strokeWidth={2.5} />
+        <path d={compLine} fill="none" stroke="var(--accent-start)" strokeWidth={2.5} />
         {/* Dots */}
         {points.map((p, i) => (
           <g key={i}>
             <circle cx={toX(p.param)} cy={toY(p.pConnected)} r={3.5} fill="#22c55e" />
-            <circle cx={toX(p.param)} cy={toY(p.pComplex)} r={3.5} fill="#6366f1" />
+            <circle cx={toX(p.param)} cy={toY(p.pComplex)} r={3.5} fill="var(--accent-start)" />
           </g>
         ))}
         {/* Legend */}
         <circle cx={W - padR - 150} cy={padT + 10} r={5} fill="#22c55e" />
         <text x={W - padR - 140} y={padT + 14} fill="var(--text-primary)" fontSize={12}>{t.pConnected}</text>
-        <circle cx={W - padR - 150} cy={padT + 30} r={5} fill="#6366f1" />
+        <circle cx={W - padR - 150} cy={padT + 30} r={5} fill="var(--accent-start)" />
         <text x={W - padR - 140} y={padT + 34} fill="var(--text-primary)" fontSize={12}>{t.pComplex}</text>
       </svg>
     </div>
@@ -467,7 +467,7 @@ export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
             <span style={s.statBadge(stats.connected ? "#22c55e" : "#ef4444")}>
               {stats.connected ? t.connected : t.components.replace("{0}", String(stats.components))}
             </span>
-            <span style={s.statBadge(stats.complex ? "#6366f1" : "#f59e0b")}>
+            <span style={s.statBadge(stats.complex ? "var(--accent-start)" : "#f59e0b")}>
               {stats.complex ? t.allComplex : t.notAllComplex}
             </span>
             {!stats.connected && (

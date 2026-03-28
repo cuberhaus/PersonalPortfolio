@@ -193,7 +193,7 @@ const card = {
   background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "1rem", padding: "1.5rem",
 } as const;
 
-const accent1 = "#6366f1";
+const accent1 = "var(--accent-start)";
 const accent2 = "#22c55e";
 
 function formatAssign(a: Assignment): string {
@@ -227,7 +227,7 @@ function SchematicSvg({ t }: { t: typeof TRANSLATIONS.en }) {
         { x: 220, y: 130, label: `${t.center} 2` },
       ].map((c, i) => (
         <g key={i}>
-          <ellipse cx={c.x + 30} cy={c.y + 22} rx="38" ry="26" fill="var(--bg-secondary)" stroke="#6366f1" strokeWidth="1.5" />
+          <ellipse cx={c.x + 30} cy={c.y + 22} rx="38" ry="26" fill="var(--bg-secondary)" stroke="var(--accent-start)" strokeWidth="1.5" />
           <text x={c.x + 30} y={c.y + 25} textAnchor="middle" fill="var(--text-primary)" fontSize="10" fontWeight="600">{c.label}</text>
         </g>
       ))}
@@ -328,7 +328,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
             {t.heuristics.map((h) => (
               <div key={h.name} style={{
                 padding: "0.6rem 0.75rem", background: "var(--bg-secondary)", borderRadius: "0.5rem",
-                border: h.active ? "1px solid rgba(99,102,241,0.4)" : "1px solid var(--border-color)",
+                border: h.active ? "1px solid color-mix(in srgb, var(--accent-start) 40%, transparent)" : "1px solid var(--border-color)",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.2rem" }}>
                   <span style={{
@@ -337,7 +337,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
                   }}>{h.name}</span>
                   {h.active && <span style={{
                     fontSize: "0.55rem", padding: "0.1rem 0.35rem", borderRadius: "0.25rem",
-                    background: "rgba(99,102,241,0.2)", color: "#a5b4fc", fontWeight: 600,
+                    background: "var(--glow-color)", color: "#a5b4fc", fontWeight: 600,
                   }}>{t.usedInDemo}</span>}
                 </div>
                 <div style={{ fontSize: "0.75rem", color: h.active ? "var(--text-primary)" : "var(--text-muted)", lineHeight: 1.4 }}>{h.desc}</div>
@@ -367,13 +367,13 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
         ...card, marginBottom: "1.25rem",
         background: "linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-card) 100%)",
         border: "1px solid var(--border-color)",
-        boxShadow: "0 4px 24px rgba(99, 102, 241, 0.08)",
+        boxShadow: "0 4px 24px color-mix(in srgb, var(--accent-start) 8%, transparent)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
           <div style={{
             width: 32, height: 32, borderRadius: "0.5rem", display: "flex", alignItems: "center",
             justifyContent: "center", fontSize: "1rem",
-            background: `linear-gradient(135deg, rgba(99,102,241,0.15), rgba(34,197,94,0.1))`,
+            background: `linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), rgba(34,197,94,0.1))`,
           }}>⚡</div>
           <div>
             <h3 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 700 }}>{t.runDemo}</h3>
@@ -384,7 +384,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
         </div>
 
         <div style={{
-          padding: "0.75rem 0.85rem", background: "rgba(99,102,241,0.06)", border: "1px solid rgba(129,140,248,0.2)",
+          padding: "0.75rem 0.85rem", background: "color-mix(in srgb, var(--accent-start) 6%, transparent)", border: "1px solid rgba(129,140,248,0.2)",
           borderRadius: "0.5rem", marginBottom: "1rem", fontSize: "0.78rem", lineHeight: 1.55, color: "var(--text-secondary)",
         }}>
           <strong style={{ color: "var(--text-primary)" }}>{t.howItWorks}</strong>{t.howDesc1}

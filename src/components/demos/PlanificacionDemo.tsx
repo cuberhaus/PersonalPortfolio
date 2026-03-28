@@ -254,7 +254,7 @@ function parseTripSteps(plan: string[], diasMap: Record<string, number>): TripSt
   return out;
 }
 
-const CITY_COLORS = ["#6366f1", "#a855f7", "#22c55e", "#f59e0b", "#ec4899", "#06b6d4"];
+const CITY_COLORS = ["var(--accent-start)", "var(--accent-end)", "#22c55e", "#f59e0b", "#ec4899", "#06b6d4"];
 function cityColor(id: string): string {
   let h = 0;
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0;
@@ -266,8 +266,8 @@ const card = {
   background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "1rem", padding: "1.5rem",
 } as const;
 
-const accent1 = "#6366f1";
-const accent2 = "#a855f7";
+const accent1 = "var(--accent-start)";
+const accent2 = "var(--accent-end)";
 
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  FLIGHT NETWORK SVG                                                    */
@@ -523,7 +523,7 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
           <div style={{
             width: 30, height: 30, borderRadius: "0.5rem", display: "flex", alignItems: "center",
             justifyContent: "center", fontSize: "0.9rem",
-            background: `linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))`,
+            background: `linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), color-mix(in srgb, var(--accent-end) 10%, transparent))`,
           }}>⚡</div>
           <div>
             <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.runPlanner}</h3>
