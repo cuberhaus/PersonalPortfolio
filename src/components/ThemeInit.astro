@@ -11,9 +11,8 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
 ---
 
 {position === 'head' && (
-<script is:inline>
-  // Apply theme before render to prevent FOUC
-  const VALID = ['dark','dracula','nord','tokyo-night','catppuccin-mocha','one-dark','light','nord-light','catppuccin-latte','solarized-light'];
+<script is:inline define:vars={{ THEME_IDS }}>
+  const VALID = THEME_IDS;
 
   const __theme = (() => {
     const url = new URL(window.location.href);
@@ -52,7 +51,7 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
 {position === 'body' && (
 <div id="theme-modal" class="theme-modal" aria-hidden="true">
   <div class="theme-modal-backdrop"></div>
-  <div class="theme-modal-panel" role="dialog" aria-modal="true" aria-label="Theme picker">
+  <div class="theme-modal-panel" role="dialog" aria-modal="true" data-i18n-aria-label>
     <div class="theme-modal-header">
       <span class="theme-modal-title" data-i18n-title></span>
       <kbd class="theme-modal-hint">Ctrl+K</kbd>
@@ -257,10 +256,12 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     const darkEl = modal.querySelector('[data-i18n-dark]');
     const lightEl = modal.querySelector('[data-i18n-light]');
     const footerEl = modal.querySelector('[data-i18n-footer]');
+    const panelEl = modal.querySelector('[data-i18n-aria-label]');
     if (titleEl) titleEl.textContent = strings.title;
     if (darkEl) darkEl.textContent = strings.dark;
     if (lightEl) lightEl.textContent = strings.light;
     if (footerEl) footerEl.innerHTML = strings.footer;
+    if (panelEl) panelEl.setAttribute('aria-label', strings.title);
 
     let previouslyFocused: Element | null = null;
 

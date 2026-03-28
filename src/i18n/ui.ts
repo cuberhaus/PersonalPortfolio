@@ -89,6 +89,7 @@ export const ui = {
     'aria.toggleTheme': 'Toggle theme (Ctrl+K for more themes)',
     'aria.scrollTop': 'Scroll to top of page',
     'aria.viewGithub': 'View on GitHub',
+    'aria.skipToContent': 'Skip to content',
   },
   es: {
     // Nav
@@ -172,6 +173,7 @@ export const ui = {
     'aria.toggleTheme': 'Cambiar tema (Ctrl+K para más temas)',
     'aria.scrollTop': 'Ir arriba',
     'aria.viewGithub': 'Ver en GitHub',
+    'aria.skipToContent': 'Saltar al contenido',
   },
   ca: {
     // Nav
@@ -255,5 +257,6 @@ export const ui = {
     'aria.toggleTheme': 'Canviar tema (Ctrl+K per a més temes)',
     'aria.scrollTop': 'Anar a dalt',
     'aria.viewGithub': 'Veure a GitHub',
+    'aria.skipToContent': 'Saltar al contingut',
   },
 } as const;
