@@ -44,7 +44,24 @@ const TRANSLATIONS = {
     hideLog: "Hide solver log",
     ghRepo: "GitHub repo \u2197",
     missingApi: "Planner API not configured (set PUBLIC_PLANNER_URL at build time).",
-    noPlan: "Planner returned no plan."
+    noPlan: "Planner returned no plan.",
+    fullAppTitle: "This demo vs. the full app",
+    demoIncludesLabel: "This demo includes:",
+    demoFeatures: [
+      "Flight network diagram and constraint overview for Extension 2",
+      "Browsable PDDL domain & problem source code",
+      "Downloadable .pddl files",
+      "Extension descriptions at a glance",
+    ],
+    fullAppDesc: "The full web app (run locally) adds:",
+    fullAppFeatures: [
+      "File browser for all extensions (Basico through Extension 4)",
+      "Interactive graph visualization of the problem structure",
+      "Real Metric-FF planner execution on any domain/problem",
+      "Planned route highlighted on the graph",
+      "Editable PDDL with re-run support",
+    ],
+    fullAppHint: "Run locally to access the full app:",
   },
   es: {
     extensions: [
@@ -86,7 +103,24 @@ const TRANSLATIONS = {
     hideLog: "Ocultar log del solver",
     ghRepo: "Repositorio en GitHub \u2197",
     missingApi: "API del planificador no configurada (establece PUBLIC_PLANNER_URL en tiempo de compilación).",
-    noPlan: "El planificador no devolvió ningún plan."
+    noPlan: "El planificador no devolvió ningún plan.",
+    fullAppTitle: "Esta demo vs. la app completa",
+    demoIncludesLabel: "Esta demo incluye:",
+    demoFeatures: [
+      "Diagrama de la red de vuelos y resumen de restricciones para la Extensión 2",
+      "Código fuente PDDL del dominio y problema navegable",
+      "Archivos .pddl descargables",
+      "Descripción de las extensiones de un vistazo",
+    ],
+    fullAppDesc: "La app web completa (ejecución local) añade:",
+    fullAppFeatures: [
+      "Explorador de archivos para todas las extensiones (Básico a Extensión 4)",
+      "Visualización interactiva del grafo de la estructura del problema",
+      "Ejecución real del planificador Metric-FF sobre cualquier dominio/problema",
+      "Ruta planificada resaltada sobre el grafo",
+      "PDDL editable con soporte para re-ejecución",
+    ],
+    fullAppHint: "Ejecútalo localmente para acceder a la app completa:",
   },
   ca: {
     extensions: [
@@ -128,7 +162,24 @@ const TRANSLATIONS = {
     hideLog: "Ocultar log del solver",
     ghRepo: "Repositori a GitHub \u2197",
     missingApi: "API del planificador no configurada (estableix PUBLIC_PLANNER_URL en temps de compilació).",
-    noPlan: "El planificador no ha retornat cap pla."
+    noPlan: "El planificador no ha retornat cap pla.",
+    fullAppTitle: "Aquesta demo vs. l'app completa",
+    demoIncludesLabel: "Aquesta demo inclou:",
+    demoFeatures: [
+      "Diagrama de la xarxa de vols i resum de restriccions per a l'Extensió 2",
+      "Codi font PDDL del domini i problema navegable",
+      "Arxius .pddl descarregables",
+      "Descripció de les extensions d'un cop d'ull",
+    ],
+    fullAppDesc: "L'app web completa (execució local) afegeix:",
+    fullAppFeatures: [
+      "Explorador d'arxius per a totes les extensions (Bàsic a Extensió 4)",
+      "Visualització interactiva del graf de l'estructura del problema",
+      "Execució real del planificador Metric-FF sobre qualsevol domini/problema",
+      "Ruta planificada ressaltada sobre el graf",
+      "PDDL editable amb suport per a re-execució",
+    ],
+    fullAppHint: "Executa'l localment per accedir a l'app completa:",
   }
 };
 
@@ -427,6 +478,49 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
         devCmd="cd Practica_de_Planificacion && make dev"
         lang={lang}
       />
+
+      {/* ── DEMO VS FULL APP ── */}
+      <div style={{
+        marginBottom: "1.25rem", padding: "1rem 1.25rem",
+        background: "linear-gradient(135deg, rgba(139,92,246,0.06), rgba(14,165,233,0.06))",
+        border: "1px solid rgba(139,92,246,0.2)",
+        borderRadius: "0.75rem",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.85rem" }}>
+          <span style={{ fontSize: "0.9rem" }}>&#9432;</span>
+          <strong style={{ fontSize: "0.82rem", color: "var(--text-primary)" }}>{t.fullAppTitle}</strong>
+        </div>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))",
+          gap: "1rem",
+        }}>
+          <div>
+            <p style={{ margin: "0 0 0.35rem", fontSize: "0.76rem", fontWeight: 600, color: "var(--text-primary)" }}>
+              {t.demoIncludesLabel}
+            </p>
+            <ul style={{ margin: 0, paddingLeft: "1.2rem", fontSize: "0.74rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+              {t.demoFeatures.map((f, i) => <li key={i}>{f}</li>)}
+            </ul>
+          </div>
+          <div>
+            <p style={{ margin: "0 0 0.35rem", fontSize: "0.76rem", fontWeight: 600, color: accent1 }}>
+              {t.fullAppDesc}
+            </p>
+            <ul style={{ margin: 0, paddingLeft: "1.2rem", fontSize: "0.74rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+              {t.fullAppFeatures.map((f, i) => <li key={i}>{f}</li>)}
+            </ul>
+          </div>
+        </div>
+        <p style={{ margin: "0.75rem 0 0", fontSize: "0.72rem", color: "var(--text-muted)" }}>
+          {t.fullAppHint}{" "}
+          <code style={{
+            padding: "0.15rem 0.4rem", borderRadius: "0.25rem",
+            background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
+            fontSize: "0.7rem", fontFamily: "var(--font-mono, monospace)", color: "var(--text-primary)",
+          }}>cd Practica_de_Planificacion && make dev</code>
+        </p>
+      </div>
 
       {/* ── PROBLEM OVERVIEW ── */}
       <div style={{
