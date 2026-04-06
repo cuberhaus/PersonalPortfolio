@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from "react";
+import { useId } from "react";
 import LiveAppEmbed from "./LiveAppEmbed";
 
 type Lang = "en" | "es" | "ca";
@@ -28,28 +28,12 @@ const TRANSLATIONS = {
     domain: "Domain (Ext 2)",
     problem: "Problem (Ext 2)",
     download: "Download \u2193",
-    runPlanner: "Run planner",
-    runReq: "Requires deployed planner API",
-    notConfig: "Planner API not configured.",
-    notConfigDesc: " Set PUBLIC_PLANNER_URL in .env before building. You can still browse the PDDL above and download the files.",
-    domainLabel: "Domain",
-    problemLabel: "Problem",
-    running: "Running\u2026",
-    reset: "Reset to defaults",
-    plan: "Plan",
-    steps: "steps",
-    total: "total:",
-    rawActions: "Raw plan actions",
-    showLog: "Show solver log",
-    hideLog: "Hide solver log",
     ghRepo: "GitHub repo \u2197",
-    missingApi: "Planner API not configured (set PUBLIC_PLANNER_URL at build time).",
-    noPlan: "Planner returned no plan.",
     fullAppTitle: "This demo vs. the full app",
     demoIncludesLabel: "This demo includes:",
     demoFeatures: [
       "Flight network diagram and constraint overview for Extension 2",
-      "Browsable PDDL domain & problem source code",
+      "Read-only PDDL domain & problem source code",
       "Downloadable .pddl files",
       "Extension descriptions at a glance",
     ],
@@ -57,7 +41,7 @@ const TRANSLATIONS = {
     fullAppFeatures: [
       "File browser for all extensions (Basico through Extension 4)",
       "Interactive graph visualization of the problem structure",
-      "Real Metric-FF planner execution on any domain/problem",
+      "Built-in planner execution on any domain/problem",
       "Planned route highlighted on the graph",
       "Editable PDDL with re-run support",
     ],
@@ -87,28 +71,12 @@ const TRANSLATIONS = {
     domain: "Dominio (Ext 2)",
     problem: "Problema (Ext 2)",
     download: "Descargar \u2193",
-    runPlanner: "Ejecutar planificador",
-    runReq: "Requiere API de planificador desplegada",
-    notConfig: "API del planificador no configurada.",
-    notConfigDesc: " Establece PUBLIC_PLANNER_URL en .env antes de compilar. Aún puedes ver el PDDL arriba y descargar los archivos.",
-    domainLabel: "Dominio",
-    problemLabel: "Problema",
-    running: "Ejecutando\u2026",
-    reset: "Restablecer por defecto",
-    plan: "Plan",
-    steps: "pasos",
-    total: "total:",
-    rawActions: "Acciones crudas del plan",
-    showLog: "Mostrar log del solver",
-    hideLog: "Ocultar log del solver",
     ghRepo: "Repositorio en GitHub \u2197",
-    missingApi: "API del planificador no configurada (establece PUBLIC_PLANNER_URL en tiempo de compilación).",
-    noPlan: "El planificador no devolvió ningún plan.",
     fullAppTitle: "Esta demo vs. la app completa",
     demoIncludesLabel: "Esta demo incluye:",
     demoFeatures: [
       "Diagrama de la red de vuelos y resumen de restricciones para la Extensión 2",
-      "Código fuente PDDL del dominio y problema navegable",
+      "Código fuente PDDL del dominio y problema (solo lectura)",
       "Archivos .pddl descargables",
       "Descripción de las extensiones de un vistazo",
     ],
@@ -116,7 +84,7 @@ const TRANSLATIONS = {
     fullAppFeatures: [
       "Explorador de archivos para todas las extensiones (Básico a Extensión 4)",
       "Visualización interactiva del grafo de la estructura del problema",
-      "Ejecución real del planificador Metric-FF sobre cualquier dominio/problema",
+      "Ejecución del planificador integrado sobre cualquier dominio/problema",
       "Ruta planificada resaltada sobre el grafo",
       "PDDL editable con soporte para re-ejecución",
     ],
@@ -146,28 +114,12 @@ const TRANSLATIONS = {
     domain: "Domini (Ext 2)",
     problem: "Problema (Ext 2)",
     download: "Descarregar \u2193",
-    runPlanner: "Executar planificador",
-    runReq: "Requereix API de planificador desplegada",
-    notConfig: "API del planificador no configurada.",
-    notConfigDesc: " Estableix PUBLIC_PLANNER_URL a .env abans de compilar. Encara pots veure el PDDL a dalt i descarregar els fitxers.",
-    domainLabel: "Domini",
-    problemLabel: "Problema",
-    running: "Executant\u2026",
-    reset: "Restablir per defecte",
-    plan: "Pla",
-    steps: "passos",
-    total: "total:",
-    rawActions: "Accions crues del pla",
-    showLog: "Mostrar log del solver",
-    hideLog: "Ocultar log del solver",
     ghRepo: "Repositori a GitHub \u2197",
-    missingApi: "API del planificador no configurada (estableix PUBLIC_PLANNER_URL en temps de compilació).",
-    noPlan: "El planificador no ha retornat cap pla.",
     fullAppTitle: "Aquesta demo vs. l'app completa",
     demoIncludesLabel: "Aquesta demo inclou:",
     demoFeatures: [
       "Diagrama de la xarxa de vols i resum de restriccions per a l'Extensió 2",
-      "Codi font PDDL del domini i problema navegable",
+      "Codi font PDDL del domini i problema (només lectura)",
       "Arxius .pddl descarregables",
       "Descripció de les extensions d'un cop d'ull",
     ],
@@ -175,7 +127,7 @@ const TRANSLATIONS = {
     fullAppFeatures: [
       "Explorador d'arxius per a totes les extensions (Bàsic a Extensió 4)",
       "Visualització interactiva del graf de l'estructura del problema",
-      "Execució real del planificador Metric-FF sobre qualsevol domini/problema",
+      "Execució del planificador integrat sobre qualsevol domini/problema",
       "Ruta planificada ressaltada sobre el graf",
       "PDDL editable amb suport per a re-execució",
     ],
@@ -186,15 +138,6 @@ const TRANSLATIONS = {
 const basePath =
   typeof import.meta !== "undefined" && import.meta.env?.BASE_URL != null
     ? import.meta.env.BASE_URL : "/";
-
-function plannerBaseUrl(): string {
-  const raw = typeof import.meta !== "undefined" && import.meta.env?.PUBLIC_PLANNER_URL != null
-    ? String(import.meta.env.PUBLIC_PLANNER_URL).trim() : "";
-  const u = raw.replace(/\/$/, "");
-  if (u) return u;
-  if (typeof import.meta !== "undefined" && import.meta.env?.DEV) return "http://127.0.0.1:8765";
-  return "";
-}
 
 /* ── PDDL sources ── */
 const DOMAIN_EXT2 = `(define (domain agencia_viaje)
@@ -282,30 +225,6 @@ const PROBLEM_EXT2 = `(define (problem agencia_viaje)
 
 const GH = "https://github.com/cuberhaus/Practica_de_Planificacion";
 
-type PlanResponse = { ok: boolean; plan?: string[]; stdout?: string; error?: string; time_sec?: number; };
-type TripStep = { from: string; to: string; flight: string; hotel: string; diasToken: string; days: number | null; };
-
-function parseDiasFromProblem(problem: string): Record<string, number> {
-  const m: Record<string, number> = {};
-  const re = /\(=\s*\(dias_por_ciudad\s+(\w+)\)\s+(\d+)\)/g;
-  let x: RegExpExecArray | null;
-  while ((x = re.exec(problem))) m[x[1]] = parseInt(x[2], 10);
-  return m;
-}
-
-function parseTripSteps(plan: string[], diasMap: Record<string, number>): TripStep[] {
-  const out: TripStep[] = [];
-  for (const line of plan) {
-    const t = line.trim();
-    if (!t.startsWith("(anadir_ciudad ") || !t.endsWith(")")) continue;
-    const inner = t.slice("(anadir_ciudad ".length, -1).trim().split(/\s+/);
-    if (inner.length < 5) continue;
-    const [from, to, flight, hotel, diasToken] = inner;
-    out.push({ from, to, flight, hotel, diasToken, days: diasMap[diasToken] ?? null });
-  }
-  return out;
-}
-
 const CITY_COLORS = ["var(--accent-start)", "var(--accent-end)", "#22c55e", "#f59e0b", "#ec4899", "#06b6d4"];
 function cityColor(id: string): string {
   let h = 0;
@@ -377,97 +296,12 @@ function FlightNetwork() {
 }
 
 /* ════════════════════════════════════════════════════════════════════════ */
-/*  PLAN RESULT VISUALIZATION                                             */
-/* ════════════════════════════════════════════════════════════════════════ */
-function PlanResult({ plan, problem, timeSec, t }: { plan: string[]; problem: string; timeSec?: number; t: typeof TRANSLATIONS.en }) {
-  const diasMap = parseDiasFromProblem(problem);
-  const steps = parseTripSteps(plan, diasMap);
-  let cumDays = 0;
-
-  return (
-    <div style={{ marginTop: "1rem" }}>
-      <h4 style={{ margin: "0 0 0.75rem", fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary)" }}>
-        ✅ {t.plan} ({plan.length} {t.steps}{timeSec != null ? ` \u00b7 ${timeSec}s` : ""})
-      </h4>
-
-      {steps.length > 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1rem" }}>
-          {steps.map((s, i) => {
-            const d = s.days;
-            if (d != null) cumDays += d;
-            return (
-              <div key={i} style={{
-                display: "flex", gap: "0.75rem", alignItems: "flex-start",
-                padding: "0.6rem 0.85rem", background: "var(--bg-secondary)", borderRadius: "0.5rem", border: "1px solid var(--border-color)",
-              }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
-                  background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-                  color: "var(--text-primary)", fontSize: "0.7rem", fontWeight: 700,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>{i + 1}</div>
-                <div style={{ fontSize: "0.82rem" }}>
-                  <span style={{ color: cityColor(s.from), fontWeight: 600 }}>{s.from}</span>
-                  <span style={{ color: "var(--text-muted)", margin: "0 0.3rem" }}>→</span>
-                  <span style={{ color: cityColor(s.to), fontWeight: 600 }}>{s.to}</span>
-                  <span style={{ color: "var(--text-muted)", marginLeft: "0.5rem", fontSize: "0.75rem" }}>
-                    ✈️ {s.flight} · 🏨 {s.hotel} · 📅 {d != null ? `${d}d` : s.diasToken}
-                    {cumDays > 0 && <span style={{ color: "var(--text-muted)" }}> ({t.total} {cumDays}d)</span>}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      <details>
-        <summary style={{ fontSize: "0.75rem", color: "var(--text-muted)", cursor: "pointer" }}>{t.rawActions}</summary>
-        <ol style={{
-          margin: "0.5rem 0 0", paddingLeft: "1.25rem", color: "var(--text-secondary)",
-          fontFamily: "ui-monospace, monospace", fontSize: "0.72rem", lineHeight: 1.8,
-        }}>
-          {plan.map((a, i) => <li key={i}>{a}</li>)}
-        </ol>
-      </details>
-    </div>
-  );
-}
-
-/* ════════════════════════════════════════════════════════════════════════ */
 /*  MAIN EXPORT                                                           */
 /* ════════════════════════════════════════════════════════════════════════ */
 export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
-  const plannerUrl = useMemo(() => plannerBaseUrl(), []);
   const pDomain = `${basePath}demos/planificacion/agencia_de_viajes_domain_ext2.pddl`;
   const pProblem = `${basePath}demos/planificacion/agencia_de_viajes_problem_ext2.pddl`;
-
-  const [domainEdit, setDomainEdit] = useState(DOMAIN_EXT2);
-  const [problemEdit, setProblemEdit] = useState(PROBLEM_EXT2);
-  const [running, setRunning] = useState(false);
-  const [result, setResult] = useState<PlanResponse | null>(null);
-  const [fetchErr, setFetchErr] = useState<string | null>(null);
-  const [showLog, setShowLog] = useState(false);
-
-  async function runPlanner() {
-    setFetchErr(null); setResult(null);
-    if (!plannerUrl) { setFetchErr(t.missingApi); return; }
-    setRunning(true);
-    try {
-      const res = await fetch(`${plannerUrl}/plan`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ domain: domainEdit, problem: problemEdit }),
-      });
-      let data: PlanResponse;
-      try { data = await res.json() as PlanResponse; } catch { setFetchErr(`HTTP ${res.status}: not JSON`); return; }
-      setResult(data);
-      if (!res.ok) setFetchErr(data.error || `HTTP ${res.status}`);
-      else if (!data.ok) setFetchErr(data.error || t.noPlan);
-    } catch (e) {
-      setFetchErr(e instanceof Error ? e.message : "Network error.");
-    } finally { setRunning(false); }
-  }
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
@@ -617,100 +451,6 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
             color: "var(--text-secondary)", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(360px, 40vh)",
           }}><code>{PROBLEM_EXT2}</code></pre>
         </div>
-      </div>
-
-      {/* ── RUN PLANNER ── */}
-      <div style={{ ...card, marginBottom: "1.25rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-          <div style={{
-            width: 30, height: 30, borderRadius: "0.5rem", display: "flex", alignItems: "center",
-            justifyContent: "center", fontSize: "0.9rem",
-            background: `linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), color-mix(in srgb, var(--accent-end) 10%, transparent))`,
-          }}>⚡</div>
-          <div>
-            <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.runPlanner}</h3>
-            <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>
-              {plannerUrl ? `ENHSP backend \u00b7 ${plannerUrl}` : t.runReq}
-            </p>
-          </div>
-        </div>
-
-        {!plannerUrl && (
-          <div style={{
-            padding: "0.75rem 1rem", background: "rgba(234, 179, 8, 0.08)", border: "1px solid rgba(234, 179, 8, 0.25)",
-            borderRadius: "0.5rem", color: "#fde047", fontSize: "0.82rem", lineHeight: 1.5, marginBottom: "1rem",
-          }}>
-            <strong>{t.notConfig}</strong>{t.notConfigDesc}
-          </div>
-        )}
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
-          <div>
-            <label style={{ display: "block", color: "var(--text-muted)", fontSize: "0.75rem", marginBottom: "0.25rem" }}>{t.domainLabel}</label>
-            <textarea value={domainEdit} onChange={(e) => setDomainEdit(e.target.value)} spellCheck={false} rows={8}
-              style={{
-                width: "100%", padding: "0.65rem", fontSize: "0.68rem", lineHeight: 1.4,
-                fontFamily: "ui-monospace, monospace", background: "var(--bg-secondary)", color: "var(--text-primary)",
-                border: "1px solid var(--border-color)", borderRadius: "0.5rem", resize: "vertical", boxSizing: "border-box",
-              }}
-            />
-          </div>
-          <div>
-            <label style={{ display: "block", color: "var(--text-muted)", fontSize: "0.75rem", marginBottom: "0.25rem" }}>{t.problemLabel}</label>
-            <textarea value={problemEdit} onChange={(e) => setProblemEdit(e.target.value)} spellCheck={false} rows={8}
-              style={{
-                width: "100%", padding: "0.65rem", fontSize: "0.68rem", lineHeight: 1.4,
-                fontFamily: "ui-monospace, monospace", background: "var(--bg-secondary)", color: "var(--text-primary)",
-                border: "1px solid var(--border-color)", borderRadius: "0.5rem", resize: "vertical", boxSizing: "border-box",
-              }}
-            />
-          </div>
-        </div>
-
-        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
-          <button type="button" onClick={() => void runPlanner()} disabled={running || !plannerUrl}
-            style={{
-              padding: "0.5rem 1.1rem", borderRadius: "0.5rem", border: "none", cursor: running || !plannerUrl ? "not-allowed" : "pointer",
-              fontWeight: 600, fontSize: "0.85rem",
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
-              opacity: running || !plannerUrl ? 0.5 : 1,
-            }}>
-            {running ? t.running : t.runPlanner}
-          </button>
-          <button type="button" onClick={() => { setDomainEdit(DOMAIN_EXT2); setProblemEdit(PROBLEM_EXT2); setResult(null); setFetchErr(null); }}
-            style={{
-              padding: "0.45rem 0.85rem", borderRadius: "0.5rem", border: "1px solid var(--border-color)",
-              cursor: "pointer", fontSize: "0.78rem", background: "var(--bg-card-hover)", color: "var(--text-secondary)",
-            }}>{t.reset}</button>
-        </div>
-
-        {fetchErr && (
-          <div style={{
-            marginTop: "0.75rem", padding: "0.75rem 1rem", background: "rgba(239,68,68,0.08)",
-            border: "1px solid rgba(239,68,68,0.25)", borderRadius: "0.5rem",
-            color: "#fca5a5", fontSize: "0.82rem", whiteSpace: "pre-wrap",
-          }}>{fetchErr}</div>
-        )}
-
-        {result?.ok && result.plan && result.plan.length > 0 && (
-          <PlanResult plan={result.plan} problem={problemEdit} timeSec={result.time_sec} t={t} />
-        )}
-
-        {result?.stdout && (
-          <div style={{ marginTop: "0.75rem" }}>
-            <button type="button" onClick={() => setShowLog((v) => !v)} style={{
-              fontSize: "0.75rem", color: "var(--text-muted)", cursor: "pointer",
-              background: "none", border: "none", padding: 0, textDecoration: "underline",
-            }}>{showLog ? t.hideLog : t.showLog}</button>
-            {showLog && (
-              <pre style={{
-                marginTop: "0.5rem", padding: "0.75rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
-                borderRadius: "0.5rem", fontSize: "0.65rem", fontFamily: "ui-monospace, monospace",
-                color: "var(--text-muted)", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(300px, 35vh)",
-              }}><code>{result.stdout}</code></pre>
-            )}
-          </div>
-        )}
       </div>
 
       {/* ── LINKS ── */}
