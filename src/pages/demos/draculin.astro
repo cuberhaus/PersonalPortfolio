@@ -2,10 +2,10 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import DraculinDemo from '../../components/demos/DraculinDemo';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
-const isDev = import.meta.env.DEV;
 
 const titles = {
   en: "Draculin",
@@ -51,37 +51,17 @@ const badge = badges[lang] || badges.en;
       accentTo="#a855f7"
     />
 
-    {isDev ? (
-      <div class="draculin-local-section">
-        <div class="draculin-local-header">
-          <h3>Live Flutter app (runs locally)</h3>
-          <p class="draculin-local-hint">
-            Start it: <code>cd Draculin-Backend && docker compose up -d</code>
-          </p>
-          <a href="http://localhost:8890" target="_blank" rel="noopener noreferrer" class="draculin-open-btn">
-            Open in new tab
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-            </svg>
-          </a>
-        </div>
-        <div class="phone-frame-container">
-          <div class="phone-frame">
-            <div class="phone-notch"></div>
-            <iframe
-              src="http://localhost:8890"
-              title="Draculin Flutter App"
-              class="draculin-iframe"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </div>
-    ) : (
-      <div class="draculin-demo-wrapper">
-        <DraculinDemo lang={lang} client:visible />
-      </div>
-    )}
+    <LiveAppEmbed
+      url="http://localhost:8890"
+      title="Draculin Flutter App"
+      dockerCmd="cd Draculin-Backend && docker compose up -d"
+      lang={lang}
+      client:load
+    />
+
+    <div class="draculin-demo-wrapper">
+      <DraculinDemo lang={lang} client:visible />
+    </div>
 
     <div class="demo-info">
       <h3>About this project</h3>
@@ -91,16 +71,6 @@ const badge = badges[lang] || badges.en;
         images for menstrual health tracking. The frontend is built with Flutter (supporting iOS,
         Android, and web), while the backend runs on Django with image inference capabilities.
       </p>
-      {isDev && (
-        <div class="run-local-box">
-          <h4>Run the real app locally</h4>
-          <ol>
-            <li><code>cd Draculin-Backend</code></li>
-            <li><code>docker compose up -d</code> — builds and starts the Django backend (port 8889) and Flutter web frontend (port 8890)</li>
-          </ol>
-          <p class="run-local-note">Requires: Docker. The chatbot and vision features run in mock mode without API keys.</p>
-        </div>
-      )}
       
     </div>
   </div>
@@ -114,135 +84,6 @@ const badge = badges[lang] || badges.en;
     background: var(--bg-card);
     padding: 1.5rem;
     min-height: 400px;
-  }
-
-  .draculin-local-section {
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border-color);
-    overflow: hidden;
-    background: var(--bg-card);
-    margin-bottom: 0;
-  }
-
-  .draculin-local-header {
-    padding: 1rem 1.5rem;
-    background: color-mix(in srgb, var(--accent-start) 8%, transparent);
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .draculin-local-header h3 {
-    margin: 0;
-    font-size: 1rem;
-  }
-
-  .draculin-local-hint {
-    margin: 0;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    flex: 1;
-    min-width: 200px;
-  }
-
-  .draculin-local-hint code {
-    font-size: 0.75rem;
-    background: var(--bg-secondary);
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.25rem;
-  }
-
-  .draculin-open-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--accent-start);
-    padding: 0.35rem 0.75rem;
-    border-radius: 0.5rem;
-    background: var(--bg-secondary);
-    transition: color var(--transition-fast), background var(--transition-fast);
-  }
-
-  .draculin-open-btn:hover {
-    color: var(--accent-end);
-    background: var(--bg-card-hover);
-  }
-
-  .phone-frame-container {
-    display: flex;
-    justify-content: center;
-    padding: 2rem 1rem;
-    background: linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 5%, transparent), color-mix(in srgb, var(--accent-end) 5%, transparent));
-  }
-
-  .phone-frame {
-    position: relative;
-    width: 375px;
-    height: 750px;
-    border-radius: 2.5rem;
-    border: 4px solid var(--border-color-hover);
-    background: var(--bg-primary);
-    box-shadow:
-      0 0 0 2px var(--border-color),
-      0 20px 60px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-  }
-
-  .phone-notch {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 140px;
-    height: 28px;
-    background: var(--bg-primary);
-    border-radius: 0 0 1.25rem 1.25rem;
-    z-index: 10;
-  }
-
-  .draculin-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
-    border-radius: 2.25rem;
-  }
-
-  .run-local-box {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-md);
-    border-left: 3px solid var(--accent-start);
-  }
-
-  .run-local-box h4 { margin-bottom: 0.5rem; font-size: 0.95rem; }
-
-  .run-local-box ol {
-    margin: 0.5rem 0 0 1.25rem;
-    padding: 0;
-  }
-
-  .run-local-box li {
-    margin-bottom: 0.35rem;
-    color: var(--text-secondary);
-  }
-
-  .run-local-box code {
-    background: var(--bg-card);
-    padding: 0.15rem 0.35rem;
-    border-radius: 0.25rem;
-    font-size: 0.85rem;
-  }
-
-  .run-local-note {
-    margin: 0.75rem 0 0 !important;
-    font-size: 0.8rem !important;
-    color: var(--text-muted) !important;
   }
 
   .demo-info {

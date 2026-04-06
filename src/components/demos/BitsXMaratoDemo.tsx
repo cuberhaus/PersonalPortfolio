@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef, useId, useMemo } from "react";
+import LiveAppEmbed from "./LiveAppEmbed";
 
 /* ── frame data ── */
 const FRAME = { w: 472, h: 296, maskPolygon: "2,205 470,185 470,215 2,236" };
@@ -372,6 +373,13 @@ export default function BitsXMaratoDemo({ lang = "en" }: { lang?: Lang }) {
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
+      <LiveAppEmbed
+        url="http://localhost:8001"
+        title="Aorta Viewer — bitsXlaMarato"
+        dockerCmd="cd bitsXlaMarato && docker compose up"
+        devCmd="cd bitsXlaMarato && make dev"
+        lang={lang}
+      />
 
       {/* ── PIPELINE STRIP ── */}
       <div style={{

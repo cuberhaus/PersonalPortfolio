@@ -25,9 +25,17 @@ TENDA_DIR="$(cd "$PORTFOLIO/../tenda_online" 2>/dev/null && pwd)" || TENDA_DIR="
 DRAC_DIR="$(cd "$PORTFOLIO/../Draculin-Backend" 2>/dev/null && pwd)" || DRAC_DIR=""
 PLANNER_DIR="$(cd "$PORTFOLIO/planner-api" 2>/dev/null && pwd)" || PLANNER_DIR=""
 PROP_DIR="$(cd "$PORTFOLIO/../subgrup-prop7.1" 2>/dev/null && pwd)" || PROP_DIR=""
+TFG_DIR="$(cd "$PORTFOLIO/../TFG" 2>/dev/null && pwd)" || TFG_DIR=""
+BITSX_DIR="$(cd "$PORTFOLIO/../bitsXlaMarato" 2>/dev/null && pwd)" || BITSX_DIR=""
+PRO2_DIR="$(cd "$PORTFOLIO/../pracpro2" 2>/dev/null && pwd)" || PRO2_DIR=""
+PLANIF_DIR="$(cd "$PORTFOLIO/../Practica_de_Planificacion" 2>/dev/null && pwd)" || PLANIF_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
+TFG_UP=0
+BITSX_UP=0
+PRO2_CID=""
+PLANIF_CID=""
 PLANNER_PID=""
 PROP_PID=""
 
@@ -53,6 +61,22 @@ cleanup() {
   if [[ "$DRAC_UP" == 1 ]] && [[ -f "${DRAC_DIR}/docker-compose.yml" ]]; then
     echo "Stopping Draculin stack (docker compose down)..."
     (cd "$DRAC_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$TFG_UP" == 1 ]] && [[ -f "${TFG_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping TFG stack (docker compose down)..."
+    (cd "$TFG_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$BITSX_UP" == 1 ]] && [[ -f "${BITSX_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping bitsXlaMarato stack (docker compose down)..."
+    (cd "$BITSX_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ -n "${PRO2_CID}" ]]; then
+    echo "Stopping pracpro2 container..."
+    docker rm -f "$PRO2_CID" >/dev/null 2>&1 || true
+  fi
+  if [[ -n "${PLANIF_CID}" ]]; then
+    echo "Stopping Practica_de_Planificacion container..."
+    docker rm -f "$PLANIF_CID" >/dev/null 2>&1 || true
   fi
   exit "$ec"
 }
@@ -82,6 +106,56 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       fi
     else
       echo "==> Draculin skipped (no ../Draculin-Backend/docker-compose.yml)"
+    fi
+
+    # TFG — React + FastAPI polyp detection dashboard
+    if [[ -f "${TFG_DIR}/docker-compose.yml" ]]; then
+      echo "==> TFG              http://localhost:8082  (docker compose)"
+      if (cd "$TFG_DIR" && docker compose up -d); then
+        TFG_UP=1
+      else
+        echo "    warning: TFG docker compose failed" >&2
+      fi
+    else
+      echo "==> TFG skipped      (no ../TFG/docker-compose.yml)"
+    fi
+
+    # bitsXlaMarato — Angular + FastAPI aorta viewer (GPU)
+    if [[ -f "${BITSX_DIR}/docker-compose.yml" ]]; then
+      echo "==> bitsXlaMarato    http://localhost:8001  (docker compose, GPU)"
+      if (cd "$BITSX_DIR" && docker compose up -d); then
+        BITSX_UP=1
+      else
+        echo "    warning: bitsXlaMarato docker compose failed (GPU required)" >&2
+      fi
+    else
+      echo "==> bitsXlaMarato skipped (no ../bitsXlaMarato/docker-compose.yml)"
+    fi
+
+    # pracpro2 — Vue + D3 + FastAPI phylogenetic tree
+    if [[ -d "${PRO2_DIR}" ]]; then
+      echo "==> pracpro2         http://localhost:8000  (docker run)"
+      PRO2_CID=$(docker run -d --rm -p 8000:8000 --name portfolio-pro2 pracpro2 2>/dev/null) || {
+        echo "    Building pracpro2 image first..."
+        (cd "$PRO2_DIR" && docker build -t pracpro2 .) >/dev/null 2>&1 && \
+          PRO2_CID=$(docker run -d --rm -p 8000:8000 --name portfolio-pro2 pracpro2 2>/dev/null) || \
+          echo "    warning: pracpro2 docker run failed" >&2
+      }
+    else
+      echo "==> pracpro2 skipped (no ../pracpro2/)"
+    fi
+
+    # Practica_de_Planificacion — SvelteKit + Metric-FF
+    if [[ -d "${PLANIF_DIR}" ]]; then
+      echo "==> Planificacion    http://localhost:3000  (docker run)"
+      PLANIF_CID=$(docker run -d --rm -p 3000:3000 --name portfolio-planif practica-planificacion 2>/dev/null) || {
+        echo "    Building practica-planificacion image first..."
+        (cd "$PLANIF_DIR" && docker build -t practica-planificacion .) >/dev/null 2>&1 && \
+          PLANIF_CID=$(docker run -d --rm -p 3000:3000 --name portfolio-planif practica-planificacion 2>/dev/null) || \
+          echo "    warning: practica-planificacion docker run failed" >&2
+      }
+    else
+      echo "==> Planificacion skipped (no ../Practica_de_Planificacion/)"
     fi
   fi
   echo ""

@@ -2,10 +2,10 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import TendaDemo from '../../components/demos/TendaDemo';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
-const isDev = import.meta.env.DEV;
 
 const TRANSLATIONS = {
   en: {
@@ -74,45 +74,21 @@ const t = useTranslations(lang);
       accentTo="#06b6d4"
     />
 
-    {isDev ? (
-      <div class="tenda-local-section">
-        <div class="tenda-local-header">
-          <h3>{tr.liveApp}</h3>
-          <p class="tenda-local-hint" set:html={tr.startHint}></p>
-          <a href="http://localhost:8888" target="_blank" rel="noopener noreferrer" class="tenda-open-btn">
-            {tr.openNewTab}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-            </svg>
-          </a>
-        </div>
-        <iframe
-          src="http://localhost:8888"
-          title="Tenda Online"
-          class="tenda-iframe"
-          loading="lazy"
-        />
-      </div>
-    ) : (
-      <div class="tenda-demo-wrapper">
-        <TendaDemo lang={lang} client:visible />
-      </div>
-    )}
+    <LiveAppEmbed
+      url="http://localhost:8888"
+      title="Tenda Online"
+      dockerCmd="cd tenda_online && docker compose up -d && ./start.sh"
+      lang={lang}
+      client:load
+    />
+
+    <div class="tenda-demo-wrapper">
+      <TendaDemo lang={lang} client:visible />
+    </div>
 
     <div class="demo-info">
       <h3>{tr.aboutTitle}</h3>
       <p>{tr.aboutDesc}</p>
-      {isDev && (
-        <div class="run-local-box">
-          <h4>{tr.runLocal}</h4>
-          <ol>
-            <li set:html={tr.step1}></li>
-            <li set:html={tr.step2}></li>
-            <li set:html={tr.step3}></li>
-          </ol>
-          <p class="run-local-note">{tr.runNote}</p>
-        </div>
-      )}
       
     </div>
   </div>
@@ -126,103 +102,6 @@ const t = useTranslations(lang);
     background: var(--bg-card);
     padding: 1.5rem;
     min-height: 400px;
-  }
-
-  .tenda-local-section {
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border-color);
-    overflow: hidden;
-    background: var(--bg-card);
-    margin-bottom: 0;
-  }
-
-  .tenda-local-header {
-    padding: 1rem 1.5rem;
-    background: color-mix(in srgb, var(--accent-start) 8%, transparent);
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .tenda-local-header h3 {
-    margin: 0;
-    font-size: 1rem;
-  }
-
-  .tenda-local-hint {
-    margin: 0;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    flex: 1;
-    min-width: 200px;
-  }
-
-  .tenda-local-hint code {
-    font-size: 0.75rem;
-    background: var(--bg-secondary);
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.25rem;
-  }
-
-  .tenda-open-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--accent-start);
-    padding: 0.35rem 0.75rem;
-    border-radius: 0.5rem;
-    background: var(--bg-secondary);
-    transition: color var(--transition-fast), background var(--transition-fast);
-  }
-
-  .tenda-open-btn:hover {
-    color: var(--accent-end);
-    background: var(--bg-card-hover);
-  }
-
-  .tenda-iframe {
-    width: 100%;
-    height: 600px;
-    min-height: 500px;
-    border: none;
-    display: block;
-  }
-
-  .run-local-box {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-md);
-    border-left: 3px solid var(--accent-start);
-  }
-
-  .run-local-box h4 { margin-bottom: 0.5rem; font-size: 0.95rem; }
-
-  .run-local-box ol {
-    margin: 0.5rem 0 0 1.25rem;
-    padding: 0;
-  }
-
-  .run-local-box li {
-    margin-bottom: 0.35rem;
-    color: var(--text-secondary);
-  }
-
-  .run-local-box code {
-    background: var(--bg-card);
-    padding: 0.15rem 0.35rem;
-    border-radius: 0.25rem;
-    font-size: 0.85rem;
-  }
-
-  .run-local-note {
-    margin: 0.75rem 0 0 !important;
-    font-size: 0.8rem !important;
-    color: var(--text-muted) !important;
   }
 
   .demo-info {

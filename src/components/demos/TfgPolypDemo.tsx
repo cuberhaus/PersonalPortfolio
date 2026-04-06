@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import modelData from "../../data/tfg-model-results.json";
+import LiveAppEmbed from "./LiveAppEmbed";
 
 /* ── constants ── */
 const accent1 = "#10b981"; // emerald
@@ -603,6 +604,14 @@ export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
+      <LiveAppEmbed
+        url="http://localhost:8082"
+        title="TFG Polyp Detection Dashboard"
+        dockerCmd="cd TFG && docker compose up"
+        devCmd="cd TFG && make run"
+        lang={lang}
+      />
+
       {/* Pipeline */}
       <PipelineStrip t={t} />
 
@@ -665,7 +674,7 @@ export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
             <h4 style={{ margin: "0 0 0.5rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.links}</h4>
             <p style={{ margin: "0.5rem 0 0", fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
               {t.dashboard1}<strong style={{ color: "var(--text-secondary)" }}>{t.dashboard2}</strong>{t.dashboard3}
-              <code style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>make run</code>{t.dashboard4}
+              <code style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>docker compose up</code>{t.dashboard4}
             </p>
           </div>
           <div style={{ marginTop: "1.25rem" }}>

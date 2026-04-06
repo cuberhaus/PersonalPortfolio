@@ -1,29 +1,10 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
-const isDev = import.meta.env.DEV;
-
-// Comprovar si el backend local està actiu intentant fer un fetch
-let backendActive = false;
-if (isDev) {
-  try {
-    const response = await fetch('http://localhost:8081/', {
-      method: 'HEAD',
-      // Un timeout curt perquè no pengi la càrrega de la pàgina
-      signal: AbortSignal.timeout(500)
-    });
-    backendActive = response.ok;
-  } catch (error) {
-    // Si hi ha un error (connexió refusada, timeout, etc.), el backend no està actiu
-    backendActive = false;
-  }
-}
-
-// Mostra la iframe si estem en DEV I el backend està actiu
-const showIframe = isDev && backendActive;
 
 const TRANSLATIONS = {
   en: {
@@ -143,34 +124,22 @@ const t = useTranslations(lang);
       accentTo="#f97316"
     />
 
-    {showIframe ? (
-      <div class="demo-local-section">
-        <div class="demo-local-header">
-          <h3>{tr.liveApp}</h3>
-          <p class="demo-local-hint" set:html={tr.startHint}></p>
-          <a href="http://localhost:8081" target="_blank" rel="noopener noreferrer" class="demo-open-btn">
-            {tr.openNewTab}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-            </svg>
-          </a>
+    <LiveAppEmbed
+      url="http://localhost:8081"
+      title="PROP Recommendation System"
+      dockerCmd="cd subgrup-prop7.1 && make web"
+      lang={lang}
+      client:load
+    />
+
+    <div class="demo-local-section">
+      <div class="demo-local-header" style="justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <h3>{tr.demoUnavail}</h3>
         </div>
-        <iframe
-          src="http://localhost:8081"
-          title={tr.title}
-          class="demo-iframe"
-          loading="lazy"
-        />
+        <span class="badge" style="margin: 0; font-size: 0.65rem;">Interactive Mock</span>
       </div>
-    ) : (
-      <div class="demo-local-section">
-        <div class="demo-local-header" style="justify-content: space-between;">
-          <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <h3>{tr.demoUnavail}</h3>
-          </div>
-          <span class="badge" style="margin: 0; font-size: 0.65rem;">Interactive Mock</span>
-        </div>
-        <div class="mock-browser">
+      <div class="mock-browser">
           <div class="mock-nav">
             <div class="mock-nav-brand">{tr.mockNavBrand}</div>
             <div class="mock-nav-links">
@@ -374,21 +343,11 @@ const t = useTranslations(lang);
           </div>
         </div>
       </div>
-    )}
+    </div>
 
     <div class="demo-info">
       <h3>{tr.aboutTitle}</h3>
       <p>{tr.aboutDesc}</p>
-      {isDev && (
-        <div class="run-local-box">
-          <h4>{tr.runLocal}</h4>
-          <ol>
-            <li set:html={tr.step1}></li>
-            <li set:html={tr.step2}></li>
-            <li set:html={tr.step3}></li>
-          </ol>
-        </div>
-      )}
       
     </div>
     <script is:inline>
@@ -456,74 +415,6 @@ const t = useTranslations(lang);
   .demo-local-header h3 {
     margin: 0;
     font-size: 1rem;
-  }
-
-  .demo-local-hint {
-    margin: 0;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    flex: 1;
-    min-width: 200px;
-  }
-
-  .demo-local-hint code {
-    font-size: 0.75rem;
-    background: var(--bg-secondary);
-    padding: 0.2rem 0.4rem;
-    border-radius: 0.25rem;
-  }
-
-  .demo-open-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--accent-start);
-    padding: 0.35rem 0.75rem;
-    border-radius: 0.5rem;
-    background: var(--bg-secondary);
-    transition: color var(--transition-fast), background var(--transition-fast);
-  }
-
-  .demo-open-btn:hover {
-    color: var(--accent-end);
-    background: var(--bg-card-hover);
-  }
-
-  .demo-iframe {
-    width: 100%;
-    height: 600px;
-    min-height: 500px;
-    border: none;
-    display: block;
-  }
-
-  .run-local-box {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-md);
-    border-left: 3px solid var(--accent-start);
-  }
-
-  .run-local-box h4 { margin-bottom: 0.5rem; font-size: 0.95rem; }
-
-  .run-local-box ol {
-    margin: 0.5rem 0 0 1.25rem;
-    padding: 0;
-  }
-
-  .run-local-box li {
-    margin-bottom: 0.35rem;
-    color: var(--text-secondary);
-  }
-
-  .run-local-box code {
-    background: var(--bg-card);
-    padding: 0.15rem 0.35rem;
-    border-radius: 0.25rem;
-    font-size: 0.85rem;
   }
 
   .demo-info {

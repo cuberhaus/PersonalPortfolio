@@ -1,4 +1,5 @@
 import { useId, useMemo, useState } from "react";
+import LiveAppEmbed from "./LiveAppEmbed";
 
 type Lang = "en" | "es" | "ca";
 
@@ -419,6 +420,13 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
+      <LiveAppEmbed
+        url="http://localhost:3000"
+        title="PDDL Planning Web App"
+        dockerCmd="cd Practica_de_Planificacion && make docker-run"
+        devCmd="cd Practica_de_Planificacion && make dev"
+        lang={lang}
+      />
 
       {/* ── PROBLEM OVERVIEW ── */}
       <div style={{

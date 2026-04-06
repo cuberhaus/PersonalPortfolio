@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
+import LiveAppEmbed from "./LiveAppEmbed";
 import {
   type Species,
   type ClusterState,
@@ -343,6 +344,14 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
 
   return (
     <div style={styles.wrapper}>
+      <LiveAppEmbed
+        url="http://localhost:8000"
+        title="PRO2 Phylogenetic Tree Web App"
+        dockerCmd="cd pracpro2 && make docker-run"
+        devCmd="cd pracpro2 && make dev"
+        lang={lang}
+      />
+
       {/* How it works */}
       <div style={{
         ...styles.card,
