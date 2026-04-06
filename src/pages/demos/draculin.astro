@@ -56,10 +56,11 @@ const badge = badges[lang] || badges.en;
       title="Draculin Flutter App"
       dockerCmd="cd Draculin-Backend && docker compose up -d"
       lang={lang}
+      fallbackSelector="#draculin-mock-fallback"
       client:load
     />
 
-    <div class="draculin-demo-wrapper">
+    <div id="draculin-mock-fallback" class="draculin-demo-wrapper">
       <DraculinDemo lang={lang} client:visible />
     </div>
 
@@ -92,6 +93,9 @@ const badge = badges[lang] || badges.en;
     background: var(--bg-card);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .demo-info h3 { margin-bottom: 0.75rem; }

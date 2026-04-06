@@ -1,0 +1,239 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { renderIconSvg } from '../lib/demo-icons';
+import demosEn from '../data/demos.json';
+import demosEs from '../data/demos.es.json';
+import demosCa from '../data/demos.ca.json';
+
+interface Props {
+  currentSlug?: string;
+}
+
+const { currentSlug } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const allDemos = lang === 'es' ? demosEs : lang === 'ca' ? demosCa : demosEn;
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+
+function demoHref(slug: string) {
+  return lang === 'en' ? `${base}/demos/${slug}/` : `${base}/${lang}/demos/${slug}/`;
+}
+---
+
+<aside class="demo-sidebar" id="demo-sidebar" aria-label={t('demo.allDemos')}>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  <div class="sidebar-panel">
+    <div class="sidebar-header">
+      <span class="sidebar-title">{t('demo.allDemos')}</span>
+      <button class="sidebar-close" id="sidebar-close" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <nav class="sidebar-list">
+      {allDemos.map((demo) => (
+        <a
+          href={demoHref(demo.slug)}
+          class:list={['sidebar-item', { active: demo.slug === currentSlug }]}
+          aria-current={demo.slug === currentSlug ? 'page' : undefined}
+          data-astro-reload
+        >
+          <span class="sidebar-icon" set:html={renderIconSvg(demo.icon, 18)} />
+          <div class="sidebar-item-info">
+            <span class="sidebar-item-title">{demo.title}</span>
+            <span class="sidebar-item-tags">
+              {demo.tags.slice(0, 3).join(' · ')}
+            </span>
+          </div>
+        </a>
+      ))}
+    </nav>
+  </div>
+</aside>
+
+<script>
+  function initSidebar() {
+    const sidebar = document.getElementById('demo-sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const closeBtn = document.getElementById('sidebar-close');
+    const toggleBtn = document.getElementById('sidebar-toggle');
+    if (!sidebar) return;
+
+    function open() { sidebar!.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function close() { sidebar!.classList.remove('open'); document.body.style.overflow = ''; }
+
+    toggleBtn?.addEventListener('click', () => {
+      sidebar!.classList.contains('open') ? close() : open();
+    });
+    backdrop?.addEventListener('click', close);
+    closeBtn?.addEventListener('click', close);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebar!.classList.contains('open')) close();
+    });
+  }
+
+  initSidebar();
+  document.addEventListener('astro:page-load', initSidebar);
+</script>
+
+<style>
+  .demo-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100vh;
+    z-index: 1100;
+    pointer-events: none;
+  }
+
+  .demo-sidebar.open {
+    width: 100%;
+    pointer-events: auto;
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .demo-sidebar.open .sidebar-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(320px, 85vw);
+    height: 100vh;
+    background: var(--bg-primary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+
+  .demo-sidebar.open .sidebar-panel {
+    transform: translateX(0);
+  }
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+
+  .sidebar-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .sidebar-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition: color var(--transition-fast), background var(--transition-fast);
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .sidebar-close:hover {
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+  }
+
+  .sidebar-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 1.25rem;
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: background var(--transition-fast), color var(--transition-fast);
+    border-left: 3px solid transparent;
+  }
+
+  .sidebar-item:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .sidebar-item.active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(14, 165, 233, 0.06));
+    border-left-color: var(--accent-start);
+    color: var(--text-primary);
+  }
+
+  .sidebar-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .sidebar-item:hover .sidebar-icon,
+  .sidebar-item.active .sidebar-icon {
+    color: var(--accent-start);
+  }
+
+  .sidebar-item-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .sidebar-item-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sidebar-item-tags {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

@@ -8,6 +8,8 @@ interface LiveAppEmbedProps {
   dockerCmd: string;
   devCmd?: string;
   lang?: Lang;
+  /** CSS selector for a static fallback element to hide when the app is online */
+  fallbackSelector?: string;
 }
 
 const T = {
@@ -46,7 +48,7 @@ const T = {
   },
 };
 
-export default function LiveAppEmbed({ url, title, dockerCmd, devCmd, lang = "en" }: LiveAppEmbedProps) {
+export default function LiveAppEmbed({ url, title, dockerCmd, devCmd, lang = "en", fallbackSelector }: LiveAppEmbedProps) {
   const [status, setStatus] = useState<"checking" | "online" | "offline">("checking");
   const [expanded, setExpanded] = useState(true);
   const t = T[lang] || T.en;
@@ -61,6 +63,13 @@ export default function LiveAppEmbed({ url, title, dockerCmd, devCmd, lang = "en
   }, [url]);
 
   useEffect(() => { probe(); }, [probe]);
+
+  useEffect(() => {
+    if (!fallbackSelector) return;
+    const el = document.querySelector(fallbackSelector) as HTMLElement | null;
+    if (!el) return;
+    el.style.display = status === "online" ? "none" : "";
+  }, [status, fallbackSelector]);
 
   if (status === "checking") {
     return <div style={{ minHeight: 1 }} />;
