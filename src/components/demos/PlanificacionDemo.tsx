@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, useState } from "react";
 import LiveAppEmbed from "./LiveAppEmbed";
 
 type Lang = "en" | "es" | "ca";
@@ -29,6 +29,16 @@ const TRANSLATIONS = {
     problem: "Problem (Ext 2)",
     download: "Download \u2193",
     ghRepo: "GitHub repo \u2197",
+    mockTitle: "Planner output preview",
+    mockDesc: "Pre-computed optimal plan for the Extension 2 problem above.",
+    mockRun: "Simulate planner",
+    mockRunning: "Solving\u2026",
+    mockBadge: "Mock",
+    mockSteps: "steps",
+    mockDays: "days",
+    mockInterest: "interest",
+    mockRoute: "Route",
+    mockActions: "Raw plan actions",
     fullAppTitle: "This demo vs. the full app",
     demoIncludesLabel: "This demo includes:",
     demoFeatures: [
@@ -36,6 +46,7 @@ const TRANSLATIONS = {
       "Read-only PDDL domain & problem source code",
       "Downloadable .pddl files",
       "Extension descriptions at a glance",
+      "Mock planner with pre-computed optimal solution",
     ],
     fullAppDesc: "The full web app (run locally) adds:",
     fullAppFeatures: [
@@ -72,6 +83,16 @@ const TRANSLATIONS = {
     problem: "Problema (Ext 2)",
     download: "Descargar \u2193",
     ghRepo: "Repositorio en GitHub \u2197",
+    mockTitle: "Vista previa del planificador",
+    mockDesc: "Plan \u00f3ptimo pre-calculado para el problema de la Extensi\u00f3n 2.",
+    mockRun: "Simular planificador",
+    mockRunning: "Resolviendo\u2026",
+    mockBadge: "Mock",
+    mockSteps: "pasos",
+    mockDays: "d\u00edas",
+    mockInterest: "inter\u00e9s",
+    mockRoute: "Ruta",
+    mockActions: "Acciones crudas del plan",
     fullAppTitle: "Esta demo vs. la app completa",
     demoIncludesLabel: "Esta demo incluye:",
     demoFeatures: [
@@ -79,6 +100,7 @@ const TRANSLATIONS = {
       "Código fuente PDDL del dominio y problema (solo lectura)",
       "Archivos .pddl descargables",
       "Descripción de las extensiones de un vistazo",
+      "Planificador simulado con solución óptima pre-calculada",
     ],
     fullAppDesc: "La app web completa (ejecución local) añade:",
     fullAppFeatures: [
@@ -115,6 +137,16 @@ const TRANSLATIONS = {
     problem: "Problema (Ext 2)",
     download: "Descarregar \u2193",
     ghRepo: "Repositori a GitHub \u2197",
+    mockTitle: "Vista pr\u00e8via del planificador",
+    mockDesc: "Pla \u00f2ptim pre-calculat per al problema de l'Extensi\u00f3 2.",
+    mockRun: "Simular planificador",
+    mockRunning: "Resolent\u2026",
+    mockBadge: "Mock",
+    mockSteps: "passos",
+    mockDays: "dies",
+    mockInterest: "inter\u00e8s",
+    mockRoute: "Ruta",
+    mockActions: "Accions crues del pla",
     fullAppTitle: "Aquesta demo vs. l'app completa",
     demoIncludesLabel: "Aquesta demo inclou:",
     demoFeatures: [
@@ -122,6 +154,7 @@ const TRANSLATIONS = {
       "Codi font PDDL del domini i problema (només lectura)",
       "Arxius .pddl descarregables",
       "Descripció de les extensions d'un cop d'ull",
+      "Planificador simulat amb solució òptima pre-calculada",
     ],
     fullAppDesc: "L'app web completa (execució local) afegeix:",
     fullAppFeatures: [
@@ -225,6 +258,12 @@ const PROBLEM_EXT2 = `(define (problem agencia_viaje)
 
 const GH = "https://github.com/cuberhaus/Practica_de_Planificacion";
 
+const MOCK_PLAN = [
+  { action: "(anadir_ciudad cg1 c1 vg1 h1 dias4)", from: "cg1", to: "c1", flight: "vg1", hotel: "h1", days: 4, interest: 1 },
+  { action: "(anadir_ciudad c1 c2 v1 h2 dias4)", from: "c1", to: "c2", flight: "v1", hotel: "h2", days: 4, interest: 2 },
+  { action: "(anadir_ciudad c2 c3 v2 h3 dias2)", from: "c2", to: "c3", flight: "v2", hotel: "h3", days: 2, interest: 3 },
+];
+
 const CITY_COLORS = ["var(--accent-start)", "var(--accent-end)", "#22c55e", "#f59e0b", "#ec4899", "#06b6d4"];
 function cityColor(id: string): string {
   let h = 0;
@@ -302,6 +341,12 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   const pDomain = `${basePath}demos/planificacion/agencia_de_viajes_domain_ext2.pddl`;
   const pProblem = `${basePath}demos/planificacion/agencia_de_viajes_problem_ext2.pddl`;
+  const [mockState, setMockState] = useState<"idle" | "running" | "done">("idle");
+
+  function simulatePlanner() {
+    setMockState("running");
+    setTimeout(() => setMockState("done"), 800 + Math.random() * 600);
+  }
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
@@ -451,6 +496,113 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
             color: "var(--text-secondary)", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(360px, 40vh)",
           }}><code>{PROBLEM_EXT2}</code></pre>
         </div>
+      </div>
+
+      {/* ── MOCK PLANNER ── */}
+      <div style={{ ...card, marginBottom: "1.25rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+          <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
+            {t.mockTitle}
+          </h4>
+          <span style={{
+            padding: "0.15rem 0.45rem", borderRadius: "0.3rem", fontSize: "0.6rem", fontWeight: 700,
+            letterSpacing: "0.05em", textTransform: "uppercase",
+            background: "rgba(139,92,246,0.15)", color: "#c4b5fd", border: "1px solid rgba(139,92,246,0.25)",
+          }}>{t.mockBadge}</span>
+        </div>
+        <p style={{ margin: "0 0 0.75rem", fontSize: "0.76rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
+          {t.mockDesc}
+        </p>
+
+        {mockState === "idle" && (
+          <button type="button" onClick={simulatePlanner} style={{
+            padding: "0.5rem 1.1rem", borderRadius: "0.5rem", border: "none", cursor: "pointer",
+            fontWeight: 600, fontSize: "0.82rem",
+            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
+          }}>{t.mockRun}</button>
+        )}
+
+        {mockState === "running" && (
+          <div style={{
+            display: "flex", alignItems: "center", gap: "0.5rem",
+            padding: "0.6rem 1rem", background: "var(--bg-secondary)", borderRadius: "0.5rem",
+            border: "1px solid var(--border-color)", fontSize: "0.82rem", color: "var(--text-muted)",
+          }}>
+            <span style={{ display: "inline-block", animation: "spin 1s linear infinite", fontSize: "1rem" }}>&#9881;</span>
+            {t.mockRunning}
+            <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+          </div>
+        )}
+
+        {mockState === "done" && (() => {
+          let cumDays = 0;
+          const totalInterest = MOCK_PLAN.reduce((s, p) => s + p.interest, 0);
+          const totalDays = MOCK_PLAN.reduce((s, p) => s + p.days, 0);
+          return (
+            <div>
+              <div style={{
+                display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap",
+                marginBottom: "0.75rem", fontSize: "0.78rem",
+              }}>
+                <span style={{ color: "#22c55e", fontWeight: 700 }}>&#10003; {MOCK_PLAN.length} {t.mockSteps}</span>
+                <span style={{ color: "var(--text-muted)" }}>{totalDays} {t.mockDays}</span>
+                <span style={{ color: "var(--text-muted)" }}>{t.mockInterest}: {totalInterest}</span>
+                <span style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>
+                  {t.mockRoute}: {["cg1", ...MOCK_PLAN.map(p => p.to)].map((c, i, arr) => (
+                    <span key={c}>
+                      <span style={{ color: cityColor(c), fontWeight: 600 }}>{c}</span>
+                      {i < arr.length - 1 && <span style={{ margin: "0 0.2rem", opacity: 0.5 }}>{"\u2192"}</span>}
+                    </span>
+                  ))}
+                </span>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", marginBottom: "0.75rem" }}>
+                {MOCK_PLAN.map((step, i) => {
+                  cumDays += step.days;
+                  return (
+                    <div key={i} style={{
+                      display: "flex", gap: "0.65rem", alignItems: "center",
+                      padding: "0.55rem 0.85rem", background: "var(--bg-secondary)",
+                      borderRadius: "0.5rem", border: "1px solid var(--border-color)",
+                    }}>
+                      <div style={{
+                        width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
+                        background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
+                        color: "#fff", fontSize: "0.65rem", fontWeight: 700,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}>{i + 1}</div>
+                      <div style={{ fontSize: "0.78rem", display: "flex", alignItems: "center", gap: "0.3rem", flexWrap: "wrap" }}>
+                        <span style={{ color: cityColor(step.from), fontWeight: 600 }}>{step.from}</span>
+                        <span style={{ color: "var(--text-muted)" }}>{"\u2192"}</span>
+                        <span style={{ color: cityColor(step.to), fontWeight: 600 }}>{step.to}</span>
+                        <span style={{ color: "var(--text-muted)", fontSize: "0.72rem", marginLeft: "0.3rem" }}>
+                          {"\u2708\uFE0F"} {step.flight} · {"\uD83C\uDFE8"} {step.hotel} · {"\uD83D\uDCC5"} {step.days}d ({cumDays}d)
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <details>
+                <summary style={{ fontSize: "0.72rem", color: "var(--text-muted)", cursor: "pointer" }}>{t.mockActions}</summary>
+                <ol style={{
+                  margin: "0.4rem 0 0", paddingLeft: "1.25rem", color: "var(--text-secondary)",
+                  fontFamily: "ui-monospace, monospace", fontSize: "0.68rem", lineHeight: 1.8,
+                }}>
+                  {MOCK_PLAN.map((p, i) => <li key={i}>{p.action}</li>)}
+                </ol>
+              </details>
+
+              <button type="button" onClick={() => setMockState("idle")} style={{
+                marginTop: "0.6rem", padding: "0.35rem 0.75rem", borderRadius: "0.4rem",
+                border: "1px solid var(--border-color)", cursor: "pointer",
+                fontSize: "0.72rem", background: "var(--bg-card-hover)", color: "var(--text-secondary)",
+              }}>{t.mockRun}</button>
+            </div>
+          );
+        })()}
       </div>
 
       {/* ── LINKS ── */}
