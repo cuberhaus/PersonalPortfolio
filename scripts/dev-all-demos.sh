@@ -168,7 +168,7 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       echo "==> bitsXlaMarato skipped (no ../bitsXlaMarato/docker-compose.yml)"
     fi
 
-    # pracpro2 — Vue + D3 + FastAPI phylogenetic tree
+    # pracpro2 — Vue + D3 + Rust/Axum phylogenetic tree
     if [[ -d "${PRO2_DIR}" ]]; then
       echo "==> pracpro2         http://localhost:8000  (docker run)"
       PRO2_CID=$(docker run -d --rm -p 8000:8000 --name portfolio-pro2 pracpro2 2>/dev/null) || {
