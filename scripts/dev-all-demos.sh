@@ -30,6 +30,8 @@ BITSX_DIR="$(cd "$PORTFOLIO/../bitsXlaMarato" 2>/dev/null && pwd)" || BITSX_DIR=
 PRO2_DIR="$(cd "$PORTFOLIO/../pracpro2" 2>/dev/null && pwd)" || PRO2_DIR=""
 PLANIF_DIR="$(cd "$PORTFOLIO/../Practica_de_Planificacion" 2>/dev/null && pwd)" || PLANIF_DIR=""
 DESASTRES_DIR="$(cd "$PORTFOLIO/../desastresIA" 2>/dev/null && pwd)" || DESASTRES_DIR=""
+MPIDS_DIR="$(cd "$PORTFOLIO/../projectA" 2>/dev/null && pwd)" || MPIDS_DIR=""
+PHASE_DIR="$(cd "$PORTFOLIO/../projectA2" 2>/dev/null && pwd)" || PHASE_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
@@ -38,6 +40,8 @@ BITSX_UP=0
 PRO2_CID=""
 PLANIF_CID=""
 DESASTRES_UP=0
+MPIDS_UP=0
+PHASE_UP=0
 PLANNER_PID=""
 PROP_PID=""
 
@@ -83,6 +87,14 @@ cleanup() {
   if [[ "$DESASTRES_UP" == 1 ]] && [[ -f "${DESASTRES_DIR}/docker-compose.yml" ]]; then
     echo "Stopping DesastresIA stack (docker compose down)..."
     (cd "$DESASTRES_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$MPIDS_UP" == 1 ]] && [[ -f "${MPIDS_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping MPIDS stack (docker compose down)..."
+    (cd "$MPIDS_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$PHASE_UP" == 1 ]] && [[ -f "${PHASE_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping PhaseTransitions stack (docker compose down)..."
+    (cd "$PHASE_DIR" && docker compose down) >/dev/null 2>&1 || true
   fi
   exit "$ec"
 }
@@ -174,6 +186,30 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       fi
     else
       echo "==> DesastresIA skipped (no ../desastresIA/docker-compose.yml)"
+    fi
+
+    # projectA — Preact + D3 + FastAPI MPIDS solver
+    if [[ -f "${MPIDS_DIR}/docker-compose.yml" ]]; then
+      echo "==> MPIDS            http://localhost:8084  (docker compose)"
+      if (cd "$MPIDS_DIR" && docker compose up -d); then
+        MPIDS_UP=1
+      else
+        echo "    warning: MPIDS docker compose failed" >&2
+      fi
+    else
+      echo "==> MPIDS skipped (no ../projectA/docker-compose.yml)"
+    fi
+
+    # projectA2 — Lit + Canvas + D3 + FastAPI phase transitions
+    if [[ -f "${PHASE_DIR}/docker-compose.yml" ]]; then
+      echo "==> PhaseTransitions http://localhost:8085  (docker compose)"
+      if (cd "$PHASE_DIR" && docker compose up -d); then
+        PHASE_UP=1
+      else
+        echo "    warning: PhaseTransitions docker compose failed" >&2
+      fi
+    else
+      echo "==> PhaseTransitions skipped (no ../projectA2/docker-compose.yml)"
     fi
   fi
   echo ""

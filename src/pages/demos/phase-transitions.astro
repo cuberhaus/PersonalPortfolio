@@ -2,6 +2,7 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import PhaseTransitionsDemo from '../../components/demos/PhaseTransitionsDemo';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -32,9 +33,9 @@ const aboutTitles = {
 };
 
 const aboutDescs = {
-  en: "Originally a Python project for the Algorithmics course at FIB-UPC, studying phase transitions in random graphs using NetworkX. This browser demo is a port of the graph generation, percolation, and connectivity/complexity analysis to TypeScript with interactive visualization.",
-  es: "Originalmente un proyecto de Python para el curso de Algoritmia en la FIB-UPC, estudiando transiciones de fase en grafos aleatorios usando NetworkX. Esta demo de navegador es un port de la generación de grafos, percolación y análisis de conectividad/complejidad a TypeScript con visualización interactiva.",
-  ca: "Originalment un projecte de Python per al curs d'Algorísmia a la FIB-UPC, estudiant transicions de fase en grafs aleatoris usant NetworkX. Aquesta demo de navegador és un port de la generació de grafs, percolació i anàlisi de connectivitat/complexitat a TypeScript amb visualització interactiva."
+  en: "Originally a Python project for the Algorithmics course at FIB-UPC, studying phase transitions in random graphs using NetworkX. This full-stack web app wraps the original Python/NetworkX logic in a FastAPI backend with a Lit (Web Components) + Canvas + D3.js frontend for interactive graph visualization and Monte Carlo phase transition charts.",
+  es: "Originalmente un proyecto de Python para el curso de Algoritmia en la FIB-UPC, estudiando transiciones de fase en grafos aleatorios usando NetworkX. Esta app web full-stack envuelve la lógica original de Python/NetworkX en un backend FastAPI con un frontend Lit (Web Components) + Canvas + D3.js para visualización interactiva de grafos y gráficas de transición de fase Monte Carlo.",
+  ca: "Originalment un projecte de Python per al curs d'Algorísmia a la FIB-UPC, estudiant transicions de fase en grafs aleatoris usant NetworkX. Aquesta app web full-stack encapsula la lògica original de Python/NetworkX en un backend FastAPI amb un frontend Lit (Web Components) + Canvas + D3.js per a visualització interactiva de grafs i gràfiques de transició de fase Monte Carlo."
 };
 
 const metaDescs = {
@@ -58,6 +59,15 @@ const badge = badges[lang] || badges.en;
       githubLabel={t('demo.viewSource')}
       accentFrom="#14b8a6"
       accentTo="#22c55e"
+    />
+
+    <LiveAppEmbed
+      url="http://localhost:8085"
+      title="Phase Transitions Explorer"
+      dockerCmd="cd projectA2 && docker compose up -d"
+      devCmd="cd projectA2 && make dev"
+      lang={lang}
+      client:load
     />
 
     <PhaseTransitionsDemo lang={lang} client:visible />

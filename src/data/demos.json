@@ -110,11 +110,12 @@
   {
     "slug": "mpids",
     "title": "MPIDS Solver",
-    "description": "Find the minimum dominating set in a graph using greedy and local search algorithms, with interactive visualization.",
+    "description": "Interactive graph dominance solver with D3 force-directed visualization. Find the minimum positive influence dominating set using greedy and SA-style local search.",
     "tags": [
-      "Algorithms",
-      "Graph Theory",
-      "TypeScript"
+      "Preact",
+      "D3.js",
+      "FastAPI",
+      "Graph Theory"
     ],
     "icon": "graph",
     "github": "https://github.com/cuberhaus/projectA",
@@ -123,10 +124,11 @@
   {
     "slug": "phase-transitions",
     "title": "Graph Phase Transitions",
-    "description": "Explore percolation and connectivity phase transitions on binomial, geometric, and grid graphs.",
+    "description": "Explore connectivity and complexity phase transitions on binomial, geometric, and grid random graphs with real-time percolation animation and Monte Carlo sweep charts.",
     "tags": [
-      "Algorithms",
-      "Graph Theory",
+      "Lit",
+      "Canvas",
+      "FastAPI",
       "NetworkX"
     ],
     "icon": "scatter",
