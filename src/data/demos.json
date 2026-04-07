@@ -113,7 +113,7 @@
     "title": "MPIDS Solver",
     "description": "Interactive graph dominance solver with D3 force-directed visualization. Find the minimum positive influence dominating set using greedy and SA-style local search.",
     "tags": [
-      "Preact",
+      "Elm",
       "D3.js",
       "FastAPI",
       "Graph Theory"
