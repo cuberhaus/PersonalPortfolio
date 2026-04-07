@@ -1,4 +1,4 @@
-.PHONY: install dev dev-all dev-planner build preview stop-all clean test help
+.PHONY: install dev dev-all dev-planner build preview stop-all docker-build-all clean test help
 
 default: help
 
@@ -22,6 +22,40 @@ preview: ## Preview the production build locally
 
 test: ## Run Vitest test suite
 	npm test
+
+PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
+
+docker-build-all: ## Build Docker images for all demo backends
+	@echo "Building all demo Docker images..."
+	@if [ -f "$(PARENT)/TFG/docker-compose.yml" ]; then \
+		echo "==> TFG              :8082"; \
+		docker compose -f "$(PARENT)/TFG/docker-compose.yml" build; \
+	else echo "==> TFG skipped (not found)"; fi
+	@if [ -f "$(PARENT)/bitsXlaMarato/docker-compose.yml" ]; then \
+		echo "==> bitsXlaMarato    :8001  (GPU)"; \
+		docker compose -f "$(PARENT)/bitsXlaMarato/docker-compose.yml" build; \
+	else echo "==> bitsXlaMarato skipped (not found)"; fi
+	@if [ -f "$(PARENT)/tenda_online/docker/docker-compose.yml" ]; then \
+		echo "==> Tenda Online     :8888"; \
+		docker compose -f "$(PARENT)/tenda_online/docker/docker-compose.yml" build; \
+	else echo "==> Tenda skipped (not found)"; fi
+	@if [ -f "$(PARENT)/Draculin-Backend/docker-compose.yml" ]; then \
+		echo "==> Draculin         :8890"; \
+		docker compose -f "$(PARENT)/Draculin-Backend/docker-compose.yml" build; \
+	else echo "==> Draculin skipped (not found)"; fi
+	@if [ -f "$(PARENT)/pracpro2/Dockerfile" ]; then \
+		echo "==> pracpro2         :8000"; \
+		docker build -t pracpro2 "$(PARENT)/pracpro2"; \
+	else echo "==> pracpro2 skipped (not found)"; fi
+	@if [ -f "$(PARENT)/Practica_de_Planificacion/Dockerfile" ]; then \
+		echo "==> Planificacion    :3000"; \
+		docker build -t practica-planificacion "$(PARENT)/Practica_de_Planificacion"; \
+	else echo "==> Planificacion skipped (not found)"; fi
+	@if [ -f "$(PARENT)/desastresIA/docker-compose.yml" ]; then \
+		echo "==> DesastresIA      :8083"; \
+		docker compose -f "$(PARENT)/desastresIA/docker-compose.yml" build; \
+	else echo "==> DesastresIA skipped (not found)"; fi
+	@echo "Done."
 
 stop-all: ## Stop all demo backend containers/services
 	@echo "Stopping portfolio demo services..."
