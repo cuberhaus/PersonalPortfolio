@@ -1,4 +1,8 @@
-.PHONY: install dev dev-all dev-planner build preview stop-all docker-build-all docker-rebuild-all clean test help
+.PHONY: install dev dev-all dev-planner build preview stop-all \
+       docker-build-all docker-build-parallel docker-rebuild-all \
+       clean test help \
+       _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
+       _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
 
 default: help
 
@@ -49,37 +53,55 @@ define build_if_changed
 	fi
 endef
 
-docker-build-all: ## Build Docker images for demos (skips unchanged)
-	@echo "Building demo Docker images (incremental)..."
+DEMO_TARGETS := _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
+                _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
+
+_db-tfg:
 	$(call build_if_changed,tfg,$(PARENT)/TFG,TFG              :8082,\
 		docker compose -f "$(PARENT)/TFG/docker-compose.yml" build)
+_db-bitsx:
 	$(call build_if_changed,bitsx,$(PARENT)/bitsXlaMarato,bitsXlaMarato    :8001,\
 		docker compose -f "$(PARENT)/bitsXlaMarato/docker-compose.yml" build)
+_db-tenda:
 	$(call build_if_changed,tenda,$(PARENT)/tenda_online,Tenda Online     :8888,\
 		docker compose -f "$(PARENT)/tenda_online/docker/docker-compose.yml" build)
+_db-draculin:
 	$(call build_if_changed,draculin,$(PARENT)/Draculin-Backend,Draculin         :8890,\
 		docker compose -f "$(PARENT)/Draculin-Backend/docker-compose.yml" build)
+_db-pro2:
 	$(call build_if_changed,pro2,$(PARENT)/pracpro2,pracpro2         :8000,\
 		docker build -t pracpro2 "$(PARENT)/pracpro2")
+_db-planif:
 	$(call build_if_changed,planif,$(PARENT)/Practica_de_Planificacion,Planificacion    :3000,\
 		docker build -t practica-planificacion "$(PARENT)/Practica_de_Planificacion")
+_db-desastres:
 	$(call build_if_changed,desastres,$(PARENT)/desastresIA,DesastresIA      :8083,\
 		docker compose -f "$(PARENT)/desastresIA/docker-compose.yml" build)
+_db-mpids:
 	$(call build_if_changed,mpids,$(PARENT)/projectA,MPIDS            :8084,\
 		docker compose -f "$(PARENT)/projectA/docker-compose.yml" build)
+_db-phase:
 	$(call build_if_changed,phase,$(PARENT)/projectA2,PhaseTransitions :8085,\
 		docker compose -f "$(PARENT)/projectA2/docker-compose.yml" build)
+_db-caim:
 	$(call build_if_changed,caim,$(PARENT)/CAIM,CAIM             :8086,\
 		docker compose -f "$(PARENT)/CAIM/docker-compose.yml" build)
+_db-joceda:
 	$(call build_if_changed,joceda,$(PARENT)/joc_eda,JocEDA           :8087,\
 		docker compose -f "$(PARENT)/joc_eda/docker-compose.yml" build)
+_db-sbcia:
 	$(call build_if_changed,sbcia,$(PARENT)/SBC_IA,SBC_IA           :8088,\
 		docker compose -f "$(PARENT)/SBC_IA/docker-compose.yml" build)
+
+docker-build-all: $(DEMO_TARGETS) ## Build Docker images for demos (skips unchanged, use -jN for parallel)
 	@echo "Done."
+
+docker-build-parallel: ## Build all Docker images in parallel (auto-detects cores)
+	+@make docker-build-all -j$$(nproc) --output-sync=target
 
 docker-rebuild-all: ## Force rebuild all Docker images (ignore cache)
 	@rm -rf "$(STAMPS)"
-	@$(MAKE) docker-build-all
+	+@make docker-build-all
 
 stop-all: ## Stop all demo backend containers/services
 	@echo "Stopping portfolio demo services..."
