@@ -1,6 +1,7 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -134,6 +135,15 @@ const metaDescs = {
       githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"
       accentTo="#f59e0b"
+    />
+
+    <LiveAppEmbed
+      url="http://localhost:8087"
+      title="ThePurge Viewer"
+      dockerCmd="cd joc_eda && docker compose up -d"
+      devCmd="cd joc_eda && make web-dev"
+      lang={lang}
+      client:load
     />
 
     <div class="cards-row">

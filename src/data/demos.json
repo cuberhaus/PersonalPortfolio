@@ -58,11 +58,12 @@
   {
     "slug": "joc-eda",
     "title": "Programming Game Viewer",
-    "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Replay viewer for the Data Structures and Algorithms programming game competition.",
+    "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Full-stack game viewer with live C++ engine, Canvas rendering, and interactive replay controls.",
     "tags": [
-      "C++",
+      "Mithril.js",
       "Canvas",
-      "AI"
+      "C++",
+      "FastAPI"
     ],
     "icon": "gamepad",
     "github": "https://github.com/cuberhaus/joc_eda",

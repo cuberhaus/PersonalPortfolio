@@ -33,6 +33,7 @@ DESASTRES_DIR="$(cd "$PORTFOLIO/../desastresIA" 2>/dev/null && pwd)" || DESASTRE
 MPIDS_DIR="$(cd "$PORTFOLIO/../projectA" 2>/dev/null && pwd)" || MPIDS_DIR=""
 PHASE_DIR="$(cd "$PORTFOLIO/../projectA2" 2>/dev/null && pwd)" || PHASE_DIR=""
 CAIM_DIR="$(cd "$PORTFOLIO/../CAIM" 2>/dev/null && pwd)" || CAIM_DIR=""
+JOCEDA_DIR="$(cd "$PORTFOLIO/../joc_eda" 2>/dev/null && pwd)" || JOCEDA_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
@@ -44,6 +45,7 @@ DESASTRES_UP=0
 MPIDS_UP=0
 PHASE_UP=0
 CAIM_UP=0
+JOCEDA_UP=0
 PLANNER_PID=""
 PROP_PID=""
 
@@ -101,6 +103,10 @@ cleanup() {
   if [[ "$CAIM_UP" == 1 ]] && [[ -f "${CAIM_DIR}/docker-compose.yml" ]]; then
     echo "Stopping CAIM stack (docker compose down)..."
     (cd "$CAIM_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$JOCEDA_UP" == 1 ]] && [[ -f "${JOCEDA_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping JocEDA stack (docker compose down)..."
+    (cd "$JOCEDA_DIR" && docker compose down) >/dev/null 2>&1 || true
   fi
   exit "$ec"
 }
@@ -228,6 +234,18 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       fi
     else
       echo "==> CAIM skipped (no ../CAIM/docker-compose.yml)"
+    fi
+
+    # JocEDA — Mithril.js + Canvas game viewer
+    if [[ -f "${JOCEDA_DIR}/docker-compose.yml" ]]; then
+      echo "==> JocEDA           http://localhost:8087  (docker compose)"
+      if (cd "$JOCEDA_DIR" && docker compose up -d); then
+        JOCEDA_UP=1
+      else
+        echo "    warning: JocEDA docker compose failed" >&2
+      fi
+    else
+      echo "==> JocEDA skipped (no ../joc_eda/docker-compose.yml)"
     fi
   fi
   echo ""
