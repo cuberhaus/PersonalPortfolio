@@ -1,4 +1,4 @@
-.PHONY: install dev dev-all dev-planner build preview stop-all docker-build-all clean test help
+.PHONY: install dev dev-all dev-planner build preview stop-all docker-build-all docker-rebuild-all clean test help
 
 default: help
 
@@ -24,38 +24,52 @@ test: ## Run Vitest test suite
 	npm test
 
 PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
+STAMPS := .build-stamps
+FIND_EXCLUDES := -not -path '*/node_modules/*' \
+                 -not -path '*/.git/*' \
+                 -not -path '*/dist/*' \
+                 -not -path '*/__pycache__/*' \
+                 -not -path '*/.next/*' \
+                 -not -path '*/build/*' \
+                 -not -path '*/.astro/*' \
+                 -not -path '*/.gradle/*' \
+                 -not -path '*/target/*' \
+                 -not -name '*.pyc'
 
-docker-build-all: ## Build Docker images for all demo backends
-	@echo "Building all demo Docker images..."
-	@if [ -f "$(PARENT)/TFG/docker-compose.yml" ]; then \
-		echo "==> TFG              :8082"; \
-		docker compose -f "$(PARENT)/TFG/docker-compose.yml" build; \
-	else echo "==> TFG skipped (not found)"; fi
-	@if [ -f "$(PARENT)/bitsXlaMarato/docker-compose.yml" ]; then \
-		echo "==> bitsXlaMarato    :8001  (GPU)"; \
-		docker compose -f "$(PARENT)/bitsXlaMarato/docker-compose.yml" build; \
-	else echo "==> bitsXlaMarato skipped (not found)"; fi
-	@if [ -f "$(PARENT)/tenda_online/docker/docker-compose.yml" ]; then \
-		echo "==> Tenda Online     :8888"; \
-		docker compose -f "$(PARENT)/tenda_online/docker/docker-compose.yml" build; \
-	else echo "==> Tenda skipped (not found)"; fi
-	@if [ -f "$(PARENT)/Draculin-Backend/docker-compose.yml" ]; then \
-		echo "==> Draculin         :8890"; \
-		docker compose -f "$(PARENT)/Draculin-Backend/docker-compose.yml" build; \
-	else echo "==> Draculin skipped (not found)"; fi
-	@if [ -f "$(PARENT)/pracpro2/Dockerfile" ]; then \
-		echo "==> pracpro2         :8000"; \
-		docker build -t pracpro2 "$(PARENT)/pracpro2"; \
-	else echo "==> pracpro2 skipped (not found)"; fi
-	@if [ -f "$(PARENT)/Practica_de_Planificacion/Dockerfile" ]; then \
-		echo "==> Planificacion    :3000"; \
-		docker build -t practica-planificacion "$(PARENT)/Practica_de_Planificacion"; \
-	else echo "==> Planificacion skipped (not found)"; fi
-	@if [ -f "$(PARENT)/desastresIA/docker-compose.yml" ]; then \
-		echo "==> DesastresIA      :8083"; \
-		docker compose -f "$(PARENT)/desastresIA/docker-compose.yml" build; \
-	else echo "==> DesastresIA skipped (not found)"; fi
+# $(1)=stamp name  $(2)=source dir  $(3)=label  $(4)=build command
+define build_if_changed
+	@if [ ! -d "$(2)" ]; then \
+		echo "==> $(3) skipped (not found)"; \
+	elif [ ! -f "$(STAMPS)/$(1)" ] || \
+	     [ -n "$$(find "$(2)" $(FIND_EXCLUDES) -newer "$(STAMPS)/$(1)" -print -quit 2>/dev/null)" ]; then \
+		echo "==> $(3)  [building]"; \
+		$(4) && mkdir -p "$(STAMPS)" && touch "$(STAMPS)/$(1)"; \
+	else \
+		echo "==> $(3)  [up to date]"; \
+	fi
+endef
+
+docker-build-all: ## Build Docker images for demos (skips unchanged)
+	@echo "Building demo Docker images (incremental)..."
+	$(call build_if_changed,tfg,$(PARENT)/TFG,TFG              :8082,\
+		docker compose -f "$(PARENT)/TFG/docker-compose.yml" build)
+	$(call build_if_changed,bitsx,$(PARENT)/bitsXlaMarato,bitsXlaMarato    :8001,\
+		docker compose -f "$(PARENT)/bitsXlaMarato/docker-compose.yml" build)
+	$(call build_if_changed,tenda,$(PARENT)/tenda_online,Tenda Online     :8888,\
+		docker compose -f "$(PARENT)/tenda_online/docker/docker-compose.yml" build)
+	$(call build_if_changed,draculin,$(PARENT)/Draculin-Backend,Draculin         :8890,\
+		docker compose -f "$(PARENT)/Draculin-Backend/docker-compose.yml" build)
+	$(call build_if_changed,pro2,$(PARENT)/pracpro2,pracpro2         :8000,\
+		docker build -t pracpro2 "$(PARENT)/pracpro2")
+	$(call build_if_changed,planif,$(PARENT)/Practica_de_Planificacion,Planificacion    :3000,\
+		docker build -t practica-planificacion "$(PARENT)/Practica_de_Planificacion")
+	$(call build_if_changed,desastres,$(PARENT)/desastresIA,DesastresIA      :8083,\
+		docker compose -f "$(PARENT)/desastresIA/docker-compose.yml" build)
 	@echo "Done."
+
+docker-rebuild-all: ## Force rebuild all Docker images (ignore cache)
+	@rm -rf "$(STAMPS)"
+	@$(MAKE) docker-build-all
 
 stop-all: ## Stop all demo backend containers/services
 	@echo "Stopping portfolio demo services..."
@@ -71,7 +85,7 @@ stop-all: ## Stop all demo backend containers/services
 	@echo "Done."
 
 clean: ## Remove build artifacts and node_modules
-	rm -rf dist/ node_modules/ .astro/
+	rm -rf dist/ node_modules/ .astro/ .build-stamps/
 
 help: ## Show this help message
 	@echo "Available commands:"
