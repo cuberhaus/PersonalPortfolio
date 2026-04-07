@@ -73,6 +73,8 @@ docker-build-all: ## Build Docker images for demos (skips unchanged)
 		docker compose -f "$(PARENT)/CAIM/docker-compose.yml" build)
 	$(call build_if_changed,joceda,$(PARENT)/joc_eda,JocEDA           :8087,\
 		docker compose -f "$(PARENT)/joc_eda/docker-compose.yml" build)
+	$(call build_if_changed,sbcia,$(PARENT)/SBC_IA,SBC_IA           :8088,\
+		docker compose -f "$(PARENT)/SBC_IA/docker-compose.yml" build)
 	@echo "Done."
 
 docker-rebuild-all: ## Force rebuild all Docker images (ignore cache)
@@ -92,6 +94,7 @@ stop-all: ## Stop all demo backend containers/services
 	-docker compose -f ../projectA2/docker-compose.yml down 2>/dev/null
 	-docker compose -f ../CAIM/docker-compose.yml down 2>/dev/null
 	-docker compose -f ../joc_eda/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../SBC_IA/docker-compose.yml down 2>/dev/null
 	-fuser -k 8081/tcp 2>/dev/null
 	-fuser -k 8765/tcp 2>/dev/null
 	@echo "Done."
@@ -115,5 +118,6 @@ help: ## Show this help message
 	@echo "  PhaseTransitions :8085  (docker compose)"
 	@echo "  CAIM             :8086  (docker compose)"
 	@echo "  JocEDA           :8087  (docker compose)"
+	@echo "  SBC_IA           :8088  (docker compose)"
 	@echo "  PROP             :8081  (Spring Boot)"
 	@echo "  planner-api      :8765  (ENHSP)"

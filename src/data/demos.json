@@ -204,5 +204,19 @@
     "icon": "search",
     "github": "https://github.com/cuberhaus/CAIM",
     "image": ""
+  },
+  {
+    "slug": "sbc-ia",
+    "title": "Trip Planner (Expert System)",
+    "description": "An expert system trip planner: answer 10 questions about your travel preferences and get a full itinerary with cities, hotels, activities, transport, and cost. Reimplements CLIPS rules in Python.",
+    "tags": [
+      "HTMX",
+      "Alpine.js",
+      "FastAPI",
+      "Expert System"
+    ],
+    "icon": "map",
+    "github": "https://github.com/cuberhaus/SBC_IA",
+    "image": ""
   }
 ]

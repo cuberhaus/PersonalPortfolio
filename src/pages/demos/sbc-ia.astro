@@ -1,0 +1,64 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+import DemoHeader from '../../components/DemoHeader.astro';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const titles = {
+  en: "Trip Planner (Expert System)",
+  es: "Planificador de Viajes (Sistema Experto)",
+  ca: "Planificador de Viatges (Sistema Expert)"
+};
+
+const leads = {
+  en: "A <strong>knowledge-based expert system</strong> for trip planning: answer <strong>10 questions</strong> about your preferences (trip type, budget, duration, hotel quality…) and get a complete <strong>itinerary</strong> with cities, hotels, activities, transport, and cost. Reimplements <strong>CLIPS rules</strong> in Python with an <strong>HTMX + Alpine.js</strong> frontend — zero JavaScript build step.",
+  es: "Un <strong>sistema experto basado en conocimiento</strong> para planificación de viajes: responde <strong>10 preguntas</strong> sobre tus preferencias (tipo de viaje, presupuesto, duración, calidad del hotel…) y obtén un <strong>itinerario completo</strong> con ciudades, hoteles, actividades, transporte y coste. Reimplementa las <strong>reglas CLIPS</strong> en Python con un frontend <strong>HTMX + Alpine.js</strong> — sin build de JavaScript.",
+  ca: "Un <strong>sistema expert basat en coneixement</strong> per a planificació de viatges: respon <strong>10 preguntes</strong> sobre les teves preferències (tipus de viatge, pressupost, durada, qualitat de l'hotel…) i obtén un <strong>itinerari complet</strong> amb ciutats, hotels, activitats, transport i cost. Reimplementa les <strong>regles CLIPS</strong> en Python amb un frontend <strong>HTMX + Alpine.js</strong> — sense build de JavaScript."
+};
+
+const badges = {
+  en: "Knowledge-Based Systems · HTMX + Alpine.js + FastAPI · FIB-UPC",
+  es: "Sistemas Basados en Conocimiento · HTMX + Alpine.js + FastAPI · FIB-UPC",
+  ca: "Sistemes Basats en Coneixement · HTMX + Alpine.js + FastAPI · FIB-UPC"
+};
+
+const metaDescs = {
+  en: "Expert system trip planner using HTMX, Alpine.js, and FastAPI. Answer 10 questions to get a complete travel itinerary with cities, hotels, activities, and transport.",
+  es: "Planificador de viajes con sistema experto usando HTMX, Alpine.js y FastAPI. Responde 10 preguntas para obtener un itinerario completo con ciudades, hoteles, actividades y transporte.",
+  ca: "Planificador de viatges amb sistema expert usant HTMX, Alpine.js i FastAPI. Respon 10 preguntes per obtenir un itinerari complet amb ciutats, hotels, activitats i transport."
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
+---
+
+<DemoLayout
+  title={title}
+  description={metaDescs[lang] || metaDescs.en}
+  slug="sbc-ia"
+>
+  <div class="container">
+    <DemoHeader
+      badge={badge}
+      title={title}
+      lead={lead}
+      githubUrl="https://github.com/cuberhaus/SBC_IA"
+      githubLabel={t('demo.viewSource')}
+      accentFrom="#6366f1"
+      accentTo="#22c55e"
+    />
+
+    <LiveAppEmbed
+      url="http://localhost:8088"
+      title="SBC_IA Trip Planner"
+      dockerCmd="cd SBC_IA && docker compose up -d"
+      devCmd="cd SBC_IA && make web-dev"
+      lang={lang}
+      client:load
+    />
+  </div>
+</DemoLayout>

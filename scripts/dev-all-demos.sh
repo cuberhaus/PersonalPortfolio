@@ -34,6 +34,7 @@ MPIDS_DIR="$(cd "$PORTFOLIO/../projectA" 2>/dev/null && pwd)" || MPIDS_DIR=""
 PHASE_DIR="$(cd "$PORTFOLIO/../projectA2" 2>/dev/null && pwd)" || PHASE_DIR=""
 CAIM_DIR="$(cd "$PORTFOLIO/../CAIM" 2>/dev/null && pwd)" || CAIM_DIR=""
 JOCEDA_DIR="$(cd "$PORTFOLIO/../joc_eda" 2>/dev/null && pwd)" || JOCEDA_DIR=""
+SBCIA_DIR="$(cd "$PORTFOLIO/../SBC_IA" 2>/dev/null && pwd)" || SBCIA_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
@@ -46,6 +47,7 @@ MPIDS_UP=0
 PHASE_UP=0
 CAIM_UP=0
 JOCEDA_UP=0
+SBCIA_UP=0
 PLANNER_PID=""
 PROP_PID=""
 
@@ -107,6 +109,10 @@ cleanup() {
   if [[ "$JOCEDA_UP" == 1 ]] && [[ -f "${JOCEDA_DIR}/docker-compose.yml" ]]; then
     echo "Stopping JocEDA stack (docker compose down)..."
     (cd "$JOCEDA_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$SBCIA_UP" == 1 ]] && [[ -f "${SBCIA_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping SBC_IA stack (docker compose down)..."
+    (cd "$SBCIA_DIR" && docker compose down) >/dev/null 2>&1 || true
   fi
   exit "$ec"
 }
@@ -246,6 +252,18 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       fi
     else
       echo "==> JocEDA skipped (no ../joc_eda/docker-compose.yml)"
+    fi
+
+    # SBC_IA — HTMX + Alpine.js trip planner expert system
+    if [[ -f "${SBCIA_DIR}/docker-compose.yml" ]]; then
+      echo "==> SBC_IA           http://localhost:8088  (docker compose)"
+      if (cd "$SBCIA_DIR" && docker compose up -d); then
+        SBCIA_UP=1
+      else
+        echo "    warning: SBC_IA docker compose failed" >&2
+      fi
+    else
+      echo "==> SBC_IA skipped (no ../SBC_IA/docker-compose.yml)"
     fi
   fi
   echo ""
