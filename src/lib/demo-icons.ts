@@ -17,6 +17,7 @@ export const ICON_PATHS: Record<string, string> = {
   ml:         '<rect x="3" y="14" width="4" height="6" rx="0.5"/><rect x="10" y="10" width="4" height="10" rx="0.5"/><rect x="17" y="6" width="4" height="14" rx="0.5"/><path d="M5 8l3 3 4-4 4 3 3-5"/><circle cx="5" cy="7" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="4" r="1.5" fill="currentColor" stroke="none"/>',
   microscope: '<circle cx="12" cy="9" r="3"/><path d="M12 12v4"/><path d="M8 21h8"/><path d="M12 16v5"/><path d="M7 3l2 6"/><path d="M17 3l-2 6"/><circle cx="12" cy="9" r="6" opacity="0.3"/>',
   server:     '<rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>',
+  search:     '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
 };
 
 export function renderIconSvg(icon: string, size: number): string {
