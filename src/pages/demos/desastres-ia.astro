@@ -59,12 +59,9 @@ const badge = badges[lang] || badges.en;
       dockerCmd="cd desastresIA && docker compose up -d"
       devCmd="cd desastresIA && make dev"
       lang={lang}
-      fallbackSelector="#desastres-mock-fallback"
       client:load
     />
 
-    <div id="desastres-mock-fallback">
-      <DesastresIADemo lang={lang} client:visible />
-    </div>
+    <DesastresIADemo lang={lang} client:visible />
   </div>
 </DemoLayout>
