@@ -2,6 +2,7 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import DesastresIADemo from '../../components/demos/DesastresIADemo';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -14,21 +15,21 @@ const titles = {
 };
 
 const leads = {
-  en: "Local search on a <strong>disaster-relief</strong> model: helicopters rescue <strong>groups</strong> at <strong>centers</strong> in an optimized order. Compare <strong>hill climbing</strong> vs <strong>simulated annealing</strong> — runs entirely in your browser.",
-  es: "Búsqueda local en un modelo de <strong>ayuda en desastres</strong>: helicópteros rescatan <strong>grupos</strong> en <strong>centros</strong> en un orden optimizado. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> — se ejecuta completamente en tu navegador.",
-  ca: "Cerca local en un model d'<strong>ajuda en desastres</strong>: helicòpters rescaten <strong>grups</strong> en <strong>centres</strong> en un ordre optimitzat. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> — s'executa completament al teu navegador."
+  en: "Local search on a <strong>disaster-relief</strong> model: helicopters rescue <strong>groups</strong> at <strong>centers</strong> in an optimized order. Full-stack web app with an interactive <strong>2D map solver</strong> and <strong>experiment dashboard</strong> — compare <strong>hill climbing</strong> vs <strong>simulated annealing</strong> with 3 heuristics and 6 successor functions.",
+  es: "Búsqueda local en un modelo de <strong>ayuda en desastres</strong>: helicópteros rescatan <strong>grupos</strong> en <strong>centros</strong> en un orden optimizado. App web full-stack con un <strong>mapa 2D interactivo</strong> y un <strong>panel de experimentos</strong> — compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> con 3 heurísticos y 6 funciones sucesoras.",
+  ca: "Cerca local en un model d'<strong>ajuda en desastres</strong>: helicòpters rescaten <strong>grups</strong> en <strong>centres</strong> en un ordre optimitzat. App web full-stack amb un <strong>mapa 2D interactiu</strong> i un <strong>tauler d'experiments</strong> — compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> amb 3 heurístics i 6 funcions successores."
 };
 
 const badges = {
-  en: "Artificial Intelligence · FIB-UPC",
-  es: "Inteligencia Artificial · FIB-UPC",
-  ca: "Intel·ligència Artificial · FIB-UPC"
+  en: "Artificial Intelligence · Solid.js + FastAPI · FIB-UPC",
+  es: "Inteligencia Artificial · Solid.js + FastAPI · FIB-UPC",
+  ca: "Intel·ligència Artificial · Solid.js + FastAPI · FIB-UPC"
 };
 
 const metaDescs = {
-  en: "Helicopter assignment for disaster rescue operations using hill climbing and simulated annealing with AIMA (Java).",
-  es: "Asignación de helicópteros para operaciones de rescate en desastres usando hill climbing y simulated annealing con AIMA (Java).",
-  ca: "Assignació d'helicòpters per a operacions de rescat en desastres usant hill climbing i simulated annealing amb AIMA (Java)."
+  en: "Helicopter assignment for disaster rescue using hill climbing and simulated annealing. Interactive 2D map solver and experiment dashboard built with Solid.js and FastAPI.",
+  es: "Asignación de helicópteros para rescate en desastres usando hill climbing y simulated annealing. Solucionador interactivo con mapa 2D y panel de experimentos con Solid.js y FastAPI.",
+  ca: "Assignació d'helicòpters per a rescat en desastres usant hill climbing i simulated annealing. Solucionador interactiu amb mapa 2D i tauler d'experiments amb Solid.js i FastAPI."
 };
 
 const title = titles[lang] || titles.en;
@@ -52,6 +53,18 @@ const badge = badges[lang] || badges.en;
       accentTo="#22c55e"
     />
 
-    <DesastresIADemo lang={lang} client:visible />
+    <LiveAppEmbed
+      url="http://localhost:8083"
+      title="DesastresIA Solver"
+      dockerCmd="cd desastresIA && docker compose up -d"
+      devCmd="cd desastresIA && make dev"
+      lang={lang}
+      fallbackSelector="#desastres-mock-fallback"
+      client:load
+    />
+
+    <div id="desastres-mock-fallback">
+      <DesastresIADemo lang={lang} client:visible />
+    </div>
   </div>
 </DemoLayout>

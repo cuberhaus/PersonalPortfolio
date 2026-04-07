@@ -29,6 +29,7 @@ TFG_DIR="$(cd "$PORTFOLIO/../TFG" 2>/dev/null && pwd)" || TFG_DIR=""
 BITSX_DIR="$(cd "$PORTFOLIO/../bitsXlaMarato" 2>/dev/null && pwd)" || BITSX_DIR=""
 PRO2_DIR="$(cd "$PORTFOLIO/../pracpro2" 2>/dev/null && pwd)" || PRO2_DIR=""
 PLANIF_DIR="$(cd "$PORTFOLIO/../Practica_de_Planificacion" 2>/dev/null && pwd)" || PLANIF_DIR=""
+DESASTRES_DIR="$(cd "$PORTFOLIO/../desastresIA" 2>/dev/null && pwd)" || DESASTRES_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
@@ -36,6 +37,7 @@ TFG_UP=0
 BITSX_UP=0
 PRO2_CID=""
 PLANIF_CID=""
+DESASTRES_UP=0
 PLANNER_PID=""
 PROP_PID=""
 
@@ -77,6 +79,10 @@ cleanup() {
   if [[ -n "${PLANIF_CID}" ]]; then
     echo "Stopping Practica_de_Planificacion container..."
     docker rm -f "$PLANIF_CID" >/dev/null 2>&1 || true
+  fi
+  if [[ "$DESASTRES_UP" == 1 ]] && [[ -f "${DESASTRES_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping DesastresIA stack (docker compose down)..."
+    (cd "$DESASTRES_DIR" && docker compose down) >/dev/null 2>&1 || true
   fi
   exit "$ec"
 }
@@ -156,6 +162,18 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       }
     else
       echo "==> Planificacion skipped (no ../Practica_de_Planificacion/)"
+    fi
+
+    # desastresIA — Solid.js + FastAPI local search solver
+    if [[ -f "${DESASTRES_DIR}/docker-compose.yml" ]]; then
+      echo "==> DesastresIA       http://localhost:8083  (docker compose)"
+      if (cd "$DESASTRES_DIR" && docker compose up -d); then
+        DESASTRES_UP=1
+      else
+        echo "    warning: DesastresIA docker compose failed" >&2
+      fi
+    else
+      echo "==> DesastresIA skipped (no ../desastresIA/docker-compose.yml)"
     fi
   fi
   echo ""

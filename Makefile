@@ -31,6 +31,7 @@ stop-all: ## Stop all demo backend containers/services
 	-docker compose -f ../Draculin-Backend/docker-compose.yml down 2>/dev/null
 	-docker rm -f portfolio-pro2 2>/dev/null
 	-docker rm -f portfolio-planif 2>/dev/null
+	-docker compose -f ../desastresIA/docker-compose.yml down 2>/dev/null
 	-fuser -k 8081/tcp 2>/dev/null
 	-fuser -k 8765/tcp 2>/dev/null
 	@echo "Done."
@@ -49,5 +50,6 @@ help: ## Show this help message
 	@echo "  Planificacion    :3000  (docker run)"
 	@echo "  Tenda            :8888  (docker compose)"
 	@echo "  Draculin         :8890  (docker compose)"
+	@echo "  DesastresIA      :8083  (docker compose)"
 	@echo "  PROP             :8081  (Spring Boot)"
 	@echo "  planner-api      :8765  (ENHSP)"
