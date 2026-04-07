@@ -1,0 +1,100 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+import DemoHeader from '../../components/DemoHeader.astro';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const titles = {
+  en: "CAIM IR Explorer",
+  es: "CAIM Explorador RI",
+  ca: "CAIM Explorador RI"
+};
+
+const leads = {
+  en: "Explore core <strong>information retrieval</strong> concepts interactively: run <strong>PageRank</strong> on the global airport route network with a world map visualization, and analyze <strong>Zipf's Law</strong> on text corpora with curve fitting.",
+  es: "Explora conceptos fundamentales de <strong>recuperación de información</strong> de forma interactiva: ejecuta <strong>PageRank</strong> en la red global de rutas aéreas con un mapa mundial, y analiza la <strong>Ley de Zipf</strong> en corpus de texto con ajuste de curvas.",
+  ca: "Explora conceptes fonamentals de <strong>recuperació d'informació</strong> de forma interactiva: executa <strong>PageRank</strong> a la xarxa global de rutes aèries amb un mapa mundial, i analitza la <strong>Llei de Zipf</strong> en corpus de text amb ajust de corbes."
+};
+
+const badges = {
+  en: "Information Retrieval · FIB-UPC",
+  es: "Recuperación de Información · FIB-UPC",
+  ca: "Recuperació d'Informació · FIB-UPC"
+};
+
+const aboutTitles = {
+  en: "About this project",
+  es: "Sobre este proyecto",
+  ca: "Sobre aquest projecte"
+};
+
+const aboutDescs = {
+  en: "Originally lab exercises for the CAIM (Search and Analysis of Information) course at FIB-UPC, covering PageRank, Zipf/Heap laws, TF-IDF, Rocchio, MapReduce, and graph analysis. This full-stack web app reimplements the PageRank and Zipf algorithms in Python (FastAPI) with a Vanilla TypeScript + D3.js frontend — no UI framework, just plain TypeScript managing the DOM directly.",
+  es: "Originalmente ejercicios de laboratorio del curso CAIM (Cerca i Anàlisi de la Informació) en la FIB-UPC, cubriendo PageRank, leyes de Zipf/Heap, TF-IDF, Rocchio, MapReduce y análisis de grafos. Esta app web full-stack reimplementa los algoritmos de PageRank y Zipf en Python (FastAPI) con un frontend de Vanilla TypeScript + D3.js — sin framework de UI, solo TypeScript puro manejando el DOM directamente.",
+  ca: "Originalment exercicis de laboratori del curs CAIM (Cerca i Anàlisi de la Informació) a la FIB-UPC, cobrint PageRank, lleis de Zipf/Heap, TF-IDF, Rocchio, MapReduce i anàlisi de grafs. Aquesta app web full-stack reimplementa els algorismes de PageRank i Zipf en Python (FastAPI) amb un frontend de Vanilla TypeScript + D3.js — sense framework d'UI, només TypeScript pur gestionant el DOM directament."
+};
+
+const metaDescs = {
+  en: "Interactive PageRank and Zipf's Law explorer for information retrieval concepts.",
+  es: "Explorador interactivo de PageRank y Ley de Zipf para conceptos de recuperación de información.",
+  ca: "Explorador interactiu de PageRank i Llei de Zipf per a conceptes de recuperació d'informació."
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
+---
+
+<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="caim">
+  <div class="container">
+    <DemoHeader
+      badge={badge}
+      title={title}
+      lead={lead}
+      githubUrl="https://github.com/cuberhaus/CAIM"
+      githubLabel={t('demo.viewSource')}
+      accentFrom="#06b6d4"
+      accentTo="#6366f1"
+    />
+
+    <LiveAppEmbed
+      url="http://localhost:8086"
+      title="CAIM IR Explorer"
+      dockerCmd="cd CAIM && docker compose up -d"
+      devCmd="cd CAIM && make dev"
+      lang={lang}
+      client:load
+    />
+
+    <div class="demo-info">
+      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
+      <p>{aboutDescs[lang] || aboutDescs.en}</p>
+    </div>
+  </div>
+</DemoLayout>
+
+<style>
+  .demo-info {
+    margin-top: 2.5rem;
+    padding: 2rem;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .demo-info h3 {
+    margin-bottom: 0.75rem;
+  }
+
+  .demo-info p {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+</style>

@@ -189,5 +189,19 @@
     "icon": "server",
     "github": "https://github.com/cuberhaus/subgrup-prop7.1",
     "image": ""
+  },
+  {
+    "slug": "caim",
+    "title": "CAIM IR Explorer",
+    "description": "Interactive information retrieval explorer: PageRank on the global airport network with world map visualization, and Zipf's Law analysis with curve fitting on text corpora.",
+    "tags": [
+      "Vanilla TS",
+      "D3.js",
+      "FastAPI",
+      "PageRank"
+    ],
+    "icon": "search",
+    "github": "https://github.com/cuberhaus/CAIM",
+    "image": ""
   }
 ]

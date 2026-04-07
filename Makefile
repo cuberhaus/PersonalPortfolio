@@ -69,6 +69,8 @@ docker-build-all: ## Build Docker images for demos (skips unchanged)
 		docker compose -f "$(PARENT)/projectA/docker-compose.yml" build)
 	$(call build_if_changed,phase,$(PARENT)/projectA2,PhaseTransitions :8085,\
 		docker compose -f "$(PARENT)/projectA2/docker-compose.yml" build)
+	$(call build_if_changed,caim,$(PARENT)/CAIM,CAIM             :8086,\
+		docker compose -f "$(PARENT)/CAIM/docker-compose.yml" build)
 	@echo "Done."
 
 docker-rebuild-all: ## Force rebuild all Docker images (ignore cache)
@@ -86,6 +88,7 @@ stop-all: ## Stop all demo backend containers/services
 	-docker compose -f ../desastresIA/docker-compose.yml down 2>/dev/null
 	-docker compose -f ../projectA/docker-compose.yml down 2>/dev/null
 	-docker compose -f ../projectA2/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../CAIM/docker-compose.yml down 2>/dev/null
 	-fuser -k 8081/tcp 2>/dev/null
 	-fuser -k 8765/tcp 2>/dev/null
 	@echo "Done."
@@ -107,5 +110,6 @@ help: ## Show this help message
 	@echo "  DesastresIA      :8083  (docker compose)"
 	@echo "  MPIDS            :8084  (docker compose)"
 	@echo "  PhaseTransitions :8085  (docker compose)"
+	@echo "  CAIM             :8086  (docker compose)"
 	@echo "  PROP             :8081  (Spring Boot)"
 	@echo "  planner-api      :8765  (ENHSP)"

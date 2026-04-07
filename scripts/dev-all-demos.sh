@@ -32,6 +32,7 @@ PLANIF_DIR="$(cd "$PORTFOLIO/../Practica_de_Planificacion" 2>/dev/null && pwd)" 
 DESASTRES_DIR="$(cd "$PORTFOLIO/../desastresIA" 2>/dev/null && pwd)" || DESASTRES_DIR=""
 MPIDS_DIR="$(cd "$PORTFOLIO/../projectA" 2>/dev/null && pwd)" || MPIDS_DIR=""
 PHASE_DIR="$(cd "$PORTFOLIO/../projectA2" 2>/dev/null && pwd)" || PHASE_DIR=""
+CAIM_DIR="$(cd "$PORTFOLIO/../CAIM" 2>/dev/null && pwd)" || CAIM_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
@@ -42,6 +43,7 @@ PLANIF_CID=""
 DESASTRES_UP=0
 MPIDS_UP=0
 PHASE_UP=0
+CAIM_UP=0
 PLANNER_PID=""
 PROP_PID=""
 
@@ -95,6 +97,10 @@ cleanup() {
   if [[ "$PHASE_UP" == 1 ]] && [[ -f "${PHASE_DIR}/docker-compose.yml" ]]; then
     echo "Stopping PhaseTransitions stack (docker compose down)..."
     (cd "$PHASE_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$CAIM_UP" == 1 ]] && [[ -f "${CAIM_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping CAIM stack (docker compose down)..."
+    (cd "$CAIM_DIR" && docker compose down) >/dev/null 2>&1 || true
   fi
   exit "$ec"
 }
@@ -210,6 +216,18 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       fi
     else
       echo "==> PhaseTransitions skipped (no ../projectA2/docker-compose.yml)"
+    fi
+
+    # CAIM — Vanilla TS + D3 + FastAPI IR explorer
+    if [[ -f "${CAIM_DIR}/docker-compose.yml" ]]; then
+      echo "==> CAIM             http://localhost:8086  (docker compose)"
+      if (cd "$CAIM_DIR" && docker compose up -d); then
+        CAIM_UP=1
+      else
+        echo "    warning: CAIM docker compose failed" >&2
+      fi
+    else
+      echo "==> CAIM skipped (no ../CAIM/docker-compose.yml)"
     fi
   fi
   echo ""
