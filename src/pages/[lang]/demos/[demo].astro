@@ -1,6 +1,7 @@
 ---
 import ApaPractica from '../../demos/apa-practica.astro';
 import BitsxMarato from '../../demos/bitsx-marato.astro';
+import Caim from '../../demos/caim.astro';
 import DesastresIa from '../../demos/desastres-ia.astro';
 import Draculin from '../../demos/draculin.astro';
 import JocEda from '../../demos/joc-eda.astro';
@@ -11,16 +12,17 @@ import PhaseTransitions from '../../demos/phase-transitions.astro';
 import Planificacion from '../../demos/planificacion.astro';
 import Pro2 from '../../demos/pro2.astro';
 import Prop from '../../demos/prop.astro';
+import SbcIa from '../../demos/sbc-ia.astro';
 import Tenda from '../../demos/tenda.astro';
 import TfgPolyps from '../../demos/tfg-polyps.astro';
 
 export function getStaticPaths() {
   const langs = ['es', 'ca'];
   const demos = [
-    'apa-practica', 'bitsx-marato', 'desastres-ia', 'draculin',
+    'apa-practica', 'bitsx-marato', 'caim', 'desastres-ia', 'draculin',
     'joc-eda', 'jsbach', 'matriculas', 'mpids',
     'phase-transitions', 'planificacion', 'pro2', 'prop',
-    'tenda', 'tfg-polyps'
+    'sbc-ia', 'tenda', 'tfg-polyps'
   ];
   return langs.flatMap(lang => demos.map(demo => ({ params: { lang, demo } })));
 }
@@ -30,6 +32,7 @@ const { demo } = Astro.params;
 
 {demo === 'apa-practica' && <ApaPractica />}
 {demo === 'bitsx-marato' && <BitsxMarato />}
+{demo === 'caim' && <Caim />}
 {demo === 'desastres-ia' && <DesastresIa />}
 {demo === 'draculin' && <Draculin />}
 {demo === 'joc-eda' && <JocEda />}
@@ -40,5 +43,6 @@ const { demo } = Astro.params;
 {demo === 'planificacion' && <Planificacion />}
 {demo === 'pro2' && <Pro2 />}
 {demo === 'prop' && <Prop />}
+{demo === 'sbc-ia' && <SbcIa />}
 {demo === 'tenda' && <Tenda />}
 {demo === 'tfg-polyps' && <TfgPolyps />}

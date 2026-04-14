@@ -1,6 +1,6 @@
 .PHONY: install dev dev-all dev-planner build preview stop-all \
        docker-build-all docker-build-parallel docker-rebuild-all \
-       clean test help \
+       clean test test-all help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
 
@@ -24,8 +24,33 @@ build: ## Build for production
 preview: ## Preview the production build locally
 	npm run preview
 
-test: ## Run Vitest test suite
+test: ## Run Vitest test suite (portfolio only)
 	npm test
+
+test-all: test ## Run ALL test suites (portfolio + every demo backend)
+	@echo ""
+	@echo "=== Python backends (pytest) ==="
+	cd "$(PARENT)/projectA/web"   && python -m pytest backend/test_app.py -v
+	cd "$(PARENT)/desastresIA/web" && python -m pytest backend/test_app.py -v
+	cd "$(PARENT)/projectA2/web"  && python -m pytest backend/test_app.py -v
+	cd "$(PARENT)/CAIM/web"       && python -m pytest backend/test_app.py -v
+	cd "$(PARENT)/bitsXlaMarato/web/backend" && python -m pytest test_app.py -v
+	cd "$(PARENT)/SBC_IA/web"     && python -m pytest backend/test_app.py -v
+	cd "$(PARENT)/TFG/backend"    && python -m pytest test_main.py -v
+	@echo ""
+	@echo "=== Django (Draculin) ==="
+	cd "$(PARENT)/Draculin-Backend" && python manage.py test dracu -v2
+	@echo ""
+	@echo "=== Go (joc_eda) ==="
+	cd "$(PARENT)/joc_eda/web/backend-go" && go test -v ./...
+	@echo ""
+	@echo "=== Rust (pracpro2) ==="
+	cd "$(PARENT)/pracpro2/web/backend" && cargo test --verbose
+	@echo ""
+	@echo "=== JS (Planificacion) ==="
+	cd "$(PARENT)/Practica_de_Planificacion/web" && npx vitest run
+	@echo ""
+	@echo "All test suites passed."
 
 PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
 STAMPS := .build-stamps

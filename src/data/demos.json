@@ -212,7 +212,7 @@
     "tags": [
       "HTMX",
       "Alpine.js",
-      "FastAPI",
+      "Litestar",
       "Expert System"
     ],
     "icon": "map",

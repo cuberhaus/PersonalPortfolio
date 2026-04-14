@@ -186,5 +186,33 @@
     "icon": "server",
     "github": "https://github.com/cuberhaus/subgrup-prop7.1",
     "image": ""
+  },
+  {
+    "slug": "caim",
+    "title": "Explorador IR — CAIM",
+    "description": "Explorador interactivo de recuperación de información: PageRank sobre la red global de aeropuertos con visualización en mapa mundial, y análisis de la Ley de Zipf con ajuste de curvas en corpus de texto.",
+    "tags": [
+      "Vanilla TS",
+      "D3.js",
+      "FastAPI",
+      "PageRank"
+    ],
+    "icon": "search",
+    "github": "https://github.com/cuberhaus/CAIM",
+    "image": ""
+  },
+  {
+    "slug": "sbc-ia",
+    "title": "Planificador de Viajes (Sistema Experto)",
+    "description": "Un sistema experto de planificación de viajes: responde 10 preguntas sobre tus preferencias y obtén un itinerario completo con ciudades, hoteles, actividades, transporte y coste. Reimplementa reglas CLIPS en Python.",
+    "tags": [
+      "HTMX",
+      "Alpine.js",
+      "Litestar",
+      "Expert System"
+    ],
+    "icon": "map",
+    "github": "https://github.com/cuberhaus/SBC_IA",
+    "image": ""
   }
 ]
