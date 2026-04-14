@@ -19,7 +19,6 @@ Dark-themed portfolio built with **[Astro](https://astro.build)** (static export
 npm install
 npm run dev              # Astro only — http://localhost:4321
 npm run dev:all          # All local demo backends + Astro (see below)
-npm run dev:with-planner # planner-api + Astro only (no Docker)
 npm run build
 npm run preview
 ```
@@ -38,8 +37,6 @@ One command starts everything the demos can use locally (then **Ctrl+C** tears i
 Requires **bash**, **Docker** (for Tenda + Draculin), **Python 3** + Java for the planner. Missing **sibling** repos (Tenda/Draculin) are skipped. **`planner-api/`** ships with this project.
 
 Flags (advanced): `bash scripts/dev-all-demos.sh --skip-docker` or `--skip-planner`.
-
-**`npm run dev:with-planner`** — only **planner-api** + Astro (no Docker). Use when you don’t need Tenda/Draculin.
 
 **Windows:** use **WSL** or **Git Bash**, or start each stack manually (README sections below).
 

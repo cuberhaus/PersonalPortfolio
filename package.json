@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "astro dev",
     "dev:all": "bash scripts/dev-all-demos.sh",
-    "dev:with-planner": "bash scripts/dev-with-planner.sh",
     "build": "astro build",
     "preview": "astro preview",
     "test": "vitest run",

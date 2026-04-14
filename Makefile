@@ -1,4 +1,4 @@
-.PHONY: install dev dev-all dev-planner build preview stop-all \
+.PHONY: install dev dev-all build preview stop-all \
        docker-build-all docker-build-parallel docker-rebuild-all \
        clean test test-all help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
@@ -17,9 +17,6 @@ dev: ## Start Astro dev server only (no backends)
 
 dev-all: ## Start Astro + ALL demo backends (Docker + planner-api + PROP)
 	npm run dev:all
-
-dev-planner: ## Start Astro + planner-api only (no Docker)
-	npm run dev:with-planner
 
 build: ## Build for production
 	npm run build
