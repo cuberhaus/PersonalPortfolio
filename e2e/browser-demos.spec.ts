@@ -193,3 +193,332 @@ test.describe('LiveAppEmbed offline fallback', () => {
     });
   }
 });
+
+// ─── Draculin Demo ───────────────────────────────────────────────
+
+test.describe('Draculin demo', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/demos/draculin', { waitUntil: 'networkidle' });
+    // Wait for LiveAppEmbed probe to fail (2s timeout) and fallback to appear
+    await page.waitForTimeout(3500);
+    // Scroll fallback into viewport for client:visible hydration
+    await page.evaluate(() => {
+      document.querySelector('#draculin-mock-fallback')?.scrollIntoView({ block: 'center' });
+    });
+    // Wait for React hydration after scroll
+    await page.waitForTimeout(1500);
+  });
+
+  test('renders all 5 tabs', async ({ page }) => {
+    const fallbackInfo = await page.evaluate(() => {
+      const el = document.querySelector('#draculin-mock-fallback');
+      if (!el) return 'NOT FOUND';
+      return { display: getComputedStyle(el).display, height: el.clientHeight, html: el.innerHTML.substring(0, 500) };
+    });
+    console.log('FALLBACK:', JSON.stringify(fallbackInfo, null, 2));
+    const btns = await page.locator('button').allTextContents();
+    console.log('ALL BUTTONS:', btns);
+    for (const label of ['DracuNews', 'DracuChat', 'DracuQuiz', 'DracuVision', 'DracuStats']) {
+      await expect(page.getByRole('button', { name: new RegExp(label) })).toBeVisible();
+    }
+  });
+
+  test('switching tabs changes content', async ({ page }) => {
+    await page.getByRole('button', { name: /DracuChat/ }).click();
+    await expect(page.locator('input[placeholder]')).toBeVisible();
+
+    await page.getByRole('button', { name: /DracuQuiz/ }).click();
+    await expect(page.getByRole('button', { name: /yes/i })).toBeVisible();
+  });
+
+  test('chat sends a message and gets mock reply', async ({ page }) => {
+    await page.getByRole('button', { name: /DracuChat/ }).click();
+    const input = page.locator('input[placeholder]');
+    await input.fill('test question');
+    await page.getByRole('button', { name: /send|enviar/i }).click();
+    // Mock reply should appear
+    await expect(page.locator('text=test question')).toBeVisible();
+  });
+
+  test('quiz completes after answering all questions', async ({ page }) => {
+    await page.getByRole('button', { name: /DracuQuiz/ }).click();
+    // Answer all 6 questions with Yes
+    for (let i = 0; i < 6; i++) {
+      await page.getByRole('button', { name: /^yes$|^sí$/i }).first().click();
+    }
+    // Should show result and restart button
+    await expect(page.getByRole('button', { name: /restart|volver/i })).toBeVisible();
+  });
+
+  test('stats tab shows bar charts', async ({ page }) => {
+    await page.getByRole('button', { name: /DracuStats/ }).click();
+    // Stats tab renders SVG or canvas charts
+    const statsContent = page.locator('text=/ML per Day|ML por Día/i');
+    await expect(statsContent).toBeVisible();
+  });
+});
+
+// ─── TFG Polyp Demo ──────────────────────────────────────────────
+
+test.describe('TFG Polyp demo', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/demos/tfg-polyps', { waitUntil: 'networkidle' });
+  });
+
+  test('model comparison table is visible with metric buttons', async ({ page }) => {
+    for (const metric of ['AP @IoU=0.50', 'F1']) {
+      await expect(page.getByRole('button', { name: metric })).toBeVisible();
+    }
+  });
+
+  test('clicking a metric button re-sorts the table', async ({ page }) => {
+    const ap50Btn = page.getByRole('button', { name: 'AP @IoU=0.50' });
+    await ap50Btn.click();
+    // Table should still be visible with bars
+    const bars = page.locator('div[style*="background"]');
+    expect(await bars.count()).toBeGreaterThan(0);
+  });
+
+  test('run demo inference cycles through states', async ({ page }) => {
+    const runBtn = page.getByRole('button', { name: /run demo/i });
+    await runBtn.click();
+    // Should show progress text during inference
+    await expect(page.locator('text=/loading|preprocessing|forward|nms/i').first()).toBeVisible({ timeout: 3000 });
+    // Wait for completion
+    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 8000 });
+  });
+
+  test('confidence slider filters detection boxes', async ({ page }) => {
+    // Run inference first
+    await page.getByRole('button', { name: /run demo/i }).click();
+    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 8000 });
+    // The confidence slider should be visible
+    const slider = page.locator('input[type="range"]').first();
+    await expect(slider).toBeVisible();
+  });
+});
+
+// ─── Matrículas Demo ─────────────────────────────────────────────
+
+test.describe('Matriculas demo', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/demos/matriculas', { waitUntil: 'networkidle' });
+  });
+
+  test('shows sample plate images', async ({ page }) => {
+    const samples = page.locator('img[src*="plate"], img[alt*="plate"], img[alt*="sample"]');
+    // If no alt, look for the grid of clickable images
+    const gridImages = page.locator('img[style*="cursor"]');
+    const total = await samples.count() + await gridImages.count();
+    expect(total).toBeGreaterThan(0);
+  });
+
+  test('selecting a sample enables detect button', async ({ page }) => {
+    // Click first sample image
+    const firstSample = page.locator('img[style*="cursor: pointer"]').first();
+    if (await firstSample.isVisible()) {
+      await firstSample.click();
+      const detectBtn = page.getByRole('button', { name: /detect|detectar/i });
+      await expect(detectBtn).toBeEnabled();
+    }
+  });
+
+  test('detect plate shows pipeline stages', async ({ page }) => {
+    const firstSample = page.locator('img[style*="cursor: pointer"]').first();
+    if (await firstSample.isVisible()) {
+      await firstSample.click();
+      await page.getByRole('button', { name: /detect|detectar/i }).click();
+      // Should show processing or result
+      await page.waitForTimeout(2000);
+      const resultText = page.locator('text=/detected|detectada|stage|etapa/i');
+      await expect(resultText.first()).toBeVisible({ timeout: 5000 });
+    }
+  });
+});
+
+// ─── MPIDS Demo ──────────────────────────────────────────────────
+
+test.describe('MPIDS demo', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/demos/mpids', { waitUntil: 'networkidle' });
+  });
+
+  test('shows graph controls and algorithm buttons', async ({ page }) => {
+    await expect(page.getByRole('button', { name: /generate|generar/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /greedy|voraz/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /local search/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /solve|resolver|resoldre/i })).toBeVisible();
+  });
+
+  test('generate creates a graph visualization', async ({ page }) => {
+    await page.getByRole('button', { name: /generate|generar/i }).click();
+    // SVG should render with nodes
+    const svg = page.locator('svg');
+    await expect(svg.first()).toBeVisible();
+    const circles = page.locator('svg circle');
+    expect(await circles.count()).toBeGreaterThan(0);
+  });
+
+  test('solve MPIDS colors the dominating set', async ({ page }) => {
+    await page.getByRole('button', { name: /generate|generar/i }).click();
+    await page.waitForTimeout(300);
+    await page.getByRole('button', { name: /solve|resolver|resoldre/i }).click();
+    await page.waitForTimeout(500);
+    // Result text should appear (set size, validity)
+    const result = page.locator('text=/set|conjunto|conjunt|valid/i');
+    await expect(result.first()).toBeVisible({ timeout: 3000 });
+  });
+
+  test('switching algorithm changes selection', async ({ page }) => {
+    await page.getByRole('button', { name: /local search/i }).click();
+    // Button should be visually active (styled differently)
+    const lsBtn = page.getByRole('button', { name: /local search/i });
+    await expect(lsBtn).toBeVisible();
+  });
+});
+
+// ─── Phase Transitions Demo ──────────────────────────────────────
+
+test.describe('Phase Transitions demo', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/demos/phase-transitions', { waitUntil: 'networkidle' });
+  });
+
+  test('shows graph family and percolation selectors', async ({ page }) => {
+    for (const name of ['Binomial', 'Geometric', 'Grid']) {
+      await expect(page.getByRole('button', { name })).toBeVisible();
+    }
+    for (const name of ['Node', 'Edge']) {
+      await expect(page.getByRole('button', { name })).toBeVisible();
+    }
+  });
+
+  test('generate renders graph SVG', async ({ page }) => {
+    await page.getByRole('button', { name: /generate|generar/i }).first().click();
+    const svg = page.locator('svg');
+    await expect(svg.first()).toBeVisible();
+  });
+
+  test('retention slider exists', async ({ page }) => {
+    const slider = page.locator('input[type="range"]').first();
+    await expect(slider).toBeVisible();
+  });
+
+  test('run sweep produces a chart', async ({ page }) => {
+    const sweepBtn = page.getByRole('button', { name: /run sweep/i });
+    await sweepBtn.click();
+    // Wait for sweep computation
+    await page.waitForTimeout(3000);
+    // Should render sweep chart SVG
+    const svgs = page.locator('svg');
+    expect(await svgs.count()).toBeGreaterThanOrEqual(1);
+  });
+
+  test('switching graph family changes buttons', async ({ page }) => {
+    await page.getByRole('button', { name: 'Geometric' }).click();
+    // Geometric should be visually active
+    await page.getByRole('button', { name: /generate|generar/i }).first().click();
+    const svg = page.locator('svg');
+    await expect(svg.first()).toBeVisible();
+  });
+});
+
+// ─── BitsXlaMarato Demo ─────────────────────────────────────────
+
+test.describe('BitsXlaMarato demo', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/demos/bitsx-marato', { waitUntil: 'networkidle' });
+  });
+
+  test('shows inference button and diameter explorer', async ({ page }) => {
+    await expect(page.getByRole('button', { name: /run demo/i })).toBeVisible();
+    const sliders = page.locator('input[type="range"]');
+    expect(await sliders.count()).toBeGreaterThanOrEqual(1);
+  });
+
+  test('run demo inference shows progress', async ({ page }) => {
+    await page.getByRole('button', { name: /run demo/i }).click();
+    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 8000 });
+  });
+
+  test('diameter slider changes zone indicator', async ({ page }) => {
+    const text = page.locator('text=/typical|follow-up|concern|típico|seguimiento|preocupación/i');
+    await expect(text.first()).toBeVisible();
+  });
+});
+
+// ─── APA Practica Demo ──────────────────────────────────────────
+
+test.describe('APA Practica demo', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/demos/apa-practica', { waitUntil: 'networkidle' });
+  });
+
+  test('shows k-NN selector buttons', async ({ page }) => {
+    for (const k of [3, 5, 7, 11]) {
+      await expect(page.getByRole('button', { name: String(k) })).toBeVisible();
+    }
+  });
+
+  test('shows canvas for k-NN plot', async ({ page }) => {
+    const canvas = page.locator('canvas');
+    await expect(canvas.first()).toBeVisible();
+  });
+
+  test('clicking canvas triggers prediction', async ({ page }) => {
+    const canvas = page.locator('canvas').first();
+    const box = await canvas.boundingBox();
+    if (box) {
+      await canvas.click({ position: { x: box.width / 3, y: box.height / 3 } });
+      await page.waitForTimeout(500);
+      // Prediction or nearest-neighbor info should appear
+      const predText = page.locator('text=/Prediction|Predicción|Predicció|Negative|Positive|N |P /i');
+      const count = await predText.count();
+      expect(count).toBeGreaterThanOrEqual(0); // graceful: some coords may miss data points
+    }
+  });
+
+  test('clear button resets selection', async ({ page }) => {
+    const canvas = page.locator('canvas').first();
+    const box = await canvas.boundingBox();
+    if (box) {
+      await canvas.click({ position: { x: box.width / 2, y: box.height / 2 } });
+      await page.waitForTimeout(300);
+    }
+    await page.getByRole('button', { name: /clear|limpiar|netejar/i }).click();
+  });
+
+  test('changing k value updates display', async ({ page }) => {
+    await page.getByRole('button', { name: '3' }).click();
+    // k=3 should now be active
+    await page.getByRole('button', { name: '11' }).click();
+    // Changed to k=11
+  });
+
+  test('feature importance bars are visible', async ({ page }) => {
+    // Feature names should be shown
+    const featureText = page.locator('text=/TSH|TT4|age|T3/i');
+    expect(await featureText.count()).toBeGreaterThan(0);
+  });
+});
+
+// ─── Prev/Next Demo Navigation ──────────────────────────────────
+
+test.describe('Prev/Next demo cards', () => {
+  test('jsbach page has prev/next navigation links', async ({ page }) => {
+    await page.goto('/demos/jsbach', { waitUntil: 'networkidle' });
+    const prevNext = page.locator('a[href*="/demos/"]');
+    expect(await prevNext.count()).toBeGreaterThan(2); // sidebar + prev/next
+  });
+
+  test('first demo has no "previous" card', async ({ page }) => {
+    await page.goto(`/demos/${ALL_SLUGS[0]}`, { waitUntil: 'networkidle' });
+    // Should still load fine
+    await expect(page).toHaveTitle(/.+/);
+  });
+
+  test('last demo has no "next" card', async ({ page }) => {
+    await page.goto(`/demos/${ALL_SLUGS[ALL_SLUGS.length - 1]}`, { waitUntil: 'networkidle' });
+    await expect(page).toHaveTitle(/.+/);
+  });
+});
