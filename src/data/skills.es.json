@@ -1,18 +1,18 @@
 [
   {
     "category": "Lenguajes de Programación",
-    "items": ["Python", "C", "C++", "Java", "SQL", "Haskell", "Prolog", "JavaScript", "PowerShell"]
+    "items": ["Python", "TypeScript", "JavaScript", "C", "C++", "Java", "SQL"]
   },
   {
     "category": "IA y Ciencia de Datos",
-    "items": ["Machine Learning", "Computer Vision", "Data Mining", "Supervised Learning", "Big Data", "Statistics", "Knowledge-Based Systems"]
+    "items": ["Machine Learning", "Computer Vision", "PyTorch", "scikit-learn", "OpenCV", "LangChain", "Object Detection", "Generative Models", "MLOps", "Data Mining", "Statistics"]
   },
   {
     "category": "Herramientas y Plataformas",
-    "items": ["AWS", "Azure", "Informatica", "Power BI", "SQL Server", "Git", "Docker", "Jupyter", "Google Colab"]
+    "items": ["AWS", "Azure", "GCP", "Docker", "GitHub Actions", "PostgreSQL", "FastAPI", "Git", "Jupyter"]
   },
   {
     "category": "Fundamentos de Informática",
-    "items": ["Algorithms", "Dynamic Programming", "Software Architecture", "Parallel Processing", "Cybersecurity", "Network Administration"]
+    "items": ["Algorithms", "Software Architecture", "Parallel Processing", "CI/CD", "Compiler Design", "Cybersecurity"]
   }
 ]
