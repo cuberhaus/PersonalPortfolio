@@ -18,6 +18,7 @@ export const ICON_PATHS: Record<string, string> = {
   microscope: '<circle cx="12" cy="9" r="3"/><path d="M12 12v4"/><path d="M8 21h8"/><path d="M12 16v5"/><path d="M7 3l2 6"/><path d="M17 3l-2 6"/><circle cx="12" cy="9" r="6" opacity="0.3"/>',
   server:     '<rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>',
   search:     '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+  cpu:        '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/>',
 };
 
 export function renderIconSvg(icon: string, size: number): string {

@@ -214,5 +214,20 @@
     "icon": "map",
     "github": "https://github.com/cuberhaus/SBC_IA",
     "image": ""
+  },
+  {
+    "slug": "par-parallel",
+    "title": "Laboratoris de Computació Paral·lela",
+    "description": "Cinc pràctiques d'OpenMP compilades a WebAssembly: conjunt de Mandelbrot, equació de la calor, merge-sort de 4 vies, càlcul de π i benchmarks d'speedup paral·lel — tot executant-se al teu navegador.",
+    "tags": [
+      "C",
+      "OpenMP",
+      "WebAssembly",
+      "Preact",
+      "Canvas"
+    ],
+    "icon": "cpu",
+    "github": "https://github.com/cuberhaus/PAR",
+    "image": ""
   }
 ]

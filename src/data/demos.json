@@ -218,5 +218,20 @@
     "icon": "map",
     "github": "https://github.com/cuberhaus/SBC_IA",
     "image": ""
+  },
+  {
+    "slug": "par-parallel",
+    "title": "Parallel Computing Labs",
+    "description": "Five OpenMP labs compiled to WebAssembly: Mandelbrot set, heat equation solver, 4-way merge-sort, pi computation, and parallel speedup benchmarks — all running in your browser.",
+    "tags": [
+      "C",
+      "OpenMP",
+      "WebAssembly",
+      "Preact",
+      "Canvas"
+    ],
+    "icon": "cpu",
+    "github": "https://github.com/cuberhaus/PAR",
+    "image": ""
   }
 ]

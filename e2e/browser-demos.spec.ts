@@ -12,7 +12,7 @@ const ALL_SLUGS = [
   'tfg-polyps', 'draculin', 'bitsx-marato', 'matriculas',
   'joc-eda', 'jsbach', 'tenda', 'pro2', 'mpids',
   'phase-transitions', 'planificacion', 'desastres-ia',
-  'apa-practica', 'prop', 'caim', 'sbc-ia',
+  'apa-practica', 'prop', 'caim', 'sbc-ia', 'par-parallel',
 ];
 
 // ─── Demo pages load without errors ─────────────────────────────
@@ -642,5 +642,46 @@ test.describe('CAIM demo i18n', () => {
     });
     await page.waitForTimeout(1500);
     await expect(page.getByRole('button', { name: /Zipf/i })).toBeVisible();
+  });
+});
+
+// ─── PAR Parallel Computing demo ────────────────────────────────
+
+test.describe('PAR Parallel Computing demo', () => {
+  test('renders demo header with correct title', async ({ page }) => {
+    await page.goto('/demos/par-parallel', { waitUntil: 'networkidle' });
+    await expect(page.locator('h1')).toContainText('Parallel Computing');
+  });
+
+  test('renders three canvas elements for mini demos', async ({ page }) => {
+    await page.goto('/demos/par-parallel', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(2000);
+    // Scroll to demo section
+    await page.evaluate(() => {
+      document.querySelector('.par-demo')?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(2000);
+    const canvases = page.locator('.par-canvas');
+    await expect(canvases).toHaveCount(3);
+  });
+
+  test('heat equation play button starts iteration', async ({ page }) => {
+    await page.goto('/demos/par-parallel', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(2000);
+    await page.evaluate(() => {
+      document.querySelector('.par-demo')?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(2000);
+    // Click play on heat panel
+    const playBtn = page.locator('.par-panel').nth(1).getByRole('button', { name: /Play|Iniciar|Inicia/i });
+    await playBtn.click();
+    await page.waitForTimeout(500);
+    // Should now show Pause
+    await expect(page.locator('.par-panel').nth(1).getByRole('button', { name: /Pause|Pausar|Pausa/i })).toBeVisible();
+  });
+
+  test('Spanish PAR page shows translated title', async ({ page }) => {
+    await page.goto('/es/demos/par-parallel', { waitUntil: 'networkidle' });
+    await expect(page.locator('h1')).toContainText('Computación Paralela');
   });
 });
