@@ -45,12 +45,9 @@ count_to "$TMPDIR_LOC/c"          c    -not -path '*/rvctools/*' -not -path '*/p
 count_to "$TMPDIR_LOC/cpp"        cpp  &
 count_to "$TMPDIR_LOC/java"       java -not -path '*/aima/*' &
 count_to "$TMPDIR_LOC/sql"        sql  &
-count_to "$TMPDIR_LOC/haskell"    hs   &
-count_to "$TMPDIR_LOC/prolog"     pl   -not -path '*/LanguageTool*' -not -path '*/texstudio/*' &
 count_to "$TMPDIR_LOC/js"         js   -not -path '*/.obsidian*' -not -path '*/.angular/*' -not -path '*/javadoc/*' &
 count_to "$TMPDIR_LOC/ts"         ts   &
 count_to "$TMPDIR_LOC/tsx"        tsx   &
-count_to "$TMPDIR_LOC/powershell" ps1  &
 wait
 
 declare -A LINES
@@ -59,11 +56,9 @@ LINES[C]=$(<"$TMPDIR_LOC/c")
 LINES[C++]=$(<"$TMPDIR_LOC/cpp")
 LINES[Java]=$(<"$TMPDIR_LOC/java")
 LINES[SQL]=$(<"$TMPDIR_LOC/sql")
-LINES[Haskell]=$(<"$TMPDIR_LOC/haskell")
-LINES[Prolog]=$(<"$TMPDIR_LOC/prolog")
 js=$(<"$TMPDIR_LOC/js"); ts=$(<"$TMPDIR_LOC/ts"); tsx=$(<"$TMPDIR_LOC/tsx")
-LINES[JavaScript]=$(( js + ts + tsx ))
-LINES[PowerShell]=$(<"$TMPDIR_LOC/powershell")
+LINES[TypeScript]=$(( ts + tsx ))
+LINES[JavaScript]=$js
 
 # ── Compute totals & format ───────────────────────────────────────────────────
 TOTAL=0
@@ -106,7 +101,7 @@ if [[ "${1:-}" == "--patch" ]]; then
   # Build the replacement block
   BLOCK="const LOC_DATA: Record<string, { lines: string; pct: number }> = {"
   # Fixed order matching skills.json
-  for lang in Python C "C++" Java SQL Haskell Prolog JavaScript PowerShell; do
+  for lang in Python TypeScript JavaScript C "C++" Java SQL; do
     n=${LINES[$lang]}
     pct=$(( n * 100 / TOTAL ))
     (( pct == 0 && n > 0 )) && pct=1
