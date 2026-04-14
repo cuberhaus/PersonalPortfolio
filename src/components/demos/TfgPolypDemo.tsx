@@ -334,10 +334,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  MOCK INFERENCE                                                        */
 /* ════════════════════════════════════════════════════════════════════════ */
-const MOCK_BOXES = [
-  { x: 35, y: 30, w: 22, h: 25, score: 0.94, label: "polyp" },
-  { x: 62, y: 55, w: 15, h: 18, score: 0.71, label: "polyp" },
-];
+import { MOCK_BOXES } from "../../lib/tfg-mock-boxes";
 
 function MockInference({ t }: { t: typeof TRANSLATIONS.en }) {
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");

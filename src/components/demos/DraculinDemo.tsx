@@ -104,14 +104,7 @@ const TRANSLATIONS = {
   }
 };
 
-const FALLBACK_NEWS = [
-  { title: "La Marató 2023", link: "https://www.ccma.cat/tv3/marato/", img: "https://pessebre.org/wp-content/uploads/2022/12/logo-lamarato_normal.jpg" },
-  { title: "Las farmacias catalanas distribuirán productos menstruales gratuitos a partir de 2024", link: "https://elpais.com/espana/catalunya/2023-09-21/las-farmacias-catalanas-distribuiran-productos-menstruales-gratuitos-a-partir-de-2024.html", img: "" },
-  { title: "Cómo ayudar a tu hija a superar el miedo al uso del tampón y la copa menstrual", link: "https://elpais.com/mamas-papas/expertos/2023-08-28/como-ayudar-a-tu-hija-a-superar-el-miedo-al-uso-del-tampon-y-la-copa-menstrual.html", img: "" },
-];
-
-const BLOOD_DATA: Record<string, number> = { Mon: 5, Tue: 10, Wed: 7, Thu: 15, Fri: 8, Sat: 4, Sun: 6 };
-const PERIOD_DAYS = [2, 3, 4, 5, 28, 29, 30];
+import { FALLBACK_NEWS, BLOOD_DATA, PERIOD_DAYS, scoreBand } from "../../lib/draculin-quiz";
 
 const s = {
   wrapper: { fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)", minHeight: "500px" },
@@ -264,8 +257,9 @@ function QuizTab({ t }: { t: typeof TRANSLATIONS.en }) {
     }
   };
 
-  const result = score <= 3 ? t.quizResult1 : score <= 7 ? t.quizResult2 : t.quizResult3;
-  const resultColor = score <= 3 ? "#4ade80" : score <= 7 ? "#facc15" : "#f87171";
+  const band = scoreBand(score);
+  const result = band === "mild" ? t.quizResult1 : band === "moderate" ? t.quizResult2 : t.quizResult3;
+  const resultColor = band === "mild" ? "#4ade80" : band === "moderate" ? "#facc15" : "#f87171";
 
   const restart = () => { setIdx(0); setScore(0); setDone(false); };
 

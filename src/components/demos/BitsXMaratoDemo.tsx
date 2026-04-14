@@ -203,10 +203,9 @@ const accent1 = "#be123c"; // rose
 const accent2 = "#0ea5e9"; // sky
 
 /* ── diameter zones ── */
+import { diameterZone as _diameterZone } from "../../lib/bitsx-diameter";
 function diameterZone(mm: number, t: typeof TRANSLATIONS.en) {
-  if (mm < 30) return { label: t.diameterZones.typical.label, color: "#22c55e", detail: t.diameterZones.typical.detail };
-  if (mm < 45) return { label: t.diameterZones.followup.label, color: "#eab308", detail: t.diameterZones.followup.detail };
-  return { label: t.diameterZones.concern.label, color: "#ef4444", detail: t.diameterZones.concern.detail };
+  return _diameterZone(mm, t.diameterZones);
 }
 
 /* ════════════════════════════════════════════════════════════════════════ */
