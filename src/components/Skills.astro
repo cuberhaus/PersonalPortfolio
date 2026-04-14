@@ -17,6 +17,38 @@ const LOC_DATA: Record<string, { lines: string; pct: number }> = {
   Java:        { lines: '~57K', pct: 23 },
   SQL:         { lines: '~1.9K', pct: 1 },
 };
+
+const SKILL_CONTEXT: Record<string, string> = {
+  // AI & Data Science
+  'Machine Learning':   'TFG · APA_Practica · MD · datathon',
+  'Computer Vision':    'TFG · bitsXlaMarato · VC · Draculin',
+  'PyTorch':            'TFG · bitsXlaMarato · datathon2023',
+  'scikit-learn':       'APA_Practica · MD · MD2 · datathon',
+  'OpenCV':             'TFG · bitsXlaMarato · Draculin · ROB',
+  'LangChain':          'AgenticEraHackathon · informatica-PoC',
+  'Object Detection':   'TFG (FRCNN/RetinaNet/SSD) · bitsXla',
+  'Generative Models':  'TFG polyp augment (CycleGAN, SPADE)',
+  'MLOps':              'TFG (Optuna+W&B) · collab-server (MLflow)',
+  'Data Mining':        'MD · MD2 · CAIM (TF-IDF, K-Means)',
+  'Statistics':         'APA · APA_Practica · MD · MD2',
+  // Tools & Platforms
+  'AWS':                'collab-server (MinIO S3-compatible)',
+  'Azure':              'informatica-PoC',
+  'GCP':                'AgenticEra · informatica-PoC (Vertex AI)',
+  'Docker':             '15 Dockerfiles · 13 compose files',
+  'GitHub Actions':     '25+ workflow files across repos',
+  'PostgreSQL':         'collab-server · AgenticEraHackathon',
+  'FastAPI':            'TFG · bitsXlaMarato · desastresIA · A2',
+  'Git':                'All projects',
+  'Jupyter':            '10+ repos (APA, MD, CAIM, datathon…)',
+  // CS Fundamentals
+  'Algorithms':         'desastresIA · joc_eda · projectA/A2',
+  'Software Architecture': 'subgrup-prop7.1 · SpringUnitTesting',
+  'Parallel Processing':'PAR (OpenMP) · joc_eda (multiprocess)',
+  'CI/CD':              '25+ GitHub Actions across repos',
+  'Compiler Design':    'ANTLR4_JSBach (grammar+lexer+parser)',
+  'Cybersecurity':      'waslab01–04 (web security labs)',
+};
 ---
 
 <section class="section skills" id="skills">
@@ -36,8 +68,12 @@ const LOC_DATA: Record<string, { lines: string; pct: number }> = {
           <div class="skill-pills">
             {group.items.map((item) => {
               const loc = LOC_DATA[item];
-              return loc ? (
-                <span class="skill-pill has-tooltip" data-tooltip={`${loc.lines} lines · ${loc.pct}%`}>{item}</span>
+              const ctx = SKILL_CONTEXT[item];
+              const tooltip = loc
+                ? `${loc.lines} lines · ${loc.pct}%`
+                : ctx || null;
+              return tooltip ? (
+                <span class="skill-pill has-tooltip" data-tooltip={tooltip}>{item}</span>
               ) : (
                 <span class="skill-pill">{item}</span>
               );
