@@ -59,9 +59,12 @@ const badge = badges[lang] || badges.en;
       dockerCmd="cd PAR && docker compose up -d"
       devCmd="cd PAR && make dev"
       lang={lang}
+      fallbackSelector="#par-mock-fallback"
       client:load
     />
 
-    <ParDemo lang={lang} client:visible />
+    <div id="par-mock-fallback">
+      <ParDemo lang={lang} client:visible />
+    </div>
   </div>
 </DemoLayout>
