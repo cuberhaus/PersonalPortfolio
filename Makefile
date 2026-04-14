@@ -8,6 +8,9 @@ default: help
 
 install: ## Install project dependencies
 	npm install
+	@command -v go >/dev/null 2>&1 || { echo "Installing Go..."; sudo apt-get update && sudo apt-get install -y golang-go; }
+	@. "$(HOME)/.local/share/cargo/env" 2>/dev/null; \
+	command -v cargo >/dev/null 2>&1 || { echo "Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; }
 
 dev: ## Start Astro dev server only (no backends)
 	npm run dev
@@ -42,10 +45,19 @@ test-all: test ## Run ALL test suites (portfolio + every demo backend)
 	cd "$(PARENT)/Draculin-Backend" && python manage.py test dracu -v2
 	@echo ""
 	@echo "=== Go (joc_eda) ==="
-	cd "$(PARENT)/joc_eda/web/backend-go" && go test -v ./...
+	@if command -v go >/dev/null 2>&1; then \
+		cd "$(PARENT)/joc_eda/web/backend-go" && go test -v ./...; \
+	else \
+		echo "SKIP: go not found"; \
+	fi
 	@echo ""
 	@echo "=== Rust (pracpro2) ==="
-	cd "$(PARENT)/pracpro2/web/backend" && cargo test --verbose
+	@. "$(HOME)/.local/share/cargo/env" 2>/dev/null; \
+	if command -v cargo >/dev/null 2>&1; then \
+		cd "$(PARENT)/pracpro2/web/backend" && cargo test --verbose; \
+	else \
+		echo "SKIP: cargo not found"; \
+	fi
 	@echo ""
 	@echo "=== JS (Planificacion) ==="
 	cd "$(PARENT)/Practica_de_Planificacion/web" && npx vitest run
