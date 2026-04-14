@@ -61,8 +61,6 @@ const badge = badges[lang] || badges.en;
       accentTo="#6366f1"
     />
 
-    <CAIMDemo lang={lang} client:visible />
-
     <LiveAppEmbed
       url="http://localhost:8086"
       title="CAIM IR Explorer"
@@ -72,6 +70,8 @@ const badge = badges[lang] || badges.en;
       fallbackSelector=".caim-mock"
       client:load
     />
+
+    <CAIMDemo lang={lang} client:visible />
 
     <div class="demo-info">
       <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
