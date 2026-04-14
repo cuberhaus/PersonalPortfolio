@@ -93,7 +93,7 @@ define build_if_changed
 endef
 
 DEMO_TARGETS := _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
-                _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia _db-par
+                _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia _db-par _db-rob
 
 _db-tfg:
 	$(call build_if_changed,tfg,$(PARENT)/TFG,TFG              :8082,\
@@ -134,6 +134,9 @@ _db-sbcia:
 _db-par:
 	$(call build_if_changed,par,$(PARENT)/PAR,PAR              :8089,\
 		docker compose -f "$(PARENT)/PAR/docker-compose.yml" build)
+_db-rob:
+	$(call build_if_changed,rob,$(PARENT)/ROB,ROB              :8092,\
+		docker compose -f "$(PARENT)/ROB/docker-compose.yml" build)
 
 docker-build-all: $(DEMO_TARGETS) ## Build Docker images for demos (skips unchanged, use -jN for parallel)
 	@echo "Done."

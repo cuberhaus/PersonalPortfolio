@@ -233,5 +233,20 @@
     "icon": "cpu",
     "github": "https://github.com/cuberhaus/PAR",
     "image": ""
+  },
+  {
+    "slug": "rob-robotics",
+    "title": "Robotics Dashboard",
+    "description": "Interactive robotics visualizations: mobile robot odometry replay, wall-following simulator, 3D robot arm FK (Puma560/3-Link), trajectory planner, sensor dashboard, and EKF state estimation — all with real lab data.",
+    "tags": [
+      "Ember.js",
+      "Babylon.js",
+      "Robotics",
+      "Canvas",
+      "EKF"
+    ],
+    "icon": "bot",
+    "github": "https://github.com/cuberhaus/ROB",
+    "image": ""
   }
 ]

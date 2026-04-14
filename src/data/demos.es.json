@@ -229,5 +229,20 @@
     "icon": "cpu",
     "github": "https://github.com/cuberhaus/PAR",
     "image": ""
+  },
+  {
+    "slug": "rob-robotics",
+    "title": "Panel de Robótica",
+    "description": "Visualizaciones interactivas de robótica: replay de odometría móvil, simulador de seguimiento de paredes, cinemática directa 3D (Puma560/3-Link), planificador de trayectorias, dashboard de sensores y estimación de estado EKF — todo con datos reales de laboratorio.",
+    "tags": [
+      "Ember.js",
+      "Babylon.js",
+      "Robótica",
+      "Canvas",
+      "EKF"
+    ],
+    "icon": "bot",
+    "github": "https://github.com/cuberhaus/ROB",
+    "image": ""
   }
 ]

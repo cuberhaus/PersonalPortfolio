@@ -36,6 +36,7 @@ CAIM_DIR="$(cd "$PORTFOLIO/../CAIM" 2>/dev/null && pwd)" || CAIM_DIR=""
 JOCEDA_DIR="$(cd "$PORTFOLIO/../joc_eda" 2>/dev/null && pwd)" || JOCEDA_DIR=""
 SBCIA_DIR="$(cd "$PORTFOLIO/../SBC_IA" 2>/dev/null && pwd)" || SBCIA_DIR=""
 PAR_DIR="$(cd "$PORTFOLIO/../PAR" 2>/dev/null && pwd)" || PAR_DIR=""
+ROB_DIR="$(cd "$PORTFOLIO/../ROB" 2>/dev/null && pwd)" || ROB_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
@@ -50,6 +51,7 @@ CAIM_UP=0
 JOCEDA_UP=0
 SBCIA_UP=0
 PAR_UP=0
+ROB_UP=0
 PLANNER_PID=""
 PROP_PID=""
 
@@ -119,6 +121,10 @@ cleanup() {
   if [[ "$PAR_UP" == 1 ]] && [[ -f "${PAR_DIR}/docker-compose.yml" ]]; then
     echo "Stopping PAR stack (docker compose down)..."
     (cd "$PAR_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$ROB_UP" == 1 ]] && [[ -f "${ROB_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping ROB stack (docker compose down)..."
+    (cd "$ROB_DIR" && docker compose down) >/dev/null 2>&1 || true
   fi
   exit "$ec"
 }
@@ -282,6 +288,18 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       fi
     else
       echo "==> PAR skipped (no ../PAR/docker-compose.yml)"
+    fi
+
+    # ROB — Ember.js + Babylon.js robotics dashboard
+    if [[ -f "${ROB_DIR}/docker-compose.yml" ]]; then
+      echo "==> ROB              http://localhost:8092  (docker compose)"
+      if (cd "$ROB_DIR" && docker compose up -d); then
+        ROB_UP=1
+      else
+        echo "    warning: ROB docker compose failed" >&2
+      fi
+    else
+      echo "==> ROB skipped (no ../ROB/docker-compose.yml)"
     fi
   fi
   echo ""

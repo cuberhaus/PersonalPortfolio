@@ -1,0 +1,70 @@
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+import DemoHeader from '../../components/DemoHeader.astro';
+import RobDemo from '../../components/demos/RobDemo';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const titles = {
+  en: "Robotics Dashboard",
+  es: "Panel de Robótica",
+  ca: "Panell de Robòtica"
+};
+
+const leads = {
+  en: "Six interactive <strong>robotics</strong> visualizations built with <strong>Ember.js</strong> and <strong>Babylon.js</strong>: mobile robot odometry replay with laser scans, wall-following controller simulation, 3D robot arm forward kinematics (Puma560/3-Link), trajectory planning, real sensor data dashboard, and <strong>EKF</strong> state estimation with covariance ellipses.",
+  es: "Seis visualizaciones interactivas de <strong>robótica</strong> con <strong>Ember.js</strong> y <strong>Babylon.js</strong>: reproducción de odometría móvil con escáneres láser, simulación de seguimiento de paredes, cinemática directa 3D de brazos robóticos (Puma560/3-Link), planificación de trayectorias, dashboard de sensores reales y estimación de estado <strong>EKF</strong> con elipses de covarianza.",
+  ca: "Sis visualitzacions interactives de <strong>robòtica</strong> amb <strong>Ember.js</strong> i <strong>Babylon.js</strong>: reproducció d'odometria mòbil amb escàners làser, simulació de seguiment de parets, cinemàtica directa 3D de braços robòtics (Puma560/3-Link), planificació de trajectòries, dashboard de sensors reals i estimació d'estat <strong>EKF</strong> amb el·lipses de covariança."
+};
+
+const badges = {
+  en: "Robotics · Ember.js + Babylon.js + Canvas · FIB-UPC",
+  es: "Robótica · Ember.js + Babylon.js + Canvas · FIB-UPC",
+  ca: "Robòtica · Ember.js + Babylon.js + Canvas · FIB-UPC"
+};
+
+const metaDescs = {
+  en: "Interactive robotics dashboard: mobile robot odometry, wall-following, 3D robot arm FK, trajectory planning, sensor data, and EKF state estimation.",
+  es: "Panel interactivo de robótica: odometría, seguimiento de paredes, cinemática directa 3D, sensores y EKF.",
+  ca: "Panell interactiu de robòtica: odometria, seguiment de parets, cinemàtica directa 3D, sensors i EKF."
+};
+
+const title = titles[lang] || titles.en;
+const lead = leads[lang] || leads.en;
+const badge = badges[lang] || badges.en;
+---
+
+<DemoLayout
+  title={title}
+  description={metaDescs[lang] || metaDescs.en}
+  slug="rob-robotics"
+>
+  <div class="container">
+    <DemoHeader
+      badge={badge}
+      title={title}
+      lead={lead}
+      githubUrl="https://github.com/cuberhaus/ROB"
+      githubLabel={t('demo.viewSource')}
+      accentFrom="#4dabf7"
+      accentTo="#69db7c"
+    />
+
+    <LiveAppEmbed
+      url="http://localhost:8092"
+      title="ROB Robotics Dashboard"
+      dockerCmd="cd ROB && docker compose up -d"
+      devCmd="cd ROB && make dev"
+      lang={lang}
+      fallbackSelector="#rob-mock-fallback"
+      client:load
+    />
+
+    <div id="rob-mock-fallback">
+      <RobDemo lang={lang} client:visible />
+    </div>
+  </div>
+</DemoLayout>
