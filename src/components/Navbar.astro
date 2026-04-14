@@ -11,6 +11,7 @@ const links = [
   { label: t('nav.projects'), href: '#projects' },
   { label: t('nav.skills'), href: '#skills' },
   { label: t('nav.experience'), href: '#experience' },
+  { label: t('work.label'), href: '#work' },
   { label: t('nav.education'), href: '#education' },
   { label: t('nav.contact'), href: '#contact' },
 ];
@@ -20,7 +21,7 @@ const links = [
   <div class="nav-inner container">
     <a href="#hero" class="nav-logo gradient-text">Pol C.</a>
 
-    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+    <button class="nav-toggle" aria-label={t('aria.toggleMenu')} aria-expanded="false" aria-controls="nav-links">
       <span class="hamburger"></span>
     </button>
 
@@ -169,8 +170,9 @@ const links = [
       padding: 1rem 0;
       transform: translateY(-100%);
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
-      transition: transform var(--transition-base), opacity var(--transition-base);
+      transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s var(--transition-base);
     }
     
     .nav-theme-toggle {
@@ -185,7 +187,9 @@ const links = [
     .nav-links.open {
       transform: translateY(0);
       opacity: 1;
+      visibility: visible;
       pointer-events: auto;
+      transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s;
     }
 
     .nav-links li {
@@ -223,18 +227,36 @@ const links = [
     // Initial check
     scrollHandler();
 
-    toggle?.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!expanded));
-      links?.classList.toggle('open');
-    });
+    const closeMenu = () => {
+      toggle?.setAttribute('aria-expanded', 'false');
+      links?.classList.remove('open');
+    };
 
-    links?.querySelectorAll('.nav-link').forEach((link) => {
-      link.addEventListener('click', () => {
-        toggle?.setAttribute('aria-expanded', 'false');
-        links?.classList.remove('open');
+    if (toggle && !toggle.hasAttribute('data-initialized')) {
+      toggle.setAttribute('data-initialized', 'true');
+      toggle.addEventListener('click', () => {
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!expanded));
+        links?.classList.toggle('open');
       });
-    });
+    }
+
+    if (links && !links.hasAttribute('data-links-init')) {
+      links.setAttribute('data-links-init', 'true');
+      links.querySelectorAll('.nav-link').forEach((link) => {
+        link.addEventListener('click', closeMenu);
+      });
+    }
+
+    if (navbar && !navbar.hasAttribute('data-esc-init')) {
+      navbar.setAttribute('data-esc-init', 'true');
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && links?.classList.contains('open')) {
+          closeMenu();
+          toggle?.focus();
+        }
+      });
+    }
 
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');

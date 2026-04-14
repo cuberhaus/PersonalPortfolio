@@ -2,7 +2,20 @@ node_modules/
 dist/
 .astro/
 verification-screenshots/
+coverage/
+
+.build-stamps/
+
+.env
+.env.*
+.DS_Store
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
 
 # planner-api (Python)
 planner-api/.venv/
 planner-api/**/__pycache__/
+planner-api/**/.pytest_cache/

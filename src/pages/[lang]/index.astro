@@ -6,9 +6,11 @@ import About from '../../components/About.astro';
 import Demos from '../../components/Demos.astro';
 import Skills from '../../components/Skills.astro';
 import Experience from '../../components/Experience.astro';
+import WorkProjects from '../../components/WorkProjects.astro';
 import Education from '../../components/Education.astro';
 import Contact from '../../components/Contact.astro';
 import Footer from '../../components/Footer.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 export function getStaticPaths() {
   return [
@@ -16,9 +18,12 @@ export function getStaticPaths() {
     { params: { lang: 'ca' } }
   ];
 }
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<Layout>
+<Layout title={t('meta.title')} description={t('meta.description')}>
   <Navbar />
   <main id="main-content">
     <Hero />
@@ -26,6 +31,7 @@ export function getStaticPaths() {
     <Demos />
     <Skills />
     <Experience />
+    <WorkProjects />
     <Education />
     <Contact />
   </main>

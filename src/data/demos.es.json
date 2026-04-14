@@ -44,6 +44,18 @@
     "image": ""
   },
   {
+    "slug": "matriculas",
+    "title": "Detección de Matrículas",
+    "description": "Detecta y lee matrículas de coches a partir de imágenes usando visión por computadora — un pipeline de MATLAB portado al navegador.",
+    "tags": [
+      "Computer Vision",
+      "TypeScript"
+    ],
+    "icon": "camera",
+    "github": "https://github.com/cuberhaus/SPMatriculas",
+    "image": ""
+  },
+  {
     "slug": "joc-eda",
     "title": "Visor de Juego de Programación",
     "description": "Observa a bots de IA luchar en una cuadrícula — guerreros, constructores, armas y estrategia. Visor de repeticiones para la competición de juego de programación de Estructuras de Datos y Algoritmos.",
@@ -54,19 +66,6 @@
     ],
     "icon": "gamepad",
     "github": "https://github.com/cuberhaus/joc_eda",
-    "image": ""
-  },
-  {
-    "slug": "pro2",
-    "title": "Clustering WPGMA",
-    "description": "Construye árboles filogenéticos paso a paso. Introduce especies con secuencias genéticas y observa cómo el algoritmo WPGMA fusiona clústeres en un dendrograma.",
-    "tags": [
-      "TypeScript",
-      "Algorithms",
-      "D3"
-    ],
-    "icon": "tree",
-    "github": "https://github.com/cuberhaus/pracpro2",
     "image": ""
   },
   {
@@ -96,15 +95,16 @@
     "image": ""
   },
   {
-    "slug": "matriculas",
-    "title": "Detección de Matrículas",
-    "description": "Detecta y lee matrículas de coches a partir de imágenes usando visión por computadora — un pipeline de MATLAB portado al navegador.",
+    "slug": "pro2",
+    "title": "Clustering WPGMA",
+    "description": "Construye árboles filogenéticos paso a paso. Introduce especies con secuencias genéticas y observa cómo el algoritmo WPGMA fusiona clústeres en un dendrograma.",
     "tags": [
-      "Computer Vision",
-      "TypeScript"
+      "TypeScript",
+      "Algorithms",
+      "D3"
     ],
-    "icon": "camera",
-    "github": "https://github.com/cuberhaus/SPMatriculas",
+    "icon": "tree",
+    "github": "https://github.com/cuberhaus/pracpro2",
     "image": ""
   },
   {
@@ -185,6 +185,34 @@
     ],
     "icon": "server",
     "github": "https://github.com/cuberhaus/subgrup-prop7.1",
+    "image": ""
+  },
+  {
+    "slug": "caim",
+    "title": "Explorador IR — CAIM",
+    "description": "Explorador interactivo de recuperación de información: PageRank sobre la red global de aeropuertos con visualización en mapa mundial, y análisis de la Ley de Zipf con ajuste de curvas en corpus de texto.",
+    "tags": [
+      "Vanilla TS",
+      "D3.js",
+      "FastAPI",
+      "PageRank"
+    ],
+    "icon": "search",
+    "github": "https://github.com/cuberhaus/CAIM",
+    "image": ""
+  },
+  {
+    "slug": "sbc-ia",
+    "title": "Planificador de Viajes (Sistema Experto)",
+    "description": "Un sistema experto de planificación de viajes: responde 10 preguntas sobre tus preferencias y obtén un itinerario completo con ciudades, hoteles, actividades, transporte y coste. Reimplementa reglas CLIPS en Python.",
+    "tags": [
+      "HTMX",
+      "Alpine.js",
+      "Litestar",
+      "Expert System"
+    ],
+    "icon": "map",
+    "github": "https://github.com/cuberhaus/SBC_IA",
     "image": ""
   }
 ]

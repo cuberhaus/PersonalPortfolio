@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { interpret, playNotes, SAMPLE_PROGRAMS, type JSBachResult } from "../../lib/jsbach/interpreter";
 
 type Lang = "en" | "es" | "ca";
@@ -75,7 +75,7 @@ const styles = {
     transition: "all 0.15s ease",
   },
   primaryBtn: {
-    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
     color: "var(--text-primary)",
   },
   secondaryBtn: {
@@ -157,6 +157,13 @@ export default function JSBachDemo({ lang = "en" }: { lang?: Lang }) {
   const [playing, setPlaying] = useState(false);
   const [activeNote, setActiveNote] = useState(-1);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const playbackTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  useEffect(() => {
+    return () => {
+      playbackTimeoutsRef.current.forEach(clearTimeout);
+    };
+  }, []);
 
   const run = useCallback(() => {
     const r = interpret(code);
@@ -171,10 +178,17 @@ export default function JSBachDemo({ lang = "en" }: { lang?: Lang }) {
     const tempo = 120;
     const beatMs = (60 / tempo) * 1000;
 
+    playbackTimeoutsRef.current.forEach(clearTimeout);
+    playbackTimeoutsRef.current = [];
+
     result.notes.forEach((_, i) => {
-      setTimeout(() => setActiveNote(i), i * beatMs);
+      playbackTimeoutsRef.current.push(
+        setTimeout(() => setActiveNote(i), i * beatMs)
+      );
     });
-    setTimeout(() => setActiveNote(-1), result.notes.length * beatMs);
+    playbackTimeoutsRef.current.push(
+      setTimeout(() => setActiveNote(-1), result.notes.length * beatMs)
+    );
 
     await playNotes(result.notes, tempo);
     setPlaying(false);

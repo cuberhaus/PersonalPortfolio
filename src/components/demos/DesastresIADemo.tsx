@@ -72,7 +72,14 @@ const TRANSLATIONS = {
     finalQueues: "Final queues",
     initialState: "Initial state breakdown & raw log",
     compact: "Compact:",
-    ghRepo: "GitHub repo \u2197"
+    ghRepo: "GitHub repo \u2197",
+    webAppTitle: "Full Web App",
+    webAppDesc: "Run the Docker container to access the full interactive solver with all features below.",
+    webAppFeatures: [
+      { icon: "\uD83D\uDDFA\uFE0F", title: "2D Map Solver", desc: "Interactive Canvas map with helicopter routes, group tooltips, and color-coded assignments" },
+      { icon: "\uD83D\uDCCA", title: "Experiment Dashboard", desc: "Batch-run across seed ranges with boxplot comparisons of all algorithm configurations" },
+      { icon: "\u2699\uFE0F", title: "Full Configuration", desc: "All 3 heuristics, 6 successor functions, 3 initial states, and tunable SA parameters" },
+    ],
   },
   es: {
     pipeline: [
@@ -128,7 +135,14 @@ const TRANSLATIONS = {
     finalQueues: "Colas finales",
     initialState: "Desglose estado inicial y log crudo",
     compact: "Compacto:",
-    ghRepo: "Repositorio en GitHub \u2197"
+    ghRepo: "Repositorio en GitHub \u2197",
+    webAppTitle: "Web App completa",
+    webAppDesc: "Ejecuta el contenedor Docker para acceder al solucionador interactivo completo con todas las funcionalidades.",
+    webAppFeatures: [
+      { icon: "\uD83D\uDDFA\uFE0F", title: "Mapa 2D interactivo", desc: "Mapa Canvas con rutas de helicópteros, tooltips de grupos y asignaciones por color" },
+      { icon: "\uD83D\uDCCA", title: "Panel de experimentos", desc: "Ejecución por lotes con comparaciones boxplot de todas las configuraciones" },
+      { icon: "\u2699\uFE0F", title: "Configuración completa", desc: "3 heurísticos, 6 funciones sucesoras, 3 estados iniciales y parámetros SA ajustables" },
+    ],
   },
   ca: {
     pipeline: [
@@ -184,7 +198,14 @@ const TRANSLATIONS = {
     finalQueues: "Cues finals",
     initialState: "Desglossament estat inicial i log cru",
     compact: "Compacte:",
-    ghRepo: "Repositori a GitHub \u2197"
+    ghRepo: "Repositori a GitHub \u2197",
+    webAppTitle: "Web App completa",
+    webAppDesc: "Executa el contenidor Docker per accedir al solucionador interactiu complet amb totes les funcionalitats.",
+    webAppFeatures: [
+      { icon: "\uD83D\uDDFA\uFE0F", title: "Mapa 2D interactiu", desc: "Mapa Canvas amb rutes d'helicòpters, tooltips de grups i assignacions per color" },
+      { icon: "\uD83D\uDCCA", title: "Tauler d'experiments", desc: "Execució per lots amb comparacions boxplot de totes les configuracions" },
+      { icon: "\u2699\uFE0F", title: "Configuració completa", desc: "3 heurístics, 6 funcions successores, 3 estats inicials i paràmetres SA ajustables" },
+    ],
   }
 };
 
@@ -193,7 +214,7 @@ const card = {
   background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "1rem", padding: "1.5rem",
 } as const;
 
-const accent1 = "#6366f1";
+const accent1 = "var(--accent-start)";
 const accent2 = "#22c55e";
 
 function formatAssign(a: Assignment): string {
@@ -227,7 +248,7 @@ function SchematicSvg({ t }: { t: typeof TRANSLATIONS.en }) {
         { x: 220, y: 130, label: `${t.center} 2` },
       ].map((c, i) => (
         <g key={i}>
-          <ellipse cx={c.x + 30} cy={c.y + 22} rx="38" ry="26" fill="var(--bg-secondary)" stroke="#6366f1" strokeWidth="1.5" />
+          <ellipse cx={c.x + 30} cy={c.y + 22} rx="38" ry="26" fill="var(--bg-secondary)" stroke="var(--accent-start)" strokeWidth="1.5" />
           <text x={c.x + 30} y={c.y + 25} textAnchor="middle" fill="var(--text-primary)" fontSize="10" fontWeight="600">{c.label}</text>
         </g>
       ))}
@@ -307,6 +328,38 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
         </div>
       </div>
 
+      {/* ── WEB APP FEATURES ── */}
+      <div style={{
+        ...card, marginBottom: "1.25rem",
+        background: "linear-gradient(135deg, rgba(99,102,241,0.08), rgba(34,197,94,0.06))",
+        border: "1px solid rgba(99,102,241,0.25)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+          <span style={{ fontSize: "1.1rem" }}>🚁</span>
+          <h4 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.webAppTitle}</h4>
+          <span style={{
+            padding: "0.15rem 0.45rem", borderRadius: "0.3rem", fontSize: "0.6rem", fontWeight: 700,
+            background: "linear-gradient(135deg, #6366f1, #22c55e)", color: "#fff",
+            letterSpacing: "0.05em", textTransform: "uppercase" as const,
+          }}>Solid.js + FastAPI</span>
+        </div>
+        <p style={{ margin: "0 0 0.75rem", fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
+          {t.webAppDesc}
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.5rem" }}>
+          {t.webAppFeatures.map((f, i) => (
+            <div key={i} style={{
+              padding: "0.65rem 0.75rem", background: "var(--bg-secondary)", borderRadius: "0.5rem",
+              border: "1px solid var(--border-color)",
+            }}>
+              <div style={{ fontSize: "1rem", marginBottom: "0.2rem" }}>{f.icon}</div>
+              <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "0.15rem" }}>{f.title}</div>
+              <div style={{ fontSize: "0.68rem", color: "var(--text-muted)", lineHeight: 1.4 }}>{f.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ── SCHEMATIC + PROBLEM OVERVIEW ── */}
       <div style={{
         display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
@@ -328,7 +381,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
             {t.heuristics.map((h) => (
               <div key={h.name} style={{
                 padding: "0.6rem 0.75rem", background: "var(--bg-secondary)", borderRadius: "0.5rem",
-                border: h.active ? "1px solid rgba(99,102,241,0.4)" : "1px solid var(--border-color)",
+                border: h.active ? "1px solid color-mix(in srgb, var(--accent-start) 40%, transparent)" : "1px solid var(--border-color)",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.2rem" }}>
                   <span style={{
@@ -337,7 +390,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
                   }}>{h.name}</span>
                   {h.active && <span style={{
                     fontSize: "0.55rem", padding: "0.1rem 0.35rem", borderRadius: "0.25rem",
-                    background: "rgba(99,102,241,0.2)", color: "#a5b4fc", fontWeight: 600,
+                    background: "var(--glow-color)", color: "#a5b4fc", fontWeight: 600,
                   }}>{t.usedInDemo}</span>}
                 </div>
                 <div style={{ fontSize: "0.75rem", color: h.active ? "var(--text-primary)" : "var(--text-muted)", lineHeight: 1.4 }}>{h.desc}</div>
@@ -367,13 +420,13 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
         ...card, marginBottom: "1.25rem",
         background: "linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-card) 100%)",
         border: "1px solid var(--border-color)",
-        boxShadow: "0 4px 24px rgba(99, 102, 241, 0.08)",
+        boxShadow: "0 4px 24px color-mix(in srgb, var(--accent-start) 8%, transparent)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", flexWrap: "wrap" }}>
           <div style={{
             width: 32, height: 32, borderRadius: "0.5rem", display: "flex", alignItems: "center",
             justifyContent: "center", fontSize: "1rem",
-            background: `linear-gradient(135deg, rgba(99,102,241,0.15), rgba(34,197,94,0.1))`,
+            background: `linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), rgba(34,197,94,0.1))`,
           }}>⚡</div>
           <div>
             <h3 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 700 }}>{t.runDemo}</h3>
@@ -384,7 +437,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
         </div>
 
         <div style={{
-          padding: "0.75rem 0.85rem", background: "rgba(99,102,241,0.06)", border: "1px solid rgba(129,140,248,0.2)",
+          padding: "0.75rem 0.85rem", background: "color-mix(in srgb, var(--accent-start) 6%, transparent)", border: "1px solid rgba(129,140,248,0.2)",
           borderRadius: "0.5rem", marginBottom: "1rem", fontSize: "0.78rem", lineHeight: 1.55, color: "var(--text-secondary)",
         }}>
           <strong style={{ color: "var(--text-primary)" }}>{t.howItWorks}</strong>{t.howDesc1}

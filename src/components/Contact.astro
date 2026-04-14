@@ -47,7 +47,7 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
           </svg>
         </button>
-        <p id="form-result" class="form-result"></p>
+        <p id="form-result" class="form-result" role="status" aria-live="polite"></p>
       </form>
     </div>
 
@@ -73,7 +73,7 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
   </div>
 </section>
 
-<script define:vars={{ successMsg: t('contact.success'), errorMsg: t('contact.error'), sendMsg: t('contact.cta') }}>
+<script define:vars={{ successMsg: t('contact.success'), errorMsg: t('contact.error'), invalidEmailMsg: t('contact.invalidEmail'), sendMsg: t('contact.cta'), sendingMsg: t('contact.sending'), didYouMeanMsg: t('contact.didYouMean') }}>
   const initForm = () => {
     const form = document.getElementById('contact-form');
     const result = document.getElementById('form-result');
@@ -86,10 +86,41 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
         e.preventDefault();
         const formData = new FormData(form);
         const object = Object.fromEntries(formData);
+        
+        // Email validation
+        const email = object.email.toString().trim().toLowerCase();
+        // Check standard valid format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        // Common typo domains
+        const typos = {
+          'ail.com': 'gmail.com', 'gmil.com': 'gmail.com', 'gamil.com': 'gmail.com', 'gmai.com': 'gmail.com',
+          'gmail.co': 'gmail.com', 'gmail.con': 'gmail.com',
+          'hotmai.com': 'hotmail.com', 'hotmil.com': 'hotmail.com',
+          'yaho.com': 'yahoo.com', 'outloo.com': 'outlook.com'
+        };
+        
+        const domain = email.split('@')[1];
+
+        if (!emailRegex.test(email) || typos[domain]) {
+          if (result) {
+            if (typos[domain]) {
+               const safeLocal = email.split('@')[0].replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+               result.innerHTML = `${didYouMeanMsg} <b>${safeLocal}@${typos[domain]}</b>?`;
+            } else {
+               result.innerHTML = invalidEmailMsg;
+            }
+            result.classList.remove("success");
+            result.classList.add("error");
+            result.style.display = "block";
+          }
+          return;
+        }
+
         const json = JSON.stringify(object);
 
         if (result) result.style.display = "none";
-        if (btnText) btnText.innerHTML = "Sending...";
+        if (btnText) btnText.innerHTML = sendingMsg;
         if (btn) btn.style.opacity = "0.7";
         if (btn) btn.style.pointerEvents = "none";
 
@@ -112,7 +143,6 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
             }
             form.reset();
           } else {
-            console.log(response);
             if (result) {
               result.innerHTML = errorMsg;
               result.classList.remove("success");
@@ -121,8 +151,7 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
             }
           }
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
           if (result) {
             result.innerHTML = errorMsg;
             result.classList.remove("success");
@@ -199,6 +228,11 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
     transition: all var(--transition-base);
   }
 
+  .form-group textarea {
+    resize: none;
+    min-height: 140px;
+  }
+
   .form-group input::placeholder,
   .form-group textarea::placeholder {
     color: var(--text-muted);
@@ -208,7 +242,7 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
   .form-group textarea:focus {
     outline: none;
     border-color: var(--accent-start);
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 0 2px var(--glow-color);
   }
 
   .contact-submit {
@@ -230,7 +264,7 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
 
   .contact-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 30px var(--glow-color-strong);
   }
 
   .contact-submit svg {

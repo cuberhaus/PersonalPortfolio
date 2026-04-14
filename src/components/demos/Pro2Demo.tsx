@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
+import LiveAppEmbed from "./LiveAppEmbed";
 import {
   type Species,
   type ClusterState,
@@ -193,7 +194,7 @@ const styles = {
     transition: "all 0.15s ease",
   },
   primaryBtn: {
-    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
     color: "var(--text-primary)",
   },
   secondaryBtn: {
@@ -244,7 +245,7 @@ const styles = {
     padding: "0.75rem 1rem",
     fontSize: "0.85rem",
     marginBottom: "1rem",
-    borderLeft: "3px solid #6366f1",
+    borderLeft: "3px solid var(--accent-start)",
   },
 } as const;
 
@@ -343,19 +344,27 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
 
   return (
     <div style={styles.wrapper}>
+      <LiveAppEmbed
+        url="http://localhost:8000"
+        title="PRO2 Phylogenetic Tree Web App"
+        dockerCmd="cd pracpro2 && make docker-run"
+        devCmd="cd pracpro2 && make dev"
+        lang={lang}
+      />
+
       {/* How it works */}
       <div style={{
         ...styles.card,
-        borderLeft: "3px solid #6366f1",
-        background: "linear-gradient(135deg, rgba(99,102,241,0.05), rgba(168,85,247,0.03))",
+        borderLeft: "3px solid var(--accent-start)",
+        background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 5%, transparent), color-mix(in srgb, var(--accent-end) 3%, transparent))",
       }}>
         <h3 style={{ ...styles.h3, marginBottom: "0.75rem" }}>{t.howItWorks}</h3>
         <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.8 }}>
           <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "var(--text-primary)" }}>{t.step1}</strong>{t.step1Desc1}<strong style={{ color: "#a855f7" }}>{t.step1Desc2}</strong>{t.step1Desc3}<strong style={{ color: "#a855f7" }}>{t.step1Desc4}</strong>{t.step1Desc5}
+            <strong style={{ color: "var(--text-primary)" }}>{t.step1}</strong>{t.step1Desc1}<strong style={{ color: "var(--accent-end)" }}>{t.step1Desc2}</strong>{t.step1Desc3}<strong style={{ color: "var(--accent-end)" }}>{t.step1Desc4}</strong>{t.step1Desc5}
           </p>
           <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "var(--text-primary)" }}>{t.step2}</strong>{t.step2Desc1}<strong style={{ color: "#a855f7" }}>{t.step2Desc2}</strong>{t.step2Desc3}<em>{t.step2Desc4}</em>{t.step2Desc5}
+            <strong style={{ color: "var(--text-primary)" }}>{t.step2}</strong>{t.step2Desc1}<strong style={{ color: "var(--accent-end)" }}>{t.step2Desc2}</strong>{t.step2Desc3}<em>{t.step2Desc4}</em>{t.step2Desc5}
           </p>
           <p style={{ marginBottom: "0.5rem" }}>
             <strong style={{ color: "var(--text-primary)" }}>{t.step3}</strong>{t.step3Desc1}<em>{t.step3Desc2}</em>{t.step3Desc3}<em>{t.step3Desc4}</em>{t.step3Desc5}
@@ -388,7 +397,7 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
               <tbody>
                 {species.map((s) => (
                   <tr key={s.id}>
-                    <td style={{ ...styles.td, fontWeight: 600, color: "#a855f7" }}>{s.id}</td>
+                    <td style={{ ...styles.td, fontWeight: 600, color: "var(--accent-end)" }}>{s.id}</td>
                     <td style={{
                       ...styles.td,
                       fontFamily: "monospace",
@@ -564,10 +573,10 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
               {history.map((step, i) => (
                 <div key={i} style={styles.stepInfo}>
                   <strong>{t.stepWord} {i + 1}:</strong> {t.merged}{" "}
-                  <span style={{ color: "#a855f7" }}>{step.merged.id1}</span>{" "}
+                  <span style={{ color: "var(--accent-end)" }}>{step.merged.id1}</span>{" "}
                   +{" "}
-                  <span style={{ color: "#a855f7" }}>{step.merged.id2}</span>{" "}
-                  → <span style={{ color: "#6366f1" }}>{step.merged.newId}</span>{" "}
+                  <span style={{ color: "var(--accent-end)" }}>{step.merged.id2}</span>{" "}
+                  → <span style={{ color: "var(--accent-start)" }}>{step.merged.newId}</span>{" "}
                   ({t.distanceWord} {step.merged.distance.toFixed(2)})
                 </div>
               ))}
@@ -714,7 +723,7 @@ function Dendrogram({ tree }: { tree: TreeNode }) {
           y1={l.y1}
           x2={l.x2}
           y2={l.y2}
-          stroke="#6366f1"
+          stroke="var(--accent-start)"
           strokeWidth={2}
         />
       ))}

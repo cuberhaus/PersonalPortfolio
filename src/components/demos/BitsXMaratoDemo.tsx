@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef, useId, useMemo } from "react";
+import LiveAppEmbed from "./LiveAppEmbed";
 
 /* ── frame data ── */
 const FRAME = { w: 472, h: 296, maskPolygon: "2,205 470,185 470,215 2,236" };
@@ -202,10 +203,9 @@ const accent1 = "#be123c"; // rose
 const accent2 = "#0ea5e9"; // sky
 
 /* ── diameter zones ── */
+import { diameterZone as _diameterZone } from "../../lib/bitsx-diameter";
 function diameterZone(mm: number, t: typeof TRANSLATIONS.en) {
-  if (mm < 30) return { label: t.diameterZones.typical.label, color: "#22c55e", detail: t.diameterZones.typical.detail };
-  if (mm < 45) return { label: t.diameterZones.followup.label, color: "#eab308", detail: t.diameterZones.followup.detail };
-  return { label: t.diameterZones.concern.label, color: "#ef4444", detail: t.diameterZones.concern.detail };
+  return _diameterZone(mm, t.diameterZones);
 }
 
 /* ════════════════════════════════════════════════════════════════════════ */
@@ -372,6 +372,13 @@ export default function BitsXMaratoDemo({ lang = "en" }: { lang?: Lang }) {
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
+      <LiveAppEmbed
+        url="http://localhost:8001"
+        title="Aorta Viewer — bitsXlaMarato"
+        dockerCmd="cd bitsXlaMarato && docker compose up"
+        devCmd="cd bitsXlaMarato && make dev"
+        lang={lang}
+      />
 
       {/* ── PIPELINE STRIP ── */}
       <div style={{

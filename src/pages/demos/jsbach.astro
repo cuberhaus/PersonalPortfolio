@@ -1,9 +1,11 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
+import DemoHeader from '../../components/DemoHeader.astro';
 import JSBachDemo from '../../components/demos/JSBachDemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const titles = {
   en: "JSBach Interpreter",
@@ -41,10 +43,10 @@ const aboutDesc = {
   ca: "Originalment construït amb ANTLR4 i Python per a un curs de compiladors a la FIB-UPC. El llenguatge suporta procediments, recursió, aritmètica, llistes, condicionals, bucles i reproducció de notes musicals. Aquesta versió per a navegador utilitza un parser escrit a mà i la Web Audio API per a la síntesi de so."
 };
 
-const viewSource = {
-  en: "View source on GitHub",
-  es: "Ver código en GitHub",
-  ca: "Veure codi a GitHub"
+const metaDescs = {
+  en: "Write and play music with the JSBach programming language, right in your browser.",
+  es: "Escribe y reproduce música con el lenguaje de programación JSBach, directamente en tu navegador.",
+  ca: "Escriu i reprodueix música amb el llenguatge de programació JSBach, directament al teu navegador."
 };
 
 const title = titles[lang] || titles.en;
@@ -53,35 +55,26 @@ const badge = badges[lang] || badges.en;
 const hint = hints[lang] || hints.en;
 ---
 
-<DemoLayout title={title} description="Write and play music with the JSBach programming language, right in your browser.">
+<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="jsbach">
   <div class="container">
-    <div class="demo-header">
-      <div class="badge">{badge}</div>
-      <h1>{title}</h1>
-      <p class="demo-lead" set:html={lead} />
+    <DemoHeader
+      badge={badge}
+      title={title}
+      lead={lead}
+      githubUrl="https://github.com/cuberhaus/ANTLR4_JSBach"
+      githubLabel={t('demo.viewSource')}
+      accentFrom="#f59e0b"
+      accentTo="#f97316"
+    >
       <div class="syntax-hints">
         <code>&lt;:&gt; C4</code> {hint[0]} &nbsp;
         <code>&lt;!&gt; "text"</code> {hint[1]} &nbsp;
         <code>x &lt;- 5</code> {hint[2]} &nbsp;
         <code>|: ... :|</code> {hint[3]}
       </div>
-      <div class="demo-header-actions">
-        {(() => {
-          const vs = { en: "View Source on GitHub", es: "Ver código en GitHub", ca: "Veure codi a GitHub" };
-          return (
-            <a href="https://github.com/cuberhaus/ANTLR4_JSBach" class="demo-header-github" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
-                <path d="M9 18c-4.51 2-5-2-7-2"/>
-              </svg>
-              {vs[lang] || vs.en}
-            </a>
-          );
-        })()}
-      </div>
-    </div>
+    </DemoHeader>
 
-    <JSBachDemo lang={lang} client:load />
+    <JSBachDemo lang={lang} client:visible />
 
     <div class="demo-info">
       <h3>{aboutTitle[lang] || aboutTitle.en}</h3>
@@ -92,43 +85,6 @@ const hint = hints[lang] || hints.en;
 </DemoLayout>
 
 <style>
-  .demo-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-  .badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.75rem;
-    border-radius: 2rem;
-    background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(249,115,22,0.1));
-    border: 1px solid rgba(245,158,11,0.25);
-    color: #f59e0b;
-    margin-bottom: 1rem;
-  }
-  .demo-header h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 800;
-    margin: 0 0 0.85rem;
-    background: linear-gradient(135deg, #f59e0b, #f97316);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .demo-lead {
-    color: var(--text-secondary);
-    max-width: 40rem;
-    margin: 0 auto 1.5rem;
-    line-height: 1.7;
-    font-size: 1rem;
-  }
-  .demo-lead strong { color: var(--text-primary, #e4e4e7); }
-
   .syntax-hints {
     display: flex;
     justify-content: center;
@@ -153,6 +109,9 @@ const hint = hints[lang] || hints.en;
     background: var(--bg-card);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .demo-info h3 { margin-bottom: 0.75rem; }

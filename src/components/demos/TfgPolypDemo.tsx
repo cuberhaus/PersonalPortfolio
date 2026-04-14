@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import modelData from "../../data/tfg-model-results.json";
+import LiveAppEmbed from "./LiveAppEmbed";
 
 /* ── constants ── */
 const accent1 = "#10b981"; // emerald
@@ -67,15 +68,15 @@ const TRANSLATIONS = {
       { name: "SSD Lite", backbone: "MobileNet V3", note: "Lightweight / mobile" },
     ],
     links: "Local Dashboard",
-    dashboard1: "The project includes a ",
-    dashboard2: "Streamlit dashboard",
-    dashboard3: " for interactive model exploration and inference. Clone the repo and run ",
-    dashboard4: " from ",
+    dashboard1: "The project includes a comprehensive ",
+    dashboard2: "React & FastAPI dashboard",
+    dashboard3: " for interactive model exploration, HPO, and generative augmentation. Clone the repo and run ",
+    dashboard4: " in the root directory.",
     author: "Author",
     runLocal: "\u25B8 Run the project locally",
     projDesc1: "The project is ",
     projDesc2: "Python + PyTorch",
-    projDesc3: ". A CUDA GPU is recommended for training. The Streamlit dashboard works on CPU.",
+    projDesc3: ". A CUDA GPU is recommended for training. The web dashboard works on CPU.",
     datasetNote1: "Place the LDPolypVideo dataset under ",
     datasetNote2: " and ",
   },
@@ -131,15 +132,15 @@ const TRANSLATIONS = {
       { name: "SSD Lite", backbone: "MobileNet V3", note: "Ligero / móvil" },
     ],
     links: "Dashboard local",
-    dashboard1: "El proyecto incluye un ",
-    dashboard2: "dashboard de Streamlit",
-    dashboard3: " para exploración e inferencia interactiva. Clona el repo y ejecuta ",
-    dashboard4: " desde ",
+    dashboard1: "El proyecto incluye un completo ",
+    dashboard2: "dashboard de React y FastAPI",
+    dashboard3: " para exploración de modelos, HPO y aumento de datos generativo. Clona el repo y ejecuta ",
+    dashboard4: " en el directorio raíz.",
     author: "Autor",
     runLocal: "\u25B8 Ejecutar el proyecto localmente",
     projDesc1: "El proyecto es ",
     projDesc2: "Python + PyTorch",
-    projDesc3: ". Se recomienda una GPU CUDA para entrenamiento. El dashboard funciona en CPU.",
+    projDesc3: ". Se recomienda una GPU CUDA para entrenamiento. El dashboard web funciona en CPU.",
     datasetNote1: "Coloca el dataset LDPolypVideo bajo ",
     datasetNote2: " y ",
   },
@@ -195,15 +196,15 @@ const TRANSLATIONS = {
       { name: "SSD Lite", backbone: "MobileNet V3", note: "Lleuger / mòbil" },
     ],
     links: "Tauler local",
-    dashboard1: "El projecte inclou un ",
-    dashboard2: "dashboard de Streamlit",
-    dashboard3: " per exploració i inferència interactiva. Clona el repo i executa ",
-    dashboard4: " des de ",
+    dashboard1: "El projecte inclou un complet ",
+    dashboard2: "dashboard de React i FastAPI",
+    dashboard3: " per exploració de models, HPO i augment de dades generatiu. Clona el repo i executa ",
+    dashboard4: " en el directori arrel.",
     author: "Autor",
     runLocal: "\u25B8 Executar el projecte localment",
     projDesc1: "El projecte és ",
     projDesc2: "Python + PyTorch",
-    projDesc3: ". Es recomana una GPU CUDA per entrenament. El dashboard funciona en CPU.",
+    projDesc3: ". Es recomana una GPU CUDA per entrenament. El dashboard web funciona en CPU.",
     datasetNote1: "Col·loca el dataset LDPolypVideo sota ",
     datasetNote2: " i ",
   }
@@ -333,10 +334,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  MOCK INFERENCE                                                        */
 /* ════════════════════════════════════════════════════════════════════════ */
-const MOCK_BOXES = [
-  { x: 35, y: 30, w: 22, h: 25, score: 0.94, label: "polyp" },
-  { x: 62, y: 55, w: 15, h: 18, score: 0.71, label: "polyp" },
-];
+import { MOCK_BOXES } from "../../lib/tfg-mock-boxes";
 
 function MockInference({ t }: { t: typeof TRANSLATIONS.en }) {
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
@@ -603,6 +601,14 @@ export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
+      <LiveAppEmbed
+        url="http://localhost:8082"
+        title="TFG Polyp Detection Dashboard"
+        dockerCmd="cd TFG && docker compose up"
+        devCmd="cd TFG && make run"
+        lang={lang}
+      />
+
       {/* Pipeline */}
       <PipelineStrip t={t} />
 
@@ -665,8 +671,7 @@ export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
             <h4 style={{ margin: "0 0 0.5rem", fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.links}</h4>
             <p style={{ margin: "0.5rem 0 0", fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
               {t.dashboard1}<strong style={{ color: "var(--text-secondary)" }}>{t.dashboard2}</strong>{t.dashboard3}
-              <code style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>streamlit run src/app.py</code>{t.dashboard4}
-              <code style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>code/</code>.
+              <code style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>docker compose up</code>{t.dashboard4}
             </p>
           </div>
           <div style={{ marginTop: "1.25rem" }}>

@@ -1,7 +1,11 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<button id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+<button id="theme-toggle" aria-label={t('aria.toggleTheme')} title={t('aria.toggleTheme')}>
   <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="5"></circle>
     <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -44,24 +48,33 @@
     display: none;
   }
 
-  :global([data-theme="light"]) .sun-icon {
+  :global([data-theme="light"]) .sun-icon,
+  :global([data-theme="nord-light"]) .sun-icon,
+  :global([data-theme="catppuccin-latte"]) .sun-icon,
+  :global([data-theme="solarized-light"]) .sun-icon {
     display: block;
   }
 
-  :global([data-theme="light"]) .moon-icon {
+  :global([data-theme="light"]) .moon-icon,
+  :global([data-theme="nord-light"]) .moon-icon,
+  :global([data-theme="catppuccin-latte"]) .moon-icon,
+  :global([data-theme="solarized-light"]) .moon-icon {
     display: none;
   }
 </style>
 
 <script>
+  const LIGHT_SCHEMES = ['light', 'nord-light', 'catppuccin-latte', 'solarized-light'];
+
   const initThemeToggle = () => {
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle && !themeToggle.hasAttribute('data-initialized')) {
       themeToggle.setAttribute('data-initialized', 'true');
       themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const isLight = LIGHT_SCHEMES.includes(current);
+        const newTheme = isLight ? 'dark' : 'light';
+
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
       });

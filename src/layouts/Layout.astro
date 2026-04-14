@@ -1,7 +1,8 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
-import { getLangFromUrl } from '../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import ScrollToTop from '../components/ScrollToTop.astro';
+import ThemeInit from '../components/ThemeInit.astro';
 import Analytics from '../components/Analytics.astro';
 
 interface Props {
@@ -15,6 +16,7 @@ const {
 } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 ---
 
@@ -26,23 +28,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
 
-    <script is:inline>
-      // Apply theme before render to prevent FOUC
-      const theme = (() => {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-          return 'light';
-        }
-        return 'dark';
-      })();
-      if (theme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
-    </script>
+    <ThemeInit position="head" />
 
     <!-- OpenGraph -->
     <meta property="og:type" content="website" />
@@ -52,27 +38,52 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     <meta property="og:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={Astro.url} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
 
+    <link rel="canonical" href={Astro.url} />
+    <link rel="alternate" hreflang="en" href={new URL(base + '/', Astro.site || Astro.url)} />
+    <link rel="alternate" hreflang="es" href={new URL(base + '/es/', Astro.site || Astro.url)} />
+    <link rel="alternate" hreflang="ca" href={new URL(base + '/ca/', Astro.site || Astro.url)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(base + '/', Astro.site || Astro.url)} />
     <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Pol Casacuberta",
+      "url": Astro.site?.toString() || Astro.url.origin,
+      "jobTitle": "AI & Data Consultant",
+      "sameAs": [
+        "https://github.com/cuberhaus",
+        "https://linkedin.com/in/polcasacubertagil"
+      ]
+    })} />
     <ViewTransitions />
     <Analytics />
   </head>
   <body>
-    <a href="#main-content" class="skip-to-content">Skip to content</a>
+    <ThemeInit position="body" />
+    <a href="#main-content" class="skip-to-content">{t('aria.skipToContent')}</a>
     <slot />
     <ScrollToTop />
 
@@ -99,4 +110,5 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
 <style is:global>
   @import '../styles/global.css';
+  @import '../styles/themes.css';
 </style>

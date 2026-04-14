@@ -1,9 +1,12 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
+import DemoHeader from '../../components/DemoHeader.astro';
 import MPIDSDemo from '../../components/demos/MPIDSDemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const titles = {
   en: "MPIDS Solver",
@@ -30,15 +33,15 @@ const aboutTitles = {
 };
 
 const aboutDescs = {
-  en: "Originally a C++ project for the Algorithmics course at FIB-UPC, solving the MPIDS problem with greedy heuristics, simulated annealing, and CPLEX ILP. This browser demo is a port of the greedy and local search algorithms to TypeScript with an interactive force-directed graph visualization.",
-  es: "Originalmente un proyecto en C++ para el curso de Algoritmia en la FIB-UPC, resolviendo el problema MPIDS con heurísticas voraces, simulated annealing e ILP con CPLEX. Esta demo de navegador es un port de los algoritmos de búsqueda voraz y local a TypeScript con una visualización interactiva de grafos dirigida por fuerzas.",
-  ca: "Originalment un projecte en C++ per al curs d'Algorísmia a la FIB-UPC, resolent el problema MPIDS amb heurístiques voraces, simulated annealing i ILP amb CPLEX. Aquesta demo de navegador és un port dels algorismes de cerca voraç i local a TypeScript amb una visualització interactiva de grafs dirigida per forces."
+  en: "Originally a C++ project for the Algorithmics course at FIB-UPC, solving the MPIDS problem with greedy heuristics, simulated annealing, and CPLEX ILP. This full-stack web app reimplements the algorithms in Python (FastAPI backend) with an Elm + D3.js frontend providing an interactive force-directed graph visualization via ports.",
+  es: "Originalmente un proyecto en C++ para el curso de Algoritmia en la FIB-UPC, resolviendo el problema MPIDS con heurísticas voraces, simulated annealing e ILP con CPLEX. Esta app web full-stack reimplementa los algoritmos en Python (backend FastAPI) con un frontend Elm + D3.js que ofrece una visualización interactiva de grafos dirigida por fuerzas mediante ports.",
+  ca: "Originalment un projecte en C++ per al curs d'Algorísmia a la FIB-UPC, resolent el problema MPIDS amb heurístiques voraces, simulated annealing i ILP amb CPLEX. Aquesta app web full-stack reimplementa els algorismes en Python (backend FastAPI) amb un frontend Elm + D3.js que ofereix una visualització interactiva de grafs dirigida per forces mitjançant ports."
 };
 
-const viewSource = {
-  en: "View source on GitHub",
-  es: "Ver código en GitHub",
-  ca: "Veure codi a GitHub"
+const metaDescs = {
+  en: "Interactive Minimum Positive Influence Dominating Set solver with graph visualization.",
+  es: "Solver interactivo del Minimum Positive Influence Dominating Set con visualización de grafos.",
+  ca: "Solver interactiu del Minimum Positive Influence Dominating Set amb visualització de grafs."
 };
 
 const title = titles[lang] || titles.en;
@@ -46,29 +49,28 @@ const lead = leads[lang] || leads.en;
 const badge = badges[lang] || badges.en;
 ---
 
-<DemoLayout title={title} description="Interactive Minimum Positive Influence Dominating Set solver with graph visualization.">
+<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="mpids">
   <div class="container">
-    <div class="demo-header">
-      <div class="badge">{badge}</div>
-      <h1>{title}</h1>
-      <p class="demo-lead" set:html={lead} />
-      <div class="demo-header-actions">
-        {(() => {
-          const vs = { en: "View Source on GitHub", es: "Ver código en GitHub", ca: "Veure codi a GitHub" };
-          return (
-            <a href="https://github.com/cuberhaus/projectA" class="demo-header-github" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
-                <path d="M9 18c-4.51 2-5-2-7-2"/>
-              </svg>
-              {vs[lang] || vs.en}
-            </a>
-          );
-        })()}
-      </div>
-    </div>
+    <DemoHeader
+      badge={badge}
+      title={title}
+      lead={lead}
+      githubUrl="https://github.com/cuberhaus/projectA"
+      githubLabel={t('demo.viewSource')}
+      accentFrom="#6366f1"
+      accentTo="#a855f7"
+    />
 
-    <MPIDSDemo lang={lang} client:load />
+    <LiveAppEmbed
+      url="http://localhost:8084"
+      title="MPIDS Solver"
+      dockerCmd="cd projectA && docker compose up -d"
+      devCmd="cd projectA && make dev"
+      lang={lang}
+      client:load
+    />
+
+    <MPIDSDemo lang={lang} client:visible />
 
     <div class="demo-info">
       <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
@@ -79,48 +81,15 @@ const badge = badges[lang] || badges.en;
 </DemoLayout>
 
 <style>
-  .demo-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-  .badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.75rem;
-    border-radius: 2rem;
-    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1));
-    border: 1px solid rgba(99,102,241,0.25);
-    color: #6366f1;
-    margin-bottom: 1rem;
-  }
-  .demo-header h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 800;
-    margin: 0 0 0.85rem;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-  }
-  .demo-lead {
-    color: var(--text-secondary);
-    max-width: 40rem;
-    margin: 0 auto 1.5rem;
-    line-height: 1.7;
-    font-size: 1rem;
-  }
-  .demo-lead strong { color: var(--text-primary, #e4e4e7); }
-
   .demo-info {
     margin-top: 2.5rem;
     padding: 2rem;
     background: var(--bg-card);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .demo-info h3 {

@@ -1,9 +1,11 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
+import DemoHeader from '../../components/DemoHeader.astro';
 import ApaPracticaDemo from '../../components/demos/ApaPracticaDemo';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const titles = {
   en: "Hypothyroid Classification",
@@ -12,15 +14,27 @@ const titles = {
 };
 
 const leads = {
-  en: "End-to-end binary classification pipeline \u2014 predict hypothyroidism from clinical data using <strong>9 model families</strong> in sklearn. The interactive demos below run <strong>real trained models</strong> directly in your browser.",
-  es: "Pipeline de clasificación binaria de principio a fin \u2014 predice el hipotiroidismo a partir de datos clínicos utilizando <strong>9 familias de modelos</strong> en sklearn. Las demostraciones interactivas a continuación ejecutan <strong>modelos entrenados reales</strong> directamente en tu navegador.",
-  ca: "Pipeline de classificació binària de principi a fi \u2014 prediu l'hipotiroïdisme a partir de dades clíniques utilitzant <strong>9 famílies de models</strong> en sklearn. Les demostracions interactives a continuació executen <strong>models entrenats reals</strong> directament al teu navegador."
+  en: "End-to-end binary classification pipeline — predict hypothyroidism from clinical data using <strong>9 model families</strong> in sklearn. The interactive demos below run <strong>real trained models</strong> directly in your browser.",
+  es: "Pipeline de clasificación binaria de principio a fin — predice el hipotiroidismo a partir de datos clínicos utilizando <strong>9 familias de modelos</strong> en sklearn. Las demostraciones interactivas a continuación ejecutan <strong>modelos entrenados reales</strong> directamente en tu navegador.",
+  ca: "Pipeline de classificació binària de principi a fi — prediu l'hipotiroïdisme a partir de dades clíniques utilitzant <strong>9 famílies de models</strong> en sklearn. Les demostracions interactives a continuació executen <strong>models entrenats reals</strong> directament al teu navegador."
 };
 
 const badges = {
-  en: "Machine Learning \u00b7 FIB-UPC",
-  es: "Machine Learning \u00b7 FIB-UPC",
-  ca: "Machine Learning \u00b7 FIB-UPC"
+  en: "Machine Learning · FIB-UPC",
+  es: "Machine Learning · FIB-UPC",
+  ca: "Machine Learning · FIB-UPC"
+};
+
+const metaTitles = {
+  en: "Machine Learning — Hypothyroid",
+  es: "Machine Learning — Hipotiroidismo",
+  ca: "Machine Learning — Hipotiroïdisme"
+};
+
+const metaDescs = {
+  en: "End-to-end ML pipeline for hypothyroidism detection: EDA, imputation, 9 sklearn model families compared. Interactive browser demo with real trained model.",
+  es: "Pipeline de ML de principio a fin para detección de hipotiroidismo: EDA, imputación, 9 familias de modelos sklearn comparadas. Demo interactiva con modelo entrenado real.",
+  ca: "Pipeline de ML de principi a fi per a detecció d'hipotiroïdisme: EDA, imputació, 9 famílies de models sklearn comparades. Demo interactiva amb model entrenat real."
 };
 
 const title = titles[lang] || titles.en;
@@ -29,70 +43,21 @@ const badge = badges[lang] || badges.en;
 ---
 
 <DemoLayout
-  title="Machine Learning \u2014 Hypothyroid"
-  description="End-to-end ML pipeline for hypothyroidism detection: EDA, imputation, 9 sklearn model families compared. Interactive browser demo with real trained model."
+  title={metaTitles[lang] || metaTitles.en}
+  description={metaDescs[lang] || metaDescs.en}
+  slug="apa-practica"
 >
   <div class="container">
-    <div class="demo-header">
-      <div class="badge">{badge}</div>
-      <h1>{title}</h1>
-      <p class="demo-lead" set:html={lead} />
-      <div class="demo-header-actions">
-        {(() => {
-          const vs = { en: "View Source on GitHub", es: "Ver código en GitHub", ca: "Veure codi a GitHub" };
-          return (
-            <a href="https://github.com/cuberhaus/APA_Practica" class="demo-header-github" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
-                <path d="M9 18c-4.51 2-5-2-7-2"/>
-              </svg>
-              {vs[lang] || vs.en}
-            </a>
-          );
-        })()}
-      </div>
-    </div>
+    <DemoHeader
+      badge={badge}
+      title={title}
+      lead={lead}
+      githubUrl="https://github.com/cuberhaus/APA_Practica"
+      githubLabel={t('demo.viewSource')}
+      accentFrom="#818cf8"
+      accentTo="#2dd4bf"
+    />
 
-    <ApaPracticaDemo lang={lang} client:load />
+    <ApaPracticaDemo lang={lang} client:visible />
   </div>
 </DemoLayout>
-
-<style>
-  .demo-header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-  .badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.75rem;
-    border-radius: 2rem;
-    background: linear-gradient(135deg, rgba(129,140,248,0.15), rgba(45,212,191,0.1));
-    border: 1px solid rgba(129,140,248,0.2);
-    color: #818cf8;
-    margin-bottom: 1rem;
-  }
-  .demo-header h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 800;
-    margin: 0 0 0.85rem;
-    background: linear-gradient(135deg, #818cf8, #2dd4bf);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-  }
-  .demo-lead {
-    color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1.7;
-    max-width: 40rem;
-    margin: 0 auto;
-  }
-  .demo-lead strong {
-    color: var(--text-primary);
-  }
-</style>

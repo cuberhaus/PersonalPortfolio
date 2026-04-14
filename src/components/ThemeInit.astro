@@ -1,0 +1,333 @@
+---
+import { THEMES, THEME_IDS } from '../lib/themes';
+
+interface Props {
+  position: 'head' | 'body';
+}
+
+const { position } = Astro.props;
+const darkThemes = THEMES.filter(t => t.colorScheme === 'dark');
+const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
+---
+
+{position === 'head' && (
+<script is:inline define:vars={{ THEME_IDS }}>
+  const VALID = THEME_IDS;
+
+  const __theme = (() => {
+    const url = new URL(window.location.href);
+    const param = url.searchParams.get('theme');
+    if (param && VALID.includes(param)) {
+      localStorage.setItem('theme', param);
+      url.searchParams.delete('theme');
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+      return param;
+    }
+    if (typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved && VALID.includes(saved)) return saved;
+    }
+    if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      return 'light';
+    }
+    return 'dark';
+  })();
+  document.documentElement.setAttribute('data-theme', __theme);
+
+  window.setTheme = function(id) {
+    if (!VALID.includes(id)) {
+      console.error(
+        'Unknown theme "' + id + '". Available themes:\n' +
+        VALID.map(function(t) { return '  \u2022 ' + t; }).join('\n')
+      );
+      return;
+    }
+    document.documentElement.setAttribute('data-theme', id);
+    localStorage.setItem('theme', id);
+  };
+</script>
+)}
+
+{position === 'body' && (
+<div id="theme-modal" class="theme-modal" aria-hidden="true">
+  <div class="theme-modal-backdrop"></div>
+  <div class="theme-modal-panel" role="dialog" aria-modal="true" data-i18n-aria-label>
+    <div class="theme-modal-header">
+      <span class="theme-modal-title" data-i18n-title></span>
+      <kbd class="theme-modal-hint">Ctrl+K</kbd>
+    </div>
+    <div class="theme-modal-group">
+      <span class="theme-modal-label" data-i18n-dark></span>
+      <div class="theme-modal-grid">
+        {darkThemes.map(theme => (
+          <button class="theme-modal-swatch" data-theme-id={theme.id}>
+            <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
+            <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+    <div class="theme-modal-divider"></div>
+    <div class="theme-modal-group">
+      <span class="theme-modal-label" data-i18n-light></span>
+      <div class="theme-modal-grid">
+        {lightThemes.map(theme => (
+          <button class="theme-modal-swatch" data-theme-id={theme.id}>
+            <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
+            <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+    <div class="theme-modal-footer">
+      <span data-i18n-footer></span>
+    </div>
+  </div>
+</div>
+)}
+
+<style is:global>
+  .theme-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .theme-modal.open {
+    display: flex;
+  }
+
+  .theme-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: tm-fade-in 150ms ease;
+  }
+
+  @keyframes tm-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .theme-modal-panel {
+    position: relative;
+    min-width: 320px;
+    max-width: 400px;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    animation: tm-slide-in 150ms ease;
+  }
+
+  @keyframes tm-slide-in {
+    from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .theme-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .theme-modal-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .theme-modal-hint {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+  }
+
+  .theme-modal-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .theme-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+  }
+
+  .theme-modal-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0.625rem 0;
+  }
+
+  .theme-modal-swatch {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .theme-modal-swatch:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+  }
+
+  .theme-modal-swatch.active {
+    color: var(--text-primary);
+    background: var(--bg-card-hover);
+  }
+
+  .theme-modal-color {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--tm-bg) 50%, var(--tm-accent) 50%);
+    border: 1.5px solid var(--border-color-hover);
+  }
+
+  .theme-modal-swatch.active .theme-modal-color {
+    border-color: var(--accent-start);
+    box-shadow: 0 0 0 2px var(--glow-color);
+  }
+
+  .theme-modal-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .theme-modal-footer {
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .theme-modal-footer kbd {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    background: var(--bg-secondary);
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+  }
+</style>
+
+<script>
+  const TM_I18N: Record<string, { title: string; dark: string; light: string; footer: string }> = {
+    en: { title: 'Choose a theme', dark: 'Dark', light: 'Light', footer: 'Press <kbd>Esc</kbd> to close' },
+    es: { title: 'Elige un tema', dark: 'Oscuro', light: 'Claro', footer: 'Pulsa <kbd>Esc</kbd> para cerrar' },
+    ca: { title: 'Tria un tema', dark: 'Fosc', light: 'Clar', footer: 'Prem <kbd>Esc</kbd> per tancar' },
+  };
+
+  const initThemeModal = () => {
+    const modal = document.getElementById('theme-modal');
+    if (!modal || modal.hasAttribute('data-tm-init')) return;
+    modal.setAttribute('data-tm-init', 'true');
+
+    const lang = document.documentElement.getAttribute('lang') || 'en';
+    const strings = TM_I18N[lang] || TM_I18N.en;
+    const titleEl = modal.querySelector('[data-i18n-title]');
+    const darkEl = modal.querySelector('[data-i18n-dark]');
+    const lightEl = modal.querySelector('[data-i18n-light]');
+    const footerEl = modal.querySelector('[data-i18n-footer]');
+    const panelEl = modal.querySelector('[data-i18n-aria-label]');
+    if (titleEl) titleEl.textContent = strings.title;
+    if (darkEl) darkEl.textContent = strings.dark;
+    if (lightEl) lightEl.textContent = strings.light;
+    if (footerEl) footerEl.innerHTML = strings.footer;
+    if (panelEl) panelEl.setAttribute('aria-label', strings.title);
+
+    let previouslyFocused: Element | null = null;
+
+    const trapFocus = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const focusable = modal.querySelectorAll<HTMLElement>('button, [tabindex]:not([tabindex="-1"])');
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    const open = () => {
+      previouslyFocused = document.activeElement;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      modal.querySelectorAll('.theme-modal-swatch').forEach(s => {
+        s.classList.toggle('active', s.getAttribute('data-theme-id') === current);
+      });
+      const activeSwatch = modal.querySelector('.theme-modal-swatch.active') as HTMLElement;
+      if (activeSwatch) activeSwatch.focus();
+      else (modal.querySelector('.theme-modal-swatch') as HTMLElement)?.focus();
+      modal.addEventListener('keydown', trapFocus);
+    };
+
+    const close = () => {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.removeEventListener('keydown', trapFocus);
+      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
+    };
+
+    modal.querySelector('.theme-modal-backdrop')?.addEventListener('click', close);
+
+    modal.addEventListener('click', (e) => {
+      const swatch = (e.target as HTMLElement).closest('.theme-modal-swatch') as HTMLElement | null;
+      if (!swatch) return;
+      const themeId = swatch.getAttribute('data-theme-id');
+      if (!themeId) return;
+      document.documentElement.setAttribute('data-theme', themeId);
+      localStorage.setItem('theme', themeId);
+      modal.querySelectorAll('.theme-modal-swatch').forEach(s => {
+        s.classList.toggle('active', s.getAttribute('data-theme-id') === themeId);
+      });
+      close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        if (modal.classList.contains('open')) close();
+        else open();
+      }
+      if (e.key === 'Escape' && modal.classList.contains('open')) {
+        close();
+      }
+    });
+  };
+
+  initThemeModal();
+  document.addEventListener('astro:page-load', initThemeModal);
+</script>

@@ -126,20 +126,20 @@ const s = {
     padding: "1.5rem", marginBottom: "1.25rem",
   } as const,
   infoCard: {
-    background: "linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.05))",
-    borderRadius: 16, border: "1px solid rgba(99,102,241,0.15)",
+    background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 8%, transparent), color-mix(in srgb, var(--accent-end) 5%, transparent))",
+    borderRadius: 16, border: "1px solid color-mix(in srgb, var(--accent-start) 15%, transparent)",
     padding: "1.25rem 1.5rem", marginBottom: "1.25rem",
   } as const,
   row: { display: "flex", gap: "0.75rem", flexWrap: "wrap" as const, alignItems: "center", marginBottom: "0.75rem" },
   btn: (active = false) => ({
     padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid var(--border-color)",
-    background: active ? "linear-gradient(135deg, #6366f1, #a855f7)" : "var(--bg-secondary)",
+    background: active ? "linear-gradient(135deg, var(--accent-start), var(--accent-end))" : "var(--bg-secondary)",
     color: "var(--text-primary)", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
     transition: "all 0.15s",
   }),
   btnPrimary: {
     padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",
-    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
     color: "var(--text-primary)", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600,
   } as const,
   btnDisabled: {
@@ -181,11 +181,11 @@ const s = {
 } as const;
 
 const COLORS = {
-  inSet: "#6366f1",
+  inSet: "var(--accent-start)",
   dominated: "#22c55e",
   undominated: "#ef4444",
   edge: "var(--border-color)",
-  edgeHighlight: "rgba(99,102,241,0.3)",
+  edgeHighlight: "var(--glow-color-strong)",
 };
 
 type Algorithm = "greedy" | "local-search";
@@ -208,11 +208,19 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
   const [computing, setComputing] = useState(false);
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
   const [selectedSample, setSelectedSample] = useState(0);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [randomN, setRandomN] = useState(30);
   const [randomP, setRandomP] = useState(0.15);
   const [layoutIter, setLayoutIter] = useState(0);
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const solveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (solveTimeoutRef.current) clearTimeout(solveTimeoutRef.current);
+    };
+  }, []);
 
   const SVG_W = 860;
   const SVG_H = 500;
@@ -248,8 +256,7 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     if (!graph) return;
     setComputing(true);
     setTooltip(null);
-    // Use setTimeout to let the UI update
-    setTimeout(() => {
+    solveTimeoutRef.current = setTimeout(() => {
       const r = algorithm === "greedy"
         ? greedySolver(graph)
         : localSearchSolver(graph, Math.max(2000, graph.n * 10));
@@ -268,8 +275,8 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     const basePath = rawBase.endsWith("/") ? rawBase : rawBase + "/";
     fetch(`${basePath}demos/mpids/${name}`)
       .then((r) => r.text())
-      .then((text) => { setSelectedSample(-1); loadGraph(text); })
-      .catch(console.error);
+      .then((text) => { setSelectedSample(-1); setLoadError(null); loadGraph(text); })
+      .catch(() => { setLoadError('Failed to load sample graph'); });
   }, [loadGraph]);
 
   const handleRandom = useCallback(() => {
@@ -327,6 +334,12 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
           </div>
         </div>
       </div>
+
+      {loadError && (
+        <div style={{ padding: "0.5rem 1rem", marginBottom: "1rem", borderRadius: 8, background: "#ef444415", border: "1px solid #ef444430", color: "#ef4444", fontSize: "0.85rem" }}>
+          {loadError}
+        </div>
+      )}
 
       {/* Graph selection */}
       <div style={s.card}>

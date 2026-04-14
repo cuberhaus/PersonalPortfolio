@@ -125,7 +125,7 @@ const s = {
       aspectRatio: "4/3",
       objectFit: "cover",
       borderRadius: "0.5rem",
-      border: selected ? "2px solid #6366f1" : "2px solid var(--border-color)",
+      border: selected ? "2px solid var(--accent-start)" : "2px solid var(--border-color)",
       cursor: "pointer",
       transition: "border-color 0.2s, transform 0.2s",
       transform: selected ? "scale(1.03)" : "none",
@@ -136,7 +136,7 @@ const s = {
     justifyContent: "center",
     gap: "0.5rem",
     padding: "0.6rem 1.2rem",
-    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
     color: "var(--text-primary)",
     border: "none",
     borderRadius: "0.5rem",
@@ -146,7 +146,7 @@ const s = {
   } as React.CSSProperties,
   runBtn: {
     padding: "0.6rem 1.5rem",
-    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
     color: "var(--text-primary)",
     border: "none",
     borderRadius: "0.5rem",
@@ -182,7 +182,7 @@ const s = {
     gap: "1rem",
     padding: "1rem 1.5rem",
     background: "var(--bg-secondary)",
-    border: "1px solid #6366f1",
+    border: "1px solid var(--accent-start)",
     borderRadius: "0.75rem",
     marginBottom: "1rem",
   },
@@ -191,7 +191,7 @@ const s = {
     fontSize: "2rem",
     fontWeight: 700,
     letterSpacing: "0.15em",
-    color: "#6366f1",
+    color: "var(--accent-start)",
     textTransform: "uppercase" as const,
   },
   truthText: {
@@ -223,7 +223,7 @@ const s = {
     ({
       height: "100%",
       width: `${pct}%`,
-      background: "linear-gradient(90deg, #6366f1, #a855f7)",
+      background: "linear-gradient(90deg, var(--accent-start), var(--accent-end))",
       borderRadius: "4px",
       transition: "width 0.3s ease",
     }) as React.CSSProperties,
@@ -248,8 +248,8 @@ const s = {
     marginLeft: "0.5rem",
   },
   infoCard: {
-    background: "rgba(99, 102, 241, 0.08)",
-    border: "1px solid rgba(99, 102, 241, 0.2)",
+    background: "color-mix(in srgb, var(--accent-start) 8%, transparent)",
+    border: "1px solid color-mix(in srgb, var(--accent-start) 20%, transparent)",
     borderRadius: "0.75rem",
     padding: "1.25rem",
     marginBottom: "1.5rem",
@@ -273,7 +273,7 @@ const s = {
     width: "22px",
     height: "22px",
     borderRadius: "50%",
-    background: "#6366f1",
+    background: "var(--accent-start)",
     color: "var(--text-primary)",
     fontSize: "0.7rem",
     fontWeight: 700,
@@ -290,7 +290,7 @@ function PulsingDots() {
             width: 6,
             height: 6,
             borderRadius: "50%",
-            background: "#6366f1",
+            background: "var(--accent-start)",
             animation: `pulse-dot 1.2s ease-in-out ${i * 0.2}s infinite`,
           }}
         />
@@ -338,7 +338,7 @@ export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
   const basePath = rawBase.endsWith("/") ? rawBase : rawBase + "/";
 
   useEffect(() => {
-    initWorker().catch(() => {});
+    initWorker().catch(() => { setError('Failed to initialize worker'); });
   }, []);
 
   const selectSample = useCallback((sample: (typeof SAMPLES)[number]) => {
@@ -438,7 +438,7 @@ export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
             <div
               style={{
                 height: "100%",
-                background: "linear-gradient(90deg, #6366f1, #a855f7)",
+                background: "linear-gradient(90deg, var(--accent-start), var(--accent-end))",
                 borderRadius: "4px",
                 animation: "indeterminate 1.5s ease-in-out infinite",
               }}
@@ -518,7 +518,7 @@ export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
                         fontFamily: "monospace",
                         fontSize: "1rem",
                         fontWeight: 700,
-                        color: "#6366f1",
+                        color: "var(--accent-start)",
                         marginTop: "0.25rem",
                       }}
                     >

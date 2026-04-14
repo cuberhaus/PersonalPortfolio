@@ -1,31 +1,184 @@
-.PHONY: install dev build preview clean help
+.PHONY: install dev dev-all build preview stop-all \
+       docker-build-all docker-build-parallel docker-rebuild-all \
+       clean test test-all help \
+       _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
+       _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
 
-# Default target when just running `make`
 default: help
 
 install: ## Install project dependencies
 	npm install
+	@command -v go >/dev/null 2>&1 || { echo "Installing Go..."; sudo apt-get update && sudo apt-get install -y golang-go; }
+	@. "$(HOME)/.local/share/cargo/env" 2>/dev/null; \
+	command -v cargo >/dev/null 2>&1 || { echo "Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; }
 
-dev: ## Start the Astro development server
+dev: ## Start Astro dev server only (no backends)
 	npm run dev
 
-dev-all: ## Start the Astro development server and all demo backend services
+dev-all: ## Start Astro + ALL demo backends (Docker + planner-api + PROP)
 	npm run dev:all
 
-dev-planner: ## Start the Astro development server and the planner backend service
-	npm run dev:with-planner
-
-build: ## Build the project for production
+build: ## Build for production
 	npm run build
 
 preview: ## Preview the production build locally
 	npm run preview
 
+test: ## Run Vitest test suite (portfolio only)
+	npm test
+
+test-all: test ## Run ALL test suites (portfolio + every demo backend)
+	@echo ""
+	@echo "=== Python backends (pytest) ==="
+	cd "$(PARENT)/projectA/web"   && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/desastresIA/web" && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/projectA2/web"  && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/CAIM/web"       && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/bitsXlaMarato/web/backend" && $(SYS_PYTHON) -m pytest test_app.py -v
+	cd "$(PARENT)/SBC_IA/web"     && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/TFG/backend"    && $(SYS_PYTHON) -m pytest test_main.py -v
+	@echo ""
+	@echo "=== Django (Draculin) ==="
+	cd "$(PARENT)/Draculin-Backend" && $(SYS_PYTHON) manage.py test dracu -v2
+	@echo ""
+	@echo "=== Go (joc_eda) ==="
+	@if command -v go >/dev/null 2>&1; then \
+		cd "$(PARENT)/joc_eda/web/backend-go" && go test -v ./...; \
+	else \
+		echo "SKIP: go not found"; \
+	fi
+	@echo ""
+	@echo "=== Rust (pracpro2) ==="
+	@. "$(HOME)/.local/share/cargo/env" 2>/dev/null; \
+	if command -v cargo >/dev/null 2>&1; then \
+		cd "$(PARENT)/pracpro2/web/backend" && cargo test --verbose; \
+	else \
+		echo "SKIP: cargo not found"; \
+	fi
+	@echo ""
+	@echo "=== JS (Planificacion) ==="
+	cd "$(PARENT)/Practica_de_Planificacion/web" && npx vitest run
+	@echo ""
+	@echo "All test suites passed."
+
+PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
+
+# Ensure pytest commands use the system Python, not an accidentally activated venv
+unexport VIRTUAL_ENV
+SYS_PYTHON := $(shell PATH="$$(echo "$$PATH" | tr ':' '\n' | grep -v '\.venv' | tr '\n' ':')" which python)
+
+STAMPS := .build-stamps
+FIND_EXCLUDES := -not -path '*/node_modules/*' \
+                 -not -path '*/.git/*' \
+                 -not -path '*/dist/*' \
+                 -not -path '*/__pycache__/*' \
+                 -not -path '*/.next/*' \
+                 -not -path '*/build/*' \
+                 -not -path '*/.astro/*' \
+                 -not -path '*/.gradle/*' \
+                 -not -path '*/target/*' \
+                 -not -name '*.pyc'
+
+# $(1)=stamp name  $(2)=source dir  $(3)=label  $(4)=build command
+define build_if_changed
+	@if [ ! -d "$(2)" ]; then \
+		echo "==> $(3) skipped (not found)"; \
+	elif [ ! -f "$(STAMPS)/$(1)" ] || \
+	     [ -n "$$(find "$(2)" $(FIND_EXCLUDES) -newer "$(STAMPS)/$(1)" -print -quit 2>/dev/null)" ]; then \
+		echo "==> $(3)  [building]"; \
+		$(4) && mkdir -p "$(STAMPS)" && touch "$(STAMPS)/$(1)"; \
+	else \
+		echo "==> $(3)  [up to date]"; \
+	fi
+endef
+
+DEMO_TARGETS := _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
+                _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
+
+_db-tfg:
+	$(call build_if_changed,tfg,$(PARENT)/TFG,TFG              :8082,\
+		docker compose -f "$(PARENT)/TFG/docker-compose.yml" build)
+_db-bitsx:
+	$(call build_if_changed,bitsx,$(PARENT)/bitsXlaMarato,bitsXlaMarato    :8001,\
+		docker compose -f "$(PARENT)/bitsXlaMarato/docker-compose.yml" build)
+_db-tenda:
+	$(call build_if_changed,tenda,$(PARENT)/tenda_online,Tenda Online     :8888,\
+		docker compose -f "$(PARENT)/tenda_online/docker/docker-compose.yml" build)
+_db-draculin:
+	$(call build_if_changed,draculin,$(PARENT)/Draculin-Backend,Draculin         :8890,\
+		docker compose -f "$(PARENT)/Draculin-Backend/docker-compose.yml" build)
+_db-pro2:
+	$(call build_if_changed,pro2,$(PARENT)/pracpro2,pracpro2         :8000,\
+		docker build -t pracpro2 "$(PARENT)/pracpro2")
+_db-planif:
+	$(call build_if_changed,planif,$(PARENT)/Practica_de_Planificacion,Planificacion    :3000,\
+		docker build -t practica-planificacion "$(PARENT)/Practica_de_Planificacion")
+_db-desastres:
+	$(call build_if_changed,desastres,$(PARENT)/desastresIA,DesastresIA      :8083,\
+		docker compose -f "$(PARENT)/desastresIA/docker-compose.yml" build)
+_db-mpids:
+	$(call build_if_changed,mpids,$(PARENT)/projectA,MPIDS            :8084,\
+		docker compose -f "$(PARENT)/projectA/docker-compose.yml" build)
+_db-phase:
+	$(call build_if_changed,phase,$(PARENT)/projectA2,PhaseTransitions :8085,\
+		docker compose -f "$(PARENT)/projectA2/docker-compose.yml" build)
+_db-caim:
+	$(call build_if_changed,caim,$(PARENT)/CAIM,CAIM             :8086,\
+		docker compose -f "$(PARENT)/CAIM/docker-compose.yml" build)
+_db-joceda:
+	$(call build_if_changed,joceda,$(PARENT)/joc_eda,JocEDA           :8087,\
+		docker compose -f "$(PARENT)/joc_eda/docker-compose.yml" build)
+_db-sbcia:
+	$(call build_if_changed,sbcia,$(PARENT)/SBC_IA,SBC_IA           :8088,\
+		docker compose -f "$(PARENT)/SBC_IA/docker-compose.yml" build)
+
+docker-build-all: $(DEMO_TARGETS) ## Build Docker images for demos (skips unchanged, use -jN for parallel)
+	@echo "Done."
+
+docker-build-parallel: ## Build all Docker images in parallel (auto-detects cores)
+	+@make docker-build-all -j$$(nproc) --output-sync=target
+
+docker-rebuild-all: ## Force rebuild all Docker images (ignore cache)
+	@rm -rf "$(STAMPS)"
+	+@make docker-build-all
+
+stop-all: ## Stop all demo backend containers/services
+	@echo "Stopping portfolio demo services..."
+	-docker compose -f ../TFG/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../bitsXlaMarato/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../tenda_online/docker/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../Draculin-Backend/docker-compose.yml down 2>/dev/null
+	-docker rm -f portfolio-pro2 2>/dev/null
+	-docker rm -f portfolio-planif 2>/dev/null
+	-docker compose -f ../desastresIA/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../projectA/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../projectA2/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../CAIM/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../joc_eda/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../SBC_IA/docker-compose.yml down 2>/dev/null
+	-fuser -k 8081/tcp 2>/dev/null
+	-fuser -k 8765/tcp 2>/dev/null
+	@echo "Done."
+
 clean: ## Remove build artifacts and node_modules
-	rm -rf dist/
-	rm -rf node_modules/
-	rm -rf .astro/
+	rm -rf dist/ node_modules/ .astro/ .build-stamps/
 
 help: ## Show this help message
 	@echo "Available commands:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@echo ""
+	@echo "Demo backends started by dev-all:"
+	@echo "  TFG              :8082  (docker compose)"
+	@echo "  bitsXlaMarato    :8001  (docker compose, GPU)"
+	@echo "  pracpro2         :8000  (docker run)"
+	@echo "  Planificacion    :3000  (docker run)"
+	@echo "  Tenda            :8888  (docker compose)"
+	@echo "  Draculin         :8890  (docker compose)"
+	@echo "  DesastresIA      :8083  (docker compose)"
+	@echo "  MPIDS            :8084  (docker compose)"
+	@echo "  PhaseTransitions :8085  (docker compose)"
+	@echo "  CAIM             :8086  (docker compose)"
+	@echo "  JocEDA           :8087  (docker compose)"
+	@echo "  SBC_IA           :8088  (docker compose)"
+	@echo "  PROP             :8081  (Spring Boot)"
+	@echo "  planner-api      :8765  (ENHSP)"

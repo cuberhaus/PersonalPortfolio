@@ -1,0 +1,316 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { renderIconSvg } from '../lib/demo-icons';
+import demosEn from '../data/demos.json';
+import demosEs from '../data/demos.es.json';
+import demosCa from '../data/demos.ca.json';
+
+interface Props {
+  currentSlug: string;
+}
+
+const { currentSlug } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const allDemos = lang === 'es' ? demosEs : lang === 'ca' ? demosCa : demosEn;
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+
+function demoHref(slug: string) {
+  return lang === 'en' ? `${base}/demos/${slug}/` : `${base}/${lang}/demos/${slug}/`;
+}
+
+const currentIdx = allDemos.findIndex(d => d.slug === currentSlug);
+const prevDemo = currentIdx > 0 ? allDemos[currentIdx - 1] : null;
+const nextDemo = currentIdx < allDemos.length - 1 ? allDemos[currentIdx + 1] : null;
+
+const excludeSlugs = new Set([currentSlug, prevDemo?.slug, nextDemo?.slug].filter(Boolean));
+const candidates = allDemos.filter(d => !excludeSlugs.has(d.slug));
+
+// Seeded Fisher-Yates shuffle — stable per page, varies between pages
+let seed = 0;
+for (const ch of currentSlug) seed = ((seed << 5) - seed + ch.charCodeAt(0)) | 0;
+seed = ((seed % 2147483646) + 2147483646) % 2147483646 + 1;
+function nextRand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+const shuffled = [...candidates];
+for (let i = shuffled.length - 1; i > 0; i--) {
+  const j = Math.floor(nextRand() * (i + 1));
+  [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+}
+const exploreDemos = shuffled.slice(0, 4);
+---
+
+<section class="demo-nav-section">
+  <div class="container">
+    {/* ── Prev / Next ── */}
+    <div class="prevnext-strip">
+      {prevDemo ? (
+        <a href={demoHref(prevDemo.slug)} class="prevnext-card prevnext-prev" data-astro-reload>
+          <span class="prevnext-dir">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            {t('demo.previous')}
+          </span>
+          <span class="prevnext-icon" set:html={renderIconSvg(prevDemo.icon, 24)} />
+          <span class="prevnext-title">{prevDemo.title}</span>
+          <span class="prevnext-desc">{prevDemo.description}</span>
+          <ul class="prevnext-tags">
+            {prevDemo.tags.map((tag) => <li>{tag}</li>)}
+          </ul>
+        </a>
+      ) : <div />}
+      {nextDemo ? (
+        <a href={demoHref(nextDemo.slug)} class="prevnext-card prevnext-next" data-astro-reload>
+          <span class="prevnext-dir">
+            {t('demo.next')}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </span>
+          <span class="prevnext-icon" set:html={renderIconSvg(nextDemo.icon, 24)} />
+          <span class="prevnext-title">{nextDemo.title}</span>
+          <span class="prevnext-desc">{nextDemo.description}</span>
+          <ul class="prevnext-tags">
+            {nextDemo.tags.map((tag) => <li>{tag}</li>)}
+          </ul>
+        </a>
+      ) : <div />}
+    </div>
+
+    {/* ── Explore more ── */}
+    {exploreDemos.length > 0 && (
+      <div class="explore-section">
+        <h2 class="explore-heading">{t('demo.moreProjects')}</h2>
+        <div class="explore-grid">
+          {exploreDemos.map((demo) => (
+            <a href={demoHref(demo.slug)} class="explore-card" data-astro-reload>
+              <span class="explore-icon" set:html={renderIconSvg(demo.icon, 20)} />
+              <div class="explore-info">
+                <span class="explore-title">{demo.title}</span>
+                <ul class="explore-tags">
+                  {demo.tags.map((tag) => <li>{tag}</li>)}
+                </ul>
+              </div>
+              <svg class="explore-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .demo-nav-section {
+    margin-top: 4rem;
+    padding: 3rem 0 2rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  /* ── Prev / Next ── */
+  .prevnext-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .prevnext-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .prevnext-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-start);
+    box-shadow: 0 8px 28px var(--glow-color);
+  }
+
+  .prevnext-dir {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-start);
+  }
+
+  .prevnext-icon {
+    color: var(--accent-start);
+    display: flex;
+    align-items: center;
+  }
+
+  .prevnext-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+    transition: color var(--transition-fast);
+  }
+
+  .prevnext-card:hover .prevnext-title {
+    color: var(--accent-start);
+  }
+
+  .prevnext-desc {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .prevnext-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.15rem;
+  }
+
+  .prevnext-tags li {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .prevnext-next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .prevnext-next .prevnext-tags {
+    justify-content: flex-end;
+  }
+
+  /* ── Explore more ── */
+  .explore-heading {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .explore-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .explore-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .explore-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-start);
+    box-shadow: 0 6px 24px var(--glow-color);
+  }
+
+  .explore-icon {
+    flex-shrink: 0;
+    color: var(--accent-start);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .explore-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .explore-title {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-primary);
+    transition: color var(--transition-fast);
+  }
+
+  .explore-card:hover .explore-title {
+    color: var(--accent-start);
+  }
+
+  .explore-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.3rem;
+  }
+
+  .explore-tags li {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .explore-arrow {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .explore-card:hover .explore-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--accent-start);
+  }
+
+  @media (max-width: 768px) {
+    .prevnext-strip {
+      grid-template-columns: 1fr;
+    }
+
+    .prevnext-next {
+      text-align: left;
+      align-items: flex-start;
+    }
+
+    .prevnext-next .prevnext-tags {
+      justify-content: flex-start;
+    }
+
+    .explore-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -44,29 +44,29 @@
     "image": ""
   },
   {
-    "slug": "joc-eda",
-    "title": "Programming Game Viewer",
-    "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Replay viewer for the Data Structures and Algorithms programming game competition.",
+    "slug": "matriculas",
+    "title": "License Plate Detection",
+    "description": "Detect and read license plates from car images using computer vision — a MATLAB pipeline ported to the browser.",
     "tags": [
-      "C++",
-      "Canvas",
-      "AI"
+      "Computer Vision",
+      "TypeScript"
     ],
-    "icon": "gamepad",
-    "github": "https://github.com/cuberhaus/joc_eda",
+    "icon": "camera",
+    "github": "https://github.com/cuberhaus/SPMatriculas",
     "image": ""
   },
   {
-    "slug": "pro2",
-    "title": "WPGMA Clustering",
-    "description": "Build phylogenetic trees step by step. Input species with gene sequences and watch the WPGMA algorithm merge clusters into a dendrogram.",
+    "slug": "joc-eda",
+    "title": "Programming Game Viewer",
+    "description": "Watch AI bots battle on a grid — warriors, builders, weapons, and strategy. Full-stack game viewer with live C++ engine, Canvas rendering, and interactive replay controls.",
     "tags": [
-      "TypeScript",
-      "Algorithms",
-      "D3"
+      "Mithril.js",
+      "Canvas",
+      "C++",
+      "FastAPI"
     ],
-    "icon": "tree",
-    "github": "https://github.com/cuberhaus/pracpro2",
+    "icon": "gamepad",
+    "github": "https://github.com/cuberhaus/joc_eda",
     "image": ""
   },
   {
@@ -96,25 +96,27 @@
     "image": ""
   },
   {
-    "slug": "matriculas",
-    "title": "License Plate Detection",
-    "description": "Detect and read license plates from car images using computer vision — a MATLAB pipeline ported to the browser.",
+    "slug": "pro2",
+    "title": "WPGMA Clustering",
+    "description": "Build phylogenetic trees step by step. Input species with gene sequences and watch the WPGMA algorithm merge clusters into a dendrogram.",
     "tags": [
-      "Computer Vision",
-      "TypeScript"
+      "TypeScript",
+      "Algorithms",
+      "D3"
     ],
-    "icon": "camera",
-    "github": "https://github.com/cuberhaus/SPMatriculas",
+    "icon": "tree",
+    "github": "https://github.com/cuberhaus/pracpro2",
     "image": ""
   },
   {
     "slug": "mpids",
     "title": "MPIDS Solver",
-    "description": "Find the minimum dominating set in a graph using greedy and local search algorithms, with interactive visualization.",
+    "description": "Interactive graph dominance solver with D3 force-directed visualization. Find the minimum positive influence dominating set using greedy and SA-style local search.",
     "tags": [
-      "Algorithms",
-      "Graph Theory",
-      "TypeScript"
+      "Elm",
+      "D3.js",
+      "FastAPI",
+      "Graph Theory"
     ],
     "icon": "graph",
     "github": "https://github.com/cuberhaus/projectA",
@@ -123,10 +125,11 @@
   {
     "slug": "phase-transitions",
     "title": "Graph Phase Transitions",
-    "description": "Explore percolation and connectivity phase transitions on binomial, geometric, and grid graphs.",
+    "description": "Explore connectivity and complexity phase transitions on binomial, geometric, and grid random graphs with real-time percolation animation and Monte Carlo sweep charts.",
     "tags": [
-      "Algorithms",
-      "Graph Theory",
+      "Lit",
+      "Canvas",
+      "FastAPI",
       "NetworkX"
     ],
     "icon": "scatter",
@@ -149,11 +152,12 @@
   {
     "slug": "desastres-ia",
     "title": "Desastres IA",
-    "description": "Disaster relief as local search: helicopters rescue groups from centers using hill climbing and simulated annealing (AIMA).",
+    "description": "Disaster relief as local search: helicopters rescue groups from centers using hill climbing and simulated annealing. Full-stack web solver with interactive 2D map and experiment dashboard.",
     "tags": [
-      "Java",
-      "AIMA",
+      "Solid.js",
+      "FastAPI",
       "Local search",
+      "Canvas",
       "UPC"
     ],
     "icon": "helicopter",
@@ -185,6 +189,34 @@
     ],
     "icon": "server",
     "github": "https://github.com/cuberhaus/subgrup-prop7.1",
+    "image": ""
+  },
+  {
+    "slug": "caim",
+    "title": "CAIM IR Explorer",
+    "description": "Interactive information retrieval explorer: PageRank on the global airport network with world map visualization, and Zipf's Law analysis with curve fitting on text corpora.",
+    "tags": [
+      "Vanilla TS",
+      "D3.js",
+      "FastAPI",
+      "PageRank"
+    ],
+    "icon": "search",
+    "github": "https://github.com/cuberhaus/CAIM",
+    "image": ""
+  },
+  {
+    "slug": "sbc-ia",
+    "title": "Trip Planner (Expert System)",
+    "description": "An expert system trip planner: answer 10 questions about your travel preferences and get a full itinerary with cities, hotels, activities, transport, and cost. Reimplements CLIPS rules in Python.",
+    "tags": [
+      "HTMX",
+      "Alpine.js",
+      "Litestar",
+      "Expert System"
+    ],
+    "icon": "map",
+    "github": "https://github.com/cuberhaus/SBC_IA",
     "image": ""
   }
 ]

@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo, useEffect, useCallback } from "react";
 import pcaPointsData from "../../data/pca_points.json";
-import modelWeights from "../../data/model_weights.json";
+import { clamp, dist2, knnVote, predict, absCoefs, maxCoef } from "../../lib/apa-predictor";
+import type { Pt } from "../../lib/apa-predictor";
 
 /* ── constants ── */
 const CW = 520;
@@ -171,12 +172,6 @@ const TRANSLATIONS = {
   }
 };
 
-type Pt = { x: number; y: number; cls: 0 | 1 };
-
-function clamp(x: number, lo: number, hi: number) {
-  return Math.max(lo, Math.min(hi, x));
-}
-
 function loadRealPoints(): Pt[] {
   return pcaPointsData.map((p) => ({
     x: 18 + p.x * (CW - 36),
@@ -184,36 +179,6 @@ function loadRealPoints(): Pt[] {
     cls: p.cls as 0 | 1,
   }));
 }
-
-function dist2(ax: number, ay: number, bx: number, by: number) {
-  return (ax - bx) ** 2 + (ay - by) ** 2;
-}
-
-function knnVote(px: number, py: number, points: Pt[], k: number) {
-  const sorted = [...points].sort((a, b) => dist2(px, py, a.x, a.y) - dist2(px, py, b.x, b.y));
-  const neighbors = sorted.slice(0, k);
-  let c0 = 0, c1 = 0;
-  for (const n of neighbors) n.cls === 0 ? c0++ : c1++;
-  const cls: 0 | 1 = c1 > c0 ? 1 : c0 > c1 ? 0 : neighbors[0].cls;
-  return { cls, neighbors };
-}
-
-/* ── prediction helper ── */
-function predict(age: number, tsh: number, tt4: number, t3: number) {
-  const vals = [age, tsh, tt4, t3];
-  let z = modelWeights.intercept;
-  for (let i = 0; i < 4; i++) {
-    z += ((vals[i] - modelWeights.scaler_mean[i]) / modelWeights.scaler_scale[i]) * modelWeights.coef[i];
-  }
-  const prob = 1 / (1 + Math.exp(-z));
-  // Class 0 = hypothyroid (P), Class 1 = negative (N).
-  // LogReg outputs P(class=1): high prob → negative, low prob → hypothyroid.
-  return { isHypo: z < 0, probability: prob, z };
-}
-
-/* ── feature importance (absolute coef magnitude, normalised) ── */
-const absCoefs = modelWeights.coef.map(Math.abs);
-const maxCoef = Math.max(...absCoefs);
 
 /* ── shared styles ── */
 const card = {

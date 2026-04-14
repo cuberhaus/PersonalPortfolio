@@ -6,20 +6,23 @@
   "scripts": {
     "dev": "astro dev",
     "dev:all": "bash scripts/dev-all-demos.sh",
-    "dev:with-planner": "bash scripts/dev-with-planner.sh",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
-    "@astrojs/react": "^5.0.0",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "astro": "^5.18.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "@astrojs/react": "5.0.0",
+    "astro": "5.18.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "@astrojs/sitemap": "^3.7.1",
-    "playwright": "^1.58.2"
+    "@astrojs/sitemap": "3.7.1",
+    "@playwright/test": "^1.59.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "playwright": "1.58.2",
+    "vitest": "4.1.2"
   }
 }

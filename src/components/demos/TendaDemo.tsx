@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   MOCK_CATEGORIES,
   MOCK_PRODUCTS,
@@ -152,9 +152,9 @@ const styles = {
     borderRadius: "0.35rem",
     transition: "all 0.15s",
   },
-  linkHover: { color: "#6366f1" },
+  linkHover: { color: "var(--accent-start)" },
   cartBadge: {
-    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
     color: "var(--text-primary)",
     fontSize: "0.7rem",
     padding: "0.15rem 0.45rem",
@@ -193,7 +193,7 @@ const styles = {
   },
   productInfo: { padding: "1rem" },
   productName: { fontWeight: 600, marginBottom: "0.35rem", fontSize: "0.95rem" },
-  productPrice: { color: "#a855f7", fontWeight: 600, fontSize: "1rem" },
+  productPrice: { color: "var(--accent-end)", fontWeight: 600, fontSize: "1rem" },
   input: {
     background: "var(--bg-secondary)",
     border: "1px solid var(--border-color)",
@@ -214,7 +214,7 @@ const styles = {
     transition: "all 0.15s",
   },
   primaryBtn: {
-    background: "linear-gradient(135deg, #6366f1, #a855f7)",
+    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
     color: "var(--text-primary)",
   },
   secondaryBtn: { background: "var(--border-color)", color: "var(--text-secondary)" },
@@ -241,8 +241,8 @@ const styles = {
     color: "var(--text-muted)",
   },
   mockBanner: {
-    background: "linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.08))",
-    border: "1px solid rgba(99,102,241,0.3)",
+    background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 10%, transparent), color-mix(in srgb, var(--accent-end) 8%, transparent))",
+    border: "1px solid var(--glow-color-strong)",
     borderRadius: "0.5rem",
     padding: "0.5rem 1rem",
     fontSize: "0.75rem",
@@ -268,6 +268,13 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
   const [cart, setCart] = useState<Record<number, number>>({});
   const [checkoutForm, setCheckoutForm] = useState({ name: "", email: "", address: "", userType: "guest" as "guest" | "registered", password: "" });
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const orderTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (orderTimeoutRef.current) clearTimeout(orderTimeoutRef.current);
+    };
+  }, []);
 
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
 
@@ -314,7 +321,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
   const placeOrder = useCallback(() => {
     setOrderPlaced(true);
     setCart({});
-    setTimeout(() => {
+    orderTimeoutRef.current = setTimeout(() => {
       setOrderPlaced(false);
       setView("home");
       setCheckoutForm({ name: "", email: "", address: "", userType: "guest", password: "" });
@@ -345,7 +352,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
           <span
             style={styles.link}
             onClick={goHome}
-            onMouseOver={(e) => (e.currentTarget.style.color = "#6366f1")}
+            onMouseOver={(e) => (e.currentTarget.style.color = "var(--accent-start)")}
             onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
           >
             {t.home}
@@ -355,7 +362,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
               key={c.id}
               style={styles.link}
               onClick={() => openCategory(c)}
-              onMouseOver={(e) => (e.currentTarget.style.color = "#6366f1")}
+              onMouseOver={(e) => (e.currentTarget.style.color = "var(--accent-start)")}
               onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
             >
               {c.name}
@@ -364,7 +371,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
           <span
             style={styles.link}
             onClick={() => setView("cart")}
-            onMouseOver={(e) => (e.currentTarget.style.color = "#6366f1")}
+            onMouseOver={(e) => (e.currentTarget.style.color = "var(--accent-start)")}
             onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
           >
             {t.cart} {cartCount > 0 && <span style={styles.cartBadge}>{cartCount}</span>}
@@ -384,7 +391,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
                   style={{ ...styles.card, cursor: "pointer" }}
                   onClick={() => openCategory(c)}
                   onMouseOver={(e) => {
-                    e.currentTarget.style.borderColor = "#6366f1";
+                    e.currentTarget.style.borderColor = "var(--accent-start)";
                     e.currentTarget.style.background = "var(--bg-card-hover)";
                   }}
                   onMouseOut={(e) => {
@@ -419,7 +426,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
                 style={styles.productCard}
                 onClick={() => openProduct(p)}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.borderColor = "#6366f1";
+                  e.currentTarget.style.borderColor = "var(--accent-start)";
                   e.currentTarget.style.transform = "translateY(-2px)";
                 }}
                 onMouseOut={(e) => {
@@ -457,7 +464,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
               <div style={{ flex: 1, minWidth: "200px" }}>
                 <h2 style={{ marginBottom: "0.5rem" }}>{product.name}</h2>
                 <p style={{ color: "var(--text-secondary)", marginBottom: "1rem", lineHeight: 1.6 }}>{product.description}</p>
-                <p style={{ marginBottom: "0.5rem" }}>{t.price} <strong style={{ color: "#a855f7" }}>{product.price.toFixed(2)} €</strong></p>
+                <p style={{ marginBottom: "0.5rem" }}>{t.price} <strong style={{ color: "var(--accent-end)" }}>{product.price.toFixed(2)} €</strong></p>
                 <p style={{ marginBottom: "1rem", fontSize: "0.9rem", color: "var(--text-muted)" }}>{t.stock} {product.stock}</p>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   <input
@@ -544,7 +551,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
                     <td colSpan={3} style={{ ...styles.td, textAlign: "right" as const, fontWeight: 600 }}>
                       {t.totalLabel}
                     </td>
-                    <td style={{ ...styles.td, fontWeight: 600, color: "#a855f7" }}>{cartTotal.toFixed(2)} €</td>
+                    <td style={{ ...styles.td, fontWeight: 600, color: "var(--accent-end)" }}>{cartTotal.toFixed(2)} €</td>
                     <td style={styles.td}></td>
                   </tr>
                 </table>
@@ -641,7 +648,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
                   )}
                 </div>
                 <div style={{ marginTop: "1.5rem", paddingTop: "1rem", borderTop: "1px solid var(--border-color)" }}>
-                  <p style={{ marginBottom: "0.5rem", color: "var(--text-secondary)" }}>{t.totalLabel} <strong style={{ color: "#a855f7" }}>{cartTotal.toFixed(2)} €</strong></p>
+                  <p style={{ marginBottom: "0.5rem", color: "var(--text-secondary)" }}>{t.totalLabel} <strong style={{ color: "var(--accent-end)" }}>{cartTotal.toFixed(2)} €</strong></p>
                   <button style={{ ...styles.button, ...styles.primaryBtn }} onClick={placeOrder}>
                     {t.confirmOrder}
                   </button>

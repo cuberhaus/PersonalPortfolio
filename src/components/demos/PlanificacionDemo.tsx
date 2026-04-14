@@ -1,4 +1,5 @@
-import { useId, useMemo, useState } from "react";
+import { useId, useState } from "react";
+import LiveAppEmbed from "./LiveAppEmbed";
 
 type Lang = "en" | "es" | "ca";
 
@@ -27,23 +28,35 @@ const TRANSLATIONS = {
     domain: "Domain (Ext 2)",
     problem: "Problem (Ext 2)",
     download: "Download \u2193",
-    runPlanner: "Run planner",
-    runReq: "Requires deployed planner API",
-    notConfig: "Planner API not configured.",
-    notConfigDesc: " Set PUBLIC_PLANNER_URL in .env before building. You can still browse the PDDL above and download the files.",
-    domainLabel: "Domain",
-    problemLabel: "Problem",
-    running: "Running\u2026",
-    reset: "Reset to defaults",
-    plan: "Plan",
-    steps: "steps",
-    total: "total:",
-    rawActions: "Raw plan actions",
-    showLog: "Show solver log",
-    hideLog: "Hide solver log",
     ghRepo: "GitHub repo \u2197",
-    missingApi: "Planner API not configured (set PUBLIC_PLANNER_URL at build time).",
-    noPlan: "Planner returned no plan."
+    mockTitle: "Planner output preview",
+    mockDesc: "Pre-computed optimal plan for the Extension 2 problem above.",
+    mockRun: "Simulate planner",
+    mockRunning: "Solving\u2026",
+    mockBadge: "Mock",
+    mockSteps: "steps",
+    mockDays: "days",
+    mockInterest: "interest",
+    mockRoute: "Route",
+    mockActions: "Raw plan actions",
+    fullAppTitle: "This demo vs. the full app",
+    demoIncludesLabel: "This demo includes:",
+    demoFeatures: [
+      "Flight network diagram and constraint overview for Extension 2",
+      "Read-only PDDL domain & problem source code",
+      "Downloadable .pddl files",
+      "Extension descriptions at a glance",
+      "Mock planner with pre-computed optimal solution",
+    ],
+    fullAppDesc: "The full web app (run locally) adds:",
+    fullAppFeatures: [
+      "File browser for all extensions (Basico through Extension 4)",
+      "Interactive graph visualization of the problem structure",
+      "Built-in planner execution on any domain/problem",
+      "Planned route highlighted on the graph",
+      "Editable PDDL with re-run support",
+    ],
+    fullAppHint: "Run locally to access the full app:",
   },
   es: {
     extensions: [
@@ -69,23 +82,35 @@ const TRANSLATIONS = {
     domain: "Dominio (Ext 2)",
     problem: "Problema (Ext 2)",
     download: "Descargar \u2193",
-    runPlanner: "Ejecutar planificador",
-    runReq: "Requiere API de planificador desplegada",
-    notConfig: "API del planificador no configurada.",
-    notConfigDesc: " Establece PUBLIC_PLANNER_URL en .env antes de compilar. Aún puedes ver el PDDL arriba y descargar los archivos.",
-    domainLabel: "Dominio",
-    problemLabel: "Problema",
-    running: "Ejecutando\u2026",
-    reset: "Restablecer por defecto",
-    plan: "Plan",
-    steps: "pasos",
-    total: "total:",
-    rawActions: "Acciones crudas del plan",
-    showLog: "Mostrar log del solver",
-    hideLog: "Ocultar log del solver",
     ghRepo: "Repositorio en GitHub \u2197",
-    missingApi: "API del planificador no configurada (establece PUBLIC_PLANNER_URL en tiempo de compilación).",
-    noPlan: "El planificador no devolvió ningún plan."
+    mockTitle: "Vista previa del planificador",
+    mockDesc: "Plan \u00f3ptimo pre-calculado para el problema de la Extensi\u00f3n 2.",
+    mockRun: "Simular planificador",
+    mockRunning: "Resolviendo\u2026",
+    mockBadge: "Mock",
+    mockSteps: "pasos",
+    mockDays: "d\u00edas",
+    mockInterest: "inter\u00e9s",
+    mockRoute: "Ruta",
+    mockActions: "Acciones crudas del plan",
+    fullAppTitle: "Esta demo vs. la app completa",
+    demoIncludesLabel: "Esta demo incluye:",
+    demoFeatures: [
+      "Diagrama de la red de vuelos y resumen de restricciones para la Extensión 2",
+      "Código fuente PDDL del dominio y problema (solo lectura)",
+      "Archivos .pddl descargables",
+      "Descripción de las extensiones de un vistazo",
+      "Planificador simulado con solución óptima pre-calculada",
+    ],
+    fullAppDesc: "La app web completa (ejecución local) añade:",
+    fullAppFeatures: [
+      "Explorador de archivos para todas las extensiones (Básico a Extensión 4)",
+      "Visualización interactiva del grafo de la estructura del problema",
+      "Ejecución del planificador integrado sobre cualquier dominio/problema",
+      "Ruta planificada resaltada sobre el grafo",
+      "PDDL editable con soporte para re-ejecución",
+    ],
+    fullAppHint: "Ejecútalo localmente para acceder a la app completa:",
   },
   ca: {
     extensions: [
@@ -111,38 +136,41 @@ const TRANSLATIONS = {
     domain: "Domini (Ext 2)",
     problem: "Problema (Ext 2)",
     download: "Descarregar \u2193",
-    runPlanner: "Executar planificador",
-    runReq: "Requereix API de planificador desplegada",
-    notConfig: "API del planificador no configurada.",
-    notConfigDesc: " Estableix PUBLIC_PLANNER_URL a .env abans de compilar. Encara pots veure el PDDL a dalt i descarregar els fitxers.",
-    domainLabel: "Domini",
-    problemLabel: "Problema",
-    running: "Executant\u2026",
-    reset: "Restablir per defecte",
-    plan: "Pla",
-    steps: "passos",
-    total: "total:",
-    rawActions: "Accions crues del pla",
-    showLog: "Mostrar log del solver",
-    hideLog: "Ocultar log del solver",
     ghRepo: "Repositori a GitHub \u2197",
-    missingApi: "API del planificador no configurada (estableix PUBLIC_PLANNER_URL en temps de compilació).",
-    noPlan: "El planificador no ha retornat cap pla."
+    mockTitle: "Vista pr\u00e8via del planificador",
+    mockDesc: "Pla \u00f2ptim pre-calculat per al problema de l'Extensi\u00f3 2.",
+    mockRun: "Simular planificador",
+    mockRunning: "Resolent\u2026",
+    mockBadge: "Mock",
+    mockSteps: "passos",
+    mockDays: "dies",
+    mockInterest: "inter\u00e8s",
+    mockRoute: "Ruta",
+    mockActions: "Accions crues del pla",
+    fullAppTitle: "Aquesta demo vs. l'app completa",
+    demoIncludesLabel: "Aquesta demo inclou:",
+    demoFeatures: [
+      "Diagrama de la xarxa de vols i resum de restriccions per a l'Extensió 2",
+      "Codi font PDDL del domini i problema (només lectura)",
+      "Arxius .pddl descarregables",
+      "Descripció de les extensions d'un cop d'ull",
+      "Planificador simulat amb solució òptima pre-calculada",
+    ],
+    fullAppDesc: "L'app web completa (execució local) afegeix:",
+    fullAppFeatures: [
+      "Explorador d'arxius per a totes les extensions (Bàsic a Extensió 4)",
+      "Visualització interactiva del graf de l'estructura del problema",
+      "Execució del planificador integrat sobre qualsevol domini/problema",
+      "Ruta planificada ressaltada sobre el graf",
+      "PDDL editable amb suport per a re-execució",
+    ],
+    fullAppHint: "Executa'l localment per accedir a l'app completa:",
   }
 };
 
 const basePath =
   typeof import.meta !== "undefined" && import.meta.env?.BASE_URL != null
     ? import.meta.env.BASE_URL : "/";
-
-function plannerBaseUrl(): string {
-  const raw = typeof import.meta !== "undefined" && import.meta.env?.PUBLIC_PLANNER_URL != null
-    ? String(import.meta.env.PUBLIC_PLANNER_URL).trim() : "";
-  const u = raw.replace(/\/$/, "");
-  if (u) return u;
-  if (typeof import.meta !== "undefined" && import.meta.env?.DEV) return "http://127.0.0.1:8765";
-  return "";
-}
 
 /* ── PDDL sources ── */
 const DOMAIN_EXT2 = `(define (domain agencia_viaje)
@@ -230,44 +258,15 @@ const PROBLEM_EXT2 = `(define (problem agencia_viaje)
 
 const GH = "https://github.com/cuberhaus/Practica_de_Planificacion";
 
-type PlanResponse = { ok: boolean; plan?: string[]; stdout?: string; error?: string; time_sec?: number; };
-type TripStep = { from: string; to: string; flight: string; hotel: string; diasToken: string; days: number | null; };
-
-function parseDiasFromProblem(problem: string): Record<string, number> {
-  const m: Record<string, number> = {};
-  const re = /\(=\s*\(dias_por_ciudad\s+(\w+)\)\s+(\d+)\)/g;
-  let x: RegExpExecArray | null;
-  while ((x = re.exec(problem))) m[x[1]] = parseInt(x[2], 10);
-  return m;
-}
-
-function parseTripSteps(plan: string[], diasMap: Record<string, number>): TripStep[] {
-  const out: TripStep[] = [];
-  for (const line of plan) {
-    const t = line.trim();
-    if (!t.startsWith("(anadir_ciudad ") || !t.endsWith(")")) continue;
-    const inner = t.slice("(anadir_ciudad ".length, -1).trim().split(/\s+/);
-    if (inner.length < 5) continue;
-    const [from, to, flight, hotel, diasToken] = inner;
-    out.push({ from, to, flight, hotel, diasToken, days: diasMap[diasToken] ?? null });
-  }
-  return out;
-}
-
-const CITY_COLORS = ["#6366f1", "#a855f7", "#22c55e", "#f59e0b", "#ec4899", "#06b6d4"];
-function cityColor(id: string): string {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0;
-  return CITY_COLORS[Math.abs(h) % CITY_COLORS.length];
-}
+import { MOCK_PLAN, CITY_COLORS, cityColor } from "../../lib/planificacion";
 
 /* ── shared styles ── */
 const card = {
   background: "var(--bg-card)", border: "1px solid var(--border-color)", borderRadius: "1rem", padding: "1.5rem",
 } as const;
 
-const accent1 = "#6366f1";
-const accent2 = "#a855f7";
+const accent1 = "var(--accent-start)";
+const accent2 = "var(--accent-end)";
 
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  FLIGHT NETWORK SVG                                                    */
@@ -325,100 +324,71 @@ function FlightNetwork() {
 }
 
 /* ════════════════════════════════════════════════════════════════════════ */
-/*  PLAN RESULT VISUALIZATION                                             */
-/* ════════════════════════════════════════════════════════════════════════ */
-function PlanResult({ plan, problem, timeSec, t }: { plan: string[]; problem: string; timeSec?: number; t: typeof TRANSLATIONS.en }) {
-  const diasMap = parseDiasFromProblem(problem);
-  const steps = parseTripSteps(plan, diasMap);
-  let cumDays = 0;
-
-  return (
-    <div style={{ marginTop: "1rem" }}>
-      <h4 style={{ margin: "0 0 0.75rem", fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary)" }}>
-        ✅ {t.plan} ({plan.length} {t.steps}{timeSec != null ? ` \u00b7 ${timeSec}s` : ""})
-      </h4>
-
-      {steps.length > 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1rem" }}>
-          {steps.map((s, i) => {
-            const d = s.days;
-            if (d != null) cumDays += d;
-            return (
-              <div key={i} style={{
-                display: "flex", gap: "0.75rem", alignItems: "flex-start",
-                padding: "0.6rem 0.85rem", background: "var(--bg-secondary)", borderRadius: "0.5rem", border: "1px solid var(--border-color)",
-              }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
-                  background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-                  color: "var(--text-primary)", fontSize: "0.7rem", fontWeight: 700,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>{i + 1}</div>
-                <div style={{ fontSize: "0.82rem" }}>
-                  <span style={{ color: cityColor(s.from), fontWeight: 600 }}>{s.from}</span>
-                  <span style={{ color: "var(--text-muted)", margin: "0 0.3rem" }}>→</span>
-                  <span style={{ color: cityColor(s.to), fontWeight: 600 }}>{s.to}</span>
-                  <span style={{ color: "var(--text-muted)", marginLeft: "0.5rem", fontSize: "0.75rem" }}>
-                    ✈️ {s.flight} · 🏨 {s.hotel} · 📅 {d != null ? `${d}d` : s.diasToken}
-                    {cumDays > 0 && <span style={{ color: "var(--text-muted)" }}> ({t.total} {cumDays}d)</span>}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      <details>
-        <summary style={{ fontSize: "0.75rem", color: "var(--text-muted)", cursor: "pointer" }}>{t.rawActions}</summary>
-        <ol style={{
-          margin: "0.5rem 0 0", paddingLeft: "1.25rem", color: "var(--text-secondary)",
-          fontFamily: "ui-monospace, monospace", fontSize: "0.72rem", lineHeight: 1.8,
-        }}>
-          {plan.map((a, i) => <li key={i}>{a}</li>)}
-        </ol>
-      </details>
-    </div>
-  );
-}
-
-/* ════════════════════════════════════════════════════════════════════════ */
 /*  MAIN EXPORT                                                           */
 /* ════════════════════════════════════════════════════════════════════════ */
 export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
-  const plannerUrl = useMemo(() => plannerBaseUrl(), []);
   const pDomain = `${basePath}demos/planificacion/agencia_de_viajes_domain_ext2.pddl`;
   const pProblem = `${basePath}demos/planificacion/agencia_de_viajes_problem_ext2.pddl`;
+  const [mockState, setMockState] = useState<"idle" | "running" | "done">("idle");
 
-  const [domainEdit, setDomainEdit] = useState(DOMAIN_EXT2);
-  const [problemEdit, setProblemEdit] = useState(PROBLEM_EXT2);
-  const [running, setRunning] = useState(false);
-  const [result, setResult] = useState<PlanResponse | null>(null);
-  const [fetchErr, setFetchErr] = useState<string | null>(null);
-  const [showLog, setShowLog] = useState(false);
-
-  async function runPlanner() {
-    setFetchErr(null); setResult(null);
-    if (!plannerUrl) { setFetchErr(t.missingApi); return; }
-    setRunning(true);
-    try {
-      const res = await fetch(`${plannerUrl}/plan`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ domain: domainEdit, problem: problemEdit }),
-      });
-      let data: PlanResponse;
-      try { data = await res.json() as PlanResponse; } catch { setFetchErr(`HTTP ${res.status}: not JSON`); return; }
-      setResult(data);
-      if (!res.ok) setFetchErr(data.error || `HTTP ${res.status}`);
-      else if (!data.ok) setFetchErr(data.error || t.noPlan);
-    } catch (e) {
-      setFetchErr(e instanceof Error ? e.message : "Network error.");
-    } finally { setRunning(false); }
+  function simulatePlanner() {
+    setMockState("running");
+    setTimeout(() => setMockState("done"), 800 + Math.random() * 600);
   }
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
+      <LiveAppEmbed
+        url="http://localhost:3000"
+        title="PDDL Planning Web App"
+        dockerCmd="cd Practica_de_Planificacion && make docker-run"
+        devCmd="cd Practica_de_Planificacion && make dev"
+        lang={lang}
+      />
+
+      {/* ── DEMO VS FULL APP ── */}
+      <div style={{
+        marginBottom: "1.25rem", padding: "1rem 1.25rem",
+        background: "linear-gradient(135deg, rgba(139,92,246,0.06), rgba(14,165,233,0.06))",
+        border: "1px solid rgba(139,92,246,0.2)",
+        borderRadius: "0.75rem",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.85rem" }}>
+          <span style={{ fontSize: "0.9rem" }}>&#9432;</span>
+          <strong style={{ fontSize: "0.82rem", color: "var(--text-primary)" }}>{t.fullAppTitle}</strong>
+        </div>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))",
+          gap: "1rem",
+        }}>
+          <div>
+            <p style={{ margin: "0 0 0.35rem", fontSize: "0.76rem", fontWeight: 600, color: "var(--text-primary)" }}>
+              {t.demoIncludesLabel}
+            </p>
+            <ul style={{ margin: 0, paddingLeft: "1.2rem", fontSize: "0.74rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+              {t.demoFeatures.map((f, i) => <li key={i}>{f}</li>)}
+            </ul>
+          </div>
+          <div>
+            <p style={{ margin: "0 0 0.35rem", fontSize: "0.76rem", fontWeight: 600, color: accent1 }}>
+              {t.fullAppDesc}
+            </p>
+            <ul style={{ margin: 0, paddingLeft: "1.2rem", fontSize: "0.74rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+              {t.fullAppFeatures.map((f, i) => <li key={i}>{f}</li>)}
+            </ul>
+          </div>
+        </div>
+        <p style={{ margin: "0.75rem 0 0", fontSize: "0.72rem", color: "var(--text-muted)" }}>
+          {t.fullAppHint}{" "}
+          <code style={{
+            padding: "0.15rem 0.4rem", borderRadius: "0.25rem",
+            background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
+            fontSize: "0.7rem", fontFamily: "var(--font-mono, monospace)", color: "var(--text-primary)",
+          }}>cd Practica_de_Planificacion && make dev</code>
+        </p>
+      </div>
 
       {/* ── PROBLEM OVERVIEW ── */}
       <div style={{
@@ -517,98 +487,111 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
         </div>
       </div>
 
-      {/* ── RUN PLANNER ── */}
+      {/* ── MOCK PLANNER ── */}
       <div style={{ ...card, marginBottom: "1.25rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-          <div style={{
-            width: 30, height: 30, borderRadius: "0.5rem", display: "flex", alignItems: "center",
-            justifyContent: "center", fontSize: "0.9rem",
-            background: `linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1))`,
-          }}>⚡</div>
-          <div>
-            <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.runPlanner}</h3>
-            <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>
-              {plannerUrl ? `ENHSP backend \u00b7 ${plannerUrl}` : t.runReq}
-            </p>
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+          <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
+            {t.mockTitle}
+          </h4>
+          <span style={{
+            padding: "0.15rem 0.45rem", borderRadius: "0.3rem", fontSize: "0.6rem", fontWeight: 700,
+            letterSpacing: "0.05em", textTransform: "uppercase",
+            background: "rgba(139,92,246,0.15)", color: "#c4b5fd", border: "1px solid rgba(139,92,246,0.25)",
+          }}>{t.mockBadge}</span>
         </div>
+        <p style={{ margin: "0 0 0.75rem", fontSize: "0.76rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
+          {t.mockDesc}
+        </p>
 
-        {!plannerUrl && (
+        {mockState === "idle" && (
+          <button type="button" onClick={simulatePlanner} style={{
+            padding: "0.5rem 1.1rem", borderRadius: "0.5rem", border: "none", cursor: "pointer",
+            fontWeight: 600, fontSize: "0.82rem",
+            background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "#fff",
+          }}>{t.mockRun}</button>
+        )}
+
+        {mockState === "running" && (
           <div style={{
-            padding: "0.75rem 1rem", background: "rgba(234, 179, 8, 0.08)", border: "1px solid rgba(234, 179, 8, 0.25)",
-            borderRadius: "0.5rem", color: "#fde047", fontSize: "0.82rem", lineHeight: 1.5, marginBottom: "1rem",
+            display: "flex", alignItems: "center", gap: "0.5rem",
+            padding: "0.6rem 1rem", background: "var(--bg-secondary)", borderRadius: "0.5rem",
+            border: "1px solid var(--border-color)", fontSize: "0.82rem", color: "var(--text-muted)",
           }}>
-            <strong>{t.notConfig}</strong>{t.notConfigDesc}
+            <span style={{ display: "inline-block", animation: "spin 1s linear infinite", fontSize: "1rem" }}>&#9881;</span>
+            {t.mockRunning}
+            <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
           </div>
         )}
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
-          <div>
-            <label style={{ display: "block", color: "var(--text-muted)", fontSize: "0.75rem", marginBottom: "0.25rem" }}>{t.domainLabel}</label>
-            <textarea value={domainEdit} onChange={(e) => setDomainEdit(e.target.value)} spellCheck={false} rows={8}
-              style={{
-                width: "100%", padding: "0.65rem", fontSize: "0.68rem", lineHeight: 1.4,
-                fontFamily: "ui-monospace, monospace", background: "var(--bg-secondary)", color: "var(--text-primary)",
-                border: "1px solid var(--border-color)", borderRadius: "0.5rem", resize: "vertical", boxSizing: "border-box",
-              }}
-            />
-          </div>
-          <div>
-            <label style={{ display: "block", color: "var(--text-muted)", fontSize: "0.75rem", marginBottom: "0.25rem" }}>{t.problemLabel}</label>
-            <textarea value={problemEdit} onChange={(e) => setProblemEdit(e.target.value)} spellCheck={false} rows={8}
-              style={{
-                width: "100%", padding: "0.65rem", fontSize: "0.68rem", lineHeight: 1.4,
-                fontFamily: "ui-monospace, monospace", background: "var(--bg-secondary)", color: "var(--text-primary)",
-                border: "1px solid var(--border-color)", borderRadius: "0.5rem", resize: "vertical", boxSizing: "border-box",
-              }}
-            />
-          </div>
-        </div>
+        {mockState === "done" && (() => {
+          let cumDays = 0;
+          const totalInterest = MOCK_PLAN.reduce((s, p) => s + p.interest, 0);
+          const totalDays = MOCK_PLAN.reduce((s, p) => s + p.days, 0);
+          return (
+            <div>
+              <div style={{
+                display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap",
+                marginBottom: "0.75rem", fontSize: "0.78rem",
+              }}>
+                <span style={{ color: "#22c55e", fontWeight: 700 }}>&#10003; {MOCK_PLAN.length} {t.mockSteps}</span>
+                <span style={{ color: "var(--text-muted)" }}>{totalDays} {t.mockDays}</span>
+                <span style={{ color: "var(--text-muted)" }}>{t.mockInterest}: {totalInterest}</span>
+                <span style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>
+                  {t.mockRoute}: {["cg1", ...MOCK_PLAN.map(p => p.to)].map((c, i, arr) => (
+                    <span key={c}>
+                      <span style={{ color: cityColor(c), fontWeight: 600 }}>{c}</span>
+                      {i < arr.length - 1 && <span style={{ margin: "0 0.2rem", opacity: 0.5 }}>{"\u2192"}</span>}
+                    </span>
+                  ))}
+                </span>
+              </div>
 
-        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
-          <button type="button" onClick={() => void runPlanner()} disabled={running || !plannerUrl}
-            style={{
-              padding: "0.5rem 1.1rem", borderRadius: "0.5rem", border: "none", cursor: running || !plannerUrl ? "not-allowed" : "pointer",
-              fontWeight: 600, fontSize: "0.85rem",
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`, color: "var(--text-primary)",
-              opacity: running || !plannerUrl ? 0.5 : 1,
-            }}>
-            {running ? t.running : t.runPlanner}
-          </button>
-          <button type="button" onClick={() => { setDomainEdit(DOMAIN_EXT2); setProblemEdit(PROBLEM_EXT2); setResult(null); setFetchErr(null); }}
-            style={{
-              padding: "0.45rem 0.85rem", borderRadius: "0.5rem", border: "1px solid var(--border-color)",
-              cursor: "pointer", fontSize: "0.78rem", background: "var(--bg-card-hover)", color: "var(--text-secondary)",
-            }}>{t.reset}</button>
-        </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", marginBottom: "0.75rem" }}>
+                {MOCK_PLAN.map((step, i) => {
+                  cumDays += step.days;
+                  return (
+                    <div key={i} style={{
+                      display: "flex", gap: "0.65rem", alignItems: "center",
+                      padding: "0.55rem 0.85rem", background: "var(--bg-secondary)",
+                      borderRadius: "0.5rem", border: "1px solid var(--border-color)",
+                    }}>
+                      <div style={{
+                        width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
+                        background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
+                        color: "#fff", fontSize: "0.65rem", fontWeight: 700,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}>{i + 1}</div>
+                      <div style={{ fontSize: "0.78rem", display: "flex", alignItems: "center", gap: "0.3rem", flexWrap: "wrap" }}>
+                        <span style={{ color: cityColor(step.from), fontWeight: 600 }}>{step.from}</span>
+                        <span style={{ color: "var(--text-muted)" }}>{"\u2192"}</span>
+                        <span style={{ color: cityColor(step.to), fontWeight: 600 }}>{step.to}</span>
+                        <span style={{ color: "var(--text-muted)", fontSize: "0.72rem", marginLeft: "0.3rem" }}>
+                          {"\u2708\uFE0F"} {step.flight} · {"\uD83C\uDFE8"} {step.hotel} · {"\uD83D\uDCC5"} {step.days}d ({cumDays}d)
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
 
-        {fetchErr && (
-          <div style={{
-            marginTop: "0.75rem", padding: "0.75rem 1rem", background: "rgba(239,68,68,0.08)",
-            border: "1px solid rgba(239,68,68,0.25)", borderRadius: "0.5rem",
-            color: "#fca5a5", fontSize: "0.82rem", whiteSpace: "pre-wrap",
-          }}>{fetchErr}</div>
-        )}
+              <details>
+                <summary style={{ fontSize: "0.72rem", color: "var(--text-muted)", cursor: "pointer" }}>{t.mockActions}</summary>
+                <ol style={{
+                  margin: "0.4rem 0 0", paddingLeft: "1.25rem", color: "var(--text-secondary)",
+                  fontFamily: "ui-monospace, monospace", fontSize: "0.68rem", lineHeight: 1.8,
+                }}>
+                  {MOCK_PLAN.map((p, i) => <li key={i}>{p.action}</li>)}
+                </ol>
+              </details>
 
-        {result?.ok && result.plan && result.plan.length > 0 && (
-          <PlanResult plan={result.plan} problem={problemEdit} timeSec={result.time_sec} t={t} />
-        )}
-
-        {result?.stdout && (
-          <div style={{ marginTop: "0.75rem" }}>
-            <button type="button" onClick={() => setShowLog((v) => !v)} style={{
-              fontSize: "0.75rem", color: "var(--text-muted)", cursor: "pointer",
-              background: "none", border: "none", padding: 0, textDecoration: "underline",
-            }}>{showLog ? t.hideLog : t.showLog}</button>
-            {showLog && (
-              <pre style={{
-                marginTop: "0.5rem", padding: "0.75rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
-                borderRadius: "0.5rem", fontSize: "0.65rem", fontFamily: "ui-monospace, monospace",
-                color: "var(--text-muted)", lineHeight: 1.4, overflowX: "auto", maxHeight: "min(300px, 35vh)",
-              }}><code>{result.stdout}</code></pre>
-            )}
-          </div>
-        )}
+              <button type="button" onClick={() => setMockState("idle")} style={{
+                marginTop: "0.6rem", padding: "0.35rem 0.75rem", borderRadius: "0.4rem",
+                border: "1px solid var(--border-color)", cursor: "pointer",
+                fontSize: "0.72rem", background: "var(--bg-card-hover)", color: "var(--text-secondary)",
+              }}>{t.mockRun}</button>
+            </div>
+          );
+        })()}
       </div>
 
       {/* ── LINKS ── */}
