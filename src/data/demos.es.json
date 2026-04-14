@@ -190,7 +190,7 @@
   {
     "slug": "caim",
     "title": "Explorador IR — CAIM",
-    "description": "Explorador interactivo de recuperación de información: PageRank sobre la red global de aeropuertos con visualización en mapa mundial, y análisis de la Ley de Zipf con ajuste de curvas en corpus de texto.",
+    "description": "Explorador interactivo de recuperación de información en el navegador: calcula PageRank sobre la red global de aeropuertos con un mapa D3, y analiza la Ley de Zipf en corpus de texto con ajuste de curvas.",
     "tags": [
       "Vanilla TS",
       "D3.js",

@@ -13,7 +13,8 @@ const LIVE_DEMOS = [
   { slug: 'draculin', port: 8890, name: 'Draculin' },
   { slug: 'desastres-ia', port: 8083, name: 'Desastres IA' },
   { slug: 'sbc-ia', port: 8088, name: 'SBC IA Trip Planner' },
-  { slug: 'caim', port: 8086, name: 'CAIM IR Explorer' },
+  // CAIM is now a browser-native mock demo; iframe fallback still works but tested in browser-demos.spec.ts
+  // { slug: 'caim', port: 8086, name: 'CAIM IR Explorer' },
   { slug: 'planificacion', port: 8765, name: 'Planificación' },
   { slug: 'joc-eda', port: 8082, name: 'Joc EDA' },
   { slug: 'mpids', port: 8085, name: 'MPIDS Solver' },

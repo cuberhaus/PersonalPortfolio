@@ -1,6 +1,7 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
+import CAIMDemo from '../../components/demos/CAIMDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
@@ -60,12 +61,15 @@ const badge = badges[lang] || badges.en;
       accentTo="#6366f1"
     />
 
+    <CAIMDemo lang={lang} client:visible />
+
     <LiveAppEmbed
       url="http://localhost:8086"
       title="CAIM IR Explorer"
       dockerCmd="cd CAIM && docker compose up -d"
       devCmd="cd CAIM && make dev"
       lang={lang}
+      fallbackSelector=".caim-mock"
       client:load
     />
 
