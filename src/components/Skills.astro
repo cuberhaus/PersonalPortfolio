@@ -7,6 +7,18 @@ import skillsCa from '../data/skills.ca.json';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const skills = lang === 'es' ? skillsEs : lang === 'ca' ? skillsCa : skillsEn;
+
+const LOC_DATA: Record<string, { lines: string; pct: number }> = {
+  Python:     { lines: '~71K', pct: 18 },
+  C:          { lines: '~182K', pct: 47 },
+  'C++':      { lines: '~39K', pct: 10 },
+  Java:       { lines: '~52K', pct: 13 },
+  SQL:        { lines: '~1.2K', pct: 0 },
+  Haskell:    { lines: '~2.4K', pct: 1 },
+  Prolog:     { lines: '~7.5K', pct: 2 },
+  JavaScript: { lines: '~34K', pct: 9 },
+  PowerShell: { lines: '~1.8K', pct: 0 },
+};
 ---
 
 <section class="section skills" id="skills">
@@ -24,9 +36,14 @@ const skills = lang === 'es' ? skillsEs : lang === 'ca' ? skillsCa : skillsEn;
         <div class="skill-group">
           <h3 class="skill-category">{group.category}</h3>
           <div class="skill-pills">
-            {group.items.map((item) => (
-              <span class="skill-pill">{item}</span>
-            ))}
+            {group.items.map((item) => {
+              const loc = LOC_DATA[item];
+              return loc ? (
+                <span class="skill-pill has-tooltip" data-tooltip={`${loc.lines} lines · ${loc.pct}%`}>{item}</span>
+              ) : (
+                <span class="skill-pill">{item}</span>
+              );
+            })}
           </div>
         </div>
       ))}
@@ -86,6 +103,37 @@ const skills = lang === 'es' ? skillsEs : lang === 'ca' ? skillsCa : skillsEn;
     border-color: var(--accent-start);
     box-shadow: 0 0 12px var(--glow-color);
     transform: translateY(-1px);
+  }
+
+  .has-tooltip {
+    position: relative;
+    cursor: default;
+  }
+
+  .has-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color-hover);
+    border-radius: var(--radius-sm, 6px);
+    padding: 0.3rem 0.65rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+  }
+
+  .has-tooltip:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
   }
 
   @media (max-width: 768px) {

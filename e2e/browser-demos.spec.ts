@@ -556,7 +556,7 @@ test.describe('CAIM IR Explorer demo', () => {
   });
 
   test('shows PageRank and Zipf tab buttons', async ({ page }) => {
-    await expect(page.getByRole('button', { name: /PageRank/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'PageRank', exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: /Zipf/i })).toBeVisible();
   });
 
