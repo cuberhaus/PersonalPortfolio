@@ -199,8 +199,14 @@ test.describe('LiveAppEmbed offline fallback', () => {
 test.describe('Draculin demo', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/demos/draculin', { waitUntil: 'networkidle' });
-    // Wait for LiveAppEmbed probe to fail (2s timeout) and fallback to appear
-    await page.waitForTimeout(3500);
+    // Wait for LiveAppEmbed probe to complete (2s timeout)
+    await page.waitForTimeout(3000);
+    // Force fallback visible — the backend may be running (online → display:none)
+    // but we want to test the mock demo regardless
+    await page.evaluate(() => {
+      const el = document.querySelector('#draculin-mock-fallback') as HTMLElement;
+      if (el) el.style.display = '';
+    });
     // Scroll fallback into viewport for client:visible hydration
     await page.evaluate(() => {
       document.querySelector('#draculin-mock-fallback')?.scrollIntoView({ block: 'center' });
@@ -210,14 +216,6 @@ test.describe('Draculin demo', () => {
   });
 
   test('renders all 5 tabs', async ({ page }) => {
-    const fallbackInfo = await page.evaluate(() => {
-      const el = document.querySelector('#draculin-mock-fallback');
-      if (!el) return 'NOT FOUND';
-      return { display: getComputedStyle(el).display, height: el.clientHeight, html: el.innerHTML.substring(0, 500) };
-    });
-    console.log('FALLBACK:', JSON.stringify(fallbackInfo, null, 2));
-    const btns = await page.locator('button').allTextContents();
-    console.log('ALL BUTTONS:', btns);
     for (const label of ['DracuNews', 'DracuChat', 'DracuQuiz', 'DracuVision', 'DracuStats']) {
       await expect(page.getByRole('button', { name: new RegExp(label) })).toBeVisible();
     }
