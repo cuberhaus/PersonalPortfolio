@@ -42,7 +42,7 @@ jobs:
           cache-dependency-path: planner-api/requirements.txt
 
       - name: Install dependencies
-        run: pip install -r requirements.txt pytest httpx
+        run: pip install -r requirements.txt pytest
 
       - name: Run tests
         run: python -m pytest tests/ -v
