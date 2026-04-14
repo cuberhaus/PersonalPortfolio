@@ -30,16 +30,16 @@ test: ## Run Vitest test suite (portfolio only)
 test-all: test ## Run ALL test suites (portfolio + every demo backend)
 	@echo ""
 	@echo "=== Python backends (pytest) ==="
-	cd "$(PARENT)/projectA/web"   && python -m pytest backend/test_app.py -v
-	cd "$(PARENT)/desastresIA/web" && python -m pytest backend/test_app.py -v
-	cd "$(PARENT)/projectA2/web"  && python -m pytest backend/test_app.py -v
-	cd "$(PARENT)/CAIM/web"       && python -m pytest backend/test_app.py -v
-	cd "$(PARENT)/bitsXlaMarato/web/backend" && python -m pytest test_app.py -v
-	cd "$(PARENT)/SBC_IA/web"     && python -m pytest backend/test_app.py -v
-	cd "$(PARENT)/TFG/backend"    && python -m pytest test_main.py -v
+	cd "$(PARENT)/projectA/web"   && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/desastresIA/web" && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/projectA2/web"  && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/CAIM/web"       && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/bitsXlaMarato/web/backend" && $(SYS_PYTHON) -m pytest test_app.py -v
+	cd "$(PARENT)/SBC_IA/web"     && $(SYS_PYTHON) -m pytest backend/test_app.py -v
+	cd "$(PARENT)/TFG/backend"    && $(SYS_PYTHON) -m pytest test_main.py -v
 	@echo ""
 	@echo "=== Django (Draculin) ==="
-	cd "$(PARENT)/Draculin-Backend" && python manage.py test dracu -v2
+	cd "$(PARENT)/Draculin-Backend" && $(SYS_PYTHON) manage.py test dracu -v2
 	@echo ""
 	@echo "=== Go (joc_eda) ==="
 	@if command -v go >/dev/null 2>&1; then \
@@ -62,6 +62,11 @@ test-all: test ## Run ALL test suites (portfolio + every demo backend)
 	@echo "All test suites passed."
 
 PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
+
+# Ensure pytest commands use the system Python, not an accidentally activated venv
+unexport VIRTUAL_ENV
+SYS_PYTHON := $(shell PATH="$$(echo "$$PATH" | tr ':' '\n' | grep -v '\.venv' | tr '\n' ':')" which python)
+
 STAMPS := .build-stamps
 FIND_EXCLUDES := -not -path '*/node_modules/*' \
                  -not -path '*/.git/*' \
