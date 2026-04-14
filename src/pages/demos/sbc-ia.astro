@@ -2,6 +2,7 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import SbcDemo from '../../components/demos/SbcDemo';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -58,7 +59,23 @@ const badge = badges[lang] || badges.en;
       dockerCmd="cd SBC_IA && docker compose up -d"
       devCmd="cd SBC_IA && make web-dev"
       lang={lang}
+      fallbackSelector="#sbc-mock-fallback"
       client:load
     />
+
+    <div id="sbc-mock-fallback" class="sbc-demo-wrapper">
+      <SbcDemo lang={lang} client:visible />
+    </div>
   </div>
 </DemoLayout>
+
+<style>
+  .sbc-demo-wrapper {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    background: var(--bg-card);
+    padding: 1.5rem;
+    min-height: 400px;
+  }
+</style>

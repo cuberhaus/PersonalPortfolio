@@ -194,7 +194,7 @@
   {
     "slug": "caim",
     "title": "CAIM IR Explorer",
-    "description": "Interactive information retrieval explorer: PageRank on the global airport network with world map visualization, and Zipf's Law analysis with curve fitting on text corpora.",
+    "description": "Interactive information retrieval explorer running in-browser: compute PageRank on the global airport network with a D3 world map, and analyze Zipf's Law on text corpora with curve fitting.",
     "tags": [
       "Vanilla TS",
       "D3.js",

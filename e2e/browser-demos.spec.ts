@@ -540,3 +540,107 @@ test.describe('Prev/Next demo cards', () => {
     await expect(page).toHaveTitle(/.+/);
   });
 });
+
+// ─── CAIM IR Explorer Demo ───────────────────────────────────────
+
+test.describe('CAIM IR Explorer demo', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/demos/caim', { waitUntil: 'networkidle' });
+    // Wait for LiveAppEmbed probe + component hydration
+    await page.waitForTimeout(3000);
+    // Scroll mock into viewport for client:visible
+    await page.evaluate(() => {
+      document.querySelector('.caim-mock')?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(1500);
+  });
+
+  test('shows PageRank and Zipf tab buttons', async ({ page }) => {
+    await expect(page.getByRole('button', { name: /PageRank/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Zipf/i })).toBeVisible();
+  });
+
+  test('tab switching changes content', async ({ page }) => {
+    // Switch to Zipf tab
+    await page.getByRole('button', { name: /Zipf/i }).click();
+    await page.waitForTimeout(500);
+    // Should show corpus buttons
+    await expect(page.getByRole('button', { name: /Novels/i })).toBeVisible();
+
+    // Switch back to PageRank
+    await page.getByRole('button', { name: /PageRank/i }).click();
+    await page.waitForTimeout(500);
+    // Should show run button
+    await expect(page.getByRole('button', { name: /Run PageRank|Ejecutar|Executar/i })).toBeVisible();
+  });
+
+  test('PageRank tab: run produces rankings table', async ({ page }) => {
+    // Should auto-run on mount; wait for table to appear
+    await page.waitForTimeout(2000);
+    const table = page.locator('.caim-mock table');
+    const rows = table.locator('tbody tr');
+    const count = await rows.count();
+    expect(count).toBeGreaterThanOrEqual(1);
+  });
+
+  test('PageRank tab: map renders SVG circles', async ({ page }) => {
+    await page.waitForTimeout(3000);
+    const circles = page.locator('.caim-mock svg circle');
+    const count = await circles.count();
+    expect(count).toBeGreaterThanOrEqual(5);
+  });
+
+  test('Zipf tab: selecting a corpus renders chart', async ({ page }) => {
+    await page.getByRole('button', { name: /Zipf/i }).click();
+    await page.waitForTimeout(1000);
+    // Click News corpus
+    await page.getByRole('button', { name: /News/i }).click();
+    await page.waitForTimeout(500);
+    // Should render SVG with data points
+    const circles = page.locator('.caim-mock svg circle');
+    const count = await circles.count();
+    expect(count).toBeGreaterThanOrEqual(1);
+  });
+
+  test('Zipf tab: custom text analysis works', async ({ page }) => {
+    await page.getByRole('button', { name: /Zipf/i }).click();
+    await page.waitForTimeout(500);
+    const textarea = page.locator('.caim-mock textarea');
+    await textarea.fill('the quick brown fox jumps over the lazy dog the dog the fox the');
+    await page.getByRole('button', { name: /Analyze|Analizar|Analitzar/i }).click();
+    await page.waitForTimeout(500);
+    // Should show word table with "the" at top
+    await expect(page.locator('.caim-mock table').last().locator('text=the').first()).toBeVisible();
+  });
+
+  test('Zipf tab: parameter display shows values', async ({ page }) => {
+    await page.getByRole('button', { name: /Zipf/i }).click();
+    await page.waitForTimeout(1000);
+    // Should display R² value
+    await expect(page.locator('.caim-mock').locator('text=R²').first()).toBeVisible();
+  });
+});
+
+// ─── CAIM i18n ───────────────────────────────────────────────────
+
+test.describe('CAIM demo i18n', () => {
+  test('Spanish CAIM page shows translated tab labels', async ({ page }) => {
+    await page.goto('/es/demos/caim', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(3000);
+    await page.evaluate(() => {
+      document.querySelector('.caim-mock')?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(1500);
+    await expect(page.getByRole('button', { name: /Zipf/i })).toBeVisible();
+  });
+
+  test('Catalan CAIM page shows translated tab labels', async ({ page }) => {
+    await page.goto('/ca/demos/caim', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(3000);
+    await page.evaluate(() => {
+      document.querySelector('.caim-mock')?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(1500);
+    await expect(page.getByRole('button', { name: /Zipf/i })).toBeVisible();
+  });
+});
