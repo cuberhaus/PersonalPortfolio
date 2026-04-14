@@ -309,8 +309,8 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
   for (const t of yTicks) {
     g.append('line').attr('x1', 0).attr('x2', iw).attr('y1', yScale(t)).attr('y2', yScale(t))
       .attr('stroke', '#1a1a2e').attr('stroke-width', 0.5);
-    g.append('text').attr('x', -6).attr('y', yScale(t) + 3)
-      .attr('fill', '#64748b').attr('font-size', '7px').attr('text-anchor', 'end')
+    g.append('text').attr('x', -6).attr('y', yScale(t) + 4)
+      .attr('fill', '#64748b').attr('font-size', '10px').attr('text-anchor', 'end')
       .text(t.toExponential(0));
   }
 
@@ -327,11 +327,11 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
     .attr('stroke-width', 1.5);
 
   // Axis labels (outside clip)
-  g.append('text').attr('x', iw / 2).attr('y', ih + 18)
-    .attr('fill', '#64748b').attr('font-size', '8px').attr('text-anchor', 'middle')
+  g.append('text').attr('x', iw / 2).attr('y', ih + 20)
+    .attr('fill', '#64748b').attr('font-size', '11px').attr('text-anchor', 'middle')
     .text('Iteration');
   g.append('text').attr('x', -ih / 2).attr('y', -38)
-    .attr('fill', '#64748b').attr('font-size', '8px').attr('text-anchor', 'middle')
+    .attr('fill', '#64748b').attr('font-size', '11px').attr('text-anchor', 'middle')
     .attr('transform', 'rotate(-90)')
     .text('Max Δ');
 }
