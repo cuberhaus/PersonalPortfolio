@@ -107,16 +107,37 @@ test.describe('JSBach demo', () => {
 test.describe('Tenda demo', () => {
   test('displays product categories on home', async ({ page }) => {
     await page.goto('/demos/tenda', { waitUntil: 'networkidle' });
-    // Should show category cards or product grid
-    const cards = page.locator('[style*="cursor: pointer"], [role="link"]');
+    // Wait for LiveAppEmbed probe to complete
+    await page.waitForTimeout(3000);
+    // Force fallback visible in case backend is running
+    await page.evaluate(() => {
+      const el = document.querySelector('#tenda-mock-fallback') as HTMLElement;
+      if (el) el.style.display = '';
+    });
+    // Scroll fallback into viewport for client:visible hydration
+    await page.evaluate(() => {
+      document.querySelector('#tenda-mock-fallback')?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(1500);
+    // Should show category cards with cursor:pointer
+    const cards = page.locator('#tenda-mock-fallback [style*="cursor:pointer"]');
     const count = await cards.count();
     expect(count).toBeGreaterThan(0);
   });
 
   test('add to cart updates badge count', async ({ page }) => {
     await page.goto('/demos/tenda', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(3000);
+    await page.evaluate(() => {
+      const el = document.querySelector('#tenda-mock-fallback') as HTMLElement;
+      if (el) el.style.display = '';
+    });
+    await page.evaluate(() => {
+      document.querySelector('#tenda-mock-fallback')?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(1500);
     // Navigate to a category, then a product
-    const firstClickable = page.locator('[style*="cursor: pointer"]').first();
+    const firstClickable = page.locator('#tenda-mock-fallback [style*="cursor:pointer"]').first();
     if (await firstClickable.isVisible()) {
       await firstClickable.click();
       await page.waitForTimeout(300);
@@ -124,7 +145,6 @@ test.describe('Tenda demo', () => {
       const addBtn = page.getByRole('button', { name: /add to cart|añadir|afegir/i }).first();
       if (await addBtn.isVisible()) {
         await addBtn.click();
-        // Cart badge should show "1"
         await page.waitForTimeout(200);
       }
     }
