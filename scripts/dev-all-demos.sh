@@ -35,6 +35,7 @@ PHASE_DIR="$(cd "$PORTFOLIO/../projectA2" 2>/dev/null && pwd)" || PHASE_DIR=""
 CAIM_DIR="$(cd "$PORTFOLIO/../CAIM" 2>/dev/null && pwd)" || CAIM_DIR=""
 JOCEDA_DIR="$(cd "$PORTFOLIO/../joc_eda" 2>/dev/null && pwd)" || JOCEDA_DIR=""
 SBCIA_DIR="$(cd "$PORTFOLIO/../SBC_IA" 2>/dev/null && pwd)" || SBCIA_DIR=""
+PAR_DIR="$(cd "$PORTFOLIO/../PAR" 2>/dev/null && pwd)" || PAR_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
@@ -48,6 +49,7 @@ PHASE_UP=0
 CAIM_UP=0
 JOCEDA_UP=0
 SBCIA_UP=0
+PAR_UP=0
 PLANNER_PID=""
 PROP_PID=""
 
@@ -113,6 +115,10 @@ cleanup() {
   if [[ "$SBCIA_UP" == 1 ]] && [[ -f "${SBCIA_DIR}/docker-compose.yml" ]]; then
     echo "Stopping SBC_IA stack (docker compose down)..."
     (cd "$SBCIA_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$PAR_UP" == 1 ]] && [[ -f "${PAR_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping PAR stack (docker compose down)..."
+    (cd "$PAR_DIR" && docker compose down) >/dev/null 2>&1 || true
   fi
   exit "$ec"
 }
@@ -264,6 +270,18 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       fi
     else
       echo "==> SBC_IA skipped (no ../SBC_IA/docker-compose.yml)"
+    fi
+
+    # PAR — Preact + Canvas + WASM parallel computing visualiser
+    if [[ -f "${PAR_DIR}/docker-compose.yml" ]]; then
+      echo "==> PAR              http://localhost:8089  (docker compose)"
+      if (cd "$PAR_DIR" && docker compose up -d); then
+        PAR_UP=1
+      else
+        echo "    warning: PAR docker compose failed" >&2
+      fi
+    else
+      echo "==> PAR skipped (no ../PAR/docker-compose.yml)"
     fi
   fi
   echo ""
