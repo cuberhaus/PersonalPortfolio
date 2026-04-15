@@ -37,6 +37,7 @@ JOCEDA_DIR="$(cd "$PORTFOLIO/../joc_eda" 2>/dev/null && pwd)" || JOCEDA_DIR=""
 SBCIA_DIR="$(cd "$PORTFOLIO/../SBC_IA" 2>/dev/null && pwd)" || SBCIA_DIR=""
 PAR_DIR="$(cd "$PORTFOLIO/../PAR" 2>/dev/null && pwd)" || PAR_DIR=""
 ROB_DIR="$(cd "$PORTFOLIO/../ROB" 2>/dev/null && pwd)" || ROB_DIR=""
+GRAFICS_DIR="$(cd "$PORTFOLIO/../fib/G/web" 2>/dev/null && pwd)" || GRAFICS_DIR=""
 
 TENDA_UP=0
 DRAC_UP=0
@@ -52,6 +53,7 @@ JOCEDA_UP=0
 SBCIA_UP=0
 PAR_UP=0
 ROB_UP=0
+GRAFICS_UP=0
 PLANNER_PID=""
 PROP_PID=""
 
@@ -125,6 +127,10 @@ cleanup() {
   if [[ "$ROB_UP" == 1 ]] && [[ -f "${ROB_DIR}/docker-compose.yml" ]]; then
     echo "Stopping ROB stack (docker compose down)..."
     (cd "$ROB_DIR" && docker compose down) >/dev/null 2>&1 || true
+  fi
+  if [[ "$GRAFICS_UP" == 1 ]] && [[ -f "${GRAFICS_DIR}/docker-compose.yml" ]]; then
+    echo "Stopping Grafics stack (docker compose down)..."
+    (cd "$GRAFICS_DIR" && docker compose down) >/dev/null 2>&1 || true
   fi
   exit "$ec"
 }
@@ -300,6 +306,18 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       fi
     else
       echo "==> ROB skipped (no ../ROB/docker-compose.yml)"
+    fi
+
+    # Grafics — Vanilla TS + Vite + WebGL2 shader playground
+    if [[ -f "${GRAFICS_DIR}/docker-compose.yml" ]]; then
+      echo "==> Grafics          http://localhost:8093  (docker compose)"
+      if (cd "$GRAFICS_DIR" && docker compose up -d); then
+        GRAFICS_UP=1
+      else
+        echo "    warning: Grafics docker compose failed" >&2
+      fi
+    else
+      echo "==> Grafics skipped (no ../fib/G/web/docker-compose.yml)"
     fi
   fi
   echo ""

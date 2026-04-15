@@ -244,5 +244,34 @@
     "icon": "bot",
     "github": "https://github.com/cuberhaus/ROB",
     "image": ""
+  },
+  {
+    "slug": "fib-algorithms",
+    "title": "Visualitzador d'Algoritmes",
+    "description": "Visualitzacions pas a pas de 18 algorismes: Dijkstra, Prim, DFS, ordenació topològica, BFS en laberint, flood fill, Sudoku, merge/insertion/radix sort, N-Reines, cerca binària, MCD, exponenciació de matrius i TSP 2-opt.",
+    "tags": [
+      "Qwik",
+      "Canvas",
+      "Algorismes",
+      "Grafs",
+      "Ordenació"
+    ],
+    "icon": "brain",
+    "github": "https://github.com/cuberhaus/fib",
+    "image": ""
+  },
+  {
+    "slug": "grafics",
+    "title": "Playground de Shaders de Gràfics",
+    "description": "Playground interactiu de shaders WebGL2 que porta les pràctiques de Gràfics de FIB-UPC al navegador: transformacions de vèrtexs, il·luminació Phong, textures procedurals, patrons, emulació de geometry shaders i efectes avançats — tot executant GLSL en temps real.",
+    "tags": [
+      "WebGL2",
+      "GLSL",
+      "Shaders",
+      "UPC"
+    ],
+    "icon": "cube",
+    "github": "https://github.com/cuberhaus/fib",
+    "image": ""
   }
 ]

@@ -17,6 +17,7 @@ import Tenda from '../../demos/tenda.astro';
 import TfgPolyps from '../../demos/tfg-polyps.astro';
 import ParParallel from '../../demos/par-parallel.astro';
 import RobRobotics from '../../demos/rob-robotics.astro';
+import Grafics from '../../demos/grafics.astro';
 
 export function getStaticPaths() {
   const langs = ['es', 'ca'];
@@ -24,7 +25,7 @@ export function getStaticPaths() {
     'apa-practica', 'bitsx-marato', 'caim', 'desastres-ia', 'draculin',
     'joc-eda', 'jsbach', 'matriculas', 'mpids',
     'phase-transitions', 'planificacion', 'pro2', 'prop',
-    'sbc-ia', 'tenda', 'tfg-polyps', 'par-parallel', 'rob-robotics'
+    'sbc-ia', 'tenda', 'tfg-polyps', 'par-parallel', 'rob-robotics', 'grafics'
   ];
   return langs.flatMap(lang => demos.map(demo => ({ params: { lang, demo } })));
 }
@@ -50,3 +51,4 @@ const { demo } = Astro.params;
 {demo === 'tfg-polyps' && <TfgPolyps />}
 {demo === 'par-parallel' && <ParParallel />}
 {demo === 'rob-robotics' && <RobRobotics />}
+{demo === 'grafics' && <Grafics />}
