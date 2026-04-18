@@ -91,6 +91,7 @@ describe('Education data', () => {
         expect(entry.degree.trim().length).toBeGreaterThan(0);
         expect(entry.institution.trim().length).toBeGreaterThan(0);
         expect(entry.period.trim().length).toBeGreaterThan(0);
+        expect(entry.link.trim().length).toBeGreaterThan(0);
       }
     }
   });
@@ -101,6 +102,27 @@ describe('Education data', () => {
       expect(eduEn[i].institution).toBe(eduCa[i].institution);
     }
   });
+
+  it('links match across translations', () => {
+    for (let i = 0; i < eduEn.length; i++) {
+      expect(eduEn[i].link).toBe(eduEs[i].link);
+      expect(eduEn[i].link).toBe(eduCa[i].link);
+    }
+  });
+
+  it('every link is a valid HTTPS URL', () => {
+    for (const entry of eduEn) {
+      expect(() => new URL(entry.link)).not.toThrow();
+      expect(entry.link).toMatch(/^https:\/\//);
+    }
+  });
+
+  it('education links are reachable', async () => {
+    for (const entry of eduEn) {
+      const res = await fetch(entry.link, { method: 'HEAD', redirect: 'follow' });
+      expect(res.ok, `${entry.link} returned ${res.status}`).toBe(true);
+    }
+  }, 15_000);
 });
 
 // ─── Work Projects ──────────────────────────────────────────────

@@ -2,7 +2,7 @@
        docker-build-all docker-build-parallel docker-rebuild-all \
        clean test test-all help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
-       _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia _db-par _db-fib
+       _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
 
 default: help
 
@@ -93,7 +93,7 @@ define build_if_changed
 endef
 
 DEMO_TARGETS := _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
-                _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia _db-par _db-rob _db-fib
+                _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
 
 _db-tfg:
 	$(call build_if_changed,tfg,$(PARENT)/TFG,TFG              :8082,\
@@ -131,15 +131,6 @@ _db-joceda:
 _db-sbcia:
 	$(call build_if_changed,sbcia,$(PARENT)/SBC_IA,SBC_IA           :8088,\
 		docker compose -f "$(PARENT)/SBC_IA/docker-compose.yml" build)
-_db-par:
-	$(call build_if_changed,par,$(PARENT)/PAR,PAR              :8089,\
-		docker compose -f "$(PARENT)/PAR/docker-compose.yml" build)
-_db-rob:
-	$(call build_if_changed,rob,$(PARENT)/ROB,ROB              :8092,\
-		docker compose -f "$(PARENT)/ROB/docker-compose.yml" build)
-_db-fib:
-	$(call build_if_changed,fib,$(PARENT)/fib,FIB              :8090,\
-		docker compose -f "$(PARENT)/fib/docker-compose.yml" build)
 
 docker-build-all: $(DEMO_TARGETS) ## Build Docker images for demos (skips unchanged, use -jN for parallel)
 	@echo "Done."
@@ -165,8 +156,6 @@ stop-all: ## Stop all demo backend containers/services
 	-docker compose -f ../CAIM/docker-compose.yml down 2>/dev/null
 	-docker compose -f ../joc_eda/docker-compose.yml down 2>/dev/null
 	-docker compose -f ../SBC_IA/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../PAR/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../fib/docker-compose.yml down 2>/dev/null
 	-fuser -k 8081/tcp 2>/dev/null
 	-fuser -k 8765/tcp 2>/dev/null
 	@echo "Done."
@@ -191,7 +180,5 @@ help: ## Show this help message
 	@echo "  CAIM             :8086  (docker compose)"
 	@echo "  JocEDA           :8087  (docker compose)"
 	@echo "  SBC_IA           :8088  (docker compose)"
-	@echo "  PAR              :8089  (docker compose)"
-	@echo "  FIB              :8090  (docker compose)"
 	@echo "  PROP             :8081  (Spring Boot)"
 	@echo "  planner-api      :8765  (ENHSP)"

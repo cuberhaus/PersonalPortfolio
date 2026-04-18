@@ -15,14 +15,14 @@ export const ui = {
     'nav.experience': 'Experience',
     'nav.education': 'Education',
     'nav.contact': 'Contact',
-    
+
     // Hero
     'hero.greeting': 'Hi, my name is',
     'hero.tagline_1': 'I turn data into',
     'hero.tagline_2': 'intelligent solutions.',
     'hero.description': 'Computer Science Engineer specializing in AI, data science, and machine learning. Currently working as an AI & Data Consultant, turning complex data into actionable insights and intelligent solutions.',
     'hero.cta': 'View my work',
-    
+
     // About
     'about.label': 'About',
     'about.title': 'A bit about me',
@@ -30,7 +30,7 @@ export const ui = {
     'about.p2': "I believe in standing on the shoulders of giants — leveraging the best of existing knowledge and technology to build innovative solutions. From predictive analytics and data governance to computer vision and neural networks, I enjoy tackling complex problems that drive real impact.",
     'about.p3': "Here are some technologies I've been working with recently:",
     'about.cv': 'Download CV',
-    
+
     // Projects
     'projects.label': 'Interactive',
     'projects.title': 'Try my projects',
@@ -38,26 +38,26 @@ export const ui = {
     'projects.badge': 'Live Demo',
     'projects.showMore': 'Show more',
     'projects.showLess': 'Show less',
-    
+
     // Skills
     'skills.label': 'Skills',
     'skills.title': 'Tech I work with',
     'skills.subtitle': 'Technologies and tools I use to bring ideas to life.',
-    
+
     // Experience
     'experience.label': 'Experience',
     'experience.title': "Where I've worked",
     'experience.subtitle': 'A timeline of my professional journey so far.',
-    
+
     // Work Projects
     'work.label': 'Professional Work',
     'work.title': 'Featured Projects',
     'work.subtitle': 'Key milestones and AI initiatives delivered in the real world.',
-    
+
     // Education
     'education.label': 'Education',
     'education.title': 'Where I studied',
-    
+
     // Contact
     'contact.label': 'Contact',
     'contact.title': 'Get in touch',
@@ -74,11 +74,10 @@ export const ui = {
     'contact.invalidEmail': 'Please enter a valid email address (e.g., name@gmail.com).',
     'contact.sending': 'Sending...',
     'contact.didYouMean': 'Did you mean',
-    
+
     // Demos Layout
     'demo.portfolio': 'Portfolio',
-    'demo.copyLink': 'Copy link',
-    'demo.copied': 'Copied!',
+
     'demo.moreProjects': 'More Projects',
     'demo.previous': 'Previous',
     'demo.next': 'Next',
@@ -100,14 +99,14 @@ export const ui = {
     'nav.experience': 'Experiencia',
     'nav.education': 'Educación',
     'nav.contact': 'Contacto',
-    
+
     // Hero
     'hero.greeting': 'Hola, mi nombre es',
     'hero.tagline_1': 'Convierto datos en',
     'hero.tagline_2': 'soluciones inteligentes.',
     'hero.description': 'Ingeniero Informático especializado en IA, ciencia de datos y aprendizaje automático. Actualmente trabajando como Consultor de IA y Datos, transformando datos complejos en información útil y soluciones inteligentes.',
     'hero.cta': 'Ver mi trabajo',
-    
+
     // About
     'about.label': 'Sobre mí',
     'about.title': 'Un poco sobre mí',
@@ -115,7 +114,7 @@ export const ui = {
     'about.p2': "Creo en subirse a hombros de gigantes, aprovechando lo mejor del conocimiento y la tecnología existentes para construir soluciones innovadoras. Desde el análisis predictivo y la gobernanza de datos hasta la visión por computadora y las redes neuronales, disfruto resolviendo problemas complejos con impacto real.",
     'about.p3': "Aquí hay algunas tecnologías con las que he trabajado recientemente:",
     'about.cv': 'Descargar CV',
-    
+
     // Projects
     'projects.label': 'Interactivo',
     'projects.title': 'Prueba mis proyectos',
@@ -123,26 +122,26 @@ export const ui = {
     'projects.badge': 'Demo en vivo',
     'projects.showMore': 'Mostrar más',
     'projects.showLess': 'Mostrar menos',
-    
+
     // Skills
     'skills.label': 'Habilidades',
     'skills.title': 'Tecnología que utilizo',
     'skills.subtitle': 'Tecnologías y herramientas que uso para hacer realidad las ideas.',
-    
+
     // Experience
     'experience.label': 'Experiencia',
     'experience.title': 'Dónde he trabajado',
     'experience.subtitle': 'Una línea de tiempo de mi trayectoria profesional hasta ahora.',
-    
+
     // Work Projects
     'work.label': 'Trabajo Profesional',
     'work.title': 'Proyectos Destacados',
     'work.subtitle': 'Hitos clave e iniciativas de IA entregadas en el mundo real.',
-    
+
     // Education
     'education.label': 'Educación',
     'education.title': 'Dónde estudié',
-    
+
     // Contact
     'contact.label': 'Contacto',
     'contact.title': 'Ponte en contacto',
@@ -159,11 +158,10 @@ export const ui = {
     'contact.invalidEmail': 'Por favor, introduce un correo válido (ej. nombre@gmail.com).',
     'contact.sending': 'Enviando...',
     'contact.didYouMean': 'Quisiste decir',
-    
+
     // Demos Layout
     'demo.portfolio': 'Portafolio',
-    'demo.copyLink': 'Copiar enlace',
-    'demo.copied': '¡Copiado!',
+
     'demo.moreProjects': 'Más Proyectos',
     'demo.previous': 'Anterior',
     'demo.next': 'Siguiente',
@@ -185,14 +183,14 @@ export const ui = {
     'nav.experience': 'Experiència',
     'nav.education': 'Educació',
     'nav.contact': 'Contacte',
-    
+
     // Hero
     'hero.greeting': 'Hola, em dic',
     'hero.tagline_1': 'Converteixo dades en',
     'hero.tagline_2': 'solucions intel·ligents.',
     'hero.description': "Enginyer Informàtic especialitzat en IA, ciència de dades i aprenentatge automàtic. Actualment treballant com a Consultor d'IA i Dades, transformant dades complexes en informació útil i solucions intel·ligents.",
     'hero.cta': 'Veure el meu treball',
-    
+
     // About
     'about.label': 'Sobre mi',
     'about.title': 'Una mica sobre mi',
@@ -200,7 +198,7 @@ export const ui = {
     'about.p2': "Crec en pujar a espatlles de gegants, aprofitant el millor del coneixement i la tecnologia existents per construir solucions innovadores. Des de l'anàlisi predictiu i la governança de dades fins a la visió per computador i les xarxes neuronals, gaudeixo resolent problemes complexos amb impacte real.",
     'about.p3': "Aquí hi ha algunes tecnologies amb les quals he treballat recentment:",
     'about.cv': 'Descarregar CV',
-    
+
     // Demos
     'projects.label': 'Interactiu',
     'projects.title': 'Prova els meus projectes',
@@ -208,26 +206,26 @@ export const ui = {
     'projects.badge': 'Demo en viu',
     'projects.showMore': 'Mostra més',
     'projects.showLess': 'Mostra menys',
-    
+
     // Skills
     'skills.label': 'Habilitats',
     'skills.title': 'Tecnologia que utilitzo',
     'skills.subtitle': 'Tecnologies i eines que faig servir per fer realitat les idees.',
-    
+
     // Experience
     'experience.label': 'Experiència',
     'experience.title': 'On he treballat',
     'experience.subtitle': 'Una línia de temps de la meva trajectòria professional fins ara.',
-    
+
     // Work Projects
     'work.label': 'Treball Professional',
     'work.title': 'Projectes Destacats',
     'work.subtitle': "Fites clau i iniciatives d'IA entregades al món real.",
-    
+
     // Education
     'education.label': 'Educació',
     'education.title': 'On he estudiat',
-    
+
     // Contact
     'contact.label': 'Contacte',
     'contact.title': "Posa't en contacte",
@@ -244,11 +242,10 @@ export const ui = {
     'contact.invalidEmail': 'Si us plau, introdueix un correu vàlid (ex. nom@gmail.com).',
     'contact.sending': 'Enviant...',
     'contact.didYouMean': 'Volies dir',
-    
+
     // Demos Layout
     'demo.portfolio': 'Portafolis',
-    'demo.copyLink': 'Copiar enllaç',
-    'demo.copied': 'Copiat!',
+
     'demo.moreProjects': 'Més Projectes',
     'demo.previous': 'Anterior',
     'demo.next': 'Següent',
