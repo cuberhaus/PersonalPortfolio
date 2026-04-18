@@ -70,7 +70,7 @@ const siteBase = Astro.site || Astro.url;
         rel="stylesheet"
       />
     </noscript>
-    
+
     <title>{title} — Pol Casacuberta</title>
     <Analytics />
   </head>
@@ -88,7 +88,7 @@ const siteBase = Astro.site || Astro.url;
           {t('demo.portfolio')}
         </a>
         <span class="demo-nav-title gradient-text">{title}</span>
-        
+
         <div class="demo-controls">
           <button class="sidebar-toggle" id="sidebar-toggle" aria-label={t('demo.allDemos')} title={t('demo.allDemos')}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -100,15 +100,6 @@ const siteBase = Astro.site || Astro.url;
           </button>
           <LanguagePicker />
           <ThemeToggle />
-          <button class="demo-copy-btn" id="copy-demo-link" aria-label={t('demo.copyLink')} title={t('demo.copyLink')} data-copied-text={t('demo.copied')}>
-            <svg class="icon-copy" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none; color: var(--accent-start);">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-          </button>
         </div>
       </div>
     </nav>
@@ -118,53 +109,12 @@ const siteBase = Astro.site || Astro.url;
       {slug && <DemoNav currentSlug={slug} />}
     </main>
 
-    <script>
-      const initCopyBtn = () => {
-        const copyBtn = document.getElementById('copy-demo-link');
-        if (copyBtn && !copyBtn.hasAttribute('data-initialized')) {
-          copyBtn.setAttribute('data-initialized', 'true');
-          copyBtn.addEventListener('click', async () => {
-            try {
-              await navigator.clipboard.writeText(window.location.href);
-              const iconCopy = copyBtn.querySelector('.icon-copy');
-              const iconCheck = copyBtn.querySelector('.icon-check');
-              
-              if (iconCopy && iconCheck) {
-                iconCopy.style.display = 'none';
-                iconCheck.style.display = 'block';
-                const originalTitle = copyBtn.getAttribute('title');
-                const copiedText = copyBtn.getAttribute('data-copied-text') || 'Copied!';
-                copyBtn.setAttribute('title', copiedText);
-                
-                setTimeout(() => {
-                  iconCopy.style.display = 'block';
-                  iconCheck.style.display = 'none';
-                  copyBtn.setAttribute('title', originalTitle || 'Copy link');
-                }, 2000);
-              }
-            } catch {
-              // Clipboard API not available
-            }
-          });
-        }
-      };
 
-      initCopyBtn();
-      document.addEventListener('astro:page-load', initCopyBtn);
-    </script>
     <style>
       @media (max-width: 768px) {
         .demo-controls :global(.language-picker) {
-          order: 4;
-          width: 100%;
-          justify-content: center;
-          border-top: none;
-          padding-top: 0.25rem;
-          margin-top: 0.25rem;
-          border-bottom: 1px solid var(--border-color);
-          padding-bottom: 0.5rem;
-          border-left: none;
-          padding-left: 0;
+          margin: 0;
+          width: fit-content;
         }
       }
     </style>
@@ -237,23 +187,6 @@ const siteBase = Astro.site || Astro.url;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-  }
-
-  .demo-copy-btn {
-    justify-self: end;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--radius-md);
-    color: var(--text-secondary);
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-  }
-
-  .demo-copy-btn:hover {
-    color: var(--text-primary);
-    background-color: var(--bg-secondary);
   }
 
   .demo-main {

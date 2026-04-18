@@ -19,24 +19,46 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
     <div class="contact-content reveal">
       <p class="contact-text">{t('contact.text')}</p>
       
-      <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contact-form">
+      <form
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        class="contact-form"
+        id="contact-form"
+        data-success-msg={t('contact.success')}
+        data-error-msg={t('contact.error')}
+        data-invalid-email-msg={t('contact.invalidEmail')}
+        data-send-msg={t('contact.cta')}
+        data-sending-msg={t('contact.sending')}
+        data-did-you-mean-msg={t('contact.didYouMean')}
+        data-use-suggestion-msg={t('contact.useSuggestion')}
+      >
         <input type="hidden" name="access_key" value={web3FormsKey} />
-        
+
         <div class="form-group">
           <label for="name">{t('contact.name')}</label>
           <input type="text" id="name" name="name" required placeholder={t('contact.namePlaceholder')} />
         </div>
-        
+
         <div class="form-group">
           <label for="email">{t('contact.email')}</label>
-          <input type="email" id="email" name="email" required placeholder={t('contact.emailPlaceholder')} />
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+            spellcheck="false"
+            autocapitalize="none"
+            placeholder={t('contact.emailPlaceholder')}
+          />
+          <p id="email-hint" class="email-hint" role="status" aria-live="polite"></p>
         </div>
-        
+
         <div class="form-group">
           <label for="message">{t('contact.message')}</label>
           <textarea id="message" name="message" rows="5" required placeholder={t('contact.messagePlaceholder')}></textarea>
         </div>
-        
+
         <!-- Honeypot Spam Protection -->
         <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
@@ -73,102 +95,182 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
   </div>
 </section>
 
-<script define:vars={{ successMsg: t('contact.success'), errorMsg: t('contact.error'), invalidEmailMsg: t('contact.invalidEmail'), sendMsg: t('contact.cta'), sendingMsg: t('contact.sending'), didYouMeanMsg: t('contact.didYouMean') }}>
+<script>
+  import { validateEmail } from '../lib/email-validator';
+
+  type Msgs = {
+    success: string;
+    error: string;
+    invalidEmail: string;
+    send: string;
+    sending: string;
+    didYouMean: string;
+    useSuggestion: string;
+  };
+
+  const readMsgs = (form: HTMLFormElement): Msgs => ({
+    success: form.dataset.successMsg ?? 'Thanks! Your message has been sent.',
+    error: form.dataset.errorMsg ?? 'Oops! Something went wrong.',
+    invalidEmail: form.dataset.invalidEmailMsg ?? 'Please enter a valid email address.',
+    send: form.dataset.sendMsg ?? 'Send Message',
+    sending: form.dataset.sendingMsg ?? 'Sending...',
+    didYouMean: form.dataset.didYouMeanMsg ?? 'Did you mean',
+    useSuggestion: form.dataset.useSuggestionMsg ?? 'Use this',
+  });
+
+  const clearHint = (hint: HTMLElement) => {
+    hint.textContent = '';
+    hint.classList.remove('error', 'suggestion');
+    hint.style.display = 'none';
+  };
+
+  const showError = (hint: HTMLElement, text: string) => {
+    hint.textContent = text;
+    hint.classList.remove('suggestion');
+    hint.classList.add('error');
+    hint.style.display = 'block';
+  };
+
+  const showSuggestion = (
+    hint: HTMLElement,
+    input: HTMLInputElement,
+    msgs: Msgs,
+    suggestion: string,
+  ) => {
+    hint.replaceChildren();
+    hint.classList.remove('error');
+    hint.classList.add('suggestion');
+    hint.style.display = 'block';
+
+    hint.append(document.createTextNode(`${msgs.didYouMean} `));
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'email-suggest-btn';
+    btn.textContent = suggestion;
+    btn.setAttribute('aria-label', `${msgs.useSuggestion}: ${suggestion}`);
+    btn.addEventListener('click', () => {
+      input.value = suggestion;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      clearHint(hint);
+      input.focus();
+    });
+    hint.append(btn, document.createTextNode('?'));
+  };
+
   const initForm = () => {
-    const form = document.getElementById('contact-form');
-    const result = document.getElementById('form-result');
-    const btn = document.getElementById('submit-btn');
-    const btnText = btn?.querySelector('span');
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (!form || form.dataset.initialized === 'true') return;
+    form.dataset.initialized = 'true';
 
-    if (form && !form.hasAttribute('data-initialized')) {
-      form.setAttribute('data-initialized', 'true');
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(form);
-        const object = Object.fromEntries(formData);
-        
-        // Email validation
-        const email = object.email.toString().trim().toLowerCase();
-        // Check standard valid format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
-        // Common typo domains
-        const typos = {
-          'ail.com': 'gmail.com', 'gmil.com': 'gmail.com', 'gamil.com': 'gmail.com', 'gmai.com': 'gmail.com',
-          'gmail.co': 'gmail.com', 'gmail.con': 'gmail.com',
-          'hotmai.com': 'hotmail.com', 'hotmil.com': 'hotmail.com',
-          'yaho.com': 'yahoo.com', 'outloo.com': 'outlook.com'
-        };
-        
-        const domain = email.split('@')[1];
+    const result = document.getElementById('form-result') as HTMLElement | null;
+    const btn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+    const btnText = btn?.querySelector('span') ?? null;
+    const emailInput = form.querySelector('#email') as HTMLInputElement | null;
+    const emailHint = document.getElementById('email-hint') as HTMLElement | null;
 
-        if (!emailRegex.test(email) || typos[domain]) {
-          if (result) {
-            if (typos[domain]) {
-               const safeLocal = email.split('@')[0].replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
-               result.innerHTML = `${didYouMeanMsg} <b>${safeLocal}@${typos[domain]}</b>?`;
-            } else {
-               result.innerHTML = invalidEmailMsg;
-            }
-            result.classList.remove("success");
-            result.classList.add("error");
-            result.style.display = "block";
-          }
+    const msgs = readMsgs(form);
+
+    // Live validation on blur / input so the user gets immediate feedback
+    // without having to hit Send first.
+    if (emailInput && emailHint) {
+      emailInput.addEventListener('blur', () => {
+        const raw = emailInput.value;
+        if (!raw.trim()) {
+          clearHint(emailHint);
           return;
         }
+        const res = validateEmail(raw);
+        if (res.valid) {
+          clearHint(emailHint);
+        } else if (res.reason === 'typo') {
+          showSuggestion(emailHint, emailInput, msgs, res.suggestion);
+        } else if (res.reason === 'format') {
+          showError(emailHint, msgs.invalidEmail);
+        } else {
+          clearHint(emailHint);
+        }
+      });
 
-        const json = JSON.stringify(object);
+      // Clear the hint as soon as the user edits again — avoids stale
+      // suggestions hanging around while they fix the address.
+      emailInput.addEventListener('input', () => clearHint(emailHint));
+    }
 
-        if (result) result.style.display = "none";
-        if (btnText) btnText.innerHTML = sendingMsg;
-        if (btn) btn.style.opacity = "0.7";
-        if (btn) btn.style.pointerEvents = "none";
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-        fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: json
-        })
-        .then(async (response) => {
-          let json = await response.json();
-          if (response.status == 200) {
-            if (result) {
-              result.innerHTML = successMsg;
-              result.classList.remove("error");
-              result.classList.add("success");
-              result.style.display = "block";
-            }
-            form.reset();
+      const emailValue = emailInput?.value ?? '';
+      const res = validateEmail(emailValue);
+
+      if (!res.valid) {
+        if (emailHint && emailInput) {
+          if (res.reason === 'typo') {
+            showSuggestion(emailHint, emailInput, msgs, res.suggestion);
           } else {
-            if (result) {
-              result.innerHTML = errorMsg;
-              result.classList.remove("success");
-              result.classList.add("error");
-              result.style.display = "block";
-            }
+            showError(emailHint, msgs.invalidEmail);
+          }
+        }
+        if (result) {
+          result.textContent = msgs.invalidEmail;
+          result.classList.remove('success');
+          result.classList.add('error');
+          result.style.display = 'block';
+        }
+        emailInput?.focus();
+        return;
+      }
+
+      const formData = new FormData(form);
+      formData.set('email', res.normalized);
+      const payload = JSON.stringify(Object.fromEntries(formData));
+
+      if (result) result.style.display = 'none';
+      if (btnText) btnText.textContent = msgs.sending;
+      if (btn) {
+        btn.style.opacity = '0.7';
+        btn.style.pointerEvents = 'none';
+      }
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: payload,
+      })
+        .then(async (response) => {
+          await response.json().catch(() => ({}));
+          if (!result) return;
+          if (response.ok) {
+            result.textContent = msgs.success;
+            result.classList.remove('error');
+            result.classList.add('success');
+            result.style.display = 'block';
+            form.reset();
+            if (emailHint) clearHint(emailHint);
+          } else {
+            result.textContent = msgs.error;
+            result.classList.remove('success');
+            result.classList.add('error');
+            result.style.display = 'block';
           }
         })
         .catch(() => {
-          if (result) {
-            result.innerHTML = errorMsg;
-            result.classList.remove("success");
-            result.classList.add("error");
-            result.style.display = "block";
-          }
+          if (!result) return;
+          result.textContent = msgs.error;
+          result.classList.remove('success');
+          result.classList.add('error');
+          result.style.display = 'block';
         })
-        .finally(function() {
-          if (btnText) btnText.innerHTML = sendMsg;
-          if (btn) btn.style.opacity = "1";
-          if (btn) btn.style.pointerEvents = "all";
+        .finally(() => {
+          if (btnText) btnText.textContent = msgs.send;
+          if (btn) {
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'all';
+          }
           setTimeout(() => {
-            if (result) result.style.display = "none";
+            if (result) result.style.display = 'none';
           }, 5000);
         });
-      });
-    }
+    });
   };
 
   initForm();
@@ -289,6 +391,41 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
 
   .form-result.error {
     color: #ef4444;
+  }
+
+  .email-hint {
+    display: none;
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .email-hint.error {
+    color: #ef4444;
+  }
+
+  .email-hint.suggestion {
+    color: var(--text-secondary);
+  }
+
+  .email-suggest-btn {
+    display: inline;
+    padding: 0;
+    margin: 0 0.15rem;
+    background: none;
+    border: none;
+    color: var(--accent-start);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+
+  .email-suggest-btn:hover,
+  .email-suggest-btn:focus-visible {
+    color: var(--accent-end);
+    outline: none;
   }
 
   .contact-socials {

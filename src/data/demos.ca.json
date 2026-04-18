@@ -246,7 +246,7 @@
     "image": ""
   },
   {
-    "slug": "fib-algorithms",
+    "slug": "algorithms",
     "title": "Visualitzador d'Algoritmes",
     "description": "Visualitzacions pas a pas de 18 algorismes: Dijkstra, Prim, DFS, ordenació topològica, BFS en laberint, flood fill, Sudoku, merge/insertion/radix sort, N-Reines, cerca binària, MCD, exponenciació de matrius i TSP 2-opt.",
     "tags": [

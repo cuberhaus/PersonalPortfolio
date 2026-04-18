@@ -3,12 +3,14 @@
     "degree": "Computer Science and Engineering Degree",
     "institution": "UPC — Facultat d'Informàtica de Barcelona (FIB)",
     "location": "Barcelona, Spain",
-    "period": "Mar 2019 — 2023"
+    "period": "Mar 2019 — 2023",
+    "link": "https://www.fib.upc.edu/en"
   },
   {
     "degree": "Cambridge C1 English Certificate",
     "institution": "Cambridge",
     "location": "Barcelona, Spain",
-    "period": "June 2019"
+    "period": "June 2019",
+    "link": "https://www.cambridgeenglish.org/exams-and-tests/advanced/"
   }
 ]

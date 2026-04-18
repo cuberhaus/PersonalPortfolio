@@ -91,6 +91,7 @@ describe('Education data', () => {
         expect(entry.degree.trim().length).toBeGreaterThan(0);
         expect(entry.institution.trim().length).toBeGreaterThan(0);
         expect(entry.period.trim().length).toBeGreaterThan(0);
+        expect(entry.link.trim().length).toBeGreaterThan(0);
       }
     }
   });
@@ -101,6 +102,27 @@ describe('Education data', () => {
       expect(eduEn[i].institution).toBe(eduCa[i].institution);
     }
   });
+
+  it('links match across translations', () => {
+    for (let i = 0; i < eduEn.length; i++) {
+      expect(eduEn[i].link).toBe(eduEs[i].link);
+      expect(eduEn[i].link).toBe(eduCa[i].link);
+    }
+  });
+
+  it('every link is a valid HTTPS URL', () => {
+    for (const entry of eduEn) {
+      expect(() => new URL(entry.link)).not.toThrow();
+      expect(entry.link).toMatch(/^https:\/\//);
+    }
+  });
+
+  it('education links are reachable', async () => {
+    for (const entry of eduEn) {
+      const res = await fetch(entry.link, { method: 'HEAD', redirect: 'follow' });
+      expect(res.ok, `${entry.link} returned ${res.status}`).toBe(true);
+    }
+  }, 15_000);
 });
 
 // ─── Work Projects ──────────────────────────────────────────────
@@ -136,4 +158,24 @@ describe('Work projects data', () => {
       expect(workEn[i].icon).toBe(workCa[i].icon);
     }
   });
+
+  it('links match across translations and are valid HTTPS URLs', () => {
+    for (let i = 0; i < workEn.length; i++) {
+      if (workEn[i].link) {
+        expect(workEs[i].link).toBe(workEn[i].link);
+        expect(workCa[i].link).toBe(workEn[i].link);
+        expect(() => new URL(workEn[i].link)).not.toThrow();
+        expect(workEn[i].link).toMatch(/^https:\/\//);
+      }
+    }
+  });
+
+  it('work project links are reachable', async () => {
+    for (const project of workEn) {
+      if (project.link) {
+        const res = await fetch(project.link, { method: 'HEAD', redirect: 'follow' });
+        expect(res.ok, `${project.link} returned ${res.status}`).toBe(true);
+      }
+    }
+  }, 15_000);
 });

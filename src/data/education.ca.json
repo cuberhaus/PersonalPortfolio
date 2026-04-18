@@ -3,12 +3,14 @@
     "degree": "Grau en Enginyeria Informàtica",
     "institution": "UPC — Facultat d'Informàtica de Barcelona (FIB)",
     "location": "Barcelona, Espanya",
-    "period": "Mar 2019 — 2023"
+    "period": "Mar 2019 — 2023",
+    "link": "https://www.fib.upc.edu/en"
   },
   {
     "degree": "Certificat d'Anglès C1",
     "institution": "Cambridge",
     "location": "Barcelona, Espanya",
-    "period": "Jun 2019"
+    "period": "Jun 2019",
+    "link": "https://www.cambridgeenglish.org/exams-and-tests/advanced/"
   }
 ]

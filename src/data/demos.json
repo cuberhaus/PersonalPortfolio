@@ -250,7 +250,7 @@
     "image": ""
   },
   {
-    "slug": "fib-algorithms",
+    "slug": "algorithms",
     "title": "Algorithm Visualizer",
     "description": "Interactive step-by-step visualizations of 18 algorithms: Dijkstra, Prim, DFS, topological sort, BFS maze, flood fill, Sudoku, merge/insertion/radix sort, N-Queens, binary search, GCD, matrix exponentiation, and 2-opt TSP.",
     "tags": [

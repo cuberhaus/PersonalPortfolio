@@ -24,7 +24,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
     <div class="demo-grid reveal-stagger" id="demo-grid">
       {demos.map((demo, index) => (
-        <article class={`demo-card ${index >= 6 ? 'hidden-demo extra-demo' : ''}`}>
+        <article class={`demo-card ${index >= 6 ? 'hidden-demo extra-demo' : ''}${index >= 3 && index < 6 ? ' mobile-extra-demo mobile-hidden-demo' : ''}`} data-index={index}>
           <div class="demo-card-inner">
             <div class="demo-icon" set:html={renderIconSvg(demo.icon, 28)} />
 
@@ -83,37 +83,80 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     if (!btn || btn.hasAttribute('data-initialized')) return;
     btn.setAttribute('data-initialized', 'true');
 
-    btn.addEventListener('click', () => {
-      const isExpanded = btn.classList.toggle('expanded');
-      btn.setAttribute('aria-expanded', String(isExpanded));
-      const extraDemos = document.querySelectorAll('.extra-demo');
-      
-      extraDemos.forEach((demo, index) => {
-        if (isExpanded) {
-          demo.classList.remove('hidden-demo');
-          // Add a small delay for staggered animation effect based on index
-          setTimeout(() => {
-            demo.classList.add('visible');
-          }, 20 + (index * 60)); // 60ms stagger between each card
-        } else {
-          demo.classList.remove('visible');
-          // Wait for transition before hiding
-          setTimeout(() => {
-            demo.classList.add('hidden-demo');
-          }, 400); // matches transition time
-        }
-      });
+    const isMobile = () => window.matchMedia('(max-width: 640px)').matches;
+    const getCards = () => [...document.querySelectorAll('#demo-grid .demo-card[data-index]')];
+    const totalCount = getCards().length;
+    let mobileShown = 3;
 
-      if (isExpanded) {
-        btn.textContent = btn.getAttribute('data-less');
-      } else {
-        btn.textContent = btn.getAttribute('data-more');
-        // Scroll back to top of projects section smoothly
-        const section = document.getElementById('projects');
-        if (section) {
-          const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          section.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
+    function scrollToProjects() {
+      const section = document.getElementById('projects');
+      if (section) {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        section.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
+      }
+    }
+
+    btn.addEventListener('click', () => {
+      if (isMobile()) {
+        if (mobileShown >= totalCount) {
+          // Collapse back to 3
+          getCards().forEach(card => {
+            const idx = parseInt(card.getAttribute('data-index') || '0');
+            if (idx >= 3) {
+              card.classList.remove('visible');
+              setTimeout(() => {
+                if (idx >= 6) card.classList.add('hidden-demo');
+                else card.classList.add('mobile-hidden-demo');
+              }, 400);
+            }
+          });
+          mobileShown = 3;
+          btn.textContent = btn.getAttribute('data-more');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.classList.remove('expanded');
+          scrollToProjects();
+        } else {
+          // Reveal next 3
+          const end = Math.min(mobileShown + 3, totalCount);
+          let stagger = 0;
+          for (let i = mobileShown; i < end; i++) {
+            const card = getCards().find(c => c.getAttribute('data-index') === String(i));
+            if (card) {
+              card.classList.remove('hidden-demo', 'mobile-hidden-demo');
+              const delay = 20 + stagger * 60;
+              setTimeout(() => card.classList.add('visible'), delay);
+              stagger++;
+            }
+          }
+          mobileShown = end;
+          if (mobileShown >= totalCount) {
+            btn.textContent = btn.getAttribute('data-less');
+            btn.setAttribute('aria-expanded', 'true');
+            btn.classList.add('expanded');
+          }
         }
+      } else {
+        // Desktop: toggle all extras at once
+        const isExpanded = btn.classList.toggle('expanded');
+        btn.setAttribute('aria-expanded', String(isExpanded));
+
+        getCards().forEach(card => {
+          const idx = parseInt(card.getAttribute('data-index') || '0');
+          if (idx < 6) return;
+          if (isExpanded) {
+            card.classList.remove('hidden-demo');
+            setTimeout(() => card.classList.add('visible'), 20 + ((idx - 6) * 60));
+          } else {
+            card.classList.remove('visible');
+            setTimeout(() => card.classList.add('hidden-demo'), 400);
+          }
+        });
+
+        btn.textContent = isExpanded
+          ? btn.getAttribute('data-less')
+          : btn.getAttribute('data-more');
+
+        if (!isExpanded) scrollToProjects();
       }
     });
   });
@@ -222,7 +265,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     color: inherit;
     text-decoration: none;
   }
-  
+
   .full-card-link::after {
     content: '';
     position: absolute;
@@ -278,6 +321,22 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
   @media (max-width: 640px) {
     .demo-grid {
       grid-template-columns: 1fr;
+    }
+
+    .mobile-hidden-demo {
+      display: none !important;
+    }
+
+    .mobile-extra-demo {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      transition-delay: 0ms !important;
+    }
+
+    .mobile-extra-demo.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
