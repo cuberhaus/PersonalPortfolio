@@ -128,6 +128,12 @@ export const ui = {
     'design.ide.blurb':       'VSCode vibes: tab cards, gutter, syntax-coloured hero',
     'design.risograph.name':  'Risograph',
     'design.risograph.blurb': 'Duotone print, halftone dots, grain and misregister',
+    'design.deco.name':       'Art Deco',
+    'design.deco.blurb':      'Sunbursts, gold gradients, stepped pyramid borders',
+    'design.wabisabi.name':   'Wabi-sabi',
+    'design.wabisabi.blurb':  'Serene Japanese minimalism, vast negative space',
+    'design.dashboard.name':  'Dashboard',
+    'design.dashboard.blurb': 'Admin UI: KPIs, status pills, data density',
   },
   es: {
     // Nav
@@ -250,6 +256,12 @@ export const ui = {
     'design.ide.blurb':       'Vibes VSCode: pestañas, gutter, héroe con sintaxis',
     'design.risograph.name':  'Risograph',
     'design.risograph.blurb': 'Impresión dúo-tono, trama de puntos, grano y desregistro',
+    'design.deco.name':       'Art Déco',
+    'design.deco.blurb':      'Soles radiantes, degradados dorados, bordes escalonados',
+    'design.wabisabi.name':   'Wabi-sabi',
+    'design.wabisabi.blurb':  'Minimalismo japonés sereno, gran espacio en blanco',
+    'design.dashboard.name':  'Panel',
+    'design.dashboard.blurb': 'UI de admin: KPIs, píldoras de estado, densidad de datos',
   },
   ca: {
     // Nav
@@ -372,5 +384,11 @@ export const ui = {
     'design.ide.blurb':       'Vibes VSCode: pestanyes, gutter, heroi amb sintaxi',
     'design.risograph.name':  'Risograph',
     'design.risograph.blurb': 'Impressió duotò, trama de punts, gra i desregistre',
+    'design.deco.name':       'Art Déco',
+    'design.deco.blurb':      'Sols radiants, degradats daurats, vores esglaonades',
+    'design.wabisabi.name':   'Wabi-sabi',
+    'design.wabisabi.blurb':  'Minimalisme japonès serè, gran espai en blanc',
+    'design.dashboard.name':  'Tauler',
+    'design.dashboard.blurb': 'UI d\'admin: KPIs, píndoles d\'estat, densitat de dades',
   },
 } as const;

@@ -110,10 +110,11 @@ test.describe('Ctrl+K customize modal', () => {
   test('design tiles include every registered design', async ({ page }) => {
     await openModal(page);
     for (const id of [
-      'minimal', 'editorial', 'glass', 'swiss', 'neumorphic', 'pixel',
+      'minimal', 'editorial', 'swiss', 'pixel',
       'terminal', 'cyber', 'clay',
       'notebook', 'brutalist', 'blueprint',
       'academic', 'ide', 'risograph',
+      'deco', 'wabisabi',
     ]) {
       await expect(page.locator(`[data-design-id="${id}"]`)).toBeVisible();
     }
@@ -203,5 +204,33 @@ test.describe('Ctrl+K customize modal', () => {
     const aboutBg = await page.locator('section.about').evaluate(el => getComputedStyle(el).backgroundColor);
     const demosBg = await page.locator('section.demos').evaluate(el => getComputedStyle(el).backgroundColor);
     expect(aboutBg).not.toBe(demosBg);
+  });
+
+  test('Art Deco prefixes section titles with a Roman numeral', async ({ page }) => {
+    await openModal(page);
+    await page.locator('[data-design-id="deco"]').click();
+    await page.keyboard.press('Escape');
+    const title = page.locator('section.about .section-title').first();
+    const pseudoContent = await title.evaluate(el => getComputedStyle(el, '::before').content);
+    expect(pseudoContent).toMatch(/I{1,3}|IV|V/);
+  });
+
+  test('Wabi-sabi applies Shippori Mincho (or serif fallback) to the hero name', async ({ page }) => {
+    const h1 = page.locator('h1.hero-name').first();
+    await openModal(page);
+    await page.locator('[data-design-id="wabisabi"]').click();
+    await page.keyboard.press('Escape');
+    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    expect(font.toLowerCase()).toMatch(/shippori|mincho|serif|garamond/);
+  });
+
+  test('Dashboard design (hidden) still applies via window.setDesign API', async ({ page }) => {
+    await page.evaluate(() => (window as unknown as { setDesign(id: string): void }).setDesign('dashboard'));
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'dashboard');
+    const greeting = page.locator('.hero-greeting').first();
+    const display = await greeting.evaluate(el => getComputedStyle(el).display);
+    expect(display).toMatch(/inline-flex|flex/);
+    const radius = await greeting.evaluate(el => getComputedStyle(el).borderRadius);
+    expect(radius).not.toBe('0px');
   });
 });

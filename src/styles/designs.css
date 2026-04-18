@@ -2864,3 +2864,832 @@ html[data-design='risograph'] .hero-grid,
 html[data-design='risograph'] .hero-gradient {
   display: none;
 }
+
+
+/* ══════════════ ART DECO ════════════════════════════════════
+ * Poiret One display, gold gradients, sunburst background,
+ * stepped-pyramid borders, Roman-numeral sections.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='deco'] {
+  --font-sans: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-display: 'Poiret One', 'Playfair Display', 'Cormorant Garamond', serif;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --deco-gold: #c9a961;
+  --deco-gold-grad: linear-gradient(135deg, #e8cf89 0%, #b88d3a 45%, #e8cf89 100%);
+  counter-reset: deco-section;
+}
+
+/* Body sunburst + subtle chevron wash */
+html[data-design='deco'] body {
+  background-image:
+    radial-gradient(ellipse 120% 70% at 50% -20%,
+      color-mix(in oklab, var(--deco-gold) 22%, transparent),
+      transparent 60%),
+    conic-gradient(from 90deg at 50% 0%,
+      transparent 0deg,
+      color-mix(in oklab, var(--deco-gold) 7%, transparent) 4deg,
+      transparent 8deg,
+      color-mix(in oklab, var(--deco-gold) 7%, transparent) 12deg,
+      transparent 16deg,
+      color-mix(in oklab, var(--deco-gold) 7%, transparent) 20deg,
+      transparent 180deg);
+  background-attachment: fixed;
+  background-color: var(--bg-primary);
+  letter-spacing: 0.015em;
+}
+
+html[data-design='deco'] h1,
+html[data-design='deco'] h2,
+html[data-design='deco'] h3,
+html[data-design='deco'] h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+html[data-design='deco'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 9vw, 6rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+  background: var(--deco-gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  display: block;
+  position: relative;
+}
+
+/* Double-rule flourishes above and below the hero name */
+html[data-design='deco'] .hero-name::before,
+html[data-design='deco'] .hero-name::after {
+  content: '';
+  display: block;
+  height: 6px;
+  margin: 0.5rem auto;
+  width: min(360px, 60%);
+  border-top: 1px solid var(--deco-gold);
+  border-bottom: 1px solid var(--deco-gold);
+}
+
+html[data-design='deco'] .hero-greeting,
+html[data-design='deco'] .section-label {
+  font-family: var(--font-display);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--deco-gold);
+}
+
+html[data-design='deco'] .section {
+  counter-increment: deco-section;
+  border-top: 1px solid var(--deco-gold);
+  border-bottom: 1px solid var(--deco-gold);
+  padding: 5rem 0;
+  position: relative;
+}
+
+/* Inner hairline rule above/below each section (double-rule effect) */
+html[data-design='deco'] .section::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid color-mix(in oklab, var(--deco-gold) 60%, transparent);
+}
+
+html[data-design='deco'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-align: center;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+
+html[data-design='deco'] .section-title::before {
+  content: counter(deco-section, upper-roman) '  ·  ';
+  color: var(--deco-gold);
+  font-weight: 400;
+}
+
+html[data-design='deco'] .gradient-text {
+  background: var(--deco-gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Cards as stepped-pyramid frames */
+html[data-design='deco'] .card,
+html[data-design='deco'] .skill-group,
+html[data-design='deco'] .timeline-content,
+html[data-design='deco'] .work-card,
+html[data-design='deco'] .education-card,
+html[data-design='deco'] .demo-card,
+html[data-design='deco'] .contact-form {
+  background: color-mix(in oklab, var(--bg-card) 80%, transparent);
+  border: 1px solid var(--deco-gold);
+  border-radius: 0;
+  box-shadow:
+    inset 0 0 0 3px var(--bg-card),
+    inset 0 0 0 4px var(--deco-gold);
+  padding: 1.75rem;
+  clip-path: polygon(
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0 calc(100% - 8px),
+    0 8px
+  );
+}
+
+html[data-design='deco'] .card h3,
+html[data-design='deco'] .work-card h3,
+html[data-design='deco'] .education-card h3,
+html[data-design='deco'] .demo-card h3 {
+  text-align: center;
+  color: var(--deco-gold);
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+html[data-design='deco'] .card h3::after,
+html[data-design='deco'] .work-card h3::after,
+html[data-design='deco'] .education-card h3::after,
+html[data-design='deco'] .demo-card h3::after {
+  content: '◆';
+  display: block;
+  margin: 0.4rem auto 0;
+  color: var(--deco-gold);
+  font-size: 0.6rem;
+}
+
+html[data-design='deco'] .skill-pill,
+html[data-design='deco'] .demo-tags li,
+html[data-design='deco'] .work-tags li {
+  background: transparent;
+  border: 1px solid var(--deco-gold);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  padding: 0.35rem 0.75rem;
+  color: var(--deco-gold);
+}
+
+html[data-design='deco'] .navbar {
+  background: color-mix(in oklab, var(--bg-primary) 92%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--deco-gold);
+  box-shadow: 0 1px 0 var(--deco-gold);
+}
+
+html[data-design='deco'] .nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  background: var(--deco-gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-design='deco'] .nav-link {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+html[data-design='deco'] .hero-cta,
+html[data-design='deco'] .contact-submit {
+  background: var(--deco-gold-grad);
+  color: #1a1308;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 0.9rem 2rem;
+  clip-path: polygon(
+    10px 0,
+    calc(100% - 10px) 0,
+    100% 50%,
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0 50%
+  );
+  box-shadow: none;
+}
+
+html[data-design='deco'] .hero-cta:hover,
+html[data-design='deco'] .contact-submit:hover {
+  filter: brightness(1.1);
+  transform: none;
+}
+
+html[data-design='deco'] .form-group input,
+html[data-design='deco'] .form-group textarea {
+  background: transparent;
+  border: 1px solid var(--deco-gold);
+  border-radius: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+html[data-design='deco'] .form-group input:focus,
+html[data-design='deco'] .form-group textarea:focus {
+  outline: 0;
+  box-shadow: inset 0 0 0 1px var(--deco-gold);
+}
+
+html[data-design='deco'] .hero-grid {
+  display: none;
+}
+
+html[data-design='deco'] .hero-gradient {
+  background: radial-gradient(circle at 50% 0%,
+    color-mix(in oklab, var(--deco-gold) 35%, transparent),
+    transparent 60%);
+  opacity: 0.8;
+}
+
+
+/* ══════════════ WABI-SABI ═══════════════════════════════════
+ * Japanese minimalism: Shippori Mincho, vast negative space,
+ * subtle vertical accents, hairline ink dividers.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='wabisabi'] {
+  --font-sans: 'Shippori Mincho', 'Noto Serif JP', 'Cormorant Garamond', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
+  --font-display: var(--font-sans);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --section-padding: 9rem 0;
+  --container-width: 760px;
+  --wabi-ink: color-mix(in oklab, var(--text-primary) 95%, transparent);
+  --wabi-paper: color-mix(in oklab, var(--bg-primary) 90%, #f2ece1);
+  --wabi-hair: color-mix(in oklab, var(--text-primary) 18%, transparent);
+}
+
+html[data-design='wabisabi'] body {
+  background: var(--wabi-paper);
+  color: var(--wabi-ink);
+  font-size: 1.05rem;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+
+html[data-design='wabisabi'] h1,
+html[data-design='wabisabi'] h2,
+html[data-design='wabisabi'] h3,
+html[data-design='wabisabi'] h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+}
+
+html[data-design='wabisabi'] .hero {
+  padding: 8rem 0 10rem;
+  position: relative;
+}
+
+html[data-design='wabisabi'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5.5vw, 4rem);
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  color: var(--wabi-ink);
+}
+
+html[data-design='wabisabi'] .hero-greeting,
+html[data-design='wabisabi'] .section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  text-transform: lowercase;
+  letter-spacing: 0.3em;
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: color-mix(in oklab, var(--wabi-ink) 55%, transparent);
+}
+
+html[data-design='wabisabi'] .hero-tagline {
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.03em;
+}
+
+html[data-design='wabisabi'] .hero-description {
+  font-size: 1rem;
+  max-width: 48ch;
+  line-height: 2.1;
+  color: color-mix(in oklab, var(--wabi-ink) 75%, transparent);
+}
+
+/* Each section carries a thin vertical accent line on the left */
+html[data-design='wabisabi'] .section {
+  position: relative;
+  padding-left: 2.5rem;
+  border: 0;
+}
+
+html[data-design='wabisabi'] .section::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 2rem;
+  bottom: 2rem;
+  width: 1px;
+  background: var(--wabi-hair);
+}
+
+html[data-design='wabisabi'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin-bottom: 3rem;
+  color: var(--wabi-ink);
+}
+
+html[data-design='wabisabi'] .section-title::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--wabi-hair);
+  margin-top: 1.25rem;
+}
+
+html[data-design='wabisabi'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent-start);
+  font-style: italic;
+}
+
+html[data-design='wabisabi'] .card,
+html[data-design='wabisabi'] .skill-group,
+html[data-design='wabisabi'] .timeline-content,
+html[data-design='wabisabi'] .work-card,
+html[data-design='wabisabi'] .education-card,
+html[data-design='wabisabi'] .demo-card,
+html[data-design='wabisabi'] .contact-form {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--wabi-hair);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 2rem 0 2.5rem;
+}
+
+html[data-design='wabisabi'] .skill-pill,
+html[data-design='wabisabi'] .demo-tags li,
+html[data-design='wabisabi'] .work-tags li {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  font-weight: 400;
+  text-transform: lowercase;
+  padding: 0;
+  color: color-mix(in oklab, var(--wabi-ink) 65%, transparent);
+}
+
+html[data-design='wabisabi'] .skill-pill + .skill-pill::before,
+html[data-design='wabisabi'] .demo-tags li + li::before,
+html[data-design='wabisabi'] .work-tags li + li::before {
+  content: '·';
+  margin: 0 0.6rem 0 -0.2rem;
+  opacity: 0.5;
+}
+
+html[data-design='wabisabi'] .navbar {
+  background: color-mix(in oklab, var(--wabi-paper) 95%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--wabi-hair);
+}
+
+html[data-design='wabisabi'] .nav-logo {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+}
+
+html[data-design='wabisabi'] .nav-link {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: lowercase;
+  font-weight: 400;
+}
+
+html[data-design='wabisabi'] .hero-cta,
+html[data-design='wabisabi'] .contact-submit {
+  background: transparent;
+  color: var(--wabi-ink);
+  border: 0;
+  border-bottom: 1px solid var(--wabi-ink);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  font-weight: 400;
+  padding: 0.5rem 0.25rem;
+  box-shadow: none;
+}
+
+html[data-design='wabisabi'] .hero-cta::after,
+html[data-design='wabisabi'] .contact-submit::after {
+  content: ' →';
+  margin-left: 1.5rem;
+  opacity: 0.6;
+  transition: margin-left var(--transition-medium), opacity var(--transition-medium);
+}
+
+html[data-design='wabisabi'] .hero-cta:hover,
+html[data-design='wabisabi'] .contact-submit:hover {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+html[data-design='wabisabi'] .hero-cta:hover::after,
+html[data-design='wabisabi'] .contact-submit:hover::after {
+  margin-left: 2rem;
+  opacity: 1;
+}
+
+html[data-design='wabisabi'] .form-group input,
+html[data-design='wabisabi'] .form-group textarea {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--wabi-hair);
+  border-radius: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+html[data-design='wabisabi'] .form-group input:focus,
+html[data-design='wabisabi'] .form-group textarea:focus {
+  outline: 0;
+  border-bottom-color: var(--wabi-ink);
+  box-shadow: none;
+}
+
+html[data-design='wabisabi'] .hero-grid,
+html[data-design='wabisabi'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ DASHBOARD ═══════════════════════════════════
+ * Admin-UI / analytics feel: KPI-style headers, status pills
+ * with coloured dots, alternating row tints, dense monospace labels.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='dashboard'] {
+  --font-display: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --border-width: 1px;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --dash-row:      color-mix(in oklab, var(--bg-secondary) 40%, transparent);
+  --dash-border:   color-mix(in oklab, var(--text-primary) 10%, transparent);
+  --dash-green:    #22c55e;
+  --dash-amber:    #f59e0b;
+  --dash-blue:     var(--accent-start);
+}
+
+html[data-design='dashboard'] body {
+  font-size: 0.93rem;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-design='dashboard'] h1,
+html[data-design='dashboard'] h2,
+html[data-design='dashboard'] h3,
+html[data-design='dashboard'] h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+html[data-design='dashboard'] .hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* Status pill next to the greeting */
+html[data-design='dashboard'] .hero-greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--dash-border);
+}
+
+html[data-design='dashboard'] .hero-greeting::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dash-green);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--dash-green) 25%, transparent);
+}
+
+html[data-design='dashboard'] .section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+html[data-design='dashboard'] .section-label::before {
+  content: 'METRIC · ';
+  opacity: 0.6;
+}
+
+html[data-design='dashboard'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+/* Alternating-row tint on sections (subtle) */
+html[data-design='dashboard'] .section:nth-of-type(even) {
+  background: var(--dash-row);
+}
+
+/* Timestamp annotation in the top-right of each section */
+html[data-design='dashboard'] .section {
+  position: relative;
+}
+
+html[data-design='dashboard'] .section[data-num]::after {
+  content: '↻ updated just now  ·  #' attr(data-num);
+  position: absolute;
+  top: 2.5rem;
+  right: 1rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+html[data-design='dashboard'] .gradient-text {
+  background: linear-gradient(90deg, var(--dash-blue), var(--accent-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-design='dashboard'] .card,
+html[data-design='dashboard'] .skill-group,
+html[data-design='dashboard'] .timeline-content,
+html[data-design='dashboard'] .work-card,
+html[data-design='dashboard'] .education-card,
+html[data-design='dashboard'] .demo-card,
+html[data-design='dashboard'] .contact-form {
+  background: var(--bg-card);
+  border: 1px solid var(--dash-border);
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 1.25rem 1.25rem 0.75rem;
+  position: relative;
+}
+
+/* KPI-style top strip on every card */
+html[data-design='dashboard'] .card::before,
+html[data-design='dashboard'] .work-card::before,
+html[data-design='dashboard'] .education-card::before,
+html[data-design='dashboard'] .demo-card::before,
+html[data-design='dashboard'] .skill-group::before,
+html[data-design='dashboard'] .timeline-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    var(--dash-blue) 0%,
+    var(--dash-blue) 68%,
+    var(--dash-border) 68%,
+    var(--dash-border) 100%
+  );
+  border-radius: 0.375rem 0.375rem 0 0;
+}
+
+/* Fake sparkline ribbon at the bottom of work / demo / education cards */
+html[data-design='dashboard'] .work-card::after,
+html[data-design='dashboard'] .demo-card::after,
+html[data-design='dashboard'] .education-card::after {
+  content: '';
+  display: block;
+  height: 28px;
+  margin: 0.75rem -1.25rem -0.75rem;
+  background:
+    linear-gradient(to top,
+      color-mix(in oklab, var(--dash-blue) 12%, transparent),
+      transparent),
+    repeating-linear-gradient(
+      to right,
+      transparent 0,
+      transparent 7px,
+      color-mix(in oklab, var(--dash-blue) 45%, transparent) 7px,
+      color-mix(in oklab, var(--dash-blue) 45%, transparent) 8px,
+      transparent 8px,
+      transparent 15px,
+      color-mix(in oklab, var(--dash-blue) 28%, transparent) 15px,
+      color-mix(in oklab, var(--dash-blue) 28%, transparent) 16px
+    );
+  mask-image: linear-gradient(to top, black 0%, transparent 95%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 95%);
+  opacity: 0.75;
+  border-top: 1px dashed var(--dash-border);
+}
+
+html[data-design='dashboard'] .card h3,
+html[data-design='dashboard'] .work-card h3,
+html[data-design='dashboard'] .education-card h3,
+html[data-design='dashboard'] .demo-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+
+html[data-design='dashboard'] .skill-pill,
+html[data-design='dashboard'] .demo-tags li,
+html[data-design='dashboard'] .work-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--dash-border);
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 0.15rem 0.5rem 0.15rem 0.45rem;
+  text-transform: none;
+}
+
+html[data-design='dashboard'] .skill-pill::before,
+html[data-design='dashboard'] .demo-tags li::before,
+html[data-design='dashboard'] .work-tags li::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dash-green);
+}
+
+html[data-design='dashboard'] .skill-pill:nth-child(3n)::before,
+html[data-design='dashboard'] .demo-tags li:nth-child(3n)::before,
+html[data-design='dashboard'] .work-tags li:nth-child(3n)::before {
+  background: var(--dash-amber);
+}
+
+html[data-design='dashboard'] .skill-pill:nth-child(3n+1)::before,
+html[data-design='dashboard'] .demo-tags li:nth-child(3n+1)::before,
+html[data-design='dashboard'] .work-tags li:nth-child(3n+1)::before {
+  background: var(--dash-blue);
+}
+
+html[data-design='dashboard'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--dash-border);
+}
+
+html[data-design='dashboard'] .nav-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+html[data-design='dashboard'] .nav-logo::before {
+  content: '◐ ';
+  color: var(--dash-blue);
+  margin-right: 0.15rem;
+}
+
+html[data-design='dashboard'] .nav-link {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-secondary);
+}
+
+html[data-design='dashboard'] .hero-cta,
+html[data-design='dashboard'] .contact-submit {
+  background: var(--dash-blue);
+  color: #fff;
+  border: 0;
+  border-radius: 0.375rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0.6rem 1.1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+html[data-design='dashboard'] .hero-cta::before,
+html[data-design='dashboard'] .contact-submit::before {
+  content: '↗ ';
+  margin-right: 0.15rem;
+  opacity: 0.9;
+}
+
+html[data-design='dashboard'] .hero-cta:hover,
+html[data-design='dashboard'] .contact-submit:hover {
+  filter: brightness(1.08);
+  transform: none;
+}
+
+html[data-design='dashboard'] .form-group input,
+html[data-design='dashboard'] .form-group textarea {
+  background: var(--bg-primary);
+  border: 1px solid var(--dash-border);
+  border-radius: 0.375rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.9rem;
+  padding: 0.55rem 0.75rem;
+}
+
+html[data-design='dashboard'] .form-group input:focus,
+html[data-design='dashboard'] .form-group textarea:focus {
+  outline: 0;
+  border-color: var(--dash-blue);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--dash-blue) 20%, transparent);
+}
+
+html[data-design='dashboard'] .hero-grid {
+  opacity: 0.4;
+}

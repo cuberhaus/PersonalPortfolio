@@ -91,7 +91,7 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     <div class="theme-modal-group">
       <span class="theme-modal-label" data-i18n-design></span>
       <div class="theme-modal-design-grid">
-        {DESIGNS.map(design => (
+        {DESIGNS.filter(d => !d.hidden).map(design => (
           <button
             class="theme-modal-design"
             data-kind="design"
@@ -611,6 +611,95 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     text-shadow:
       -1px 1px 0 rgba(255, 91, 136, 0.65),
       1px -1px 0 rgba(58, 211, 255, 0.65);
+  }
+
+  /* Art Deco tile: gold gradient, stepped corners, sunburst feel */
+  .theme-modal-design[data-preview-style='deco'] .theme-modal-design-preview {
+    background:
+      radial-gradient(
+        ellipse 100% 60% at 50% 0%,
+        rgba(201, 169, 97, 0.45),
+        transparent 70%
+      ),
+      linear-gradient(180deg,
+        color-mix(in oklab, var(--bg-secondary) 70%, #1a1308) 0%,
+        color-mix(in oklab, var(--bg-secondary) 90%, #0d0905) 100%);
+    border: 1px solid #c9a961;
+    border-radius: 0;
+    box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--bg-secondary) 90%, #0d0905),
+                inset 0 0 0 3px #c9a961;
+    clip-path: polygon(
+      4px 0, calc(100% - 4px) 0,
+      100% 4px, 100% calc(100% - 4px),
+      calc(100% - 4px) 100%, 4px 100%,
+      0 calc(100% - 4px), 0 4px
+    );
+  }
+  .theme-modal-design[data-preview-style='deco'] .theme-modal-design-sample {
+    background: linear-gradient(135deg, #e8cf89 0%, #b88d3a 50%, #e8cf89 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* Wabi-sabi tile: cream paper, one thin vertical accent, subtle ink */
+  .theme-modal-design[data-preview-style='zen'] .theme-modal-design-preview {
+    background:
+      linear-gradient(to right,
+        color-mix(in oklab, var(--text-primary) 35%, transparent) 0,
+        color-mix(in oklab, var(--text-primary) 35%, transparent) 1px,
+        transparent 1px),
+      color-mix(in oklab, var(--bg-primary) 80%, #f2ece1);
+    background-position: 10px 0;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 1px 70%, 100% 100%;
+    background-origin: content-box, padding-box;
+    border: 1px solid color-mix(in oklab, var(--text-primary) 15%, transparent);
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .theme-modal-design[data-preview-style='zen'] .theme-modal-design-sample {
+    color: color-mix(in oklab, var(--text-primary) 90%, transparent);
+    letter-spacing: 0.08em;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  /* Dashboard tile: KPI strip at top + coloured status dot */
+  .theme-modal-design[data-preview-style='dash'] .theme-modal-design-preview {
+    background: var(--bg-card);
+    background-image:
+      linear-gradient(
+        to right,
+        var(--accent-start) 0%,
+        var(--accent-start) 65%,
+        color-mix(in oklab, var(--text-primary) 15%, transparent) 65%,
+        color-mix(in oklab, var(--text-primary) 15%, transparent) 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 3px;
+    background-position: top;
+    border: 1px solid color-mix(in oklab, var(--text-primary) 12%, transparent);
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    position: relative;
+  }
+  .theme-modal-design[data-preview-style='dash'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 2px color-mix(in oklab, #22c55e 25%, transparent);
+  }
+  .theme-modal-design[data-preview-style='dash'] .theme-modal-design-sample {
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   .theme-modal-design-meta {

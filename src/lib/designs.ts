@@ -14,8 +14,15 @@ export interface DesignMeta {
       | 'gradient' | 'serif' | 'blur' | 'grid' | 'soft' | 'pixel'
       | 'terminal' | 'neon' | 'clay'
       | 'paper' | 'raw' | 'schematic'
-      | 'tex' | 'editor' | 'riso';
+      | 'tex' | 'editor' | 'riso'
+      | 'deco' | 'zen' | 'dash';
   };
+  /**
+   * Retired designs: kept registered (so persisted `localStorage.design`
+   * and `?design=<id>` URLs keep working) but not rendered in the Ctrl+K
+   * picker grid.
+   */
+  hidden?: boolean;
 }
 
 export const DESIGNS: DesignMeta[] = [
@@ -36,6 +43,7 @@ export const DESIGNS: DesignMeta[] = [
     label: 'Glass',
     blurb: 'Translucent cards, aurora blur, soft shadows',
     preview: { font: 'Inter, system-ui, sans-serif', radius: '1.5rem', style: 'blur' },
+    hidden: true,
   },
   {
     id: 'swiss',
@@ -48,6 +56,7 @@ export const DESIGNS: DesignMeta[] = [
     label: 'Neumorphic',
     blurb: 'Soft pillowy UI with inset / outset shadows',
     preview: { font: 'Inter, system-ui, sans-serif', radius: '1.5rem', style: 'soft' },
+    hidden: true,
   },
   {
     id: 'pixel',
@@ -108,6 +117,25 @@ export const DESIGNS: DesignMeta[] = [
     label: 'Risograph',
     blurb: 'Duotone print, halftone dots, grain and misregister',
     preview: { font: 'Inter, system-ui, sans-serif', radius: '0.25rem', style: 'riso' },
+  },
+  {
+    id: 'deco',
+    label: 'Art Deco',
+    blurb: 'Sunbursts, gold gradients, stepped pyramid borders',
+    preview: { font: '"Poiret One", "Playfair Display", serif', radius: '0', style: 'deco' },
+  },
+  {
+    id: 'wabisabi',
+    label: 'Wabi-sabi',
+    blurb: 'Serene Japanese minimalism, vast negative space',
+    preview: { font: '"Shippori Mincho", "Noto Serif JP", serif', radius: '0', style: 'zen' },
+  },
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    blurb: 'Admin UI: KPIs, status pills, data density',
+    preview: { font: 'Inter, system-ui, sans-serif', radius: '0.25rem', style: 'dash' },
+    hidden: true,
   },
 ];
 
