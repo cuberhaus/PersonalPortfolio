@@ -10,7 +10,10 @@ export interface DesignMeta {
     /** Corner radius sample: e.g. '0', '0.75rem', '1.5rem'. */
     radius: string;
     /** Pictorial style keyword used to pick the tile's mini-mockup. */
-    style: 'gradient' | 'serif' | 'blur' | 'grid' | 'soft' | 'pixel' | 'terminal' | 'neon' | 'clay';
+    style:
+      | 'gradient' | 'serif' | 'blur' | 'grid' | 'soft' | 'pixel'
+      | 'terminal' | 'neon' | 'clay'
+      | 'paper' | 'raw' | 'schematic';
   };
 }
 
@@ -68,6 +71,24 @@ export const DESIGNS: DesignMeta[] = [
     label: 'Claymorphism',
     blurb: 'Chunky 3D pillows with soft pastel shadows',
     preview: { font: 'Inter, system-ui, sans-serif', radius: '1.75rem', style: 'clay' },
+  },
+  {
+    id: 'notebook',
+    label: 'Notebook',
+    blurb: 'Graph paper, handwritten ink, highlighter marks',
+    preview: { font: 'Caveat, "Comic Sans MS", cursive', radius: '0.5rem', style: 'paper' },
+  },
+  {
+    id: 'brutalist',
+    label: 'Brutalist',
+    blurb: 'Raw HTML energy: Times, yellow tape, thick borders',
+    preview: { font: '"Times New Roman", Times, serif', radius: '0', style: 'raw' },
+  },
+  {
+    id: 'blueprint',
+    label: 'Blueprint',
+    blurb: 'Cyan grid, hairlines, dimension marks, tech labels',
+    preview: { font: '"JetBrains Mono", ui-monospace, monospace', radius: '0', style: 'schematic' },
   },
 ];
 

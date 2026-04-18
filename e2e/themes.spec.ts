@@ -112,9 +112,39 @@ test.describe('Ctrl+K customize modal', () => {
     for (const id of [
       'minimal', 'editorial', 'glass', 'swiss', 'neumorphic', 'pixel',
       'terminal', 'cyber', 'clay',
+      'notebook', 'brutalist', 'blueprint',
     ]) {
       await expect(page.locator(`[data-design-id="${id}"]`)).toBeVisible();
     }
+  });
+
+  test('notebook design applies Caveat to the hero name', async ({ page }) => {
+    const h1 = page.locator('h1.hero-name').first();
+    await openModal(page);
+    await page.locator('[data-design-id="notebook"]').click();
+    await page.keyboard.press('Escape');
+    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    expect(font.toLowerCase()).toContain('caveat');
+  });
+
+  test('brutalist design uses Times New Roman and thick shadows on the CTA', async ({ page }) => {
+    await openModal(page);
+    await page.locator('[data-design-id="brutalist"]').click();
+    await page.keyboard.press('Escape');
+    const bodyFont = await page.locator('body').evaluate(el => getComputedStyle(el).fontFamily);
+    expect(bodyFont.toLowerCase()).toContain('times');
+    const cta = page.locator('.hero-cta').first();
+    const shadow = await cta.evaluate(el => getComputedStyle(el).boxShadow);
+    expect(shadow).not.toBe('none');
+  });
+
+  test('blueprint design tags sections with REV-<n> via ::before', async ({ page }) => {
+    await openModal(page);
+    await page.locator('[data-design-id="blueprint"]').click();
+    await page.keyboard.press('Escape');
+    const aboutSection = page.locator('section.about');
+    const pseudoContent = await aboutSection.evaluate(el => getComputedStyle(el, '::before').content);
+    expect(pseudoContent).toMatch(/REV-?0?1/i);
   });
 
   test('terminal design switches the hero greeting to monospace', async ({ page }) => {

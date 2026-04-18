@@ -460,6 +460,83 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
       inset 0 2px 4px -1px rgba(255, 255, 255, 0.35);
   }
 
+  .theme-modal-design[data-preview-style='paper'] .theme-modal-design-preview {
+    background-color: var(--bg-secondary);
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--text-primary) 12%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--text-primary) 12%, transparent) 1px, transparent 1px);
+    background-size: 8px 8px;
+    border: 1px solid color-mix(in oklab, var(--text-primary) 35%, transparent);
+    border-radius: 0.4rem;
+    transform: rotate(-2deg);
+    box-shadow: 2px 3px 0 color-mix(in oklab, var(--text-primary) 20%, transparent);
+  }
+  .theme-modal-design[data-preview-style='paper'] .theme-modal-design-sample {
+    transform: rotate(2deg);
+    position: relative;
+  }
+  .theme-modal-design[data-preview-style='paper'] .theme-modal-design-sample::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    bottom: 2px;
+    height: 5px;
+    background: color-mix(in oklab, var(--accent-start) 40%, #fff58a);
+    opacity: 0.6;
+    z-index: -1;
+    border-radius: 1px;
+  }
+
+  .theme-modal-design[data-preview-style='raw'] .theme-modal-design-preview {
+    background: #ffe000;
+    border: 3px solid var(--text-primary);
+    border-radius: 0;
+    box-shadow: 3px 3px 0 var(--text-primary);
+  }
+  .theme-modal-design[data-preview-style='raw'] .theme-modal-design-sample {
+    font-weight: 900;
+    font-style: italic;
+    color: #000;
+  }
+
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview {
+    background-color: color-mix(in oklab, var(--bg-secondary) 82%, var(--accent-start));
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--accent-start) 45%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--accent-start) 45%, transparent) 1px, transparent 1px);
+    background-size: 6px 6px;
+    border: 1px solid var(--accent-start);
+    border-radius: 0;
+    position: relative;
+  }
+  /* Corner tick marks on the tile preview */
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview::before,
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border: 2px solid var(--accent-start);
+    z-index: 1;
+  }
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview::before {
+    top: -1px;
+    left: -1px;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview::after {
+    bottom: -1px;
+    right: -1px;
+    border-left: 0;
+    border-top: 0;
+  }
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-sample {
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
   .theme-modal-design-meta {
     display: flex;
     flex-direction: column;

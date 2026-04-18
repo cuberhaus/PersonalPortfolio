@@ -116,6 +116,12 @@ export const ui = {
     'design.cyber.blurb':     'Neon glow, chromatic aberration, synthwave grid',
     'design.clay.name':       'Claymorphism',
     'design.clay.blurb':      'Chunky 3D pillows with soft pastel shadows',
+    'design.notebook.name':   'Notebook',
+    'design.notebook.blurb':  'Graph paper, handwritten ink, highlighter marks',
+    'design.brutalist.name':  'Brutalist',
+    'design.brutalist.blurb': 'Raw HTML energy: Times, yellow tape, thick borders',
+    'design.blueprint.name':  'Blueprint',
+    'design.blueprint.blurb': 'Cyan grid, hairlines, dimension marks, tech labels',
   },
   es: {
     // Nav
@@ -226,6 +232,12 @@ export const ui = {
     'design.cyber.blurb':     'Brillo neón, aberración cromática, rejilla synthwave',
     'design.clay.name':       'Claymorfismo',
     'design.clay.blurb':      'Cojines 3D voluminosos con sombras pastel suaves',
+    'design.notebook.name':   'Libreta',
+    'design.notebook.blurb':  'Papel cuadriculado, tinta manuscrita, marcas de fluorescente',
+    'design.brutalist.name':  'Brutalista',
+    'design.brutalist.blurb': 'Energía HTML cruda: Times, cinta amarilla, bordes gruesos',
+    'design.blueprint.name':  'Plano técnico',
+    'design.blueprint.blurb': 'Cuadrícula cian, líneas finas, marcas de cota y etiquetas',
   },
   ca: {
     // Nav
@@ -336,5 +348,11 @@ export const ui = {
     'design.cyber.blurb':     'Brillantor neó, aberració cromàtica, graella synthwave',
     'design.clay.name':       'Claymorfisme',
     'design.clay.blurb':      'Coixins 3D voluminosos amb ombres pastel suaus',
+    'design.notebook.name':   'Llibreta',
+    'design.notebook.blurb':  'Paper quadriculat, tinta manuscrita, marques de fluorescent',
+    'design.brutalist.name':  'Brutalista',
+    'design.brutalist.blurb': 'Energia HTML crua: Times, cinta groga, vores gruixudes',
+    'design.blueprint.name':  'Plànol tècnic',
+    'design.blueprint.blurb': 'Quadrícula cian, línies fines, marques de cota i etiquetes',
   },
 } as const;
