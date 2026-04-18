@@ -7,8 +7,22 @@ interface Props {
 }
 
 const { position } = Astro.props;
-const darkThemes = THEMES.filter(t => t.colorScheme === 'dark');
-const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
+const darkThemes = THEMES.filter(t => t.colorScheme === 'dark' && !t.hidden);
+const lightThemes = THEMES.filter(t => t.colorScheme === 'light' && !t.hidden);
+
+/**
+ * Reverse map: paletteId -> design ids that list this palette in their
+ * `recommendedThemes`. Used purely as a soft hint (★ badge on matching
+ * swatches when the corresponding design is active). Pre-computed at
+ * build time so the modal stays zero-JS for the initial paint.
+ */
+const recommendedBy: Record<string, string[]> = {};
+for (const d of DESIGNS) {
+  for (const t of d.recommendedThemes ?? []) {
+    (recommendedBy[t] ??= []).push(d.id);
+  }
+}
+const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(' ');
 ---
 
 {position === 'head' && (
@@ -114,14 +128,21 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     <div class="theme-modal-divider"></div>
 
     <div class="theme-modal-group">
-      <span class="theme-modal-label" data-i18n-palette></span>
+      <span class="theme-modal-label">
+        <span data-i18n-palette></span>
+        <span class="theme-modal-rec-legend" aria-hidden="true">
+          <span class="theme-modal-rec-legend-star">★</span>
+          <span data-i18n-recommended></span>
+        </span>
+      </span>
       <div class="theme-modal-subgroup">
         <span class="theme-modal-sublabel" data-i18n-dark></span>
         <div class="theme-modal-grid">
           {darkThemes.map(theme => (
-            <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id}>
+            <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id} data-recommended-for={recFor(theme.id)}>
               <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
               <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+              <span class="theme-modal-rec-badge" aria-hidden="true">★</span>
             </button>
           ))}
         </div>
@@ -130,9 +151,10 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
         <span class="theme-modal-sublabel" data-i18n-light></span>
         <div class="theme-modal-grid">
           {lightThemes.map(theme => (
-            <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id}>
+            <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id} data-recommended-for={recFor(theme.id)}>
               <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
               <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+              <span class="theme-modal-rec-badge" aria-hidden="true">★</span>
             </button>
           ))}
         </div>
@@ -221,13 +243,34 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
   }
 
   .theme-modal-label {
-    display: block;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
     font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
     margin-bottom: 0.5rem;
+  }
+
+  .theme-modal-rec-legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: var(--text-muted);
+    opacity: 0.8;
+  }
+
+  .theme-modal-rec-legend-star {
+    color: var(--accent-start);
+    font-size: 0.7rem;
+    line-height: 1;
   }
 
   .theme-modal-subgroup + .theme-modal-subgroup {
@@ -264,6 +307,7 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
   }
 
   .theme-modal-swatch {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -304,6 +348,34 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
   .theme-modal-name {
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  /* ── Recommended-palette hint (soft) ───────────────────────
+     Star badge + accent ring appear on swatches whose
+     `data-recommended-for` includes the current design id.
+     The `data-rec='true'` flag is toggled in refreshActive(). */
+  .theme-modal-rec-badge {
+    margin-left: auto;
+    font-size: 0.7rem;
+    line-height: 1;
+    color: var(--accent-start);
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .theme-modal-swatch[data-rec='true'] .theme-modal-rec-badge {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .theme-modal-swatch[data-rec='true'] .theme-modal-color {
+    border-color: var(--accent-start);
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--accent-start) 55%, transparent);
+  }
+
+  .theme-modal-swatch[data-rec='true'] .theme-modal-name {
+    color: var(--text-primary);
   }
 
   /* ── Design swatches ────────────────────────────────────── */
@@ -702,6 +774,80 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     letter-spacing: -0.02em;
   }
 
+  /* Zine tile: photocopied paper + tape + heavy black border, rotated */
+  .theme-modal-design[data-preview-style='zine'] .theme-modal-design-preview {
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in oklab, #ffd84d 60%, var(--bg-primary)) 0 10px,
+        transparent 10px 18px),
+      color-mix(in oklab, var(--bg-primary) 80%, #f4efe3);
+    background-position: 8px -6px, 0 0;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 22px 10px, 100% 100%;
+    border: 2px solid var(--text-primary);
+    border-radius: 0;
+    box-shadow: 2px 2px 0 var(--text-primary);
+    transform: rotate(-2deg);
+  }
+  .theme-modal-design[data-preview-style='zine'] .theme-modal-design-sample {
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
+  }
+
+  /* Comic tile: Ben-Day dots + thick outline + rotated chunky sample */
+  .theme-modal-design[data-preview-style='comic'] .theme-modal-design-preview {
+    background-color: #fff;
+    background-image:
+      radial-gradient(
+        color-mix(in oklab, var(--accent-start) 55%, transparent) 1.2px,
+        transparent 1.6px);
+    background-size: 6px 6px;
+    border: 2px solid #0a0a0a;
+    border-radius: 0.4rem;
+    box-shadow: 3px 3px 0 #0a0a0a;
+  }
+  .theme-modal-design[data-preview-style='comic'] .theme-modal-design-sample {
+    color: var(--accent-start);
+    font-family: Bangers, 'Inter Tight', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-shadow:
+      -1.5px 0 0 #0a0a0a,
+      1.5px 0 0 #0a0a0a,
+      0 -1.5px 0 #0a0a0a,
+      0 1.5px 0 #0a0a0a,
+      2px 2px 0 #0a0a0a;
+    transform: rotate(-3deg);
+  }
+
+  /* Newspaper tile: cream paper, double rule, blackletter sample */
+  .theme-modal-design[data-preview-style='news'] .theme-modal-design-preview {
+    background: color-mix(in oklab, var(--bg-primary) 75%, #f4eedd);
+    border: 3px double var(--text-primary);
+    border-radius: 0;
+    box-shadow: none;
+    position: relative;
+  }
+  .theme-modal-design[data-preview-style='news'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 18%;
+    border-top: 1px solid var(--text-primary);
+    border-bottom: 1px solid var(--text-primary);
+    height: 3px;
+  }
+  .theme-modal-design[data-preview-style='news'] .theme-modal-design-sample {
+    font-family: UnifrakturMaguntia, 'Playfair Display', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+  }
+
   .theme-modal-design-meta {
     display: flex;
     flex-direction: column;
@@ -777,6 +923,7 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     const titleEl = modal.querySelector('[data-i18n-title]');
     const designLabelEl = modal.querySelector('[data-i18n-design]');
     const paletteLabelEl = modal.querySelector('[data-i18n-palette]');
+    const recLegendEl = modal.querySelector('[data-i18n-recommended]');
     const darkEl = modal.querySelector('[data-i18n-dark]');
     const lightEl = modal.querySelector('[data-i18n-light]');
     const footerEl = modal.querySelector('[data-i18n-footer]');
@@ -785,6 +932,7 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     if (titleEl) titleEl.textContent = title;
     if (designLabelEl) designLabelEl.textContent = tr(lang, 'theme.design');
     if (paletteLabelEl) paletteLabelEl.textContent = tr(lang, 'theme.palette');
+    if (recLegendEl) recLegendEl.textContent = tr(lang, 'theme.recommended');
     if (darkEl) darkEl.textContent = tr(lang, 'theme.dark');
     if (lightEl) lightEl.textContent = tr(lang, 'theme.light');
     if (footerEl) footerEl.innerHTML = tr(lang, 'theme.closeHint');
@@ -821,8 +969,14 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     const refreshActive = () => {
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
       const currentDesign = document.documentElement.getAttribute('data-design') || 'minimal';
-      modal.querySelectorAll('.theme-modal-swatch').forEach(s => {
+      modal.querySelectorAll<HTMLElement>('.theme-modal-swatch').forEach(s => {
         s.classList.toggle('active', s.getAttribute('data-theme-id') === currentTheme);
+        const recFor = (s.getAttribute('data-recommended-for') || '').split(/\s+/).filter(Boolean);
+        if (recFor.includes(currentDesign)) {
+          s.setAttribute('data-rec', 'true');
+        } else {
+          s.removeAttribute('data-rec');
+        }
       });
       modal.querySelectorAll('.theme-modal-design').forEach(d => {
         d.classList.toggle('active', d.getAttribute('data-design-id') === currentDesign);

@@ -115,6 +115,7 @@ test.describe('Ctrl+K customize modal', () => {
       'notebook', 'brutalist', 'blueprint',
       'academic', 'ide', 'risograph',
       'deco', 'wabisabi',
+      'zine', 'comic', 'newspaper',
     ]) {
       await expect(page.locator(`[data-design-id="${id}"]`)).toBeVisible();
     }
@@ -232,5 +233,63 @@ test.describe('Ctrl+K customize modal', () => {
     expect(display).toMatch(/inline-flex|flex/);
     const radius = await greeting.evaluate(el => getComputedStyle(el).borderRadius);
     expect(radius).not.toBe('0px');
+  });
+
+  test('Zine design applies a heavy box-shadow offset to cards (photocopied feel)', async ({ page }) => {
+    await openModal(page);
+    await page.locator('[data-design-id="zine"]').click();
+    await page.keyboard.press('Escape');
+    const card = page.locator('.work-card, .demo-card, .card').first();
+    const shadow = await card.evaluate(el => getComputedStyle(el).boxShadow);
+    expect(shadow).not.toBe('none');
+    // solid offset shadow without blur → contains "0px 0px" or explicit offsets, not "rgba(0,0,0,0.1)"
+    expect(shadow).toMatch(/\d+px\s+\d+px\s+0px/);
+  });
+
+  test('Comic design applies Bangers to the hero name', async ({ page }) => {
+    const h1 = page.locator('h1.hero-name').first();
+    await openModal(page);
+    await page.locator('[data-design-id="comic"]').click();
+    await page.keyboard.press('Escape');
+    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    expect(font.toLowerCase()).toContain('bangers');
+  });
+
+  test('Newspaper design applies UnifrakturMaguntia to the nav logo (masthead)', async ({ page }) => {
+    await openModal(page);
+    await page.locator('[data-design-id="newspaper"]').click();
+    await page.keyboard.press('Escape');
+    const logo = page.locator('.nav-logo').first();
+    const font = await logo.evaluate(el => getComputedStyle(el).fontFamily);
+    expect(font.toLowerCase()).toMatch(/unifraktur|fraktur|playfair/);
+  });
+
+  test('recommended palettes get a ★ badge when matching design is active', async ({ page }) => {
+    await openModal(page);
+    // Terminal recommends phosphor, amber-crt, gruvbox-dark
+    await page.locator('[data-design-id="terminal"]').click();
+
+    const phosphor = page.locator('[data-theme-id="phosphor"]');
+    const nord = page.locator('[data-theme-id="nord"]');
+
+    // Recommended swatch gets data-rec='true' and a fully-opaque star badge
+    await expect(phosphor).toHaveAttribute('data-rec', 'true');
+    await expect(phosphor.locator('.theme-modal-rec-badge')).toHaveCSS('opacity', '1');
+
+    // Non-recommended swatch has no data-rec flag and a hidden star badge
+    await expect(nord).not.toHaveAttribute('data-rec', 'true');
+    await expect(nord.locator('.theme-modal-rec-badge')).toHaveCSS('opacity', '0');
+  });
+
+  test('recommendation stars move when the user picks a different design', async ({ page }) => {
+    await openModal(page);
+    // Newspaper recommends sepia; pixel does NOT recommend sepia.
+    await page.locator('[data-design-id="newspaper"]').click();
+    await expect(page.locator('[data-theme-id="sepia"]')).toHaveAttribute('data-rec', 'true');
+
+    await page.locator('[data-design-id="pixel"]').click();
+    await expect(page.locator('[data-theme-id="sepia"]')).not.toHaveAttribute('data-rec', 'true');
+    // Pixel recommends synthwave
+    await expect(page.locator('[data-theme-id="synthwave"]')).toHaveAttribute('data-rec', 'true');
   });
 });

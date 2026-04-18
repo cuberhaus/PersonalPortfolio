@@ -3693,3 +3693,948 @@ html[data-design='dashboard'] .form-group textarea:focus {
 html[data-design='dashboard'] .hero-grid {
   opacity: 0.4;
 }
+
+
+/* ══════════════ ZINE ════════════════════════════════════════
+ * Photocopied punk energy: ransom-note font mixing, tape and
+ * staples, heavy black borders, duotone spot-color accent.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='zine'] {
+  --font-sans: 'Times New Roman', Times, Georgia, serif;
+  --font-display: 'Arial Black', 'Helvetica Neue', sans-serif;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 3px;
+  --shadow-card: 4px 4px 0 var(--text-primary);
+  --zine-ink: var(--text-primary);
+  --zine-paper: color-mix(in oklab, var(--bg-primary) 80%, #f4efe3);
+  --zine-spot: var(--accent-start);
+  --zine-tape: color-mix(in oklab, #ffd84d 55%, var(--bg-primary));
+}
+
+/* Slightly grainy / photocopied paper */
+html[data-design='zine'] body {
+  background-color: var(--zine-paper);
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.08 0'/></filter><rect width='220' height='220' filter='url(%23g)'/></svg>");
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+  color: var(--zine-ink);
+}
+
+html[data-design='zine'] h1,
+html[data-design='zine'] h2,
+html[data-design='zine'] h3,
+html[data-design='zine'] h4 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0;
+  line-height: 1.05;
+}
+
+/* Ransom-note hero name: split across words with different fonts/angles */
+html[data-design='zine'] .hero-name {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.95;
+  display: block;
+  transform: rotate(-1.5deg);
+  filter: contrast(1.1);
+}
+
+/* Apply different fonts to pseudo-elements + use span selectors-ish via word wrap */
+html[data-design='zine'] .hero-name::first-letter {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  padding: 0 0.1em;
+  margin-right: 0.1em;
+}
+
+html[data-design='zine'] .hero-greeting,
+html[data-design='zine'] .section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  padding: 0.2rem 0.5rem;
+  text-transform: uppercase;
+  display: inline-block;
+  transform: rotate(-2deg);
+}
+
+html[data-design='zine'] .hero-tagline {
+  font-family: Caveat, cursive;
+  font-weight: 700;
+  font-size: 1.8rem;
+  transform: rotate(1deg);
+  color: var(--zine-spot);
+}
+
+html[data-design='zine'] .section {
+  border-top: 3px solid var(--zine-ink);
+  border-bottom: 3px solid var(--zine-ink);
+  padding: 4.5rem 0;
+  position: relative;
+}
+
+html[data-design='zine'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  transform: rotate(-1deg);
+  margin-bottom: 2rem;
+}
+
+/* Alternate section titles get the spot colour */
+html[data-design='zine'] .section:nth-of-type(even) .section-title {
+  background: var(--zine-spot);
+  color: var(--zine-paper);
+  transform: rotate(1deg);
+}
+
+html[data-design='zine'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--zine-paper);
+  background-color: var(--zine-spot);
+  padding: 0 0.2em;
+}
+
+/* Cards look like stapled / taped paper scraps */
+html[data-design='zine'] .card,
+html[data-design='zine'] .skill-group,
+html[data-design='zine'] .timeline-content,
+html[data-design='zine'] .work-card,
+html[data-design='zine'] .education-card,
+html[data-design='zine'] .demo-card,
+html[data-design='zine'] .contact-form {
+  background: var(--zine-paper);
+  border: 3px solid var(--zine-ink);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 var(--zine-ink);
+  padding: 1.5rem;
+  position: relative;
+  filter: contrast(1.05);
+}
+
+html[data-design='zine'] .card:nth-of-type(odd),
+html[data-design='zine'] .work-card:nth-of-type(odd),
+html[data-design='zine'] .demo-card:nth-of-type(odd),
+html[data-design='zine'] .education-card:nth-of-type(odd) {
+  transform: rotate(-0.6deg);
+}
+html[data-design='zine'] .card:nth-of-type(even),
+html[data-design='zine'] .work-card:nth-of-type(even),
+html[data-design='zine'] .demo-card:nth-of-type(even),
+html[data-design='zine'] .education-card:nth-of-type(even) {
+  transform: rotate(0.8deg);
+}
+
+/* Tape strip in the top-left corner of each card */
+html[data-design='zine'] .card::before,
+html[data-design='zine'] .work-card::before,
+html[data-design='zine'] .demo-card::before,
+html[data-design='zine'] .education-card::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  width: 60px;
+  height: 18px;
+  background: var(--zine-tape);
+  border: 1px solid color-mix(in oklab, var(--zine-ink) 40%, transparent);
+  transform: rotate(-8deg);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+  opacity: 0.85;
+}
+
+/* Staple in the top-right corner */
+html[data-design='zine'] .card::after,
+html[data-design='zine'] .work-card::after,
+html[data-design='zine'] .demo-card::after,
+html[data-design='zine'] .education-card::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  width: 14px;
+  height: 3px;
+  background: var(--zine-ink);
+  box-shadow: 0 4px 0 var(--zine-ink);
+  transform: rotate(8deg);
+}
+
+html[data-design='zine'] .card h3,
+html[data-design='zine'] .work-card h3,
+html[data-design='zine'] .demo-card h3,
+html[data-design='zine'] .education-card h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  margin-bottom: 0.5rem;
+}
+
+html[data-design='zine'] .skill-pill,
+html[data-design='zine'] .demo-tags li,
+html[data-design='zine'] .work-tags li {
+  background: var(--zine-paper);
+  border: 2px solid var(--zine-ink);
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  color: var(--zine-ink);
+}
+
+html[data-design='zine'] .skill-pill:nth-child(3n) {
+  background: var(--zine-spot);
+  color: var(--zine-paper);
+  transform: rotate(-3deg);
+}
+html[data-design='zine'] .skill-pill:nth-child(3n+1) {
+  font-family: 'Press Start 2P', ui-monospace, monospace;
+  font-size: 0.6rem;
+  transform: rotate(2deg);
+}
+html[data-design='zine'] .skill-pill:nth-child(3n+2) {
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  transform: rotate(-1deg);
+}
+
+html[data-design='zine'] .navbar {
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  border-bottom: 4px solid var(--zine-spot);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html[data-design='zine'] .nav-logo {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--zine-paper);
+  background: var(--zine-spot);
+  padding: 0 0.4rem;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+html[data-design='zine'] .nav-link {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: var(--zine-paper);
+}
+
+html[data-design='zine'] .nav-link:hover {
+  background: var(--zine-spot);
+  color: var(--zine-paper);
+}
+
+html[data-design='zine'] .hero-cta,
+html[data-design='zine'] .contact-submit {
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  border: 3px solid var(--zine-ink);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 5px 5px 0 var(--zine-spot);
+  transform: rotate(-1deg);
+}
+
+html[data-design='zine'] .hero-cta:hover,
+html[data-design='zine'] .contact-submit:hover {
+  transform: rotate(-1deg) translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--zine-spot);
+}
+
+html[data-design='zine'] .form-group input,
+html[data-design='zine'] .form-group textarea {
+  background: var(--zine-paper);
+  border: 3px solid var(--zine-ink);
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--zine-ink);
+}
+
+html[data-design='zine'] .form-group input:focus,
+html[data-design='zine'] .form-group textarea:focus {
+  outline: 0;
+  background: var(--zine-tape);
+  box-shadow: 4px 4px 0 var(--zine-ink);
+}
+
+html[data-design='zine'] .hero-grid,
+html[data-design='zine'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ COMIC ═══════════════════════════════════════
+ * Bangers display, thick outlined panels, Ben-Day dot halftone,
+ * speech-bubble tag pills, POW! burst decoration.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='comic'] {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Bangers', 'Inter Tight', sans-serif;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --border-width: 3px;
+  --comic-ink: #0a0a0a;
+  --comic-pop: var(--accent-start);
+  --comic-pop2: var(--accent-end);
+  --comic-paper: color-mix(in oklab, var(--bg-primary) 70%, #fffef2);
+  --shadow-card: 4px 4px 0 var(--comic-ink);
+}
+
+/* Ben-Day dots all over the page body, subtle */
+html[data-design='comic'] body {
+  background-color: var(--comic-paper);
+  background-image:
+    radial-gradient(
+      color-mix(in oklab, var(--comic-pop) 45%, transparent) 1.2px,
+      transparent 1.6px);
+  background-size: 8px 8px;
+  color: var(--comic-ink);
+  font-family: var(--font-sans);
+}
+
+html[data-design='comic'] h1,
+html[data-design='comic'] h2,
+html[data-design='comic'] h3,
+html[data-design='comic'] h4 {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: var(--comic-ink);
+  font-weight: 400;
+}
+
+html[data-design='comic'] .hero {
+  position: relative;
+}
+
+html[data-design='comic'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 10vw, 6.5rem);
+  letter-spacing: 0.02em;
+  line-height: 0.9;
+  color: var(--comic-pop);
+  /* Chunky black outline */
+  text-shadow:
+    -3px 0 0 var(--comic-ink),
+    3px 0 0 var(--comic-ink),
+    0 -3px 0 var(--comic-ink),
+    0 3px 0 var(--comic-ink),
+    -3px -3px 0 var(--comic-ink),
+    3px 3px 0 var(--comic-ink),
+    -3px 3px 0 var(--comic-ink),
+    3px -3px 0 var(--comic-ink),
+    6px 6px 0 var(--comic-ink);
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+/* POW! burst in the hero corner */
+html[data-design='comic'] .hero::after {
+  content: 'POW!';
+  position: absolute;
+  top: 14%;
+  right: 5%;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  color: var(--comic-pop2);
+  background: #ffeb3b;
+  padding: 0.5rem 1rem;
+  clip-path: polygon(
+    0% 10%, 20% 0%, 35% 15%, 50% 0%, 65% 15%, 80% 0%, 100% 10%,
+    95% 30%, 100% 50%, 90% 65%, 100% 85%, 80% 95%, 65% 85%, 50% 100%,
+    35% 85%, 20% 100%, 0% 85%, 10% 65%, 0% 50%, 10% 30%
+  );
+  transform: rotate(15deg);
+  text-shadow:
+    -2px 0 0 var(--comic-ink),
+    2px 0 0 var(--comic-ink),
+    0 -2px 0 var(--comic-ink),
+    0 2px 0 var(--comic-ink);
+  pointer-events: none;
+}
+
+html[data-design='comic'] .hero-greeting {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  color: var(--comic-ink);
+  background: #fff;
+  border: 3px solid var(--comic-ink);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  display: inline-block;
+  box-shadow: 3px 3px 0 var(--comic-ink);
+  transform: rotate(-1deg);
+  text-transform: uppercase;
+}
+
+html[data-design='comic'] .hero-tagline {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: var(--comic-ink);
+}
+
+html[data-design='comic'] .section-label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--comic-pop2);
+  text-transform: uppercase;
+}
+
+html[data-design='comic'] .section {
+  border-top: 3px solid var(--comic-ink);
+  padding: 4rem 0;
+  position: relative;
+}
+
+html[data-design='comic'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  letter-spacing: 0.04em;
+  margin-bottom: 2rem;
+  color: var(--comic-pop);
+  text-shadow:
+    -2px 0 0 var(--comic-ink),
+    2px 0 0 var(--comic-ink),
+    0 -2px 0 var(--comic-ink),
+    0 2px 0 var(--comic-ink),
+    4px 4px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--comic-pop2);
+}
+
+/* Cards = comic panels: thick outlined, white, drop-shadowed */
+html[data-design='comic'] .card,
+html[data-design='comic'] .skill-group,
+html[data-design='comic'] .timeline-content,
+html[data-design='comic'] .work-card,
+html[data-design='comic'] .education-card,
+html[data-design='comic'] .demo-card,
+html[data-design='comic'] .contact-form {
+  background: #fff;
+  border: 3px solid var(--comic-ink);
+  border-radius: 0.75rem;
+  box-shadow: 5px 5px 0 var(--comic-ink);
+  padding: 1.5rem;
+  position: relative;
+}
+
+html[data-design='comic'] .card h3,
+html[data-design='comic'] .work-card h3,
+html[data-design='comic'] .demo-card h3,
+html[data-design='comic'] .education-card h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  letter-spacing: 0.03em;
+  color: var(--comic-pop);
+  text-shadow: 2px 2px 0 var(--comic-ink);
+  margin-bottom: 0.5rem;
+}
+
+/* Speech-bubble style tags */
+html[data-design='comic'] .skill-pill,
+html[data-design='comic'] .demo-tags li,
+html[data-design='comic'] .work-tags li {
+  background: #fff;
+  border: 2px solid var(--comic-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.75rem;
+  color: var(--comic-ink);
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .skill-pill:nth-child(3n) {
+  background: #ffeb3b;
+}
+html[data-design='comic'] .skill-pill:nth-child(3n+1) {
+  background: color-mix(in oklab, var(--comic-pop) 25%, #fff);
+}
+
+html[data-design='comic'] .navbar {
+  background: #fff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 3px solid var(--comic-ink);
+  box-shadow: 0 3px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .nav-logo {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  color: var(--comic-pop);
+  text-shadow: 2px 2px 0 var(--comic-ink);
+  text-transform: uppercase;
+}
+
+html[data-design='comic'] .nav-link {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--comic-ink);
+}
+
+html[data-design='comic'] .hero-cta,
+html[data-design='comic'] .contact-submit {
+  background: var(--comic-pop2);
+  color: var(--comic-ink);
+  border: 3px solid var(--comic-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.4rem;
+  box-shadow: 4px 4px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .hero-cta:hover,
+html[data-design='comic'] .contact-submit:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 3px 3px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .form-group input,
+html[data-design='comic'] .form-group textarea {
+  background: #fff;
+  border: 3px solid var(--comic-ink);
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  padding: 0.6rem 0.85rem;
+  box-shadow: 2px 2px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .form-group input:focus,
+html[data-design='comic'] .form-group textarea:focus {
+  outline: 0;
+  box-shadow: 4px 4px 0 var(--comic-pop);
+}
+
+html[data-design='comic'] .hero-grid {
+  display: none;
+}
+
+html[data-design='comic'] .hero-gradient {
+  background: radial-gradient(circle at 70% 30%,
+    color-mix(in oklab, #ffeb3b 55%, transparent),
+    transparent 60%);
+  opacity: 0.7;
+}
+
+
+/* ══════════════ NEWSPAPER ═══════════════════════════════════
+ * Broadsheet front page: blackletter masthead, serif columns,
+ * dated rule, classified-ad cards, small-caps labels.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='newspaper'] {
+  --font-sans: 'EB Garamond', 'Crimson Pro', Georgia, serif;
+  --font-display: 'UnifrakturMaguntia', 'Playfair Display', Georgia, serif;
+  --font-subhead: 'Playfair Display', Georgia, serif;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --news-paper: color-mix(in oklab, var(--bg-primary) 75%, #f4eedd);
+  --news-ink: color-mix(in oklab, var(--text-primary) 98%, #1a1812);
+  --news-muted: color-mix(in oklab, var(--news-ink) 55%, transparent);
+  --news-hair: color-mix(in oklab, var(--news-ink) 30%, transparent);
+  --shadow-card: none;
+}
+
+html[data-design='newspaper'] body {
+  background: var(--news-paper);
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  color: var(--news-ink);
+  font-family: var(--font-sans);
+  font-size: 1.02rem;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+html[data-design='newspaper'] h1,
+html[data-design='newspaper'] h2,
+html[data-design='newspaper'] h3,
+html[data-design='newspaper'] h4 {
+  font-family: var(--font-subhead);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+/* Giant blackletter nameplate */
+html[data-design='newspaper'] .hero {
+  border-top: 4px double var(--news-ink);
+  border-bottom: 4px double var(--news-ink);
+  padding: 3rem 0 2.5rem;
+  text-align: center;
+}
+
+html[data-design='newspaper'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 10vw, 6rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--news-ink);
+  text-align: center;
+  display: block;
+  margin: 0.25rem 0 0.5rem;
+}
+
+/* Dateline above name */
+html[data-design='newspaper'] .hero-greeting {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  color: var(--news-muted);
+  display: block;
+  text-align: center;
+  border-bottom: 1px solid var(--news-hair);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+html[data-design='newspaper'] .hero-greeting::before {
+  content: 'VOL. MMXXVI  ·  NO. III  ·  ';
+  letter-spacing: 0.2em;
+}
+
+html[data-design='newspaper'] .hero-greeting::after {
+  content: '  ·  PRICE: FREE';
+  letter-spacing: 0.2em;
+}
+
+html[data-design='newspaper'] .hero-tagline {
+  font-family: var(--font-subhead);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: var(--news-ink);
+  max-width: 60ch;
+  margin: 0 auto 0.5rem;
+}
+
+html[data-design='newspaper'] .hero-description {
+  max-width: 60ch;
+  margin: 0.75rem auto 1.25rem;
+  text-align: justify;
+  text-align-last: center;
+  hyphens: auto;
+  color: var(--news-ink);
+}
+
+html[data-design='newspaper'] .section {
+  border-top: 1px solid var(--news-ink);
+  padding: 3rem 0;
+  position: relative;
+}
+
+/* Section dateline: small-caps rubric above title */
+html[data-design='newspaper'] .section-label,
+html[data-design='newspaper'] .section[data-num]::before {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  color: var(--news-muted);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+html[data-design='newspaper'] .section[data-num]::before {
+  content: 'SECTION ' attr(data-num);
+  position: static;
+  border-bottom: 1px solid var(--news-hair);
+  padding-bottom: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+html[data-design='newspaper'] .section-title {
+  font-family: var(--font-subhead);
+  font-weight: 800;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  letter-spacing: -0.005em;
+  color: var(--news-ink);
+  margin-bottom: 0.25rem;
+  line-height: 1.1;
+}
+
+html[data-design='newspaper'] .section-title::after {
+  content: '';
+  display: block;
+  width: 100%;
+  border-top: 3px double var(--news-ink);
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+html[data-design='newspaper'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--news-ink);
+  font-style: italic;
+}
+
+/* Two-column body text in the About section */
+html[data-design='newspaper'] .about-text {
+  column-count: 2;
+  column-gap: 2rem;
+  column-rule: 1px solid var(--news-hair);
+  text-align: justify;
+  hyphens: auto;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+html[data-design='newspaper'] .about-text p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.2em;
+  float: left;
+  line-height: 0.9;
+  padding-right: 0.5rem;
+  padding-top: 0.2rem;
+  color: var(--news-ink);
+}
+
+@media (max-width: 720px) {
+  html[data-design='newspaper'] .about-text {
+    column-count: 1;
+  }
+}
+
+/* Cards = classified-ad boxes */
+html[data-design='newspaper'] .card,
+html[data-design='newspaper'] .skill-group,
+html[data-design='newspaper'] .timeline-content,
+html[data-design='newspaper'] .work-card,
+html[data-design='newspaper'] .education-card,
+html[data-design='newspaper'] .demo-card,
+html[data-design='newspaper'] .contact-form {
+  background: var(--news-paper);
+  border: 1px solid var(--news-ink);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 1.5rem;
+  position: relative;
+}
+
+/* Classified-ad small-caps label strip across top of work / demo / education cards */
+html[data-design='newspaper'] .work-card::before,
+html[data-design='newspaper'] .demo-card::before,
+html[data-design='newspaper'] .education-card::before {
+  content: 'ADVERTISEMENT';
+  display: block;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: var(--news-muted);
+  border-bottom: 1px solid var(--news-hair);
+  padding-bottom: 0.35rem;
+  margin: -0.5rem -0.5rem 0.75rem;
+  text-align: center;
+}
+
+html[data-design='newspaper'] .education-card::before {
+  content: 'ACADEMIC RECORD';
+}
+
+html[data-design='newspaper'] .work-card::before {
+  content: 'EMPLOYMENT NOTICE';
+}
+
+html[data-design='newspaper'] .demo-card::before {
+  content: 'FEATURED DEMO';
+}
+
+html[data-design='newspaper'] .card h3,
+html[data-design='newspaper'] .work-card h3,
+html[data-design='newspaper'] .demo-card h3,
+html[data-design='newspaper'] .education-card h3 {
+  font-family: var(--font-subhead);
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+
+html[data-design='newspaper'] .skill-pill,
+html[data-design='newspaper'] .demo-tags li,
+html[data-design='newspaper'] .work-tags li {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  padding: 0;
+  color: var(--news-ink);
+  text-transform: lowercase;
+}
+
+html[data-design='newspaper'] .skill-pill::before,
+html[data-design='newspaper'] .demo-tags li::before,
+html[data-design='newspaper'] .work-tags li::before {
+  content: '[ ';
+  color: var(--news-muted);
+}
+html[data-design='newspaper'] .skill-pill::after,
+html[data-design='newspaper'] .demo-tags li::after,
+html[data-design='newspaper'] .work-tags li::after {
+  content: ' ]';
+  color: var(--news-muted);
+}
+
+html[data-design='newspaper'] .navbar {
+  background: var(--news-paper);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 3px double var(--news-ink);
+  box-shadow: none;
+}
+
+html[data-design='newspaper'] .nav-logo {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  color: var(--news-ink);
+}
+
+html[data-design='newspaper'] .nav-link {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+  color: var(--news-ink);
+}
+
+html[data-design='newspaper'] .hero-cta,
+html[data-design='newspaper'] .contact-submit {
+  background: var(--news-ink);
+  color: var(--news-paper);
+  border: 1px solid var(--news-ink);
+  border-radius: 0;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
+  padding: 0.65rem 1.25rem;
+  box-shadow: 4px 4px 0 var(--news-ink), 4px 4px 0 1px var(--news-paper) inset;
+  text-transform: lowercase;
+}
+
+html[data-design='newspaper'] .hero-cta:hover,
+html[data-design='newspaper'] .contact-submit:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 3px 3px 0 var(--news-ink);
+  background: var(--news-ink);
+}
+
+html[data-design='newspaper'] .form-group input,
+html[data-design='newspaper'] .form-group textarea {
+  background: var(--news-paper);
+  border: 0;
+  border-bottom: 1px solid var(--news-ink);
+  border-radius: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  padding: 0.45rem 0;
+}
+
+html[data-design='newspaper'] .form-group input:focus,
+html[data-design='newspaper'] .form-group textarea:focus {
+  outline: 0;
+  border-bottom-width: 2px;
+  box-shadow: none;
+}
+
+html[data-design='newspaper'] .footer {
+  border-top: 3px double var(--news-ink);
+  border-bottom: 3px double var(--news-ink);
+  padding: 2rem 0;
+  text-align: center;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  letter-spacing: 0.15em;
+  color: var(--news-muted);
+}
+
+html[data-design='newspaper'] .hero-grid,
+html[data-design='newspaper'] .hero-gradient {
+  display: none;
+}

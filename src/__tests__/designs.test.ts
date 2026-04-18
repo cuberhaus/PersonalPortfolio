@@ -13,6 +13,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { DESIGNS, DESIGN_IDS, DEFAULT_DESIGN } from '../lib/designs';
+import { THEME_IDS } from '../lib/themes';
 import { ui, languages } from '../i18n/ui';
 
 const designsCss = readFileSync(resolve('./src/styles/designs.css'), 'utf8');
@@ -23,12 +24,13 @@ const MODAL_KEYS = [
   'theme.palette',
   'theme.dark',
   'theme.light',
+  'theme.recommended',
   'theme.closeHint',
 ] as const;
 
 describe('DESIGNS registry', () => {
-  it('contains at least 18 designs', () => {
-    expect(DESIGNS.length).toBeGreaterThanOrEqual(18);
+  it('contains at least 21 designs', () => {
+    expect(DESIGNS.length).toBeGreaterThanOrEqual(21);
   });
 
   it('DEFAULT_DESIGN is a valid id', () => {
@@ -54,6 +56,7 @@ describe('DESIGNS registry', () => {
           'paper', 'raw', 'schematic',
           'tex', 'editor', 'riso',
           'deco', 'zen', 'dash',
+          'zine', 'comic', 'news',
         ],
       ).toContain(d.preview.style);
     }
@@ -93,6 +96,35 @@ describe('design i18n coverage', () => {
     const bundle = ui[lang] as Record<string, string>;
     for (const key of MODAL_KEYS) {
       expect(bundle[key], `${lang}: missing ${key}`).toBeTruthy();
+    }
+  });
+});
+
+describe('recommendedThemes (soft palette hints)', () => {
+  it('every design (active + hidden) declares at least one recommendation', () => {
+    for (const d of DESIGNS) {
+      expect(
+        d.recommendedThemes && d.recommendedThemes.length > 0,
+        `design "${d.id}" has no recommendedThemes`,
+      ).toBe(true);
+    }
+  });
+
+  it('every recommended palette id resolves to a real theme', () => {
+    for (const d of DESIGNS) {
+      for (const paletteId of d.recommendedThemes ?? []) {
+        expect(
+          THEME_IDS,
+          `design "${d.id}" recommends unknown palette "${paletteId}"`,
+        ).toContain(paletteId);
+      }
+    }
+  });
+
+  it('recommendedThemes contains no duplicates per design', () => {
+    for (const d of DESIGNS) {
+      const recs = d.recommendedThemes ?? [];
+      expect(new Set(recs).size, `design "${d.id}" has duplicate recommendations`).toBe(recs.length);
     }
   });
 });
