@@ -650,7 +650,7 @@ test.describe('CAIM demo i18n', () => {
 test.describe('PAR Parallel Computing demo', () => {
   test('renders demo header with correct title', async ({ page }) => {
     await page.goto('/demos/par-parallel', { waitUntil: 'networkidle' });
-    await expect(page.locator('h1')).toContainText('Parallel Computing');
+    await expect(page.locator('h1.demo-hdr-title')).toContainText('Parallel Computing');
   });
 
   test('renders three canvas elements for mini demos', async ({ page }) => {
@@ -682,6 +682,6 @@ test.describe('PAR Parallel Computing demo', () => {
 
   test('Spanish PAR page shows translated title', async ({ page }) => {
     await page.goto('/es/demos/par-parallel', { waitUntil: 'networkidle' });
-    await expect(page.locator('h1')).toContainText('Computación Paralela');
+    await expect(page.locator('h1.demo-hdr-title')).toContainText('Computación Paralela');
   });
 });
