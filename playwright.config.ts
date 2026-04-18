@@ -22,6 +22,11 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       testMatch: /live-demos\.spec\.ts/,
     },
+    {
+      name: 'themes',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /themes\.spec\.ts/,
+    },
   ],
   webServer: {
     command: 'npm run dev',

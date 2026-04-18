@@ -1,5 +1,6 @@
 ---
 import { THEMES, THEME_IDS } from '../lib/themes';
+import { DESIGNS, DESIGN_IDS, DEFAULT_DESIGN } from '../lib/designs';
 
 interface Props {
   position: 'head' | 'body';
@@ -11,13 +12,14 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
 ---
 
 {position === 'head' && (
-<script is:inline define:vars={{ THEME_IDS }}>
-  const VALID = THEME_IDS;
+<script is:inline define:vars={{ THEME_IDS, DESIGN_IDS, DEFAULT_DESIGN }}>
+  const VALID_THEMES = THEME_IDS;
+  const VALID_DESIGNS = DESIGN_IDS;
 
   const __theme = (() => {
     const url = new URL(window.location.href);
     const param = url.searchParams.get('theme');
-    if (param && VALID.includes(param)) {
+    if (param && VALID_THEMES.includes(param)) {
       localStorage.setItem('theme', param);
       url.searchParams.delete('theme');
       history.replaceState(null, '', url.pathname + url.search + url.hash);
@@ -25,7 +27,7 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     }
     if (typeof localStorage !== 'undefined') {
       const saved = localStorage.getItem('theme');
-      if (saved && VALID.includes(saved)) return saved;
+      if (saved && VALID_THEMES.includes(saved)) return saved;
     }
     if (window.matchMedia('(prefers-color-scheme: light)').matches) {
       return 'light';
@@ -34,16 +36,45 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
   })();
   document.documentElement.setAttribute('data-theme', __theme);
 
+  const __design = (() => {
+    const url = new URL(window.location.href);
+    const param = url.searchParams.get('design');
+    if (param && VALID_DESIGNS.includes(param)) {
+      localStorage.setItem('design', param);
+      url.searchParams.delete('design');
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+      return param;
+    }
+    if (typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem('design');
+      if (saved && VALID_DESIGNS.includes(saved)) return saved;
+    }
+    return DEFAULT_DESIGN;
+  })();
+  document.documentElement.setAttribute('data-design', __design);
+
   window.setTheme = function(id) {
-    if (!VALID.includes(id)) {
+    if (!VALID_THEMES.includes(id)) {
       console.error(
         'Unknown theme "' + id + '". Available themes:\n' +
-        VALID.map(function(t) { return '  \u2022 ' + t; }).join('\n')
+        VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n')
       );
       return;
     }
     document.documentElement.setAttribute('data-theme', id);
     localStorage.setItem('theme', id);
+  };
+
+  window.setDesign = function(id) {
+    if (!VALID_DESIGNS.includes(id)) {
+      console.error(
+        'Unknown design "' + id + '". Available designs:\n' +
+        VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n')
+      );
+      return;
+    }
+    document.documentElement.setAttribute('data-design', id);
+    localStorage.setItem('design', id);
   };
 </script>
 )}
@@ -56,29 +87,58 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
       <span class="theme-modal-title" data-i18n-title></span>
       <kbd class="theme-modal-hint">Ctrl+K</kbd>
     </div>
+
     <div class="theme-modal-group">
-      <span class="theme-modal-label" data-i18n-dark></span>
-      <div class="theme-modal-grid">
-        {darkThemes.map(theme => (
-          <button class="theme-modal-swatch" data-theme-id={theme.id}>
-            <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
-            <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+      <span class="theme-modal-label" data-i18n-design></span>
+      <div class="theme-modal-design-grid">
+        {DESIGNS.map(design => (
+          <button
+            class="theme-modal-design"
+            data-kind="design"
+            data-design-id={design.id}
+            data-preview-style={design.preview.style}
+            style={`--td-font: ${design.preview.font}; --td-radius: ${design.preview.radius};`}
+          >
+            <span class="theme-modal-design-preview" aria-hidden="true">
+              <span class="theme-modal-design-sample">Aa</span>
+            </span>
+            <span class="theme-modal-design-meta">
+              <span class="theme-modal-design-name" data-i18n-design-name={design.id}>{design.label}</span>
+              <span class="theme-modal-design-blurb" data-i18n-design-blurb={design.id}>{design.blurb}</span>
+            </span>
           </button>
         ))}
       </div>
     </div>
+
     <div class="theme-modal-divider"></div>
+
     <div class="theme-modal-group">
-      <span class="theme-modal-label" data-i18n-light></span>
-      <div class="theme-modal-grid">
-        {lightThemes.map(theme => (
-          <button class="theme-modal-swatch" data-theme-id={theme.id}>
-            <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
-            <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
-          </button>
-        ))}
+      <span class="theme-modal-label" data-i18n-palette></span>
+      <div class="theme-modal-subgroup">
+        <span class="theme-modal-sublabel" data-i18n-dark></span>
+        <div class="theme-modal-grid">
+          {darkThemes.map(theme => (
+            <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id}>
+              <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
+              <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div class="theme-modal-subgroup">
+        <span class="theme-modal-sublabel" data-i18n-light></span>
+        <div class="theme-modal-grid">
+          {lightThemes.map(theme => (
+            <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id}>
+              <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
+              <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
+
     <div class="theme-modal-footer">
       <span data-i18n-footer></span>
     </div>
@@ -116,8 +176,10 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
 
   .theme-modal-panel {
     position: relative;
-    min-width: 320px;
-    max-width: 400px;
+    min-width: 340px;
+    width: min(520px, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
     padding: 1.25rem;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -154,6 +216,10 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     border: 1px solid var(--border-color);
   }
 
+  .theme-modal-group + .theme-modal-group {
+    margin-top: 0.25rem;
+  }
+
   .theme-modal-label {
     display: block;
     font-size: 0.65rem;
@@ -164,16 +230,37 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     margin-bottom: 0.5rem;
   }
 
+  .theme-modal-subgroup + .theme-modal-subgroup {
+    margin-top: 0.75rem;
+  }
+
+  .theme-modal-sublabel {
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+    opacity: 0.85;
+  }
+
   .theme-modal-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.25rem;
   }
 
+  .theme-modal-design-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
   .theme-modal-divider {
     height: 1px;
     background: var(--border-color);
-    margin: 0.625rem 0;
+    margin: 0.875rem 0;
   }
 
   .theme-modal-swatch {
@@ -219,6 +306,184 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     text-overflow: ellipsis;
   }
 
+  /* ── Design swatches ────────────────────────────────────── */
+  .theme-modal-design {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    text-align: left;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .theme-modal-design:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-color-hover);
+    color: var(--text-primary);
+  }
+
+  .theme-modal-design.active {
+    border-color: var(--accent-start);
+    box-shadow: 0 0 0 1px var(--glow-color);
+    color: var(--text-primary);
+  }
+
+  .theme-modal-design-preview {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--td-radius, 0.5rem);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .theme-modal-design-sample {
+    font-family: var(--td-font, inherit);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .theme-modal-design[data-preview-style='gradient'] .theme-modal-design-preview {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-secondary) 55%, color-mix(in oklab, var(--accent-start) 35%, var(--bg-secondary)) 100%);
+  }
+  .theme-modal-design[data-preview-style='gradient'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+  }
+
+  .theme-modal-design[data-preview-style='serif'] .theme-modal-design-sample {
+    font-style: italic;
+  }
+  .theme-modal-design[data-preview-style='serif'] .theme-modal-design-preview {
+    border-radius: 0;
+    border-bottom: 2px solid var(--text-primary);
+  }
+
+  .theme-modal-design[data-preview-style='blur'] .theme-modal-design-preview {
+    background:
+      radial-gradient(circle at 30% 30%, color-mix(in oklab, var(--accent-start) 40%, transparent), transparent 60%),
+      radial-gradient(circle at 70% 70%, color-mix(in oklab, var(--accent-end) 40%, transparent), transparent 60%),
+      var(--bg-secondary);
+    border: 1px solid color-mix(in oklab, var(--text-primary) 15%, transparent);
+  }
+
+  .theme-modal-design[data-preview-style='grid'] .theme-modal-design-preview {
+    border-radius: 0;
+    border: 1px solid var(--text-primary);
+  }
+  .theme-modal-design[data-preview-style='grid'] .theme-modal-design-preview::before {
+    content: '02';
+    position: absolute;
+    top: 2px; right: 4px;
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: #e10600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .theme-modal-design[data-preview-style='soft'] .theme-modal-design-preview {
+    background: var(--bg-primary);
+    border: 0;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25), -2px -2px 6px rgba(255, 255, 255, 0.04);
+  }
+
+  .theme-modal-design[data-preview-style='pixel'] .theme-modal-design-preview {
+    border-radius: 0;
+    border: 2px solid var(--text-primary);
+    box-shadow: 2px 2px 0 var(--text-primary);
+    background: var(--bg-secondary);
+  }
+  .theme-modal-design[data-preview-style='pixel'] .theme-modal-design-sample {
+    font-size: 0.65rem;
+  }
+
+  .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-preview {
+    border-radius: 0;
+    border: 1px dashed var(--accent-start);
+    background: var(--bg-secondary);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      rgba(0, 0, 0, 0.12) 2px,
+      rgba(0, 0, 0, 0.12) 3px
+    );
+  }
+  .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-sample {
+    font-size: 0.8rem;
+    color: var(--accent-start);
+  }
+  .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-sample::before {
+    content: '>';
+    margin-right: 2px;
+    opacity: 0.7;
+  }
+
+  .theme-modal-design[data-preview-style='neon'] .theme-modal-design-preview {
+    border-radius: 0;
+    border: 1px solid var(--accent-start);
+    background:
+      linear-gradient(transparent 0, transparent 60%, color-mix(in oklab, var(--accent-start) 35%, transparent) 100%),
+      var(--bg-secondary);
+    box-shadow: 0 0 10px color-mix(in oklab, var(--accent-start) 40%, transparent),
+      inset 0 0 8px color-mix(in oklab, var(--accent-start) 15%, transparent);
+  }
+  .theme-modal-design[data-preview-style='neon'] .theme-modal-design-sample {
+    text-shadow: -1px 0 0 #ff2e88, 1px 0 0 #00f0ff;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .theme-modal-design[data-preview-style='clay'] .theme-modal-design-preview {
+    background: var(--bg-secondary);
+    border: 0;
+    border-radius: 1rem;
+    box-shadow:
+      0 4px 10px -3px color-mix(in oklab, var(--accent-start) 40%, transparent),
+      0 8px 14px -6px rgba(0, 0, 0, 0.2),
+      inset 0 -2px 4px -1px rgba(0, 0, 0, 0.18),
+      inset 0 2px 4px -1px rgba(255, 255, 255, 0.35);
+  }
+
+  .theme-modal-design-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+
+  .theme-modal-design-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .theme-modal-design-blurb {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
   .theme-modal-footer {
     margin-top: 0.75rem;
     padding-top: 0.5rem;
@@ -236,13 +501,28 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     border-radius: 3px;
     border: 1px solid var(--border-color);
   }
+
+  @media (max-width: 480px) {
+    .theme-modal-design-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 
 <script>
-  const TM_I18N: Record<string, { title: string; dark: string; light: string; footer: string }> = {
-    en: { title: 'Choose a theme', dark: 'Dark', light: 'Light', footer: 'Press <kbd>Esc</kbd> to close' },
-    es: { title: 'Elige un tema', dark: 'Oscuro', light: 'Claro', footer: 'Pulsa <kbd>Esc</kbd> para cerrar' },
-    ca: { title: 'Tria un tema', dark: 'Fosc', light: 'Clar', footer: 'Prem <kbd>Esc</kbd> per tancar' },
+  import { ui, defaultLang } from '../i18n/ui';
+
+  type Lang = keyof typeof ui;
+
+  const pickLang = (raw: string | null): Lang => {
+    if (raw && raw in ui) return raw as Lang;
+    return defaultLang as Lang;
+  };
+
+  const tr = (lang: Lang, key: keyof typeof ui[typeof defaultLang]): string => {
+    const bundle = ui[lang] as Record<string, string>;
+    const fallback = ui[defaultLang as Lang] as Record<string, string>;
+    return bundle[key as string] ?? fallback[key as string] ?? '';
   };
 
   const initThemeModal = () => {
@@ -250,18 +530,34 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     if (!modal || modal.hasAttribute('data-tm-init')) return;
     modal.setAttribute('data-tm-init', 'true');
 
-    const lang = document.documentElement.getAttribute('lang') || 'en';
-    const strings = TM_I18N[lang] || TM_I18N.en;
+    const lang = pickLang(document.documentElement.getAttribute('lang'));
+
     const titleEl = modal.querySelector('[data-i18n-title]');
+    const designLabelEl = modal.querySelector('[data-i18n-design]');
+    const paletteLabelEl = modal.querySelector('[data-i18n-palette]');
     const darkEl = modal.querySelector('[data-i18n-dark]');
     const lightEl = modal.querySelector('[data-i18n-light]');
     const footerEl = modal.querySelector('[data-i18n-footer]');
     const panelEl = modal.querySelector('[data-i18n-aria-label]');
-    if (titleEl) titleEl.textContent = strings.title;
-    if (darkEl) darkEl.textContent = strings.dark;
-    if (lightEl) lightEl.textContent = strings.light;
-    if (footerEl) footerEl.innerHTML = strings.footer;
-    if (panelEl) panelEl.setAttribute('aria-label', strings.title);
+    const title = tr(lang, 'theme.customize');
+    if (titleEl) titleEl.textContent = title;
+    if (designLabelEl) designLabelEl.textContent = tr(lang, 'theme.design');
+    if (paletteLabelEl) paletteLabelEl.textContent = tr(lang, 'theme.palette');
+    if (darkEl) darkEl.textContent = tr(lang, 'theme.dark');
+    if (lightEl) lightEl.textContent = tr(lang, 'theme.light');
+    if (footerEl) footerEl.innerHTML = tr(lang, 'theme.closeHint');
+    if (panelEl) panelEl.setAttribute('aria-label', title);
+
+    modal.querySelectorAll<HTMLElement>('[data-i18n-design-name]').forEach(el => {
+      const id = el.getAttribute('data-i18n-design-name') ?? '';
+      const localized = tr(lang, `design.${id}.name` as keyof typeof ui[typeof defaultLang]);
+      if (localized) el.textContent = localized;
+    });
+    modal.querySelectorAll<HTMLElement>('[data-i18n-design-blurb]').forEach(el => {
+      const id = el.getAttribute('data-i18n-design-blurb') ?? '';
+      const localized = tr(lang, `design.${id}.blurb` as keyof typeof ui[typeof defaultLang]);
+      if (localized) el.textContent = localized;
+    });
 
     let previouslyFocused: Element | null = null;
 
@@ -280,17 +576,27 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
       }
     };
 
+    const refreshActive = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const currentDesign = document.documentElement.getAttribute('data-design') || 'minimal';
+      modal.querySelectorAll('.theme-modal-swatch').forEach(s => {
+        s.classList.toggle('active', s.getAttribute('data-theme-id') === currentTheme);
+      });
+      modal.querySelectorAll('.theme-modal-design').forEach(d => {
+        d.classList.toggle('active', d.getAttribute('data-design-id') === currentDesign);
+      });
+    };
+
     const open = () => {
       previouslyFocused = document.activeElement;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
-      const current = document.documentElement.getAttribute('data-theme') || 'dark';
-      modal.querySelectorAll('.theme-modal-swatch').forEach(s => {
-        s.classList.toggle('active', s.getAttribute('data-theme-id') === current);
-      });
-      const activeSwatch = modal.querySelector('.theme-modal-swatch.active') as HTMLElement;
-      if (activeSwatch) activeSwatch.focus();
-      else (modal.querySelector('.theme-modal-swatch') as HTMLElement)?.focus();
+      refreshActive();
+      const activeEl =
+        modal.querySelector('.theme-modal-design.active') as HTMLElement ||
+        modal.querySelector('.theme-modal-swatch.active') as HTMLElement;
+      if (activeEl) activeEl.focus();
+      else (modal.querySelector('.theme-modal-design, .theme-modal-swatch') as HTMLElement)?.focus();
       modal.addEventListener('keydown', trapFocus);
     };
 
@@ -304,16 +610,25 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     modal.querySelector('.theme-modal-backdrop')?.addEventListener('click', close);
 
     modal.addEventListener('click', (e) => {
-      const swatch = (e.target as HTMLElement).closest('.theme-modal-swatch') as HTMLElement | null;
-      if (!swatch) return;
-      const themeId = swatch.getAttribute('data-theme-id');
-      if (!themeId) return;
-      document.documentElement.setAttribute('data-theme', themeId);
-      localStorage.setItem('theme', themeId);
-      modal.querySelectorAll('.theme-modal-swatch').forEach(s => {
-        s.classList.toggle('active', s.getAttribute('data-theme-id') === themeId);
-      });
-      close();
+      const target = e.target as HTMLElement;
+      const designBtn = target.closest('.theme-modal-design') as HTMLElement | null;
+      if (designBtn) {
+        const id = designBtn.getAttribute('data-design-id');
+        if (!id) return;
+        document.documentElement.setAttribute('data-design', id);
+        try { localStorage.setItem('design', id); } catch (_err) { /* private mode */ }
+        refreshActive();
+        return;
+      }
+      const swatch = target.closest('.theme-modal-swatch') as HTMLElement | null;
+      if (swatch) {
+        const id = swatch.getAttribute('data-theme-id');
+        if (!id) return;
+        document.documentElement.setAttribute('data-theme', id);
+        try { localStorage.setItem('theme', id); } catch (_err) { /* private mode */ }
+        refreshActive();
+        return;
+      }
     });
 
     document.addEventListener('keydown', (e) => {
