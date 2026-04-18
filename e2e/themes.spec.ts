@@ -113,6 +113,7 @@ test.describe('Ctrl+K customize modal', () => {
       'minimal', 'editorial', 'glass', 'swiss', 'neumorphic', 'pixel',
       'terminal', 'cyber', 'clay',
       'notebook', 'brutalist', 'blueprint',
+      'academic', 'ide', 'risograph',
     ]) {
       await expect(page.locator(`[data-design-id="${id}"]`)).toBeVisible();
     }
@@ -173,5 +174,34 @@ test.describe('Ctrl+K customize modal', () => {
     const aboutSection = page.locator('section.about');
     const pseudoContent = await aboutSection.evaluate(el => getComputedStyle(el, '::before').content);
     expect(pseudoContent).toMatch(/01/);
+  });
+
+  test('academic design applies EB Garamond to the hero name', async ({ page }) => {
+    const h1 = page.locator('h1.hero-name').first();
+    await openModal(page);
+    await page.locator('[data-design-id="academic"]').click();
+    await page.keyboard.press('Escape');
+    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    expect(font.toLowerCase()).toContain('garamond');
+  });
+
+  test('IDE design wraps the hero name in string quotes via ::before', async ({ page }) => {
+    const h1 = page.locator('h1.hero-name').first();
+    await openModal(page);
+    await page.locator('[data-design-id="ide"]').click();
+    await page.keyboard.press('Escape');
+    const pseudoContent = await h1.evaluate(el => getComputedStyle(el, '::before').content);
+    expect(pseudoContent).toMatch(/"/);
+    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    expect(font.toLowerCase()).toContain('jetbrains mono');
+  });
+
+  test('risograph design duotones odd vs even sections', async ({ page }) => {
+    await openModal(page);
+    await page.locator('[data-design-id="risograph"]').click();
+    await page.keyboard.press('Escape');
+    const aboutBg = await page.locator('section.about').evaluate(el => getComputedStyle(el).backgroundColor);
+    const demosBg = await page.locator('section.demos').evaluate(el => getComputedStyle(el).backgroundColor);
+    expect(aboutBg).not.toBe(demosBg);
   });
 });

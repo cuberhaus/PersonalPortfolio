@@ -13,7 +13,8 @@ export interface DesignMeta {
     style:
       | 'gradient' | 'serif' | 'blur' | 'grid' | 'soft' | 'pixel'
       | 'terminal' | 'neon' | 'clay'
-      | 'paper' | 'raw' | 'schematic';
+      | 'paper' | 'raw' | 'schematic'
+      | 'tex' | 'editor' | 'riso';
   };
 }
 
@@ -89,6 +90,24 @@ export const DESIGNS: DesignMeta[] = [
     label: 'Blueprint',
     blurb: 'Cyan grid, hairlines, dimension marks, tech labels',
     preview: { font: '"JetBrains Mono", ui-monospace, monospace', radius: '0', style: 'schematic' },
+  },
+  {
+    id: 'academic',
+    label: 'Academic',
+    blurb: 'LaTeX paper: Garamond, numbered sections, abstracts',
+    preview: { font: '"EB Garamond", "Crimson Pro", Georgia, serif', radius: '0', style: 'tex' },
+  },
+  {
+    id: 'ide',
+    label: 'IDE',
+    blurb: 'VSCode vibes: tab cards, gutter, syntax-coloured hero',
+    preview: { font: '"JetBrains Mono", ui-monospace, monospace', radius: '0.25rem', style: 'editor' },
+  },
+  {
+    id: 'risograph',
+    label: 'Risograph',
+    blurb: 'Duotone print, halftone dots, grain and misregister',
+    preview: { font: 'Inter, system-ui, sans-serif', radius: '0.25rem', style: 'riso' },
   },
 ];
 

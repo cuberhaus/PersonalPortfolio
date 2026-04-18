@@ -537,6 +537,82 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     letter-spacing: 0.05em;
   }
 
+  .theme-modal-design[data-preview-style='tex'] .theme-modal-design-preview {
+    background: color-mix(in oklab, #f4ecd8 30%, var(--bg-secondary));
+    border-radius: 0;
+    border-top: 1px solid var(--text-primary);
+    border-bottom: 1px solid var(--text-primary);
+    border-left: 0;
+    border-right: 0;
+  }
+  .theme-modal-design[data-preview-style='tex'] .theme-modal-design-preview::before {
+    content: '§ 1';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    font-size: 0.5rem;
+    letter-spacing: 0;
+    color: var(--accent-start);
+    font-family: 'EB Garamond', 'Crimson Pro', serif;
+    font-style: italic;
+  }
+  .theme-modal-design[data-preview-style='tex'] .theme-modal-design-sample {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .theme-modal-design[data-preview-style='editor'] .theme-modal-design-preview {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color-hover);
+    border-radius: 0.2rem;
+    overflow: hidden;
+  }
+  .theme-modal-design[data-preview-style='editor'] .theme-modal-design-preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 7px;
+    background: color-mix(in oklab, var(--bg-primary) 60%, transparent);
+    border-bottom: 1px solid var(--border-color);
+  }
+  .theme-modal-design[data-preview-style='editor'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    top: 7px;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+    background: color-mix(in oklab, var(--bg-primary) 50%, transparent);
+    border-right: 1px solid color-mix(in oklab, var(--text-muted) 40%, transparent);
+  }
+  .theme-modal-design[data-preview-style='editor'] .theme-modal-design-sample {
+    font-size: 0.75rem;
+    color: #98c379;
+    margin-left: 6px;
+    margin-top: 4px;
+  }
+
+  .theme-modal-design[data-preview-style='riso'] .theme-modal-design-preview {
+    background-color: color-mix(in oklab, var(--accent-start) 15%, var(--bg-secondary));
+    background-image:
+      radial-gradient(
+        color-mix(in oklab, var(--accent-end) 50%, transparent) 1px,
+        transparent 1.4px
+      );
+    background-size: 5px 5px;
+    border: 2px solid var(--text-primary);
+    border-radius: 0.2rem;
+    box-shadow: 2px 2px 0 color-mix(in oklab, var(--accent-end) 70%, transparent);
+  }
+  .theme-modal-design[data-preview-style='riso'] .theme-modal-design-sample {
+    font-weight: 900;
+    text-shadow:
+      -1px 1px 0 rgba(255, 91, 136, 0.65),
+      1px -1px 0 rgba(58, 211, 255, 0.65);
+  }
+
   .theme-modal-design-meta {
     display: flex;
     flex-direction: column;

@@ -122,6 +122,12 @@ export const ui = {
     'design.brutalist.blurb': 'Raw HTML energy: Times, yellow tape, thick borders',
     'design.blueprint.name':  'Blueprint',
     'design.blueprint.blurb': 'Cyan grid, hairlines, dimension marks, tech labels',
+    'design.academic.name':   'Academic',
+    'design.academic.blurb':  'LaTeX paper: Garamond, numbered sections, abstracts',
+    'design.ide.name':        'IDE',
+    'design.ide.blurb':       'VSCode vibes: tab cards, gutter, syntax-coloured hero',
+    'design.risograph.name':  'Risograph',
+    'design.risograph.blurb': 'Duotone print, halftone dots, grain and misregister',
   },
   es: {
     // Nav
@@ -238,6 +244,12 @@ export const ui = {
     'design.brutalist.blurb': 'Energía HTML cruda: Times, cinta amarilla, bordes gruesos',
     'design.blueprint.name':  'Plano técnico',
     'design.blueprint.blurb': 'Cuadrícula cian, líneas finas, marcas de cota y etiquetas',
+    'design.academic.name':   'Académico',
+    'design.academic.blurb':  'Paper LaTeX: Garamond, secciones numeradas, resumen',
+    'design.ide.name':        'IDE',
+    'design.ide.blurb':       'Vibes VSCode: pestañas, gutter, héroe con sintaxis',
+    'design.risograph.name':  'Risograph',
+    'design.risograph.blurb': 'Impresión dúo-tono, trama de puntos, grano y desregistro',
   },
   ca: {
     // Nav
@@ -354,5 +366,11 @@ export const ui = {
     'design.brutalist.blurb': 'Energia HTML crua: Times, cinta groga, vores gruixudes',
     'design.blueprint.name':  'Plànol tècnic',
     'design.blueprint.blurb': 'Quadrícula cian, línies fines, marques de cota i etiquetes',
+    'design.academic.name':   'Acadèmic',
+    'design.academic.blurb':  'Paper LaTeX: Garamond, seccions numerades, resum',
+    'design.ide.name':        'IDE',
+    'design.ide.blurb':       'Vibes VSCode: pestanyes, gutter, heroi amb sintaxi',
+    'design.risograph.name':  'Risograph',
+    'design.risograph.blurb': 'Impressió duotò, trama de punts, gra i desregistre',
   },
 } as const;

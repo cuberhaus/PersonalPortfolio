@@ -2016,3 +2016,851 @@ html[data-design='blueprint'] .hero-grid,
 html[data-design='blueprint'] .hero-gradient {
   display: none;
 }
+
+
+/* ══════════════ ACADEMIC ════════════════════════════════════
+ * LaTeX paper aesthetic: Garamond body, justified prose,
+ * numbered sections, abstract block, small-caps nav.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='academic'] {
+  --font-sans: 'EB Garamond', 'Crimson Pro', 'Source Serif Pro', Georgia, 'Times New Roman', serif;
+  --font-display: var(--font-sans);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --section-padding: 4.5rem 0;
+  --container-width: 820px;
+  counter-reset: acad-section;
+}
+
+html[data-design='academic'] body {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  background: var(--bg-primary);
+}
+
+html[data-design='academic'] p {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+html[data-design='academic'] h1,
+html[data-design='academic'] h2,
+html[data-design='academic'] h3,
+html[data-design='academic'] h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* Hero as title block — centred author + affiliation */
+html[data-design='academic'] .hero {
+  text-align: center;
+}
+
+html[data-design='academic'] .hero-inner,
+html[data-design='academic'] .hero-content {
+  text-align: center;
+  margin: 0 auto;
+}
+
+html[data-design='academic'] .hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.1;
+  margin: 0 auto 0.5rem;
+  text-align: center;
+}
+
+html[data-design='academic'] .hero-greeting {
+  font-family: var(--font-display);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+html[data-design='academic'] .hero-greeting::before {
+  content: 'Abstract. ';
+  font-weight: 700;
+  font-style: normal;
+  color: var(--text-primary);
+}
+
+html[data-design='academic'] .hero-tagline {
+  font-style: italic;
+  font-size: 1.25rem;
+}
+
+html[data-design='academic'] .hero-description {
+  font-size: 1.05rem;
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: justify;
+}
+
+/* Auto-numbered sections: 01. About, 02. Projects … */
+html[data-design='academic'] .section {
+  counter-increment: acad-section;
+  border-top: 1px solid color-mix(in oklab, var(--text-primary) 25%, transparent);
+  padding-top: 2.5rem;
+}
+
+html[data-design='academic'] .section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+html[data-design='academic'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  margin-bottom: 1.25rem;
+}
+
+html[data-design='academic'] .section-title::before {
+  content: counter(acad-section, decimal-leading-zero) '.  ';
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--accent-start);
+}
+
+html[data-design='academic'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+/* Figures / cards — thin ruled frames with numbered captions */
+html[data-design='academic'] .card,
+html[data-design='academic'] .skill-group,
+html[data-design='academic'] .timeline-content,
+html[data-design='academic'] .work-card,
+html[data-design='academic'] .education-card,
+html[data-design='academic'] .demo-card,
+html[data-design='academic'] .contact-form {
+  background: transparent;
+  border: 1px solid color-mix(in oklab, var(--text-primary) 25%, transparent);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 1.5rem 1.75rem;
+}
+
+html[data-design='academic'] .work-card h3::before,
+html[data-design='academic'] .demo-card h3::before,
+html[data-design='academic'] .education-card h3::before {
+  content: '§  ';
+  font-family: var(--font-display);
+  color: var(--accent-start);
+  font-weight: 400;
+}
+
+html[data-design='academic'] .skill-pill,
+html[data-design='academic'] .demo-tags li,
+html[data-design='academic'] .work-tags li {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0;
+  color: var(--accent-start);
+}
+
+html[data-design='academic'] .skill-pill::before,
+html[data-design='academic'] .demo-tags li::before,
+html[data-design='academic'] .work-tags li::before {
+  content: '[';
+}
+
+html[data-design='academic'] .skill-pill::after,
+html[data-design='academic'] .demo-tags li::after,
+html[data-design='academic'] .work-tags li::after {
+  content: ']';
+}
+
+html[data-design='academic'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--text-primary) 20%, transparent);
+}
+
+html[data-design='academic'] .nav-logo {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+}
+
+html[data-design='academic'] .nav-link {
+  font-family: var(--font-display);
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+}
+
+html[data-design='academic'] .hero-cta,
+html[data-design='academic'] .contact-submit {
+  background: transparent;
+  color: var(--accent-start);
+  border: 0;
+  border-bottom: 1px solid var(--accent-start);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 0.25rem 0.1rem;
+  box-shadow: none;
+}
+
+html[data-design='academic'] .hero-cta::after,
+html[data-design='academic'] .contact-submit::after {
+  content: ' →';
+  font-style: normal;
+}
+
+html[data-design='academic'] .hero-cta:hover,
+html[data-design='academic'] .contact-submit:hover {
+  color: var(--accent-end);
+  border-bottom-color: var(--accent-end);
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+html[data-design='academic'] .form-group input,
+html[data-design='academic'] .form-group textarea {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid color-mix(in oklab, var(--text-primary) 40%, transparent);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  padding: 0.5rem 0;
+}
+
+html[data-design='academic'] .form-group input:focus,
+html[data-design='academic'] .form-group textarea:focus {
+  outline: 0;
+  border-bottom-color: var(--accent-start);
+  box-shadow: none;
+}
+
+html[data-design='academic'] blockquote {
+  font-style: italic;
+  border-left: 2px solid var(--accent-start);
+  padding-left: 1rem;
+}
+
+html[data-design='academic'] .hero-grid,
+html[data-design='academic'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ IDE ═════════════════════════════════════════
+ * VSCode-inspired: JetBrains Mono, tabbed cards, gutter stripe,
+ * status bar, syntax-coloured tokens.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='ide'] {
+  --font-sans: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-display: var(--font-sans);
+  --font-mono: var(--font-sans);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.25rem;
+  --border-width: 1px;
+  --shadow-card: none;
+  --ide-keyword: #c678dd;
+  --ide-string:  #98c379;
+  --ide-func:    #61afef;
+  --ide-number:  #d19a66;
+  --ide-comment: color-mix(in oklab, var(--text-muted) 90%, transparent);
+  --ide-gutter:  color-mix(in oklab, var(--bg-secondary) 85%, transparent);
+  --ide-line:    color-mix(in oklab, var(--text-muted) 45%, transparent);
+  --ide-tab-bg:  color-mix(in oklab, var(--bg-secondary) 95%, transparent);
+  --ide-tab-active: var(--bg-card);
+}
+
+html[data-design='ide'] body {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  letter-spacing: 0;
+  /* make room for the status bar */
+  padding-bottom: 26px;
+}
+
+/* Bottom VSCode-style status bar */
+html[data-design='ide'] body::after {
+  content: '⎇ main    ✓ no problems    UTF-8    LF    TypeScript    Ln 42, Col 18';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  background: var(--accent-start);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+html[data-design='ide'] h1,
+html[data-design='ide'] h2,
+html[data-design='ide'] h3,
+html[data-design='ide'] h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+html[data-design='ide'] .hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ide-string);
+}
+
+html[data-design='ide'] .hero-name::before {
+  content: '"';
+  color: var(--ide-string);
+  opacity: 0.8;
+}
+
+html[data-design='ide'] .hero-name::after {
+  content: '"';
+  color: var(--ide-string);
+  opacity: 0.8;
+}
+
+html[data-design='ide'] .hero-greeting {
+  font-family: var(--font-mono);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ide-comment);
+  font-style: italic;
+}
+
+html[data-design='ide'] .hero-greeting::before {
+  content: '// ';
+  opacity: 0.75;
+}
+
+html[data-design='ide'] .hero-tagline {
+  font-family: var(--font-mono);
+}
+
+html[data-design='ide'] .section-label {
+  font-family: var(--font-mono);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ide-comment);
+  font-style: italic;
+}
+
+html[data-design='ide'] .section-label::before {
+  content: '// ';
+  opacity: 0.75;
+}
+
+html[data-design='ide'] .section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ide-func);
+}
+
+html[data-design='ide'] .section-title::before {
+  content: '▸ ';
+  color: var(--text-muted);
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+html[data-design='ide'] .section-title::after {
+  content: '()';
+  color: var(--text-muted);
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+html[data-design='ide'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--ide-keyword);
+}
+
+/* Cards as editor tabs: a file-tab header strip + gutter stripe on the left */
+html[data-design='ide'] .card,
+html[data-design='ide'] .skill-group,
+html[data-design='ide'] .timeline-content,
+html[data-design='ide'] .work-card,
+html[data-design='ide'] .education-card,
+html[data-design='ide'] .demo-card,
+html[data-design='ide'] .contact-form {
+  background: var(--ide-tab-active);
+  border: 1px solid var(--border-color-hover);
+  border-radius: 0.25rem;
+  box-shadow: none;
+  position: relative;
+  padding: 2.25rem 1.25rem 1.25rem 2.5rem;
+  overflow: hidden;
+}
+
+/* Tab bar header */
+html[data-design='ide'] .card::before,
+html[data-design='ide'] .work-card::before,
+html[data-design='ide'] .education-card::before,
+html[data-design='ide'] .demo-card::before,
+html[data-design='ide'] .contact-form::before {
+  content: '● card.tsx  ×';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: var(--ide-tab-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+html[data-design='ide'] .skill-group::before {
+  content: '● skills.json  ×';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: var(--ide-tab-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+html[data-design='ide'] .timeline-content::before {
+  content: '● experience.log  ×';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: var(--ide-tab-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* Gutter stripe on the left (behind padding-left) */
+html[data-design='ide'] .card::after,
+html[data-design='ide'] .skill-group::after,
+html[data-design='ide'] .timeline-content::after,
+html[data-design='ide'] .work-card::after,
+html[data-design='ide'] .education-card::after,
+html[data-design='ide'] .demo-card::after,
+html[data-design='ide'] .contact-form::after {
+  content: '';
+  position: absolute;
+  top: 26px;
+  bottom: 0;
+  left: 0;
+  width: 32px;
+  background:
+    linear-gradient(to right,
+      var(--ide-gutter) 0,
+      var(--ide-gutter) 31px,
+      var(--ide-line) 31px,
+      var(--ide-line) 32px);
+  pointer-events: none;
+}
+
+html[data-design='ide'] .skill-pill,
+html[data-design='ide'] .demo-tags li,
+html[data-design='ide'] .work-tags li {
+  background: color-mix(in oklab, var(--ide-keyword) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--ide-keyword) 35%, transparent);
+  border-radius: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  color: var(--ide-keyword);
+  padding: 0.15rem 0.5rem;
+}
+
+html[data-design='ide'] .skill-pill::before,
+html[data-design='ide'] .demo-tags li::before,
+html[data-design='ide'] .work-tags li::before {
+  content: '#';
+  opacity: 0.6;
+  margin-right: 0.1rem;
+}
+
+html[data-design='ide'] .navbar {
+  background: var(--bg-secondary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid var(--border-color-hover);
+}
+
+html[data-design='ide'] .nav-logo {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--ide-func);
+}
+
+html[data-design='ide'] .nav-logo::before {
+  content: '{ ';
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+html[data-design='ide'] .nav-logo::after {
+  content: ' }';
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+html[data-design='ide'] .nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-secondary);
+}
+
+html[data-design='ide'] .nav-link::before {
+  content: '▸ ';
+  opacity: 0.5;
+}
+
+html[data-design='ide'] .hero-cta,
+html[data-design='ide'] .contact-submit {
+  background: var(--ide-func);
+  color: var(--bg-primary);
+  border: 0;
+  border-radius: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none;
+  padding: 0.6rem 1.25rem;
+}
+
+html[data-design='ide'] .hero-cta::before,
+html[data-design='ide'] .contact-submit::before {
+  content: '▶ ';
+  font-size: 0.75rem;
+}
+
+html[data-design='ide'] .hero-cta:hover,
+html[data-design='ide'] .contact-submit:hover {
+  background: color-mix(in oklab, var(--ide-func) 85%, #fff);
+  transform: none;
+}
+
+html[data-design='ide'] .form-group input,
+html[data-design='ide'] .form-group textarea {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color-hover);
+  border-radius: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ide-string);
+}
+
+html[data-design='ide'] .form-group input:focus,
+html[data-design='ide'] .form-group textarea:focus {
+  outline: 0;
+  border-color: var(--ide-func);
+  box-shadow: 0 0 0 1px var(--ide-func);
+}
+
+html[data-design='ide'] .hero-grid,
+html[data-design='ide'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ RISOGRAPH ═══════════════════════════════════
+ * Duotone sections, halftone dot cards, SVG grain overlay,
+ * soft chromatic misregistration on headings.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='risograph'] {
+  --radius-sm: 0.15rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.25rem;
+  --border-width: 2px;
+  --shadow-card: 4px 4px 0 color-mix(in oklab, var(--accent-start) 70%, var(--text-primary));
+  --riso-pink: #ff5b88;
+  --riso-cyan: #3ad3ff;
+}
+
+html[data-design='risograph'] body {
+  letter-spacing: 0.005em;
+  background: var(--bg-primary);
+}
+
+/* Grain overlay via inline SVG noise (fractalNoise) */
+html[data-design='risograph'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+}
+
+/* Duotone section backgrounds — odd = accent-start, even = accent-end */
+html[data-design='risograph'] .section {
+  position: relative;
+}
+
+html[data-design='risograph'] .section:nth-of-type(odd) {
+  background: color-mix(in oklab, var(--accent-start) 9%, var(--bg-primary));
+}
+
+html[data-design='risograph'] .section:nth-of-type(even) {
+  background: color-mix(in oklab, var(--accent-end) 9%, var(--bg-primary));
+}
+
+html[data-design='risograph'] h1,
+html[data-design='risograph'] h2,
+html[data-design='risograph'] h3,
+html[data-design='risograph'] h4 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Soft chromatic misregistration on headings */
+html[data-design='risograph'] .hero-name,
+html[data-design='risograph'] .section-title {
+  text-shadow:
+    -1.5px 1.5px 0 color-mix(in oklab, var(--riso-pink) 65%, transparent),
+    1.5px -1.5px 0 color-mix(in oklab, var(--riso-cyan) 65%, transparent);
+}
+
+html[data-design='risograph'] .hero-name {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+html[data-design='risograph'] .hero-greeting,
+html[data-design='risograph'] .section-label {
+  display: inline-block;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  padding: 0.15rem 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  transform: rotate(-1.5deg);
+  box-shadow: 2px 2px 0 color-mix(in oklab, var(--accent-start) 80%, transparent);
+}
+
+html[data-design='risograph'] .section-title {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+html[data-design='risograph'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent-start);
+  text-shadow:
+    -1.5px 1.5px 0 color-mix(in oklab, var(--riso-pink) 70%, transparent),
+    1.5px -1.5px 0 color-mix(in oklab, var(--riso-cyan) 70%, transparent);
+}
+
+/* Halftone dot pattern on card backgrounds */
+html[data-design='risograph'] .card,
+html[data-design='risograph'] .skill-group,
+html[data-design='risograph'] .timeline-content,
+html[data-design='risograph'] .work-card,
+html[data-design='risograph'] .education-card,
+html[data-design='risograph'] .demo-card,
+html[data-design='risograph'] .contact-form {
+  background-color: var(--bg-card);
+  background-image:
+    radial-gradient(
+      color-mix(in oklab, var(--accent-start) 28%, transparent) 1.1px,
+      transparent 1.4px
+    );
+  background-size: 8px 8px;
+  background-position: 0 0;
+  border: 2px solid var(--text-primary);
+  border-radius: 0.25rem;
+  box-shadow: 4px 4px 0 color-mix(in oklab, var(--accent-start) 75%, var(--text-primary));
+}
+
+html[data-design='risograph'] .section:nth-of-type(even) .card,
+html[data-design='risograph'] .section:nth-of-type(even) .work-card,
+html[data-design='risograph'] .section:nth-of-type(even) .education-card,
+html[data-design='risograph'] .section:nth-of-type(even) .demo-card,
+html[data-design='risograph'] .section:nth-of-type(even) .skill-group,
+html[data-design='risograph'] .section:nth-of-type(even) .timeline-content {
+  background-image:
+    radial-gradient(
+      color-mix(in oklab, var(--accent-end) 28%, transparent) 1.1px,
+      transparent 1.4px
+    );
+  box-shadow: 4px 4px 0 color-mix(in oklab, var(--accent-end) 75%, var(--text-primary));
+}
+
+html[data-design='risograph'] .card:hover,
+html[data-design='risograph'] .work-card:hover,
+html[data-design='risograph'] .education-card:hover,
+html[data-design='risograph'] .demo-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 color-mix(in oklab, var(--accent-start) 85%, var(--text-primary));
+}
+
+html[data-design='risograph'] .skill-pill,
+html[data-design='risograph'] .demo-tags li,
+html[data-design='risograph'] .work-tags li {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border: 0;
+  border-radius: 0;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  padding: 0.25rem 0.55rem;
+  box-shadow: 2px 2px 0 color-mix(in oklab, var(--accent-start) 70%, transparent);
+}
+
+html[data-design='risograph'] .skill-pill:nth-child(odd),
+html[data-design='risograph'] .demo-tags li:nth-child(odd),
+html[data-design='risograph'] .work-tags li:nth-child(odd) {
+  background: var(--accent-start);
+  color: var(--bg-primary);
+}
+
+html[data-design='risograph'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 2px solid var(--text-primary);
+}
+
+html[data-design='risograph'] .nav-logo {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-shadow:
+    -1px 1px 0 color-mix(in oklab, var(--riso-pink) 60%, transparent),
+    1px -1px 0 color-mix(in oklab, var(--riso-cyan) 60%, transparent);
+}
+
+html[data-design='risograph'] .nav-link {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+}
+
+html[data-design='risograph'] .hero-cta,
+html[data-design='risograph'] .contact-submit {
+  background: var(--accent-start);
+  color: var(--bg-primary);
+  border: 2px solid var(--text-primary);
+  border-radius: 0.25rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--text-primary);
+  padding: 0.8rem 1.5rem;
+}
+
+html[data-design='risograph'] .hero-cta:hover,
+html[data-design='risograph'] .contact-submit:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--text-primary);
+}
+
+html[data-design='risograph'] .hero-cta:active,
+html[data-design='risograph'] .contact-submit:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--text-primary);
+}
+
+html[data-design='risograph'] .form-group input,
+html[data-design='risograph'] .form-group textarea {
+  background: var(--bg-primary);
+  border: 2px solid var(--text-primary);
+  border-radius: 0.15rem;
+  font-family: var(--font-sans);
+  padding: 0.6rem 0.75rem;
+}
+
+html[data-design='risograph'] .form-group input:focus,
+html[data-design='risograph'] .form-group textarea:focus {
+  outline: 0;
+  box-shadow: 3px 3px 0 var(--accent-start);
+}
+
+html[data-design='risograph'] .hero-grid,
+html[data-design='risograph'] .hero-gradient {
+  display: none;
+}
