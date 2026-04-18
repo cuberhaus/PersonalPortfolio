@@ -113,16 +113,8 @@ const siteBase = Astro.site || Astro.url;
     <style>
       @media (max-width: 768px) {
         .demo-controls :global(.language-picker) {
-          order: 4;
-          width: 100%;
-          justify-content: center;
-          border-top: none;
-          padding-top: 0.25rem;
-          margin-top: 0.25rem;
-          border-bottom: 1px solid var(--border-color);
-          padding-bottom: 0.5rem;
-          border-left: none;
-          padding-left: 0;
+          margin: 0;
+          width: fit-content;
         }
       }
     </style>
