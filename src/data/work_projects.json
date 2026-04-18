@@ -5,7 +5,8 @@
     "role": "AI & Data Consultant @ Deloitte",
     "description": "The world's first Physical AI project delivered at Deloitte. Detected manufacturing anomalies on live motor production lines in real-time. Also developed a digital twin of the warehouse with camera tracking for packages.",
     "tags": ["Physical AI", "Computer Vision", "Digital Twin", "IoT", "Real-time"],
-    "icon": "cpu"
+    "icon": "cpu",
+    "link": "https://horse-powertrain.com/"
   },
   {
     "title": "E2E AI Talent Matching Platform",

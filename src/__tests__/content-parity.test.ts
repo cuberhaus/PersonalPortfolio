@@ -158,4 +158,24 @@ describe('Work projects data', () => {
       expect(workEn[i].icon).toBe(workCa[i].icon);
     }
   });
+
+  it('links match across translations and are valid HTTPS URLs', () => {
+    for (let i = 0; i < workEn.length; i++) {
+      if (workEn[i].link) {
+        expect(workEs[i].link).toBe(workEn[i].link);
+        expect(workCa[i].link).toBe(workEn[i].link);
+        expect(() => new URL(workEn[i].link)).not.toThrow();
+        expect(workEn[i].link).toMatch(/^https:\/\//);
+      }
+    }
+  });
+
+  it('work project links are reachable', async () => {
+    for (const project of workEn) {
+      if (project.link) {
+        const res = await fetch(project.link, { method: 'HEAD', redirect: 'follow' });
+        expect(res.ok, `${project.link} returned ${res.status}`).toBe(true);
+      }
+    }
+  }, 15_000);
 });

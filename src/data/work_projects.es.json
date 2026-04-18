@@ -5,7 +5,8 @@
     "role": "AI & Data Consultant @ Deloitte",
     "description": "El primer proyecto de IA Física entregado a nivel mundial en Deloitte. Detección de anomalías de fabricación en líneas de producción de motores en vivo y en tiempo real. También se desarrolló un gemelo digital del almacén con seguimiento de paquetes por cámara.",
     "tags": ["IA Física", "Visión por Computadora", "Gemelo Digital", "IoT", "Tiempo Real"],
-    "icon": "cpu"
+    "icon": "cpu",
+    "link": "https://horse-powertrain.com/"
   },
   {
     "title": "Plataforma E2E de Emparejamiento de Talento IA",
