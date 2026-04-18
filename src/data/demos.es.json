@@ -229,5 +229,49 @@
     "icon": "cpu",
     "github": "https://github.com/cuberhaus/PAR",
     "image": ""
+  },
+  {
+    "slug": "rob-robotics",
+    "title": "Panel de Robótica",
+    "description": "Visualizaciones interactivas de robótica: replay de odometría móvil, simulador de seguimiento de paredes, cinemática directa 3D (Puma560/3-Link), planificador de trayectorias, dashboard de sensores y estimación de estado EKF — todo con datos reales de laboratorio.",
+    "tags": [
+      "Ember.js",
+      "Babylon.js",
+      "Robótica",
+      "Canvas",
+      "EKF"
+    ],
+    "icon": "bot",
+    "github": "https://github.com/cuberhaus/ROB",
+    "image": ""
+  },
+  {
+    "slug": "fib-algorithms",
+    "title": "Visualizador de Algoritmos",
+    "description": "Visualizaciones paso a paso de 18 algoritmos: Dijkstra, Prim, DFS, ordenación topológica, BFS en laberinto, flood fill, Sudoku, merge/insertion/radix sort, N-Reinas, búsqueda binaria, MCD, exponenciación de matrices y TSP 2-opt.",
+    "tags": [
+      "Qwik",
+      "Canvas",
+      "Algoritmos",
+      "Grafos",
+      "Ordenación"
+    ],
+    "icon": "brain",
+    "github": "https://github.com/cuberhaus/fib",
+    "image": ""
+  },
+  {
+    "slug": "grafics",
+    "title": "Playground de Shaders de Gráficos",
+    "description": "Playground interactivo de shaders WebGL2 que porta las prácticas de Gràfics de FIB-UPC al navegador: transformaciones de vértices, iluminación Phong, texturas procedurales, patrones, emulación de geometry shaders y efectos avanzados — todo ejecutando GLSL en tiempo real.",
+    "tags": [
+      "WebGL2",
+      "GLSL",
+      "Shaders",
+      "UPC"
+    ],
+    "icon": "cube",
+    "github": "https://github.com/cuberhaus/fib",
+    "image": ""
   }
 ]

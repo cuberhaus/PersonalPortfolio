@@ -233,5 +233,49 @@
     "icon": "cpu",
     "github": "https://github.com/cuberhaus/PAR",
     "image": ""
+  },
+  {
+    "slug": "rob-robotics",
+    "title": "Robotics Dashboard",
+    "description": "Interactive robotics visualizations: mobile robot odometry replay, wall-following simulator, 3D robot arm FK (Puma560/3-Link), trajectory planner, sensor dashboard, and EKF state estimation — all with real lab data.",
+    "tags": [
+      "Ember.js",
+      "Babylon.js",
+      "Robotics",
+      "Canvas",
+      "EKF"
+    ],
+    "icon": "bot",
+    "github": "https://github.com/cuberhaus/ROB",
+    "image": ""
+  },
+  {
+    "slug": "fib-algorithms",
+    "title": "Algorithm Visualizer",
+    "description": "Interactive step-by-step visualizations of 18 algorithms: Dijkstra, Prim, DFS, topological sort, BFS maze, flood fill, Sudoku, merge/insertion/radix sort, N-Queens, binary search, GCD, matrix exponentiation, and 2-opt TSP.",
+    "tags": [
+      "Qwik",
+      "Canvas",
+      "Algorithms",
+      "Graphs",
+      "Sorting"
+    ],
+    "icon": "brain",
+    "github": "https://github.com/cuberhaus/fib",
+    "image": ""
+  },
+  {
+    "slug": "grafics",
+    "title": "Computer Graphics Shader Playground",
+    "description": "Interactive WebGL2 shader playground porting FIB-UPC Computer Graphics labs: vertex transforms, Phong lighting, procedural textures, fragment patterns, geometry shader emulation, and advanced effects — all running live GLSL in your browser.",
+    "tags": [
+      "WebGL2",
+      "GLSL",
+      "Shaders",
+      "UPC"
+    ],
+    "icon": "cube",
+    "github": "https://github.com/cuberhaus/fib",
+    "image": ""
   }
 ]
