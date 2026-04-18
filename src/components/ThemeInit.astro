@@ -1,23 +1,39 @@
 ---
 import { THEMES, THEME_IDS } from '../lib/themes';
+import { DESIGNS, DESIGN_IDS, DEFAULT_DESIGN } from '../lib/designs';
 
 interface Props {
   position: 'head' | 'body';
 }
 
 const { position } = Astro.props;
-const darkThemes = THEMES.filter(t => t.colorScheme === 'dark');
-const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
+const darkThemes = THEMES.filter(t => t.colorScheme === 'dark' && !t.hidden);
+const lightThemes = THEMES.filter(t => t.colorScheme === 'light' && !t.hidden);
+
+/**
+ * Reverse map: paletteId -> design ids that list this palette in their
+ * `recommendedThemes`. Used purely as a soft hint (★ badge on matching
+ * swatches when the corresponding design is active). Pre-computed at
+ * build time so the modal stays zero-JS for the initial paint.
+ */
+const recommendedBy: Record<string, string[]> = {};
+for (const d of DESIGNS) {
+  for (const t of d.recommendedThemes ?? []) {
+    (recommendedBy[t] ??= []).push(d.id);
+  }
+}
+const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(' ');
 ---
 
 {position === 'head' && (
-<script is:inline define:vars={{ THEME_IDS }}>
-  const VALID = THEME_IDS;
+<script is:inline define:vars={{ THEME_IDS, DESIGN_IDS, DEFAULT_DESIGN }}>
+  const VALID_THEMES = THEME_IDS;
+  const VALID_DESIGNS = DESIGN_IDS;
 
   const __theme = (() => {
     const url = new URL(window.location.href);
     const param = url.searchParams.get('theme');
-    if (param && VALID.includes(param)) {
+    if (param && VALID_THEMES.includes(param)) {
       localStorage.setItem('theme', param);
       url.searchParams.delete('theme');
       history.replaceState(null, '', url.pathname + url.search + url.hash);
@@ -25,7 +41,7 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     }
     if (typeof localStorage !== 'undefined') {
       const saved = localStorage.getItem('theme');
-      if (saved && VALID.includes(saved)) return saved;
+      if (saved && VALID_THEMES.includes(saved)) return saved;
     }
     if (window.matchMedia('(prefers-color-scheme: light)').matches) {
       return 'light';
@@ -34,16 +50,45 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
   })();
   document.documentElement.setAttribute('data-theme', __theme);
 
+  const __design = (() => {
+    const url = new URL(window.location.href);
+    const param = url.searchParams.get('design');
+    if (param && VALID_DESIGNS.includes(param)) {
+      localStorage.setItem('design', param);
+      url.searchParams.delete('design');
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+      return param;
+    }
+    if (typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem('design');
+      if (saved && VALID_DESIGNS.includes(saved)) return saved;
+    }
+    return DEFAULT_DESIGN;
+  })();
+  document.documentElement.setAttribute('data-design', __design);
+
   window.setTheme = function(id) {
-    if (!VALID.includes(id)) {
+    if (!VALID_THEMES.includes(id)) {
       console.error(
         'Unknown theme "' + id + '". Available themes:\n' +
-        VALID.map(function(t) { return '  \u2022 ' + t; }).join('\n')
+        VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n')
       );
       return;
     }
     document.documentElement.setAttribute('data-theme', id);
     localStorage.setItem('theme', id);
+  };
+
+  window.setDesign = function(id) {
+    if (!VALID_DESIGNS.includes(id)) {
+      console.error(
+        'Unknown design "' + id + '". Available designs:\n' +
+        VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n')
+      );
+      return;
+    }
+    document.documentElement.setAttribute('data-design', id);
+    localStorage.setItem('design', id);
   };
 </script>
 )}
@@ -56,29 +101,66 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
       <span class="theme-modal-title" data-i18n-title></span>
       <kbd class="theme-modal-hint">Ctrl+K</kbd>
     </div>
+
     <div class="theme-modal-group">
-      <span class="theme-modal-label" data-i18n-dark></span>
-      <div class="theme-modal-grid">
-        {darkThemes.map(theme => (
-          <button class="theme-modal-swatch" data-theme-id={theme.id}>
-            <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
-            <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+      <span class="theme-modal-label" data-i18n-design></span>
+      <div class="theme-modal-design-grid">
+        {DESIGNS.filter(d => !d.hidden).map(design => (
+          <button
+            class="theme-modal-design"
+            data-kind="design"
+            data-design-id={design.id}
+            data-preview-style={design.preview.style}
+            style={`--td-font: ${design.preview.font}; --td-radius: ${design.preview.radius};`}
+          >
+            <span class="theme-modal-design-preview" aria-hidden="true">
+              <span class="theme-modal-design-sample">Aa</span>
+            </span>
+            <span class="theme-modal-design-meta">
+              <span class="theme-modal-design-name" data-i18n-design-name={design.id}>{design.label}</span>
+              <span class="theme-modal-design-blurb" data-i18n-design-blurb={design.id}>{design.blurb}</span>
+            </span>
           </button>
         ))}
       </div>
     </div>
+
     <div class="theme-modal-divider"></div>
+
     <div class="theme-modal-group">
-      <span class="theme-modal-label" data-i18n-light></span>
-      <div class="theme-modal-grid">
-        {lightThemes.map(theme => (
-          <button class="theme-modal-swatch" data-theme-id={theme.id}>
-            <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
-            <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
-          </button>
-        ))}
+      <span class="theme-modal-label">
+        <span data-i18n-palette></span>
+        <span class="theme-modal-rec-legend" aria-hidden="true">
+          <span class="theme-modal-rec-legend-star">★</span>
+          <span data-i18n-recommended></span>
+        </span>
+      </span>
+      <div class="theme-modal-subgroup">
+        <span class="theme-modal-sublabel" data-i18n-dark></span>
+        <div class="theme-modal-grid">
+          {darkThemes.map(theme => (
+            <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id} data-recommended-for={recFor(theme.id)}>
+              <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
+              <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+              <span class="theme-modal-rec-badge" aria-hidden="true">★</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div class="theme-modal-subgroup">
+        <span class="theme-modal-sublabel" data-i18n-light></span>
+        <div class="theme-modal-grid">
+          {lightThemes.map(theme => (
+            <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id} data-recommended-for={recFor(theme.id)}>
+              <span class="theme-modal-color" style={`--tm-bg: ${theme.preview[0]}; --tm-accent: ${theme.preview[1]}`}></span>
+              <span class="theme-modal-name">{theme.label.replace('Default ', '')}</span>
+              <span class="theme-modal-rec-badge" aria-hidden="true">★</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
+
     <div class="theme-modal-footer">
       <span data-i18n-footer></span>
     </div>
@@ -116,8 +198,10 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
 
   .theme-modal-panel {
     position: relative;
-    min-width: 320px;
-    max-width: 400px;
+    min-width: 340px;
+    width: min(520px, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
     padding: 1.25rem;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -154,8 +238,15 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     border: 1px solid var(--border-color);
   }
 
+  .theme-modal-group + .theme-modal-group {
+    margin-top: 0.25rem;
+  }
+
   .theme-modal-label {
-    display: block;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
     font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -164,19 +255,59 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     margin-bottom: 0.5rem;
   }
 
+  .theme-modal-rec-legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: var(--text-muted);
+    opacity: 0.8;
+  }
+
+  .theme-modal-rec-legend-star {
+    color: var(--accent-start);
+    font-size: 0.7rem;
+    line-height: 1;
+  }
+
+  .theme-modal-subgroup + .theme-modal-subgroup {
+    margin-top: 0.75rem;
+  }
+
+  .theme-modal-sublabel {
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+    opacity: 0.85;
+  }
+
   .theme-modal-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.25rem;
   }
 
+  .theme-modal-design-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
   .theme-modal-divider {
     height: 1px;
     background: var(--border-color);
-    margin: 0.625rem 0;
+    margin: 0.875rem 0;
   }
 
   .theme-modal-swatch {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -219,6 +350,528 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     text-overflow: ellipsis;
   }
 
+  /* ── Recommended-palette hint (soft) ───────────────────────
+     Star badge + accent ring appear on swatches whose
+     `data-recommended-for` includes the current design id.
+     The `data-rec='true'` flag is toggled in refreshActive(). */
+  .theme-modal-rec-badge {
+    margin-left: auto;
+    font-size: 0.7rem;
+    line-height: 1;
+    color: var(--accent-start);
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .theme-modal-swatch[data-rec='true'] .theme-modal-rec-badge {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .theme-modal-swatch[data-rec='true'] .theme-modal-color {
+    border-color: var(--accent-start);
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--accent-start) 55%, transparent);
+  }
+
+  .theme-modal-swatch[data-rec='true'] .theme-modal-name {
+    color: var(--text-primary);
+  }
+
+  /* ── Design swatches ────────────────────────────────────── */
+  .theme-modal-design {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    text-align: left;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .theme-modal-design:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-color-hover);
+    color: var(--text-primary);
+  }
+
+  .theme-modal-design.active {
+    border-color: var(--accent-start);
+    box-shadow: 0 0 0 1px var(--glow-color);
+    color: var(--text-primary);
+  }
+
+  .theme-modal-design-preview {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--td-radius, 0.5rem);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .theme-modal-design-sample {
+    font-family: var(--td-font, inherit);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .theme-modal-design[data-preview-style='gradient'] .theme-modal-design-preview {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-secondary) 55%, color-mix(in oklab, var(--accent-start) 35%, var(--bg-secondary)) 100%);
+  }
+  .theme-modal-design[data-preview-style='gradient'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+  }
+
+  .theme-modal-design[data-preview-style='serif'] .theme-modal-design-sample {
+    font-style: italic;
+  }
+  .theme-modal-design[data-preview-style='serif'] .theme-modal-design-preview {
+    border-radius: 0;
+    border-bottom: 2px solid var(--text-primary);
+  }
+
+  .theme-modal-design[data-preview-style='blur'] .theme-modal-design-preview {
+    background:
+      radial-gradient(circle at 30% 30%, color-mix(in oklab, var(--accent-start) 40%, transparent), transparent 60%),
+      radial-gradient(circle at 70% 70%, color-mix(in oklab, var(--accent-end) 40%, transparent), transparent 60%),
+      var(--bg-secondary);
+    border: 1px solid color-mix(in oklab, var(--text-primary) 15%, transparent);
+  }
+
+  .theme-modal-design[data-preview-style='grid'] .theme-modal-design-preview {
+    border-radius: 0;
+    border: 1px solid var(--text-primary);
+  }
+  .theme-modal-design[data-preview-style='grid'] .theme-modal-design-preview::before {
+    content: '02';
+    position: absolute;
+    top: 2px; right: 4px;
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: #e10600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .theme-modal-design[data-preview-style='soft'] .theme-modal-design-preview {
+    background: var(--bg-primary);
+    border: 0;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25), -2px -2px 6px rgba(255, 255, 255, 0.04);
+  }
+
+  .theme-modal-design[data-preview-style='pixel'] .theme-modal-design-preview {
+    border-radius: 0;
+    border: 2px solid var(--text-primary);
+    box-shadow: 2px 2px 0 var(--text-primary);
+    background: var(--bg-secondary);
+  }
+  .theme-modal-design[data-preview-style='pixel'] .theme-modal-design-sample {
+    font-size: 0.65rem;
+  }
+
+  .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-preview {
+    border-radius: 0;
+    border: 1px dashed var(--accent-start);
+    background: var(--bg-secondary);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      rgba(0, 0, 0, 0.12) 2px,
+      rgba(0, 0, 0, 0.12) 3px
+    );
+  }
+  .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-sample {
+    font-size: 0.8rem;
+    color: var(--accent-start);
+  }
+  .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-sample::before {
+    content: '>';
+    margin-right: 2px;
+    opacity: 0.7;
+  }
+
+  .theme-modal-design[data-preview-style='neon'] .theme-modal-design-preview {
+    border-radius: 0;
+    border: 1px solid var(--accent-start);
+    background:
+      linear-gradient(transparent 0, transparent 60%, color-mix(in oklab, var(--accent-start) 35%, transparent) 100%),
+      var(--bg-secondary);
+    box-shadow: 0 0 10px color-mix(in oklab, var(--accent-start) 40%, transparent),
+      inset 0 0 8px color-mix(in oklab, var(--accent-start) 15%, transparent);
+  }
+  .theme-modal-design[data-preview-style='neon'] .theme-modal-design-sample {
+    text-shadow: -1px 0 0 #ff2e88, 1px 0 0 #00f0ff;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .theme-modal-design[data-preview-style='clay'] .theme-modal-design-preview {
+    background: var(--bg-secondary);
+    border: 0;
+    border-radius: 1rem;
+    box-shadow:
+      0 4px 10px -3px color-mix(in oklab, var(--accent-start) 40%, transparent),
+      0 8px 14px -6px rgba(0, 0, 0, 0.2),
+      inset 0 -2px 4px -1px rgba(0, 0, 0, 0.18),
+      inset 0 2px 4px -1px rgba(255, 255, 255, 0.35);
+  }
+
+  .theme-modal-design[data-preview-style='paper'] .theme-modal-design-preview {
+    background-color: var(--bg-secondary);
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--text-primary) 12%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--text-primary) 12%, transparent) 1px, transparent 1px);
+    background-size: 8px 8px;
+    border: 1px solid color-mix(in oklab, var(--text-primary) 35%, transparent);
+    border-radius: 0.4rem;
+    transform: rotate(-2deg);
+    box-shadow: 2px 3px 0 color-mix(in oklab, var(--text-primary) 20%, transparent);
+  }
+  .theme-modal-design[data-preview-style='paper'] .theme-modal-design-sample {
+    transform: rotate(2deg);
+    position: relative;
+  }
+  .theme-modal-design[data-preview-style='paper'] .theme-modal-design-sample::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    bottom: 2px;
+    height: 5px;
+    background: color-mix(in oklab, var(--accent-start) 40%, #fff58a);
+    opacity: 0.6;
+    z-index: -1;
+    border-radius: 1px;
+  }
+
+  .theme-modal-design[data-preview-style='raw'] .theme-modal-design-preview {
+    background: #ffe000;
+    border: 3px solid var(--text-primary);
+    border-radius: 0;
+    box-shadow: 3px 3px 0 var(--text-primary);
+  }
+  .theme-modal-design[data-preview-style='raw'] .theme-modal-design-sample {
+    font-weight: 900;
+    font-style: italic;
+    color: #000;
+  }
+
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview {
+    background-color: color-mix(in oklab, var(--bg-secondary) 82%, var(--accent-start));
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--accent-start) 45%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--accent-start) 45%, transparent) 1px, transparent 1px);
+    background-size: 6px 6px;
+    border: 1px solid var(--accent-start);
+    border-radius: 0;
+    position: relative;
+  }
+  /* Corner tick marks on the tile preview */
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview::before,
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border: 2px solid var(--accent-start);
+    z-index: 1;
+  }
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview::before {
+    top: -1px;
+    left: -1px;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-preview::after {
+    bottom: -1px;
+    right: -1px;
+    border-left: 0;
+    border-top: 0;
+  }
+  .theme-modal-design[data-preview-style='schematic'] .theme-modal-design-sample {
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .theme-modal-design[data-preview-style='tex'] .theme-modal-design-preview {
+    background: color-mix(in oklab, #f4ecd8 30%, var(--bg-secondary));
+    border-radius: 0;
+    border-top: 1px solid var(--text-primary);
+    border-bottom: 1px solid var(--text-primary);
+    border-left: 0;
+    border-right: 0;
+  }
+  .theme-modal-design[data-preview-style='tex'] .theme-modal-design-preview::before {
+    content: '§ 1';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    font-size: 0.5rem;
+    letter-spacing: 0;
+    color: var(--accent-start);
+    font-family: 'EB Garamond', 'Crimson Pro', serif;
+    font-style: italic;
+  }
+  .theme-modal-design[data-preview-style='tex'] .theme-modal-design-sample {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .theme-modal-design[data-preview-style='editor'] .theme-modal-design-preview {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color-hover);
+    border-radius: 0.2rem;
+    overflow: hidden;
+  }
+  .theme-modal-design[data-preview-style='editor'] .theme-modal-design-preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 7px;
+    background: color-mix(in oklab, var(--bg-primary) 60%, transparent);
+    border-bottom: 1px solid var(--border-color);
+  }
+  .theme-modal-design[data-preview-style='editor'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    top: 7px;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+    background: color-mix(in oklab, var(--bg-primary) 50%, transparent);
+    border-right: 1px solid color-mix(in oklab, var(--text-muted) 40%, transparent);
+  }
+  .theme-modal-design[data-preview-style='editor'] .theme-modal-design-sample {
+    font-size: 0.75rem;
+    color: #98c379;
+    margin-left: 6px;
+    margin-top: 4px;
+  }
+
+  .theme-modal-design[data-preview-style='riso'] .theme-modal-design-preview {
+    background-color: color-mix(in oklab, var(--accent-start) 15%, var(--bg-secondary));
+    background-image:
+      radial-gradient(
+        color-mix(in oklab, var(--accent-end) 50%, transparent) 1px,
+        transparent 1.4px
+      );
+    background-size: 5px 5px;
+    border: 2px solid var(--text-primary);
+    border-radius: 0.2rem;
+    box-shadow: 2px 2px 0 color-mix(in oklab, var(--accent-end) 70%, transparent);
+  }
+  .theme-modal-design[data-preview-style='riso'] .theme-modal-design-sample {
+    font-weight: 900;
+    text-shadow:
+      -1px 1px 0 rgba(255, 91, 136, 0.65),
+      1px -1px 0 rgba(58, 211, 255, 0.65);
+  }
+
+  /* Art Deco tile: gold gradient, stepped corners, sunburst feel */
+  .theme-modal-design[data-preview-style='deco'] .theme-modal-design-preview {
+    background:
+      radial-gradient(
+        ellipse 100% 60% at 50% 0%,
+        rgba(201, 169, 97, 0.45),
+        transparent 70%
+      ),
+      linear-gradient(180deg,
+        color-mix(in oklab, var(--bg-secondary) 70%, #1a1308) 0%,
+        color-mix(in oklab, var(--bg-secondary) 90%, #0d0905) 100%);
+    border: 1px solid #c9a961;
+    border-radius: 0;
+    box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--bg-secondary) 90%, #0d0905),
+                inset 0 0 0 3px #c9a961;
+    clip-path: polygon(
+      4px 0, calc(100% - 4px) 0,
+      100% 4px, 100% calc(100% - 4px),
+      calc(100% - 4px) 100%, 4px 100%,
+      0 calc(100% - 4px), 0 4px
+    );
+  }
+  .theme-modal-design[data-preview-style='deco'] .theme-modal-design-sample {
+    background: linear-gradient(135deg, #e8cf89 0%, #b88d3a 50%, #e8cf89 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* Wabi-sabi tile: cream paper, one thin vertical accent, subtle ink */
+  .theme-modal-design[data-preview-style='zen'] .theme-modal-design-preview {
+    background:
+      linear-gradient(to right,
+        color-mix(in oklab, var(--text-primary) 35%, transparent) 0,
+        color-mix(in oklab, var(--text-primary) 35%, transparent) 1px,
+        transparent 1px),
+      color-mix(in oklab, var(--bg-primary) 80%, #f2ece1);
+    background-position: 10px 0;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 1px 70%, 100% 100%;
+    background-origin: content-box, padding-box;
+    border: 1px solid color-mix(in oklab, var(--text-primary) 15%, transparent);
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .theme-modal-design[data-preview-style='zen'] .theme-modal-design-sample {
+    color: color-mix(in oklab, var(--text-primary) 90%, transparent);
+    letter-spacing: 0.08em;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  /* Dashboard tile: KPI strip at top + coloured status dot */
+  .theme-modal-design[data-preview-style='dash'] .theme-modal-design-preview {
+    background: var(--bg-card);
+    background-image:
+      linear-gradient(
+        to right,
+        var(--accent-start) 0%,
+        var(--accent-start) 65%,
+        color-mix(in oklab, var(--text-primary) 15%, transparent) 65%,
+        color-mix(in oklab, var(--text-primary) 15%, transparent) 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 3px;
+    background-position: top;
+    border: 1px solid color-mix(in oklab, var(--text-primary) 12%, transparent);
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    position: relative;
+  }
+  .theme-modal-design[data-preview-style='dash'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 2px color-mix(in oklab, #22c55e 25%, transparent);
+  }
+  .theme-modal-design[data-preview-style='dash'] .theme-modal-design-sample {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* Zine tile: photocopied paper + tape + heavy black border, rotated */
+  .theme-modal-design[data-preview-style='zine'] .theme-modal-design-preview {
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in oklab, #ffd84d 60%, var(--bg-primary)) 0 10px,
+        transparent 10px 18px),
+      color-mix(in oklab, var(--bg-primary) 80%, #f4efe3);
+    background-position: 8px -6px, 0 0;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 22px 10px, 100% 100%;
+    border: 2px solid var(--text-primary);
+    border-radius: 0;
+    box-shadow: 2px 2px 0 var(--text-primary);
+    transform: rotate(-2deg);
+  }
+  .theme-modal-design[data-preview-style='zine'] .theme-modal-design-sample {
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
+  }
+
+  /* Comic tile: Ben-Day dots + thick outline + rotated chunky sample */
+  .theme-modal-design[data-preview-style='comic'] .theme-modal-design-preview {
+    background-color: #fff;
+    background-image:
+      radial-gradient(
+        color-mix(in oklab, var(--accent-start) 55%, transparent) 1.2px,
+        transparent 1.6px);
+    background-size: 6px 6px;
+    border: 2px solid #0a0a0a;
+    border-radius: 0.4rem;
+    box-shadow: 3px 3px 0 #0a0a0a;
+  }
+  .theme-modal-design[data-preview-style='comic'] .theme-modal-design-sample {
+    color: var(--accent-start);
+    font-family: Bangers, 'Inter Tight', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-shadow:
+      -1.5px 0 0 #0a0a0a,
+      1.5px 0 0 #0a0a0a,
+      0 -1.5px 0 #0a0a0a,
+      0 1.5px 0 #0a0a0a,
+      2px 2px 0 #0a0a0a;
+    transform: rotate(-3deg);
+  }
+
+  /* Newspaper tile: cream paper, double rule, blackletter sample */
+  .theme-modal-design[data-preview-style='news'] .theme-modal-design-preview {
+    background: color-mix(in oklab, var(--bg-primary) 75%, #f4eedd);
+    border: 3px double var(--text-primary);
+    border-radius: 0;
+    box-shadow: none;
+    position: relative;
+  }
+  .theme-modal-design[data-preview-style='news'] .theme-modal-design-preview::after {
+    content: '';
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 18%;
+    border-top: 1px solid var(--text-primary);
+    border-bottom: 1px solid var(--text-primary);
+    height: 3px;
+  }
+  .theme-modal-design[data-preview-style='news'] .theme-modal-design-sample {
+    font-family: UnifrakturMaguntia, 'Playfair Display', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+  }
+
+  .theme-modal-design-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+
+  .theme-modal-design-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .theme-modal-design-blurb {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    line-height: 1.3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
   .theme-modal-footer {
     margin-top: 0.75rem;
     padding-top: 0.5rem;
@@ -236,13 +889,28 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     border-radius: 3px;
     border: 1px solid var(--border-color);
   }
+
+  @media (max-width: 480px) {
+    .theme-modal-design-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 
 <script>
-  const TM_I18N: Record<string, { title: string; dark: string; light: string; footer: string }> = {
-    en: { title: 'Choose a theme', dark: 'Dark', light: 'Light', footer: 'Press <kbd>Esc</kbd> to close' },
-    es: { title: 'Elige un tema', dark: 'Oscuro', light: 'Claro', footer: 'Pulsa <kbd>Esc</kbd> para cerrar' },
-    ca: { title: 'Tria un tema', dark: 'Fosc', light: 'Clar', footer: 'Prem <kbd>Esc</kbd> per tancar' },
+  import { ui, defaultLang } from '../i18n/ui';
+
+  type Lang = keyof typeof ui;
+
+  const pickLang = (raw: string | null): Lang => {
+    if (raw && raw in ui) return raw as Lang;
+    return defaultLang as Lang;
+  };
+
+  const tr = (lang: Lang, key: keyof typeof ui[typeof defaultLang]): string => {
+    const bundle = ui[lang] as Record<string, string>;
+    const fallback = ui[defaultLang as Lang] as Record<string, string>;
+    return bundle[key as string] ?? fallback[key as string] ?? '';
   };
 
   const initThemeModal = () => {
@@ -250,18 +918,36 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     if (!modal || modal.hasAttribute('data-tm-init')) return;
     modal.setAttribute('data-tm-init', 'true');
 
-    const lang = document.documentElement.getAttribute('lang') || 'en';
-    const strings = TM_I18N[lang] || TM_I18N.en;
+    const lang = pickLang(document.documentElement.getAttribute('lang'));
+
     const titleEl = modal.querySelector('[data-i18n-title]');
+    const designLabelEl = modal.querySelector('[data-i18n-design]');
+    const paletteLabelEl = modal.querySelector('[data-i18n-palette]');
+    const recLegendEl = modal.querySelector('[data-i18n-recommended]');
     const darkEl = modal.querySelector('[data-i18n-dark]');
     const lightEl = modal.querySelector('[data-i18n-light]');
     const footerEl = modal.querySelector('[data-i18n-footer]');
     const panelEl = modal.querySelector('[data-i18n-aria-label]');
-    if (titleEl) titleEl.textContent = strings.title;
-    if (darkEl) darkEl.textContent = strings.dark;
-    if (lightEl) lightEl.textContent = strings.light;
-    if (footerEl) footerEl.innerHTML = strings.footer;
-    if (panelEl) panelEl.setAttribute('aria-label', strings.title);
+    const title = tr(lang, 'theme.customize');
+    if (titleEl) titleEl.textContent = title;
+    if (designLabelEl) designLabelEl.textContent = tr(lang, 'theme.design');
+    if (paletteLabelEl) paletteLabelEl.textContent = tr(lang, 'theme.palette');
+    if (recLegendEl) recLegendEl.textContent = tr(lang, 'theme.recommended');
+    if (darkEl) darkEl.textContent = tr(lang, 'theme.dark');
+    if (lightEl) lightEl.textContent = tr(lang, 'theme.light');
+    if (footerEl) footerEl.innerHTML = tr(lang, 'theme.closeHint');
+    if (panelEl) panelEl.setAttribute('aria-label', title);
+
+    modal.querySelectorAll<HTMLElement>('[data-i18n-design-name]').forEach(el => {
+      const id = el.getAttribute('data-i18n-design-name') ?? '';
+      const localized = tr(lang, `design.${id}.name` as keyof typeof ui[typeof defaultLang]);
+      if (localized) el.textContent = localized;
+    });
+    modal.querySelectorAll<HTMLElement>('[data-i18n-design-blurb]').forEach(el => {
+      const id = el.getAttribute('data-i18n-design-blurb') ?? '';
+      const localized = tr(lang, `design.${id}.blurb` as keyof typeof ui[typeof defaultLang]);
+      if (localized) el.textContent = localized;
+    });
 
     let previouslyFocused: Element | null = null;
 
@@ -280,17 +966,33 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
       }
     };
 
+    const refreshActive = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const currentDesign = document.documentElement.getAttribute('data-design') || 'minimal';
+      modal.querySelectorAll<HTMLElement>('.theme-modal-swatch').forEach(s => {
+        s.classList.toggle('active', s.getAttribute('data-theme-id') === currentTheme);
+        const recFor = (s.getAttribute('data-recommended-for') || '').split(/\s+/).filter(Boolean);
+        if (recFor.includes(currentDesign)) {
+          s.setAttribute('data-rec', 'true');
+        } else {
+          s.removeAttribute('data-rec');
+        }
+      });
+      modal.querySelectorAll('.theme-modal-design').forEach(d => {
+        d.classList.toggle('active', d.getAttribute('data-design-id') === currentDesign);
+      });
+    };
+
     const open = () => {
       previouslyFocused = document.activeElement;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
-      const current = document.documentElement.getAttribute('data-theme') || 'dark';
-      modal.querySelectorAll('.theme-modal-swatch').forEach(s => {
-        s.classList.toggle('active', s.getAttribute('data-theme-id') === current);
-      });
-      const activeSwatch = modal.querySelector('.theme-modal-swatch.active') as HTMLElement;
-      if (activeSwatch) activeSwatch.focus();
-      else (modal.querySelector('.theme-modal-swatch') as HTMLElement)?.focus();
+      refreshActive();
+      const activeEl =
+        modal.querySelector('.theme-modal-design.active') as HTMLElement ||
+        modal.querySelector('.theme-modal-swatch.active') as HTMLElement;
+      if (activeEl) activeEl.focus();
+      else (modal.querySelector('.theme-modal-design, .theme-modal-swatch') as HTMLElement)?.focus();
       modal.addEventListener('keydown', trapFocus);
     };
 
@@ -304,16 +1006,25 @@ const lightThemes = THEMES.filter(t => t.colorScheme === 'light');
     modal.querySelector('.theme-modal-backdrop')?.addEventListener('click', close);
 
     modal.addEventListener('click', (e) => {
-      const swatch = (e.target as HTMLElement).closest('.theme-modal-swatch') as HTMLElement | null;
-      if (!swatch) return;
-      const themeId = swatch.getAttribute('data-theme-id');
-      if (!themeId) return;
-      document.documentElement.setAttribute('data-theme', themeId);
-      localStorage.setItem('theme', themeId);
-      modal.querySelectorAll('.theme-modal-swatch').forEach(s => {
-        s.classList.toggle('active', s.getAttribute('data-theme-id') === themeId);
-      });
-      close();
+      const target = e.target as HTMLElement;
+      const designBtn = target.closest('.theme-modal-design') as HTMLElement | null;
+      if (designBtn) {
+        const id = designBtn.getAttribute('data-design-id');
+        if (!id) return;
+        document.documentElement.setAttribute('data-design', id);
+        try { localStorage.setItem('design', id); } catch (_err) { /* private mode */ }
+        refreshActive();
+        return;
+      }
+      const swatch = target.closest('.theme-modal-swatch') as HTMLElement | null;
+      if (swatch) {
+        const id = swatch.getAttribute('data-theme-id');
+        if (!id) return;
+        document.documentElement.setAttribute('data-theme', id);
+        try { localStorage.setItem('theme', id); } catch (_err) { /* private mode */ }
+        refreshActive();
+        return;
+      }
     });
 
     document.addEventListener('keydown', (e) => {

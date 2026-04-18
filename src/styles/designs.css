@@ -1,0 +1,4640 @@
+/* ─────────────────────────────────────────────────────────────
+ * Design axis (`html[data-design='…']`)
+ *
+ * Each block below defines a whole visual language on top of the
+ * color palette provided by `data-theme`. Color tokens stay as-is;
+ * these blocks override typography, spacing, radii, shadows,
+ * borders, and decorative component selectors.
+ *
+ * Motion-heavy effects are gated behind
+ * `@media (prefers-reduced-motion: no-preference)`.
+ * ───────────────────────────────────────────────────────────── */
+
+
+/* ══════════════ MINIMAL (default) ═══════════════════════════
+ * Intentionally the same as the base tokens in global.css so the
+ * block is explicit for theme-tooling / e2e tests.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='minimal'] {
+  --font-display: var(--font-sans);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --border-width: 1px;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+
+/* ══════════════ EDITORIAL ═══════════════════════════════════
+ * Serif headlines, drop caps, multi-column prose, sharp corners.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='editorial'] {
+  --font-sans: 'Crimson Pro', 'Source Serif Pro', Georgia, serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --section-padding: 5rem 0;
+  --container-width: 960px;
+}
+
+html[data-design='editorial'] body {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  letter-spacing: 0.005em;
+}
+
+html[data-design='editorial'] h1,
+html[data-design='editorial'] h2,
+html[data-design='editorial'] h3,
+html[data-design='editorial'] h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+html[data-design='editorial'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.04em;
+}
+
+html[data-design='editorial'] .hero-greeting,
+html[data-design='editorial'] .section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+html[data-design='editorial'] .section-title {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+html[data-design='editorial'] .about-text p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 4.5em;
+  line-height: 0.85;
+  font-weight: 800;
+  padding: 0.1em 0.1em 0 0;
+  color: var(--accent-start);
+}
+
+html[data-design='editorial'] .about-text {
+  columns: 2;
+  column-gap: 2.5rem;
+  column-rule: 1px solid var(--border-color);
+}
+
+html[data-design='editorial'] .about-text p,
+html[data-design='editorial'] .about-text ul,
+html[data-design='editorial'] .about-text .about-actions {
+  break-inside: avoid;
+}
+
+html[data-design='editorial'] .card,
+html[data-design='editorial'] .skill-group,
+html[data-design='editorial'] .timeline-content,
+html[data-design='editorial'] .work-card,
+html[data-design='editorial'] .education-card,
+html[data-design='editorial'] .demo-card,
+html[data-design='editorial'] .contact-form {
+  background: transparent;
+  border: 0;
+  border-top: 2px solid var(--text-primary);
+  border-radius: 0;
+  box-shadow: none;
+  padding-top: 1.25rem;
+}
+
+html[data-design='editorial'] .skill-pill,
+html[data-design='editorial'] .demo-tags li,
+html[data-design='editorial'] .work-tags li {
+  border-radius: 0;
+  border-left: 2px solid var(--accent-start);
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  background: transparent;
+  padding: 0 0.5rem;
+}
+
+html[data-design='editorial'] .navbar {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+html[data-design='editorial'] .nav-logo {
+  font-family: var(--font-display);
+  font-style: italic;
+}
+
+html[data-design='editorial'] .nav-link {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+html[data-design='editorial'] .hero-cta,
+html[data-design='editorial'] .contact-submit {
+  border-radius: 0;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+html[data-design='editorial'] .hero-grid,
+html[data-design='editorial'] .hero-gradient {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  html[data-design='editorial'] .about-text {
+    columns: 1;
+  }
+}
+
+
+/* ══════════════ GLASS ═══════════════════════════════════════
+ * Translucent cards with heavy blur and soft aurora gradients.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='glass'] {
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;
+  --border-width: 1px;
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+html[data-design='glass'] body {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, color-mix(in oklab, var(--accent-start) 22%, transparent), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 90% 30%, color-mix(in oklab, var(--accent-end) 18%, transparent), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 90%, color-mix(in oklab, var(--accent-start) 14%, transparent), transparent 65%),
+    var(--bg-primary);
+  background-attachment: fixed;
+}
+
+html[data-design='glass'] .card,
+html[data-design='glass'] .skill-group,
+html[data-design='glass'] .timeline-content,
+html[data-design='glass'] .work-card,
+html[data-design='glass'] .education-card,
+html[data-design='glass'] .demo-card,
+html[data-design='glass'] .contact-form {
+  background: color-mix(in oklab, var(--bg-card) 45%, transparent);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid color-mix(in oklab, var(--text-primary) 12%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 color-mix(in oklab, #ffffff 18%, transparent);
+}
+
+html[data-design='glass'] .navbar {
+  background: color-mix(in oklab, var(--bg-nav) 50%, transparent);
+  backdrop-filter: blur(32px) saturate(1.6);
+  -webkit-backdrop-filter: blur(32px) saturate(1.6);
+  border-bottom: 1px solid color-mix(in oklab, var(--text-primary) 8%, transparent);
+}
+
+html[data-design='glass'] .hero-cta,
+html[data-design='glass'] .contact-submit {
+  border-radius: 999px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 24px var(--glow-color-strong), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+html[data-design='glass'] .skill-pill,
+html[data-design='glass'] .demo-tags li,
+html[data-design='glass'] .work-tags li {
+  background: color-mix(in oklab, var(--bg-secondary) 40%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--text-primary) 10%, transparent);
+}
+
+html[data-design='glass'] .hero-grid {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-design='glass'] body {
+    animation: design-glass-aurora 32s ease-in-out infinite alternate;
+  }
+  @keyframes design-glass-aurora {
+    0%   { background-position: 0% 0%, 100% 0%, 50% 100%, 0 0; }
+    100% { background-position: 20% 10%, 80% 20%, 55% 85%, 0 0; }
+  }
+}
+
+
+/* ══════════════ SWISS ═══════════════════════════════════════
+ * Strict grid, uppercase nav, giant section numerals, red rules.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='swiss'] {
+  --font-sans: 'Inter Tight', Helvetica, Arial, 'Helvetica Neue', sans-serif;
+  --font-display: var(--font-sans);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --section-padding: 7rem 0;
+  --container-width: 1180px;
+  --swiss-accent: #e10600;
+}
+
+html[data-design='swiss'] body {
+  font-size: 1rem;
+  letter-spacing: -0.005em;
+}
+
+html[data-design='swiss'] h1,
+html[data-design='swiss'] h2,
+html[data-design='swiss'] h3,
+html[data-design='swiss'] h4 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-transform: none;
+}
+
+html[data-design='swiss'] .hero-name {
+  font-size: clamp(4rem, 12vw, 8rem);
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+
+html[data-design='swiss'] .hero-greeting,
+html[data-design='swiss'] .section-label,
+html[data-design='swiss'] .nav-link {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+html[data-design='swiss'] .section {
+  position: relative;
+  border-top: 1px solid var(--text-primary);
+  padding-top: 4rem;
+}
+
+html[data-design='swiss'] .section[data-num]::before {
+  content: attr(data-num);
+  position: absolute;
+  top: 1rem;
+  right: 0;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 800;
+  color: var(--swiss-accent);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+html[data-design='swiss'] .section-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+html[data-design='swiss'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid var(--text-primary);
+}
+
+html[data-design='swiss'] .nav-link::after {
+  background: var(--swiss-accent);
+}
+
+html[data-design='swiss'] .card,
+html[data-design='swiss'] .skill-group,
+html[data-design='swiss'] .timeline-content,
+html[data-design='swiss'] .work-card,
+html[data-design='swiss'] .education-card,
+html[data-design='swiss'] .demo-card,
+html[data-design='swiss'] .contact-form {
+  background: transparent;
+  border: 1px solid var(--text-primary);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+html[data-design='swiss'] .skill-pill,
+html[data-design='swiss'] .demo-tags li,
+html[data-design='swiss'] .work-tags li {
+  border: 1px solid var(--text-primary);
+  background: transparent;
+  border-radius: 0;
+  font-weight: 500;
+}
+
+html[data-design='swiss'] .hero-cta,
+html[data-design='swiss'] .contact-submit {
+  border-radius: 0;
+  background: var(--swiss-accent);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  border: 0;
+}
+
+html[data-design='swiss'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--swiss-accent);
+}
+
+html[data-design='swiss'] .hero-grid,
+html[data-design='swiss'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ NEUMORPHIC ══════════════════════════════════
+ * Soft UI with inset / outset shadows, monochrome relief.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='neumorphic'] {
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.75rem;
+  --border-width: 0;
+  --shadow-card: 8px 8px 20px rgba(0, 0, 0, 0.18), -8px -8px 20px rgba(255, 255, 255, 0.04);
+  --neu-up: 8px 8px 20px rgba(0, 0, 0, 0.18), -8px -8px 20px rgba(255, 255, 255, 0.04);
+  --neu-down: inset 6px 6px 12px rgba(0, 0, 0, 0.25), inset -6px -6px 12px rgba(255, 255, 255, 0.04);
+  --neu-sm-up: 4px 4px 10px rgba(0, 0, 0, 0.18), -4px -4px 10px rgba(255, 255, 255, 0.04);
+}
+
+html[data-design='neumorphic'][data-theme='light'],
+html[data-design='neumorphic'][data-theme='nord-light'],
+html[data-design='neumorphic'][data-theme='catppuccin-latte'],
+html[data-design='neumorphic'][data-theme='solarized-light'] {
+  --neu-up: 8px 8px 20px rgba(0, 0, 0, 0.12), -8px -8px 20px rgba(255, 255, 255, 0.9);
+  --neu-down: inset 6px 6px 12px rgba(0, 0, 0, 0.1), inset -6px -6px 12px rgba(255, 255, 255, 0.9);
+  --neu-sm-up: 4px 4px 10px rgba(0, 0, 0, 0.08), -4px -4px 10px rgba(255, 255, 255, 0.9);
+  --shadow-card: var(--neu-up);
+}
+
+html[data-design='neumorphic'] body {
+  background: var(--bg-primary);
+}
+
+html[data-design='neumorphic'] .card,
+html[data-design='neumorphic'] .skill-group,
+html[data-design='neumorphic'] .timeline-content,
+html[data-design='neumorphic'] .work-card,
+html[data-design='neumorphic'] .education-card,
+html[data-design='neumorphic'] .demo-card,
+html[data-design='neumorphic'] .contact-form {
+  background: var(--bg-primary);
+  border: 0;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--neu-up);
+}
+
+html[data-design='neumorphic'] .card:hover,
+html[data-design='neumorphic'] .skill-group:hover,
+html[data-design='neumorphic'] .timeline-content:hover,
+html[data-design='neumorphic'] .work-card:hover,
+html[data-design='neumorphic'] .education-card:hover,
+html[data-design='neumorphic'] .demo-card:hover {
+  box-shadow: var(--neu-down);
+  transform: none;
+  border-color: transparent;
+}
+
+html[data-design='neumorphic'] .skill-pill,
+html[data-design='neumorphic'] .demo-tags li,
+html[data-design='neumorphic'] .work-tags li,
+html[data-design='neumorphic'] .work-badge {
+  background: var(--bg-primary);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: var(--neu-sm-up);
+}
+
+html[data-design='neumorphic'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+html[data-design='neumorphic'] .navbar.scrolled {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  border-bottom: 0;
+}
+
+html[data-design='neumorphic'] .hero-cta,
+html[data-design='neumorphic'] .contact-submit {
+  background: var(--bg-primary);
+  color: var(--accent-start);
+  border-radius: 999px;
+  box-shadow: var(--neu-up);
+}
+
+html[data-design='neumorphic'] .hero-cta:hover,
+html[data-design='neumorphic'] .contact-submit:hover {
+  box-shadow: var(--neu-down);
+  transform: none;
+}
+
+html[data-design='neumorphic'] .form-group input,
+html[data-design='neumorphic'] .form-group textarea {
+  background: var(--bg-primary);
+  border: 0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--neu-down);
+}
+
+html[data-design='neumorphic'] .hero-grid,
+html[data-design='neumorphic'] .hero-gradient {
+  opacity: 0.4;
+}
+
+
+/* ══════════════ PIXEL ═══════════════════════════════════════
+ * 8-bit pixel font, hard shadows, blocky borders, no gradients.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='pixel'] {
+  --font-sans: 'Press Start 2P', ui-monospace, 'Courier New', monospace;
+  --font-mono: 'Press Start 2P', ui-monospace, 'Courier New', monospace;
+  --font-display: var(--font-sans);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 3px;
+  --shadow-card: 4px 4px 0 var(--text-primary);
+  --section-padding: 4rem 0;
+  image-rendering: pixelated;
+}
+
+html[data-design='pixel'] body {
+  font-size: 0.8rem;
+  line-height: 1.9;
+  letter-spacing: 0;
+}
+
+html[data-design='pixel'] p,
+html[data-design='pixel'] li,
+html[data-design='pixel'] span,
+html[data-design='pixel'] label,
+html[data-design='pixel'] input,
+html[data-design='pixel'] textarea,
+html[data-design='pixel'] button {
+  font-size: 0.72rem;
+}
+
+html[data-design='pixel'] h1 { font-size: clamp(1.4rem, 3.5vw, 2rem); line-height: 1.4; }
+html[data-design='pixel'] h2 { font-size: clamp(1.1rem, 2.5vw, 1.4rem); line-height: 1.4; }
+html[data-design='pixel'] h3 { font-size: clamp(0.9rem, 1.5vw, 1.05rem); line-height: 1.4; }
+
+html[data-design='pixel'] .hero-name {
+  font-size: clamp(1.6rem, 4.5vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+html[data-design='pixel'] .hero-tagline {
+  font-size: clamp(0.8rem, 1.6vw, 1rem);
+  line-height: 1.6;
+}
+
+html[data-design='pixel'] .hero-description {
+  font-size: 0.75rem;
+  line-height: 2;
+}
+
+html[data-design='pixel'] .card,
+html[data-design='pixel'] .skill-group,
+html[data-design='pixel'] .timeline-content,
+html[data-design='pixel'] .work-card,
+html[data-design='pixel'] .education-card,
+html[data-design='pixel'] .demo-card,
+html[data-design='pixel'] .contact-form {
+  background: var(--bg-card);
+  border: 3px solid var(--text-primary);
+  border-radius: 0;
+  box-shadow: 6px 6px 0 var(--text-primary);
+}
+
+html[data-design='pixel'] .card:hover,
+html[data-design='pixel'] .skill-group:hover,
+html[data-design='pixel'] .timeline-content:hover,
+html[data-design='pixel'] .work-card:hover,
+html[data-design='pixel'] .education-card:hover,
+html[data-design='pixel'] .demo-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--accent-start);
+}
+
+html[data-design='pixel'] .skill-pill,
+html[data-design='pixel'] .demo-tags li,
+html[data-design='pixel'] .work-tags li {
+  border: 2px solid var(--text-primary);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 var(--text-primary);
+  padding: 0.4rem 0.7rem;
+  font-size: 0.65rem;
+  background: var(--bg-secondary);
+}
+
+html[data-design='pixel'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 3px solid var(--text-primary);
+}
+
+html[data-design='pixel'] .nav-link {
+  font-size: 0.65rem;
+}
+
+html[data-design='pixel'] .hero-cta,
+html[data-design='pixel'] .contact-submit {
+  background: var(--accent-start);
+  color: #000;
+  border: 3px solid var(--text-primary);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 var(--text-primary);
+  padding: 0.85rem 1.5rem;
+  font-size: 0.75rem;
+}
+
+html[data-design='pixel'] .hero-cta:hover,
+html[data-design='pixel'] .contact-submit:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--text-primary);
+}
+
+html[data-design='pixel'] .hero-cta:active,
+html[data-design='pixel'] .contact-submit:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--text-primary);
+}
+
+html[data-design='pixel'] .form-group input,
+html[data-design='pixel'] .form-group textarea {
+  border: 3px solid var(--text-primary);
+  border-radius: 0;
+  background: var(--bg-primary);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+}
+
+html[data-design='pixel'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent-start);
+}
+
+html[data-design='pixel'] .hero-grid,
+html[data-design='pixel'] .hero-gradient {
+  display: none;
+}
+
+html[data-design='pixel'] .hero-greeting::after {
+  content: '_';
+  display: inline-block;
+  margin-left: 0.25rem;
+  color: var(--accent-start);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-design='pixel'] .hero-greeting::after {
+    animation: design-pixel-blink 1s step-end infinite;
+  }
+  @keyframes design-pixel-blink {
+    0%, 50%  { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+  }
+}
+
+
+/* ══════════════ TERMINAL ════════════════════════════════════
+ * Monospace everywhere, CRT scanlines, prompt markers,
+ * bracketed tags. Feels like a retro shell session.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='terminal'] {
+  --font-sans: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-display: var(--font-sans);
+  --font-mono: var(--font-sans);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --container-width: 1100px;
+}
+
+html[data-design='terminal'] body {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  letter-spacing: 0;
+  position: relative;
+}
+
+/* CRT scanlines + subtle vignette — pointer-events: none so it doesn't block clicks */
+html[data-design='terminal'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      rgba(0, 0, 0, 0.06) 2px,
+      rgba(0, 0, 0, 0.06) 3px
+    ),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.25) 100%);
+  mix-blend-mode: multiply;
+}
+
+html[data-design='terminal'][data-theme='light'] body::after,
+html[data-design='terminal'][data-theme='nord-light'] body::after,
+html[data-design='terminal'][data-theme='catppuccin-latte'] body::after,
+html[data-design='terminal'][data-theme='solarized-light'] body::after {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      rgba(0, 0, 0, 0.04) 2px,
+      rgba(0, 0, 0, 0.04) 3px
+    ),
+    radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.12) 100%);
+}
+
+html[data-design='terminal'] h1,
+html[data-design='terminal'] h2,
+html[data-design='terminal'] h3,
+html[data-design='terminal'] h4 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+html[data-design='terminal'] .hero-name {
+  font-size: clamp(2rem, 5.5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+html[data-design='terminal'] .hero-greeting::before {
+  content: '$ ';
+  color: var(--accent-start);
+}
+
+html[data-design='terminal'] .hero-greeting::after {
+  content: '_';
+  display: inline-block;
+  margin-left: 0.25rem;
+  color: var(--accent-start);
+}
+
+html[data-design='terminal'] .section-label::before {
+  content: '// ';
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+html[data-design='terminal'] .section-title::before {
+  content: '> ';
+  color: var(--accent-start);
+  opacity: 0.8;
+}
+
+html[data-design='terminal'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent-start);
+}
+
+html[data-design='terminal'] .card,
+html[data-design='terminal'] .skill-group,
+html[data-design='terminal'] .timeline-content,
+html[data-design='terminal'] .work-card,
+html[data-design='terminal'] .education-card,
+html[data-design='terminal'] .demo-card,
+html[data-design='terminal'] .contact-form {
+  background: var(--bg-card);
+  border: 1px dashed var(--border-color-hover);
+  border-radius: 0;
+  box-shadow: none;
+  position: relative;
+}
+
+html[data-design='terminal'] .card::before,
+html[data-design='terminal'] .skill-group::before,
+html[data-design='terminal'] .timeline-content::before,
+html[data-design='terminal'] .work-card::before,
+html[data-design='terminal'] .education-card::before,
+html[data-design='terminal'] .demo-card::before,
+html[data-design='terminal'] .contact-form::before {
+  content: '┌─';
+  position: absolute;
+  top: -0.1em;
+  left: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-start);
+  background: var(--bg-primary);
+  padding: 0 0.25rem;
+  line-height: 1;
+  opacity: 0.6;
+}
+
+html[data-design='terminal'] .skill-pill,
+html[data-design='terminal'] .demo-tags li,
+html[data-design='terminal'] .work-tags li {
+  border: 1px solid var(--border-color-hover);
+  background: transparent;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  padding: 0.2rem 0.5rem;
+}
+
+html[data-design='terminal'] .skill-pill::before,
+html[data-design='terminal'] .demo-tags li::before,
+html[data-design='terminal'] .work-tags li::before {
+  content: '[';
+  color: var(--accent-start);
+  margin-right: 0.15rem;
+}
+
+html[data-design='terminal'] .skill-pill::after,
+html[data-design='terminal'] .demo-tags li::after,
+html[data-design='terminal'] .work-tags li::after {
+  content: ']';
+  color: var(--accent-start);
+  margin-left: 0.15rem;
+}
+
+html[data-design='terminal'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px dashed var(--border-color-hover);
+}
+
+html[data-design='terminal'] .nav-logo::before {
+  content: '~/';
+  color: var(--accent-start);
+  opacity: 0.7;
+}
+
+html[data-design='terminal'] .nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+html[data-design='terminal'] .nav-link::before {
+  content: './';
+  opacity: 0.5;
+  margin-right: 0.1rem;
+}
+
+html[data-design='terminal'] .hero-cta,
+html[data-design='terminal'] .contact-submit {
+  background: transparent;
+  color: var(--accent-start);
+  border: 1px solid var(--accent-start);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+}
+
+html[data-design='terminal'] .hero-cta::before,
+html[data-design='terminal'] .contact-submit::before {
+  content: '> ';
+}
+
+html[data-design='terminal'] .hero-cta:hover,
+html[data-design='terminal'] .contact-submit:hover {
+  background: var(--accent-start);
+  color: var(--bg-primary);
+}
+
+html[data-design='terminal'] .form-group input,
+html[data-design='terminal'] .form-group textarea {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color-hover);
+  border-radius: 0;
+  font-family: var(--font-mono);
+}
+
+html[data-design='terminal'] .hero-grid,
+html[data-design='terminal'] .hero-gradient {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-design='terminal'] .hero-greeting::after {
+    animation: design-terminal-blink 1s step-end infinite;
+  }
+  @keyframes design-terminal-blink {
+    0%, 50%  { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+  }
+}
+
+
+/* ══════════════ CYBERPUNK ═══════════════════════════════════
+ * Neon glows, chromatic aberration headline, synthwave grid,
+ * hard geometric buttons. Dystopian-future vibe.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='cyber'] {
+  --font-sans: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --font-display: 'Orbitron', 'Inter Tight', sans-serif;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: 0 0 20px color-mix(in oklab, var(--accent-start) 25%, transparent);
+  --cyber-pink: #ff2e88;
+  --cyber-cyan: #00f0ff;
+}
+
+html[data-design='cyber'] body {
+  letter-spacing: 0.01em;
+  background:
+    linear-gradient(180deg, transparent 0%, transparent 60%, color-mix(in oklab, var(--accent-start) 10%, transparent) 100%),
+    var(--bg-primary);
+}
+
+html[data-design='cyber'] h1,
+html[data-design='cyber'] h2,
+html[data-design='cyber'] h3,
+html[data-design='cyber'] h4 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 800;
+}
+
+html[data-design='cyber'] .hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 9vw, 6rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  text-shadow:
+    -2px 0 0 var(--cyber-pink),
+    2px 0 0 var(--cyber-cyan),
+    0 0 30px color-mix(in oklab, var(--accent-start) 50%, transparent);
+}
+
+html[data-design='cyber'] .hero-greeting,
+html[data-design='cyber'] .section-label,
+html[data-design='cyber'] .nav-link {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+}
+
+html[data-design='cyber'] .section-title {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+html[data-design='cyber'] .gradient-text {
+  background: linear-gradient(90deg, var(--cyber-pink), var(--cyber-cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-design='cyber'] .card,
+html[data-design='cyber'] .skill-group,
+html[data-design='cyber'] .timeline-content,
+html[data-design='cyber'] .work-card,
+html[data-design='cyber'] .education-card,
+html[data-design='cyber'] .demo-card,
+html[data-design='cyber'] .contact-form {
+  background: color-mix(in oklab, var(--bg-card) 85%, transparent);
+  border: 1px solid var(--accent-start);
+  border-radius: 0;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent-start) 25%, transparent),
+    0 0 30px color-mix(in oklab, var(--accent-start) 18%, transparent),
+    inset 0 0 20px color-mix(in oklab, var(--accent-start) 6%, transparent);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
+}
+
+html[data-design='cyber'] .card:hover,
+html[data-design='cyber'] .skill-group:hover,
+html[data-design='cyber'] .work-card:hover,
+html[data-design='cyber'] .demo-card:hover,
+html[data-design='cyber'] .education-card:hover {
+  box-shadow:
+    0 0 0 1px var(--accent-start),
+    0 0 40px color-mix(in oklab, var(--accent-start) 35%, transparent),
+    inset 0 0 30px color-mix(in oklab, var(--accent-start) 10%, transparent);
+}
+
+html[data-design='cyber'] .skill-pill,
+html[data-design='cyber'] .demo-tags li,
+html[data-design='cyber'] .work-tags li {
+  background: transparent;
+  border: 1px solid var(--accent-start);
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.65rem;
+  padding: 0.3rem 0.6rem;
+  color: var(--accent-start);
+}
+
+html[data-design='cyber'] .navbar {
+  background: color-mix(in oklab, var(--bg-primary) 85%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--accent-start);
+  box-shadow: 0 0 20px color-mix(in oklab, var(--accent-start) 20%, transparent);
+}
+
+html[data-design='cyber'] .nav-logo {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+html[data-design='cyber'] .hero-cta,
+html[data-design='cyber'] .contact-submit {
+  background: linear-gradient(90deg, var(--cyber-pink), var(--accent-start));
+  color: #fff;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  box-shadow:
+    0 0 20px color-mix(in oklab, var(--cyber-pink) 40%, transparent),
+    0 0 40px color-mix(in oklab, var(--accent-start) 25%, transparent);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 10px) 0,
+    100% 10px,
+    100% 100%,
+    10px 100%,
+    0 calc(100% - 10px)
+  );
+}
+
+html[data-design='cyber'] .hero-cta:hover,
+html[data-design='cyber'] .contact-submit:hover {
+  box-shadow:
+    0 0 30px color-mix(in oklab, var(--cyber-pink) 60%, transparent),
+    0 0 60px color-mix(in oklab, var(--accent-start) 40%, transparent);
+}
+
+html[data-design='cyber'] .form-group input,
+html[data-design='cyber'] .form-group textarea {
+  background: color-mix(in oklab, var(--bg-secondary) 70%, transparent);
+  border: 1px solid var(--accent-start);
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html[data-design='cyber'] .form-group input:focus,
+html[data-design='cyber'] .form-group textarea:focus {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent-start) 40%, transparent);
+}
+
+/* Synthwave perspective grid under the hero */
+html[data-design='cyber'] .hero {
+  position: relative;
+  overflow: hidden;
+}
+
+html[data-design='cyber'] .hero::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 200%;
+  height: 50%;
+  transform: translateX(-50%) perspective(600px) rotateX(65deg);
+  transform-origin: 50% 0;
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--cyber-cyan) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--cyber-pink) 45%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to top, black 0%, transparent 85%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 85%);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+
+html[data-design='cyber'] .hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+html[data-design='cyber'] .hero-grid,
+html[data-design='cyber'] .hero-gradient {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-design='cyber'] .hero::before {
+    animation: design-cyber-grid 18s linear infinite;
+  }
+  @keyframes design-cyber-grid {
+    from { background-position: 0 0, 0 0; }
+    to   { background-position: 0 48px, 48px 0; }
+  }
+}
+
+
+/* ══════════════ CLAY ════════════════════════════════════════
+ * Chunky 3D pillows with layered soft shadows and huge radii.
+ * Feels like tactile, pressable plastic.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='clay'] {
+  --radius-sm: 1rem;
+  --radius-md: 1.5rem;
+  --radius-lg: 2rem;
+  --border-width: 0;
+  --section-padding: 6rem 0;
+  --clay-depth:
+    0 14px 28px -10px color-mix(in oklab, var(--accent-start) 45%, transparent),
+    0 30px 50px -20px rgba(0, 0, 0, 0.25),
+    inset 0 -6px 10px -4px color-mix(in oklab, var(--accent-end) 35%, transparent),
+    inset 0 6px 10px -4px rgba(255, 255, 255, 0.35);
+  --clay-depth-hover:
+    0 20px 40px -12px color-mix(in oklab, var(--accent-start) 55%, transparent),
+    0 40px 70px -24px rgba(0, 0, 0, 0.3),
+    inset 0 -8px 14px -6px color-mix(in oklab, var(--accent-end) 45%, transparent),
+    inset 0 8px 14px -6px rgba(255, 255, 255, 0.45);
+  --clay-sm:
+    0 6px 14px -4px color-mix(in oklab, var(--accent-start) 30%, transparent),
+    0 12px 20px -10px rgba(0, 0, 0, 0.18),
+    inset 0 -3px 6px -2px color-mix(in oklab, var(--accent-end) 25%, transparent),
+    inset 0 3px 6px -2px rgba(255, 255, 255, 0.3);
+  --shadow-card: var(--clay-depth);
+}
+
+html[data-design='clay'][data-theme='light'],
+html[data-design='clay'][data-theme='nord-light'],
+html[data-design='clay'][data-theme='catppuccin-latte'],
+html[data-design='clay'][data-theme='solarized-light'] {
+  --clay-depth:
+    0 14px 28px -10px color-mix(in oklab, var(--accent-start) 35%, transparent),
+    0 30px 50px -20px rgba(0, 0, 0, 0.12),
+    inset 0 -6px 10px -4px color-mix(in oklab, var(--accent-end) 20%, transparent),
+    inset 0 6px 10px -4px rgba(255, 255, 255, 0.9);
+  --clay-depth-hover:
+    0 20px 40px -12px color-mix(in oklab, var(--accent-start) 45%, transparent),
+    0 40px 70px -24px rgba(0, 0, 0, 0.16),
+    inset 0 -8px 14px -6px color-mix(in oklab, var(--accent-end) 30%, transparent),
+    inset 0 8px 14px -6px rgba(255, 255, 255, 0.95);
+  --clay-sm:
+    0 6px 14px -4px color-mix(in oklab, var(--accent-start) 22%, transparent),
+    0 12px 20px -10px rgba(0, 0, 0, 0.08),
+    inset 0 -3px 6px -2px color-mix(in oklab, var(--accent-end) 18%, transparent),
+    inset 0 3px 6px -2px rgba(255, 255, 255, 0.95);
+  --shadow-card: var(--clay-depth);
+}
+
+html[data-design='clay'] body {
+  background:
+    radial-gradient(ellipse 90% 60% at 15% 0%, color-mix(in oklab, var(--accent-start) 16%, transparent), transparent 55%),
+    radial-gradient(ellipse 80% 60% at 85% 100%, color-mix(in oklab, var(--accent-end) 14%, transparent), transparent 55%),
+    var(--bg-primary);
+  background-attachment: fixed;
+}
+
+html[data-design='clay'] .card,
+html[data-design='clay'] .skill-group,
+html[data-design='clay'] .timeline-content,
+html[data-design='clay'] .work-card,
+html[data-design='clay'] .education-card,
+html[data-design='clay'] .demo-card,
+html[data-design='clay'] .contact-form {
+  background: var(--bg-card);
+  border: 0;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--clay-depth);
+  padding: 2rem;
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+}
+
+html[data-design='clay'] .card:hover,
+html[data-design='clay'] .skill-group:hover,
+html[data-design='clay'] .timeline-content:hover,
+html[data-design='clay'] .work-card:hover,
+html[data-design='clay'] .education-card:hover,
+html[data-design='clay'] .demo-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--clay-depth-hover);
+  border: 0;
+}
+
+html[data-design='clay'] .skill-pill,
+html[data-design='clay'] .demo-tags li,
+html[data-design='clay'] .work-tags li,
+html[data-design='clay'] .work-badge {
+  background: var(--bg-secondary);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: var(--clay-sm);
+  padding: 0.4rem 0.8rem;
+  font-weight: 600;
+}
+
+html[data-design='clay'] .navbar {
+  background: color-mix(in oklab, var(--bg-nav) 85%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0;
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.15);
+}
+
+html[data-design='clay'] .navbar.scrolled {
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.2);
+}
+
+html[data-design='clay'] .hero-cta,
+html[data-design='clay'] .contact-submit {
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  box-shadow:
+    0 12px 24px -8px color-mix(in oklab, var(--accent-start) 55%, transparent),
+    0 20px 40px -16px rgba(0, 0, 0, 0.3),
+    inset 0 -4px 8px -2px rgba(0, 0, 0, 0.2),
+    inset 0 4px 8px -2px rgba(255, 255, 255, 0.4);
+}
+
+html[data-design='clay'] .hero-cta:hover,
+html[data-design='clay'] .contact-submit:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 18px 30px -8px color-mix(in oklab, var(--accent-start) 65%, transparent),
+    0 28px 50px -16px rgba(0, 0, 0, 0.35),
+    inset 0 -4px 8px -2px rgba(0, 0, 0, 0.2),
+    inset 0 4px 8px -2px rgba(255, 255, 255, 0.5);
+}
+
+html[data-design='clay'] .hero-cta:active,
+html[data-design='clay'] .contact-submit:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow:
+    0 4px 8px -4px color-mix(in oklab, var(--accent-start) 45%, transparent),
+    inset 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+html[data-design='clay'] .form-group input,
+html[data-design='clay'] .form-group textarea {
+  background: var(--bg-secondary);
+  border: 0;
+  border-radius: var(--radius-md);
+  box-shadow:
+    inset 0 4px 10px -2px rgba(0, 0, 0, 0.18),
+    inset 0 -2px 6px -2px rgba(255, 255, 255, 0.25);
+  padding: 0.9rem 1.1rem;
+}
+
+html[data-design='clay'] .form-group input:focus,
+html[data-design='clay'] .form-group textarea:focus {
+  box-shadow:
+    inset 0 4px 10px -2px rgba(0, 0, 0, 0.18),
+    inset 0 -2px 6px -2px rgba(255, 255, 255, 0.25),
+    0 0 0 3px color-mix(in oklab, var(--accent-start) 30%, transparent);
+}
+
+html[data-design='clay'] .hero-grid {
+  opacity: 0.35;
+}
+
+html[data-design='clay'] .hero-gradient {
+  filter: blur(80px);
+  opacity: 0.7;
+}
+
+
+/* ══════════════ NOTEBOOK ════════════════════════════════════
+ * Graph-paper page with handwritten ink, highlighter marks,
+ * sticky-note cards tilted a few degrees for that human touch.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='notebook'] {
+  --font-display: 'Caveat', 'Bradley Hand', 'Comic Sans MS', cursive;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --border-width: 1.5px;
+  --shadow-card: 2px 3px 0 rgba(0, 0, 0, 0.12), 4px 8px 16px rgba(0, 0, 0, 0.08);
+  --nb-ink: var(--text-primary);
+  --nb-highlight: color-mix(in oklab, var(--accent-start) 35%, #fff58a);
+  --nb-line: color-mix(in oklab, var(--text-primary) 14%, transparent);
+}
+
+/* Graph-paper background: fine grid + hairline horizontal rules */
+html[data-design='notebook'] body {
+  background-image:
+    linear-gradient(to right, var(--nb-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--nb-line) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px;
+  background-attachment: fixed;
+  line-height: 1.75;
+}
+
+html[data-design='notebook'] h1,
+html[data-design='notebook'] h2,
+html[data-design='notebook'] h3,
+html[data-design='notebook'] h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+html[data-design='notebook'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3.5rem, 10vw, 6.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  transform: rotate(-1deg);
+  display: inline-block;
+  position: relative;
+}
+
+/* Highlighter stroke behind the first name (keeps underline look but warm) */
+html[data-design='notebook'] .hero-name::after {
+  content: '';
+  position: absolute;
+  left: -0.2em;
+  right: -0.2em;
+  bottom: 0.05em;
+  height: 0.35em;
+  background: var(--nb-highlight);
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  z-index: -1;
+  transform: skewY(-1deg);
+  pointer-events: none;
+}
+
+html[data-design='notebook'] .hero-greeting,
+html[data-design='notebook'] .section-label {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-muted);
+}
+
+html[data-design='notebook'] .hero-greeting::before {
+  content: 'PS: ';
+  color: var(--accent-start);
+  font-style: italic;
+}
+
+html[data-design='notebook'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  letter-spacing: -0.02em;
+}
+
+html[data-design='notebook'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent-start);
+  position: relative;
+}
+
+/* Cards = sticky notes: slight tilt, uneven shadow, tape strip on top */
+html[data-design='notebook'] .card,
+html[data-design='notebook'] .skill-group,
+html[data-design='notebook'] .timeline-content,
+html[data-design='notebook'] .work-card,
+html[data-design='notebook'] .education-card,
+html[data-design='notebook'] .demo-card,
+html[data-design='notebook'] .contact-form {
+  background: var(--bg-card);
+  border: 1.5px solid var(--nb-ink);
+  border-radius: var(--radius-md);
+  box-shadow:
+    2px 3px 0 rgba(0, 0, 0, 0.12),
+    4px 8px 16px rgba(0, 0, 0, 0.08);
+  position: relative;
+  transition: transform var(--transition-medium);
+}
+
+html[data-design='notebook'] .card:nth-of-type(odd),
+html[data-design='notebook'] .timeline-content:nth-of-type(odd),
+html[data-design='notebook'] .work-card:nth-of-type(odd),
+html[data-design='notebook'] .education-card:nth-of-type(odd),
+html[data-design='notebook'] .demo-card:nth-of-type(odd) {
+  transform: rotate(-0.4deg);
+}
+
+html[data-design='notebook'] .card:nth-of-type(even),
+html[data-design='notebook'] .timeline-content:nth-of-type(even),
+html[data-design='notebook'] .work-card:nth-of-type(even),
+html[data-design='notebook'] .education-card:nth-of-type(even),
+html[data-design='notebook'] .demo-card:nth-of-type(even) {
+  transform: rotate(0.35deg);
+}
+
+html[data-design='notebook'] .card:hover,
+html[data-design='notebook'] .work-card:hover,
+html[data-design='notebook'] .education-card:hover,
+html[data-design='notebook'] .demo-card:hover {
+  transform: rotate(0deg) translateY(-2px);
+  box-shadow:
+    3px 4px 0 rgba(0, 0, 0, 0.14),
+    6px 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* "Tape strip" corner on cards — uses the accent as washi tape */
+html[data-design='notebook'] .card::before,
+html[data-design='notebook'] .work-card::before,
+html[data-design='notebook'] .demo-card::before,
+html[data-design='notebook'] .education-card::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  width: 58px;
+  height: 18px;
+  background: color-mix(in oklab, var(--accent-start) 55%, #fff);
+  opacity: 0.85;
+  transform: rotate(-3deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+}
+
+html[data-design='notebook'] .skill-pill,
+html[data-design='notebook'] .demo-tags li,
+html[data-design='notebook'] .work-tags li {
+  background: color-mix(in oklab, var(--accent-start) 18%, var(--bg-card));
+  border: 1px dashed var(--nb-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  padding: 0.2rem 0.8rem;
+  transform: rotate(-1deg);
+}
+
+html[data-design='notebook'] .skill-pill:nth-child(even),
+html[data-design='notebook'] .demo-tags li:nth-child(even),
+html[data-design='notebook'] .work-tags li:nth-child(even) {
+  transform: rotate(1.2deg);
+}
+
+html[data-design='notebook'] .navbar {
+  background: color-mix(in oklab, var(--bg-nav) 92%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1.5px dashed var(--nb-line);
+}
+
+html[data-design='notebook'] .nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+html[data-design='notebook'] .nav-link {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html[data-design='notebook'] .nav-link:hover {
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-underline-offset: 0.25em;
+}
+
+html[data-design='notebook'] .hero-cta,
+html[data-design='notebook'] .contact-submit {
+  background: var(--bg-card);
+  color: var(--nb-ink);
+  border: 2px solid var(--nb-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: 3px 3px 0 var(--accent-start);
+  padding: 0.75rem 1.75rem;
+}
+
+html[data-design='notebook'] .hero-cta:hover,
+html[data-design='notebook'] .contact-submit:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--accent-start);
+}
+
+html[data-design='notebook'] .hero-cta:active,
+html[data-design='notebook'] .contact-submit:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--accent-start);
+}
+
+html[data-design='notebook'] .form-group input,
+html[data-design='notebook'] .form-group textarea {
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px dashed var(--nb-ink);
+  border-radius: 0;
+  font-family: var(--font-sans);
+  padding: 0.5rem 0.25rem;
+}
+
+html[data-design='notebook'] .form-group input:focus,
+html[data-design='notebook'] .form-group textarea:focus {
+  border-bottom-style: solid;
+  border-bottom-color: var(--accent-start);
+  box-shadow: none;
+  outline: 0;
+}
+
+html[data-design='notebook'] .hero-grid,
+html[data-design='notebook'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ BRUTALIST ═══════════════════════════════════
+ * Raw web-brutalism: Times, yellow tape, thick black borders,
+ * slight rotation, underline everything. Ugly-on-purpose.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='brutalist'] {
+  --font-sans: 'Times New Roman', Times, Georgia, serif;
+  --font-display: var(--font-sans);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 3px;
+  --shadow-card: none;
+  --section-padding: 4rem 0;
+  --container-width: 1080px;
+  --br-yellow: #ffe000;
+  --br-ink: var(--text-primary);
+}
+
+html[data-design='brutalist'] body {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+html[data-design='brutalist'] h1,
+html[data-design='brutalist'] h2,
+html[data-design='brutalist'] h3,
+html[data-design='brutalist'] h4 {
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  font-family: var(--font-display);
+}
+
+html[data-design='brutalist'] .hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 11vw, 7rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  background: var(--br-yellow);
+  color: #000;
+  padding: 0.05em 0.25em;
+  display: inline-block;
+  transform: rotate(-1deg);
+  border: 4px solid var(--br-ink);
+  box-shadow: 8px 8px 0 var(--br-ink);
+}
+
+html[data-design='brutalist'] .hero-greeting,
+html[data-design='brutalist'] .section-label {
+  font-family: 'Arial Black', Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  font-weight: 900;
+  font-size: 0.85rem;
+  background: var(--br-ink);
+  color: var(--bg-primary);
+  padding: 0.15rem 0.45rem;
+  display: inline-block;
+}
+
+html[data-design='brutalist'] .section-title {
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-decoration: underline;
+  text-decoration-thickness: 6px;
+  text-underline-offset: 0.2em;
+}
+
+html[data-design='brutalist'] .section {
+  border-top: 4px solid var(--br-ink);
+  padding-top: 3rem;
+}
+
+html[data-design='brutalist'] .section:nth-of-type(even) {
+  border-top-style: double;
+  border-top-width: 8px;
+}
+
+html[data-design='brutalist'] .gradient-text {
+  background: var(--br-yellow);
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: #000;
+  color: #000;
+  padding: 0 0.15em;
+}
+
+html[data-design='brutalist'] .card,
+html[data-design='brutalist'] .skill-group,
+html[data-design='brutalist'] .timeline-content,
+html[data-design='brutalist'] .work-card,
+html[data-design='brutalist'] .education-card,
+html[data-design='brutalist'] .demo-card,
+html[data-design='brutalist'] .contact-form {
+  background: var(--bg-card);
+  border: 4px solid var(--br-ink);
+  border-radius: 0;
+  box-shadow: 8px 8px 0 var(--br-ink);
+}
+
+html[data-design='brutalist'] .card:hover,
+html[data-design='brutalist'] .work-card:hover,
+html[data-design='brutalist'] .education-card:hover,
+html[data-design='brutalist'] .demo-card:hover,
+html[data-design='brutalist'] .skill-group:hover,
+html[data-design='brutalist'] .timeline-content:hover {
+  background: var(--br-yellow);
+  color: #000;
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0 var(--br-ink);
+}
+
+html[data-design='brutalist'] .card:hover *,
+html[data-design='brutalist'] .work-card:hover *,
+html[data-design='brutalist'] .demo-card:hover * {
+  color: #000 !important;
+  border-color: #000 !important;
+}
+
+html[data-design='brutalist'] .skill-pill,
+html[data-design='brutalist'] .demo-tags li,
+html[data-design='brutalist'] .work-tags li {
+  background: var(--bg-secondary);
+  border: 2px solid var(--br-ink);
+  border-radius: 0;
+  font-family: 'Arial', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.25rem 0.55rem;
+}
+
+html[data-design='brutalist'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 4px solid var(--br-ink);
+}
+
+html[data-design='brutalist'] .nav-logo {
+  font-family: 'Arial Black', Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+}
+
+html[data-design='brutalist'] .nav-link {
+  font-family: var(--font-sans);
+  font-style: italic;
+  font-size: 1rem;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+html[data-design='brutalist'] .nav-link:hover {
+  background: var(--br-yellow);
+  color: #000;
+  text-decoration: none;
+}
+
+html[data-design='brutalist'] .hero-cta,
+html[data-design='brutalist'] .contact-submit {
+  background: var(--br-yellow);
+  color: #000;
+  border: 4px solid var(--br-ink);
+  border-radius: 0;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  box-shadow: 6px 6px 0 var(--br-ink);
+  padding: 0.85rem 1.75rem;
+}
+
+html[data-design='brutalist'] .hero-cta:hover,
+html[data-design='brutalist'] .contact-submit:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--br-ink);
+}
+
+html[data-design='brutalist'] .hero-cta:active,
+html[data-design='brutalist'] .contact-submit:active {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 var(--br-ink);
+}
+
+html[data-design='brutalist'] .form-group input,
+html[data-design='brutalist'] .form-group textarea {
+  background: var(--bg-primary);
+  border: 3px solid var(--br-ink);
+  border-radius: 0;
+  font-family: 'Arial', sans-serif;
+  padding: 0.6rem 0.75rem;
+}
+
+html[data-design='brutalist'] .form-group input:focus,
+html[data-design='brutalist'] .form-group textarea:focus {
+  background: var(--br-yellow);
+  color: #000;
+  outline: 0;
+  box-shadow: 4px 4px 0 var(--br-ink);
+}
+
+html[data-design='brutalist'] a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}
+
+html[data-design='brutalist'] .hero-grid,
+html[data-design='brutalist'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ BLUEPRINT ═══════════════════════════════════
+ * Technical-drawing aesthetic: cyan grid, hairline white lines,
+ * dimension markers, revision tags. Engineer's schematic.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='blueprint'] {
+  --font-sans: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --font-display: 'JetBrains Mono', ui-monospace, monospace;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --bp-ink: color-mix(in oklab, #ffffff 92%, var(--accent-start));
+  --bp-grid: color-mix(in oklab, var(--accent-start) 35%, transparent);
+  --bp-grid-strong: color-mix(in oklab, var(--accent-start) 55%, transparent);
+  --bp-tint: color-mix(in oklab, var(--bg-primary) 82%, var(--accent-start));
+}
+
+/* Light palettes: invert the convention — dark lines on pale-cyan paper */
+html[data-design='blueprint'][data-theme='light'],
+html[data-design='blueprint'][data-theme='nord-light'],
+html[data-design='blueprint'][data-theme='catppuccin-latte'],
+html[data-design='blueprint'][data-theme='solarized-light'] {
+  --bp-ink: color-mix(in oklab, var(--text-primary) 80%, transparent);
+  --bp-grid: color-mix(in oklab, var(--accent-start) 30%, transparent);
+  --bp-grid-strong: color-mix(in oklab, var(--accent-start) 50%, transparent);
+  --bp-tint: color-mix(in oklab, var(--bg-primary) 88%, var(--accent-start));
+}
+
+html[data-design='blueprint'] body {
+  background-color: var(--bp-tint);
+  background-image:
+    linear-gradient(to right, var(--bp-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--bp-grid) 1px, transparent 1px),
+    linear-gradient(to right, var(--bp-grid-strong) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--bp-grid-strong) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px, 128px 128px, 128px 128px;
+  background-attachment: fixed;
+  color: var(--bp-ink);
+  letter-spacing: 0.005em;
+}
+
+html[data-design='blueprint'] h1,
+html[data-design='blueprint'] h2,
+html[data-design='blueprint'] h3,
+html[data-design='blueprint'] h4 {
+  color: var(--bp-ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+html[data-design='blueprint'] .hero-name {
+  font-family: var(--font-sans);
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--bp-ink);
+  position: relative;
+  display: inline-block;
+  padding: 0 0.5em;
+}
+
+/* Dimension markers bracketing the hero name: |——— Pol Casacuberta ———| */
+html[data-design='blueprint'] .hero-name::before,
+html[data-design='blueprint'] .hero-name::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 0.4em;
+  height: 1em;
+  border: 1px solid var(--bp-ink);
+  transform: translateY(-50%);
+  opacity: 0.7;
+}
+
+html[data-design='blueprint'] .hero-name::before {
+  left: -0.1em;
+  border-right: 0;
+}
+
+html[data-design='blueprint'] .hero-name::after {
+  right: -0.1em;
+  border-left: 0;
+}
+
+html[data-design='blueprint'] .hero-greeting,
+html[data-design='blueprint'] .section-label,
+html[data-design='blueprint'] .nav-link {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.72rem;
+  color: color-mix(in oklab, var(--bp-ink) 80%, transparent);
+}
+
+html[data-design='blueprint'] .section-label::before {
+  content: 'SEC · ';
+  opacity: 0.6;
+}
+
+html[data-design='blueprint'] .section-title {
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  border-bottom: 1px solid var(--bp-ink);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+html[data-design='blueprint'] .section-title::after {
+  content: '—';
+  display: inline-block;
+  margin-left: 0.5em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+html[data-design='blueprint'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--bp-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in oklab, var(--bp-ink) 40%, transparent);
+}
+
+/* Numbered section frames using existing data-num attributes */
+html[data-design='blueprint'] .section[data-num] {
+  position: relative;
+}
+
+html[data-design='blueprint'] .section[data-num]::before {
+  content: 'REV-' attr(data-num);
+  position: absolute;
+  top: 0.75rem;
+  right: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: color-mix(in oklab, var(--bp-ink) 60%, transparent);
+  padding: 0.15rem 0.4rem;
+  border: 1px solid color-mix(in oklab, var(--bp-ink) 40%, transparent);
+  pointer-events: none;
+}
+
+html[data-design='blueprint'] .card,
+html[data-design='blueprint'] .skill-group,
+html[data-design='blueprint'] .timeline-content,
+html[data-design='blueprint'] .work-card,
+html[data-design='blueprint'] .education-card,
+html[data-design='blueprint'] .demo-card,
+html[data-design='blueprint'] .contact-form {
+  background: color-mix(in oklab, var(--bg-card) 50%, transparent);
+  border: 1px solid var(--bp-ink);
+  border-radius: 0;
+  box-shadow: none;
+  position: relative;
+}
+
+/* Engineering-drawing corner tick marks on each card */
+html[data-design='blueprint'] .card::before,
+html[data-design='blueprint'] .card::after,
+html[data-design='blueprint'] .work-card::before,
+html[data-design='blueprint'] .work-card::after,
+html[data-design='blueprint'] .education-card::before,
+html[data-design='blueprint'] .education-card::after,
+html[data-design='blueprint'] .demo-card::before,
+html[data-design='blueprint'] .demo-card::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--bp-ink);
+  pointer-events: none;
+}
+
+html[data-design='blueprint'] .card::before,
+html[data-design='blueprint'] .work-card::before,
+html[data-design='blueprint'] .education-card::before,
+html[data-design='blueprint'] .demo-card::before {
+  top: -5px;
+  left: -5px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+html[data-design='blueprint'] .card::after,
+html[data-design='blueprint'] .work-card::after,
+html[data-design='blueprint'] .education-card::after,
+html[data-design='blueprint'] .demo-card::after {
+  bottom: -5px;
+  right: -5px;
+  border-left: 0;
+  border-top: 0;
+}
+
+html[data-design='blueprint'] .skill-pill,
+html[data-design='blueprint'] .demo-tags li,
+html[data-design='blueprint'] .work-tags li {
+  background: transparent;
+  border: 1px solid var(--bp-ink);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.55rem;
+  color: var(--bp-ink);
+}
+
+html[data-design='blueprint'] .navbar {
+  background: color-mix(in oklab, var(--bp-tint) 90%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--bp-ink);
+}
+
+html[data-design='blueprint'] .nav-logo {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  color: var(--bp-ink);
+}
+
+html[data-design='blueprint'] .nav-logo::before {
+  content: '⌗ ';
+  opacity: 0.6;
+}
+
+html[data-design='blueprint'] .hero-cta,
+html[data-design='blueprint'] .contact-submit {
+  background: transparent;
+  color: var(--bp-ink);
+  border: 1px solid var(--bp-ink);
+  border-radius: 0;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  padding: 0.9rem 1.6rem;
+  position: relative;
+}
+
+html[data-design='blueprint'] .hero-cta::before,
+html[data-design='blueprint'] .contact-submit::before {
+  content: '[ ';
+  opacity: 0.5;
+}
+
+html[data-design='blueprint'] .hero-cta::after,
+html[data-design='blueprint'] .contact-submit::after {
+  content: ' ]';
+  opacity: 0.5;
+}
+
+html[data-design='blueprint'] .hero-cta:hover,
+html[data-design='blueprint'] .contact-submit:hover {
+  background: color-mix(in oklab, var(--bp-ink) 12%, transparent);
+  box-shadow: inset 0 0 0 1px var(--bp-ink);
+}
+
+html[data-design='blueprint'] .form-group input,
+html[data-design='blueprint'] .form-group textarea {
+  background: transparent;
+  border: 1px solid var(--bp-ink);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--bp-ink);
+}
+
+html[data-design='blueprint'] .form-group input:focus,
+html[data-design='blueprint'] .form-group textarea:focus {
+  outline: 0;
+  box-shadow: inset 0 0 0 1px var(--bp-ink);
+}
+
+html[data-design='blueprint'] .hero-grid,
+html[data-design='blueprint'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ ACADEMIC ════════════════════════════════════
+ * LaTeX paper aesthetic: Garamond body, justified prose,
+ * numbered sections, abstract block, small-caps nav.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='academic'] {
+  --font-sans: 'EB Garamond', 'Crimson Pro', 'Source Serif Pro', Georgia, 'Times New Roman', serif;
+  --font-display: var(--font-sans);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --section-padding: 4.5rem 0;
+  --container-width: 820px;
+  counter-reset: acad-section;
+}
+
+html[data-design='academic'] body {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  letter-spacing: 0.005em;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  background: var(--bg-primary);
+}
+
+html[data-design='academic'] p {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+html[data-design='academic'] h1,
+html[data-design='academic'] h2,
+html[data-design='academic'] h3,
+html[data-design='academic'] h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* Hero as title block — centred author + affiliation */
+html[data-design='academic'] .hero {
+  text-align: center;
+}
+
+html[data-design='academic'] .hero-inner,
+html[data-design='academic'] .hero-content {
+  text-align: center;
+  margin: 0 auto;
+}
+
+html[data-design='academic'] .hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.1;
+  margin: 0 auto 0.5rem;
+  text-align: center;
+}
+
+html[data-design='academic'] .hero-greeting {
+  font-family: var(--font-display);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+html[data-design='academic'] .hero-greeting::before {
+  content: 'Abstract. ';
+  font-weight: 700;
+  font-style: normal;
+  color: var(--text-primary);
+}
+
+html[data-design='academic'] .hero-tagline {
+  font-style: italic;
+  font-size: 1.25rem;
+}
+
+html[data-design='academic'] .hero-description {
+  font-size: 1.05rem;
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: justify;
+}
+
+/* Auto-numbered sections: 01. About, 02. Projects … */
+html[data-design='academic'] .section {
+  counter-increment: acad-section;
+  border-top: 1px solid color-mix(in oklab, var(--text-primary) 25%, transparent);
+  padding-top: 2.5rem;
+}
+
+html[data-design='academic'] .section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+html[data-design='academic'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  margin-bottom: 1.25rem;
+}
+
+html[data-design='academic'] .section-title::before {
+  content: counter(acad-section, decimal-leading-zero) '.  ';
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--accent-start);
+}
+
+html[data-design='academic'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+/* Figures / cards — thin ruled frames with numbered captions */
+html[data-design='academic'] .card,
+html[data-design='academic'] .skill-group,
+html[data-design='academic'] .timeline-content,
+html[data-design='academic'] .work-card,
+html[data-design='academic'] .education-card,
+html[data-design='academic'] .demo-card,
+html[data-design='academic'] .contact-form {
+  background: transparent;
+  border: 1px solid color-mix(in oklab, var(--text-primary) 25%, transparent);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 1.5rem 1.75rem;
+}
+
+html[data-design='academic'] .work-card h3::before,
+html[data-design='academic'] .demo-card h3::before,
+html[data-design='academic'] .education-card h3::before {
+  content: '§  ';
+  font-family: var(--font-display);
+  color: var(--accent-start);
+  font-weight: 400;
+}
+
+html[data-design='academic'] .skill-pill,
+html[data-design='academic'] .demo-tags li,
+html[data-design='academic'] .work-tags li {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0;
+  color: var(--accent-start);
+}
+
+html[data-design='academic'] .skill-pill::before,
+html[data-design='academic'] .demo-tags li::before,
+html[data-design='academic'] .work-tags li::before {
+  content: '[';
+}
+
+html[data-design='academic'] .skill-pill::after,
+html[data-design='academic'] .demo-tags li::after,
+html[data-design='academic'] .work-tags li::after {
+  content: ']';
+}
+
+html[data-design='academic'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--text-primary) 20%, transparent);
+}
+
+html[data-design='academic'] .nav-logo {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+}
+
+html[data-design='academic'] .nav-link {
+  font-family: var(--font-display);
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+}
+
+html[data-design='academic'] .hero-cta,
+html[data-design='academic'] .contact-submit {
+  background: transparent;
+  color: var(--accent-start);
+  border: 0;
+  border-bottom: 1px solid var(--accent-start);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 0.25rem 0.1rem;
+  box-shadow: none;
+}
+
+html[data-design='academic'] .hero-cta::after,
+html[data-design='academic'] .contact-submit::after {
+  content: ' →';
+  font-style: normal;
+}
+
+html[data-design='academic'] .hero-cta:hover,
+html[data-design='academic'] .contact-submit:hover {
+  color: var(--accent-end);
+  border-bottom-color: var(--accent-end);
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+html[data-design='academic'] .form-group input,
+html[data-design='academic'] .form-group textarea {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid color-mix(in oklab, var(--text-primary) 40%, transparent);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  padding: 0.5rem 0;
+}
+
+html[data-design='academic'] .form-group input:focus,
+html[data-design='academic'] .form-group textarea:focus {
+  outline: 0;
+  border-bottom-color: var(--accent-start);
+  box-shadow: none;
+}
+
+html[data-design='academic'] blockquote {
+  font-style: italic;
+  border-left: 2px solid var(--accent-start);
+  padding-left: 1rem;
+}
+
+html[data-design='academic'] .hero-grid,
+html[data-design='academic'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ IDE ═════════════════════════════════════════
+ * VSCode-inspired: JetBrains Mono, tabbed cards, gutter stripe,
+ * status bar, syntax-coloured tokens.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='ide'] {
+  --font-sans: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-display: var(--font-sans);
+  --font-mono: var(--font-sans);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.25rem;
+  --border-width: 1px;
+  --shadow-card: none;
+  --ide-keyword: #c678dd;
+  --ide-string:  #98c379;
+  --ide-func:    #61afef;
+  --ide-number:  #d19a66;
+  --ide-comment: color-mix(in oklab, var(--text-muted) 90%, transparent);
+  --ide-gutter:  color-mix(in oklab, var(--bg-secondary) 85%, transparent);
+  --ide-line:    color-mix(in oklab, var(--text-muted) 45%, transparent);
+  --ide-tab-bg:  color-mix(in oklab, var(--bg-secondary) 95%, transparent);
+  --ide-tab-active: var(--bg-card);
+}
+
+html[data-design='ide'] body {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  letter-spacing: 0;
+  /* make room for the status bar */
+  padding-bottom: 26px;
+}
+
+/* Bottom VSCode-style status bar */
+html[data-design='ide'] body::after {
+  content: '⎇ main    ✓ no problems    UTF-8    LF    TypeScript    Ln 42, Col 18';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  background: var(--accent-start);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+html[data-design='ide'] h1,
+html[data-design='ide'] h2,
+html[data-design='ide'] h3,
+html[data-design='ide'] h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+html[data-design='ide'] .hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ide-string);
+}
+
+html[data-design='ide'] .hero-name::before {
+  content: '"';
+  color: var(--ide-string);
+  opacity: 0.8;
+}
+
+html[data-design='ide'] .hero-name::after {
+  content: '"';
+  color: var(--ide-string);
+  opacity: 0.8;
+}
+
+html[data-design='ide'] .hero-greeting {
+  font-family: var(--font-mono);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ide-comment);
+  font-style: italic;
+}
+
+html[data-design='ide'] .hero-greeting::before {
+  content: '// ';
+  opacity: 0.75;
+}
+
+html[data-design='ide'] .hero-tagline {
+  font-family: var(--font-mono);
+}
+
+html[data-design='ide'] .section-label {
+  font-family: var(--font-mono);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ide-comment);
+  font-style: italic;
+}
+
+html[data-design='ide'] .section-label::before {
+  content: '// ';
+  opacity: 0.75;
+}
+
+html[data-design='ide'] .section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ide-func);
+}
+
+html[data-design='ide'] .section-title::before {
+  content: '▸ ';
+  color: var(--text-muted);
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+html[data-design='ide'] .section-title::after {
+  content: '()';
+  color: var(--text-muted);
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+html[data-design='ide'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--ide-keyword);
+}
+
+/* Cards as editor tabs: a file-tab header strip + gutter stripe on the left */
+html[data-design='ide'] .card,
+html[data-design='ide'] .skill-group,
+html[data-design='ide'] .timeline-content,
+html[data-design='ide'] .work-card,
+html[data-design='ide'] .education-card,
+html[data-design='ide'] .demo-card,
+html[data-design='ide'] .contact-form {
+  background: var(--ide-tab-active);
+  border: 1px solid var(--border-color-hover);
+  border-radius: 0.25rem;
+  box-shadow: none;
+  position: relative;
+  padding: 2.25rem 1.25rem 1.25rem 2.5rem;
+  overflow: hidden;
+}
+
+/* Tab bar header */
+html[data-design='ide'] .card::before,
+html[data-design='ide'] .work-card::before,
+html[data-design='ide'] .education-card::before,
+html[data-design='ide'] .demo-card::before,
+html[data-design='ide'] .contact-form::before {
+  content: '● card.tsx  ×';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: var(--ide-tab-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+html[data-design='ide'] .skill-group::before {
+  content: '● skills.json  ×';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: var(--ide-tab-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+html[data-design='ide'] .timeline-content::before {
+  content: '● experience.log  ×';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: var(--ide-tab-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* Gutter stripe on the left (behind padding-left) */
+html[data-design='ide'] .card::after,
+html[data-design='ide'] .skill-group::after,
+html[data-design='ide'] .timeline-content::after,
+html[data-design='ide'] .work-card::after,
+html[data-design='ide'] .education-card::after,
+html[data-design='ide'] .demo-card::after,
+html[data-design='ide'] .contact-form::after {
+  content: '';
+  position: absolute;
+  top: 26px;
+  bottom: 0;
+  left: 0;
+  width: 32px;
+  background:
+    linear-gradient(to right,
+      var(--ide-gutter) 0,
+      var(--ide-gutter) 31px,
+      var(--ide-line) 31px,
+      var(--ide-line) 32px);
+  pointer-events: none;
+}
+
+html[data-design='ide'] .skill-pill,
+html[data-design='ide'] .demo-tags li,
+html[data-design='ide'] .work-tags li {
+  background: color-mix(in oklab, var(--ide-keyword) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--ide-keyword) 35%, transparent);
+  border-radius: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  color: var(--ide-keyword);
+  padding: 0.15rem 0.5rem;
+}
+
+html[data-design='ide'] .skill-pill::before,
+html[data-design='ide'] .demo-tags li::before,
+html[data-design='ide'] .work-tags li::before {
+  content: '#';
+  opacity: 0.6;
+  margin-right: 0.1rem;
+}
+
+html[data-design='ide'] .navbar {
+  background: var(--bg-secondary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid var(--border-color-hover);
+}
+
+html[data-design='ide'] .nav-logo {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--ide-func);
+}
+
+html[data-design='ide'] .nav-logo::before {
+  content: '{ ';
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+html[data-design='ide'] .nav-logo::after {
+  content: ' }';
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+html[data-design='ide'] .nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-secondary);
+}
+
+html[data-design='ide'] .nav-link::before {
+  content: '▸ ';
+  opacity: 0.5;
+}
+
+html[data-design='ide'] .hero-cta,
+html[data-design='ide'] .contact-submit {
+  background: var(--ide-func);
+  color: var(--bg-primary);
+  border: 0;
+  border-radius: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none;
+  padding: 0.6rem 1.25rem;
+}
+
+html[data-design='ide'] .hero-cta::before,
+html[data-design='ide'] .contact-submit::before {
+  content: '▶ ';
+  font-size: 0.75rem;
+}
+
+html[data-design='ide'] .hero-cta:hover,
+html[data-design='ide'] .contact-submit:hover {
+  background: color-mix(in oklab, var(--ide-func) 85%, #fff);
+  transform: none;
+}
+
+html[data-design='ide'] .form-group input,
+html[data-design='ide'] .form-group textarea {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color-hover);
+  border-radius: 0.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ide-string);
+}
+
+html[data-design='ide'] .form-group input:focus,
+html[data-design='ide'] .form-group textarea:focus {
+  outline: 0;
+  border-color: var(--ide-func);
+  box-shadow: 0 0 0 1px var(--ide-func);
+}
+
+html[data-design='ide'] .hero-grid,
+html[data-design='ide'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ RISOGRAPH ═══════════════════════════════════
+ * Duotone sections, halftone dot cards, SVG grain overlay,
+ * soft chromatic misregistration on headings.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='risograph'] {
+  --radius-sm: 0.15rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.25rem;
+  --border-width: 2px;
+  --shadow-card: 4px 4px 0 color-mix(in oklab, var(--accent-start) 70%, var(--text-primary));
+  --riso-pink: #ff5b88;
+  --riso-cyan: #3ad3ff;
+}
+
+html[data-design='risograph'] body {
+  letter-spacing: 0.005em;
+  background: var(--bg-primary);
+}
+
+/* Grain overlay via inline SVG noise (fractalNoise) */
+html[data-design='risograph'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+}
+
+/* Duotone section backgrounds — odd = accent-start, even = accent-end */
+html[data-design='risograph'] .section {
+  position: relative;
+}
+
+html[data-design='risograph'] .section:nth-of-type(odd) {
+  background: color-mix(in oklab, var(--accent-start) 9%, var(--bg-primary));
+}
+
+html[data-design='risograph'] .section:nth-of-type(even) {
+  background: color-mix(in oklab, var(--accent-end) 9%, var(--bg-primary));
+}
+
+html[data-design='risograph'] h1,
+html[data-design='risograph'] h2,
+html[data-design='risograph'] h3,
+html[data-design='risograph'] h4 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Soft chromatic misregistration on headings */
+html[data-design='risograph'] .hero-name,
+html[data-design='risograph'] .section-title {
+  text-shadow:
+    -1.5px 1.5px 0 color-mix(in oklab, var(--riso-pink) 65%, transparent),
+    1.5px -1.5px 0 color-mix(in oklab, var(--riso-cyan) 65%, transparent);
+}
+
+html[data-design='risograph'] .hero-name {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+html[data-design='risograph'] .hero-greeting,
+html[data-design='risograph'] .section-label {
+  display: inline-block;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  padding: 0.15rem 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  transform: rotate(-1.5deg);
+  box-shadow: 2px 2px 0 color-mix(in oklab, var(--accent-start) 80%, transparent);
+}
+
+html[data-design='risograph'] .section-title {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+html[data-design='risograph'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent-start);
+  text-shadow:
+    -1.5px 1.5px 0 color-mix(in oklab, var(--riso-pink) 70%, transparent),
+    1.5px -1.5px 0 color-mix(in oklab, var(--riso-cyan) 70%, transparent);
+}
+
+/* Halftone dot pattern on card backgrounds */
+html[data-design='risograph'] .card,
+html[data-design='risograph'] .skill-group,
+html[data-design='risograph'] .timeline-content,
+html[data-design='risograph'] .work-card,
+html[data-design='risograph'] .education-card,
+html[data-design='risograph'] .demo-card,
+html[data-design='risograph'] .contact-form {
+  background-color: var(--bg-card);
+  background-image:
+    radial-gradient(
+      color-mix(in oklab, var(--accent-start) 28%, transparent) 1.1px,
+      transparent 1.4px
+    );
+  background-size: 8px 8px;
+  background-position: 0 0;
+  border: 2px solid var(--text-primary);
+  border-radius: 0.25rem;
+  box-shadow: 4px 4px 0 color-mix(in oklab, var(--accent-start) 75%, var(--text-primary));
+}
+
+html[data-design='risograph'] .section:nth-of-type(even) .card,
+html[data-design='risograph'] .section:nth-of-type(even) .work-card,
+html[data-design='risograph'] .section:nth-of-type(even) .education-card,
+html[data-design='risograph'] .section:nth-of-type(even) .demo-card,
+html[data-design='risograph'] .section:nth-of-type(even) .skill-group,
+html[data-design='risograph'] .section:nth-of-type(even) .timeline-content {
+  background-image:
+    radial-gradient(
+      color-mix(in oklab, var(--accent-end) 28%, transparent) 1.1px,
+      transparent 1.4px
+    );
+  box-shadow: 4px 4px 0 color-mix(in oklab, var(--accent-end) 75%, var(--text-primary));
+}
+
+html[data-design='risograph'] .card:hover,
+html[data-design='risograph'] .work-card:hover,
+html[data-design='risograph'] .education-card:hover,
+html[data-design='risograph'] .demo-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 color-mix(in oklab, var(--accent-start) 85%, var(--text-primary));
+}
+
+html[data-design='risograph'] .skill-pill,
+html[data-design='risograph'] .demo-tags li,
+html[data-design='risograph'] .work-tags li {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border: 0;
+  border-radius: 0;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  padding: 0.25rem 0.55rem;
+  box-shadow: 2px 2px 0 color-mix(in oklab, var(--accent-start) 70%, transparent);
+}
+
+html[data-design='risograph'] .skill-pill:nth-child(odd),
+html[data-design='risograph'] .demo-tags li:nth-child(odd),
+html[data-design='risograph'] .work-tags li:nth-child(odd) {
+  background: var(--accent-start);
+  color: var(--bg-primary);
+}
+
+html[data-design='risograph'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 2px solid var(--text-primary);
+}
+
+html[data-design='risograph'] .nav-logo {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-shadow:
+    -1px 1px 0 color-mix(in oklab, var(--riso-pink) 60%, transparent),
+    1px -1px 0 color-mix(in oklab, var(--riso-cyan) 60%, transparent);
+}
+
+html[data-design='risograph'] .nav-link {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+}
+
+html[data-design='risograph'] .hero-cta,
+html[data-design='risograph'] .contact-submit {
+  background: var(--accent-start);
+  color: var(--bg-primary);
+  border: 2px solid var(--text-primary);
+  border-radius: 0.25rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--text-primary);
+  padding: 0.8rem 1.5rem;
+}
+
+html[data-design='risograph'] .hero-cta:hover,
+html[data-design='risograph'] .contact-submit:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--text-primary);
+}
+
+html[data-design='risograph'] .hero-cta:active,
+html[data-design='risograph'] .contact-submit:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--text-primary);
+}
+
+html[data-design='risograph'] .form-group input,
+html[data-design='risograph'] .form-group textarea {
+  background: var(--bg-primary);
+  border: 2px solid var(--text-primary);
+  border-radius: 0.15rem;
+  font-family: var(--font-sans);
+  padding: 0.6rem 0.75rem;
+}
+
+html[data-design='risograph'] .form-group input:focus,
+html[data-design='risograph'] .form-group textarea:focus {
+  outline: 0;
+  box-shadow: 3px 3px 0 var(--accent-start);
+}
+
+html[data-design='risograph'] .hero-grid,
+html[data-design='risograph'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ ART DECO ════════════════════════════════════
+ * Poiret One display, gold gradients, sunburst background,
+ * stepped-pyramid borders, Roman-numeral sections.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='deco'] {
+  --font-sans: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-display: 'Poiret One', 'Playfair Display', 'Cormorant Garamond', serif;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --deco-gold: #c9a961;
+  --deco-gold-grad: linear-gradient(135deg, #e8cf89 0%, #b88d3a 45%, #e8cf89 100%);
+  counter-reset: deco-section;
+}
+
+/* Body sunburst + subtle chevron wash */
+html[data-design='deco'] body {
+  background-image:
+    radial-gradient(ellipse 120% 70% at 50% -20%,
+      color-mix(in oklab, var(--deco-gold) 22%, transparent),
+      transparent 60%),
+    conic-gradient(from 90deg at 50% 0%,
+      transparent 0deg,
+      color-mix(in oklab, var(--deco-gold) 7%, transparent) 4deg,
+      transparent 8deg,
+      color-mix(in oklab, var(--deco-gold) 7%, transparent) 12deg,
+      transparent 16deg,
+      color-mix(in oklab, var(--deco-gold) 7%, transparent) 20deg,
+      transparent 180deg);
+  background-attachment: fixed;
+  background-color: var(--bg-primary);
+  letter-spacing: 0.015em;
+}
+
+html[data-design='deco'] h1,
+html[data-design='deco'] h2,
+html[data-design='deco'] h3,
+html[data-design='deco'] h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+html[data-design='deco'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 9vw, 6rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+  background: var(--deco-gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  display: block;
+  position: relative;
+}
+
+/* Double-rule flourishes above and below the hero name */
+html[data-design='deco'] .hero-name::before,
+html[data-design='deco'] .hero-name::after {
+  content: '';
+  display: block;
+  height: 6px;
+  margin: 0.5rem auto;
+  width: min(360px, 60%);
+  border-top: 1px solid var(--deco-gold);
+  border-bottom: 1px solid var(--deco-gold);
+}
+
+html[data-design='deco'] .hero-greeting,
+html[data-design='deco'] .section-label {
+  font-family: var(--font-display);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--deco-gold);
+}
+
+html[data-design='deco'] .section {
+  counter-increment: deco-section;
+  border-top: 1px solid var(--deco-gold);
+  border-bottom: 1px solid var(--deco-gold);
+  padding: 5rem 0;
+  position: relative;
+}
+
+/* Inner hairline rule above/below each section (double-rule effect) */
+html[data-design='deco'] .section::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1px solid color-mix(in oklab, var(--deco-gold) 60%, transparent);
+}
+
+html[data-design='deco'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-align: center;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+}
+
+html[data-design='deco'] .section-title::before {
+  content: counter(deco-section, upper-roman) '  ·  ';
+  color: var(--deco-gold);
+  font-weight: 400;
+}
+
+html[data-design='deco'] .gradient-text {
+  background: var(--deco-gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Cards as stepped-pyramid frames */
+html[data-design='deco'] .card,
+html[data-design='deco'] .skill-group,
+html[data-design='deco'] .timeline-content,
+html[data-design='deco'] .work-card,
+html[data-design='deco'] .education-card,
+html[data-design='deco'] .demo-card,
+html[data-design='deco'] .contact-form {
+  background: color-mix(in oklab, var(--bg-card) 80%, transparent);
+  border: 1px solid var(--deco-gold);
+  border-radius: 0;
+  box-shadow:
+    inset 0 0 0 3px var(--bg-card),
+    inset 0 0 0 4px var(--deco-gold);
+  padding: 1.75rem;
+  clip-path: polygon(
+    8px 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0 calc(100% - 8px),
+    0 8px
+  );
+}
+
+html[data-design='deco'] .card h3,
+html[data-design='deco'] .work-card h3,
+html[data-design='deco'] .education-card h3,
+html[data-design='deco'] .demo-card h3 {
+  text-align: center;
+  color: var(--deco-gold);
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+html[data-design='deco'] .card h3::after,
+html[data-design='deco'] .work-card h3::after,
+html[data-design='deco'] .education-card h3::after,
+html[data-design='deco'] .demo-card h3::after {
+  content: '◆';
+  display: block;
+  margin: 0.4rem auto 0;
+  color: var(--deco-gold);
+  font-size: 0.6rem;
+}
+
+html[data-design='deco'] .skill-pill,
+html[data-design='deco'] .demo-tags li,
+html[data-design='deco'] .work-tags li {
+  background: transparent;
+  border: 1px solid var(--deco-gold);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  padding: 0.35rem 0.75rem;
+  color: var(--deco-gold);
+}
+
+html[data-design='deco'] .navbar {
+  background: color-mix(in oklab, var(--bg-primary) 92%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--deco-gold);
+  box-shadow: 0 1px 0 var(--deco-gold);
+}
+
+html[data-design='deco'] .nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  background: var(--deco-gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-design='deco'] .nav-link {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+html[data-design='deco'] .hero-cta,
+html[data-design='deco'] .contact-submit {
+  background: var(--deco-gold-grad);
+  color: #1a1308;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 0.9rem 2rem;
+  clip-path: polygon(
+    10px 0,
+    calc(100% - 10px) 0,
+    100% 50%,
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0 50%
+  );
+  box-shadow: none;
+}
+
+html[data-design='deco'] .hero-cta:hover,
+html[data-design='deco'] .contact-submit:hover {
+  filter: brightness(1.1);
+  transform: none;
+}
+
+html[data-design='deco'] .form-group input,
+html[data-design='deco'] .form-group textarea {
+  background: transparent;
+  border: 1px solid var(--deco-gold);
+  border-radius: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+html[data-design='deco'] .form-group input:focus,
+html[data-design='deco'] .form-group textarea:focus {
+  outline: 0;
+  box-shadow: inset 0 0 0 1px var(--deco-gold);
+}
+
+html[data-design='deco'] .hero-grid {
+  display: none;
+}
+
+html[data-design='deco'] .hero-gradient {
+  background: radial-gradient(circle at 50% 0%,
+    color-mix(in oklab, var(--deco-gold) 35%, transparent),
+    transparent 60%);
+  opacity: 0.8;
+}
+
+
+/* ══════════════ WABI-SABI ═══════════════════════════════════
+ * Japanese minimalism: Shippori Mincho, vast negative space,
+ * subtle vertical accents, hairline ink dividers.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='wabisabi'] {
+  --font-sans: 'Shippori Mincho', 'Noto Serif JP', 'Cormorant Garamond', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
+  --font-display: var(--font-sans);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --shadow-card: none;
+  --section-padding: 9rem 0;
+  --container-width: 760px;
+  --wabi-ink: color-mix(in oklab, var(--text-primary) 95%, transparent);
+  --wabi-paper: color-mix(in oklab, var(--bg-primary) 90%, #f2ece1);
+  --wabi-hair: color-mix(in oklab, var(--text-primary) 18%, transparent);
+}
+
+html[data-design='wabisabi'] body {
+  background: var(--wabi-paper);
+  color: var(--wabi-ink);
+  font-size: 1.05rem;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+
+html[data-design='wabisabi'] h1,
+html[data-design='wabisabi'] h2,
+html[data-design='wabisabi'] h3,
+html[data-design='wabisabi'] h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+}
+
+html[data-design='wabisabi'] .hero {
+  padding: 8rem 0 10rem;
+  position: relative;
+}
+
+html[data-design='wabisabi'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5.5vw, 4rem);
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  color: var(--wabi-ink);
+}
+
+html[data-design='wabisabi'] .hero-greeting,
+html[data-design='wabisabi'] .section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  text-transform: lowercase;
+  letter-spacing: 0.3em;
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: color-mix(in oklab, var(--wabi-ink) 55%, transparent);
+}
+
+html[data-design='wabisabi'] .hero-tagline {
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.03em;
+}
+
+html[data-design='wabisabi'] .hero-description {
+  font-size: 1rem;
+  max-width: 48ch;
+  line-height: 2.1;
+  color: color-mix(in oklab, var(--wabi-ink) 75%, transparent);
+}
+
+/* Each section carries a thin vertical accent line on the left */
+html[data-design='wabisabi'] .section {
+  position: relative;
+  padding-left: 2.5rem;
+  border: 0;
+}
+
+html[data-design='wabisabi'] .section::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 2rem;
+  bottom: 2rem;
+  width: 1px;
+  background: var(--wabi-hair);
+}
+
+html[data-design='wabisabi'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin-bottom: 3rem;
+  color: var(--wabi-ink);
+}
+
+html[data-design='wabisabi'] .section-title::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--wabi-hair);
+  margin-top: 1.25rem;
+}
+
+html[data-design='wabisabi'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent-start);
+  font-style: italic;
+}
+
+html[data-design='wabisabi'] .card,
+html[data-design='wabisabi'] .skill-group,
+html[data-design='wabisabi'] .timeline-content,
+html[data-design='wabisabi'] .work-card,
+html[data-design='wabisabi'] .education-card,
+html[data-design='wabisabi'] .demo-card,
+html[data-design='wabisabi'] .contact-form {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--wabi-hair);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 2rem 0 2.5rem;
+}
+
+html[data-design='wabisabi'] .skill-pill,
+html[data-design='wabisabi'] .demo-tags li,
+html[data-design='wabisabi'] .work-tags li {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  font-weight: 400;
+  text-transform: lowercase;
+  padding: 0;
+  color: color-mix(in oklab, var(--wabi-ink) 65%, transparent);
+}
+
+html[data-design='wabisabi'] .skill-pill + .skill-pill::before,
+html[data-design='wabisabi'] .demo-tags li + li::before,
+html[data-design='wabisabi'] .work-tags li + li::before {
+  content: '·';
+  margin: 0 0.6rem 0 -0.2rem;
+  opacity: 0.5;
+}
+
+html[data-design='wabisabi'] .navbar {
+  background: color-mix(in oklab, var(--wabi-paper) 95%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--wabi-hair);
+}
+
+html[data-design='wabisabi'] .nav-logo {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+}
+
+html[data-design='wabisabi'] .nav-link {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: lowercase;
+  font-weight: 400;
+}
+
+html[data-design='wabisabi'] .hero-cta,
+html[data-design='wabisabi'] .contact-submit {
+  background: transparent;
+  color: var(--wabi-ink);
+  border: 0;
+  border-bottom: 1px solid var(--wabi-ink);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  font-weight: 400;
+  padding: 0.5rem 0.25rem;
+  box-shadow: none;
+}
+
+html[data-design='wabisabi'] .hero-cta::after,
+html[data-design='wabisabi'] .contact-submit::after {
+  content: ' →';
+  margin-left: 1.5rem;
+  opacity: 0.6;
+  transition: margin-left var(--transition-medium), opacity var(--transition-medium);
+}
+
+html[data-design='wabisabi'] .hero-cta:hover,
+html[data-design='wabisabi'] .contact-submit:hover {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+html[data-design='wabisabi'] .hero-cta:hover::after,
+html[data-design='wabisabi'] .contact-submit:hover::after {
+  margin-left: 2rem;
+  opacity: 1;
+}
+
+html[data-design='wabisabi'] .form-group input,
+html[data-design='wabisabi'] .form-group textarea {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--wabi-hair);
+  border-radius: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+html[data-design='wabisabi'] .form-group input:focus,
+html[data-design='wabisabi'] .form-group textarea:focus {
+  outline: 0;
+  border-bottom-color: var(--wabi-ink);
+  box-shadow: none;
+}
+
+html[data-design='wabisabi'] .hero-grid,
+html[data-design='wabisabi'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ DASHBOARD ═══════════════════════════════════
+ * Admin-UI / analytics feel: KPI-style headers, status pills
+ * with coloured dots, alternating row tints, dense monospace labels.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='dashboard'] {
+  --font-display: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --border-width: 1px;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --dash-row:      color-mix(in oklab, var(--bg-secondary) 40%, transparent);
+  --dash-border:   color-mix(in oklab, var(--text-primary) 10%, transparent);
+  --dash-green:    #22c55e;
+  --dash-amber:    #f59e0b;
+  --dash-blue:     var(--accent-start);
+}
+
+html[data-design='dashboard'] body {
+  font-size: 0.93rem;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-design='dashboard'] h1,
+html[data-design='dashboard'] h2,
+html[data-design='dashboard'] h3,
+html[data-design='dashboard'] h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+html[data-design='dashboard'] .hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* Status pill next to the greeting */
+html[data-design='dashboard'] .hero-greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--dash-border);
+}
+
+html[data-design='dashboard'] .hero-greeting::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dash-green);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--dash-green) 25%, transparent);
+}
+
+html[data-design='dashboard'] .section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+html[data-design='dashboard'] .section-label::before {
+  content: 'METRIC · ';
+  opacity: 0.6;
+}
+
+html[data-design='dashboard'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+/* Alternating-row tint on sections (subtle) */
+html[data-design='dashboard'] .section:nth-of-type(even) {
+  background: var(--dash-row);
+}
+
+/* Timestamp annotation in the top-right of each section */
+html[data-design='dashboard'] .section {
+  position: relative;
+}
+
+html[data-design='dashboard'] .section[data-num]::after {
+  content: '↻ updated just now  ·  #' attr(data-num);
+  position: absolute;
+  top: 2.5rem;
+  right: 1rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+html[data-design='dashboard'] .gradient-text {
+  background: linear-gradient(90deg, var(--dash-blue), var(--accent-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-design='dashboard'] .card,
+html[data-design='dashboard'] .skill-group,
+html[data-design='dashboard'] .timeline-content,
+html[data-design='dashboard'] .work-card,
+html[data-design='dashboard'] .education-card,
+html[data-design='dashboard'] .demo-card,
+html[data-design='dashboard'] .contact-form {
+  background: var(--bg-card);
+  border: 1px solid var(--dash-border);
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 1.25rem 1.25rem 0.75rem;
+  position: relative;
+}
+
+/* KPI-style top strip on every card */
+html[data-design='dashboard'] .card::before,
+html[data-design='dashboard'] .work-card::before,
+html[data-design='dashboard'] .education-card::before,
+html[data-design='dashboard'] .demo-card::before,
+html[data-design='dashboard'] .skill-group::before,
+html[data-design='dashboard'] .timeline-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    var(--dash-blue) 0%,
+    var(--dash-blue) 68%,
+    var(--dash-border) 68%,
+    var(--dash-border) 100%
+  );
+  border-radius: 0.375rem 0.375rem 0 0;
+}
+
+/* Fake sparkline ribbon at the bottom of work / demo / education cards */
+html[data-design='dashboard'] .work-card::after,
+html[data-design='dashboard'] .demo-card::after,
+html[data-design='dashboard'] .education-card::after {
+  content: '';
+  display: block;
+  height: 28px;
+  margin: 0.75rem -1.25rem -0.75rem;
+  background:
+    linear-gradient(to top,
+      color-mix(in oklab, var(--dash-blue) 12%, transparent),
+      transparent),
+    repeating-linear-gradient(
+      to right,
+      transparent 0,
+      transparent 7px,
+      color-mix(in oklab, var(--dash-blue) 45%, transparent) 7px,
+      color-mix(in oklab, var(--dash-blue) 45%, transparent) 8px,
+      transparent 8px,
+      transparent 15px,
+      color-mix(in oklab, var(--dash-blue) 28%, transparent) 15px,
+      color-mix(in oklab, var(--dash-blue) 28%, transparent) 16px
+    );
+  mask-image: linear-gradient(to top, black 0%, transparent 95%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 95%);
+  opacity: 0.75;
+  border-top: 1px dashed var(--dash-border);
+}
+
+html[data-design='dashboard'] .card h3,
+html[data-design='dashboard'] .work-card h3,
+html[data-design='dashboard'] .education-card h3,
+html[data-design='dashboard'] .demo-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+
+html[data-design='dashboard'] .skill-pill,
+html[data-design='dashboard'] .demo-tags li,
+html[data-design='dashboard'] .work-tags li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--dash-border);
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  padding: 0.15rem 0.5rem 0.15rem 0.45rem;
+  text-transform: none;
+}
+
+html[data-design='dashboard'] .skill-pill::before,
+html[data-design='dashboard'] .demo-tags li::before,
+html[data-design='dashboard'] .work-tags li::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dash-green);
+}
+
+html[data-design='dashboard'] .skill-pill:nth-child(3n)::before,
+html[data-design='dashboard'] .demo-tags li:nth-child(3n)::before,
+html[data-design='dashboard'] .work-tags li:nth-child(3n)::before {
+  background: var(--dash-amber);
+}
+
+html[data-design='dashboard'] .skill-pill:nth-child(3n+1)::before,
+html[data-design='dashboard'] .demo-tags li:nth-child(3n+1)::before,
+html[data-design='dashboard'] .work-tags li:nth-child(3n+1)::before {
+  background: var(--dash-blue);
+}
+
+html[data-design='dashboard'] .navbar {
+  background: var(--bg-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--dash-border);
+}
+
+html[data-design='dashboard'] .nav-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+html[data-design='dashboard'] .nav-logo::before {
+  content: '◐ ';
+  color: var(--dash-blue);
+  margin-right: 0.15rem;
+}
+
+html[data-design='dashboard'] .nav-link {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-secondary);
+}
+
+html[data-design='dashboard'] .hero-cta,
+html[data-design='dashboard'] .contact-submit {
+  background: var(--dash-blue);
+  color: #fff;
+  border: 0;
+  border-radius: 0.375rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0.6rem 1.1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+html[data-design='dashboard'] .hero-cta::before,
+html[data-design='dashboard'] .contact-submit::before {
+  content: '↗ ';
+  margin-right: 0.15rem;
+  opacity: 0.9;
+}
+
+html[data-design='dashboard'] .hero-cta:hover,
+html[data-design='dashboard'] .contact-submit:hover {
+  filter: brightness(1.08);
+  transform: none;
+}
+
+html[data-design='dashboard'] .form-group input,
+html[data-design='dashboard'] .form-group textarea {
+  background: var(--bg-primary);
+  border: 1px solid var(--dash-border);
+  border-radius: 0.375rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.9rem;
+  padding: 0.55rem 0.75rem;
+}
+
+html[data-design='dashboard'] .form-group input:focus,
+html[data-design='dashboard'] .form-group textarea:focus {
+  outline: 0;
+  border-color: var(--dash-blue);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--dash-blue) 20%, transparent);
+}
+
+html[data-design='dashboard'] .hero-grid {
+  opacity: 0.4;
+}
+
+
+/* ══════════════ ZINE ════════════════════════════════════════
+ * Photocopied punk energy: ransom-note font mixing, tape and
+ * staples, heavy black borders, duotone spot-color accent.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='zine'] {
+  --font-sans: 'Times New Roman', Times, Georgia, serif;
+  --font-display: 'Arial Black', 'Helvetica Neue', sans-serif;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 3px;
+  --shadow-card: 4px 4px 0 var(--text-primary);
+  --zine-ink: var(--text-primary);
+  --zine-paper: color-mix(in oklab, var(--bg-primary) 80%, #f4efe3);
+  --zine-spot: var(--accent-start);
+  --zine-tape: color-mix(in oklab, #ffd84d 55%, var(--bg-primary));
+}
+
+/* Slightly grainy / photocopied paper */
+html[data-design='zine'] body {
+  background-color: var(--zine-paper);
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.08 0'/></filter><rect width='220' height='220' filter='url(%23g)'/></svg>");
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+  color: var(--zine-ink);
+}
+
+html[data-design='zine'] h1,
+html[data-design='zine'] h2,
+html[data-design='zine'] h3,
+html[data-design='zine'] h4 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0;
+  line-height: 1.05;
+}
+
+/* Ransom-note hero name: split across words with different fonts/angles */
+html[data-design='zine'] .hero-name {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.95;
+  display: block;
+  transform: rotate(-1.5deg);
+  filter: contrast(1.1);
+}
+
+/* Apply different fonts to pseudo-elements + use span selectors-ish via word wrap */
+html[data-design='zine'] .hero-name::first-letter {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  padding: 0 0.1em;
+  margin-right: 0.1em;
+}
+
+html[data-design='zine'] .hero-greeting,
+html[data-design='zine'] .section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  padding: 0.2rem 0.5rem;
+  text-transform: uppercase;
+  display: inline-block;
+  transform: rotate(-2deg);
+}
+
+html[data-design='zine'] .hero-tagline {
+  font-family: Caveat, cursive;
+  font-weight: 700;
+  font-size: 1.8rem;
+  transform: rotate(1deg);
+  color: var(--zine-spot);
+}
+
+html[data-design='zine'] .section {
+  border-top: 3px solid var(--zine-ink);
+  border-bottom: 3px solid var(--zine-ink);
+  padding: 4.5rem 0;
+  position: relative;
+}
+
+html[data-design='zine'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  transform: rotate(-1deg);
+  margin-bottom: 2rem;
+}
+
+/* Alternate section titles get the spot colour */
+html[data-design='zine'] .section:nth-of-type(even) .section-title {
+  background: var(--zine-spot);
+  color: var(--zine-paper);
+  transform: rotate(1deg);
+}
+
+html[data-design='zine'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--zine-paper);
+  background-color: var(--zine-spot);
+  padding: 0 0.2em;
+}
+
+/* Cards look like stapled / taped paper scraps */
+html[data-design='zine'] .card,
+html[data-design='zine'] .skill-group,
+html[data-design='zine'] .timeline-content,
+html[data-design='zine'] .work-card,
+html[data-design='zine'] .education-card,
+html[data-design='zine'] .demo-card,
+html[data-design='zine'] .contact-form {
+  background: var(--zine-paper);
+  border: 3px solid var(--zine-ink);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 var(--zine-ink);
+  padding: 1.5rem;
+  position: relative;
+  filter: contrast(1.05);
+}
+
+html[data-design='zine'] .card:nth-of-type(odd),
+html[data-design='zine'] .work-card:nth-of-type(odd),
+html[data-design='zine'] .demo-card:nth-of-type(odd),
+html[data-design='zine'] .education-card:nth-of-type(odd) {
+  transform: rotate(-0.6deg);
+}
+html[data-design='zine'] .card:nth-of-type(even),
+html[data-design='zine'] .work-card:nth-of-type(even),
+html[data-design='zine'] .demo-card:nth-of-type(even),
+html[data-design='zine'] .education-card:nth-of-type(even) {
+  transform: rotate(0.8deg);
+}
+
+/* Tape strip in the top-left corner of each card */
+html[data-design='zine'] .card::before,
+html[data-design='zine'] .work-card::before,
+html[data-design='zine'] .demo-card::before,
+html[data-design='zine'] .education-card::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  width: 60px;
+  height: 18px;
+  background: var(--zine-tape);
+  border: 1px solid color-mix(in oklab, var(--zine-ink) 40%, transparent);
+  transform: rotate(-8deg);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+  opacity: 0.85;
+}
+
+/* Staple in the top-right corner */
+html[data-design='zine'] .card::after,
+html[data-design='zine'] .work-card::after,
+html[data-design='zine'] .demo-card::after,
+html[data-design='zine'] .education-card::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  width: 14px;
+  height: 3px;
+  background: var(--zine-ink);
+  box-shadow: 0 4px 0 var(--zine-ink);
+  transform: rotate(8deg);
+}
+
+html[data-design='zine'] .card h3,
+html[data-design='zine'] .work-card h3,
+html[data-design='zine'] .demo-card h3,
+html[data-design='zine'] .education-card h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  margin-bottom: 0.5rem;
+}
+
+html[data-design='zine'] .skill-pill,
+html[data-design='zine'] .demo-tags li,
+html[data-design='zine'] .work-tags li {
+  background: var(--zine-paper);
+  border: 2px solid var(--zine-ink);
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  color: var(--zine-ink);
+}
+
+html[data-design='zine'] .skill-pill:nth-child(3n) {
+  background: var(--zine-spot);
+  color: var(--zine-paper);
+  transform: rotate(-3deg);
+}
+html[data-design='zine'] .skill-pill:nth-child(3n+1) {
+  font-family: 'Press Start 2P', ui-monospace, monospace;
+  font-size: 0.6rem;
+  transform: rotate(2deg);
+}
+html[data-design='zine'] .skill-pill:nth-child(3n+2) {
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  transform: rotate(-1deg);
+}
+
+html[data-design='zine'] .navbar {
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  border-bottom: 4px solid var(--zine-spot);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html[data-design='zine'] .nav-logo {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--zine-paper);
+  background: var(--zine-spot);
+  padding: 0 0.4rem;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+html[data-design='zine'] .nav-link {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: var(--zine-paper);
+}
+
+html[data-design='zine'] .nav-link:hover {
+  background: var(--zine-spot);
+  color: var(--zine-paper);
+}
+
+html[data-design='zine'] .hero-cta,
+html[data-design='zine'] .contact-submit {
+  background: var(--zine-ink);
+  color: var(--zine-paper);
+  border: 3px solid var(--zine-ink);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 5px 5px 0 var(--zine-spot);
+  transform: rotate(-1deg);
+}
+
+html[data-design='zine'] .hero-cta:hover,
+html[data-design='zine'] .contact-submit:hover {
+  transform: rotate(-1deg) translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--zine-spot);
+}
+
+html[data-design='zine'] .form-group input,
+html[data-design='zine'] .form-group textarea {
+  background: var(--zine-paper);
+  border: 3px solid var(--zine-ink);
+  border-radius: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--zine-ink);
+}
+
+html[data-design='zine'] .form-group input:focus,
+html[data-design='zine'] .form-group textarea:focus {
+  outline: 0;
+  background: var(--zine-tape);
+  box-shadow: 4px 4px 0 var(--zine-ink);
+}
+
+html[data-design='zine'] .hero-grid,
+html[data-design='zine'] .hero-gradient {
+  display: none;
+}
+
+
+/* ══════════════ COMIC ═══════════════════════════════════════
+ * Bangers display, thick outlined panels, Ben-Day dot halftone,
+ * speech-bubble tag pills, POW! burst decoration.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='comic'] {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Bangers', 'Inter Tight', sans-serif;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --border-width: 3px;
+  --comic-ink: #0a0a0a;
+  --comic-pop: var(--accent-start);
+  --comic-pop2: var(--accent-end);
+  --comic-paper: color-mix(in oklab, var(--bg-primary) 70%, #fffef2);
+  --shadow-card: 4px 4px 0 var(--comic-ink);
+}
+
+/* Ben-Day dots all over the page body, subtle */
+html[data-design='comic'] body {
+  background-color: var(--comic-paper);
+  background-image:
+    radial-gradient(
+      color-mix(in oklab, var(--comic-pop) 45%, transparent) 1.2px,
+      transparent 1.6px);
+  background-size: 8px 8px;
+  color: var(--comic-ink);
+  font-family: var(--font-sans);
+}
+
+html[data-design='comic'] h1,
+html[data-design='comic'] h2,
+html[data-design='comic'] h3,
+html[data-design='comic'] h4 {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: var(--comic-ink);
+  font-weight: 400;
+}
+
+html[data-design='comic'] .hero {
+  position: relative;
+}
+
+html[data-design='comic'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 10vw, 6.5rem);
+  letter-spacing: 0.02em;
+  line-height: 0.9;
+  color: var(--comic-pop);
+  /* Chunky black outline */
+  text-shadow:
+    -3px 0 0 var(--comic-ink),
+    3px 0 0 var(--comic-ink),
+    0 -3px 0 var(--comic-ink),
+    0 3px 0 var(--comic-ink),
+    -3px -3px 0 var(--comic-ink),
+    3px 3px 0 var(--comic-ink),
+    -3px 3px 0 var(--comic-ink),
+    3px -3px 0 var(--comic-ink),
+    6px 6px 0 var(--comic-ink);
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+/* POW! burst in the hero corner */
+html[data-design='comic'] .hero::after {
+  content: 'POW!';
+  position: absolute;
+  top: 14%;
+  right: 5%;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  color: var(--comic-pop2);
+  background: #ffeb3b;
+  padding: 0.5rem 1rem;
+  clip-path: polygon(
+    0% 10%, 20% 0%, 35% 15%, 50% 0%, 65% 15%, 80% 0%, 100% 10%,
+    95% 30%, 100% 50%, 90% 65%, 100% 85%, 80% 95%, 65% 85%, 50% 100%,
+    35% 85%, 20% 100%, 0% 85%, 10% 65%, 0% 50%, 10% 30%
+  );
+  transform: rotate(15deg);
+  text-shadow:
+    -2px 0 0 var(--comic-ink),
+    2px 0 0 var(--comic-ink),
+    0 -2px 0 var(--comic-ink),
+    0 2px 0 var(--comic-ink);
+  pointer-events: none;
+}
+
+html[data-design='comic'] .hero-greeting {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  color: var(--comic-ink);
+  background: #fff;
+  border: 3px solid var(--comic-ink);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  display: inline-block;
+  box-shadow: 3px 3px 0 var(--comic-ink);
+  transform: rotate(-1deg);
+  text-transform: uppercase;
+}
+
+html[data-design='comic'] .hero-tagline {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: var(--comic-ink);
+}
+
+html[data-design='comic'] .section-label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--comic-pop2);
+  text-transform: uppercase;
+}
+
+html[data-design='comic'] .section {
+  border-top: 3px solid var(--comic-ink);
+  padding: 4rem 0;
+  position: relative;
+}
+
+html[data-design='comic'] .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  letter-spacing: 0.04em;
+  margin-bottom: 2rem;
+  color: var(--comic-pop);
+  text-shadow:
+    -2px 0 0 var(--comic-ink),
+    2px 0 0 var(--comic-ink),
+    0 -2px 0 var(--comic-ink),
+    0 2px 0 var(--comic-ink),
+    4px 4px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--comic-pop2);
+}
+
+/* Cards = comic panels: thick outlined, white, drop-shadowed */
+html[data-design='comic'] .card,
+html[data-design='comic'] .skill-group,
+html[data-design='comic'] .timeline-content,
+html[data-design='comic'] .work-card,
+html[data-design='comic'] .education-card,
+html[data-design='comic'] .demo-card,
+html[data-design='comic'] .contact-form {
+  background: #fff;
+  border: 3px solid var(--comic-ink);
+  border-radius: 0.75rem;
+  box-shadow: 5px 5px 0 var(--comic-ink);
+  padding: 1.5rem;
+  position: relative;
+}
+
+html[data-design='comic'] .card h3,
+html[data-design='comic'] .work-card h3,
+html[data-design='comic'] .demo-card h3,
+html[data-design='comic'] .education-card h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  letter-spacing: 0.03em;
+  color: var(--comic-pop);
+  text-shadow: 2px 2px 0 var(--comic-ink);
+  margin-bottom: 0.5rem;
+}
+
+/* Speech-bubble style tags */
+html[data-design='comic'] .skill-pill,
+html[data-design='comic'] .demo-tags li,
+html[data-design='comic'] .work-tags li {
+  background: #fff;
+  border: 2px solid var(--comic-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.75rem;
+  color: var(--comic-ink);
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .skill-pill:nth-child(3n) {
+  background: #ffeb3b;
+}
+html[data-design='comic'] .skill-pill:nth-child(3n+1) {
+  background: color-mix(in oklab, var(--comic-pop) 25%, #fff);
+}
+
+html[data-design='comic'] .navbar {
+  background: #fff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 3px solid var(--comic-ink);
+  box-shadow: 0 3px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .nav-logo {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  color: var(--comic-pop);
+  text-shadow: 2px 2px 0 var(--comic-ink);
+  text-transform: uppercase;
+}
+
+html[data-design='comic'] .nav-link {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--comic-ink);
+}
+
+html[data-design='comic'] .hero-cta,
+html[data-design='comic'] .contact-submit {
+  background: var(--comic-pop2);
+  color: var(--comic-ink);
+  border: 3px solid var(--comic-ink);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.4rem;
+  box-shadow: 4px 4px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .hero-cta:hover,
+html[data-design='comic'] .contact-submit:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 3px 3px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .form-group input,
+html[data-design='comic'] .form-group textarea {
+  background: #fff;
+  border: 3px solid var(--comic-ink);
+  border-radius: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  padding: 0.6rem 0.85rem;
+  box-shadow: 2px 2px 0 var(--comic-ink);
+}
+
+html[data-design='comic'] .form-group input:focus,
+html[data-design='comic'] .form-group textarea:focus {
+  outline: 0;
+  box-shadow: 4px 4px 0 var(--comic-pop);
+}
+
+html[data-design='comic'] .hero-grid {
+  display: none;
+}
+
+html[data-design='comic'] .hero-gradient {
+  background: radial-gradient(circle at 70% 30%,
+    color-mix(in oklab, #ffeb3b 55%, transparent),
+    transparent 60%);
+  opacity: 0.7;
+}
+
+
+/* ══════════════ NEWSPAPER ═══════════════════════════════════
+ * Broadsheet front page: blackletter masthead, serif columns,
+ * dated rule, classified-ad cards, small-caps labels.
+ * ──────────────────────────────────────────────────────────── */
+html[data-design='newspaper'] {
+  --font-sans: 'EB Garamond', 'Crimson Pro', Georgia, serif;
+  --font-display: 'UnifrakturMaguntia', 'Playfair Display', Georgia, serif;
+  --font-subhead: 'Playfair Display', Georgia, serif;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --border-width: 1px;
+  --news-paper: color-mix(in oklab, var(--bg-primary) 75%, #f4eedd);
+  --news-ink: color-mix(in oklab, var(--text-primary) 98%, #1a1812);
+  --news-muted: color-mix(in oklab, var(--news-ink) 55%, transparent);
+  --news-hair: color-mix(in oklab, var(--news-ink) 30%, transparent);
+  --shadow-card: none;
+}
+
+html[data-design='newspaper'] body {
+  background: var(--news-paper);
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  color: var(--news-ink);
+  font-family: var(--font-sans);
+  font-size: 1.02rem;
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+html[data-design='newspaper'] h1,
+html[data-design='newspaper'] h2,
+html[data-design='newspaper'] h3,
+html[data-design='newspaper'] h4 {
+  font-family: var(--font-subhead);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+/* Giant blackletter nameplate */
+html[data-design='newspaper'] .hero {
+  border-top: 4px double var(--news-ink);
+  border-bottom: 4px double var(--news-ink);
+  padding: 3rem 0 2.5rem;
+  text-align: center;
+}
+
+html[data-design='newspaper'] .hero-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 10vw, 6rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--news-ink);
+  text-align: center;
+  display: block;
+  margin: 0.25rem 0 0.5rem;
+}
+
+/* Dateline above name */
+html[data-design='newspaper'] .hero-greeting {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  color: var(--news-muted);
+  display: block;
+  text-align: center;
+  border-bottom: 1px solid var(--news-hair);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+html[data-design='newspaper'] .hero-greeting::before {
+  content: 'VOL. MMXXVI  ·  NO. III  ·  ';
+  letter-spacing: 0.2em;
+}
+
+html[data-design='newspaper'] .hero-greeting::after {
+  content: '  ·  PRICE: FREE';
+  letter-spacing: 0.2em;
+}
+
+html[data-design='newspaper'] .hero-tagline {
+  font-family: var(--font-subhead);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: var(--news-ink);
+  max-width: 60ch;
+  margin: 0 auto 0.5rem;
+}
+
+html[data-design='newspaper'] .hero-description {
+  max-width: 60ch;
+  margin: 0.75rem auto 1.25rem;
+  text-align: justify;
+  text-align-last: center;
+  hyphens: auto;
+  color: var(--news-ink);
+}
+
+html[data-design='newspaper'] .section {
+  border-top: 1px solid var(--news-ink);
+  padding: 3rem 0;
+  position: relative;
+}
+
+/* Section dateline: small-caps rubric above title */
+html[data-design='newspaper'] .section-label,
+html[data-design='newspaper'] .section[data-num]::before {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  color: var(--news-muted);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+html[data-design='newspaper'] .section[data-num]::before {
+  content: 'SECTION ' attr(data-num);
+  position: static;
+  border-bottom: 1px solid var(--news-hair);
+  padding-bottom: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+html[data-design='newspaper'] .section-title {
+  font-family: var(--font-subhead);
+  font-weight: 800;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  letter-spacing: -0.005em;
+  color: var(--news-ink);
+  margin-bottom: 0.25rem;
+  line-height: 1.1;
+}
+
+html[data-design='newspaper'] .section-title::after {
+  content: '';
+  display: block;
+  width: 100%;
+  border-top: 3px double var(--news-ink);
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+html[data-design='newspaper'] .gradient-text {
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: var(--news-ink);
+  font-style: italic;
+}
+
+/* Two-column body text in the About section */
+html[data-design='newspaper'] .about-text {
+  column-count: 2;
+  column-gap: 2rem;
+  column-rule: 1px solid var(--news-hair);
+  text-align: justify;
+  hyphens: auto;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+html[data-design='newspaper'] .about-text p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.2em;
+  float: left;
+  line-height: 0.9;
+  padding-right: 0.5rem;
+  padding-top: 0.2rem;
+  color: var(--news-ink);
+}
+
+@media (max-width: 720px) {
+  html[data-design='newspaper'] .about-text {
+    column-count: 1;
+  }
+}
+
+/* Cards = classified-ad boxes */
+html[data-design='newspaper'] .card,
+html[data-design='newspaper'] .skill-group,
+html[data-design='newspaper'] .timeline-content,
+html[data-design='newspaper'] .work-card,
+html[data-design='newspaper'] .education-card,
+html[data-design='newspaper'] .demo-card,
+html[data-design='newspaper'] .contact-form {
+  background: var(--news-paper);
+  border: 1px solid var(--news-ink);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 1.5rem;
+  position: relative;
+}
+
+/* Classified-ad small-caps label strip across top of work / demo / education cards */
+html[data-design='newspaper'] .work-card::before,
+html[data-design='newspaper'] .demo-card::before,
+html[data-design='newspaper'] .education-card::before {
+  content: 'ADVERTISEMENT';
+  display: block;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: var(--news-muted);
+  border-bottom: 1px solid var(--news-hair);
+  padding-bottom: 0.35rem;
+  margin: -0.5rem -0.5rem 0.75rem;
+  text-align: center;
+}
+
+html[data-design='newspaper'] .education-card::before {
+  content: 'ACADEMIC RECORD';
+}
+
+html[data-design='newspaper'] .work-card::before {
+  content: 'EMPLOYMENT NOTICE';
+}
+
+html[data-design='newspaper'] .demo-card::before {
+  content: 'FEATURED DEMO';
+}
+
+html[data-design='newspaper'] .card h3,
+html[data-design='newspaper'] .work-card h3,
+html[data-design='newspaper'] .demo-card h3,
+html[data-design='newspaper'] .education-card h3 {
+  font-family: var(--font-subhead);
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+
+html[data-design='newspaper'] .skill-pill,
+html[data-design='newspaper'] .demo-tags li,
+html[data-design='newspaper'] .work-tags li {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  padding: 0;
+  color: var(--news-ink);
+  text-transform: lowercase;
+}
+
+html[data-design='newspaper'] .skill-pill::before,
+html[data-design='newspaper'] .demo-tags li::before,
+html[data-design='newspaper'] .work-tags li::before {
+  content: '[ ';
+  color: var(--news-muted);
+}
+html[data-design='newspaper'] .skill-pill::after,
+html[data-design='newspaper'] .demo-tags li::after,
+html[data-design='newspaper'] .work-tags li::after {
+  content: ' ]';
+  color: var(--news-muted);
+}
+
+html[data-design='newspaper'] .navbar {
+  background: var(--news-paper);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 3px double var(--news-ink);
+  box-shadow: none;
+}
+
+html[data-design='newspaper'] .nav-logo {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  color: var(--news-ink);
+}
+
+html[data-design='newspaper'] .nav-link {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: lowercase;
+  color: var(--news-ink);
+}
+
+html[data-design='newspaper'] .hero-cta,
+html[data-design='newspaper'] .contact-submit {
+  background: var(--news-ink);
+  color: var(--news-paper);
+  border: 1px solid var(--news-ink);
+  border-radius: 0;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
+  padding: 0.65rem 1.25rem;
+  box-shadow: 4px 4px 0 var(--news-ink), 4px 4px 0 1px var(--news-paper) inset;
+  text-transform: lowercase;
+}
+
+html[data-design='newspaper'] .hero-cta:hover,
+html[data-design='newspaper'] .contact-submit:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 3px 3px 0 var(--news-ink);
+  background: var(--news-ink);
+}
+
+html[data-design='newspaper'] .form-group input,
+html[data-design='newspaper'] .form-group textarea {
+  background: var(--news-paper);
+  border: 0;
+  border-bottom: 1px solid var(--news-ink);
+  border-radius: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  padding: 0.45rem 0;
+}
+
+html[data-design='newspaper'] .form-group input:focus,
+html[data-design='newspaper'] .form-group textarea:focus {
+  outline: 0;
+  border-bottom-width: 2px;
+  box-shadow: none;
+}
+
+html[data-design='newspaper'] .footer {
+  border-top: 3px double var(--news-ink);
+  border-bottom: 3px double var(--news-ink);
+  padding: 2rem 0;
+  text-align: center;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-variant: small-caps;
+  letter-spacing: 0.15em;
+  color: var(--news-muted);
+}
+
+html[data-design='newspaper'] .hero-grid,
+html[data-design='newspaper'] .hero-gradient {
+  display: none;
+}

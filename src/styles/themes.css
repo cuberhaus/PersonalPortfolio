@@ -205,3 +205,159 @@ html[data-theme='solarized-light'] {
   --border-color: #d6ccb3;
   --border-color-hover: #c9bfa5;
 }
+
+/* ── Gruvbox Dark ────────────────────────────────────────── */
+html[data-theme='gruvbox-dark'] {
+  color-scheme: dark;
+  --bg-primary: #1d2021;
+  --bg-primary-rgb: 29, 32, 33;
+  --bg-secondary: #282828;
+  --bg-card: #32302f;
+  --bg-card-hover: #3c3836;
+  --bg-nav: rgba(29, 32, 33, 0.6);
+  --bg-nav-scrolled: rgba(29, 32, 33, 0.85);
+
+  --text-primary: #ebdbb2;
+  --text-secondary: #d5c4a1;
+  --text-muted: #a89984;
+
+  --accent-start: #fe8019;
+  --accent-end: #fb4934;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+
+  --glow-color: rgba(254, 128, 25, 0.18);
+  --glow-color-strong: rgba(254, 128, 25, 0.4);
+
+  --border-color: #504945;
+  --border-color-hover: #665c54;
+}
+
+/* ── Synthwave ───────────────────────────────────────────── */
+html[data-theme='synthwave'] {
+  color-scheme: dark;
+  --bg-primary: #0b0221;
+  --bg-primary-rgb: 11, 2, 33;
+  --bg-secondary: #150936;
+  --bg-card: #1d1046;
+  --bg-card-hover: #2a1866;
+  --bg-nav: rgba(11, 2, 33, 0.6);
+  --bg-nav-scrolled: rgba(11, 2, 33, 0.88);
+
+  --text-primary: #f9f7ff;
+  --text-secondary: #d0bdff;
+  --text-muted: #8f7bcf;
+
+  --accent-start: #ff2a6d;
+  --accent-end: #0ff0fc;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+
+  --glow-color: rgba(255, 42, 109, 0.22);
+  --glow-color-strong: rgba(255, 42, 109, 0.5);
+
+  --border-color: #3a2780;
+  --border-color-hover: #5a3dd6;
+}
+
+/* ── Phosphor Green (CRT) ────────────────────────────────── */
+html[data-theme='phosphor'] {
+  color-scheme: dark;
+  --bg-primary: #0a140c;
+  --bg-primary-rgb: 10, 20, 12;
+  --bg-secondary: #0d1b10;
+  --bg-card: #112317;
+  --bg-card-hover: #19331f;
+  --bg-nav: rgba(10, 20, 12, 0.6);
+  --bg-nav-scrolled: rgba(10, 20, 12, 0.9);
+
+  --text-primary: #9fffb4;
+  --text-secondary: #6bd688;
+  --text-muted: #3d8a4d;
+
+  --accent-start: #33ff66;
+  --accent-end: #00cc44;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+
+  --glow-color: rgba(51, 255, 102, 0.22);
+  --glow-color-strong: rgba(51, 255, 102, 0.5);
+
+  --border-color: #1e4a2b;
+  --border-color-hover: #2d6b42;
+}
+
+/* ── Amber CRT ───────────────────────────────────────────── */
+html[data-theme='amber-crt'] {
+  color-scheme: dark;
+  --bg-primary: #140a00;
+  --bg-primary-rgb: 20, 10, 0;
+  --bg-secondary: #1a0f02;
+  --bg-card: #211703;
+  --bg-card-hover: #302205;
+  --bg-nav: rgba(20, 10, 0, 0.6);
+  --bg-nav-scrolled: rgba(20, 10, 0, 0.9);
+
+  --text-primary: #ffd390;
+  --text-secondary: #e5a64b;
+  --text-muted: #a87620;
+
+  --accent-start: #ffb000;
+  --accent-end: #ff8c00;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+
+  --glow-color: rgba(255, 176, 0, 0.22);
+  --glow-color-strong: rgba(255, 176, 0, 0.5);
+
+  --border-color: #4a3100;
+  --border-color-hover: #6b4700;
+}
+
+/* ── Sepia ──────────────────────────────────────────────── */
+html[data-theme='sepia'] {
+  color-scheme: light;
+  --bg-primary: #f4ecd8;
+  --bg-primary-rgb: 244, 236, 216;
+  --bg-secondary: #ebe1c8;
+  --bg-card: #faf4e3;
+  --bg-card-hover: #ebe1c8;
+  --bg-nav: rgba(244, 236, 216, 0.6);
+  --bg-nav-scrolled: rgba(244, 236, 216, 0.95);
+
+  --text-primary: #3d2b1f;
+  --text-secondary: #5a3f2b;
+  --text-muted: #8a6f50;
+
+  --accent-start: #a85a2e;
+  --accent-end: #7a4522;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+
+  --glow-color: rgba(168, 90, 46, 0.15);
+  --glow-color-strong: rgba(168, 90, 46, 0.35);
+
+  --border-color: #d8c8a8;
+  --border-color-hover: #c8b794;
+}
+
+/* ── Paper ───────────────────────────────────────────────── */
+html[data-theme='paper'] {
+  color-scheme: light;
+  --bg-primary: #fafaf5;
+  --bg-primary-rgb: 250, 250, 245;
+  --bg-secondary: #f0f0ea;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f0f0ea;
+  --bg-nav: rgba(250, 250, 245, 0.6);
+  --bg-nav-scrolled: rgba(250, 250, 245, 0.95);
+
+  --text-primary: #0f0f0f;
+  --text-secondary: #3a3a3a;
+  --text-muted: #7a7a7a;
+
+  --accent-start: #cc4236;
+  --accent-end: #2a2a2a;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+
+  --glow-color: rgba(204, 66, 54, 0.12);
+  --glow-color-strong: rgba(204, 66, 54, 0.28);
+
+  --border-color: #e0e0dd;
+  --border-color-hover: #c8c8c5;
+}
