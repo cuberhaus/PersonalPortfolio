@@ -95,11 +95,13 @@ const links = [
   }
 
   .nav-link:hover,
+  .nav-link:focus-visible,
   .nav-link.active {
     color: var(--text-primary);
   }
 
   .nav-link:hover::after,
+  .nav-link:focus-visible::after,
   .nav-link.active::after {
     width: 100%;
   }
@@ -175,7 +177,7 @@ const links = [
       pointer-events: none;
       transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s var(--transition-base);
     }
-    
+
     .nav-theme-toggle {
       margin-top: 1rem;
       padding-top: 1rem;

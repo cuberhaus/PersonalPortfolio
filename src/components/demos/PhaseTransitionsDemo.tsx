@@ -117,7 +117,7 @@ function GraphVis({ graph, comps, t }: { graph: SimpleGraph; comps: number[][]; 
       for (const v of comp) map[v] = c;
     });
     return map;
-  }, [graph, comps]);
+  }, [graph.n, comps]);
 
   if (graph.n === 0) {
     return (

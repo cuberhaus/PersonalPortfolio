@@ -75,7 +75,7 @@ const SKILL_CONTEXT: Record<string, string> = {
                 ? `${loc.lines} lines · ${loc.pct}%`
                 : ctx || null;
               return tooltip ? (
-                <span class="skill-pill has-tooltip" data-tooltip={tooltip}>{item}<span class="skill-bracket-close">]</span></span>
+                <span class="skill-pill has-tooltip" data-tooltip={tooltip} tabindex="0" role="note" aria-label={`${item}: ${tooltip}`}>{item}<span class="skill-bracket-close">]</span></span>
               ) : (
                 <span class="skill-pill">{item}</span>
               );
@@ -167,7 +167,8 @@ const SKILL_CONTEXT: Record<string, string> = {
     z-index: 10;
   }
 
-  .has-tooltip:hover::after {
+  .has-tooltip:hover::after,
+  .has-tooltip:focus-visible::after {
     opacity: 1;
     transform: translateX(-50%) scale(1);
   }
