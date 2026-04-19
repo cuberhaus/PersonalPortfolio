@@ -130,7 +130,6 @@ const styles = {
     color: "var(--text-muted)",
   },
 } as const;
-} as const;
 
 const ProductIcon = () => (
   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

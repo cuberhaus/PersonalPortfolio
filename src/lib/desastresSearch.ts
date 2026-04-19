@@ -156,6 +156,11 @@ export type HillClimbResult = {
   log: string[];
 };
 
+/**
+ * Steepest-descent hill climbing over SWAP neighborhood.
+ * Evaluates all O(n^2 * m^2) neighbors per iteration where n = total groups
+ * and m = number of helicopters. Fine for the toy demo (7 groups, 3 helis).
+ */
 export function hillClimbing(
   board: Board,
   initial: Assignment,
