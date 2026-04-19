@@ -1037,6 +1037,10 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
         close();
       }
     });
+
+    document.addEventListener('open-theme-modal', () => {
+      if (!modal.classList.contains('open')) open();
+    });
   };
 
   initThemeModal();
