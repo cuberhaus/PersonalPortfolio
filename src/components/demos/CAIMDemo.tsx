@@ -1,15 +1,11 @@
 import { useState, lazy, Suspense } from 'react';
 
-type Lang = 'en' | 'es' | 'ca';
+import { T, type DemoTranslations } from "../../i18n/demos/caimdemo";
+
+type Lang = "en" | "es" | "ca";
 
 const PageRankTab = lazy(() => import('./caim/PageRankTab'));
 const ZipfTab = lazy(() => import('./caim/ZipfTab'));
-
-const T = {
-  en: { pagerank: 'PageRank', zipf: "Zipf's Law", loading: 'Loading…' },
-  es: { pagerank: 'PageRank', zipf: 'Ley de Zipf', loading: 'Cargando…' },
-  ca: { pagerank: 'PageRank', zipf: 'Llei de Zipf', loading: 'Carregant…' },
-};
 
 type Tab = 'pagerank' | 'zipf';
 

@@ -1,58 +1,9 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { computeMandelbrot, jacobiStep, initHeatGrid, computePi } from '../../lib/par-kernels';
 
-type Lang = 'en' | 'es' | 'ca';
+import { T, type DemoTranslations } from "../../i18n/demos/par-demo";
 
-const T = {
-  en: {
-    mandelbrotTitle: 'Mandelbrot Set',
-    mandelbrotDesc: 'Interactive fractal — scroll to zoom, drag to pan',
-    heatTitle: 'Heat Equation',
-    heatDesc: 'Jacobi relaxation on a 2D grid — top boundary fixed at 1.0',
-    piTitle: 'Pi Convergence',
-    piDesc: 'Numerical integration of 4/(1+x²) over [0,1]',
-    iter: 'Iterations',
-    steps: 'Steps',
-    residual: 'Residual',
-    play: 'Play',
-    pause: 'Pause',
-    step: 'Step',
-    reset: 'Reset',
-    compute: 'Compute',
-  },
-  es: {
-    mandelbrotTitle: 'Conjunto de Mandelbrot',
-    mandelbrotDesc: 'Fractal interactivo — scroll para zoom, arrastra para mover',
-    heatTitle: 'Ecuación del Calor',
-    heatDesc: 'Relajación Jacobi en una cuadrícula 2D — borde superior fijo a 1.0',
-    piTitle: 'Convergencia de Pi',
-    piDesc: 'Integración numérica de 4/(1+x²) sobre [0,1]',
-    iter: 'Iteraciones',
-    steps: 'Pasos',
-    residual: 'Residuo',
-    play: 'Iniciar',
-    pause: 'Pausar',
-    step: 'Paso',
-    reset: 'Reiniciar',
-    compute: 'Calcular',
-  },
-  ca: {
-    mandelbrotTitle: 'Conjunt de Mandelbrot',
-    mandelbrotDesc: 'Fractal interactiu — scroll per zoom, arrossega per moure',
-    heatTitle: 'Equació de la Calor',
-    heatDesc: 'Relaxació Jacobi en una graella 2D — vora superior fixa a 1.0',
-    piTitle: 'Convergència de Pi',
-    piDesc: 'Integració numèrica de 4/(1+x²) sobre [0,1]',
-    iter: 'Iteracions',
-    steps: 'Passos',
-    residual: 'Residu',
-    play: 'Inicia',
-    pause: 'Pausa',
-    step: 'Pas',
-    reset: 'Reinicia',
-    compute: 'Calcula',
-  },
-};
+type Lang = "en" | "es" | "ca";
 
 /* ─── Color helpers ─── */
 

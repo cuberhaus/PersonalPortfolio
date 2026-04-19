@@ -6,62 +6,9 @@ import { line } from 'd3-shape';
 import { feature } from 'topojson-client';
 import { getAirports, ROUTES_ADJ, type Airport } from '../../../lib/caim/airports-data';
 import { computePageRank, type PageRankResult, type InitStrategy } from '../../../lib/caim/pagerank';
+import { T } from '../../../i18n/demos/caim-pagerank';
 
 type Lang = 'en' | 'es' | 'ca';
-
-const T = {
-  en: {
-    damping: 'Damping factor',
-    initStrategy: 'Init strategy',
-    run: 'Run PageRank',
-    running: 'Computing…',
-    iterations: 'Iterations',
-    time: 'Time',
-    convergence: 'Convergence',
-    rankings: 'Top airports',
-    rank: 'Rank',
-    code: 'Code',
-    name: 'Name',
-    score: 'Score',
-    uniform: 'Uniform (1/n)',
-    one: 'All on first',
-    square: 'Square root',
-  },
-  es: {
-    damping: 'Factor de amortiguación',
-    initStrategy: 'Estrategia inicial',
-    run: 'Ejecutar PageRank',
-    running: 'Calculando…',
-    iterations: 'Iteraciones',
-    time: 'Tiempo',
-    convergence: 'Convergencia',
-    rankings: 'Aeropuertos principales',
-    rank: 'Pos.',
-    code: 'Código',
-    name: 'Nombre',
-    score: 'Puntuación',
-    uniform: 'Uniforme (1/n)',
-    one: 'Todo en primero',
-    square: 'Raíz cuadrada',
-  },
-  ca: {
-    damping: "Factor d'esmorteïment",
-    initStrategy: 'Estratègia inicial',
-    run: 'Executar PageRank',
-    running: 'Calculant…',
-    iterations: 'Iteracions',
-    time: 'Temps',
-    convergence: 'Convergència',
-    rankings: 'Aeroports principals',
-    rank: 'Pos.',
-    code: 'Codi',
-    name: 'Nom',
-    score: 'Puntuació',
-    uniform: 'Uniforme (1/n)',
-    one: 'Tot al primer',
-    square: 'Arrel quadrada',
-  },
-};
 
 const WORLD_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json';
 

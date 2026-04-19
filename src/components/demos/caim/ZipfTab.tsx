@@ -4,53 +4,9 @@ import { select } from 'd3-selection';
 import { line } from 'd3-shape';
 import { getCorpusData, CORPUS_LABELS, type CorpusId, type WordFreq } from '../../../lib/caim/zipf-data';
 import { fitZipf, countWords, type ZipfFitResult } from '../../../lib/caim/zipf-fit';
+import { T } from '../../../i18n/demos/caim-zipf';
 
 type Lang = 'en' | 'es' | 'ca';
-
-const T = {
-  en: {
-    corpus: 'Corpus',
-    customText: 'Custom text',
-    analyze: 'Analyze',
-    logScale: 'Log scale',
-    linearScale: 'Linear scale',
-    parameters: 'Fitted parameters',
-    words: 'Top words',
-    rank: 'Rank',
-    word: 'Word',
-    frequency: 'Frequency',
-    customPlaceholder: 'Paste text here to analyze word frequency distribution…',
-    notEnoughWords: 'Need at least 5 distinct words.',
-  },
-  es: {
-    corpus: 'Corpus',
-    customText: 'Texto personalizado',
-    analyze: 'Analizar',
-    logScale: 'Escala log',
-    linearScale: 'Escala lineal',
-    parameters: 'Parámetros ajustados',
-    words: 'Palabras principales',
-    rank: 'Pos.',
-    word: 'Palabra',
-    frequency: 'Frecuencia',
-    customPlaceholder: 'Pega texto aquí para analizar la distribución de frecuencia de palabras…',
-    notEnoughWords: 'Se necesitan al menos 5 palabras distintas.',
-  },
-  ca: {
-    corpus: 'Corpus',
-    customText: 'Text personalitzat',
-    analyze: 'Analitzar',
-    logScale: 'Escala log',
-    linearScale: 'Escala lineal',
-    parameters: 'Paràmetres ajustats',
-    words: 'Paraules principals',
-    rank: 'Pos.',
-    word: 'Paraula',
-    frequency: 'Freqüència',
-    customPlaceholder: 'Enganxa text aquí per analitzar la distribució de freqüència de paraules…',
-    notEnoughWords: 'Es necessiten almenys 5 paraules diferents.',
-  },
-};
 
 const CORPUS_IDS: CorpusId[] = ['novels', 'news', 'abstracts'];
 
