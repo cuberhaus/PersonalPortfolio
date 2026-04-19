@@ -371,7 +371,7 @@ test.describe('MPIDS demo', () => {
   test('generate creates a graph visualization', async ({ page }) => {
     await page.getByRole('button', { name: /generate|generar/i }).click();
     // SVG should render with nodes
-    const svg = page.locator('svg');
+    const svg = page.locator('svg:has(circle)');
     await expect(svg.first()).toBeVisible();
     const circles = page.locator('svg circle');
     expect(await circles.count()).toBeGreaterThan(0);
@@ -413,7 +413,7 @@ test.describe('Phase Transitions demo', () => {
 
   test('generate renders graph SVG', async ({ page }) => {
     await page.getByRole('button', { name: /generate|generar/i }).first().click();
-    const svg = page.locator('svg');
+    const svg = page.locator('svg:has(circle, line, path[d])');
     await expect(svg.first()).toBeVisible();
   });
 
@@ -436,7 +436,7 @@ test.describe('Phase Transitions demo', () => {
     await page.getByRole('button', { name: 'Geometric' }).click();
     // Geometric should be visually active
     await page.getByRole('button', { name: /generate|generar/i }).first().click();
-    const svg = page.locator('svg');
+    const svg = page.locator('svg:has(circle, line, path[d])');
     await expect(svg.first()).toBeVisible();
   });
 });
