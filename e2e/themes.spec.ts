@@ -213,7 +213,7 @@ test.describe('Ctrl+K customize modal', () => {
     await page.keyboard.press('Escape');
     const title = page.locator('section.about .section-title').first();
     const pseudoContent = await title.evaluate(el => getComputedStyle(el, '::before').content);
-    expect(pseudoContent).toMatch(/I{1,3}|IV|V/);
+    expect(pseudoContent).toMatch(/upper-roman/);
   });
 
   test('Wabi-sabi applies Shippori Mincho (or serif fallback) to the hero name', async ({ page }) => {
