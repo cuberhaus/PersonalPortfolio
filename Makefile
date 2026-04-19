@@ -24,8 +24,9 @@ build: ## Build for production
 preview: ## Preview the production build locally
 	npm run preview
 
-test: ## Run Vitest test suite (portfolio only)
+test: ## Run Vitest unit tests and Playwright e2e tests (portfolio only)
 	npm test
+	npx playwright test
 
 test-all: test ## Run ALL test suites (portfolio + every demo backend)
 	@echo ""
@@ -37,6 +38,7 @@ test-all: test ## Run ALL test suites (portfolio + every demo backend)
 	cd "$(PARENT)/bitsXlaMarato/web/backend" && $(SYS_PYTHON) -m pytest test_app.py -v
 	cd "$(PARENT)/SBC_IA/web"     && $(SYS_PYTHON) -m pytest backend/test_app.py -v
 	cd "$(PARENT)/TFG/backend"    && $(SYS_PYTHON) -m pytest test_main.py -v
+	cd "planner-api"              && $(SYS_PYTHON) -m pytest tests/ -v
 	@echo ""
 	@echo "=== Django (Draculin) ==="
 	cd "$(PARENT)/Draculin-Backend" && $(SYS_PYTHON) manage.py test dracu -v2

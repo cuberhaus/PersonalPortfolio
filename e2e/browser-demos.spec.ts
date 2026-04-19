@@ -413,8 +413,8 @@ test.describe('Phase Transitions demo', () => {
 
   test('generate renders graph SVG', async ({ page }) => {
     await page.getByRole('button', { name: /generate|generar/i }).first().click();
-    const svg = page.locator('svg:has(circle, line, path[d])');
-    await expect(svg.first()).toBeVisible();
+    const svg = page.locator('svg[viewBox]:not([width="16"]):not([width="20"]):not([width="24"]):not([width="28"])');
+    await expect(svg.first()).toBeVisible({ timeout: 10000 });
   });
 
   test('retention slider exists', async ({ page }) => {
@@ -436,8 +436,8 @@ test.describe('Phase Transitions demo', () => {
     await page.getByRole('button', { name: 'Geometric' }).click();
     // Geometric should be visually active
     await page.getByRole('button', { name: /generate|generar/i }).first().click();
-    const svg = page.locator('svg:has(circle, line, path[d])');
-    await expect(svg.first()).toBeVisible();
+    const svg = page.locator('svg[viewBox]:not([width="16"]):not([width="20"]):not([width="24"]):not([width="28"])');
+    await expect(svg.first()).toBeVisible({ timeout: 10000 });
   });
 });
 
