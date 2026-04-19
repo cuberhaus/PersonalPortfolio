@@ -98,8 +98,16 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   <div class="theme-modal-backdrop"></div>
   <div class="theme-modal-panel" role="dialog" aria-modal="true" data-i18n-aria-label>
     <div class="theme-modal-header">
-      <span class="theme-modal-title" data-i18n-title></span>
-      <kbd class="theme-modal-hint">Ctrl+K</kbd>
+      <div class="theme-modal-title-group">
+        <span class="theme-modal-title" data-i18n-title></span>
+        <kbd class="theme-modal-hint">Ctrl+K</kbd>
+      </div>
+      <button class="theme-modal-close" aria-label="Close" data-i18n-close-aria>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
 
     <div class="theme-modal-group">
@@ -222,6 +230,31 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     margin-bottom: 1rem;
   }
 
+  .theme-modal-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .theme-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .theme-modal-close:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
   .theme-modal-title {
     font-size: 0.95rem;
     font-weight: 700;
@@ -236,6 +269,12 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     padding: 0.15rem 0.4rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-color);
+  }
+
+  @media (max-width: 640px) {
+    .theme-modal-hint {
+      display: none;
+    }
   }
 
   .theme-modal-group + .theme-modal-group {
@@ -1004,6 +1043,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     };
 
     modal.querySelector('.theme-modal-backdrop')?.addEventListener('click', close);
+    modal.querySelector('.theme-modal-close')?.addEventListener('click', close);
 
     modal.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
