@@ -138,11 +138,16 @@ html[data-design='editorial'] .nav-logo {
   font-style: italic;
 }
 
+html[data-design='editorial'] .nav-links {
+  gap: 1.25rem;
+}
+
 html[data-design='editorial'] .nav-link {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 html[data-design='editorial'] .hero-cta,
@@ -569,8 +574,13 @@ html[data-design='pixel'] .navbar {
   border-bottom: 3px solid var(--text-primary);
 }
 
+html[data-design='pixel'] .nav-links {
+  gap: 1rem;
+}
+
 html[data-design='pixel'] .nav-link {
-  font-size: 0.65rem;
+  font-size: 0.55rem;
+  white-space: nowrap;
 }
 
 html[data-design='pixel'] .hero-cta,
@@ -791,12 +801,27 @@ html[data-design='terminal'] .work-tags li::before {
   margin-right: 0.15rem;
 }
 
-html[data-design='terminal'] .skill-pill::after,
+html[data-design='terminal'] .skill-pill:not(.has-tooltip)::after,
 html[data-design='terminal'] .demo-tags li::after,
 html[data-design='terminal'] .work-tags li::after {
   content: ']';
   color: var(--accent-start);
   margin-left: 0.15rem;
+}
+
+/* Tooltip pills already use ::after for the tooltip popover,
+   so inject the closing bracket via a data-attribute rendered inline. */
+html[data-design='terminal'] .skill-pill.has-tooltip .skill-bracket-close {
+  color: var(--accent-start);
+  margin-left: 0.15rem;
+}
+
+/* Hide bracket span in non-terminal designs */
+.skill-bracket-close {
+  display: none;
+}
+html[data-design='terminal'] .skill-bracket-close {
+  display: inline;
 }
 
 html[data-design='terminal'] .navbar {
@@ -2030,23 +2055,24 @@ html[data-design='academic'] {
   --radius-lg: 0;
   --border-width: 1px;
   --shadow-card: none;
-  --section-padding: 4.5rem 0;
-  --container-width: 820px;
+  --section-padding: 5.5rem 0;
+  --container-width: 880px;
   counter-reset: acad-section;
 }
 
 html[data-design='academic'] body {
   font-size: 1.15rem;
-  line-height: 1.7;
+  line-height: 1.75;
   letter-spacing: 0.005em;
-  hyphens: auto;
-  -webkit-hyphens: auto;
   background: var(--bg-primary);
 }
 
+/* Justify + hyphenate only body copy, never UI chrome. */
 html[data-design='academic'] p {
   text-align: justify;
   text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 html[data-design='academic'] h1,
@@ -2061,12 +2087,17 @@ html[data-design='academic'] h4 {
 /* Hero as title block — centred author + affiliation */
 html[data-design='academic'] .hero {
   text-align: center;
+  min-height: auto;
+  align-items: flex-start;
+  padding-top: calc(var(--nav-height) + 4.5rem);
+  padding-bottom: 5rem;
 }
 
 html[data-design='academic'] .hero-inner,
 html[data-design='academic'] .hero-content {
   text-align: center;
   margin: 0 auto;
+  padding-top: 0;
 }
 
 html[data-design='academic'] .hero-name {
@@ -2101,18 +2132,21 @@ html[data-design='academic'] .hero-tagline {
 }
 
 html[data-design='academic'] .hero-description {
-  font-size: 1.05rem;
-  max-width: 65ch;
+  font-size: 1.1rem;
+  line-height: 1.75;
+  max-width: 62ch;
   margin-left: auto;
   margin-right: auto;
-  text-align: justify;
+  text-align: center;
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 /* Auto-numbered sections: 01. About, 02. Projects … */
 html[data-design='academic'] .section {
   counter-increment: acad-section;
   border-top: 1px solid color-mix(in oklab, var(--text-primary) 25%, transparent);
-  padding-top: 2.5rem;
+  padding-top: 3.25rem;
 }
 
 html[data-design='academic'] .section-label {
@@ -2125,10 +2159,14 @@ html[data-design='academic'] .section-label {
 
 html[data-design='academic'] .section-title {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-size: clamp(1.9rem, 3.5vw, 2.6rem);
   font-weight: 700;
   letter-spacing: -0.005em;
-  margin-bottom: 1.25rem;
+  line-height: 1.2;
+  margin-top: 0.25rem;
+  margin-bottom: 1.75rem;
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 html[data-design='academic'] .section-title::before {
@@ -2159,7 +2197,7 @@ html[data-design='academic'] .contact-form {
   border: 1px solid color-mix(in oklab, var(--text-primary) 25%, transparent);
   border-radius: 0;
   box-shadow: none;
-  padding: 1.5rem 1.75rem;
+  padding: 1.85rem 2.15rem;
 }
 
 html[data-design='academic'] .work-card h3::before,
@@ -2211,14 +2249,23 @@ html[data-design='academic'] .nav-logo {
   font-weight: 700;
   font-size: 1.15rem;
   letter-spacing: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+html[data-design='academic'] .nav-links {
+  gap: 1.25rem;
 }
 
 html[data-design='academic'] .nav-link {
   font-family: var(--font-display);
   font-variant: small-caps;
   text-transform: lowercase;
-  letter-spacing: 0.08em;
-  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  font-size: 1rem;
+  white-space: nowrap;
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 html[data-design='academic'] .hero-cta,
@@ -3308,14 +3355,20 @@ html[data-design='wabisabi'] .nav-logo {
   font-size: 1rem;
   font-weight: 400;
   letter-spacing: 0.15em;
+  margin-right: 2rem;
+}
+
+html[data-design='wabisabi'] .nav-links {
+  gap: 1.15rem;
 }
 
 html[data-design='wabisabi'] .nav-link {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
   text-transform: lowercase;
   font-weight: 400;
+  white-space: nowrap;
 }
 
 html[data-design='wabisabi'] .hero-cta,

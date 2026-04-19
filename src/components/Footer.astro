@@ -1,8 +1,27 @@
 <footer class="footer">
   <div class="container footer-inner">
     <p class="footer-copy">&copy; {new Date().getFullYear()} Pol Casacuberta</p>
+    <button class="footer-theme-btn" aria-label="Customize theme (Ctrl+K)" title="Ctrl+K">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+      <kbd>⌘K</kbd>
+    </button>
   </div>
 </footer>
+
+<script>
+  document.querySelector('.footer-theme-btn')?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('open-theme-modal'));
+  });
+  document.addEventListener('astro:page-load', () => {
+    document.querySelector('.footer-theme-btn')?.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('open-theme-modal'));
+    });
+  });
+</script>
 
 <style>
   .footer {
@@ -14,10 +33,41 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
   }
 
   .footer-copy {
     font-size: 0.85rem;
     color: var(--text-muted);
+  }
+
+  .footer-theme-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm, 6px);
+    background: var(--bg-card, transparent);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: border-color var(--transition-base), color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .footer-theme-btn:hover {
+    border-color: var(--accent-start);
+    color: var(--accent-start);
+    box-shadow: 0 0 12px var(--glow-color, rgba(99, 102, 241, 0.15));
+  }
+
+  .footer-theme-btn kbd {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.7rem;
+    padding: 0.1rem 0.3rem;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    background: var(--bg-surface, rgba(255,255,255,0.05));
+    line-height: 1;
   }
 </style>
