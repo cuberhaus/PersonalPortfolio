@@ -154,7 +154,14 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       local name="$1" url="$2" dir="$3" file="${4:-docker-compose.yml}" extra="${5:-}"
       if [[ -f "${dir}/${file}" ]]; then
         echo "==> ${name}  ${url}  (docker compose)${extra}"
-        (cd "$dir" && docker compose -f "$file" up -d 2>&1 | sed "s/^/    [${name}] /") &
+        (
+          # Free ports held by stale containers (any project name)
+          for p in $(echo "${url} ${extra}" | grep -oP '[0-9]{4,5}'); do
+            fuser -k "${p}/tcp" 2>/dev/null || true
+          done
+          cd "$dir" && docker compose -f "$file" down --remove-orphans 2>/dev/null
+          cd "$dir" && docker compose -f "$file" up -d 2>&1 | sed "s/^/    [${name}] /"
+        ) &
         DOCKER_PIDS+=($!)
       else
         echo "==> ${name} skipped (no ${dir}/${file})"
@@ -167,6 +174,8 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
       if [[ -d "${dir}" ]]; then
         echo "==> ${name}  ${url}  (docker run)"
         (
+          docker rm -f "$container" 2>/dev/null || true
+          fuser -k "${port}/tcp" 2>/dev/null || true
           docker run -d --rm -p "${port}:${port}" --name "$container" "$image" 2>/dev/null || {
             echo "    [${name}] Building image first..." >&2
             (cd "$dir" && docker build -t "$image" .) >/dev/null 2>&1 && \
