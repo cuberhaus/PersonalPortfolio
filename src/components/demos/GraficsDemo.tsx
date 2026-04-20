@@ -104,18 +104,18 @@ export default function GraficsDemo({ lang = 'en' }: { lang?: Lang }) {
 }
 
 const panelStyle: React.CSSProperties = {
-  background: '#161b22',
+  background: 'var(--bg-card)',
   borderRadius: '10px',
   padding: '1rem',
-  border: '1px solid #30363d',
+  border: '1px solid var(--border-color)',
 };
 const titleStyle: React.CSSProperties = {
-  color: '#58a6ff',
+  color: 'var(--accent-start)',
   fontSize: '1rem',
   marginBottom: '0.25rem',
 };
 const descStyle: React.CSSProperties = {
-  color: '#8b949e',
+  color: 'var(--text-secondary)',
   fontSize: '0.8rem',
   marginBottom: '0.75rem',
 };

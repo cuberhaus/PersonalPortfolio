@@ -162,7 +162,7 @@ function QuizTab({ t }: { t: typeof TRANSLATIONS.en }) {
 
   const band = scoreBand(score);
   const result = band === "mild" ? t.quizResult1 : band === "moderate" ? t.quizResult2 : t.quizResult3;
-  const resultColor = band === "mild" ? "#4ade80" : band === "moderate" ? "#facc15" : "#f87171";
+  const resultColor = band === "mild" ? "var(--accent-start)" : band === "moderate" ? "var(--accent-end)" : "var(--text-muted)";
 
   const restart = () => { setIdx(0); setScore(0); setDone(false); };
 
@@ -182,7 +182,7 @@ function QuizTab({ t }: { t: typeof TRANSLATIONS.en }) {
           </p>
           <p style={{ fontSize: "1rem", marginBottom: "2rem", lineHeight: 1.6 }}>{t.questions[idx].text}</p>
           <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
-            <button style={{ ...s.btn, background: "#ec4899", color: "var(--text-primary)", minWidth: "80px" }} onClick={() => answer(true)}>{t.yes}</button>
+            <button style={{ ...s.btn, background: "var(--accent-end)", color: "var(--text-primary)", minWidth: "80px" }} onClick={() => answer(true)}>{t.yes}</button>
             <button style={{ ...s.btn, ...s.secondaryBtn, minWidth: "80px" }} onClick={() => answer(false)}>{t.no}</button>
           </div>
         </>
@@ -239,7 +239,7 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
         <div style={s.card}>
           <h4 style={{ fontSize: "0.9rem", color: "var(--text-secondary)", marginBottom: "1rem" }}>{t.statsImpact}</h4>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-evenly", gap: "0.5rem", height: "120px" }}>
-            {[{ label: t.statsLabels.mild, val: 10, color: "#4ade80" }, { label: t.statsLabels.moderate, val: 5, color: "#facc15" }, { label: t.statsLabels.severe, val: 3, color: "#f87171" }].map((d) => (
+            {[{ label: t.statsLabels.mild, val: 10, color: "var(--accent-start)" }, { label: t.statsLabels.moderate, val: 5, color: "var(--accent-end)" }, { label: t.statsLabels.severe, val: 3, color: "var(--text-muted)" }].map((d) => (
               <div key={d.label} style={{ display: "flex", flexDirection: "column" as const, alignItems: "center", gap: "0.25rem" }}>
                 <div style={{ width: "32px", height: `${d.val * 10}px`, background: d.color, borderRadius: "3px 3px 0 0" }} title={`${d.val} users`} />
                 <span style={{ fontSize: "0.6rem", color: "var(--text-muted)", textAlign: "center" as const }}>{d.label}</span>
@@ -263,10 +263,10 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
                 key={day}
                 onClick={() => toggleDay(day)}
                 style={{
-                  background: isPeriod ? "rgba(236,72,153,0.2)" : "var(--bg-secondary)",
-                  border: isPeriod ? "1px solid #ec4899" : "1px solid var(--border-color)",
+                  background: isPeriod ? "color-mix(in srgb, var(--accent-end) 20%, transparent)" : "var(--bg-secondary)",
+                  border: isPeriod ? "1px solid var(--accent-end)" : "1px solid var(--border-color)",
                   borderRadius: "0.25rem",
-                  color: isPeriod ? "#ec4899" : "var(--text-secondary)",
+                  color: isPeriod ? "var(--accent-end)" : "var(--text-secondary)",
                   padding: "0.35rem",
                   fontSize: "0.75rem",
                   cursor: "pointer",

@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { dijkstraDemo, mergeSortDemo, bfsGridDemo } from '../../lib/fib-kernels';
 import { T } from '../../i18n/demos/fib-demo';
+import { getThemeColors, lighten } from '../../lib/demo-theme';
 
 export default function FibDemo({ lang = 'en' }: { lang?: string }) {
   const t = T[lang] || T.en;
@@ -29,17 +30,18 @@ function GraphPanel({ label }: { label: string }) {
       [110, 30], [40, 80], [180, 80], [80, 150], [160, 150],
     ];
 
-    ctx.fillStyle = '#0f0f1a';
+    const tc = getThemeColors();
+    ctx.fillStyle = tc.bgSecondary;
     ctx.fillRect(0, 0, 220, 180);
 
     for (const [u, v, w] of edges) {
       ctx.beginPath();
-      ctx.strokeStyle = '#4b5563';
+      ctx.strokeStyle = tc.borderColor;
       ctx.lineWidth = 1.5;
       ctx.moveTo(pos[u][0], pos[u][1]);
       ctx.lineTo(pos[v][0], pos[v][1]);
       ctx.stroke();
-      ctx.fillStyle = '#9ca3af';
+      ctx.fillStyle = tc.textMuted;
       ctx.font = '10px monospace';
       ctx.textAlign = 'center';
       ctx.fillText(String(w), (pos[u][0] + pos[v][0]) / 2, (pos[u][1] + pos[v][1]) / 2 - 5);
@@ -48,9 +50,9 @@ function GraphPanel({ label }: { label: string }) {
     for (let i = 0; i < 5; i++) {
       ctx.beginPath();
       ctx.arc(pos[i][0], pos[i][1], 14, 0, Math.PI * 2);
-      ctx.fillStyle = '#6d28d9';
+      ctx.fillStyle = tc.accentStart;
       ctx.fill();
-      ctx.strokeStyle = '#a78bfa';
+      ctx.strokeStyle = lighten(tc.accentStart, 0.3);
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.fillStyle = '#fff';
@@ -58,7 +60,7 @@ function GraphPanel({ label }: { label: string }) {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(String(i), pos[i][0], pos[i][1]);
-      ctx.fillStyle = '#22d3ee';
+      ctx.fillStyle = tc.accentEnd;
       ctx.font = '9px monospace';
       ctx.fillText(dist[i] === Infinity ? '∞' : String(dist[i]), pos[i][0], pos[i][1] - 22);
     }
@@ -66,8 +68,8 @@ function GraphPanel({ label }: { label: string }) {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h4 style={{ color: '#a78bfa', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
-      <canvas ref={ref} style={{ width: 220, height: 180, borderRadius: 8, border: '1px solid #2d2d44' }} />
+      <h4 style={{ color: 'var(--accent-start)', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
+      <canvas ref={ref} style={{ width: 220, height: 180, borderRadius: 8, border: '1px solid var(--border-color)' }} />
     </div>
   );
 }
@@ -86,18 +88,19 @@ function SortPanel({ label }: { label: string }) {
     const arr = [38, 72, 15, 91, 50, 23, 67, 44, 8, 83];
     const { sorted, comparisons } = mergeSortDemo(arr);
 
-    ctx.fillStyle = '#0f0f1a';
+    const tc = getThemeColors();
+    ctx.fillStyle = tc.bgSecondary;
     ctx.fillRect(0, 0, 220, 180);
 
     const barW = 220 / sorted.length;
     const max = Math.max(...sorted);
     for (let i = 0; i < sorted.length; i++) {
       const h = (sorted[i] / max) * 140;
-      ctx.fillStyle = '#22c55e';
+      ctx.fillStyle = tc.accentStart;
       ctx.fillRect(i * barW + 2, 160 - h, barW - 4, h);
     }
 
-    ctx.fillStyle = '#9ca3af';
+    ctx.fillStyle = tc.textMuted;
     ctx.font = '10px monospace';
     ctx.textAlign = 'center';
     ctx.fillText(`${comparisons} comparisons`, 110, 175);
@@ -105,8 +108,8 @@ function SortPanel({ label }: { label: string }) {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h4 style={{ color: '#a78bfa', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
-      <canvas ref={ref} style={{ width: 220, height: 180, borderRadius: 8, border: '1px solid #2d2d44' }} />
+      <h4 style={{ color: 'var(--accent-start)', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
+      <canvas ref={ref} style={{ width: 220, height: 180, borderRadius: 8, border: '1px solid var(--border-color)' }} />
     </div>
   );
 }
@@ -129,7 +132,8 @@ function MazePanel({ label }: { label: string }) {
     ];
     const { path, visited } = bfsGridDemo(rows, cols, walls);
 
-    ctx.fillStyle = '#0f0f1a';
+    const tc = getThemeColors();
+    ctx.fillStyle = tc.bgSecondary;
     ctx.fillRect(0, 0, 220, 180);
 
     const cellW = 220 / cols, cellH = 180 / rows;
@@ -139,9 +143,9 @@ function MazePanel({ label }: { label: string }) {
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const key = `${r}-${c}`;
-        if (wallSet.has(key)) ctx.fillStyle = '#374151';
-        else if (pathSet.has(key)) ctx.fillStyle = '#22c55e';
-        else ctx.fillStyle = '#1e1e2e';
+        if (wallSet.has(key)) ctx.fillStyle = tc.borderColorHover;
+        else if (pathSet.has(key)) ctx.fillStyle = tc.accentStart;
+        else ctx.fillStyle = tc.bgCard;
         ctx.fillRect(c * cellW, r * cellH, cellW - 1, cellH - 1);
       }
     }
@@ -149,8 +153,8 @@ function MazePanel({ label }: { label: string }) {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h4 style={{ color: '#a78bfa', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
-      <canvas ref={ref} style={{ width: 220, height: 180, borderRadius: 8, border: '1px solid #2d2d44' }} />
+      <h4 style={{ color: 'var(--accent-start)', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
+      <canvas ref={ref} style={{ width: 220, height: 180, borderRadius: 8, border: '1px solid var(--border-color)' }} />
     </div>
   );
 }

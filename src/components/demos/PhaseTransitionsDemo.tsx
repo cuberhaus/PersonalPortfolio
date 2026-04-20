@@ -200,17 +200,17 @@ function SweepChart({ points, t }: { points: SweepPoint[]; t: typeof TRANSLATION
         <text x={14} y={H / 2} textAnchor="middle" fill="var(--text-secondary)" fontSize={12}
           transform={`rotate(-90, 14, ${H / 2})`}>{t.pProperty}</text>
         {/* Lines */}
-        <path d={connLine} fill="none" stroke="#22c55e" strokeWidth={2.5} />
+        <path d={connLine} fill="none" stroke="var(--accent-end)" strokeWidth={2.5} />
         <path d={compLine} fill="none" stroke="var(--accent-start)" strokeWidth={2.5} />
         {/* Dots */}
         {points.map((p, i) => (
           <g key={i}>
-            <circle cx={toX(p.param)} cy={toY(p.pConnected)} r={3.5} fill="#22c55e" />
+            <circle cx={toX(p.param)} cy={toY(p.pConnected)} r={3.5} fill="var(--accent-end)" />
             <circle cx={toX(p.param)} cy={toY(p.pComplex)} r={3.5} fill="var(--accent-start)" />
           </g>
         ))}
         {/* Legend */}
-        <circle cx={W - padR - 150} cy={padT + 10} r={5} fill="#22c55e" />
+        <circle cx={W - padR - 150} cy={padT + 10} r={5} fill="var(--accent-end)" />
         <text x={W - padR - 140} y={padT + 14} fill="var(--text-primary)" fontSize={12}>{t.pConnected}</text>
         <circle cx={W - padR - 150} cy={padT + 30} r={5} fill="var(--accent-start)" />
         <text x={W - padR - 140} y={padT + 34} fill="var(--text-primary)" fontSize={12}>{t.pComplex}</text>
@@ -372,16 +372,16 @@ export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
 
         {stats && (
           <div style={{ ...s.row, marginBottom: 0 }}>
-            <span style={s.statBadge("#a78bfa")}>{t.nodesCount.replace("{0}", String(stats.nodes))}</span>
-            <span style={s.statBadge("#a78bfa")}>{t.edgesCount.replace("{0}", String(stats.edges))}</span>
-            <span style={s.statBadge(stats.connected ? "#22c55e" : "#ef4444")}>
+            <span style={s.statBadge("var(--accent-start)")}>{t.nodesCount.replace("{0}", String(stats.nodes))}</span>
+            <span style={s.statBadge("var(--accent-start)")}>{t.edgesCount.replace("{0}", String(stats.edges))}</span>
+            <span style={s.statBadge(stats.connected ? "var(--accent-start)" : "var(--accent-end)")}>
               {stats.connected ? t.connected : t.components.replace("{0}", String(stats.components))}
             </span>
-            <span style={s.statBadge(stats.complex ? "var(--accent-start)" : "#f59e0b")}>
+            <span style={s.statBadge(stats.complex ? "var(--accent-start)" : "var(--accent-end)")}>
               {stats.complex ? t.allComplex : t.notAllComplex}
             </span>
             {!stats.connected && (
-              <span style={s.statBadge("#06b6d4")}>{t.largest.replace("{0}", String(stats.largestComponent))}</span>
+              <span style={s.statBadge("var(--accent-end)")}>{t.largest.replace("{0}", String(stats.largestComponent))}</span>
             )}
           </div>
         )}

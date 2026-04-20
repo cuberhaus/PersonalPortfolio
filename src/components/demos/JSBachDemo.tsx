@@ -63,7 +63,7 @@ const styles = {
     color: "var(--text-secondary)",
   },
   error: {
-    color: "#ef4444",
+    color: "var(--accent-end)",
     background: "rgba(239, 68, 68, 0.1)",
     border: "1px solid rgba(239, 68, 68, 0.2)",
     borderRadius: "0.5rem",

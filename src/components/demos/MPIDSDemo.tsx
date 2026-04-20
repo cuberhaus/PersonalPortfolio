@@ -82,8 +82,8 @@ const s = {
 
 const COLORS = {
   inSet: "var(--accent-start)",
-  dominated: "#22c55e",
-  undominated: "#ef4444",
+  dominated: "var(--accent-end)",
+  undominated: "var(--text-muted)",
   edge: "var(--border-color)",
   edgeHighlight: "var(--glow-color-strong)",
 };
@@ -236,7 +236,7 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
       </div>
 
       {loadError && (
-        <div style={{ padding: "0.5rem 1rem", marginBottom: "1rem", borderRadius: 8, background: "#ef444415", border: "1px solid #ef444430", color: "#ef4444", fontSize: "0.85rem" }}>
+        <div style={{ padding: "0.5rem 1rem", marginBottom: "1rem", borderRadius: 8, background: "color-mix(in srgb, var(--accent-end) 8%, transparent)", border: "1px solid color-mix(in srgb, var(--accent-end) 19%, transparent)", color: "var(--accent-end)", fontSize: "0.85rem" }}>
           {loadError}
         </div>
       )}
@@ -302,7 +302,7 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
             <span style={s.statBadge(isValid ? COLORS.dominated : COLORS.undominated)}>
               {isValid ? t.validDom : t.invalidDom}
             </span>
-            <span style={s.statBadge("#a78bfa")}>{result.timeMs.toFixed(1)} ms</span>
+            <span style={s.statBadge("var(--accent-start)")}>{result.timeMs.toFixed(1)} ms</span>
           </div>
         )}
       </div>
@@ -336,10 +336,10 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
                 if (result) {
                   if (result.set.has(i)) {
                     fill = COLORS.inSet;
-                    stroke = "#818cf8";
+                    stroke = "var(--accent-start)";
                   } else if (domInfo) {
                     fill = domInfo[i].dominated ? COLORS.dominated : COLORS.undominated;
-                    stroke = domInfo[i].dominated ? "#4ade80" : "#f87171";
+                    stroke = domInfo[i].dominated ? "var(--accent-end)" : "var(--text-muted)";
                   }
                 }
                 const isHovered = tooltip?.node === i;

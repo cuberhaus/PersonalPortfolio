@@ -69,8 +69,8 @@ const styles = {
     color: "var(--text-secondary)",
   },
   dangerBtn: {
-    background: "rgba(239, 68, 68, 0.1)",
-    color: "#ef4444",
+    background: "color-mix(in srgb, var(--accent-end) 10%, transparent)",
+    color: "var(--accent-end)",
   },
   tag: {
     display: "inline-block",
@@ -292,7 +292,7 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
                           transition: "color 0.15s",
                         }}
                         title="Remove species"
-                        onMouseOver={(e) => (e.currentTarget.style.color = "#f87171")}
+                        onMouseOver={(e) => (e.currentTarget.style.color = "var(--accent-end)")}
                         onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
                       >
                         ×

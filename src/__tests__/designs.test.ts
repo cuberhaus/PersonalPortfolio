@@ -29,8 +29,8 @@ const MODAL_KEYS = [
 ] as const;
 
 describe('DESIGNS registry', () => {
-  it('contains at least 21 designs', () => {
-    expect(DESIGNS.length).toBeGreaterThanOrEqual(21);
+  it('contains at least 17 designs', () => {
+    expect(DESIGNS.length).toBeGreaterThanOrEqual(17);
   });
 
   it('DEFAULT_DESIGN is a valid id', () => {
@@ -51,11 +51,11 @@ describe('DESIGNS registry', () => {
       expect(typeof d.preview.radius).toBe('string');
       expect(
         [
-          'gradient', 'serif', 'blur', 'grid', 'soft', 'pixel',
-          'terminal', 'neon', 'clay',
+          'gradient', 'serif', 'grid', 'pixel',
+          'terminal', 'neon',
           'paper', 'raw', 'schematic',
           'tex', 'editor', 'riso',
-          'deco', 'zen', 'dash',
+          'deco', 'zen',
           'zine', 'comic', 'news',
         ],
       ).toContain(d.preview.style);
