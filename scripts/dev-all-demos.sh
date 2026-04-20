@@ -12,13 +12,17 @@ set -euo pipefail
 SKIP_DOCKER=0
 SKIP_PLANNER=0
 STOP_MODE=0
+LIST_MODE=0
+HEALTH_MODE=0
 for arg in "${@:-}"; do
   case "$arg" in
     --stop) STOP_MODE=1 ;;
+    --list) LIST_MODE=1 ;;
+    --health) HEALTH_MODE=1 ;;
     --skip-docker) SKIP_DOCKER=1 ;;
     --skip-planner) SKIP_PLANNER=1 ;;
     --help|-h)
-      echo "Usage: $0 [--stop] [--skip-docker] [--skip-planner]"
+      echo "Usage: $0 [--stop] [--list] [--health] [--skip-docker] [--skip-planner]"
       exit 0
       ;;
   esac
@@ -44,43 +48,78 @@ ROB_DIR="$(cd "$PORTFOLIO/../ROB" 2>/dev/null && pwd)" || ROB_DIR=""
 FIB_DIR="$(cd "$PORTFOLIO/../fib" 2>/dev/null && pwd)" || FIB_DIR=""
 GRAFICS_DIR="$(cd "$PORTFOLIO/../fib/G/web" 2>/dev/null && pwd)" || GRAFICS_DIR=""
 
-# ── Single source of truth: all Docker services ──────────────────────────
-# Format: "DIR COMPOSE_FILE" for compose, or "run:CONTAINER:IMAGE:PORT:DIR" for docker-run
-COMPOSE_SERVICES=(
-  "${TENDA_DIR}    docker/docker-compose.yml"
-  "${DRAC_DIR}     docker-compose.yml"
-  "${TFG_DIR}      docker-compose.yml"
-  "${BITSX_DIR}    docker-compose.yml"
-  "${DESASTRES_DIR} docker-compose.yml"
-  "${MPIDS_DIR}    docker-compose.yml"
-  "${PHASE_DIR}    docker-compose.yml"
-  "${CAIM_DIR}     docker-compose.yml"
-  "${JOCEDA_DIR}   docker-compose.yml"
-  "${SBCIA_DIR}    docker-compose.yml"
-  "${PAR_DIR}      docker-compose.yml"
-  "${ROB_DIR}      docker-compose.yml"
-  "${FIB_DIR}      docker-compose.yml"
-  "${GRAFICS_DIR}  docker-compose.yml"
+# ── Single source of truth: all services (name|port|type|dir|compose-file|extra) ──
+# type: compose, run, process
+# "extra" carries display notes like "(GPU)" or "(Flutter) API :8889"
+SERVICE_REGISTRY=(
+  "Tenda Online|8888|compose|${TENDA_DIR}|docker/docker-compose.yml|"
+  "Draculin|8890|compose|${DRAC_DIR}|docker-compose.yml|(Flutter) API :8889"
+  "TFG|8082|compose|${TFG_DIR}|docker-compose.yml|"
+  "bitsXlaMarato|8001|compose|${BITSX_DIR}|docker-compose.yml|(GPU)"
+  "DesastresIA|8083|compose|${DESASTRES_DIR}|docker-compose.yml|"
+  "MPIDS|8084|compose|${MPIDS_DIR}|docker-compose.yml|"
+  "PhaseTransitions|8085|compose|${PHASE_DIR}|docker-compose.yml|"
+  "CAIM|8086|compose|${CAIM_DIR}|docker-compose.yml|"
+  "JocEDA|8087|compose|${JOCEDA_DIR}|docker-compose.yml|"
+  "SBC_IA|8088|compose|${SBCIA_DIR}|docker-compose.yml|"
+  "PAR|8089|compose|${PAR_DIR}|docker-compose.yml|"
+  "ROB|8092|compose|${ROB_DIR}|docker-compose.yml|"
+  "FIB|8090|compose|${FIB_DIR}|docker-compose.yml|"
+  "Grafics|8093|compose|${GRAFICS_DIR}|docker-compose.yml|"
+  "pracpro2|8000|run|${PRO2_DIR}|pracpro2|portfolio-pro2"
+  "Planificacion|3000|run|${PLANIF_DIR}|practica-planificacion|portfolio-planif"
+  "PROP|8081|process|||Spring Boot"
+  "planner-api|8765|process|||ENHSP"
 )
-RUN_CONTAINERS=( "portfolio-pro2" "portfolio-planif" )
+
+# ── List mode: print "name:port" pairs (consumed by Makefile) ────────────
+if [[ "$STOP_MODE" == 0 ]] && [[ "${LIST_MODE:-0}" == 1 ]]; then
+  for entry in "${SERVICE_REGISTRY[@]}"; do
+    IFS='|' read -r name port type dir file extra <<< "$entry"
+    printf "%-18s :%s  (%s)%s\n" "$name" "$port" "$type" "${extra:+ $extra}"
+  done
+  exit 0
+fi
+
+# ── Health mode: curl each service ───────────────────────────────────────
+if [[ "${HEALTH_MODE:-0}" == 1 ]]; then
+  echo "Checking health of demo backends..."
+  failed=0
+  for entry in "${SERVICE_REGISTRY[@]}"; do
+    IFS='|' read -r name port type dir file extra <<< "$entry"
+    if curl -s --connect-timeout 2 "http://localhost:${port}/" >/dev/null 2>&1; then
+      printf "\033[32m[OK]\033[0m   %-18s (port %s)\n" "$name" "$port"
+    else
+      printf "\033[31m[FAIL]\033[0m %-18s (port %s)\n" "$name" "$port"
+      failed=1
+    fi
+  done
+  if [ $failed -eq 1 ]; then echo -e "\nSome services appear to be down."; exit 1
+  else echo -e "\nAll services are up and running!"; fi
+  exit 0
+fi
 
 # ── Stop mode: tear down everything in parallel, then exit ───────────────
 if [[ "$STOP_MODE" == 1 ]]; then
   echo "Stopping portfolio demo services..."
   (
-    for entry in "${COMPOSE_SERVICES[@]}"; do
-      dir=$(echo "$entry" | awk '{print $1}')
-      file=$(echo "$entry" | awk '{print $2}')
-      [[ -f "${dir}/${file}" ]] && \
-        (cd "$dir" && docker compose -f "$file" down 2>/dev/null) &
-    done
-    for c in "${RUN_CONTAINERS[@]}"; do
-      docker rm -f "$c" 2>/dev/null &
+    for entry in "${SERVICE_REGISTRY[@]}"; do
+      IFS='|' read -r name port type dir file extra <<< "$entry"
+      case "$type" in
+        compose)
+          [[ -f "${dir}/${file}" ]] && \
+            (cd "$dir" && docker compose -f "$file" down 2>/dev/null) &
+          ;;
+        run)
+          docker rm -f "$extra" 2>/dev/null &  # extra = container name for run type
+          ;;
+        process)
+          fuser -k "${port}/tcp" 2>/dev/null &
+          ;;
+      esac
     done
     wait
   )
-  fuser -k 8081/tcp 2>/dev/null || true
-  fuser -k 8765/tcp 2>/dev/null || true
   echo "Done."
   exit 0
 fi
@@ -104,16 +143,19 @@ cleanup() {
     wait "$PROP_PID" 2>/dev/null || true
     fuser -k 8081/tcp 2>/dev/null || true
   fi
-  # Stop all compose stacks and run containers in parallel
+  # Stop all docker services in parallel
   (
-    for entry in "${COMPOSE_SERVICES[@]}"; do
-      dir=$(echo "$entry" | awk '{print $1}')
-      file=$(echo "$entry" | awk '{print $2}')
-      [[ -f "${dir}/${file}" ]] && \
-        (cd "$dir" && docker compose -f "$file" down) >/dev/null 2>&1 &
-    done
-    for c in "${RUN_CONTAINERS[@]}"; do
-      docker rm -f "$c" >/dev/null 2>&1 &
+    for entry in "${SERVICE_REGISTRY[@]}"; do
+      IFS='|' read -r name port type dir file extra <<< "$entry"
+      case "$type" in
+        compose)
+          [[ -f "${dir}/${file}" ]] && \
+            (cd "$dir" && docker compose -f "$file" down) >/dev/null 2>&1 &
+          ;;
+        run)
+          docker rm -f "$extra" >/dev/null 2>&1 &
+          ;;
+      esac
     done
     wait
   )

@@ -22,18 +22,7 @@ stop: ## Stop all demo backend containers/services
 	@bash scripts/dev-all-demos.sh --stop
 
 health: ## Check if all demo backends are responding
-	@echo "Checking health of demo backends..."
-	@failed=0; \
-	for svc in "TFG:8082" "bitsXlaMarato:8001" "pracpro2:8000" "Planificacion:3000" "Tenda:8888" "Draculin:8890" "DesastresIA:8083" "MPIDS:8084" "PhaseTransitions:8085" "CAIM:8086" "JocEDA:8087" "SBC_IA:8088" "PROP:8081" "planner-api:8765"; do \
-		name=$${svc%%:*}; port=$${svc##*:}; \
-		if curl -s --connect-timeout 2 "http://localhost:$$port/" >/dev/null 2>&1; then \
-			printf "\033[32m[OK]\033[0m   %-18s (port %s)\n" "$$name" "$$port"; \
-		else \
-			printf "\033[31m[FAIL]\033[0m %-18s (port %s)\n" "$$name" "$$port"; \
-			failed=1; \
-		fi; \
-	done; \
-	if [ $$failed -eq 1 ]; then echo "\nSome services appear to be down."; exit 1; else echo "\nAll services are up and running!"; fi
+	@bash scripts/dev-all-demos.sh --health
 
 build: ## Build Astro site for production and all demo Docker images
 	+@$(MAKE) --no-print-directory $(DEMO_TARGETS) -j$$(nproc) --output-sync=target
@@ -91,20 +80,7 @@ help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 	@echo "Demo backends started by dev-all:"
-	@echo "  TFG              :8082  (docker compose)"
-	@echo "  bitsXlaMarato    :8001  (docker compose, GPU)"
-	@echo "  pracpro2         :8000  (docker run)"
-	@echo "  Planificacion    :3000  (docker run)"
-	@echo "  Tenda            :8888  (docker compose)"
-	@echo "  Draculin         :8890  (docker compose)"
-	@echo "  DesastresIA      :8083  (docker compose)"
-	@echo "  MPIDS            :8084  (docker compose)"
-	@echo "  PhaseTransitions :8085  (docker compose)"
-	@echo "  CAIM             :8086  (docker compose)"
-	@echo "  JocEDA           :8087  (docker compose)"
-	@echo "  SBC_IA           :8088  (docker compose)"
-	@echo "  PROP             :8081  (Spring Boot)"
-	@echo "  planner-api      :8765  (ENHSP)"
+	@bash scripts/dev-all-demos.sh --list
 
 PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
 
