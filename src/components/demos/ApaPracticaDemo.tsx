@@ -2,6 +2,7 @@ import { useState, useRef, useMemo, useEffect, useCallback } from "react";
 import pcaPointsData from "../../data/pca_points.json";
 import { clamp, dist2, knnVote, predict, absCoefs, maxCoef } from "../../lib/apa-predictor";
 import type { Pt } from "../../lib/apa-predictor";
+import { getThemeColors, lighten, withAlpha } from "../../lib/demo-theme";
 
 /* ── constants ── */
 const CW = 520;
@@ -31,10 +32,10 @@ const card = {
   padding: "1.5rem",
 } as const;
 
-const accent1 = "#818cf8";  // indigo
-const accent2 = "#2dd4bf";  // teal
-const negative = "#2dd4bf";
-const positive = "#fb7185";
+const accent1 = "var(--accent-start)";
+const accent2 = "var(--accent-end)";
+const negative = "var(--accent-end)";
+const positive = "var(--accent-start)";
 
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  KNN CANVAS                                                            */
@@ -86,14 +87,17 @@ function KnnCanvas({ t }: { t: typeof TRANSLATIONS.en }) {
     }
 
     // dots
+    const tc = getThemeColors();
     for (const p of points) {
       const isNeighbor = neighbors.includes(p);
       ctx.beginPath();
       ctx.arc(p.x, p.y, isNeighbor ? 6.5 : 4.5, 0, Math.PI * 2);
-      ctx.fillStyle = p.cls === 0 ? (isNeighbor ? "#5eead4" : "#2dd4bf80") : (isNeighbor ? "#fda4af" : "#fb718580");
+      ctx.fillStyle = p.cls === 0
+        ? (isNeighbor ? lighten(tc.accentEnd, 0.3) : withAlpha(tc.accentEnd, 0.5))
+        : (isNeighbor ? lighten(tc.accentStart, 0.3) : withAlpha(tc.accentStart, 0.5));
       ctx.fill();
       if (isNeighbor) {
-        ctx.strokeStyle = p.cls === 0 ? "#2dd4bf" : "#fb7185";
+        ctx.strokeStyle = p.cls === 0 ? tc.accentEnd : tc.accentStart;
         ctx.lineWidth = 2;
         ctx.stroke();
       }
@@ -104,7 +108,7 @@ function KnnCanvas({ t }: { t: typeof TRANSLATIONS.en }) {
       const { cls } = knnVote(query.x, query.y, points, k);
       // glow
       const grd = ctx.createRadialGradient(query.x, query.y, 0, query.x, query.y, 22);
-      grd.addColorStop(0, cls === 0 ? "rgba(45,212,191,0.25)" : "rgba(251,113,133,0.25)");
+      grd.addColorStop(0, withAlpha(cls === 0 ? tc.accentEnd : tc.accentStart, 0.25));
       grd.addColorStop(1, "transparent");
       ctx.fillStyle = grd;
       ctx.beginPath(); ctx.arc(query.x, query.y, 22, 0, Math.PI * 2); ctx.fill();
@@ -227,8 +231,8 @@ function Predictor({ t }: { t: typeof TRANSLATIONS.en }) {
           <div style={{
             width: `${conf}%`, height: "100%", borderRadius: 3,
             background: isHypo
-              ? "linear-gradient(90deg, #fb7185, #f43f5e)"
-              : "linear-gradient(90deg, #2dd4bf, #14b8a6)",
+              ? "var(--accent-gradient)"
+              : "linear-gradient(90deg, var(--accent-end), var(--accent-start))",
             transition: "width 0.4s ease",
           }} />
         </div>
@@ -306,7 +310,7 @@ export default function ApaPracticaDemo({ lang = "en" }: { lang?: Lang }) {
           <div style={{
             padding: "0.2rem 0.55rem", borderRadius: "0.35rem", fontSize: "0.65rem", fontWeight: 700,
             letterSpacing: "0.06em", textTransform: "uppercase" as const,
-            background: "linear-gradient(135deg, #818cf8, #2dd4bf)", color: "var(--text-primary)",
+            background: "var(--accent-gradient)", color: "var(--text-primary)",
           }}>{t.mlPipeline}</div>
           <span style={{ fontSize: "0.82rem", color: "var(--text-muted)" }}>{t.course}</span>
           <span style={{ fontSize: "0.82rem", color: "var(--border-color-hover)" }}>·</span>
@@ -402,7 +406,7 @@ export default function ApaPracticaDemo({ lang = "en" }: { lang?: Lang }) {
           </h4>
           <div style={{ fontSize: "0.82rem", color: "var(--text-secondary)", lineHeight: 1.65 }}>
             <p style={{ margin: "0 0 0.5rem" }}>
-              <code style={{ color: "#94a3b8" }}>hypothyroid.arff</code> {t.dataP1a} <strong style={{ color: "var(--text-primary)" }}>binaryClass</strong>{t.dataP1b}
+              <code style={{ color: "var(--text-muted)" }}>hypothyroid.arff</code> {t.dataP1a} <strong style={{ color: "var(--text-primary)" }}>binaryClass</strong>{t.dataP1b}
             </p>
             <p style={{ margin: "0 0 0.5rem" }}>
               {t.dataP2a} <strong style={{ color: "var(--text-primary)" }}>{t.nan}</strong>{t.dataP2b}

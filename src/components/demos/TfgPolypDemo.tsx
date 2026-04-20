@@ -3,8 +3,8 @@ import modelData from "../../data/tfg-model-results.json";
 import LiveAppEmbed from "./LiveAppEmbed";
 
 /* ── constants ── */
-const accent1 = "#10b981"; // emerald
-const accent2 = "#0ea5e9"; // sky
+const accent1 = "var(--accent-start)";
+const accent2 = "var(--accent-end)";
 
 const card = {
   background: "var(--bg-card)",
@@ -92,9 +92,9 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
         {(["f1", "ap50", "ap5095", "ar100"] as const).map((m) => (
           <button key={m} type="button" onClick={() => setMetric(m)} style={{
             padding: "0.3rem 0.65rem", borderRadius: "0.4rem", fontSize: "0.72rem", fontWeight: 600, cursor: "pointer",
-            border: metric === m ? `1px solid ${accent1}` : "1px solid var(--border-color)",
-            background: metric === m ? `${accent1}18` : "var(--bg-card-hover)",
-            color: metric === m ? accent1 : "var(--text-secondary)",
+            border: metric === m ? "1px solid var(--accent-start)" : "1px solid var(--border-color)",
+            background: metric === m ? "color-mix(in srgb, var(--accent-start) 10%, transparent)" : "var(--bg-card-hover)",
+            color: metric === m ? "var(--accent-start)" : "var(--text-secondary)",
           }}>{t.metrics[m]}</button>
         ))}
         <span style={{ margin: "auto 0 auto auto", fontSize: "0.68rem", color: "var(--border-color-hover)" }}>{t.sort}</span>
@@ -431,7 +431,7 @@ export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
             <div style={{
               width: 30, height: 30, borderRadius: "0.5rem", display: "flex", alignItems: "center",
               justifyContent: "center", fontSize: "0.9rem",
-              background: `linear-gradient(135deg, rgba(16,185,129,0.15), rgba(14,165,233,0.1))`,
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), color-mix(in srgb, var(--accent-end) 10%, transparent))",
             }}>{"\u{1F52C}"}</div>
             <div>
               <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.simInference}</h3>
@@ -447,7 +447,7 @@ export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
             <div style={{
               width: 30, height: 30, borderRadius: "0.5rem", display: "flex", alignItems: "center",
               justifyContent: "center", fontSize: "0.9rem",
-              background: `linear-gradient(135deg, rgba(14,165,233,0.15), rgba(16,185,129,0.1))`,
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-end) 15%, transparent), color-mix(in srgb, var(--accent-start) 10%, transparent))",
             }}>{"\u{1F3AD}"}</div>
             <div>
               <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.cgTrans}</h3>

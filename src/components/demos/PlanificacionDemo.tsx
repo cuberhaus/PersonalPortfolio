@@ -58,13 +58,13 @@ const DOMAIN_EXT2 = `(define (domain agencia_viaje)
 
 const PROBLEM_EXT2 = `(define (problem agencia_viaje)
 \t(:domain agencia_viaje)
-\t(:objects 
+\t(:objects
 \t\tcg1 c1 c2 c3 - ciudad
 \t    vg1 v1 v2 v3 - vuelo
 \t\th1 h2 h3 - hotel
 \t\tdias1 dias2 dias3 dias4 - dias_por_ciudad
 \t)
-\t(:init 
+\t(:init
 \t\t(= (num_ciudades_escogidas) 0)
 \t\t(= (min_ciudades_a_recoger) 2)
 \t\t(= (min_dias_por_ciudad) 1)
@@ -151,7 +151,7 @@ function FlightNetwork() {
       })}
       {cities.map((c) => (
         <g key={c.id}>
-          <circle cx={c.x} cy={c.y} r={18} fill={cityColor(c.id)} opacity={0.9} stroke="#18181b" strokeWidth={2} />
+          <circle cx={c.x} cy={c.y} r={18} fill={cityColor(c.id)} opacity={0.9} stroke="var(--bg-primary)" strokeWidth={2} />
           <text x={c.x} y={c.y + 4} textAnchor="middle" fill="#fff" fontSize="10" fontWeight="700" fontFamily="ui-monospace, monospace">{c.id}</text>
           <text x={c.x} y={c.y + 30} textAnchor="middle" fill="var(--text-muted)" fontSize="8">★{c.interest}</text>
         </g>
@@ -187,8 +187,8 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
       {/* ── DEMO VS FULL APP ── */}
       <div style={{
         marginBottom: "1.25rem", padding: "1rem 1.25rem",
-        background: "linear-gradient(135deg, rgba(139,92,246,0.06), rgba(14,165,233,0.06))",
-        border: "1px solid rgba(139,92,246,0.2)",
+        background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 8%, transparent), color-mix(in srgb, var(--accent-end) 5%, transparent))",
+        border: "1px solid color-mix(in srgb, var(--accent-start) 20%, transparent)",
         borderRadius: "0.75rem",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.85rem" }}>
@@ -264,7 +264,7 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
             ))}
           </div>
           <p style={{ margin: "0.85rem 0 0", fontSize: "0.72rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
-            {t.constDesc1}<code style={{ color: "#c4b5fd" }}>anadir_ciudad</code>{t.constDesc2}
+            {t.constDesc1}<code style={{ color: "var(--accent-start)" }}>anadir_ciudad</code>{t.constDesc2}
           </p>
         </div>
       </div>
@@ -287,7 +287,7 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
         <div style={{ marginTop: "0.75rem", fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
           {t.extensions.map((e) => (
             <div key={e.name} style={{ marginBottom: "0.25rem" }}>
-              <strong style={{ color: e.active ? "#c4b5fd" : "var(--text-muted)" }}>{e.name}:</strong>{" "}
+              <strong style={{ color: e.active ? "var(--accent-start)" : "var(--text-muted)" }}>{e.name}:</strong>{" "}
               <span style={{ color: e.active ? "var(--text-primary)" : "var(--text-muted)" }}>{e.desc}</span>
             </div>
           ))}
@@ -303,7 +303,7 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
         <div style={card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
             <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.domain}</h4>
-            <a href={pDomain} download style={{ fontSize: "0.72rem", color: "#a5b4fc", textDecoration: "none" }}>{t.download}</a>
+            <a href={pDomain} download style={{ fontSize: "0.72rem", color: "var(--accent-start)", textDecoration: "none" }}>{t.download}</a>
           </div>
           <pre style={{
             margin: 0, padding: "0.85rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
@@ -314,7 +314,7 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
         <div style={card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
             <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.problem}</h4>
-            <a href={pProblem} download style={{ fontSize: "0.72rem", color: "#a5b4fc", textDecoration: "none" }}>{t.download}</a>
+            <a href={pProblem} download style={{ fontSize: "0.72rem", color: "var(--accent-start)", textDecoration: "none" }}>{t.download}</a>
           </div>
           <pre style={{
             margin: 0, padding: "0.85rem", background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
@@ -333,7 +333,7 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
           <span style={{
             padding: "0.15rem 0.45rem", borderRadius: "0.3rem", fontSize: "0.6rem", fontWeight: 700,
             letterSpacing: "0.05em", textTransform: "uppercase",
-            background: "rgba(139,92,246,0.15)", color: "#c4b5fd", border: "1px solid rgba(139,92,246,0.25)",
+            background: "color-mix(in srgb, var(--accent-start) 15%, transparent)", color: "var(--accent-start)", border: "1px solid color-mix(in srgb, var(--accent-start) 25%, transparent)",
           }}>{t.mockBadge}</span>
         </div>
         <p style={{ margin: "0 0 0.75rem", fontSize: "0.76rem", color: "var(--text-muted)", lineHeight: 1.5 }}>
@@ -370,7 +370,7 @@ export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
                 display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap",
                 marginBottom: "0.75rem", fontSize: "0.78rem",
               }}>
-                <span style={{ color: "#22c55e", fontWeight: 700 }}>&#10003; {MOCK_PLAN.length} {t.mockSteps}</span>
+                <span style={{ color: "var(--accent-start)", fontWeight: 700 }}>&#10003; {MOCK_PLAN.length} {t.mockSteps}</span>
                 <span style={{ color: "var(--text-muted)" }}>{totalDays} {t.mockDays}</span>
                 <span style={{ color: "var(--text-muted)" }}>{t.mockInterest}: {totalInterest}</span>
                 <span style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>

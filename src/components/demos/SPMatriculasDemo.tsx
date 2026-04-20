@@ -387,7 +387,7 @@ export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
             borderRadius: "0.5rem",
             fontSize: "0.85rem",
             background: "var(--bg-secondary)",
-            color: "#f87171",
+            color: "var(--accent-end)",
           }}
         >
           {t.error} {error}
@@ -410,9 +410,9 @@ export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
                 </div>
                 <div style={s.truthText}>{selectedGT.toUpperCase()}</div>
                 {result.plateText.toLowerCase() === selectedGT.toLowerCase() ? (
-                  <span style={{ color: "#4ade80", fontSize: "0.8rem" }}>{t.match}</span>
+                  <span style={{ color: "var(--accent-start)", fontSize: "0.8rem" }}>{t.match}</span>
                 ) : (
-                  <span style={{ color: "#f87171", fontSize: "0.8rem" }}>{t.mismatch}</span>
+                  <span style={{ color: "var(--accent-end)", fontSize: "0.8rem" }}>{t.mismatch}</span>
                 )}
               </div>
             )}

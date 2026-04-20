@@ -5,6 +5,7 @@ import { line } from 'd3-shape';
 import { getCorpusData, CORPUS_LABELS, type CorpusId, type WordFreq } from '../../../lib/caim/zipf-data';
 import { fitZipf, countWords, type ZipfFitResult } from '../../../lib/caim/zipf-fit';
 import { T } from '../../../i18n/demos/caim-zipf';
+import { getThemeColors } from '../../../lib/demo-theme';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -161,6 +162,7 @@ export default function ZipfTab({ lang }: Props) {
 
 function drawZipfChart(container: HTMLElement, data: AnalysisResult, isLog: boolean) {
   container.innerHTML = '';
+  const tc = getThemeColors();
   const W = 600, H = 280;
   const margin = { top: 15, right: 15, bottom: 35, left: 55 };
   const iw = W - margin.left - margin.right;
@@ -189,16 +191,16 @@ function drawZipfChart(container: HTMLElement, data: AnalysisResult, isLog: bool
 
   for (const tick of yTicks) {
     g.append('line').attr('x1', 0).attr('x2', iw).attr('y1', yScale(tick)).attr('y2', yScale(tick))
-      .attr('stroke', '#1a1a2e').attr('stroke-width', 0.5);
+      .attr('stroke', tc.borderColor).attr('stroke-width', 0.5);
     g.append('text').attr('x', -6).attr('y', yScale(tick) + 3)
-      .attr('fill', '#64748b').attr('font-size', '8px').attr('text-anchor', 'end')
+      .attr('fill', tc.textMuted).attr('font-size', '8px').attr('text-anchor', 'end')
       .text(formatSI(tick));
   }
   for (const tick of xTicks) {
     g.append('line').attr('x1', xScale(tick)).attr('x2', xScale(tick)).attr('y1', 0).attr('y2', ih)
-      .attr('stroke', '#1a1a2e').attr('stroke-width', 0.5);
+      .attr('stroke', tc.borderColor).attr('stroke-width', 0.5);
     g.append('text').attr('x', xScale(tick)).attr('y', ih + 12)
-      .attr('fill', '#64748b').attr('font-size', '8px').attr('text-anchor', 'middle')
+      .attr('fill', tc.textMuted).attr('font-size', '8px').attr('text-anchor', 'middle')
       .text(formatSI(tick));
   }
 
@@ -209,7 +211,7 @@ function drawZipfChart(container: HTMLElement, data: AnalysisResult, isLog: bool
     const cy = yScale(Math.max(freqs[i], isLog ? 1 : 0));
     if (isFinite(cx) && isFinite(cy)) {
       g.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 1.5)
-        .attr('fill', '#3b82f6').attr('fill-opacity', 0.6);
+        .attr('fill', tc.accentStart).attr('fill-opacity', 0.6);
     }
   }
 
@@ -227,25 +229,25 @@ function drawZipfChart(container: HTMLElement, data: AnalysisResult, isLog: bool
     .datum(fitted)
     .attr('d', fittedLine as any)
     .attr('fill', 'none')
-    .attr('stroke', '#ef4444')
+    .attr('stroke', tc.accentEnd)
     .attr('stroke-width', 1.5)
     .attr('stroke-dasharray', '4,2');
 
   // Axis labels
   g.append('text').attr('x', iw / 2).attr('y', ih + 28)
-    .attr('fill', '#64748b').attr('font-size', '9px').attr('text-anchor', 'middle')
+    .attr('fill', tc.textMuted).attr('font-size', '9px').attr('text-anchor', 'middle')
     .text('Rank');
   g.append('text').attr('x', -ih / 2).attr('y', -40)
-    .attr('fill', '#64748b').attr('font-size', '9px').attr('text-anchor', 'middle')
+    .attr('fill', tc.textMuted).attr('font-size', '9px').attr('text-anchor', 'middle')
     .attr('transform', 'rotate(-90)')
     .text('Frequency');
 
   // Legend
-  g.append('circle').attr('cx', iw - 100).attr('cy', 8).attr('r', 3).attr('fill', '#3b82f6');
-  g.append('text').attr('x', iw - 94).attr('y', 11).attr('fill', '#cbd5e1').attr('font-size', '8px').text('Actual');
+  g.append('circle').attr('cx', iw - 100).attr('cy', 8).attr('r', 3).attr('fill', tc.accentStart);
+  g.append('text').attr('x', iw - 94).attr('y', 11).attr('fill', tc.textPrimary).attr('font-size', '8px').text('Actual');
   g.append('line').attr('x1', iw - 46).attr('x2', iw - 32).attr('y1', 8).attr('y2', 8)
-    .attr('stroke', '#ef4444').attr('stroke-width', 1.5).attr('stroke-dasharray', '3,1');
-  g.append('text').attr('x', iw - 28).attr('y', 11).attr('fill', '#cbd5e1').attr('font-size', '8px').text('Fitted');
+    .attr('stroke', tc.accentEnd).attr('stroke-width', 1.5).attr('stroke-dasharray', '3,1');
+  g.append('text').attr('x', iw - 28).attr('y', 11).attr('fill', tc.textPrimary).attr('font-size', '8px').text('Fitted');
 }
 
 function logNiceTicks(lo: number, hi: number): number[] {
@@ -288,7 +290,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.15s',
   },
   corpusBtnActive: {
-    background: 'linear-gradient(135deg, #06b6d4, #6366f1)',
+    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: '#fff', borderColor: 'transparent',
   },
   textarea: {
@@ -299,7 +301,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   analyzeBtn: {
     padding: '0.35rem 0.7rem', borderRadius: '0.35rem', border: 'none',
-    background: 'linear-gradient(135deg, #06b6d4, #6366f1)',
+    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: '#fff', fontWeight: 600, fontSize: '0.72rem', cursor: 'pointer', alignSelf: 'flex-end',
   },
   toggleBtn: {
@@ -309,12 +311,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   errorMsg: {
     padding: '0.5rem 0.75rem', marginBottom: '0.75rem', borderRadius: '0.4rem',
-    background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
-    color: '#ef4444', fontSize: '0.78rem',
+    background: 'color-mix(in srgb, var(--accent-end) 10%, transparent)', border: '1px solid color-mix(in srgb, var(--accent-end) 30%, transparent)',
+    color: 'var(--accent-end)', fontSize: '0.78rem',
   },
   chartContainer: {
     width: '100%', minHeight: 200, borderRadius: '0.5rem', overflow: 'hidden',
-    background: '#0a0a15', padding: '0.5rem',
+    background: 'var(--bg-secondary)', padding: '0.5rem',
   },
   card: {
     padding: '1rem', background: 'var(--bg-card)',

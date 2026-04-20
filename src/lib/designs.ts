@@ -11,11 +11,11 @@ export interface DesignMeta {
     radius: string;
     /** Pictorial style keyword used to pick the tile's mini-mockup. */
     style:
-      | 'gradient' | 'serif' | 'blur' | 'grid' | 'soft' | 'pixel'
-      | 'terminal' | 'neon' | 'clay'
+      | 'gradient' | 'serif' | 'grid' | 'pixel'
+      | 'terminal' | 'neon'
       | 'paper' | 'raw' | 'schematic'
       | 'tex' | 'editor' | 'riso'
-      | 'deco' | 'zen' | 'dash'
+      | 'deco' | 'zen'
       | 'zine' | 'comic' | 'news';
   };
   /**
@@ -49,27 +49,11 @@ export const DESIGNS: DesignMeta[] = [
     recommendedThemes: ['sepia', 'paper', 'dark'],
   },
   {
-    id: 'glass',
-    label: 'Glass',
-    blurb: 'Translucent cards, aurora blur, soft shadows',
-    preview: { font: 'Inter, system-ui, sans-serif', radius: '1.5rem', style: 'blur' },
-    hidden: true,
-    recommendedThemes: ['tokyo-night', 'catppuccin-mocha', 'nord'],
-  },
-  {
     id: 'swiss',
     label: 'Swiss',
     blurb: 'Strict grid, giant numerals, hairline rules',
     preview: { font: '"Inter Tight", Helvetica, Arial, sans-serif', radius: '0', style: 'grid' },
     recommendedThemes: ['paper', 'light', 'dark'],
-  },
-  {
-    id: 'neumorphic',
-    label: 'Neumorphic',
-    blurb: 'Soft pillowy UI with inset / outset shadows',
-    preview: { font: 'Inter, system-ui, sans-serif', radius: '1.5rem', style: 'soft' },
-    hidden: true,
-    recommendedThemes: ['nord-light', 'light', 'dracula'],
   },
   {
     id: 'pixel',
@@ -91,13 +75,6 @@ export const DESIGNS: DesignMeta[] = [
     blurb: 'Neon glow, chromatic aberration, synthwave grid',
     preview: { font: 'Orbitron, "Inter Tight", sans-serif', radius: '0', style: 'neon' },
     recommendedThemes: ['synthwave', 'tokyo-night', 'dracula'],
-  },
-  {
-    id: 'clay',
-    label: 'Claymorphism',
-    blurb: 'Chunky 3D pillows with soft pastel shadows',
-    preview: { font: 'Inter, system-ui, sans-serif', radius: '1.75rem', style: 'clay' },
-    recommendedThemes: ['light', 'nord-light', 'dracula'],
   },
   {
     id: 'notebook',
@@ -154,14 +131,6 @@ export const DESIGNS: DesignMeta[] = [
     blurb: 'Serene Japanese minimalism, vast negative space',
     preview: { font: '"Shippori Mincho", "Noto Serif JP", serif', radius: '0', style: 'zen' },
     recommendedThemes: ['paper', 'sepia', 'nord-light'],
-  },
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    blurb: 'Admin UI: KPIs, status pills, data density',
-    preview: { font: 'Inter, system-ui, sans-serif', radius: '0.25rem', style: 'dash' },
-    hidden: true,
-    recommendedThemes: ['dark', 'tokyo-night', 'light'],
   },
   {
     id: 'zine',

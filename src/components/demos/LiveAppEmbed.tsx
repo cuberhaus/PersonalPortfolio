@@ -90,7 +90,7 @@ export default function LiveAppEmbed({ url, title, dockerCmd, devCmd, lang = "en
         borderBottom: expanded ? "none" : undefined,
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#22c55e", display: "inline-block", boxShadow: "0 0 6px #22c55e88" }} />
+          <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent-start)", display: "inline-block", boxShadow: "0 0 6px color-mix(in srgb, var(--accent-start) 55%, transparent)" }} />
           <strong style={{ fontSize: "0.82rem", color: "var(--text-primary)" }}>{t.live}</strong>
           <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
             {t.runningAt} <code style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono, monospace)" }}>{url}</code>
@@ -116,7 +116,7 @@ export default function LiveAppEmbed({ url, title, dockerCmd, devCmd, lang = "en
           style={{
             width: "100%", height: "80vh", border: "1px solid var(--border-color)",
             borderTop: "none", borderRadius: "0 0 0.75rem 0.75rem",
-            background: "#0f172a",
+            background: "var(--bg-secondary)",
           }}
           allow="clipboard-write"
         />
