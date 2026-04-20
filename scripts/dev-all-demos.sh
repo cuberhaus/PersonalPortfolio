@@ -142,201 +142,94 @@ cleanup() {
 }
 trap 'cleanup $?' EXIT INT TERM
 
-# --- Docker: Tenda (PHP) + Draculin (Django + Flutter) ---
+# --- Docker: launch ALL services in parallel ---
 if [[ "$SKIP_DOCKER" == 0 ]]; then
   if ! command -v docker >/dev/null 2>&1; then
-    echo "==> Docker not installed — skipping Tenda (:8888) & Draculin (:8890)"
+    echo "==> Docker not installed — skipping all Docker services"
   else
-    if [[ -f "${TENDA_DIR}/docker/docker-compose.yml" ]]; then
-      echo "==> Tenda Online     http://localhost:8888  (docker compose)"
-      if (cd "$TENDA_DIR" && docker compose -f docker/docker-compose.yml up -d); then
-        TENDA_UP=1
+    DOCKER_PIDS=()
+
+    # Helper: launch a docker compose service in the background
+    _compose_up() {
+      local name="$1" url="$2" dir="$3" file="${4:-docker-compose.yml}" extra="${5:-}"
+      if [[ -f "${dir}/${file}" ]]; then
+        echo "==> ${name}  ${url}  (docker compose)${extra}"
+        (cd "$dir" && docker compose -f "$file" up -d 2>&1 | sed "s/^/    [${name}] /") &
+        DOCKER_PIDS+=($!)
       else
-        echo "    warning: Tenda docker compose failed (is Docker running?)" >&2
+        echo "==> ${name} skipped (no ${dir}/${file})"
       fi
-    else
-      echo "==> Tenda skipped    (no ../tenda_online/docker/docker-compose.yml)"
-    fi
-    if [[ -f "${DRAC_DIR}/docker-compose.yml" ]]; then
-      echo "==> Draculin         http://localhost:8890  (Flutter)  API :8889"
-      if (cd "$DRAC_DIR" && docker compose up -d); then
-        DRAC_UP=1
+    }
+
+    # Helper: launch a docker run service in the background (build-if-missing)
+    _docker_run() {
+      local name="$1" url="$2" dir="$3" image="$4" port="$5" container="$6"
+      if [[ -d "${dir}" ]]; then
+        echo "==> ${name}  ${url}  (docker run)"
+        (
+          docker run -d --rm -p "${port}:${port}" --name "$container" "$image" 2>/dev/null || {
+            echo "    [${name}] Building image first..." >&2
+            (cd "$dir" && docker build -t "$image" .) >/dev/null 2>&1 && \
+              docker run -d --rm -p "${port}:${port}" --name "$container" "$image" 2>/dev/null || \
+              echo "    warning: ${name} docker run failed" >&2
+          }
+        ) &
+        DOCKER_PIDS+=($!)
       else
-        echo "    warning: Draculin docker compose failed" >&2
+        echo "==> ${name} skipped (no ${dir}/)"
       fi
+    }
+
+    # Launch all docker compose services in parallel
+    _compose_up "Tenda Online    " "http://localhost:8888" "$TENDA_DIR"      "docker/docker-compose.yml"
+    _compose_up "Draculin        " "http://localhost:8890" "$DRAC_DIR"       "docker-compose.yml" " (Flutter) API :8889"
+    _compose_up "TFG             " "http://localhost:8082" "$TFG_DIR"
+    _compose_up "bitsXlaMarato   " "http://localhost:8001" "$BITSX_DIR"      "docker-compose.yml" " (GPU)"
+    _compose_up "DesastresIA     " "http://localhost:8083" "$DESASTRES_DIR"
+    _compose_up "MPIDS           " "http://localhost:8084" "$MPIDS_DIR"
+    _compose_up "PhaseTransitions" "http://localhost:8085" "$PHASE_DIR"
+    _compose_up "CAIM            " "http://localhost:8086" "$CAIM_DIR"
+    _compose_up "JocEDA          " "http://localhost:8087" "$JOCEDA_DIR"
+    _compose_up "SBC_IA          " "http://localhost:8088" "$SBCIA_DIR"
+    _compose_up "PAR             " "http://localhost:8089" "$PAR_DIR"
+    _compose_up "ROB             " "http://localhost:8092" "$ROB_DIR"
+    _compose_up "FIB             " "http://localhost:8090" "$FIB_DIR"
+    _compose_up "Grafics         " "http://localhost:8093" "$GRAFICS_DIR"    "docker-compose.yml"
+
+    # Launch docker run services in parallel
+    _docker_run "pracpro2        " "http://localhost:8000" "$PRO2_DIR"   "pracpro2"                  "8000" "portfolio-pro2"
+    _docker_run "Planificacion   " "http://localhost:3000" "$PLANIF_DIR" "practica-planificacion"     "3000" "portfolio-planif"
+
+    # Wait for ALL docker services to be up
+    echo ""
+    echo "==> Waiting for all Docker services to start..."
+    DOCKER_FAILED=0
+    for pid in "${DOCKER_PIDS[@]}"; do
+      wait "$pid" 2>/dev/null || DOCKER_FAILED=$((DOCKER_FAILED + 1))
+    done
+    if [[ "$DOCKER_FAILED" -gt 0 ]]; then
+      echo "    warning: $DOCKER_FAILED Docker service(s) failed to start" >&2
     else
-      echo "==> Draculin skipped (no ../Draculin-Backend/docker-compose.yml)"
+      echo "    All Docker services started."
     fi
 
-    # TFG — React + FastAPI polyp detection dashboard
-    if [[ -f "${TFG_DIR}/docker-compose.yml" ]]; then
-      echo "==> TFG              http://localhost:8082  (docker compose)"
-      if (cd "$TFG_DIR" && docker compose up -d); then
-        TFG_UP=1
-      else
-        echo "    warning: TFG docker compose failed" >&2
-      fi
-    else
-      echo "==> TFG skipped      (no ../TFG/docker-compose.yml)"
-    fi
-
-    # bitsXlaMarato — Angular + FastAPI aorta viewer (GPU)
-    if [[ -f "${BITSX_DIR}/docker-compose.yml" ]]; then
-      echo "==> bitsXlaMarato    http://localhost:8001  (docker compose, GPU)"
-      if (cd "$BITSX_DIR" && docker compose up -d); then
-        BITSX_UP=1
-      else
-        echo "    warning: bitsXlaMarato docker compose failed (GPU required)" >&2
-      fi
-    else
-      echo "==> bitsXlaMarato skipped (no ../bitsXlaMarato/docker-compose.yml)"
-    fi
-
-    # pracpro2 — Vue + D3 + Rust/Axum phylogenetic tree
-    if [[ -d "${PRO2_DIR}" ]]; then
-      echo "==> pracpro2         http://localhost:8000  (docker run)"
-      PRO2_CID=$(docker run -d --rm -p 8000:8000 --name portfolio-pro2 pracpro2 2>/dev/null) || {
-        echo "    Building pracpro2 image first..."
-        (cd "$PRO2_DIR" && docker build -t pracpro2 .) >/dev/null 2>&1 && \
-          PRO2_CID=$(docker run -d --rm -p 8000:8000 --name portfolio-pro2 pracpro2 2>/dev/null) || \
-          echo "    warning: pracpro2 docker run failed" >&2
-      }
-    else
-      echo "==> pracpro2 skipped (no ../pracpro2/)"
-    fi
-
-    # Practica_de_Planificacion — SvelteKit + Metric-FF
-    if [[ -d "${PLANIF_DIR}" ]]; then
-      echo "==> Planificacion    http://localhost:3000  (docker run)"
-      PLANIF_CID=$(docker run -d --rm -p 3000:3000 --name portfolio-planif practica-planificacion 2>/dev/null) || {
-        echo "    Building practica-planificacion image first..."
-        (cd "$PLANIF_DIR" && docker build -t practica-planificacion .) >/dev/null 2>&1 && \
-          PLANIF_CID=$(docker run -d --rm -p 3000:3000 --name portfolio-planif practica-planificacion 2>/dev/null) || \
-          echo "    warning: practica-planificacion docker run failed" >&2
-      }
-    else
-      echo "==> Planificacion skipped (no ../Practica_de_Planificacion/)"
-    fi
-
-    # desastresIA — Solid.js + FastAPI local search solver
-    if [[ -f "${DESASTRES_DIR}/docker-compose.yml" ]]; then
-      echo "==> DesastresIA       http://localhost:8083  (docker compose)"
-      if (cd "$DESASTRES_DIR" && docker compose up -d); then
-        DESASTRES_UP=1
-      else
-        echo "    warning: DesastresIA docker compose failed" >&2
-      fi
-    else
-      echo "==> DesastresIA skipped (no ../desastresIA/docker-compose.yml)"
-    fi
-
-    # projectA — Preact + D3 + FastAPI MPIDS solver
-    if [[ -f "${MPIDS_DIR}/docker-compose.yml" ]]; then
-      echo "==> MPIDS            http://localhost:8084  (docker compose)"
-      if (cd "$MPIDS_DIR" && docker compose up -d); then
-        MPIDS_UP=1
-      else
-        echo "    warning: MPIDS docker compose failed" >&2
-      fi
-    else
-      echo "==> MPIDS skipped (no ../projectA/docker-compose.yml)"
-    fi
-
-    # projectA2 — Lit + Canvas + D3 + FastAPI phase transitions
-    if [[ -f "${PHASE_DIR}/docker-compose.yml" ]]; then
-      echo "==> PhaseTransitions http://localhost:8085  (docker compose)"
-      if (cd "$PHASE_DIR" && docker compose up -d); then
-        PHASE_UP=1
-      else
-        echo "    warning: PhaseTransitions docker compose failed" >&2
-      fi
-    else
-      echo "==> PhaseTransitions skipped (no ../projectA2/docker-compose.yml)"
-    fi
-
-    # CAIM — Vanilla TS + D3 + FastAPI IR explorer
-    if [[ -f "${CAIM_DIR}/docker-compose.yml" ]]; then
-      echo "==> CAIM             http://localhost:8086  (docker compose)"
-      if (cd "$CAIM_DIR" && docker compose up -d); then
-        CAIM_UP=1
-      else
-        echo "    warning: CAIM docker compose failed" >&2
-      fi
-    else
-      echo "==> CAIM skipped (no ../CAIM/docker-compose.yml)"
-    fi
-
-    # JocEDA — Mithril.js + Canvas game viewer
-    if [[ -f "${JOCEDA_DIR}/docker-compose.yml" ]]; then
-      echo "==> JocEDA           http://localhost:8087  (docker compose)"
-      if (cd "$JOCEDA_DIR" && docker compose up -d); then
-        JOCEDA_UP=1
-      else
-        echo "    warning: JocEDA docker compose failed" >&2
-      fi
-    else
-      echo "==> JocEDA skipped (no ../joc_eda/docker-compose.yml)"
-    fi
-
-    # SBC_IA — HTMX + Alpine.js trip planner expert system
-    if [[ -f "${SBCIA_DIR}/docker-compose.yml" ]]; then
-      echo "==> SBC_IA           http://localhost:8088  (docker compose)"
-      if (cd "$SBCIA_DIR" && docker compose up -d); then
-        SBCIA_UP=1
-      else
-        echo "    warning: SBC_IA docker compose failed" >&2
-      fi
-    else
-      echo "==> SBC_IA skipped (no ../SBC_IA/docker-compose.yml)"
-    fi
-
-    # PAR — Preact + Canvas + WASM parallel computing visualiser
-    if [[ -f "${PAR_DIR}/docker-compose.yml" ]]; then
-      echo "==> PAR              http://localhost:8089  (docker compose)"
-      if (cd "$PAR_DIR" && docker compose up -d); then
-        PAR_UP=1
-      else
-        echo "    warning: PAR docker compose failed" >&2
-      fi
-    else
-      echo "==> PAR skipped (no ../PAR/docker-compose.yml)"
-    fi
-
-    # ROB — Ember.js + Babylon.js robotics dashboard
-    if [[ -f "${ROB_DIR}/docker-compose.yml" ]]; then
-      echo "==> ROB              http://localhost:8092  (docker compose)"
-      if (cd "$ROB_DIR" && docker compose up -d); then
-        ROB_UP=1
-      else
-        echo "    warning: ROB docker compose failed" >&2
-      fi
-    else
-      echo "==> ROB skipped (no ../ROB/docker-compose.yml)"
-    fi
-
-    # fib — Qwik + Canvas algorithm visualizer
-    if [[ -f "${FIB_DIR}/docker-compose.yml" ]]; then
-      echo "==> FIB              http://localhost:8090  (docker compose)"
-      if (cd "$FIB_DIR" && docker compose up -d); then
-        FIB_UP=1
-      else
-        echo "    warning: FIB docker compose failed" >&2
-      fi
-    else
-      echo "==> FIB skipped (no ../fib/docker-compose.yml)"
-    fi
-
-    # Grafics — Vanilla TS + Vite + WebGL2 shader playground
-    if [[ -f "${GRAFICS_DIR}/docker-compose.yml" ]]; then
-      echo "==> Grafics          http://localhost:8093  (docker compose)"
-      if (cd "$GRAFICS_DIR" && docker compose up -d); then
-        GRAFICS_UP=1
-      else
-        echo "    warning: Grafics docker compose failed" >&2
-      fi
-    else
-      echo "==> Grafics skipped (no ../fib/G/web/docker-compose.yml)"
-    fi
+    # Set UP flags for cleanup (check which containers are actually running)
+    [[ -f "${TENDA_DIR}/docker/docker-compose.yml" ]]   && TENDA_UP=1
+    [[ -f "${DRAC_DIR}/docker-compose.yml" ]]            && DRAC_UP=1
+    [[ -f "${TFG_DIR}/docker-compose.yml" ]]             && TFG_UP=1
+    [[ -f "${BITSX_DIR}/docker-compose.yml" ]]           && BITSX_UP=1
+    [[ -f "${DESASTRES_DIR}/docker-compose.yml" ]]       && DESASTRES_UP=1
+    [[ -f "${MPIDS_DIR}/docker-compose.yml" ]]           && MPIDS_UP=1
+    [[ -f "${PHASE_DIR}/docker-compose.yml" ]]           && PHASE_UP=1
+    [[ -f "${CAIM_DIR}/docker-compose.yml" ]]            && CAIM_UP=1
+    [[ -f "${JOCEDA_DIR}/docker-compose.yml" ]]          && JOCEDA_UP=1
+    [[ -f "${SBCIA_DIR}/docker-compose.yml" ]]           && SBCIA_UP=1
+    [[ -f "${PAR_DIR}/docker-compose.yml" ]]             && PAR_UP=1
+    [[ -f "${ROB_DIR}/docker-compose.yml" ]]             && ROB_UP=1
+    [[ -f "${FIB_DIR}/docker-compose.yml" ]]             && FIB_UP=1
+    [[ -f "${GRAFICS_DIR}/docker-compose.yml" ]]         && GRAFICS_UP=1
+    [[ -d "${PRO2_DIR}" ]]                               && PRO2_CID="portfolio-pro2"
+    [[ -d "${PLANIF_DIR}" ]]                             && PLANIF_CID="portfolio-planif"
   fi
   echo ""
 else
