@@ -1,3 +1,11 @@
+# ─── Cross-platform support ────────────────────────────────────────
+# On Windows, use Git Bash's sh.exe so POSIX utilities (find, rm,
+# grep, awk, curl …) are available in recipe lines.
+ifeq ($(OS),Windows_NT)
+  SHELL := sh.exe
+  .SHELLFLAGS := -c
+endif
+
 .PHONY: install dev dev-all build preview stop health \
        rebuild \
        clean test help \
@@ -8,9 +16,14 @@ default: help
 
 install: ## Install project dependencies
 	npm install
+ifeq ($(OS),Windows_NT)
+	@command -v go >/dev/null 2>&1 || echo "Go not found - install via:  choco install golang   OR   winget install GoLang.Go"
+	@$(CARGO_ENV) command -v cargo >/dev/null 2>&1 || echo "Rust not found - install via:  choco install rustup.install   OR   winget install Rustlang.Rustup"
+else
 	@command -v go >/dev/null 2>&1 || { echo "Installing Go..."; sudo apt-get update && sudo apt-get install -y golang-go; }
-	@. "$(HOME)/.local/share/cargo/env" 2>/dev/null; \
+	@$(CARGO_ENV) \
 	command -v cargo >/dev/null 2>&1 || { echo "Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; }
+endif
 
 dev: ## Start Astro dev server with hot-reload (no demo backends)
 	npm run dev
@@ -32,8 +45,13 @@ stop: ## Stop all demo backend containers/services
 	-docker compose -f ../CAIM/docker-compose.yml down 2>/dev/null
 	-docker compose -f ../joc_eda/docker-compose.yml down 2>/dev/null
 	-docker compose -f ../SBC_IA/docker-compose.yml down 2>/dev/null
+ifeq ($(OS),Windows_NT)
+	-powershell.exe -NoProfile -Command '$$p = Get-NetTCPConnection -LocalPort 8081 -EA SilentlyContinue; if ($$p) { Stop-Process -Id $$p.OwningProcess -Force -EA SilentlyContinue }'
+	-powershell.exe -NoProfile -Command '$$p = Get-NetTCPConnection -LocalPort 8765 -EA SilentlyContinue; if ($$p) { Stop-Process -Id $$p.OwningProcess -Force -EA SilentlyContinue }'
+else
 	-fuser -k 8081/tcp 2>/dev/null
 	-fuser -k 8765/tcp 2>/dev/null
+endif
 	@echo "Done."
 
 health: ## Check if all demo backends are responding
@@ -51,7 +69,7 @@ health: ## Check if all demo backends are responding
 	if [ $$failed -eq 1 ]; then echo "\nSome services appear to be down."; exit 1; else echo "\nAll services are up and running!"; fi
 
 build: ## Build Astro site for production and all demo Docker images
-	+@$(MAKE) --no-print-directory $(DEMO_TARGETS) -j$$(nproc) --output-sync=target
+	+@$(MAKE) --no-print-directory $(DEMO_TARGETS) -j$(NPROC) --output-sync=target
 	npm run build
 
 rebuild: ## Force rebuild all Docker images (ignore cache) and Astro site
@@ -86,7 +104,7 @@ test: ## Run ALL test suites (portfolio + every demo backend)
 	fi
 	@echo ""
 	@echo "=== Rust (pracpro2) ==="
-	@. "$(HOME)/.local/share/cargo/env" 2>/dev/null; \
+	@$(CARGO_ENV) \
 	if command -v cargo >/dev/null 2>&1; then \
 		cd "$(PARENT)/pracpro2/web/backend" && cargo test --verbose; \
 	else \
@@ -125,7 +143,15 @@ PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
 
 # Ensure pytest commands use the system Python, not an accidentally activated venv
 unexport VIRTUAL_ENV
-SYS_PYTHON := $(shell PATH="$$(echo "$$PATH" | tr ':' '\n' | grep -v '\.venv' | tr '\n' ':')" which python)
+ifeq ($(OS),Windows_NT)
+  SYS_PYTHON := $(shell PATH="$$(echo "$$PATH" | tr ':' '\n' | grep -v '\.venv' | tr '\n' ':')" which python 2>/dev/null || echo python)
+  NPROC      := $(or $(NUMBER_OF_PROCESSORS),4)
+  CARGO_ENV  := . "$(HOME)/.cargo/env" 2>/dev/null;
+else
+  SYS_PYTHON := $(shell PATH="$$(echo "$$PATH" | tr ':' '\n' | grep -v '\.venv' | tr '\n' ':')" which python)
+  NPROC      := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
+  CARGO_ENV  := . "$(HOME)/.local/share/cargo/env" 2>/dev/null;
+endif
 
 STAMPS := .build-stamps
 FIND_EXCLUDES := -not -path '*/node_modules/*' \
