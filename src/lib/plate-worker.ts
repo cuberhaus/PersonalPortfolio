@@ -86,7 +86,7 @@ interface ImageBuffer {
   label: string;
 }
 
-function report(data: any) {
+function report(data: Record<string, unknown>) {
   self.postMessage(data);
 }
 
@@ -869,8 +869,8 @@ self.onmessage = async (e: MessageEvent) => {
           ? processImage(msg.detect, msg.ocr, msg.font)
           : processImageSingle(msg.image, msg.font);
       report({ type: "result", ...result });
-    } catch (err: any) {
-      report({ type: "error", message: err.message });
+    } catch (err: unknown) {
+      report({ type: "error", message: err instanceof Error ? err.message : String(err) });
     }
   }
 };

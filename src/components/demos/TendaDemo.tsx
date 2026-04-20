@@ -7,121 +7,10 @@ import {
 } from "../../data/tenda-mock";
 
 type View = "home" | "category" | "product" | "cart" | "checkout";
-type Lang = "en" | "es" | "ca";
+import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/tenda-demo";
+import MockBanner from "./MockBanner";
 
-const TRANSLATIONS = {
-  en: {
-    mockBanner: "This is a mock demo \u2014 no real orders or payments. Browse, add to cart, and try the checkout flow.",
-    storeName: "Tenda Online",
-    home: "Home",
-    cart: "Cart",
-    welcome: "Welcome to our online clothing store",
-    backHome: "\u2190 Home",
-    back: "\u2190 Back",
-    price: "Price:",
-    stock: "Stock:",
-    addToCart: "Add to cart",
-    yourCart: "Your cart",
-    continueShopping: "Continue shopping",
-    emptyCart: "Your cart is empty.",
-    goToStore: "Go to store",
-    product: "Product",
-    quantity: "Quantity",
-    total: "Total",
-    remove: "Remove",
-    totalLabel: "Total:",
-    goToCheckout: "Go to checkout",
-    orderReceived: "Order received!",
-    simNote: "This is just a simulation. No real order has been placed.",
-    backToCart: "\u2190 Back to cart",
-    checkout: "Checkout",
-    registeredUser: "Registered user",
-    guest: "Guest",
-    fullName: "Full name",
-    namePlaceholder: "Your name",
-    email: "Email address",
-    emailPlaceholder: "email@example.com",
-    address: "Shipping address",
-    addressPlaceholder: "Street, number, city, ZIP",
-    password: "Password",
-    passwordPlaceholder: "Your password",
-    confirmOrder: "Place order"
-  },
-  es: {
-    mockBanner: "Esta es una demo simulada \u2014 no hay pedidos ni pagos reales. Explora, a\u00f1ade al carrito y prueba el flujo de pago.",
-    storeName: "Tienda Online",
-    home: "Inicio",
-    cart: "Carrito",
-    welcome: "Bienvenidos a nuestra tienda de ropa online",
-    backHome: "\u2190 Inicio",
-    back: "\u2190 Volver",
-    price: "Precio:",
-    stock: "Stock:",
-    addToCart: "A\u00f1adir al carrito",
-    yourCart: "Tu carrito",
-    continueShopping: "Seguir comprando",
-    emptyCart: "El carrito est\u00e1 vac\u00edo.",
-    goToStore: "Ir a la tienda",
-    product: "Producto",
-    quantity: "Cantidad",
-    total: "Total",
-    remove: "Eliminar",
-    totalLabel: "Total:",
-    goToCheckout: "Ir a pagar",
-    orderReceived: "\u00a1Pedido recibido!",
-    simNote: "Esto es solo una simulaci\u00f3n. No se ha realizado ning\u00fan pedido real.",
-    backToCart: "\u2190 Volver al carrito",
-    checkout: "Pago",
-    registeredUser: "Usuario registrado",
-    guest: "Invitado",
-    fullName: "Nombre completo",
-    namePlaceholder: "Tu nombre",
-    email: "Correo electr\u00f3nico",
-    emailPlaceholder: "email@ejemplo.com",
-    address: "Direcci\u00f3n de env\u00edo",
-    addressPlaceholder: "Calle, n\u00famero, ciudad, CP",
-    password: "Contrase\u00f1a",
-    passwordPlaceholder: "Tu contrase\u00f1a",
-    confirmOrder: "Confirmar pedido"
-  },
-  ca: {
-    mockBanner: "Aquesta \u00e9s una demo simulada \u2014 no hi ha comandes ni pagaments reals. Explora, afegeix al carret i prova el flux de pagament.",
-    storeName: "Botiga Online",
-    home: "Inici",
-    cart: "Carret",
-    welcome: "Benvinguts a la nostra botiga online de roba",
-    backHome: "\u2190 Inici",
-    back: "\u2190 Tornar",
-    price: "Preu:",
-    stock: "Stock:",
-    addToCart: "Afegir a la cistella",
-    yourCart: "La teva cistella",
-    continueShopping: "Continuar comprant",
-    emptyCart: "La cistella est\u00e0 buida.",
-    goToStore: "Anar a la botiga",
-    product: "Producte",
-    quantity: "Quantitat",
-    total: "Total",
-    remove: "Eliminar",
-    totalLabel: "Total:",
-    goToCheckout: "Anar al pagament",
-    orderReceived: "Comanda rebuda!",
-    simNote: "Aix\u00f2 \u00e9s nom\u00e9s una simulaci\u00f3. Cap comanda real s'ha enviat.",
-    backToCart: "\u2190 Tornar a la cistella",
-    checkout: "Checkout",
-    registeredUser: "Usuari registrat",
-    guest: "Convidat",
-    fullName: "Nom complet",
-    namePlaceholder: "El teu nom",
-    email: "Correu electr\u00f2nic",
-    emailPlaceholder: "email@exemple.cat",
-    address: "Adre\u00e7a d'enviament",
-    addressPlaceholder: "Carrer, n\u00famero, ciutat, CP",
-    password: "Contrasenya",
-    passwordPlaceholder: "La teva contrasenya",
-    confirmOrder: "Confirmar comanda"
-  }
-};
+type Lang = "en" | "es" | "ca";
 
 const styles = {
   wrapper: {
@@ -240,16 +129,6 @@ const styles = {
     padding: "3rem 2rem",
     color: "var(--text-muted)",
   },
-  mockBanner: {
-    background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 10%, transparent), color-mix(in srgb, var(--accent-end) 8%, transparent))",
-    border: "1px solid var(--glow-color-strong)",
-    borderRadius: "0.5rem",
-    padding: "0.5rem 1rem",
-    fontSize: "0.75rem",
-    color: "var(--text-secondary)",
-    marginBottom: "1rem",
-    textAlign: "center" as const,
-  },
 } as const;
 
 const ProductIcon = () => (
@@ -339,9 +218,9 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
 
   return (
     <div style={styles.wrapper}>
-      <div style={styles.mockBanner}>
+      <MockBanner>
         {t.mockBanner}
-      </div>
+      </MockBanner>
 
       {/* Nav */}
       <nav style={styles.nav}>

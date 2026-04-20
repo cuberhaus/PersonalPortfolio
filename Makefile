@@ -1,6 +1,6 @@
-.PHONY: install dev dev-all build preview stop-all \
-       docker-build-all docker-build-parallel docker-rebuild-all \
-       clean test test-all help \
+.PHONY: install dev dev-all build preview stop health \
+       rebuild \
+       clean test help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
 
@@ -12,22 +12,58 @@ install: ## Install project dependencies
 	@. "$(HOME)/.local/share/cargo/env" 2>/dev/null; \
 	command -v cargo >/dev/null 2>&1 || { echo "Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; }
 
-dev: ## Start Astro dev server only (no backends)
+dev: ## Start Astro dev server with hot-reload (no demo backends)
 	npm run dev
 
 dev-all: ## Start Astro + ALL demo backends (Docker + planner-api + PROP)
 	npm run dev:all
 
-build: ## Build for production
+stop: ## Stop all demo backend containers/services
+	@echo "Stopping portfolio demo services..."
+	-docker compose -f ../TFG/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../bitsXlaMarato/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../tenda_online/docker/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../Draculin-Backend/docker-compose.yml down 2>/dev/null
+	-docker rm -f portfolio-pro2 2>/dev/null
+	-docker rm -f portfolio-planif 2>/dev/null
+	-docker compose -f ../desastresIA/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../projectA/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../projectA2/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../CAIM/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../joc_eda/docker-compose.yml down 2>/dev/null
+	-docker compose -f ../SBC_IA/docker-compose.yml down 2>/dev/null
+	-fuser -k 8081/tcp 2>/dev/null
+	-fuser -k 8765/tcp 2>/dev/null
+	@echo "Done."
+
+health: ## Check if all demo backends are responding
+	@echo "Checking health of demo backends..."
+	@failed=0; \
+	for svc in "TFG:8082" "bitsXlaMarato:8001" "pracpro2:8000" "Planificacion:3000" "Tenda:8888" "Draculin:8890" "DesastresIA:8083" "MPIDS:8084" "PhaseTransitions:8085" "CAIM:8086" "JocEDA:8087" "SBC_IA:8088" "PROP:8081" "planner-api:8765"; do \
+		name=$${svc%%:*}; port=$${svc##*:}; \
+		if curl -s --connect-timeout 2 "http://localhost:$$port/" >/dev/null 2>&1; then \
+			printf "\033[32m[OK]\033[0m   %-18s (port %s)\n" "$$name" "$$port"; \
+		else \
+			printf "\033[31m[FAIL]\033[0m %-18s (port %s)\n" "$$name" "$$port"; \
+			failed=1; \
+		fi; \
+	done; \
+	if [ $$failed -eq 1 ]; then echo "\nSome services appear to be down."; exit 1; else echo "\nAll services are up and running!"; fi
+
+build: ## Build Astro site for production and all demo Docker images
+	+@$(MAKE) --no-print-directory $(DEMO_TARGETS) -j$$(nproc) --output-sync=target
 	npm run build
 
-preview: ## Preview the production build locally
+rebuild: ## Force rebuild all Docker images (ignore cache) and Astro site
+	@rm -rf "$(STAMPS)" dist/
+	+@$(MAKE) build
+
+preview: ## Serve the built static site from dist/ to verify production behavior
 	npm run preview
 
-test: ## Run Vitest test suite (portfolio only)
+test: ## Run ALL test suites (portfolio + every demo backend)
 	npm test
-
-test-all: test ## Run ALL test suites (portfolio + every demo backend)
+	npx playwright test
 	@echo ""
 	@echo "=== Python backends (pytest) ==="
 	cd "$(PARENT)/projectA/web"   && $(SYS_PYTHON) -m pytest backend/test_app.py -v
@@ -37,6 +73,7 @@ test-all: test ## Run ALL test suites (portfolio + every demo backend)
 	cd "$(PARENT)/bitsXlaMarato/web/backend" && $(SYS_PYTHON) -m pytest test_app.py -v
 	cd "$(PARENT)/SBC_IA/web"     && $(SYS_PYTHON) -m pytest backend/test_app.py -v
 	cd "$(PARENT)/TFG/backend"    && $(SYS_PYTHON) -m pytest test_main.py -v
+	cd "planner-api"              && $(SYS_PYTHON) -m pytest tests/ -v
 	@echo ""
 	@echo "=== Django (Draculin) ==="
 	cd "$(PARENT)/Draculin-Backend" && $(SYS_PYTHON) manage.py test dracu -v2
@@ -60,6 +97,29 @@ test-all: test ## Run ALL test suites (portfolio + every demo backend)
 	cd "$(PARENT)/Practica_de_Planificacion/web" && npx vitest run
 	@echo ""
 	@echo "All test suites passed."
+
+clean: ## Remove build artifacts and node_modules
+	rm -rf dist/ node_modules/ .astro/ .build-stamps/
+
+help: ## Show this help message
+	@echo "Available commands:"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@echo ""
+	@echo "Demo backends started by dev-all:"
+	@echo "  TFG              :8082  (docker compose)"
+	@echo "  bitsXlaMarato    :8001  (docker compose, GPU)"
+	@echo "  pracpro2         :8000  (docker run)"
+	@echo "  Planificacion    :3000  (docker run)"
+	@echo "  Tenda            :8888  (docker compose)"
+	@echo "  Draculin         :8890  (docker compose)"
+	@echo "  DesastresIA      :8083  (docker compose)"
+	@echo "  MPIDS            :8084  (docker compose)"
+	@echo "  PhaseTransitions :8085  (docker compose)"
+	@echo "  CAIM             :8086  (docker compose)"
+	@echo "  JocEDA           :8087  (docker compose)"
+	@echo "  SBC_IA           :8088  (docker compose)"
+	@echo "  PROP             :8081  (Spring Boot)"
+	@echo "  planner-api      :8765  (ENHSP)"
 
 PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
 
@@ -131,54 +191,3 @@ _db-joceda:
 _db-sbcia:
 	$(call build_if_changed,sbcia,$(PARENT)/SBC_IA,SBC_IA           :8088,\
 		docker compose -f "$(PARENT)/SBC_IA/docker-compose.yml" build)
-
-docker-build-all: $(DEMO_TARGETS) ## Build Docker images for demos (skips unchanged, use -jN for parallel)
-	@echo "Done."
-
-docker-build-parallel: ## Build all Docker images in parallel (auto-detects cores)
-	+@make docker-build-all -j$$(nproc) --output-sync=target
-
-docker-rebuild-all: ## Force rebuild all Docker images (ignore cache)
-	@rm -rf "$(STAMPS)"
-	+@make docker-build-all
-
-stop-all: ## Stop all demo backend containers/services
-	@echo "Stopping portfolio demo services..."
-	-docker compose -f ../TFG/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../bitsXlaMarato/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../tenda_online/docker/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../Draculin-Backend/docker-compose.yml down 2>/dev/null
-	-docker rm -f portfolio-pro2 2>/dev/null
-	-docker rm -f portfolio-planif 2>/dev/null
-	-docker compose -f ../desastresIA/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../projectA/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../projectA2/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../CAIM/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../joc_eda/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../SBC_IA/docker-compose.yml down 2>/dev/null
-	-fuser -k 8081/tcp 2>/dev/null
-	-fuser -k 8765/tcp 2>/dev/null
-	@echo "Done."
-
-clean: ## Remove build artifacts and node_modules
-	rm -rf dist/ node_modules/ .astro/ .build-stamps/
-
-help: ## Show this help message
-	@echo "Available commands:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
-	@echo ""
-	@echo "Demo backends started by dev-all:"
-	@echo "  TFG              :8082  (docker compose)"
-	@echo "  bitsXlaMarato    :8001  (docker compose, GPU)"
-	@echo "  pracpro2         :8000  (docker run)"
-	@echo "  Planificacion    :3000  (docker run)"
-	@echo "  Tenda            :8888  (docker compose)"
-	@echo "  Draculin         :8890  (docker compose)"
-	@echo "  DesastresIA      :8083  (docker compose)"
-	@echo "  MPIDS            :8084  (docker compose)"
-	@echo "  PhaseTransitions :8085  (docker compose)"
-	@echo "  CAIM             :8086  (docker compose)"
-	@echo "  JocEDA           :8087  (docker compose)"
-	@echo "  SBC_IA           :8088  (docker compose)"
-	@echo "  PROP             :8081  (Spring Boot)"
-	@echo "  planner-api      :8765  (ENHSP)"

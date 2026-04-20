@@ -16,106 +16,9 @@ import {
 } from "../../lib/graph-phase";
 import { forceLayout } from "../../lib/mpids";
 
-type Lang = "en" | "es" | "ca";
+import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/phase-transitions-demo";
 
-const TRANSLATIONS = {
-  en: {
-    noNodes: "No nodes remaining after percolation",
-    retentionProb: "Retention probability (p)",
-    pProperty: "P(property)",
-    pConnected: "P(connected)",
-    pComplex: "P(all components complex)",
-    title: "Phase Transitions in Random Graphs",
-    desc: "Generate random graphs and apply percolation (random removal of nodes or edges) to observe phase transitions \u2014 the sharp change from connected to disconnected as the retention probability drops. Each connected component is shown in a different color.",
-    graphFamily: "Graph family:",
-    binomial: "Binomial (Erd\u0151s\u2013R\u00e9nyi)",
-    geometric: "Geometric",
-    grid: "Grid",
-    gridSide: "Grid side:",
-    nodes: "Nodes:",
-    nodesCount: "{0} nodes",
-    generate: "Generate",
-    percolation: "Percolation:",
-    node: "Node",
-    edge: "Edge",
-    both: "Both",
-    retention: "Retention probability:",
-    edgesCount: "{0} edges",
-    connected: "Connected",
-    components: "{0} components",
-    allComplex: "All complex",
-    notAllComplex: "Not all complex",
-    largest: "Largest: {0}",
-    ptCurve: "Phase transition curve:",
-    ptDesc: "Sweeps retention probability 0\u21921, measuring P(connected) and P(all complex) over multiple trials.",
-    computing: "Computing\u2026",
-    runSweep: "Run sweep"
-  },
-  es: {
-    noNodes: "No quedan nodos después de la percolación",
-    retentionProb: "Probabilidad de retención (p)",
-    pProperty: "P(propiedad)",
-    pConnected: "P(conectado)",
-    pComplex: "P(todas comp. complejas)",
-    title: "Transiciones de Fase en Grafos Aleatorios",
-    desc: "Genera grafos aleatorios y aplica percolación (eliminación aleatoria de nodos o aristas) para observar transiciones de fase \u2014 el cambio brusco de conectado a desconectado a medida que la probabilidad de retención disminuye. Cada componente conectada se muestra en un color diferente.",
-    graphFamily: "Familia de grafos:",
-    binomial: "Binomial (Erd\u0151s\u2013R\u00e9nyi)",
-    geometric: "Geométrico",
-    grid: "Cuadrícula",
-    gridSide: "Lado cuadrícula:",
-    nodes: "Nodos:",
-    nodesCount: "{0} nodos",
-    generate: "Generar",
-    percolation: "Percolación:",
-    node: "Nodo",
-    edge: "Arista",
-    both: "Ambos",
-    retention: "Probabilidad de retención:",
-    edgesCount: "{0} aristas",
-    connected: "Conectado",
-    components: "{0} componentes",
-    allComplex: "Todas complejas",
-    notAllComplex: "No todas complejas",
-    largest: "Mayor: {0}",
-    ptCurve: "Curva de transición de fase:",
-    ptDesc: "Realiza un barrido de la probabilidad de retención de 0\u21921, midiendo P(conectado) y P(todas complejas) en múltiples ensayos.",
-    computing: "Calculando\u2026",
-    runSweep: "Ejecutar barrido"
-  },
-  ca: {
-    noNodes: "No queden nodes després de la percolació",
-    retentionProb: "Probabilitat de retenció (p)",
-    pProperty: "P(propietat)",
-    pConnected: "P(connectat)",
-    pComplex: "P(totes comp. complexes)",
-    title: "Transicions de Fase en Grafs Aleatoris",
-    desc: "Genera grafs aleatoris i aplica percolació (eliminació aleatòria de nodes o arestes) per observar transicions de fase \u2014 el canvi brusc de connectat a desconnectat a mesura que la probabilitat de retenció disminueix. Cada component connectada es mostra en un color diferent.",
-    graphFamily: "Família de grafs:",
-    binomial: "Binomial (Erd\u0151s\u2013R\u00e9nyi)",
-    geometric: "Geomètric",
-    grid: "Quadrícula",
-    gridSide: "Costat quadrícula:",
-    nodes: "Nodes:",
-    nodesCount: "{0} nodes",
-    generate: "Generar",
-    percolation: "Percolació:",
-    node: "Node",
-    edge: "Aresta",
-    both: "Ambdós",
-    retention: "Probabilitat de retenció:",
-    edgesCount: "{0} arestes",
-    connected: "Connectat",
-    components: "{0} components",
-    allComplex: "Totes complexes",
-    notAllComplex: "No totes complexes",
-    largest: "Major: {0}",
-    ptCurve: "Corba de transició de fase:",
-    ptDesc: "Realitza un escombrat de la probabilitat de retenció de 0\u21921, mesurant P(connectat) i P(totes complexes) en múltiples assajos.",
-    computing: "Calculant\u2026",
-    runSweep: "Executar escombrat"
-  }
-};
+type Lang = "en" | "es" | "ca";
 
 // ─── Palette for connected components ───
 
@@ -214,7 +117,7 @@ function GraphVis({ graph, comps, t }: { graph: SimpleGraph; comps: number[][]; 
       for (const v of comp) map[v] = c;
     });
     return map;
-  }, [graph, comps]);
+  }, [graph.n, comps]);
 
   if (graph.n === 0) {
     return (

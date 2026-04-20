@@ -67,6 +67,30 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   })();
   document.documentElement.setAttribute('data-design', __design);
 
+  // Load design-specific fonts on demand instead of all 14 families upfront.
+  // Core fonts (Inter, Inter Tight, JetBrains Mono) are in the main <link>.
+  var __designFonts = {
+    editorial:  'family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400',
+    pixel:      'family=Press+Start+2P',
+    cyber:      'family=Orbitron:wght@500;700;900',
+    notebook:   'family=Caveat:wght@500;600;700',
+    academic:   'family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+    deco:       'family=Poiret+One&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900',
+    wabisabi:   'family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+    comic:      'family=Bangers',
+    newspaper:  'family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+  };
+  var __loadedFonts = {};
+  window.__loadDesignFonts = function(id) {
+    if (__loadedFonts[id] || !__designFonts[id]) return;
+    __loadedFonts[id] = true;
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?' + __designFonts[id] + '&display=swap';
+    document.head.appendChild(link);
+  };
+  window.__loadDesignFonts(__design);
+
   window.setTheme = function(id) {
     if (!VALID_THEMES.includes(id)) {
       console.error(
@@ -89,6 +113,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     }
     document.documentElement.setAttribute('data-design', id);
     localStorage.setItem('design', id);
+    window.__loadDesignFonts(id);
   };
 </script>
 )}

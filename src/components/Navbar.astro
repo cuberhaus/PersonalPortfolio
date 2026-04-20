@@ -26,11 +26,15 @@ const links = [
     </button>
 
     <ul class="nav-links" id="nav-links">
-      {links.map((link) => (
-        <li><a href={link.href} class="nav-link">{link.label}</a></li>
-      ))}
-      <li><LanguagePicker /></li>
-      <li class="nav-theme-toggle"><ThemeToggle /></li>
+      <li class="nav-links-primary">
+        {links.map((link) => (
+          <a href={link.href} class="nav-link">{link.label}</a>
+        ))}
+      </li>
+      <li class="nav-links-util">
+        <LanguagePicker />
+        <div class="nav-theme-toggle"><ThemeToggle /></div>
+      </li>
     </ul>
   </div>
 </nav>
@@ -72,6 +76,20 @@ const links = [
     display: flex;
     gap: 1.5rem;
     align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Desktop: flatten the primary group so each link is a flex item of the row */
+  .nav-links-primary {
+    display: contents;
+  }
+
+  .nav-links-util {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
   }
 
   .nav-link {
@@ -95,11 +113,13 @@ const links = [
   }
 
   .nav-link:hover,
+  .nav-link:focus-visible,
   .nav-link.active {
     color: var(--text-primary);
   }
 
   .nav-link:hover::after,
+  .nav-link:focus-visible::after,
   .nav-link.active::after {
     width: 100%;
   }
@@ -152,37 +172,46 @@ const links = [
   }
 
   @media (max-width: 768px) {
+    .nav-inner {
+      position: relative;
+      z-index: 2;
+      isolation: isolate;
+    }
+
+    .nav-logo,
+    .nav-toggle {
+      position: relative;
+      z-index: 3;
+    }
+
     .nav-toggle {
       display: flex;
     }
 
     .nav-links {
       position: fixed;
-      top: var(--nav-height);
+      top: 0;
       left: 0;
       right: 0;
+      height: 100vh;
+      height: 100dvh;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 0;
+      padding: calc(var(--nav-height) + 1rem) 1.5rem 2rem;
       background: rgba(var(--bg-primary-rgb), 0.95);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 1rem 0;
+      border-bottom: none;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      z-index: 1;
       transform: translateY(-100%);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
       transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s var(--transition-base);
-    }
-    
-    .nav-theme-toggle {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border-color);
-      width: 100%;
-      display: flex;
-      justify-content: center;
     }
 
     .nav-links.open {
@@ -193,20 +222,77 @@ const links = [
       transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s;
     }
 
+    /* Mobile: Centered, large typography */
+    .nav-links-primary {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.75rem;
+      width: 100%;
+      flex: 1;
+    }
+
     .nav-links li {
       width: 100%;
       text-align: center;
     }
 
     .nav-link {
-      display: block;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
+      display: inline-block;
+      width: auto;
+      margin: 0;
+      padding: 0.5rem;
+      font-size: 1.75rem;
+      font-weight: 600;
+      text-align: center;
+      color: var(--text-secondary);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-link::after {
+      display: none; /* Hide underline on mobile for a cleaner look */
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text-primary);
+      transform: scale(1.05);
+    }
+
+    /* Bottom utilities */
+    .nav-links-util {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links-primary + .nav-links-util {
+      margin-top: auto;
+      padding-top: 2rem;
+      width: 100%;
+      border-top: 1px solid color-mix(in oklab, var(--border-color) 50%, transparent);
+    }
+
+    .nav-theme-toggle {
+      padding-top: 0;
+      margin-left: 0;
+    }
+
+    .nav-links-util :global(.language-picker) {
+      border-left: none;
+      padding-left: 0;
+      margin-top: 0;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 </style>
 
 <script>
+  // @ts-nocheck
   let scrollHandler;
 
   document.addEventListener('astro:page-load', () => {
@@ -215,6 +301,15 @@ const links = [
 
     const toggle = navbar.querySelector('.nav-toggle');
     const links = document.getElementById('nav-links');
+
+    const setBodyScrollLocked = (locked) => {
+      document.body.style.overflow = locked ? 'hidden' : '';
+    };
+
+    // Reset on every navigation (menu + scroll lock must not leak across views)
+    document.body.style.overflow = '';
+    toggle?.setAttribute('aria-expanded', 'false');
+    links?.classList.remove('open');
 
     // Prevent duplicate scroll listeners on multiple navigation events
     if (scrollHandler) {
@@ -231,14 +326,17 @@ const links = [
     const closeMenu = () => {
       toggle?.setAttribute('aria-expanded', 'false');
       links?.classList.remove('open');
+      setBodyScrollLocked(false);
     };
 
     if (toggle && !toggle.hasAttribute('data-initialized')) {
       toggle.setAttribute('data-initialized', 'true');
       toggle.addEventListener('click', () => {
         const expanded = toggle.getAttribute('aria-expanded') === 'true';
-        toggle.setAttribute('aria-expanded', String(!expanded));
+        const nextOpen = !expanded;
+        toggle.setAttribute('aria-expanded', String(nextOpen));
         links?.classList.toggle('open');
+        setBodyScrollLocked(nextOpen);
       });
     }
 
@@ -254,7 +352,7 @@ const links = [
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && links?.classList.contains('open')) {
           closeMenu();
-          toggle?.focus();
+          if (toggle instanceof HTMLElement) toggle.focus();
         }
       });
     }

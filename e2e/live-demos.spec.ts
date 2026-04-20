@@ -1,6 +1,6 @@
 /**
  * E2E tests for live iframe demos (require Docker backends running).
- * 
+ *
  * Prerequisites: Run `npm run dev:all` or start individual Docker services.
  *
  * Run: npx playwright test --project=live-demos
@@ -15,10 +15,10 @@ const LIVE_DEMOS = [
   { slug: 'sbc-ia', port: 8088, name: 'SBC IA Trip Planner' },
   // CAIM is now a browser-native mock demo; iframe fallback still works but tested in browser-demos.spec.ts
   // { slug: 'caim', port: 8086, name: 'CAIM IR Explorer' },
-  { slug: 'planificacion', port: 8765, name: 'Planificación' },
-  { slug: 'joc-eda', port: 8082, name: 'Joc EDA' },
-  { slug: 'mpids', port: 8085, name: 'MPIDS Solver' },
-  { slug: 'phase-transitions', port: 8087, name: 'Phase Transitions' },
+  { slug: 'planificacion', port: 3000, name: 'Planificación' },
+  { slug: 'joc-eda', port: 8087, name: 'Joc EDA' },
+  { slug: 'mpids', port: 8084, name: 'MPIDS Solver' },
+  { slug: 'phase-transitions', port: 8085, name: 'Phase Transitions' },
   { slug: 'prop', port: 8081, name: 'Prop Recommendation' },
 ];
 
@@ -41,8 +41,8 @@ for (const demo of LIVE_DEMOS) {
       // Wait for probe to complete
       await page.waitForTimeout(3000);
       // Should show green dot
-      const greenDot = page.locator('[style*="#22c55e"], [style*="linear-gradient(135deg, rgba(16,185,129"]');
-      await expect(greenDot.first()).toBeVisible();
+      const liveText = page.getByText(/Live app detected|App en vivo detectada|App en viu detectada/);
+      await expect(liveText.first()).toBeVisible();
     });
 
     test('renders iframe with correct src', async ({ page }) => {

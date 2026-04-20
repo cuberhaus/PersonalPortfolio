@@ -1,40 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { interpret, playNotes, SAMPLE_PROGRAMS, type JSBachResult } from "../../lib/jsbach/interpreter";
 
-type Lang = "en" | "es" | "ca";
+import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/jsbach-demo";
 
-const TRANSLATIONS = {
-  en: {
-    examples: "Examples",
-    codeEditor: "Code Editor",
-    run: "Run",
-    playing: "Playing...",
-    playMusic: "Play Music",
-    output: "Output",
-    notesGenerated: "{0} note{s} generated",
-    noOutput: "Program ran successfully with no output."
-  },
-  es: {
-    examples: "Ejemplos",
-    codeEditor: "Editor de Código",
-    run: "Ejecutar",
-    playing: "Reproduciendo...",
-    playMusic: "Reproducir Música",
-    output: "Salida",
-    notesGenerated: "{0} nota{s} generada{s}",
-    noOutput: "El programa se ejecutó correctamente sin salida."
-  },
-  ca: {
-    examples: "Exemples",
-    codeEditor: "Editor de Codi",
-    run: "Executar",
-    playing: "Reproduint...",
-    playMusic: "Reproduir Música",
-    output: "Sortida",
-    notesGenerated: "{0} nota{s} generada{s}",
-    noOutput: "El programa s'ha executat correctament sense sortida."
-  }
-};
+type Lang = "en" | "es" | "ca";
 
 const styles = {
   card: {

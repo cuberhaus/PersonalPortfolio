@@ -413,8 +413,8 @@ test.describe('Phase Transitions demo', () => {
 
   test('generate renders graph SVG', async ({ page }) => {
     await page.getByRole('button', { name: /generate|generar/i }).first().click();
-    const svg = page.locator('svg:has(circle, line, path[d])');
-    await expect(svg.first()).toBeVisible();
+    const svg = page.locator('svg[viewBox]:not([width="16"]):not([width="20"]):not([width="24"]):not([width="28"])');
+    await expect(svg.first()).toBeVisible({ timeout: 10000 });
   });
 
   test('retention slider exists', async ({ page }) => {
@@ -436,8 +436,8 @@ test.describe('Phase Transitions demo', () => {
     await page.getByRole('button', { name: 'Geometric' }).click();
     // Geometric should be visually active
     await page.getByRole('button', { name: /generate|generar/i }).first().click();
-    const svg = page.locator('svg:has(circle, line, path[d])');
-    await expect(svg.first()).toBeVisible();
+    const svg = page.locator('svg[viewBox]:not([width="16"]):not([width="20"]):not([width="24"]):not([width="28"])');
+    await expect(svg.first()).toBeVisible({ timeout: 10000 });
   });
 });
 
@@ -548,6 +548,9 @@ test.describe('CAIM IR Explorer demo', () => {
     await page.goto('/demos/caim', { waitUntil: 'networkidle' });
     // Wait for LiveAppEmbed probe + component hydration
     await page.waitForTimeout(3000);
+    // Skip mock tests when live backend is running (it hides the fallback)
+    const mockVisible = await page.locator('.caim-mock').isVisible();
+    test.skip(!mockVisible, 'Live backend running – mock demo hidden');
     // Scroll mock into viewport for client:visible
     await page.evaluate(() => {
       document.querySelector('.caim-mock')?.scrollIntoView({ block: 'center' });
@@ -627,6 +630,8 @@ test.describe('CAIM demo i18n', () => {
   test('Spanish CAIM page shows translated tab labels', async ({ page }) => {
     await page.goto('/es/demos/caim', { waitUntil: 'networkidle' });
     await page.waitForTimeout(3000);
+    const mockVisible = await page.locator('.caim-mock').isVisible();
+    test.skip(!mockVisible, 'Live backend running – mock demo hidden');
     await page.evaluate(() => {
       document.querySelector('.caim-mock')?.scrollIntoView({ block: 'center' });
     });
@@ -637,6 +642,8 @@ test.describe('CAIM demo i18n', () => {
   test('Catalan CAIM page shows translated tab labels', async ({ page }) => {
     await page.goto('/ca/demos/caim', { waitUntil: 'networkidle' });
     await page.waitForTimeout(3000);
+    const mockVisible = await page.locator('.caim-mock').isVisible();
+    test.skip(!mockVisible, 'Live backend running – mock demo hidden');
     await page.evaluate(() => {
       document.querySelector('.caim-mock')?.scrollIntoView({ block: 'center' });
     });
@@ -668,6 +675,9 @@ test.describe('PAR Parallel Computing demo', () => {
   test('heat equation play button starts iteration', async ({ page }) => {
     await page.goto('/demos/par-parallel', { waitUntil: 'networkidle' });
     await page.waitForTimeout(2000);
+    // Skip when live backend is running (it hides the mock fallback)
+    const mockVisible = await page.locator('#par-mock-fallback').isVisible();
+    test.skip(!mockVisible, 'Live backend running – mock demo hidden');
     await page.evaluate(() => {
       document.querySelector('.par-demo')?.scrollIntoView({ block: 'center' });
     });

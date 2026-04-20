@@ -16,8 +16,18 @@ export type Board = {
 /** Assignment[h] = ordered group ids for helicopter h */
 export type Assignment = number[][];
 
+const HELICOPTER_CAPACITY = 15;
+const MAX_GROUPS_PER_SORTIE = 3;
+const COOLDOWN_MINUTES = 10;
+const SPEED_KM_PER_MIN = 1.66667;
+
 function cloneAssign(a: Assignment): Assignment {
   return a.map((q) => [...q]);
+}
+
+/** Travel time between two points at helicopter speed */
+function travelTime(dist: number): number {
+  return dist / SPEED_KM_PER_MIN;
 }
 
 function helicopterTimeH2(
@@ -26,68 +36,43 @@ function helicopterTimeH2(
   board: Board,
 ): number {
   const { groups, distCG, distGG } = board;
-  let capacitatact = 0;
-  let tiempoact = 0;
-  let lastgroup = -1;
-  let ngrups = 0;
+  let capacity = 0;
+  let time = 0;
+  let lastGroup = -1;
+  let groupCount = 0;
 
   for (let j = 0; j < groupIds.length; j++) {
     const gid = groupIds[j];
     const g = groups[gid];
-    const isLast = j === groupIds.length - 1;
     const timePerPerson = g.prioridad === 1 ? 2 : 1;
+    const canFit = capacity + g.nPersonas <= HELICOPTER_CAPACITY && groupCount < MAX_GROUPS_PER_SORTIE;
 
-    if (!isLast) {
-      if (capacitatact + g.nPersonas <= 15 && ngrups < 3) {
-        capacitatact += g.nPersonas;
-        ngrups++;
-        if (lastgroup === -1) {
-          tiempoact += distCG(centroId, gid) / 1.66667;
-          tiempoact += g.nPersonas * timePerPerson;
-          lastgroup = gid;
-        } else {
-          tiempoact += distGG(lastgroup, gid) / 1.66667;
-          tiempoact += g.nPersonas * timePerPerson;
-          lastgroup = gid;
-        }
-      } else {
-        capacitatact = 0;
-        tiempoact += distCG(centroId, lastgroup) / 1.66667;
-        tiempoact += 10;
-        tiempoact += distCG(centroId, gid) / 1.66667;
-        tiempoact += g.nPersonas * timePerPerson;
-        lastgroup = gid;
-        ngrups = 1;
-      }
-    } else if (capacitatact + g.nPersonas <= 15 && ngrups < 3) {
-      capacitatact += g.nPersonas;
-      ngrups++;
-      if (lastgroup === -1) {
-        tiempoact += distCG(centroId, gid) / 1.66667;
-        tiempoact += g.nPersonas * timePerPerson;
-        lastgroup = gid;
-      } else {
-        tiempoact += distGG(lastgroup, gid) / 1.66667;
-        tiempoact += g.nPersonas * timePerPerson;
-        lastgroup = gid;
-      }
-      capacitatact = 0;
-      tiempoact += distCG(centroId, gid) / 1.66667;
-      lastgroup = gid;
-      ngrups = 1;
+    if (canFit) {
+      // Pick up this group in the current sortie
+      capacity += g.nPersonas;
+      groupCount++;
+      time += lastGroup === -1
+        ? travelTime(distCG(centroId, gid))
+        : travelTime(distGG(lastGroup, gid));
+      time += g.nPersonas * timePerPerson;
+      lastGroup = gid;
     } else {
-      capacitatact = 0;
-      tiempoact += distCG(centroId, lastgroup) / 1.66667;
-      tiempoact += 10;
-      tiempoact += distCG(centroId, gid) / 1.66667;
-      tiempoact += g.nPersonas * timePerPerson;
-      lastgroup = gid;
-      ngrups = 1;
-      capacitatact = 0;
-      tiempoact += distCG(centroId, gid) / 1.66667;
+      // Return to base, cooldown, start new sortie
+      time += travelTime(distCG(centroId, lastGroup));
+      time += COOLDOWN_MINUTES;
+      time += travelTime(distCG(centroId, gid));
+      time += g.nPersonas * timePerPerson;
+      lastGroup = gid;
+      capacity = g.nPersonas;
+      groupCount = 1;
+    }
+
+    // After the last group, fly back to base
+    if (j === groupIds.length - 1) {
+      time += travelTime(distCG(centroId, gid));
     }
   }
-  return tiempoact;
+  return time;
 }
 
 export function heuristicSum(board: Board, assign: Assignment): number {
@@ -171,6 +156,11 @@ export type HillClimbResult = {
   log: string[];
 };
 
+/**
+ * Steepest-descent hill climbing over SWAP neighborhood.
+ * Evaluates all O(n^2 * m^2) neighbors per iteration where n = total groups
+ * and m = number of helicopters. Fine for the toy demo (7 groups, 3 helis).
+ */
 export function hillClimbing(
   board: Board,
   initial: Assignment,

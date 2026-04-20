@@ -1,11 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { dijkstraDemo, mergeSortDemo, bfsGridDemo } from '../../lib/fib-kernels';
-
-const T: Record<string, { graph: string; sort: string; maze: string }> = {
-  en: { graph: 'Dijkstra Shortest Path', sort: 'Merge Sort', maze: 'BFS Maze Solver' },
-  es: { graph: 'Dijkstra Camino Mínimo', sort: 'Merge Sort', maze: 'BFS Laberinto' },
-  ca: { graph: 'Dijkstra Camí Mínim', sort: 'Merge Sort', maze: 'BFS Laberint' },
-};
+import { T } from '../../i18n/demos/fib-demo';
 
 export default function FibDemo({ lang = 'en' }: { lang?: string }) {
   const t = T[lang] || T.en;
