@@ -61,6 +61,15 @@ const t = useTranslations(lang);
   :global([data-theme="solarized-light"]) .moon-icon {
     display: none;
   }
+
+  @media (max-width: 768px) {
+    #theme-toggle {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+  }
 </style>
 
 <script>
