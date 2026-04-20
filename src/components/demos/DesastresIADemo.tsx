@@ -25,7 +25,7 @@ const card = {
 } as const;
 
 const accent1 = "var(--accent-start)";
-const accent2 = "#22c55e";
+const accent2 = "var(--accent-end)";
 
 function formatAssign(a: Assignment): string {
   return a.map((q, h) => `H${h}: [${q.join(", ")}]`).join("  ·  ");
@@ -39,7 +39,7 @@ function SchematicSvg({ t }: { t: typeof TRANSLATIONS.en }) {
     <svg viewBox="0 0 420 180" style={{ width: "100%", maxWidth: 420, display: "block", margin: "0 auto" }} aria-label="Disaster relief layout">
       <defs>
         <linearGradient id="helipad-g" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#4f46e5" /><stop offset="100%" stopColor="#7c3aed" />
+          <stop offset="0%" stopColor="var(--accent-start)" /><stop offset="100%" stopColor="var(--accent-end)" />
         </linearGradient>
       </defs>
       {/* Bases */}
@@ -66,11 +66,11 @@ function SchematicSvg({ t }: { t: typeof TRANSLATIONS.en }) {
       {/* Helicopter routes */}
       <circle cx="105" cy="62" r="12" fill="url(#helipad-g)" opacity={0.9} />
       <text x="105" y="66" textAnchor="middle" fill="var(--text-primary)" fontSize="9" fontWeight="700">H0</text>
-      <path d="M 120 62 Q 170 30 240 52" fill="none" stroke="#22c55e" strokeWidth="2" strokeDasharray="5 3" opacity={0.8} />
+      <path d="M 120 62 Q 170 30 240 52" fill="none" stroke="var(--accent-start)" strokeWidth="2" strokeDasharray="5 3" opacity={0.8} />
 
       <circle cx="105" cy="132" r="12" fill="url(#helipad-g)" opacity={0.9} />
       <text x="105" y="136" textAnchor="middle" fill="var(--text-primary)" fontSize="9" fontWeight="700">H2</text>
-      <path d="M 120 132 Q 200 145 330 112" fill="none" stroke="#f59e0b" strokeWidth="2" strokeDasharray="5 3" opacity={0.8} />
+      <path d="M 120 132 Q 200 145 330 112" fill="none" stroke="var(--accent-end)" strokeWidth="2" strokeDasharray="5 3" opacity={0.8} />
 
       <text x="200" y="95" fill="var(--text-muted)" fontSize="9" fontFamily="ui-monospace">{t.rescueOrder}</text>
     </svg>
@@ -141,15 +141,15 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
       {/* ── WEB APP FEATURES ── */}
       <div style={{
         ...card, marginBottom: "1.25rem",
-        background: "linear-gradient(135deg, rgba(99,102,241,0.08), rgba(34,197,94,0.06))",
-        border: "1px solid rgba(99,102,241,0.25)",
+        background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 8%, transparent), color-mix(in srgb, var(--accent-end) 6%, transparent))",
+        border: "1px solid color-mix(in srgb, var(--accent-start) 25%, transparent)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
           <span style={{ fontSize: "1.1rem" }}>🚁</span>
           <h4 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.webAppTitle}</h4>
           <span style={{
             padding: "0.15rem 0.45rem", borderRadius: "0.3rem", fontSize: "0.6rem", fontWeight: 700,
-            background: "linear-gradient(135deg, #6366f1, #22c55e)", color: "#fff",
+            background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))", color: "#fff",
             letterSpacing: "0.05em", textTransform: "uppercase" as const,
           }}>Solid.js + FastAPI</span>
         </div>
@@ -196,11 +196,11 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
                 <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.2rem" }}>
                   <span style={{
                     fontSize: "0.72rem", fontWeight: 700, fontFamily: "ui-monospace, monospace",
-                    color: h.active ? "#a5b4fc" : "var(--text-muted)",
+                    color: h.active ? "var(--accent-start)" : "var(--text-muted)",
                   }}>{h.name}</span>
                   {h.active && <span style={{
                     fontSize: "0.55rem", padding: "0.1rem 0.35rem", borderRadius: "0.25rem",
-                    background: "var(--glow-color)", color: "#a5b4fc", fontWeight: 600,
+                    background: "var(--glow-color)", color: "var(--accent-start)", fontWeight: 600,
                   }}>{t.usedInDemo}</span>}
                 </div>
                 <div style={{ fontSize: "0.75rem", color: h.active ? "var(--text-primary)" : "var(--text-muted)", lineHeight: 1.4 }}>{h.desc}</div>
@@ -301,7 +301,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
                 {" → "}
                 <strong style={{ color: "var(--text-primary)" }}>{runOut.cost.toFixed(2)}</strong>
                 {runOut.cost < runOut.initialCost - 1e-6 && (
-                  <span style={{ color: "#22c55e", marginLeft: "0.5rem" }}>
+                  <span style={{ color: "var(--accent-start)", marginLeft: "0.5rem" }}>
                     (−{((1 - runOut.cost / runOut.initialCost) * 100).toFixed(1)}%)
                   </span>
                 )}

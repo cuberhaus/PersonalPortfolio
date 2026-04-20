@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { computeMandelbrot, jacobiStep, initHeatGrid, computePi } from '../../lib/par-kernels';
+import { getThemeColors } from '../../lib/demo-theme';
 
 import { T, type DemoTranslations } from "../../i18n/demos/par-demo";
 
@@ -240,7 +241,8 @@ function PiMini({ lang }: { lang: Lang }) {
     const toX = (v: number) => pad.l + ((v - minX) / (maxX - minX || 1)) * cw;
     const toY = (v: number) => pad.t + ch - ((v - minY) / (maxY - minY || 1)) * ch;
 
-    ctx.strokeStyle = '#6366f1';
+    const tc = getThemeColors();
+    ctx.strokeStyle = tc.accentStart;
     ctx.lineWidth = 2;
     ctx.beginPath();
     data.forEach((d, i) => {
@@ -254,13 +256,13 @@ function PiMini({ lang }: { lang: Lang }) {
 
     data.forEach((d) => {
       if (d.error === 0) return;
-      ctx.fillStyle = '#6366f1';
+      ctx.fillStyle = tc.accentStart;
       ctx.beginPath();
       ctx.arc(toX(Math.log10(d.steps)), toY(Math.log10(d.error)), 3, 0, Math.PI * 2);
       ctx.fill();
     });
 
-    ctx.fillStyle = '#8b8b9e';
+    ctx.fillStyle = tc.textMuted;
     ctx.font = '9px monospace';
     ctx.textAlign = 'center';
     ctx.fillText('log₁₀(steps)', w / 2, h - 3);

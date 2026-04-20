@@ -66,7 +66,7 @@ const styles: Record<string, React.CSSProperties> = {
     transition: 'all 0.15s',
   },
   tabActive: {
-    background: 'linear-gradient(135deg, #06b6d4, #6366f1)',
+    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: '#fff',
   },
   content: {

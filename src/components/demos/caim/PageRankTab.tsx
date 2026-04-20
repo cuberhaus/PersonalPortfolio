@@ -7,6 +7,7 @@ import { feature } from 'topojson-client';
 import { getAirports, ROUTES_ADJ, type Airport } from '../../../lib/caim/airports-data';
 import { computePageRank, type PageRankResult, type InitStrategy } from '../../../lib/caim/pagerank';
 import { T } from '../../../i18n/demos/caim-pagerank';
+import { getThemeColors } from '../../../lib/demo-theme';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -147,6 +148,7 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
   const rect = container.getBoundingClientRect();
   const W = rect.width || 700;
   const H = Math.min(W * 0.55, 500);
+  const tc = getThemeColors();
 
   container.innerHTML = '';
   const svg = select(container).append('svg')
@@ -157,13 +159,13 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
   const projection = geoNaturalEarth1().fitSize([W, H], { type: 'Sphere' } as any);
   const path = geoPath(projection);
 
-  svg.append('rect').attr('width', W).attr('height', H).attr('fill', '#0a0a15');
+  svg.append('rect').attr('width', W).attr('height', H).attr('fill', tc.bgSecondary);
 
   svg.append('path')
     .datum(geoGraticule()())
     .attr('d', path as any)
     .attr('fill', 'none')
-    .attr('stroke', '#1a1a2e')
+    .attr('stroke', tc.borderColor)
     .attr('stroke-width', 0.3);
 
   try {
@@ -173,8 +175,8 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
     svg.append('path')
       .datum(land)
       .attr('d', path as any)
-      .attr('fill', '#1a1a2e')
-      .attr('stroke', '#2a2a40')
+      .attr('fill', tc.borderColor)
+      .attr('stroke', tc.borderColorHover)
       .attr('stroke-width', 0.5);
   } catch { /* offline fallback: just graticule */ }
 
@@ -182,9 +184,14 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
   const maxScore = result.rankings[0]?.score ?? 1;
 
   const color = scaleSequential((t: number) => {
-    const r = Math.round(99 + t * 156);
-    const g = Math.round(102 + t * (200 - 102));
-    const b = 241;
+    // Parse accent hex to interpolate
+    const hex = tc.accentStart;
+    const ar = parseInt(hex.slice(1, 3), 16);
+    const ag = parseInt(hex.slice(3, 5), 16);
+    const ab = parseInt(hex.slice(5, 7), 16);
+    const r = Math.round(ar + t * (255 - ar) * 0.6);
+    const g = Math.round(ag + t * (255 - ag) * 0.4);
+    const b = Math.round(ab + t * (255 - ab) * 0.2);
     return `rgb(${r},${g},${b})`;
   }).domain([0, maxScore]);
 
@@ -202,7 +209,7 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
       .attr('r', radius(ap.score))
       .attr('fill', color(ap.score))
       .attr('fill-opacity', 0.8)
-      .attr('stroke', '#0f0f1a')
+      .attr('stroke', tc.bgPrimary)
       .attr('stroke-width', 0.5);
   }
 
@@ -214,7 +221,7 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
     g.append('text')
       .attr('x', pt[0] + radius(ap.score) + 3)
       .attr('y', pt[1] + 3)
-      .attr('fill', '#e2e8f0')
+      .attr('fill', tc.textPrimary)
       .attr('font-size', '9px')
       .attr('font-family', 'var(--font-mono, monospace)')
       .text(ap.code);
@@ -224,6 +231,7 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
 function drawConvergence(container: HTMLElement, convergence: number[]) {
   container.innerHTML = '';
   if (convergence.length === 0) return;
+  const tc = getThemeColors();
 
   const W = 600, H = 240;
   const margin = { top: 10, right: 10, bottom: 25, left: 50 };
@@ -255,9 +263,9 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
   const yTicks = yScale.ticks(4);
   for (const t of yTicks) {
     g.append('line').attr('x1', 0).attr('x2', iw).attr('y1', yScale(t)).attr('y2', yScale(t))
-      .attr('stroke', '#1a1a2e').attr('stroke-width', 0.5);
+      .attr('stroke', tc.borderColor).attr('stroke-width', 0.5);
     g.append('text').attr('x', -6).attr('y', yScale(t) + 4)
-      .attr('fill', '#64748b').attr('font-size', '10px').attr('text-anchor', 'end')
+      .attr('fill', tc.textMuted).attr('font-size', '10px').attr('text-anchor', 'end')
       .text(t.toExponential(0));
   }
 
@@ -270,15 +278,15 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
     .datum(convergence)
     .attr('d', pathLine as any)
     .attr('fill', 'none')
-    .attr('stroke', '#06b6d4')
+    .attr('stroke', tc.accentStart)
     .attr('stroke-width', 1.5);
 
   // Axis labels (outside clip)
   g.append('text').attr('x', iw / 2).attr('y', ih + 20)
-    .attr('fill', '#64748b').attr('font-size', '11px').attr('text-anchor', 'middle')
+    .attr('fill', tc.textMuted).attr('font-size', '11px').attr('text-anchor', 'middle')
     .text('Iteration');
   g.append('text').attr('x', -ih / 2).attr('y', -38)
-    .attr('fill', '#64748b').attr('font-size', '11px').attr('text-anchor', 'middle')
+    .attr('fill', tc.textMuted).attr('font-size', '11px').attr('text-anchor', 'middle')
     .attr('transform', 'rotate(-90)')
     .text('Max Δ');
 }
@@ -293,7 +301,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   controlGroup: { display: 'flex', flexDirection: 'column', gap: '0.3rem' },
   label: { fontSize: '0.78rem', color: 'var(--text-muted)' },
-  slider: { width: '140px', accentColor: '#06b6d4' },
+  slider: { width: '140px', accentColor: 'var(--accent-start)' },
   select: {
     padding: '0.35rem 0.6rem', borderRadius: '0.35rem', fontSize: '0.78rem',
     background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
@@ -301,12 +309,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   runBtn: {
     padding: '0.45rem 1rem', borderRadius: '0.5rem', border: 'none',
-    background: 'linear-gradient(135deg, #06b6d4, #6366f1)',
+    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: '#fff', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer',
   },
   mapContainer: {
     width: '100%', minHeight: 200, borderRadius: '0.5rem', overflow: 'hidden',
-    background: '#0a0a15',
+    background: 'var(--bg-secondary)',
   },
   statsRow: {
     display: 'flex', gap: '1.5rem', marginTop: '0.75rem', fontSize: '0.78rem', color: 'var(--text-muted)',

@@ -1,6 +1,4 @@
 ---
-import ThemeToggle from '../components/ThemeToggle.astro';
-import LanguagePicker from '../components/LanguagePicker.astro';
 import DemoNav from '../components/DemoNav.astro';
 import DemoSidebar from '../components/DemoSidebar.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
@@ -98,8 +96,6 @@ const siteBase = Astro.site || Astro.url;
               <line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
           </button>
-          <LanguagePicker />
-          <ThemeToggle />
         </div>
       </div>
     </nav>
@@ -107,17 +103,61 @@ const siteBase = Astro.site || Astro.url;
     <main class="demo-main" id="main-content">
       <slot />
       {slug && <DemoNav currentSlug={slug} />}
+      <div class="demo-bottom-design">
+        <button class="demo-design-btn" aria-label={t('theme.customize')} title={t('theme.customize')}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+            <circle cx="6.5" cy="12" r=".5" fill="currentColor"/>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+          </svg>
+          <span>{t('theme.customize')}</span>
+        </button>
+      </div>
     </main>
 
 
     <style>
-      @media (max-width: 768px) {
-        .demo-controls :global(.language-picker) {
-          margin: 0;
-          width: fit-content;
-        }
+      .demo-bottom-design {
+        display: flex;
+        justify-content: center;
+        padding: 2rem 0 1rem;
+      }
+      .demo-design-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1.25rem;
+        border-radius: var(--radius-full, 9999px);
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        font-size: 0.82rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+      }
+      .demo-design-btn:hover {
+        color: var(--accent-start);
+        background: var(--bg-card);
+        border-color: var(--accent-start);
       }
     </style>
+    <script>
+      function initDesignBtn() {
+        document.querySelectorAll('.demo-design-btn').forEach(btn => {
+          if (btn.hasAttribute('data-init')) return;
+          btn.setAttribute('data-init', '');
+          btn.addEventListener('click', () => {
+            document.dispatchEvent(new CustomEvent('open-theme-modal'));
+          });
+        });
+      }
+      initDesignBtn();
+      document.addEventListener('astro:page-load', initDesignBtn);
+    </script>
   </body>
 </html>
 

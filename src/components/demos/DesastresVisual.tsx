@@ -56,7 +56,7 @@ const TRANSLATIONS = {
   }
 };
 
-const HELI_COLORS = ["var(--accent-start)", "#22c55e", "#f59e0b"];
+const HELI_COLORS = ["var(--accent-start)", "var(--accent-end)", "var(--text-muted)"];
 
 function project(
   x: number,
@@ -153,7 +153,7 @@ export function AssignmentMapFigure({
                 height={36}
                 rx={6}
                 fill="var(--bg-card)"
-                stroke="#a78bfa"
+                stroke="var(--accent-start)"
                 strokeWidth={2}
               />
               <text x={p.px} y={p.py + 5} textAnchor="middle" fill="var(--text-primary)" fontSize="11" fontWeight={700}>

@@ -417,7 +417,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
                         <td style={styles.td}>{(p.price * qty).toFixed(2)} €</td>
                         <td style={styles.td}>
                           <button
-                            style={{ ...styles.button, background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", padding: "0.25rem 0.5rem", fontSize: "0.8rem" }}
+                            style={{ ...styles.button, background: "color-mix(in srgb, var(--accent-end) 10%, transparent)", color: "var(--accent-end)", padding: "0.25rem 0.5rem", fontSize: "0.8rem" }}
                             onClick={() => removeFromCart(p.id)}
                           >
                             {t.remove}
@@ -452,7 +452,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
           {orderPlaced ? (
             <div style={{ ...styles.card, textAlign: "center" as const, padding: "3rem" }}>
               <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>✓</div>
-              <h3 style={{ marginBottom: "0.5rem", color: "#4ade80" }}>{t.orderReceived}</h3>
+              <h3 style={{ marginBottom: "0.5rem", color: "var(--accent-start)" }}>{t.orderReceived}</h3>
               <p style={{ color: "var(--text-secondary)" }}>{t.simNote}</p>
             </div>
           ) : (

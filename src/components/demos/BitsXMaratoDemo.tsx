@@ -18,8 +18,8 @@ const card = {
   padding: "1.5rem",
 } as const;
 
-const accent1 = "#be123c"; // rose
-const accent2 = "#0ea5e9"; // sky
+const accent1 = "var(--accent-start)";
+const accent2 = "var(--accent-end)";
 
 /* ── diameter zones ── */
 import { diameterZone as _diameterZone } from "../../lib/bitsx-diameter";
@@ -248,7 +248,7 @@ export default function BitsXMaratoDemo({ lang = "en" }: { lang?: Lang }) {
             <div style={{
               width: 30, height: 30, borderRadius: "0.5rem", display: "flex", alignItems: "center",
               justifyContent: "center", fontSize: "0.9rem",
-              background: `linear-gradient(135deg, rgba(190,18,60,0.15), rgba(14,165,233,0.1))`,
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), color-mix(in srgb, var(--accent-end) 10%, transparent))",
             }}>🔬</div>
             <div>
               <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.simInference}</h3>
@@ -264,7 +264,7 @@ export default function BitsXMaratoDemo({ lang = "en" }: { lang?: Lang }) {
             <div style={{
               width: 30, height: 30, borderRadius: "0.5rem", display: "flex", alignItems: "center",
               justifyContent: "center", fontSize: "0.9rem",
-              background: `linear-gradient(135deg, rgba(14,165,233,0.15), rgba(190,18,60,0.1))`,
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-end) 15%, transparent), color-mix(in srgb, var(--accent-start) 10%, transparent))",
             }}>📏</div>
             <div>
               <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 700 }}>{t.diameterExplorer}</h3>
