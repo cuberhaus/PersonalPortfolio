@@ -36,3 +36,38 @@ You are working on the `PersonalPortfolio` repository.
    - For `<canvas>` drawing (fillStyle, strokeStyle), CSS `var()` does **not** work. Import `getThemeColors()` from `src/lib/demo-theme.ts` to read computed theme values at render time. Also available: `lighten(hex, amount)` and `withAlpha(hex, alpha)` helpers.
    - For D3 imperative `.attr('fill', ...)` / `.attr('stroke', ...)` calls, similarly use `getThemeColors()` to read the current theme.
    - **Exceptions**: Domain-specific scientific colors may stay hardcoded when they carry semantic meaning (e.g. DNA bases A/C/G/T, medical tissue reds in colonoscopy images, traffic-light risk zones). Document why the override is necessary with a comment.
+
+7. **React Islands & Code Splitting**:
+   - React components (`.tsx`) are hydrated via Astro directives. Use `client:visible` (lazy, preferred) for below-the-fold demos; use `client:load` only when immediate interactivity is required.
+   - For demo components with multiple tabs/panels, split heavy subtabs with `React.lazy(() => import('./subtab'))` wrapped in `<Suspense fallback={<p>{t.loading}</p>}>`.
+   - React demo components receive `lang` as a prop (`{ lang = 'en' }: { lang?: string }`). Do not read language from URL or context inside React islands.
+
+8. **Accessibility**:
+   - Use semantic HTML (`<section>`, `<nav>`, `<main>`, `<article>`, `<footer>`) instead of generic `<div>`s for structural elements.
+   - Interactive toggles must have `aria-expanded`, menus need `aria-controls`, active nav links use `aria-current="page"`.
+   - Dynamic status messages (form feedback, validation) must use `role="status" aria-live="polite"`.
+   - Decorative SVGs/icons use `aria-hidden="true"`. All meaningful images need descriptive `alt` text.
+   - Keyboard support: modal dialogs must close on `Escape`, focusable elements must have visible `:focus-visible` outlines.
+
+9. **Animations & Reduced Motion**:
+   - Use the existing `.reveal` / `.reveal-stagger` CSS classes for scroll-triggered entrance animations.
+   - All CSS animations and transitions must be wrapped in `@media (prefers-reduced-motion: reduce)` guards that disable them. For JS runtime checks, use `window.matchMedia('(prefers-reduced-motion: reduce)').matches`.
+   - Use the CSS variable durations (`--transition-fast`, `--transition-base`, `--transition-slow`) instead of hardcoding `ms` values.
+
+10. **Asset Paths & BASE_URL**:
+    - All asset paths must be BASE_URL-aware: `const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;` then reference as `base + '/asset.png'`.
+    - For optional assets (profile image, CV), check existence at build time with `existsSync()` from `node:fs` and conditionally render the element.
+    - Images must include explicit `width`/`height` attributes to prevent layout shift, and use `loading="lazy"` for below-the-fold content.
+
+11. **Canvas Rendering**:
+    - Always scale canvases for high-DPI displays: `const dpr = Math.min(2, window.devicePixelRatio || 1); canvas.width = logicalWidth * dpr; ctx.scale(dpr, dpr);`. Cap at 2× to avoid performance issues on ultra-high-DPI screens.
+
+12. **Theme & Design System**:
+    - Theme and design picks are persisted to `localStorage` and restored in `ThemeInit.astro` before first paint. Never duplicate this logic elsewhere.
+    - URL query parameters (`?theme=dracula&design=pixel`) override localStorage picks. The params are consumed and stripped from the URL by `ThemeInit.astro`.
+    - Themes and designs are independent axes — any theme works with any design. Metadata lives in `src/lib/themes.ts` and `src/lib/designs.ts`.
+
+13. **Form Patterns**:
+    - Contact forms must include the honeypot field (`<input type="checkbox" name="botcheck" style="display: none;">`) for spam protection.
+    - Use explicit `<label for="id">` associations (not wrapping). Add `autocomplete` attributes to standard fields.
+    - Validation functions should return discriminated unions (e.g. `{ valid: true; normalized } | { valid: false; reason: 'empty' | 'format' | 'typo'; suggestion? }`) for exhaustive handling.
