@@ -90,7 +90,7 @@ export default function LiveAppEmbed({ url, title, dockerCmd, devCmd, lang = "en
         borderBottom: expanded ? "none" : undefined,
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent-start)", display: "inline-block", boxShadow: "0 0 6px color-mix(in srgb, var(--accent-start) 55%, transparent)" }} />
+          <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--status-online)", display: "inline-block", boxShadow: "0 0 6px color-mix(in srgb, var(--status-online) 55%, transparent)" }} />
           <strong style={{ fontSize: "0.82rem", color: "var(--text-primary)" }}>{t.live}</strong>
           <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
             {t.runningAt} <code style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono, monospace)" }}>{url}</code>

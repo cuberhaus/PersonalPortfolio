@@ -8,7 +8,7 @@ You are working on the `PersonalPortfolio` repository.
 # Development Rules & Guidelines
 1. **Astro Components**:
    - Use `.astro` files for UI components and layouts.
-   - When adding client-side interactivity, use standard `<script>` tags. 
+   - When adding client-side interactivity, use standard `<script>` tags.
    - **Important for Client Scripts**: Since the site uses Astro ViewTransitions, standard `DOMContentLoaded` events might not fire on navigation. Always bind initialization logic to both `DOMContentLoaded` (for initial load) and `astro:page-load` (for client-side navigation).
    - If a script requires bypassing Astro's bundler, use the `<script is:inline>` directive.
 
@@ -28,3 +28,11 @@ You are working on the `PersonalPortfolio` repository.
 
 5. **Data Files**:
    - Project metadata (demos, work projects) are stored in `src/data/` as JSON files (e.g., `demos.json`, `work_projects.json`). Update these files instead of hardcoding data blocks into UI components.
+
+6. **Demo Component Theming**:
+   - **Never hardcode hex colors** (e.g. `#6366f1`, `#22c55e`) in demo components. The site has 15+ themes and all demos must adapt to the active theme.
+   - For HTML, SVG, and inline React styles, use CSS custom properties: `var(--accent-start)`, `var(--accent-end)`, `var(--bg-card)`, `var(--text-primary)`, `var(--text-secondary)`, `var(--text-muted)`, `var(--border-color)`, `var(--border-color-hover)`, `var(--bg-secondary)`, `var(--bg-primary)`, `var(--glow-color)`, `var(--accent-gradient)`.
+   - For semi-transparent accent backgrounds, use `color-mix(in srgb, var(--accent-start) 15%, transparent)` instead of hardcoded `rgba(...)` values.
+   - For `<canvas>` drawing (fillStyle, strokeStyle), CSS `var()` does **not** work. Import `getThemeColors()` from `src/lib/demo-theme.ts` to read computed theme values at render time. Also available: `lighten(hex, amount)` and `withAlpha(hex, alpha)` helpers.
+   - For D3 imperative `.attr('fill', ...)` / `.attr('stroke', ...)` calls, similarly use `getThemeColors()` to read the current theme.
+   - **Exceptions**: Domain-specific scientific colors may stay hardcoded when they carry semantic meaning (e.g. DNA bases A/C/G/T, medical tissue reds in colonoscopy images, traffic-light risk zones). Document why the override is necessary with a comment.
