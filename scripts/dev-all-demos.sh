@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Start demo backends (Docker + planner-api) then Astro. From PersonalPortfolio: npm run dev:all
+# Start (or stop) demo backends (Docker + planner-api) then Astro.
+# From PersonalPortfolio: npm run dev:all   /   bash scripts/dev-all-demos.sh --stop
 #
 # Options:
+#   --stop          Stop all services and exit
 #   --skip-docker   Do not start Tenda / Draculin (docker compose)
 #   --skip-planner  Do not start planner-api (PDDL / ENHSP)
 #   --help
@@ -9,12 +11,14 @@ set -euo pipefail
 
 SKIP_DOCKER=0
 SKIP_PLANNER=0
+STOP_MODE=0
 for arg in "${@:-}"; do
   case "$arg" in
+    --stop) STOP_MODE=1 ;;
     --skip-docker) SKIP_DOCKER=1 ;;
     --skip-planner) SKIP_PLANNER=1 ;;
     --help|-h)
-      echo "Usage: $0 [--skip-docker] [--skip-planner]"
+      echo "Usage: $0 [--stop] [--skip-docker] [--skip-planner]"
       exit 0
       ;;
   esac
@@ -40,22 +44,48 @@ ROB_DIR="$(cd "$PORTFOLIO/../ROB" 2>/dev/null && pwd)" || ROB_DIR=""
 FIB_DIR="$(cd "$PORTFOLIO/../fib" 2>/dev/null && pwd)" || FIB_DIR=""
 GRAFICS_DIR="$(cd "$PORTFOLIO/../fib/G/web" 2>/dev/null && pwd)" || GRAFICS_DIR=""
 
-TENDA_UP=0
-DRAC_UP=0
-TFG_UP=0
-BITSX_UP=0
-PRO2_CID=""
-PLANIF_CID=""
-DESASTRES_UP=0
-MPIDS_UP=0
-PHASE_UP=0
-CAIM_UP=0
-JOCEDA_UP=0
-SBCIA_UP=0
-PAR_UP=0
-ROB_UP=0
-FIB_UP=0
-GRAFICS_UP=0
+# ── Single source of truth: all Docker services ──────────────────────────
+# Format: "DIR COMPOSE_FILE" for compose, or "run:CONTAINER:IMAGE:PORT:DIR" for docker-run
+COMPOSE_SERVICES=(
+  "${TENDA_DIR}    docker/docker-compose.yml"
+  "${DRAC_DIR}     docker-compose.yml"
+  "${TFG_DIR}      docker-compose.yml"
+  "${BITSX_DIR}    docker-compose.yml"
+  "${DESASTRES_DIR} docker-compose.yml"
+  "${MPIDS_DIR}    docker-compose.yml"
+  "${PHASE_DIR}    docker-compose.yml"
+  "${CAIM_DIR}     docker-compose.yml"
+  "${JOCEDA_DIR}   docker-compose.yml"
+  "${SBCIA_DIR}    docker-compose.yml"
+  "${PAR_DIR}      docker-compose.yml"
+  "${ROB_DIR}      docker-compose.yml"
+  "${FIB_DIR}      docker-compose.yml"
+  "${GRAFICS_DIR}  docker-compose.yml"
+)
+RUN_CONTAINERS=( "portfolio-pro2" "portfolio-planif" )
+
+# ── Stop mode: tear down everything in parallel, then exit ───────────────
+if [[ "$STOP_MODE" == 1 ]]; then
+  echo "Stopping portfolio demo services..."
+  (
+    for entry in "${COMPOSE_SERVICES[@]}"; do
+      dir=$(echo "$entry" | awk '{print $1}')
+      file=$(echo "$entry" | awk '{print $2}')
+      [[ -f "${dir}/${file}" ]] && \
+        (cd "$dir" && docker compose -f "$file" down 2>/dev/null) &
+    done
+    for c in "${RUN_CONTAINERS[@]}"; do
+      docker rm -f "$c" 2>/dev/null &
+    done
+    wait
+  )
+  fuser -k 8081/tcp 2>/dev/null || true
+  fuser -k 8765/tcp 2>/dev/null || true
+  echo "Done."
+  exit 0
+fi
+
+# ── Runtime state flags (only used by dev / cleanup) ─────────────────────
 PLANNER_PID=""
 PROP_PID=""
 
@@ -74,70 +104,19 @@ cleanup() {
     wait "$PROP_PID" 2>/dev/null || true
     fuser -k 8081/tcp 2>/dev/null || true
   fi
-  if [[ "$TENDA_UP" == 1 ]] && [[ -f "${TENDA_DIR}/docker/docker-compose.yml" ]]; then
-    echo "Stopping Tenda stack (docker compose down)..."
-    (cd "$TENDA_DIR" && docker compose -f docker/docker-compose.yml down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$DRAC_UP" == 1 ]] && [[ -f "${DRAC_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping Draculin stack (docker compose down)..."
-    (cd "$DRAC_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$TFG_UP" == 1 ]] && [[ -f "${TFG_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping TFG stack (docker compose down)..."
-    (cd "$TFG_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$BITSX_UP" == 1 ]] && [[ -f "${BITSX_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping bitsXlaMarato stack (docker compose down)..."
-    (cd "$BITSX_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ -n "${PRO2_CID}" ]]; then
-    echo "Stopping pracpro2 container..."
-    docker rm -f "$PRO2_CID" >/dev/null 2>&1 || true
-  fi
-  if [[ -n "${PLANIF_CID}" ]]; then
-    echo "Stopping Practica_de_Planificacion container..."
-    docker rm -f "$PLANIF_CID" >/dev/null 2>&1 || true
-  fi
-  if [[ "$DESASTRES_UP" == 1 ]] && [[ -f "${DESASTRES_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping DesastresIA stack (docker compose down)..."
-    (cd "$DESASTRES_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$MPIDS_UP" == 1 ]] && [[ -f "${MPIDS_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping MPIDS stack (docker compose down)..."
-    (cd "$MPIDS_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$PHASE_UP" == 1 ]] && [[ -f "${PHASE_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping PhaseTransitions stack (docker compose down)..."
-    (cd "$PHASE_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$CAIM_UP" == 1 ]] && [[ -f "${CAIM_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping CAIM stack (docker compose down)..."
-    (cd "$CAIM_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$JOCEDA_UP" == 1 ]] && [[ -f "${JOCEDA_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping JocEDA stack (docker compose down)..."
-    (cd "$JOCEDA_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$SBCIA_UP" == 1 ]] && [[ -f "${SBCIA_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping SBC_IA stack (docker compose down)..."
-    (cd "$SBCIA_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$PAR_UP" == 1 ]] && [[ -f "${PAR_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping PAR stack (docker compose down)..."
-    (cd "$PAR_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$ROB_UP" == 1 ]] && [[ -f "${ROB_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping ROB stack (docker compose down)..."
-    (cd "$ROB_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$FIB_UP" == 1 ]] && [[ -f "${FIB_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping FIB stack (docker compose down)..."
-    (cd "$FIB_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
-  if [[ "$GRAFICS_UP" == 1 ]] && [[ -f "${GRAFICS_DIR}/docker-compose.yml" ]]; then
-    echo "Stopping Grafics stack (docker compose down)..."
-    (cd "$GRAFICS_DIR" && docker compose down) >/dev/null 2>&1 || true
-  fi
+  # Stop all compose stacks and run containers in parallel
+  (
+    for entry in "${COMPOSE_SERVICES[@]}"; do
+      dir=$(echo "$entry" | awk '{print $1}')
+      file=$(echo "$entry" | awk '{print $2}')
+      [[ -f "${dir}/${file}" ]] && \
+        (cd "$dir" && docker compose -f "$file" down) >/dev/null 2>&1 &
+    done
+    for c in "${RUN_CONTAINERS[@]}"; do
+      docker rm -f "$c" >/dev/null 2>&1 &
+    done
+    wait
+  )
   exit "$ec"
 }
 trap 'cleanup $?' EXIT INT TERM
@@ -149,6 +128,42 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
   else
     DOCKER_PIDS=()
 
+    # Kill any container (running OR stopped) holding a given port
+    _free_port() {
+      local port="$1"
+      local cids
+
+      # Method 1: Docker filter (works for exact single-port mappings)
+      cids=$(docker ps -aq --filter "publish=${port}" 2>/dev/null) || true
+      if [[ -n "$cids" ]]; then
+        echo "$cids" | xargs -r docker rm -f 2>/dev/null || true
+      fi
+
+      # Method 2: Grep all containers for port ranges the filter misses
+      cids=$(docker ps -a --format '{{.ID}} {{.Ports}}' 2>/dev/null \
+        | grep -E "(^|[ ,])0\.0\.0\.0:([0-9]+-)?${port}(-[0-9]+)?->" \
+        | awk '{print $1}') || true
+      if [[ -n "$cids" ]]; then
+        echo "$cids" | xargs -r docker rm -f 2>/dev/null || true
+      fi
+
+      # Method 3: Kill orphaned docker-proxy processes (from removed containers)
+      local pids
+      pids=$(ps aux 2>/dev/null | grep "[d]ocker-proxy.*-host-port ${port} " | awk '{print $2}') || true
+      if [[ -n "$pids" ]]; then
+        # docker-proxy runs as root; try kill, then sudo -n (passwordless), then
+        # fall back to restarting docker to reclaim the port
+        echo "$pids" | xargs -r kill -9 2>/dev/null \
+          || echo "$pids" | xargs -r sudo -n kill -9 2>/dev/null \
+          || { echo "    Restarting Docker daemon to free orphaned port ${port}..." >&2; \
+               sudo -n systemctl restart docker 2>/dev/null || true; \
+               sleep 1; } \
+          || true
+        sleep 0.3  # let kernel release the socket
+      fi
+      return 0
+    }
+
     # Helper: launch a docker compose service in the background
     _compose_up() {
       local name="$1" url="$2" dir="$3" file="${4:-docker-compose.yml}" extra="${5:-}"
@@ -157,7 +172,7 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
         (
           # Free ports held by stale containers (any project name)
           for p in $(echo "${url} ${extra}" | grep -oP '[0-9]{4,5}'); do
-            fuser -k "${p}/tcp" 2>/dev/null || true
+            _free_port "$p"
           done
           cd "$dir" && docker compose -f "$file" down --remove-orphans 2>/dev/null
           cd "$dir" && docker compose -f "$file" up -d 2>&1 | sed "s/^/    [${name}] /"
@@ -175,7 +190,7 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
         echo "==> ${name}  ${url}  (docker run)"
         (
           docker rm -f "$container" 2>/dev/null || true
-          fuser -k "${port}/tcp" 2>/dev/null || true
+          _free_port "${port}"
           docker run -d --rm -p "${port}:${port}" --name "$container" "$image" 2>/dev/null || {
             echo "    [${name}] Building image first..." >&2
             (cd "$dir" && docker build -t "$image" .) >/dev/null 2>&1 && \
@@ -221,24 +236,6 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
     else
       echo "    All Docker services started."
     fi
-
-    # Set UP flags for cleanup (check which containers are actually running)
-    [[ -f "${TENDA_DIR}/docker/docker-compose.yml" ]]   && TENDA_UP=1
-    [[ -f "${DRAC_DIR}/docker-compose.yml" ]]            && DRAC_UP=1
-    [[ -f "${TFG_DIR}/docker-compose.yml" ]]             && TFG_UP=1
-    [[ -f "${BITSX_DIR}/docker-compose.yml" ]]           && BITSX_UP=1
-    [[ -f "${DESASTRES_DIR}/docker-compose.yml" ]]       && DESASTRES_UP=1
-    [[ -f "${MPIDS_DIR}/docker-compose.yml" ]]           && MPIDS_UP=1
-    [[ -f "${PHASE_DIR}/docker-compose.yml" ]]           && PHASE_UP=1
-    [[ -f "${CAIM_DIR}/docker-compose.yml" ]]            && CAIM_UP=1
-    [[ -f "${JOCEDA_DIR}/docker-compose.yml" ]]          && JOCEDA_UP=1
-    [[ -f "${SBCIA_DIR}/docker-compose.yml" ]]           && SBCIA_UP=1
-    [[ -f "${PAR_DIR}/docker-compose.yml" ]]             && PAR_UP=1
-    [[ -f "${ROB_DIR}/docker-compose.yml" ]]             && ROB_UP=1
-    [[ -f "${FIB_DIR}/docker-compose.yml" ]]             && FIB_UP=1
-    [[ -f "${GRAFICS_DIR}/docker-compose.yml" ]]         && GRAFICS_UP=1
-    [[ -d "${PRO2_DIR}" ]]                               && PRO2_CID="portfolio-pro2"
-    [[ -d "${PLANIF_DIR}" ]]                             && PLANIF_CID="portfolio-planif"
   fi
   echo ""
 else

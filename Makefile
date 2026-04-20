@@ -19,22 +19,7 @@ dev-all: ## Start Astro + ALL demo backends (Docker + planner-api + PROP)
 	npm run dev:all
 
 stop: ## Stop all demo backend containers/services
-	@echo "Stopping portfolio demo services..."
-	-docker compose -f ../TFG/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../bitsXlaMarato/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../tenda_online/docker/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../Draculin-Backend/docker-compose.yml down 2>/dev/null
-	-docker rm -f portfolio-pro2 2>/dev/null
-	-docker rm -f portfolio-planif 2>/dev/null
-	-docker compose -f ../desastresIA/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../projectA/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../projectA2/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../CAIM/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../joc_eda/docker-compose.yml down 2>/dev/null
-	-docker compose -f ../SBC_IA/docker-compose.yml down 2>/dev/null
-	-fuser -k 8081/tcp 2>/dev/null
-	-fuser -k 8765/tcp 2>/dev/null
-	@echo "Done."
+	@bash scripts/dev-all-demos.sh --stop
 
 health: ## Check if all demo backends are responding
 	@echo "Checking health of demo backends..."
