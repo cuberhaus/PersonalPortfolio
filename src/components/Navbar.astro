@@ -31,8 +31,10 @@ const links = [
           <a href={link.href} class="nav-link">{link.label}</a>
         ))}
       </li>
-      <li class="nav-links-util"><LanguagePicker /></li>
-      <li class="nav-links-util nav-theme-toggle"><ThemeToggle /></li>
+      <li class="nav-links-util">
+        <LanguagePicker />
+        <div class="nav-theme-toggle"><ThemeToggle /></div>
+      </li>
     </ul>
   </div>
 </nav>
@@ -82,6 +84,12 @@ const links = [
   /* Desktop: flatten the primary group so each link is a flex item of the row */
   .nav-links-primary {
     display: contents;
+  }
+
+  .nav-links-util {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
   }
 
   .nav-link {
@@ -185,14 +193,16 @@ const links = [
       top: 0;
       left: 0;
       right: 0;
+      height: 100vh;
       height: 100dvh;
-      min-height: 100dvh;
       flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
+      align-items: center;
+      justify-content: center;
       gap: 0;
-      padding: calc(var(--nav-height) + 1rem) 1.5rem 1.75rem;
-      background: var(--bg-primary);
+      padding: calc(var(--nav-height) + 1rem) 1.5rem 2rem;
+      background: rgba(var(--bg-primary-rgb), 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: none;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -212,16 +222,15 @@ const links = [
       transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s;
     }
 
-    /* Mobile: real column so nav links can sit centered in remaining space */
+    /* Mobile: Centered, large typography */
     .nav-links-primary {
       display: flex;
       flex-direction: column;
-      flex: 1 1 0;
-      min-height: 0;
       align-items: center;
       justify-content: center;
-      gap: 0.25rem;
+      gap: 1.75rem;
       width: 100%;
+      flex: 1;
     }
 
     .nav-links li {
@@ -229,31 +238,55 @@ const links = [
       text-align: center;
     }
 
+    .nav-link {
+      display: inline-block;
+      width: auto;
+      margin: 0;
+      padding: 0.5rem;
+      font-size: 1.75rem;
+      font-weight: 600;
+      text-align: center;
+      color: var(--text-secondary);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-link::after {
+      display: none; /* Hide underline on mobile for a cleaner look */
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text-primary);
+      transform: scale(1.05);
+    }
+
+    /* Bottom utilities */
     .nav-links-util {
       flex-shrink: 0;
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 1.5rem;
     }
 
     .nav-links-primary + .nav-links-util {
       margin-top: auto;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border-color);
+      padding-top: 2rem;
+      width: 100%;
+      border-top: 1px solid color-mix(in oklab, var(--border-color) 50%, transparent);
     }
 
     .nav-theme-toggle {
-      padding-top: 1rem;
+      padding-top: 0;
+      margin-left: 0;
     }
 
-    .nav-link {
-      display: block;
-      width: 100%;
-      max-width: 20rem;
-      margin: 0 auto;
-      padding: 0.85rem 1.5rem;
-      font-size: 1.125rem;
-      text-align: center;
+    .nav-links-util :global(.language-picker) {
+      border-left: none;
+      padding-left: 0;
+      margin-top: 0;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 </style>
