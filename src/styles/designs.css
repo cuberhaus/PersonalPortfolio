@@ -513,7 +513,9 @@ html[data-design='terminal'] body::after {
 html[data-design='terminal'][data-theme='light'] body::after,
 html[data-design='terminal'][data-theme='nord-light'] body::after,
 html[data-design='terminal'][data-theme='catppuccin-latte'] body::after,
-html[data-design='terminal'][data-theme='solarized-light'] body::after {
+html[data-design='terminal'][data-theme='solarized-light'] body::after,
+html[data-design='terminal'][data-theme='sepia'] body::after,
+html[data-design='terminal'][data-theme='paper'] body::after {
   background:
     repeating-linear-gradient(
       to bottom,
@@ -1427,7 +1429,9 @@ html[data-design='blueprint'] {
 html[data-design='blueprint'][data-theme='light'],
 html[data-design='blueprint'][data-theme='nord-light'],
 html[data-design='blueprint'][data-theme='catppuccin-latte'],
-html[data-design='blueprint'][data-theme='solarized-light'] {
+html[data-design='blueprint'][data-theme='solarized-light'],
+html[data-design='blueprint'][data-theme='sepia'],
+html[data-design='blueprint'][data-theme='paper'] {
   --bp-ink: color-mix(in oklab, var(--text-primary) 80%, transparent);
   --bp-grid: color-mix(in oklab, var(--accent-start) 30%, transparent);
   --bp-grid-strong: color-mix(in oklab, var(--accent-start) 50%, transparent);
@@ -2005,6 +2009,19 @@ html[data-design='ide'] {
   --ide-tab-active: var(--bg-card);
 }
 
+/* Light palettes: darken syntax colours for contrast on white backgrounds */
+html[data-design='ide'][data-theme='light'],
+html[data-design='ide'][data-theme='nord-light'],
+html[data-design='ide'][data-theme='catppuccin-latte'],
+html[data-design='ide'][data-theme='solarized-light'],
+html[data-design='ide'][data-theme='sepia'],
+html[data-design='ide'][data-theme='paper'] {
+  --ide-keyword: #7c3aed;
+  --ide-string:  #166534;
+  --ide-func:    #1d4ed8;
+  --ide-number:  #b45309;
+}
+
 html[data-design='ide'] body {
   font-size: 0.95rem;
   line-height: 1.65;
@@ -2026,7 +2043,7 @@ html[data-design='ide'] body::after {
   align-items: center;
   padding: 0 1rem;
   background: var(--accent-start);
-  color: #fff;
+  color: var(--bg-primary);
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.02em;
@@ -2582,6 +2599,17 @@ html[data-design='deco'] {
   counter-reset: deco-section;
 }
 
+/* Light palettes: darken gold for readable contrast on light backgrounds */
+html[data-design='deco'][data-theme='light'],
+html[data-design='deco'][data-theme='nord-light'],
+html[data-design='deco'][data-theme='catppuccin-latte'],
+html[data-design='deco'][data-theme='solarized-light'],
+html[data-design='deco'][data-theme='sepia'],
+html[data-design='deco'][data-theme='paper'] {
+  --deco-gold: #886420;
+  --deco-gold-grad: linear-gradient(135deg, #a8842a 0%, #6e4e12 45%, #a8842a 100%);
+}
+
 /* Body sunburst + subtle chevron wash */
 html[data-design='deco'] body {
   background-image:
@@ -2785,7 +2813,7 @@ html[data-design='deco'] .nav-link {
 html[data-design='deco'] .hero-cta,
 html[data-design='deco'] .contact-submit {
   background: var(--deco-gold-grad);
-  color: #1a1308;
+  color: var(--bg-primary);
   border: 0;
   border-radius: 0;
   font-family: var(--font-display);
@@ -3402,10 +3430,11 @@ html[data-design='comic'] {
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
   --border-width: 3px;
-  --comic-ink: #0a0a0a;
+  --comic-ink: var(--text-primary);
   --comic-pop: var(--accent-start);
   --comic-pop2: var(--accent-end);
   --comic-paper: color-mix(in oklab, var(--bg-primary) 70%, #fffef2);
+  --comic-panel: var(--bg-card);
   --shadow-card: 4px 4px 0 var(--comic-ink);
 }
 
@@ -3488,7 +3517,7 @@ html[data-design='comic'] .hero-greeting {
   font-size: 1.2rem;
   letter-spacing: 0.05em;
   color: var(--comic-ink);
-  background: #fff;
+  background: var(--comic-panel);
   border: 3px solid var(--comic-ink);
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
@@ -3550,7 +3579,7 @@ html[data-design='comic'] .work-card,
 html[data-design='comic'] .education-card,
 html[data-design='comic'] .demo-card,
 html[data-design='comic'] .contact-form {
-  background: #fff;
+  background: var(--comic-panel);
   border: 3px solid var(--comic-ink);
   border-radius: 0.75rem;
   box-shadow: 5px 5px 0 var(--comic-ink);
@@ -3575,7 +3604,7 @@ html[data-design='comic'] .education-card h3 {
 html[data-design='comic'] .skill-pill,
 html[data-design='comic'] .demo-tags li,
 html[data-design='comic'] .work-tags li {
-  background: #fff;
+  background: var(--comic-panel);
   border: 2px solid var(--comic-ink);
   border-radius: 999px;
   font-family: var(--font-display);
@@ -3592,11 +3621,11 @@ html[data-design='comic'] .skill-pill:nth-child(3n) {
   background: #ffeb3b;
 }
 html[data-design='comic'] .skill-pill:nth-child(3n+1) {
-  background: color-mix(in oklab, var(--comic-pop) 25%, #fff);
+  background: color-mix(in oklab, var(--comic-pop) 25%, var(--comic-panel));
 }
 
 html[data-design='comic'] .navbar {
-  background: #fff;
+  background: var(--comic-panel);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-bottom: 3px solid var(--comic-ink);
@@ -3645,7 +3674,7 @@ html[data-design='comic'] .contact-submit:hover {
 
 html[data-design='comic'] .form-group input,
 html[data-design='comic'] .form-group textarea {
-  background: #fff;
+  background: var(--comic-panel);
   border: 3px solid var(--comic-ink);
   border-radius: 0.5rem;
   font-family: var(--font-sans);

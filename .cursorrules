@@ -71,3 +71,32 @@ You are working on the `PersonalPortfolio` repository.
     - Contact forms must include the honeypot field (`<input type="checkbox" name="botcheck" style="display: none;">`) for spam protection.
     - Use explicit `<label for="id">` associations (not wrapping). Add `autocomplete` attributes to standard fields.
     - Validation functions should return discriminated unions (e.g. `{ valid: true; normalized } | { valid: false; reason: 'empty' | 'format' | 'typo'; suggestion? }`) for exhaustive handling.
+
+14. **Design–Theme Cross-Compatibility**:
+    - Designs and themes are independent axes, but some designs introduce custom color tokens (e.g. `--comic-ink`, `--deco-gold`, `--bp-ink`, `--ide-keyword`) that assume a dark background.
+    - When adding or editing a design, always add a **light-theme override block** for all light palettes: `html[data-design='X'][data-theme='light'], html[data-design='X'][data-theme='nord-light'], …[data-theme='solarized-light'], …[data-theme='sepia'], …[data-theme='paper']`.
+    - Never hardcode literal colors like `#fff` or `#000` for card backgrounds, ink, or text inside design blocks. Use `var(--bg-card)`, `var(--text-primary)`, or `var(--bg-primary)` so they adapt to both light and dark palettes.
+
+15. **Demo Page Template**:
+    - Every demo page follows the same structure: `DemoLayout` → `DemoHeader` → React component or `LiveAppEmbed`.
+    - Either define a `TRANSLATIONS` object inline (for `.astro` page-level text) or create a dedicated `src/i18n/demos/<slug>-demo.ts` file (for React component text). Both use `{ en: {...}, es: {...}, ca: {...} }` flat structures.
+    - Pass `slug` to `DemoLayout` to enable prev/next navigation. Pass `lang` explicitly to React islands as a prop.
+
+16. **ViewTransitions & `data-astro-reload`**:
+    - Links that change language, switch between demos, or navigate from a demo back to the portfolio must use `data-astro-reload` to force a full page load. Client-side transitions break when the layout or language context changes.
+    - Pattern: `<a href={url} data-astro-reload>`.
+
+17. **Localized Data Files**:
+    - Data in `src/data/` has parallel JSON files per language: `demos.json` (EN), `demos.es.json`, `demos.ca.json`. Same structure applies to `work_projects`, `education`, `experience`, and `skills`.
+    - Files must maintain strict parity: identical slugs, same order, same array lengths. This is enforced by unit tests in `src/__tests__/data-integrity.test.ts`.
+    - Components import all three and select at runtime: `lang === 'es' ? demosEs : lang === 'ca' ? demosCa : demosEn`.
+
+18. **Testing**:
+    - **Unit tests**: Vitest (`src/__tests__/*.test.ts`). Primarily validate data integrity (slug uniqueness, i18n parity, valid icons/URLs) and calculation logic.
+    - **E2E tests**: Playwright (`e2e/*.spec.ts`), split into three independent projects: `browser-demos`, `live-demos`, `themes`. Each project has its own `testMatch` pattern.
+    - Live-demo tests must include a backend health-check skip: `test.skip(!response.ok(), 'Backend unreachable')` to avoid false failures when Docker backends aren't running.
+
+19. **SEO & Meta Tags**:
+    - `Layout.astro` and `DemoLayout.astro` both set OpenGraph, Twitter Card, canonical, and hreflang meta tags. Use `new URL(base + path, Astro.site || Astro.url)` for absolute URLs.
+    - `Layout.astro` includes a JSON-LD `Person` schema. Demo pages can pass an optional `ogImage` prop to `DemoLayout` for demo-specific previews.
+    - Fonts are loaded non-blocking: `media="print" onload="this.media='all'"` with a `<noscript>` fallback that includes all design-specific fonts.
