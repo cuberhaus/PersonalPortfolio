@@ -1,6 +1,8 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIconSvg } from '../lib/demo-icons';
+import LanguagePicker from './LanguagePicker.astro';
+import ThemeToggle from './ThemeToggle.astro';
 import demosEn from '../data/demos.json';
 import demosEs from '../data/demos.es.json';
 import demosCa from '../data/demos.ca.json';
@@ -50,6 +52,10 @@ function demoHref(slug: string) {
         </a>
       ))}
     </nav>
+    <div class="sidebar-footer">
+      <ThemeToggle />
+      <LanguagePicker />
+    </div>
   </div>
 </aside>
 
@@ -235,5 +241,15 @@ function demoHref(slug: string) {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .sidebar-footer {
+    flex-shrink: 0;
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
   }
 </style>

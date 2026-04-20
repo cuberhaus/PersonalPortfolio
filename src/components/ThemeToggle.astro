@@ -5,7 +5,7 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<button id="theme-toggle" aria-label={t('aria.toggleTheme')} title={t('aria.toggleTheme')}>
+<button class="theme-toggle-btn" aria-label={t('aria.toggleTheme')} title={t('aria.toggleTheme')}>
   <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="5"></circle>
     <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -23,7 +23,7 @@ const t = useTranslations(lang);
 </button>
 
 <style>
-  #theme-toggle {
+  .theme-toggle-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -35,12 +35,12 @@ const t = useTranslations(lang);
     transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
   }
 
-  #theme-toggle:hover {
+  .theme-toggle-btn:hover {
     color: var(--accent-start);
     background-color: var(--bg-secondary);
   }
 
-  #theme-toggle:active {
+  .theme-toggle-btn:active {
     transform: scale(0.95);
   }
 
@@ -63,7 +63,7 @@ const t = useTranslations(lang);
   }
 
   @media (max-width: 768px) {
-    #theme-toggle {
+    .theme-toggle-btn {
       width: 2.5rem;
       height: 2.5rem;
       border-radius: var(--radius-md);
@@ -76,10 +76,10 @@ const t = useTranslations(lang);
   const LIGHT_SCHEMES = ['light', 'nord-light', 'catppuccin-latte', 'solarized-light', 'sepia', 'paper'];
 
   const initThemeToggle = () => {
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle && !themeToggle.hasAttribute('data-initialized')) {
-      themeToggle.setAttribute('data-initialized', 'true');
-      themeToggle.addEventListener('click', () => {
+    document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+      if (btn.hasAttribute('data-initialized')) return;
+      btn.setAttribute('data-initialized', 'true');
+      btn.addEventListener('click', () => {
         const current = document.documentElement.getAttribute('data-theme') || 'dark';
         const isLight = LIGHT_SCHEMES.includes(current);
         const newTheme = isLight ? 'dark' : 'light';
@@ -87,7 +87,7 @@ const t = useTranslations(lang);
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
       });
-    }
+    });
   };
 
   initThemeToggle();
