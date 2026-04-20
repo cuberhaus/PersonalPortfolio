@@ -162,7 +162,7 @@ If e2e (Playwright) tests or the browser console show these errors on demo pages
 
 ```bash
 rm -rf node_modules/.vite   # clear the Vite dep cache
-npm run dev                  # restart — Vite rebuilds in development mode
+make dev                     # restart — Vite rebuilds in development mode
 ```
 
 Or start the dev server with `--force` to skip the cache:
