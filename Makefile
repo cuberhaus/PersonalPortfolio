@@ -1,6 +1,6 @@
-.PHONY: install dev dev-all build preview stop-all \
-       docker-build-all docker-build-parallel docker-rebuild-all \
-       clean test test-all help \
+.PHONY: install dev dev-all build preview stop-all health \
+       rebuild-all \
+       clean test help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
 
@@ -18,17 +18,16 @@ dev: ## Start Astro dev server only (no backends)
 dev-all: ## Start Astro + ALL demo backends (Docker + planner-api + PROP)
 	npm run dev:all
 
-build: ## Build for production
+build: ## Build Astro site for production and all demo Docker images
+	+@$(MAKE) --no-print-directory $(DEMO_TARGETS) -j$$(nproc) --output-sync=target
 	npm run build
 
 preview: ## Preview the production build locally
 	npm run preview
 
-test: ## Run Vitest unit tests and Playwright e2e tests (portfolio only)
+test: ## Run ALL test suites (portfolio + every demo backend)
 	npm test
 	npx playwright test
-
-test-all: test ## Run ALL test suites (portfolio + every demo backend)
 	@echo ""
 	@echo "=== Python backends (pytest) ==="
 	cd "$(PARENT)/projectA/web"   && $(SYS_PYTHON) -m pytest backend/test_app.py -v
@@ -134,15 +133,9 @@ _db-sbcia:
 	$(call build_if_changed,sbcia,$(PARENT)/SBC_IA,SBC_IA           :8088,\
 		docker compose -f "$(PARENT)/SBC_IA/docker-compose.yml" build)
 
-docker-build-all: $(DEMO_TARGETS) ## Build Docker images for demos (skips unchanged, use -jN for parallel)
-	@echo "Done."
-
-docker-build-parallel: ## Build all Docker images in parallel (auto-detects cores)
-	+@make docker-build-all -j$$(nproc) --output-sync=target
-
-docker-rebuild-all: ## Force rebuild all Docker images (ignore cache)
-	@rm -rf "$(STAMPS)"
-	+@make docker-build-all
+rebuild-all: ## Force rebuild all Docker images (ignore cache) and Astro site
+	@rm -rf "$(STAMPS)" dist/
+	+@$(MAKE) build
 
 stop-all: ## Stop all demo backend containers/services
 	@echo "Stopping portfolio demo services..."
@@ -161,6 +154,20 @@ stop-all: ## Stop all demo backend containers/services
 	-fuser -k 8081/tcp 2>/dev/null
 	-fuser -k 8765/tcp 2>/dev/null
 	@echo "Done."
+
+health: ## Check if all demo backends are responding
+	@echo "Checking health of demo backends..."
+	@failed=0; \
+	for svc in "TFG:8082" "bitsXlaMarato:8001" "pracpro2:8000" "Planificacion:3000" "Tenda:8888" "Draculin:8890" "DesastresIA:8083" "MPIDS:8084" "PhaseTransitions:8085" "CAIM:8086" "JocEDA:8087" "SBC_IA:8088" "PROP:8081" "planner-api:8765"; do \
+		name=$${svc%%:*}; port=$${svc##*:}; \
+		if curl -s --connect-timeout 2 "http://localhost:$$port/" >/dev/null 2>&1; then \
+			printf "\033[32m[OK]\033[0m   %-18s (port %s)\n" "$$name" "$$port"; \
+		else \
+			printf "\033[31m[FAIL]\033[0m %-18s (port %s)\n" "$$name" "$$port"; \
+			failed=1; \
+		fi; \
+	done; \
+	if [ $$failed -eq 1 ]; then echo "\nSome services appear to be down."; exit 1; else echo "\nAll services are up and running!"; fi
 
 clean: ## Remove build artifacts and node_modules
 	rm -rf dist/ node_modules/ .astro/ .build-stamps/
