@@ -225,7 +225,7 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
             _free_port "$p"
           done
           cd "$dir" && docker compose -f "$file" down --remove-orphans 2>/dev/null
-          cd "$dir" && docker compose -f "$file" up -d --build 2>&1 | sed "s/^/    [${name}] /"
+          cd "$dir" && docker compose -f "$file" up -d 2>&1 | sed "s/^/    [${name}] /"
         ) &
         DOCKER_PIDS+=($!)
       else
