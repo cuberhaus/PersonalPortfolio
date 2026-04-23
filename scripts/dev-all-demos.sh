@@ -203,6 +203,14 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
           || true
         sleep 0.3  # let kernel release the socket
       fi
+
+      # Method 4: Nuclear fallback — kill ANY process holding this port
+      if ss -tlnH "sport = :${port}" 2>/dev/null | grep -q .; then
+        fuser -k "${port}/tcp" 2>/dev/null \
+          || sudo -n fuser -k "${port}/tcp" 2>/dev/null \
+          || true
+        sleep 0.3
+      fi
       return 0
     }
 
