@@ -10,7 +10,8 @@ endif
        rebuild free-ports \
        clean test help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
-       _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
+       _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
+       _db-rob _db-par _db-fib _db-grafics
 
 default: help
 
@@ -211,7 +212,8 @@ endef
 DOCKER_BUILD_OPTS ?=
 
 DEMO_TARGETS := _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
-                _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia
+                _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
+                _db-rob _db-par _db-fib _db-grafics
 
 _db-tfg:
 	$(call build_if_changed,tfg,$(PARENT)/TFG,TFG              :8082,\
@@ -249,3 +251,15 @@ _db-joceda:
 _db-sbcia:
 	$(call build_if_changed,sbcia,$(PARENT)/SBC_IA,SBC_IA           :8088,\
 		docker compose -f "$(PARENT)/SBC_IA/docker-compose.yml" build $(DOCKER_BUILD_OPTS))
+_db-rob:
+	$(call build_if_changed,rob,$(PARENT)/ROB,ROB              :8092,\
+		docker compose -f "$(PARENT)/ROB/docker-compose.yml" build $(DOCKER_BUILD_OPTS))
+_db-par:
+	$(call build_if_changed,par,$(PARENT)/PAR,PAR              :8089,\
+		docker compose -f "$(PARENT)/PAR/docker-compose.yml" build $(DOCKER_BUILD_OPTS))
+_db-fib:
+	$(call build_if_changed,fib,$(PARENT)/fib,FIB              :8090,\
+		docker compose -f "$(PARENT)/fib/docker-compose.yml" build $(DOCKER_BUILD_OPTS))
+_db-grafics:
+	$(call build_if_changed,grafics,$(PARENT)/fib/G/web,Grafics          :8093,\
+		docker compose -f "$(PARENT)/fib/G/web/docker-compose.yml" build $(DOCKER_BUILD_OPTS))
