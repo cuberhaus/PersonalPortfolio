@@ -4,9 +4,9 @@
     "company": "Deloitte",
     "period": "Set 2025 — Actualitat",
     "bullets": [
-      "Vaig entregar el primer projecte d'IA Física de Deloitte: detecció d'anomalies de fabricació en temps real en línies de producció de motors en viu i un bessó digital del magatzem amb seguiment de paquets per càmera, construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton)",
-      "Vaig dissenyar i desplegar infraestructura d'IA i dades a AWS, Azure i GCP — inferència a l'edge, pipelines de streaming i entrenament i servei de models al núvol",
-      "Vaig contribuir a una iniciativa de governança de dades de la Generalitat de Catalunya — catalogació i llinatge amb Informatica, i consultoria de cara al client"
+      "Lliurament del primer projecte d'IA Física de Deloitte: detecció d'anomalies de fabricació en temps real en línies de producció de motors en viu i un bessó digital del magatzem amb seguiment de paquets per càmera, construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton)",
+      "Disseny i desplegament d'infraestructura d'IA i dades a AWS, Azure i GCP — inferència a l'edge, pipelines de streaming i entrenament i servei de models al núvol",
+      "Col·laboració en una iniciativa de governança de dades de la Generalitat de Catalunya — catalogació i llinatge amb Informatica, i consultoria de cara al client"
     ]
   },
   {
@@ -14,9 +14,9 @@
     "company": "MGS, Seguros y Reaseguros S.A.",
     "period": "Set 2023 — Set 2024",
     "bullets": [
-      "Vaig desenvolupar models de predicció de preus com a part d'un equip d'IA i dades de 4 persones donant suport a l'anàlisi de productes asseguradors",
-      "Vaig automatitzar fluxos de treball de SQL Server amb PowerShell per agilitzar tasques recurrents de processament de dades i generació d'informes",
-      "Vaig desenvolupar projectes d'anàlisi geoespacial en R / RStudio, utilitzant dades cartogràfiques per aportar informació de negoci basada en la localització"
+      "Desenvolupament de models de predicció de preus dins d'un equip d'IA i dades de 4 persones donant suport a l'anàlisi de productes asseguradors",
+      "Automatització de fluxos de treball de SQL Server amb PowerShell per agilitzar tasques recurrents de processament de dades i generació d'informes",
+      "Projectes d'anàlisi geoespacial en R / RStudio, utilitzant dades cartogràfiques per aportar informació de negoci basada en la localització"
     ]
   },
   {
@@ -24,9 +24,9 @@
     "company": "Hackathon bitsxlaMarató TV3 (Guanyador)",
     "period": "Gen 2022",
     "bullets": [
-      "Vaig desenvolupar un detector d'aneurismes utilitzant una xarxa neuronal convolucional amb MaskRCNN per a la salut cardiovascular",
-      "Vaig guanyar el Hackathon bitsxlaMarató TV3 2022 per aquest projecte",
-      "Vaig dissenyar una interfície fàcil d'utilitzar per penjar vídeos, detectar l'aorta i visualitzar models en 3D"
+      "Desenvolupament d'un detector d'aneurismes utilitzant una xarxa neuronal convolucional amb MaskRCNN per a la salut cardiovascular",
+      "Projecte guanyador del Hackathon bitsxlaMarató TV3 2022",
+      "Disseny d'una interfície fàcil d'utilitzar per penjar vídeos, detectar l'aorta i visualitzar models en 3D"
     ]
   }
 ]

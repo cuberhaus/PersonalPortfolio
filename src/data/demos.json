@@ -51,7 +51,7 @@
     "icon": "aorta",
     "github": "https://github.com/cuberhaus/bitsXlaMarato",
     "image": "",
-    "lead": "Run the aorta pipeline live: abdominal ultrasound → <strong>Mask R-CNN</strong> segmentation → <strong>3D mesh</strong> reconstruction → aortic <strong>diameter</strong> estimation. Built for the <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a> hackathon.",
+    "lead": "🏆 <strong>Winning project</strong> of the <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a> 2022 hackathon. Run the aorta pipeline live: abdominal ultrasound → <strong>Mask R-CNN</strong> segmentation → <strong>3D mesh</strong> reconstruction → aortic <strong>diameter</strong> estimation.",
     "badge": "Computer Vision · Hackathon",
     "metaTitle": "BitsXLaMarató — Aorta / AAA (Mask R-CNN)",
     "metaDescription": "BitsXLaMarató 2022 winner: Mask R-CNN aorta segmentation and 3D reconstruction for aneurysm detection. Interactive PyTorch + OpenCV inference demo."
