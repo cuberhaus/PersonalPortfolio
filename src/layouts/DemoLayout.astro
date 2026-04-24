@@ -78,12 +78,12 @@ const siteBase = Astro.site || Astro.url;
     <DemoSidebar currentSlug={slug} />
     <nav class="demo-nav">
       <div class="demo-nav-inner container">
-        <a href={base + (lang === 'en' ? '/' : `/${lang}`)} class="demo-back" data-astro-reload>
+        <a href={base + (lang === 'en' ? '/' : `/${lang}`)} class="demo-back" data-astro-reload aria-label={t('demo.portfolio')}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          {t('demo.portfolio')}
+          <span class="demo-back-label">{t('demo.portfolio')}</span>
         </a>
         <span class="demo-nav-title gradient-text">{title}</span>
 
@@ -187,8 +187,8 @@ const siteBase = Astro.site || Astro.url;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: var(--radius-md);
     color: var(--text-secondary);
     background: none;
@@ -211,6 +211,13 @@ const siteBase = Astro.site || Astro.url;
     color: var(--text-secondary);
     transition: color var(--transition-fast);
     justify-self: start;
+    min-width: 0;
+  }
+
+  .demo-back-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .demo-back:hover {
@@ -221,6 +228,11 @@ const siteBase = Astro.site || Astro.url;
     font-size: 1rem;
     font-weight: 700;
     justify-self: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .demo-controls {
@@ -246,36 +258,22 @@ const siteBase = Astro.site || Astro.url;
 
   @media (max-width: 768px) {
     .demo-nav-inner {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      height: auto;
-      padding: 0.75rem 1rem;
+      grid-template-columns: auto 1fr auto;
       gap: 0.5rem;
+      height: var(--nav-height);
+    }
+
+    /* Hide the "Portfolio" label on mobile, keep just the arrow icon to save space */
+    .demo-back-label {
+      display: none;
     }
 
     .demo-back {
-      order: 1;
-    }
-
-    .demo-controls {
-      order: 2;
-      width: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.25rem;
-      justify-content: flex-end;
-      align-items: center;
+      gap: 0;
     }
 
     .demo-nav-title {
-      order: 3;
-      width: 100%;
-      text-align: center;
-      font-size: 1rem;
-      line-height: 1.3;
-      margin: 0.25rem 0;
+      font-size: 0.95rem;
     }
   }
 </style>

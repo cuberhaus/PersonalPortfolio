@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://polcasacubertagil.com/sitemap-index.xml
