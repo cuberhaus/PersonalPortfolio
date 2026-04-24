@@ -3,8 +3,8 @@
     "title": "Detección de Anomalías con IA Física",
     "company": "Horse",
     "role": "AI & Data Consultant @ Deloitte",
-    "description": "El primer proyecto de IA Física entregado a nivel mundial en Deloitte. Detección de anomalías de fabricación en líneas de producción de motores en vivo y en tiempo real. También se desarrolló un gemelo digital del almacén con seguimiento de paquetes por cámara.",
-    "tags": ["IA Física", "Visión por Computadora", "Gemelo Digital", "IoT", "Tiempo Real"],
+    "description": "El primer proyecto de IA Física entregado a nivel mundial en Deloitte. Construido sobre NVIDIA Omniverse, Isaac Sim y el stack Metropolis (DeepStream, TAO, Triton) para detectar anomalías de fabricación en líneas de producción de motores en vivo y en tiempo real, además de un gemelo digital del almacén con seguimiento de paquetes por cámara.",
+    "tags": ["IA Física", "NVIDIA Omniverse", "Isaac Sim", "Metropolis", "Gemelo Digital", "Tiempo Real"],
     "icon": "cpu",
     "link": "https://horse-powertrain.com/"
   },

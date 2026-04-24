@@ -4,9 +4,9 @@
     "company": "Deloitte",
     "period": "Sep 2025 — Present",
     "bullets": [
-      "Led a multidisciplinary team to design and deliver AI and data-driven use cases for public sector initiatives",
-      "Worked on the Generalitat de Catalunya project, focusing on Data Governance, client relationship management, and consulting strategy",
-      "Hands-on experience with Informatica, AWS, and Azure in real-world data management solutions"
+      "Delivered Deloitte's first Physical AI project: real-time manufacturing anomaly detection on live motor production lines and a warehouse digital twin with camera-based package tracking, built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton)",
+      "Designed and deployed AI and data infrastructure across AWS, Azure, and GCP — edge inference, streaming pipelines, and cloud-hosted training and model serving",
+      "Contributed to a Generalitat de Catalunya data-governance initiative — Informatica cataloguing, lineage, and client-facing consulting"
     ]
   },
   {

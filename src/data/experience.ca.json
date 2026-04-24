@@ -4,9 +4,9 @@
     "company": "Deloitte",
     "period": "Set 2025 — Actualitat",
     "bullets": [
-      "Vaig liderar un equip multidisciplinari per dissenyar i entregar casos d'ús d'IA i dades per a iniciatives del sector públic",
-      "Vaig treballar en el projecte de la Generalitat de Catalunya, centrant-me en la Governança de Dades, gestió de relacions amb clients i estratègia de consultoria",
-      "Experiència pràctica amb Informatica, AWS i Azure en solucions de gestió de dades del món real"
+      "Vaig entregar el primer projecte d'IA Física de Deloitte: detecció d'anomalies de fabricació en temps real en línies de producció de motors en viu i un bessó digital del magatzem amb seguiment de paquets per càmera, construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton)",
+      "Vaig dissenyar i desplegar infraestructura d'IA i dades a AWS, Azure i GCP — inferència a l'edge, pipelines de streaming i entrenament i servei de models al núvol",
+      "Vaig contribuir a una iniciativa de governança de dades de la Generalitat de Catalunya — catalogació i llinatge amb Informatica, i consultoria de cara al client"
     ]
   },
   {
