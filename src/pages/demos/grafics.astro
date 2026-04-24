@@ -4,49 +4,23 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import GraficsDemo from '../../components/demos/GraficsDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Computer Graphics Shader Playground",
-  es: "Playground de Shaders de Gráficos",
-  ca: "Playground de Shaders de Gràfics"
-};
-
-const leads = {
-  en: "Interactive <strong>WebGL2</strong> shader playground porting the FIB-UPC <strong>Gràfics</strong> (Computer Graphics) course labs to the browser: vertex transforms (wave, twist, bounce), <strong>Phong/Blinn-Phong</strong> lighting with 4-light setups, procedural textures (marble, fire), fragment patterns (checkerboard, Senyera, CRT, Hinomaru), geometry shader emulation (explode, voxelize), and advanced effects (shadow mapping, reflections, bloom).",
-  es: "Playground interactivo de shaders <strong>WebGL2</strong> que porta las prácticas de <strong>Gràfics</strong> (Gráficos por Computador) de FIB-UPC al navegador: transformaciones de vértices (onda, torsión, rebote), iluminación <strong>Phong/Blinn-Phong</strong> con 4 luces, texturas procedurales (mármol, fuego), patrones de fragmento (tablero, Senyera, CRT, Hinomaru), emulación de geometry shaders (explosión, voxelización), y efectos avanzados (shadow mapping, reflejos, bloom).",
-  ca: "Playground interactiu de shaders <strong>WebGL2</strong> que porta les pràctiques de <strong>Gràfics</strong> (Gràfics per Computador) de FIB-UPC al navegador: transformacions de vèrtexs (ona, torsió, rebot), il·luminació <strong>Phong/Blinn-Phong</strong> amb 4 llums, textures procedurals (marbre, foc), patrons de fragment (escaquer, Senyera, CRT, Hinomaru), emulació de geometry shaders (explosió, voxelització), i efectes avançats (shadow mapping, reflexions, bloom)."
-};
-
-const badges = {
-  en: "Computer Graphics · WebGL2 + GLSL · FIB-UPC",
-  es: "Gráficos por Computador · WebGL2 + GLSL · FIB-UPC",
-  ca: "Gràfics per Computador · WebGL2 + GLSL · FIB-UPC"
-};
-
-const metaDescs = {
-  en: "Interactive WebGL2 shader playground: vertex transforms, Phong lighting, procedural textures, fragment patterns, geometry effects, and advanced rendering.",
-  es: "Playground interactivo de shaders WebGL2: transformaciones de vértices, iluminación Phong, texturas procedurales, patrones y efectos avanzados.",
-  ca: "Playground interactiu de shaders WebGL2: transformacions de vèrtexs, il·luminació Phong, textures procedurals, patrons i efectes avançats."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('grafics', lang);
 ---
 
 <DemoLayout
-  title={title}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.title}
+  description={demo.metaDescription}
   slug="grafics"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/fib"
       githubLabel={t('demo.viewSource')}
       accentFrom="#58a6ff"

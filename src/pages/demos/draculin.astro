@@ -3,50 +3,22 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import DraculinDemo from '../../components/demos/DraculinDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
-import { getLangFromUrl } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
-
-const titles = {
-  en: "Draculin",
-  es: "Draculin",
-  ca: "Draculin"
-};
-
-const leads = {
-  en: "A mobile health app combining an <strong>AI chatbot</strong> with <strong>computer vision</strong> for menstrual health tracking. Finalist at <strong>BitsXLaMarató 2023</strong>.",
-  es: "Una app de salud móvil que combina un <strong>chatbot de IA</strong> con <strong>visión por computador</strong> para el seguimiento de la salud menstrual. Finalista en <strong>BitsXLaMarató 2023</strong>.",
-  ca: "Una app de salut mòbil que combina un <strong>chatbot d'IA</strong> amb <strong>visió per computador</strong> per al seguiment de la salut menstrual. Finalista a <strong>BitsXLaMarató 2023</strong>."
-};
-
-const badges = {
-  en: "Mobile Health \u00b7 Hackathon",
-  es: "Salud Móvil \u00b7 Hackathon",
-  ca: "Salut Mòbil \u00b7 Hackathon"
-};
-
-const vsFront = { en: "Frontend Code (GitHub)", es: "Código Frontend (GitHub)", ca: "Codi Frontend (GitHub)" };
-const vsBack = { en: "Backend Code (GitHub)", es: "Código Backend (GitHub)", ca: "Codi Backend (GitHub)" };
-
-const metaDescs = {
-  en: "Health tracking app with AI chatbot and computer vision, built with Flutter.",
-  es: "App de seguimiento de salud con chatbot de IA y visión por computador, construida con Flutter.",
-  ca: "App de seguiment de salut amb chatbot d'IA i visió per computador, construïda amb Flutter."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const t = useTranslations(lang);
+const demo = getDemo('draculin', lang);
 ---
 
-<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="draculin">
+<DemoLayout title={demo.title} description={demo.metaDescription} slug="draculin">
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl={["https://github.com/cuberhaus/Draculin-Front", "https://github.com/cuberhaus/Draculin-Backend"]}
-      githubLabel={[vsFront[lang] || vsFront.en, vsBack[lang] || vsBack.en]}
+      githubLabel={[t('demo.viewFrontend'), t('demo.viewBackend')]}
       accentFrom="#ec4899"
       accentTo="#a855f7"
     />
@@ -65,13 +37,8 @@ const badge = badges[lang] || badges.en;
     </div>
 
     <div class="demo-info">
-      <h3>About this project</h3>
-      <p>
-        Draculin was developed for the BitsXLaMarató 2023 hackathon, where it reached the finals.
-        The app uses a Google LLM-powered chatbot for health guidance and computer vision to analyze
-        images for menstrual health tracking. The frontend is built with Flutter (supporting iOS,
-        Android, and web), while the backend runs on Django with image inference capabilities.
-      </p>
+      <h3>{demo.aboutTitle}</h3>
+      <p>{demo.aboutDescription}</p>
       
     </div>
   </div>

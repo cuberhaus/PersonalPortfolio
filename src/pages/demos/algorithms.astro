@@ -4,49 +4,23 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import FibDemo from '../../components/demos/FibDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Algorithm Visualizer",
-  es: "Visualizador de Algoritmos",
-  ca: "Visualitzador d'Algoritmes"
-};
-
-const leads = {
-  en: "Eighteen interactive <strong>algorithm</strong> visualizations built with <strong>Qwik</strong> and <strong>Canvas</strong>: Dijkstra, Prim's MST, topological sort, BFS/DFS, graph bipartiteness, boolean circuits, BFS maze solver, flood fill, Sudoku backtracking, merge sort, insertion sort, radix sort, inversion counting, N-Queens, binary search, GCD, matrix exponentiation, and local search (2-opt TSP).",
-  es: "Dieciocho visualizaciones interactivas de <strong>algoritmos</strong> con <strong>Qwik</strong> y <strong>Canvas</strong>: Dijkstra, MST de Prim, ordenación topológica, BFS/DFS, bipartición de grafos, circuitos booleanos, resolución de laberintos BFS, flood fill, Sudoku (backtracking), merge sort, insertion sort, radix sort, conteo de inversiones, N-Reinas, búsqueda binaria, MCD, exponenciación de matrices y búsqueda local (2-opt TSP).",
-  ca: "Divuit visualitzacions interactives d'<strong>algoritmes</strong> amb <strong>Qwik</strong> i <strong>Canvas</strong>: Dijkstra, MST de Prim, ordenació topològica, BFS/DFS, bipartició de grafs, circuits booleans, resolució de laberints BFS, flood fill, Sudoku (backtracking), merge sort, insertion sort, radix sort, comptatge d'inversions, N-Reines, cerca binària, MCD, exponenciació de matrius i cerca local (2-opt TSP)."
-};
-
-const badges = {
-  en: "Algorithms · Qwik + Canvas · FIB-UPC",
-  es: "Algoritmos · Qwik + Canvas · FIB-UPC",
-  ca: "Algoritmes · Qwik + Canvas · FIB-UPC"
-};
-
-const metaDescs = {
-  en: "Interactive algorithm visualizer: Dijkstra, MST, BFS/DFS, sorting, backtracking, and more — built with Qwik and Canvas.",
-  es: "Visualizador interactivo de algoritmos: Dijkstra, MST, BFS/DFS, ordenación, backtracking y más — con Qwik y Canvas.",
-  ca: "Visualitzador interactiu d'algoritmes: Dijkstra, MST, BFS/DFS, ordenació, backtracking i més — amb Qwik i Canvas."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('algorithms', lang);
 ---
 
 <DemoLayout
-  title={title}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.title}
+  description={demo.metaDescription}
   slug="algorithms"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/fib"
       githubLabel={t('demo.viewSource')}
       accentFrom="#a78bfa"

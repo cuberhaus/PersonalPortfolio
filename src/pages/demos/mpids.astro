@@ -4,57 +4,19 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import MPIDSDemo from '../../components/demos/MPIDSDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "MPIDS Solver",
-  es: "Solver MPIDS",
-  ca: "Solver MPIDS"
-};
-
-const leads = {
-  en: "Find the <strong>Minimum Positive Influence Dominating Set</strong> in a graph \u2014 the smallest set of nodes where every vertex has at least half its neighbors in the set. Pick a sample graph or load your own, then run <strong>greedy</strong> or <strong>local search</strong>.",
-  es: "Encuentra el <strong>Minimum Positive Influence Dominating Set</strong> en un grafo \u2014 el conjunto más pequeño de nodos donde cada vértice tiene al menos la mitad de sus vecinos en el conjunto. Elige un grafo de muestra o carga el tuyo, luego ejecuta búsqueda <strong>voraz (greedy)</strong> o <strong>local</strong>.",
-  ca: "Troba el <strong>Minimum Positive Influence Dominating Set</strong> en un graf \u2014 el conjunt més petit de nodes on cada vèrtex té almenys la meitat dels seus veïns al conjunt. Tria un graf de mostra o carrega el teu, després executa cerca <strong>voraç (greedy)</strong> o <strong>local</strong>."
-};
-
-const badges = {
-  en: "Algorithmics \u00b7 FIB-UPC",
-  es: "Algoritmia \u00b7 FIB-UPC",
-  ca: "Algorísmia \u00b7 FIB-UPC"
-};
-
-const aboutTitles = {
-  en: "About this project",
-  es: "Sobre este proyecto",
-  ca: "Sobre aquest projecte"
-};
-
-const aboutDescs = {
-  en: "Originally a C++ project for the Algorithmics course at FIB-UPC, solving the MPIDS problem with greedy heuristics, simulated annealing, and CPLEX ILP. This full-stack web app reimplements the algorithms in Python (FastAPI backend) with an Elm + D3.js frontend providing an interactive force-directed graph visualization via ports.",
-  es: "Originalmente un proyecto en C++ para el curso de Algoritmia en la FIB-UPC, resolviendo el problema MPIDS con heurísticas voraces, simulated annealing e ILP con CPLEX. Esta app web full-stack reimplementa los algoritmos en Python (backend FastAPI) con un frontend Elm + D3.js que ofrece una visualización interactiva de grafos dirigida por fuerzas mediante ports.",
-  ca: "Originalment un projecte en C++ per al curs d'Algorísmia a la FIB-UPC, resolent el problema MPIDS amb heurístiques voraces, simulated annealing i ILP amb CPLEX. Aquesta app web full-stack reimplementa els algorismes en Python (backend FastAPI) amb un frontend Elm + D3.js que ofereix una visualització interactiva de grafs dirigida per forces mitjançant ports."
-};
-
-const metaDescs = {
-  en: "Interactive Minimum Positive Influence Dominating Set solver with graph visualization.",
-  es: "Solver interactivo del Minimum Positive Influence Dominating Set con visualización de grafos.",
-  ca: "Solver interactiu del Minimum Positive Influence Dominating Set amb visualització de grafs."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('mpids', lang);
 ---
 
-<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="mpids">
+<DemoLayout title={demo.title} description={demo.metaDescription} slug="mpids">
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/projectA"
       githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"
@@ -73,8 +35,8 @@ const badge = badges[lang] || badges.en;
     <MPIDSDemo lang={lang} client:visible />
 
     <div class="demo-info">
-      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
-      <p>{aboutDescs[lang] || aboutDescs.en}</p>
+      <h3>{demo.aboutTitle}</h3>
+      <p>{demo.aboutDescription}</p>
       
     </div>
   </div>

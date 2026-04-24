@@ -3,8 +3,8 @@
     "title": "Physical AI Anomalies Detection",
     "company": "Horse",
     "role": "AI & Data Consultant @ Deloitte",
-    "description": "The world's first Physical AI project delivered at Deloitte. Detected manufacturing anomalies on live motor production lines in real-time. Also developed a digital twin of the warehouse with camera tracking for packages.",
-    "tags": ["Physical AI", "Computer Vision", "Digital Twin", "IoT", "Real-time"],
+    "description": "The world's first Physical AI project delivered at Deloitte. Built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton) to detect manufacturing anomalies on live motor production lines in real time, plus a warehouse digital twin with camera-based package tracking.",
+    "tags": ["Physical AI", "NVIDIA Omniverse", "Isaac Sim", "Metropolis", "Digital Twin", "Real-time"],
     "icon": "cpu",
     "link": "https://horse-powertrain.com/"
   },

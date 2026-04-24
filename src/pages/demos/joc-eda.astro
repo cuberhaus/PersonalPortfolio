@@ -3,134 +3,22 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
+import { getJocEdaCopy } from '../../i18n/demos/joc-eda-page';
 
 const lang = getLangFromUrl(Astro.url);
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
-
-const TRANSLATIONS = {
-  en: {
-    title: "Programming Game Viewer",
-    desc: "Watch AI bots battle on a grid \u2014 replay viewer for the Data Structures and Algorithms programming game competition.",
-    badge: "Data Structures \u00b7 FIB-UPC",
-    lead: 'Watch <strong>AI bots</strong> compete in "The Purge" \u2014 a grid-based strategy game from the <strong>Data Structures and Algorithms</strong> course at FIB-UPC.',
-    preloaded: "Preloaded",
-    sampleTitle: "Sample Game",
-    sampleDesc: "4 AI players battle across 250 rounds on a 15\u00d730 grid. Includes warriors, builders, weapons, barricades, and resource gathering.",
-    map: "Map:",
-    rounds: "Rounds:",
-    players: "Players:",
-    watchReplay: "Watch Replay",
-    ownGame: "Your Own Game",
-    uploadDesc: "Compile and run the game locally, then upload the <code>.out</code> replay file to watch it here.",
-    uploadBtn: "Upload Replay File",
-    readingFile: "Reading file...",
-    invalidFile: "This doesn't look like a valid game file (missing \"ThePurge\" header).",
-    loadedFile: "Loaded \"{0}\" \u2014 opening viewer...",
-    fileTooLarge: "File too large for session storage. Try a smaller replay.",
-    controls: "Viewer Controls",
-    playPause: "Play / Pause",
-    prevNext: "Previous / Next round",
-    startEnd: "Go to start / end",
-    zoom: "Zoom in / out",
-    scrub: "Scrub through rounds",
-    help: "Help overlay",
-    about: "About this project",
-    aboutDesc: "Written in C++11, the game engine runs 4 AI players simultaneously on a 2D grid. The custom AI (<code>AIJohnnyMelavo</code>) uses BFS pathfinding to prioritize weapon collection, enemy hunting, and resource gathering. Each player controls warriors (fighters) and builders (constructors) who compete for money, food, guns, and bazookas across day/night cycles.",
-    howTo: "How to generate your own replays",
-    step1: "Clone the <a href=\"https://github.com/cuberhaus/joc_eda\" target=\"_blank\" rel=\"noopener noreferrer\">repository</a>",
-    step2: "Write your own AI in a file like <code>AIMyBot.cc</code> (extend the <code>Player</code> class)",
-    step3: "Run <code>make</code> to compile",
-    step4: "Run <code>./Game -i default.cnf &gt; replay.out</code> to generate a replay",
-    step5: "Upload the <code>replay.out</code> file here to watch it!",
-  },
-  es: {
-    title: "Visor de Juego de Programación",
-    desc: "Mira bots de IA luchar en una cuadrícula \u2014 visor de repeticiones para la competición de juego de programación de Estructuras de Datos y Algoritmos.",
-    badge: "Estructuras de Datos \u00b7 FIB-UPC",
-    lead: 'Mira <strong>bots de IA</strong> competir en "The Purge" \u2014 un juego de estrategia en cuadrícula de la asignatura <strong>Estructuras de Datos y Algoritmos</strong> en FIB-UPC.',
-    preloaded: "Precargado",
-    sampleTitle: "Juego de Ejemplo",
-    sampleDesc: "4 jugadores IA luchan durante 250 rondas en una cuadrícula de 15\u00d730. Incluye guerreros, constructores, armas, barricadas y recolección de recursos.",
-    map: "Mapa:",
-    rounds: "Rondas:",
-    players: "Jugadores:",
-    watchReplay: "Ver Repetición",
-    ownGame: "Tu Propio Juego",
-    uploadDesc: "Compila y ejecuta el juego localmente, luego sube el archivo de repetición <code>.out</code> para verlo aquí.",
-    uploadBtn: "Subir Archivo de Repetición",
-    readingFile: "Leyendo archivo...",
-    invalidFile: "Este no parece un archivo de juego válido (falta la cabecera \"ThePurge\").",
-    loadedFile: "Cargado \"{0}\" \u2014 abriendo visor...",
-    fileTooLarge: "Archivo demasiado grande para el almacenamiento de la sesión. Intenta con una repetición más pequeña.",
-    controls: "Controles del Visor",
-    playPause: "Reproducir / Pausa",
-    prevNext: "Ronda anterior / siguiente",
-    startEnd: "Ir al inicio / final",
-    zoom: "Acercar / Alejar",
-    scrub: "Avanzar por las rondas",
-    help: "Capa de ayuda",
-    about: "Sobre este proyecto",
-    aboutDesc: "Escrito en C++11, el motor del juego ejecuta 4 jugadores IA simultáneamente en una cuadrícula 2D. La IA personalizada (<code>AIJohnnyMelavo</code>) utiliza búsqueda BFS para priorizar la recolección de armas, cazar enemigos y recolectar recursos. Cada jugador controla guerreros (luchadores) y constructores que compiten por dinero, comida, pistolas y bazucas a través de ciclos de día/noche.",
-    howTo: "Cómo generar tus propias repeticiones",
-    step1: "Clona el <a href=\"https://github.com/cuberhaus/joc_eda\" target=\"_blank\" rel=\"noopener noreferrer\">repositorio</a>",
-    step2: "Escribe tu propia IA en un archivo como <code>AIMyBot.cc</code> (extiende la clase <code>Player</code>)",
-    step3: "Ejecuta <code>make</code> para compilar",
-    step4: "Ejecuta <code>./Game -i default.cnf &gt; replay.out</code> para generar una repetición",
-    step5: "Sube el archivo <code>replay.out</code> aquí para verlo!",
-  },
-  ca: {
-    title: "Visor de Joc de Programació",
-    desc: "Mira bots d'IA lluitar en una quadrícula \u2014 visor de repeticions per a la competició de joc de programació d'Estructures de Dades i Algorismes.",
-    badge: "Estructures de Dades \u00b7 FIB-UPC",
-    lead: 'Mira <strong>bots d\'IA</strong> competir a "The Purge" \u2014 un joc d\'estratègia en quadrícula de l\'assignatura <strong>Estructures de Dades i Algorismes</strong> a la FIB-UPC.',
-    preloaded: "Precarregat",
-    sampleTitle: "Joc d'Exemple",
-    sampleDesc: "4 jugadors IA lluiten durant 250 rondes en una quadrícula de 15\u00d730. Inclou guerrers, constructors, armes, barricades i recol·lecció de recursos.",
-    map: "Mapa:",
-    rounds: "Rondes:",
-    players: "Jugadors:",
-    watchReplay: "Veure Repetició",
-    ownGame: "El Teu Propi Joc",
-    uploadDesc: "Compila i executa el joc localment, després puja l'arxiu de repetició <code>.out</code> per veure'l aquí.",
-    uploadBtn: "Pujar Arxiu de Repetició",
-    readingFile: "Llegint arxiu...",
-    invalidFile: "Aquest no sembla un arxiu de joc vàlid (falta la capçalera \"ThePurge\").",
-    loadedFile: "Carregat \"{0}\" \u2014 obrint visor...",
-    fileTooLarge: "Arxiu massa gran per a l'emmagatzematge de la sessió. Prova amb una repetició més petita.",
-    controls: "Controls del Visor",
-    playPause: "Reproduir / Pausa",
-    prevNext: "Ronda anterior / següent",
-    startEnd: "Anar a l'inici / final",
-    zoom: "Apropar / Allunyar",
-    scrub: "Avançar per les rondes",
-    help: "Capa d'ajuda",
-    about: "Sobre aquest projecte",
-    aboutDesc: "Escrit en C++11, el motor del joc executa 4 jugadors IA simultàniament en una quadrícula 2D. La IA personalitzada (<code>AIJohnnyMelavo</code>) utilitza cerca BFS per prioritzar la recol·lecció d'armes, caçar enemics i recol·lectar recursos. Cada jugador controla guerrers (lluitadors) i constructors que competeixen per diners, menjar, pistoles i bazucs a través de cicles de dia/nit.",
-    howTo: "Com generar les teves pròpies repeticions",
-    step1: "Clona el <a href=\"https://github.com/cuberhaus/joc_eda\" target=\"_blank\" rel=\"noopener noreferrer\">repositori</a>",
-    step2: "Escriu la teva pròpia IA en un arxiu com <code>AIMyBot.cc</code> (estén la classe <code>Player</code>)",
-    step3: "Executa <code>make</code> per compilar",
-    step4: "Executa <code>./Game -i default.cnf &gt; replay.out</code> per generar una repetició",
-    step5: "Puja l'arxiu <code>replay.out</code> aquí per veure'l!",
-  }
-};
-
-const tr = TRANSLATIONS[lang] || TRANSLATIONS.en;
+const demo = getDemo('joc-eda', lang);
+const tr = getJocEdaCopy(lang);
 const t = useTranslations(lang);
-
-const metaDescs = {
-  en: TRANSLATIONS.en.desc,
-  es: TRANSLATIONS.es.desc,
-  ca: TRANSLATIONS.ca.desc
-};
 ---
 
-<DemoLayout title={tr.title} description={metaDescs[lang] || metaDescs.en} slug="joc-eda">
+<DemoLayout title={demo.metaTitle ?? demo.title} description={demo.metaDescription} slug="joc-eda">
   <div class="container joc-eda-page">
     <DemoHeader
-      badge={tr.badge}
-      title={tr.title}
-      lead={tr.lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/joc_eda"
       githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"
@@ -212,8 +100,8 @@ const metaDescs = {
 
     <!-- About -->
     <div class="demo-info">
-      <h3>{tr.about}</h3>
-      <p set:html={tr.aboutDesc}></p>
+      <h3>{demo.aboutTitle}</h3>
+      <p set:html={demo.aboutDescription}></p>
       <h4>{tr.howTo}</h4>
       <ol class="steps-list">
         <li set:html={tr.step1}></li>

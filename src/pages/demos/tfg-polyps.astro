@@ -3,56 +3,23 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import TfgPolypDemo from '../../components/demos/TfgPolypDemo';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Polyp Detection with Generative Data Augmentation",
-  es: "Detección de Pólipos con Aumento de Datos Generativo",
-  ca: "Detecció de Pòlips amb Augment de Dades Generatiu"
-};
-
-const leads = {
-  en: "Train <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong>, and <strong>SSD</strong> detectors on colonoscopy data, augmented with synthetic images from <strong>CycleGAN</strong> and <strong>SPADE</strong> generative models. Hyperparameter search via <strong>Optuna</strong> &amp; <strong>Ray Tune</strong>.",
-  es: "Entrena detectores <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong> y <strong>SSD</strong> en datos de colonoscopia, aumentados con imágenes sintéticas de modelos generativos <strong>CycleGAN</strong> y <strong>SPADE</strong>. Búsqueda de hiperparámetros vía <strong>Optuna</strong> y <strong>Ray Tune</strong>.",
-  ca: "Entrena detectors <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong> i <strong>SSD</strong> en dades de colonoscòpia, augmentades amb imatges sintètiques de models generatius <strong>CycleGAN</strong> i <strong>SPADE</strong>. Cerca d'hiperparàmetres via <strong>Optuna</strong> i <strong>Ray Tune</strong>."
-};
-
-const badges = {
-  en: "Deep Learning · Bachelor's Thesis · FIB-UPC",
-  es: "Deep Learning · Trabajo de Fin de Grado · FIB-UPC",
-  ca: "Deep Learning · Treball de Fi de Grau · FIB-UPC"
-};
-
-const metaTitles = {
-  en: "Bachelor's Thesis — Polyp Detection",
-  es: "Trabajo de Fin de Grado — Detección de Pólipos",
-  ca: "Treball de Fi de Grau — Detecció de Pòlips"
-};
-
-const metaDescs = {
-  en: "Bachelor's thesis: deep learning polyp detection in colonoscopy videos with CycleGAN/SPADE data augmentation and Faster R-CNN object detection.",
-  es: "Trabajo de fin de grado: detección de pólipos con deep learning en vídeos de colonoscopia con aumento de datos CycleGAN/SPADE y detección de objetos Faster R-CNN.",
-  ca: "Treball de fi de grau: detecció de pòlips amb deep learning en vídeos de colonoscòpia amb augment de dades CycleGAN/SPADE i detecció d'objectes Faster R-CNN."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
-const metaTitle = metaTitles[lang] || metaTitles.en;
+const demo = getDemo('tfg-polyps', lang);
 ---
 
 <DemoLayout
   title={metaTitle}
-  description={metaDescs[lang] || metaDescs.en}
+  description={demo.metaDescription}
   slug="tfg-polyps"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/TFG"
       githubLabel={t('demo.viewSource')}
       accentFrom="#10b981"

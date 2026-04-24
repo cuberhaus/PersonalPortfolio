@@ -3,55 +3,23 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import PlanificacionDemo from '../../components/demos/PlanificacionDemo';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Planning Practice",
-  es: "Práctica de Planificación",
-  ca: "Pràctica de Planificació"
-};
-
-const leads = {
-  en: "A <strong>PDDL</strong> model of a travel agency: flights, hotels, stay duration, and a numeric <strong>interest metric</strong> to minimize. Browse the Extension 2 domain, download <code>.pddl</code> files, or run the planner when an ENHSP backend is deployed.",
-  es: "Un modelo en <strong>PDDL</strong> de una agencia de viajes: vuelos, hoteles, duración de estancia y una <strong>métrica de interés</strong> numérica a minimizar. Explora el dominio de la Extensión 2, descarga archivos <code>.pddl</code> o ejecuta el planificador cuando haya un backend ENHSP desplegado.",
-  ca: "Un model en <strong>PDDL</strong> d'una agència de viatges: vols, hotels, durada d'estada i una <strong>mètrica d'interès</strong> numèrica a minimitzar. Explora el domini de l'Extensió 2, descarrega fitxers <code>.pddl</code> o executa el planificador quan hi hagi un backend ENHSP desplegat."
-};
-
-const badges = {
-  en: "Automated Planning · FIB-UPC",
-  es: "Planificación Automática · FIB-UPC",
-  ca: "Planificació Automàtica · FIB-UPC"
-};
-
-const metaTitles = {
-  en: "Travel Agency Planning (PDDL)",
-  es: "Planificación de Agencia de Viajes (PDDL)",
-  ca: "Planificació d'Agència de Viatges (PDDL)"
-};
-
-const metaDescs = {
-  en: "PDDL domain for automated travel planning: flights, hotels, duration constraints, and numeric optimization. Interactive planner demo.",
-  es: "Dominio PDDL para planificación automatizada de viajes: vuelos, hoteles, restricciones de duración y optimización numérica. Demo interactiva del planificador.",
-  ca: "Domini PDDL per a planificació automatitzada de viatges: vols, hotels, restriccions de durada i optimització numèrica. Demo interactiva del planificador."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('planificacion', lang);
 ---
 
 <DemoLayout
-  title={metaTitles[lang] || metaTitles.en}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.metaTitle ?? demo.title}
+  description={demo.metaDescription}
   slug="planificacion"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/Practica_de_Planificacion"
       githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"

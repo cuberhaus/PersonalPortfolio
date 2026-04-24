@@ -2,7 +2,7 @@
   {
     "slug": "tfg-polyps",
     "title": "Treball de Fi de Grau — Detecció de Pòlips",
-    "description": "Detecció de pòlips mitjançant aprenentatge profund amb augment de dades generatiu (CycleGAN/SPADE). Explora els resultats del model i el pipeline d'entrenament.",
+    "description": "Treball de Fi de Grau sobre detecció de pòlips en imatges de colonoscòpia amb aprenentatge profund, utilitzant CycleGAN i SPADE per generar dades d'entrenament sintètiques quan les etiquetes reals escassejaven.",
     "tags": [
       "PyTorch",
       "CycleGAN",
@@ -11,12 +11,16 @@
     ],
     "icon": "microscope",
     "github": "https://github.com/cuberhaus/TFG",
-    "image": ""
+    "image": "",
+    "lead": "Entrena detectors <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong> i <strong>SSD</strong> en dades de colonoscòpia, augmentades amb imatges sintètiques de models generatius <strong>CycleGAN</strong> i <strong>SPADE</strong>. Cerca d'hiperparàmetres via <strong>Optuna</strong> i <strong>Ray Tune</strong>.",
+    "badge": "Deep Learning · Treball de Fi de Grau · FIB-UPC",
+    "metaTitle": "Treball de Fi de Grau — Detecció de Pòlips",
+    "metaDescription": "Treball de Fi de Grau sobre detecció de pòlips en colonoscòpia amb deep learning, usant CycleGAN i SPADE per a dades sintètiques. Demo interactiva amb PyTorch + Optuna."
   },
   {
     "slug": "draculin",
     "title": "Draculin",
-    "description": "Aplicació de seguiment de salut amb xatbot d'IA i visió per computador, desenvolupada amb Flutter. Finalista a BitsXLaMarató 2023.",
+    "description": "Aplicació de seguiment de salut amb xatbot d'IA i assistència per visió per computador, desenvolupada amb Flutter i Django com a finalista de BitsXLaMarató 2023.",
     "tags": [
       "Flutter",
       "Django",
@@ -27,12 +31,17 @@
       "https://github.com/cuberhaus/Draculin-Front",
       "https://github.com/cuberhaus/Draculin-Backend"
     ],
-    "image": ""
+    "image": "",
+    "lead": "Recorre <strong>Draculin</strong>: una app de salut en Flutter + Django amb un <strong>chatbot d'IA</strong> i assistència per <strong>visió per computador</strong>. Finalista a <strong>BitsXLaMarató 2023</strong>.",
+    "badge": "Salut Mòbil · Hackató",
+    "metaDescription": "App de seguiment de salut en Flutter + Django amb chatbot d'IA i visió per computador. Finalista de BitsXLaMarató 2023 — recorre la UI i els fluxos interactius.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Draculin es va desenvolupar per al hackató BitsXLaMarató 2023, on va arribar a la final. L'app utilitza un chatbot impulsat per un LLM de Google per a orientació sanitària i visió per computador per analitzar imatges en el seguiment de la salut menstrual. El frontend està construït amb Flutter (compatible amb iOS, Android i web), mentre que el backend corre en Django amb capacitats d'inferència d'imatges."
   },
   {
     "slug": "bitsx-marato",
     "title": "BitsXLaMarató — Aorta",
-    "description": "Guanyador de BitsXLaMarató 2022 — Ecografia → Segmentació d'aorta amb Mask R-CNN i reconstrucció 3D; inferència simulada en navegador + explorador de diàmetre.",
+    "description": "Guanyador de BitsXLaMarató 2022: una eina per segmentar l'aorta en vídeos d'ecografia amb Mask R-CNN i reconstruir-la en 3D per ajudar a detectar aneurismes.",
     "tags": [
       "PyTorch",
       "OpenCV",
@@ -41,24 +50,33 @@
     ],
     "icon": "aorta",
     "github": "https://github.com/cuberhaus/bitsXlaMarato",
-    "image": ""
+    "image": "",
+    "lead": "Executa el pipeline de l'aorta en viu: ecografia abdominal → segmentació <strong>Mask R-CNN</strong> → reconstrucció de <strong>malla 3D</strong> → estimació del <strong>diàmetre</strong> aòrtic. Construït per a la hackató <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a>.",
+    "badge": "Visió per Computador · Hackató",
+    "metaTitle": "BitsXLaMarató — Aorta / AAA (Mask R-CNN)",
+    "metaDescription": "Guanyador de BitsXLaMarató 2022: segmentació d'aorta amb Mask R-CNN i reconstrucció 3D per a detecció d'aneurismes. Demo interactiva d'inferència amb PyTorch + OpenCV."
   },
   {
     "slug": "matriculas",
     "title": "Detecció de Matrícules",
-    "description": "Detecta i llegeix matrícules de cotxes a partir d'imatges utilitzant visió per computador — un pipeline de MATLAB portat al navegador.",
+    "description": "Projecte de visió per computador per localitzar i llegir matrícules en fotos de cotxes, originalment construït com un pipeline clàssic en MATLAB.",
     "tags": [
       "Computer Vision",
       "TypeScript"
     ],
     "icon": "camera",
     "github": "https://github.com/cuberhaus/SPMatriculas",
-    "image": ""
+    "image": "",
+    "lead": "Detecta i llegeix <strong>matrícules</strong> de fotos de cotxes. Tria una mostra o puja la teva i observa com el pipeline de 3 etapes — <strong>detecció de matrícula</strong>, <strong>segmentació de caràcters</strong>, <strong>OCR</strong> — s'executa íntegrament al teu navegador.",
+    "badge": "Visió per Computador · FIB-UPC",
+    "metaDescription": "Projecte de visió per computador per localitzar i llegir matrícules, originalment en MATLAB i portat a TypeScript. S'executa íntegrament al navegador.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Originalment un projecte de MATLAB per al curs de Visió per Computador a la FIB-UPC. Aquesta demo de navegador és un port del pipeline original a JavaScript — utilitza binarització adaptativa, filtrat morfològic, anàlisi de components connectades i coincidència de plantilles per detectar matrícules i llegir els seus caràcters, executant-se completament al client sense dependències externes."
   },
   {
     "slug": "joc-eda",
     "title": "Visor de Joc de Programació",
-    "description": "Observa com els bots d'IA lluiten en una quadrícula — guerrers, constructors, armes i estratègia. Visor de repeticions per a la competició de joc de programació d'Estructures de Dades i Algorismes.",
+    "description": "Projecte d'Estructures de Dades: un joc en quadrícula on bots en C++ competeixen com a guerrers i constructors en un torneig de l'assignatura.",
     "tags": [
       "C++",
       "Canvas",
@@ -66,12 +84,17 @@
     ],
     "icon": "gamepad",
     "github": "https://github.com/cuberhaus/joc_eda",
-    "image": ""
+    "image": "",
+    "lead": "Mira <strong>bots d'IA en C++</strong> competir a \"The Purge\" — un joc d'estratègia en quadrícula de l'assignatura <strong>Estructures de Dades i Algorismes</strong> a la FIB-UPC.",
+    "badge": "Estructures de Dades · FIB-UPC",
+    "metaDescription": "Projecte d'Estructures de Dades: bots d'IA en C++ competint en una quadrícula. Visor de repeticions en Canvas amb partides empaquetades o en viu.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Escrit en C++11, el motor del joc executa 4 jugadors IA simultàniament en una quadrícula 2D. La IA personalitzada (AIJohnnyMelavo) utilitza cercar BFS per prioritzar la recol·lecció d'armes, caçar enemics i recol·lectar recursos. Cada jugador controla guerrers (lluitadors) i constructors que competeixen per diners, menjar, pistoles i bazucas a través de cicles de dia/nit."
   },
   {
     "slug": "jsbach",
     "title": "Intèrpret de JSBach",
-    "description": "Escriu i reprodueix música amb un llenguatge de programació personalitzat. Un intèrpret basat en navegador per al llenguatge musical JSBach.",
+    "description": "Projecte de l'assignatura de Compiladors: JSBach, un petit llenguatge de programació on descrius peces musicals com a codi, construït amb una gramàtica ANTLR4.",
     "tags": [
       "ANTLR4",
       "Web Audio",
@@ -79,12 +102,23 @@
     ],
     "icon": "music",
     "github": "https://github.com/cuberhaus/ANTLR4_JSBach",
-    "image": ""
+    "image": "",
+    "lead": "Escriu <strong>música amb codi</strong>: JSBach és un petit llenguatge amb procediments, variables, bucles i condicionals que reprodueix <strong>notes musicals</strong>. Prova els exemples o escriu el teu propi.",
+    "badge": "Compiladors · FIB-UPC",
+    "metaDescription": "Projecte de Compiladors: JSBach, un petit llenguatge de programació musical construït amb ANTLR4. Escriu codi i reprodueix-lo en viu amb un intèrpret Web Audio.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Originalment construït amb ANTLR4 i Python per a un curs de compiladors a la FIB-UPC. El llenguatge suporta procediments, recursió, aritmètica, llistes, condicionals, bucles i reproducció de notes musicals. Aquesta versió per a navegador utilitza un parser escrit a mà i la Web Audio API per a la síntesi de so.",
+    "hints": [
+      "toca una nota",
+      "imprimir",
+      "assignar",
+      "bloc"
+    ]
   },
   {
     "slug": "tenda",
     "title": "Botiga Online",
-    "description": "Una botiga e-commerce completa amb navegació de productes, carret de compres i procés de pagament.",
+    "description": "Projecte d'Aplicacions Web: una botiga e-commerce completa construïda en PHP i MySQL, amb catàleg de productes, carret de compres i procés de pagament.",
     "tags": [
       "PHP",
       "MySQL",
@@ -92,12 +126,17 @@
     ],
     "icon": "store",
     "github": "https://github.com/cuberhaus/tenda_online",
-    "image": ""
+    "image": "",
+    "lead": "Explora una <strong>botiga e-commerce</strong> construïda en <strong>PHP</strong> i <strong>MySQL</strong>: navega productes per categoria, afegeix al carret i recorre el procés de pagament.",
+    "badge": "Desenvolupament Web · FIB-UPC",
+    "metaDescription": "Projecte d'Aplicacions Web: botiga e-commerce completa en PHP + MySQL amb catàleg, carret i pagament. Recorre-la contra el backend en viu o una reconstrucció estàtica.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Una plataforma de comerç electrònic completa amb catàleg de productes, exploració de categories, carret de la compra, flux de pagament i un tauler d'administració de comandes. Les característiques inclouen pàgines de productes dinàmiques, persistència de carret i processament de comandes."
   },
   {
     "slug": "pro2",
     "title": "Clustering WPGMA",
-    "description": "Construeix arbres filogenètics pas a pas. Introdueix espècies amb seqüències genètiques i observa com l'algorisme WPGMA fusiona clústers en un dendrograma.",
+    "description": "Projecte de Programació: implementació en C++ de clustering WPGMA per construir arbres filogenètics a partir de seqüències genètiques d'espècies.",
     "tags": [
       "TypeScript",
       "Algorithms",
@@ -105,12 +144,17 @@
     ],
     "icon": "tree",
     "github": "https://github.com/cuberhaus/pracpro2",
-    "image": ""
+    "image": "",
+    "lead": "Construeix <strong>arbres filogenètics</strong> pas a pas. Afegeix espècies amb seqüències de gens, inspecciona la <strong>matriu de distàncies k-mer</strong>, i observa com <strong>WPGMA</strong> fusiona els clústers més propers en un dendrograma.",
+    "badge": "Programació II · FIB-UPC",
+    "metaDescription": "Projecte de Programació: clustering WPGMA en C++ construint arbres filogenètics a partir de seqüències de gens. Dendrograma interactiu en D3.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Originalment un projecte de C++17 per al curs de PRO2 a la FIB-UPC. L'algorisme calcula les distàncies entre parells d'espècies utilitzant anàlisi de freqüència k-mer, després fusiona iterativament el parell més proper utilitzant el Mètode del Grup de Parells Ponderats amb Mitjana Aritmètica (WPGMA) per construir un arbre filogenètic."
   },
   {
     "slug": "mpids",
     "title": "Solver MPIDS",
-    "description": "Troba el conjunt dominant mínim en un graf utilitzant algorismes de cerca local i voraç, amb visualització interactiva.",
+    "description": "Projecte d'algorismes sobre el problema del Conjunt Dominant d'Influència Positiva Mínima (MPIDS), resolt amb heurístiques voraces i cerca local estil recuit simulat.",
     "tags": [
       "Algorithms",
       "Graph Theory",
@@ -118,12 +162,17 @@
     ],
     "icon": "graph",
     "github": "https://github.com/cuberhaus/projectA",
-    "image": ""
+    "image": "",
+    "lead": "Troba el <strong>Minimum Positive Influence Dominating Set</strong> en un graf — el conjunt més petit on cada vèrtex té almenys la meitat dels seus veïns a dins. Tria una mostra o carrega el teu, després executa <strong>greedy</strong> o <strong>cerca local</strong>.",
+    "badge": "Algorísmia · FIB-UPC",
+    "metaDescription": "Projecte d'algorismes sobre el Minimum Positive Influence Dominating Set, resolt amb heurístiques greedy i de cerca local. Editor de grafs force-directed interactiu en D3.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Originalment un projecte en C++ per al curs d'Algorísmia a la FIB-UPC, resolent el problema MPIDS amb heurístiques voraces, simulated annealing i ILP amb CPLEX. Aquesta app web full-stack reimplementa els algorismes en Python (backend FastAPI) amb un frontend Elm + D3.js que ofereix una visualització interactiva de grafs dirigida per forces mitjançant ports."
   },
   {
     "slug": "phase-transitions",
     "title": "Transicions de Fase en Grafs",
-    "description": "Explora transicions de fase de percolació i connectivitat en grafs binomials, geomètrics i de quadrícula.",
+    "description": "Projecte de recerca en algorismes sobre transicions de fase de connectivitat i complexitat en grafs aleatoris binomials, geomètrics i de quadrícula.",
     "tags": [
       "Algorithms",
       "Graph Theory",
@@ -131,12 +180,17 @@
     ],
     "icon": "scatter",
     "github": "https://github.com/cuberhaus/projectA2",
-    "image": ""
+    "image": "",
+    "lead": "Observa com els <strong>grafs aleatoris</strong> transicionen de connectats a desconnectats en eliminar nodes o arestes. Genera grafs <strong>binomials</strong> (Erdős–Rényi), <strong>geomètrics</strong> o de <strong>quadrícula</strong>, aplica percolació i mira la transició de fase en temps real.",
+    "badge": "Algorísmia · FIB-UPC",
+    "metaDescription": "Recerca en algorismes sobre transicions de fase de connectivitat i complexitat en grafs aleatoris binomials, geomètrics i de quadrícula. Animacions de percolació i gràfiques Monte Carlo interactives.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Originalment un projecte de Python per al curs d'Algorísmia a la FIB-UPC, estudiant transicions de fase en grafs aleatoris usant NetworkX. Aquesta app web full-stack encapsula la lògica original de Python/NetworkX en un backend FastAPI amb un frontend Lit (Web Components) + Canvas + D3.js per a visualització interactiva de grafs i gràfiques de transició de fase Monte Carlo."
   },
   {
     "slug": "planificacion",
     "title": "Agència de viatges (PDDL)",
-    "description": "Pràctica de planificació automàtica: domini PDDL per a viatges amb vols, hotels, restriccions numèriques i minimització de mètriques.",
+    "description": "Projecte de Planificació Automàtica: un domini PDDL per reservar viatges amb vols, hotels, restriccions numèriques i minimització de mètriques.",
     "tags": [
       "PDDL",
       "Planning",
@@ -144,12 +198,16 @@
     ],
     "icon": "map",
     "github": "https://github.com/cuberhaus/Practica_de_Planificacion",
-    "image": ""
+    "image": "",
+    "lead": "Explora un domini <strong>PDDL</strong> d'agència de viatges — vols, hotels, durada d'estada i una <strong>mètrica d'interès</strong> numèrica a minimitzar. Inspecciona els fitxers de l'Extensió 2, descarrega les fonts <code>.pddl</code> o executa el planificador quan hi hagi un backend ENHSP disponible.",
+    "badge": "Planificació Automàtica · FIB-UPC",
+    "metaTitle": "Planificació d'Agència de Viatges (PDDL)",
+    "metaDescription": "Projecte de Planificació Automàtica: un domini PDDL d'agència de viatges amb vols, hotels, restriccions numèriques i minimització de mètriques. Demo interactiva del planificador."
   },
   {
     "slug": "desastres-ia",
     "title": "Desastres IA",
-    "description": "Assistència en desastres com a cerca local: helicòpters rescaten grups de centres utilitzant escalada de turons i recuit simulat (AIMA).",
+    "description": "Projecte d'IA que planteja l'assistència en desastres com a cerca local, amb helicòpters rescatant grups des de centres mitjançant escalada de turons i recuit simulat.",
     "tags": [
       "Java",
       "AIMA",
@@ -158,12 +216,15 @@
     ],
     "icon": "helicopter",
     "github": "https://github.com/cuberhaus/desastresIA",
-    "image": ""
+    "image": "",
+    "lead": "Resol l'assignació en <strong>ajuda en desastres</strong> com a cerca local — helicòpters rescatant grups des de centres sobre un <strong>mapa 2D</strong> interactiu. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> amb 3 heurístics i 6 funcions successores.",
+    "badge": "Intel·ligència Artificial · Solid.js + FastAPI · FIB-UPC",
+    "metaDescription": "Projecte d'IA que planteja l'assistència en desastres com a cerca local: helicòpters rescatant grups mitjançant hill climbing i simulated annealing. Solver interactiu amb Solid.js + FastAPI."
   },
   {
     "slug": "apa-practica",
     "title": "Aprenentatge Automàtic — Hipotiroïdisme",
-    "description": "Tasca de classificació d'hipotiroïdisme: Nbviewer, enllaços a GitHub, demo de clic de k-NN vinculada a N/P de classe binària (FIB-UPC).",
+    "description": "Pràctica d'Aprenentatge Automàtic: entrenament i comparació de nou famílies de models de sklearn per predir l'hipotiroïdisme a partir de dades clíniques.",
     "tags": [
       "Python",
       "Jupyter",
@@ -172,12 +233,16 @@
     ],
     "icon": "ml",
     "github": "https://github.com/cuberhaus/APA_Practica",
-    "image": ""
+    "image": "",
+    "lead": "Explora un pipeline complet de classificació d'hipotiroïdisme amb <strong>9 famílies de models sklearn</strong>. Les demos interactives a continuació executen <strong>models entrenats reals</strong> directament al teu navegador.",
+    "badge": "Machine Learning · FIB-UPC",
+    "metaTitle": "Machine Learning — Hipotiroïdisme",
+    "metaDescription": "Pràctica d'aprenentatge automàtic comparant 9 famílies de models sklearn per predir hipotiroïdisme. Notebook, predictor en viu i classificador k-NN sobre PCA."
   },
   {
     "slug": "prop",
     "title": "Sistema de Recomanació",
-    "description": "Una interfície web per a un sistema de recomanació basat en contingut, construït amb Java, Spring Boot i Thymeleaf.",
+    "description": "Projecte d'Enginyeria del Programari: un sistema de recomanació basat en contingut construït en Java amb Spring Boot i Thymeleaf, incloent una interfície web completa.",
     "tags": [
       "Java",
       "Spring Boot",
@@ -185,12 +250,17 @@
     ],
     "icon": "server",
     "github": "https://github.com/cuberhaus/subgrup-prop7.1",
-    "image": ""
+    "image": "",
+    "lead": "Explora un sistema de recomanació basat en contingut construït en <strong>Java</strong> amb <strong>Spring Boot</strong> i <strong>Thymeleaf</strong> — modelant usuaris, ítems i valoracions per oferir recomanacions personalitzades.",
+    "badge": "Java · Spring Boot · FIB-UPC",
+    "metaDescription": "Projecte d'Enginyeria del Programari: un recomanador basat en contingut en Java Spring Boot amb UI web en Thymeleaf. Recorre el flux en viu o com a mockup estàtic.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Un projecte universitari per al curs \"Projectes de Programació\" a la FIB-UPC. La lògica central del domini està escrita en Java pur i inclou complexes estructures de dades i algorismes per filtrar i recomanar ítems basant-se en valoracions passades d'usuaris i atributs d'ítems (conceptes de K-Nearest Neighbors i Filtratge Col·laboratiu). La interfície web està impulsada per Spring Boot i renderitzada al servidor amb Thymeleaf i Bootstrap 5."
   },
   {
     "slug": "caim",
     "title": "Explorador IR — CAIM",
-    "description": "Explorador interactiu de recuperació d'informació al navegador: calcula PageRank sobre la xarxa global d'aeroports amb un mapa D3, i analitza la Llei de Zipf en corpus de text amb ajust de corbes.",
+    "description": "Pràctiques de l'assignatura de Recuperació d'Informació: càlcul de PageRank sobre la xarxa global d'aeroports i verificació de la Llei de Zipf en corpus de text.",
     "tags": [
       "Vanilla TS",
       "D3.js",
@@ -199,12 +269,17 @@
     ],
     "icon": "search",
     "github": "https://github.com/cuberhaus/CAIM",
-    "image": ""
+    "image": "",
+    "lead": "Explora conceptes fonamentals de <strong>recuperació d'informació</strong>: executa <strong>PageRank</strong> sobre la xarxa global d'aeroports amb un mapa mundial, i ajusta la <strong>Llei de Zipf</strong> sobre corpus de text reals.",
+    "badge": "Recuperació d'Informació · FIB-UPC",
+    "metaDescription": "Pràctiques de Recuperació d'Informació: PageRank sobre la xarxa global d'aeroports i Llei de Zipf sobre corpus de text. Mapa mundial D3 i ajust de corbes interactius.",
+    "aboutTitle": "Sobre aquest projecte",
+    "aboutDescription": "Originalment exercicis de laboratori del curs CAIM (Cerca i Anàlisi de la Informació) a la FIB-UPC, cobrint PageRank, lleis de Zipf/Heap, TF-IDF, Rocchio, MapReduce i anàlisi de grafs. Aquesta app web full-stack reimplementa els algorismes de PageRank i Zipf en Python (FastAPI) amb un frontend de Vanilla TypeScript + D3.js — sense framework d'UI, només TypeScript pur gestionant el DOM directament."
   },
   {
     "slug": "sbc-ia",
     "title": "Planificador de Viatges (Sistema Expert)",
-    "description": "Un sistema expert de planificació de viatges: respon 10 preguntes sobre les teves preferències i obtingues un itinerari complet amb ciutats, hotels, activitats, transport i cost. Reimplementa regles CLIPS en Python.",
+    "description": "Projecte de Sistemes Basats en Coneixement: un planificador de viatges com a sistema expert originalment escrit amb regles de producció CLIPS, reimplementat en Python.",
     "tags": [
       "HTMX",
       "Alpine.js",
@@ -213,12 +288,15 @@
     ],
     "icon": "map",
     "github": "https://github.com/cuberhaus/SBC_IA",
-    "image": ""
+    "image": "",
+    "lead": "Respon <strong>10 preguntes</strong> sobre tipus de viatge, pressupost, durada i preferències d'hotel, i obtén un <strong>itinerari</strong> complet amb ciutats, hotels, activitats, transport i cost. Un sistema expert en <strong>CLIPS</strong> reimplementat en Python amb un frontend <strong>HTMX + Alpine.js</strong>.",
+    "badge": "Sistemes Basats en Coneixement · HTMX + Alpine.js + FastAPI · FIB-UPC",
+    "metaDescription": "Projecte de Sistemes Basats en Coneixement: un planificador de viatges estil sistema expert CLIPS reimplementat en Python amb frontend HTMX + Alpine.js."
   },
   {
     "slug": "par-parallel",
     "title": "Laboratoris de Computació Paral·lela",
-    "description": "Cinc pràctiques d'OpenMP compilades a WebAssembly: conjunt de Mandelbrot, equació de la calor, merge-sort de 4 vies, càlcul de π i benchmarks d'speedup paral·lel — tot executant-se al teu navegador.",
+    "description": "Pràctiques de Computació Paral·lela en C amb OpenMP: Mandelbrot, equació de la calor, merge sort de 4 vies, càlcul de π i benchmarks d'speedup.",
     "tags": [
       "C",
       "OpenMP",
@@ -228,12 +306,15 @@
     ],
     "icon": "cpu",
     "github": "https://github.com/cuberhaus/PAR",
-    "image": ""
+    "image": "",
+    "lead": "Executa cinc pràctiques d'<strong>OpenMP</strong> compilades a <strong>WebAssembly</strong>: el <strong>conjunt de Mandelbrot</strong>, l'<strong>equació de la calor</strong> amb iteració Jacobi, <strong>merge-sort de 4 vies</strong>, <strong>π</strong> numèric i benchmarks d'<strong>speedup paral·lel</strong>.",
+    "badge": "Computació Paral·lela · Preact + Canvas + WASM · FIB-UPC",
+    "metaDescription": "Pràctiques de Computació Paral·lela en C amb OpenMP — Mandelbrot, equació de la calor, merge sort de 4 vies, π i speedup — compilades a WebAssembly al navegador."
   },
   {
     "slug": "rob-robotics",
     "title": "Panell de Robòtica",
-    "description": "Visualitzacions interactives de robòtica: reproducció d'odometria mòbil, simulador de seguiment de parets, cinemàtica directa 3D (Puma560/3-Link), planificador de trajectòries, dashboard de sensors i estimació d'estat EKF — tot amb dades reals de laboratori.",
+    "description": "Pràctiques de Robòtica que cobreixen odometria, seguiment de parets, cinemàtica directa 3D de braç (Puma560 / 3-Link), planificació de trajectòries, sensors i estimació d'estat EKF.",
     "tags": [
       "Ember.js",
       "Babylon.js",
@@ -243,12 +324,15 @@
     ],
     "icon": "bot",
     "github": "https://github.com/cuberhaus/ROB",
-    "image": ""
+    "image": "",
+    "lead": "Recorre sis visualitzacions interactives de <strong>robòtica</strong> amb <strong>Ember.js</strong> i <strong>Babylon.js</strong>: odometria mòbil amb escàners làser, seguiment de parets, cinemàtica 3D de braços robòtics (Puma560/3-Link), planificació de trajectòries, tauler de sensors i estimació d'estat <strong>EKF</strong>.",
+    "badge": "Robòtica · Ember.js + Babylon.js + Canvas · FIB-UPC",
+    "metaDescription": "Pràctiques de Robòtica: odometria, seguiment de parets, cinemàtica 3D de braços, planificació de trajectòries, sensors i EKF. Tauler interactiu amb Ember.js i Babylon.js."
   },
   {
     "slug": "algorithms",
     "title": "Visualitzador d'Algoritmes",
-    "description": "Visualitzacions pas a pas de 18 algorismes: Dijkstra, Prim, DFS, ordenació topològica, BFS en laberint, flood fill, Sudoku, merge/insertion/radix sort, N-Reines, cerca binària, MCD, exponenciació de matrius i TSP 2-opt.",
+    "description": "Treballs d'Algorismes i Estructures de Dades reunits en un sol visor, amb 18 algorismes clàssics de grafs, ordenació, cerca i problemes combinatoris.",
     "tags": [
       "Qwik",
       "Canvas",
@@ -258,12 +342,15 @@
     ],
     "icon": "brain",
     "github": "https://github.com/cuberhaus/fib",
-    "image": ""
+    "image": "",
+    "lead": "Recorre pas a pas 18 <strong>algorismes</strong> clàssics — Dijkstra, MST de Prim, BFS/DFS, ordenació, N-Reines, 2-opt TSP i més — amb visualitzacions interactives en <strong>Qwik</strong> i <strong>Canvas</strong>.",
+    "badge": "Algoritmes · Qwik + Canvas · FIB-UPC",
+    "metaDescription": "Treballs d'Algorismes i Estructures de Dades — 18 algorismes clàssics de grafs, ordenació, cerca i combinatòria. Visualitzador interactiu amb Qwik i Canvas."
   },
   {
     "slug": "grafics",
     "title": "Playground de Shaders de Gràfics",
-    "description": "Playground interactiu de shaders WebGL2 que porta les pràctiques de Gràfics de FIB-UPC al navegador: transformacions de vèrtexs, il·luminació Phong, textures procedurals, patrons, emulació de geometry shaders i efectes avançats — tot executant GLSL en temps real.",
+    "description": "Pràctiques de Gràfics Per Computador originalment escrites contra OpenGL d'escriptori, cobrint transformacions de vèrtexs, il·luminació Phong, textures procedurals, patrons de fragment i emulació de geometry shaders.",
     "tags": [
       "WebGL2",
       "GLSL",
@@ -272,6 +359,9 @@
     ],
     "icon": "cube",
     "github": "https://github.com/cuberhaus/fib",
-    "image": ""
+    "image": "",
+    "lead": "Edita shaders <strong>WebGL2</strong> en viu — transformacions de vèrtexs, il·luminació <strong>Phong</strong>, textures procedurals, patrons de fragment, efectes de geometry shader i més. Porta les pràctiques de <strong>Gràfics</strong> de FIB-UPC al navegador.",
+    "badge": "Gràfics per Computador · WebGL2 + GLSL · FIB-UPC",
+    "metaDescription": "Pràctiques de Gràfics per Computador originalment en OpenGL d'escriptori: transformacions de vèrtexs, il·luminació Phong, textures procedurals i efectes de geometria. Playground de shaders WebGL2 en viu."
   }
 ]

@@ -4,19 +4,19 @@
     "company": "Deloitte",
     "period": "Sep 2025 — Present",
     "bullets": [
-      "Led a multidisciplinary team to design and deliver AI and data-driven use cases for public sector initiatives",
-      "Worked on the Generalitat de Catalunya project, focusing on Data Governance, client relationship management, and consulting strategy",
-      "Hands-on experience with Informatica, AWS, and Azure in real-world data management solutions"
+      "Delivered Deloitte's first Physical AI project: real-time manufacturing anomaly detection on live motor production lines and a warehouse digital twin with camera-based package tracking, built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton)",
+      "Designed and deployed AI and data infrastructure across AWS, Azure, and GCP — edge inference, streaming pipelines, and cloud-hosted training and model serving",
+      "Contributed to a Generalitat de Catalunya data-governance initiative — Informatica cataloguing, lineage, and client-facing consulting"
     ]
   },
   {
-    "role": "Data Engineer",
+    "role": "AI and Data Engineer",
     "company": "MGS, Seguros y Reaseguros S.A.",
     "period": "Sep 2023 — Sep 2024",
     "bullets": [
-      "Championed predictive analytics, robust data governance, and optimized ETL processes, enhancing data quality and efficiency",
-      "Drove a 20% increase in report accuracy with impactful visualizations using Python, R, SQL Server, and Power BI",
-      "Crafted dynamic dashboards for real-time KPI and business metric monitoring, enabling informed strategic decisions"
+      "Built pricing prediction models as part of a 4-person AI and data team supporting insurance product analytics",
+      "Automated SQL Server workflows with PowerShell to streamline recurring data processing and reporting tasks",
+      "Developed geospatial analysis projects in R / RStudio, using map data to support location-based business insights"
     ]
   },
   {

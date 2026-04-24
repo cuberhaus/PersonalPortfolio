@@ -4,19 +4,19 @@
     "company": "Deloitte",
     "period": "Sep 2025 — Presente",
     "bullets": [
-      "Lideré un equipo multidisciplinario para diseñar y entregar casos de uso de IA y datos para iniciativas del sector público",
-      "Trabajé en el proyecto de la Generalitat de Catalunya, centrándome en la Gobernanza de Datos, gestión de relaciones con clientes y estrategia de consultoría",
-      "Experiencia práctica con Informatica, AWS y Azure en soluciones de gestión de datos del mundo real"
+      "Entregué el primer proyecto de IA Física de Deloitte: detección de anomalías de fabricación en tiempo real sobre líneas de producción de motores en vivo y un gemelo digital del almacén con seguimiento de paquetes por cámara, construido sobre NVIDIA Omniverse, Isaac Sim y el stack Metropolis (DeepStream, TAO, Triton)",
+      "Diseñé y desplegué infraestructura de IA y datos en AWS, Azure y GCP — inferencia en el edge, pipelines de streaming y entrenamiento y servicio de modelos en la nube",
+      "Contribuí a una iniciativa de gobernanza de datos de la Generalitat de Catalunya — catalogación y linaje con Informatica, y consultoría de cara al cliente"
     ]
   },
   {
-    "role": "Ingeniero de Datos",
+    "role": "Ingeniero de IA y Datos",
     "company": "MGS, Seguros y Reaseguros S.A.",
     "period": "Sep 2023 — Sep 2024",
     "bullets": [
-      "Impulsé el análisis predictivo, una sólida gobernanza de datos y procesos ETL optimizados, mejorando la calidad y eficiencia de los datos",
-      "Logré un aumento del 20% en la precisión de los informes con visualizaciones impactantes usando Python, R, SQL Server y Power BI",
-      "Creé cuadros de mando dinámicos para el seguimiento en tiempo real de KPI y métricas de negocio, permitiendo decisiones estratégicas informadas"
+      "Desarrollé modelos de predicción de precios como parte de un equipo de IA y datos de 4 personas dando soporte al análisis de productos aseguradores",
+      "Automaticé flujos de trabajo de SQL Server con PowerShell para agilizar tareas recurrentes de procesamiento de datos y generación de informes",
+      "Desarrollé proyectos de análisis geoespacial en R / RStudio, utilizando datos cartográficos para aportar información de negocio basada en la localización"
     ]
   },
   {
