@@ -2,7 +2,7 @@
   {
     "slug": "tfg-polyps",
     "title": "Trabajo de Fin de Grado — Detección de Pólipos",
-    "description": "Trabajo de Fin de Grado sobre detección de pólipos en imágenes de colonoscopia con aprendizaje profundo, usando CycleGAN y SPADE para generar datos de entrenamiento sintéticos cuando las etiquetas reales escaseaban. En esta página: explora el pipeline de entrenamiento y muestras del aumento generativo, e interactúa con el modelo real cuando el backend está activo — si no, explora resultados estáticos.",
+    "description": "Trabajo de Fin de Grado sobre detección de pólipos en imágenes de colonoscopia con aprendizaje profundo, usando CycleGAN y SPADE para generar datos de entrenamiento sintéticos cuando las etiquetas reales escaseaban.",
     "tags": [
       "PyTorch",
       "CycleGAN",
@@ -16,7 +16,7 @@
   {
     "slug": "draculin",
     "title": "Draculin",
-    "description": "Aplicación de seguimiento de salud con chatbot de IA y asistencia por visión por computadora, desarrollada con Flutter y Django como finalista de BitsXLaMarató 2023. En esta página: recorre las funcionalidades e interactúa con los flujos del chatbot y la visión por computadora — contra el backend real cuando está activo, simulado en caso contrario.",
+    "description": "Aplicación de seguimiento de salud con chatbot de IA y asistencia por visión por computadora, desarrollada con Flutter y Django como finalista de BitsXLaMarató 2023.",
     "tags": [
       "Flutter",
       "Django",
@@ -32,7 +32,7 @@
   {
     "slug": "bitsx-marato",
     "title": "BitsXLaMarató — Aorta",
-    "description": "Ganador de BitsXLaMarató 2022: una herramienta para segmentar la aorta en vídeos de ecografía con Mask R-CNN y reconstruirla en 3D para ayudar a detectar aneurismas. En esta página: ejecuta la segmentación y el explorador de diámetro — contra el backend real cuando está activo, simulado en caso contrario.",
+    "description": "Ganador de BitsXLaMarató 2022: una herramienta para segmentar la aorta en vídeos de ecografía con Mask R-CNN y reconstruirla en 3D para ayudar a detectar aneurismas.",
     "tags": [
       "PyTorch",
       "OpenCV",
@@ -46,7 +46,7 @@
   {
     "slug": "matriculas",
     "title": "Detección de Matrículas",
-    "description": "Proyecto de visión por computadora para localizar y leer matrículas en fotos de coches, originalmente construido como un pipeline clásico en MATLAB. En esta página: ejecuta el pipeline completo sobre imágenes de ejemplo, portado a TypeScript y corriendo en tu navegador.",
+    "description": "Proyecto de visión por computadora para localizar y leer matrículas en fotos de coches, originalmente construido como un pipeline clásico en MATLAB.",
     "tags": [
       "Computer Vision",
       "TypeScript"
@@ -58,7 +58,7 @@
   {
     "slug": "joc-eda",
     "title": "Visor de Juego de Programación",
-    "description": "Proyecto de Estructuras de Datos: un juego en cuadrícula donde bots en C++ compiten como guerreros y constructores en un torneo de la asignatura. En esta página: mira repeticiones de partidas con ejecución en vivo del motor C++, renderizado en Canvas y controles interactivos de reproducción.",
+    "description": "Proyecto de Estructuras de Datos: un juego en cuadrícula donde bots en C++ compiten como guerreros y constructores en un torneo de la asignatura.",
     "tags": [
       "C++",
       "Canvas",
@@ -71,7 +71,7 @@
   {
     "slug": "jsbach",
     "title": "Intérprete de JSBach",
-    "description": "Proyecto de la asignatura de Compiladores: JSBach, un pequeño lenguaje de programación donde describes piezas musicales como código, construido con una gramática ANTLR4. En esta página: escribe código JSBach y escúchalo reproducido en vivo a través de un intérprete Web Audio.",
+    "description": "Proyecto de la asignatura de Compiladores: JSBach, un pequeño lenguaje de programación donde describes piezas musicales como código, construido con una gramática ANTLR4.",
     "tags": [
       "ANTLR4",
       "Web Audio",
@@ -84,7 +84,7 @@
   {
     "slug": "tenda",
     "title": "Tienda Online",
-    "description": "Proyecto de Aplicaciones Web: una tienda e-commerce completa construida en PHP y MySQL, con catálogo de productos, carrito de compras y proceso de pago. En esta página: navega por la tienda — contra el backend real cuando está activo, o una versión estática reconstruida que también puedes explorar.",
+    "description": "Proyecto de Aplicaciones Web: una tienda e-commerce completa construida en PHP y MySQL, con catálogo de productos, carrito de compras y proceso de pago.",
     "tags": [
       "PHP",
       "MySQL",
@@ -97,7 +97,7 @@
   {
     "slug": "pro2",
     "title": "Clustering WPGMA",
-    "description": "Proyecto de Programación: implementación en C++ de clustering WPGMA para construir árboles filogenéticos a partir de secuencias genéticas de especies. En esta página: introduce especies y observa cómo el algoritmo fusiona clústeres en un dendrograma — contra el motor C++ real cuando el backend está activo, o un recorrido estático en caso contrario.",
+    "description": "Proyecto de Programación: implementación en C++ de clustering WPGMA para construir árboles filogenéticos a partir de secuencias genéticas de especies.",
     "tags": [
       "TypeScript",
       "Algorithms",
@@ -110,7 +110,7 @@
   {
     "slug": "mpids",
     "title": "Solver MPIDS",
-    "description": "Proyecto de algoritmos sobre el problema del Conjunto Dominante de Influencia Positiva Mínima (MPIDS), resuelto con heurísticas voraces y búsqueda local estilo recocido simulado. En esta página: construye o edita un grafo en una vista force-directed de D3 y ejecuta el solver de forma interactiva.",
+    "description": "Proyecto de algoritmos sobre el problema del Conjunto Dominante de Influencia Positiva Mínima (MPIDS), resuelto con heurísticas voraces y búsqueda local estilo recocido simulado.",
     "tags": [
       "Algorithms",
       "Graph Theory",
@@ -123,7 +123,7 @@
   {
     "slug": "phase-transitions",
     "title": "Transiciones de Fase en Grafos",
-    "description": "Proyecto de investigación en algoritmos sobre transiciones de fase de conectividad y complejidad en grafos aleatorios binomiales, geométricos y de cuadrícula. En esta página: observa animaciones de percolación en tiempo real y gráficas Monte Carlo mientras ajustas los parámetros del grafo.",
+    "description": "Proyecto de investigación en algoritmos sobre transiciones de fase de conectividad y complejidad en grafos aleatorios binomiales, geométricos y de cuadrícula.",
     "tags": [
       "Algorithms",
       "Graph Theory",
@@ -136,7 +136,7 @@
   {
     "slug": "planificacion",
     "title": "Agencia de viajes (PDDL)",
-    "description": "Proyecto de Planificación Automática: un dominio PDDL para reservar viajes con vuelos, hoteles, restricciones numéricas y minimización de métricas. En esta página: ejecuta el planificador sobre problemas personalizados cuando el backend está activo, o inspecciona los ficheros de dominio, problema y salidas de ejemplo en caso contrario.",
+    "description": "Proyecto de Planificación Automática: un dominio PDDL para reservar viajes con vuelos, hoteles, restricciones numéricas y minimización de métricas.",
     "tags": [
       "PDDL",
       "Planning",
@@ -149,7 +149,7 @@
   {
     "slug": "desastres-ia",
     "title": "Desastres IA",
-    "description": "Proyecto de IA que plantea la asistencia en desastres como búsqueda local, con helicópteros rescatando grupos desde centros mediante escalada de colinas y recocido simulado. En esta página: ejecuta el solver en un mapa 2D interactivo y compara experimentos en un panel de control.",
+    "description": "Proyecto de IA que plantea la asistencia en desastres como búsqueda local, con helicópteros rescatando grupos desde centros mediante escalada de colinas y recocido simulado.",
     "tags": [
       "Java",
       "AIMA",
@@ -163,7 +163,7 @@
   {
     "slug": "apa-practica",
     "title": "Aprendizaje Automático — Hipotiroidismo",
-    "description": "Práctica de Aprendizaje Automático: entrenamiento y comparación de nueve familias de modelos de sklearn para predecir hipotiroidismo a partir de datos clínicos. En esta página: abre el notebook, prueba un predictor de regresión logística en vivo y clasifica puntos sobre una proyección PCA con k-NN.",
+    "description": "Práctica de Aprendizaje Automático: entrenamiento y comparación de nueve familias de modelos de sklearn para predecir hipotiroidismo a partir de datos clínicos.",
     "tags": [
       "Python",
       "Jupyter",
@@ -177,7 +177,7 @@
   {
     "slug": "prop",
     "title": "Sistema de Recomendación",
-    "description": "Proyecto de Ingeniería del Software: un sistema de recomendación basado en contenido construido en Java con Spring Boot y Thymeleaf, incluyendo una interfaz web completa. En esta página: recorre el flujo de recomendación e inspecciona la arquitectura Java/Spring subyacente.",
+    "description": "Proyecto de Ingeniería del Software: un sistema de recomendación basado en contenido construido en Java con Spring Boot y Thymeleaf, incluyendo una interfaz web completa.",
     "tags": [
       "Java",
       "Spring Boot",
@@ -190,7 +190,7 @@
   {
     "slug": "caim",
     "title": "Explorador IR — CAIM",
-    "description": "Prácticas de la asignatura de Recuperación de Información: cálculo de PageRank sobre la red global de aeropuertos y verificación de la Ley de Zipf en corpus de texto. En esta página: ejecuta PageRank sobre un mapa mundial D3 y ajusta curvas de Zipf sobre texto real de forma interactiva.",
+    "description": "Prácticas de la asignatura de Recuperación de Información: cálculo de PageRank sobre la red global de aeropuertos y verificación de la Ley de Zipf en corpus de texto.",
     "tags": [
       "Vanilla TS",
       "D3.js",
@@ -204,7 +204,7 @@
   {
     "slug": "sbc-ia",
     "title": "Planificador de Viajes (Sistema Experto)",
-    "description": "Proyecto de Sistemas Basados en Conocimiento: un planificador de viajes como sistema experto originalmente escrito con reglas de producción CLIPS, reimplementado en Python. En esta página: responde 10 preguntas sobre tus preferencias de viaje y obtén un itinerario completo con ciudades, hoteles, actividades, transporte y coste.",
+    "description": "Proyecto de Sistemas Basados en Conocimiento: un planificador de viajes como sistema experto originalmente escrito con reglas de producción CLIPS, reimplementado en Python.",
     "tags": [
       "HTMX",
       "Alpine.js",
@@ -218,7 +218,7 @@
   {
     "slug": "par-parallel",
     "title": "Laboratorios de Computación Paralela",
-    "description": "Prácticas de Computación Paralela en C con OpenMP: Mandelbrot, ecuación del calor, merge sort de 4 vías, cálculo de π y benchmarks de speedup. En esta página: ejecuta las cinco compiladas a WebAssembly en el navegador e inspecciona el escalado paralelo.",
+    "description": "Prácticas de Computación Paralela en C con OpenMP: Mandelbrot, ecuación del calor, merge sort de 4 vías, cálculo de π y benchmarks de speedup.",
     "tags": [
       "C",
       "OpenMP",
@@ -233,7 +233,7 @@
   {
     "slug": "rob-robotics",
     "title": "Panel de Robótica",
-    "description": "Prácticas de Robótica que cubren odometría, seguimiento de paredes, cinemática directa 3D de brazo (Puma560 / 3-Link), planificación de trayectorias, sensores y estimación de estado EKF. En esta página: reproduce e interactúa con cada práctica usando datos reales capturados en un panel unificado.",
+    "description": "Prácticas de Robótica que cubren odometría, seguimiento de paredes, cinemática directa 3D de brazo (Puma560 / 3-Link), planificación de trayectorias, sensores y estimación de estado EKF.",
     "tags": [
       "Ember.js",
       "Babylon.js",
@@ -248,7 +248,7 @@
   {
     "slug": "algorithms",
     "title": "Visualizador de Algoritmos",
-    "description": "Trabajos de Algoritmos y Estructuras de Datos reunidos en un solo visor, con 18 algoritmos clásicos de grafos, ordenación, búsqueda y problemas combinatorios. En esta página: recórrelos paso a paso con visualizaciones interactivas en Canvas y parámetros ajustables.",
+    "description": "Trabajos de Algoritmos y Estructuras de Datos reunidos en un solo visor, con 18 algoritmos clásicos de grafos, ordenación, búsqueda y problemas combinatorios.",
     "tags": [
       "Qwik",
       "Canvas",
@@ -263,7 +263,7 @@
   {
     "slug": "grafics",
     "title": "Playground de Shaders de Gráficos",
-    "description": "Prácticas de Gráficos Por Computador originalmente escritas contra OpenGL de escritorio, cubriendo transformaciones de vértices, iluminación Phong, texturas procedurales, patrones de fragmento y emulación de geometry shaders. En esta página: edita el GLSL en vivo en un playground WebGL2 y ve la salida del shader actualizarse en tiempo real.",
+    "description": "Prácticas de Gráficos Por Computador originalmente escritas contra OpenGL de escritorio, cubriendo transformaciones de vértices, iluminación Phong, texturas procedurales, patrones de fragmento y emulación de geometry shaders.",
     "tags": [
       "WebGL2",
       "GLSL",

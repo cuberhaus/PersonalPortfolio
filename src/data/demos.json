@@ -2,7 +2,7 @@
   {
     "slug": "tfg-polyps",
     "title": "Bachelor's Thesis — Polyp Detection",
-    "description": "Bachelor's thesis on detecting polyps in colonoscopy images with deep learning, using CycleGAN and SPADE to generate synthetic training data when real labels were scarce. On this page: browse the training pipeline and generative augmentation samples, and interact with the live model when the backend is up — otherwise explore static results.",
+    "description": "Bachelor's thesis on detecting polyps in colonoscopy images with deep learning, using CycleGAN and SPADE to generate synthetic training data when real labels were scarce.",
     "tags": [
       "PyTorch",
       "CycleGAN",
@@ -16,7 +16,7 @@
   {
     "slug": "draculin",
     "title": "Draculin",
-    "description": "Health-tracking app with an AI chatbot and computer vision assistance, built in Flutter and Django as a BitsXLaMarató 2023 finalist. On this page: walk through the features and interact with the chatbot and CV flows — running against the real backend when it's up, simulated otherwise.",
+    "description": "Health-tracking app with an AI chatbot and computer vision assistance, built in Flutter and Django as a BitsXLaMarató 2023 finalist.",
     "tags": [
       "Flutter",
       "Django",
@@ -32,7 +32,7 @@
   {
     "slug": "bitsx-marato",
     "title": "BitsXLaMarató — Aorta",
-    "description": "BitsXLaMarató 2022 winner: a tool to segment the aorta in ultrasound videos with Mask R-CNN and reconstruct it in 3D to help detect aneurysms. On this page: run the segmentation and diameter explorer — against the real backend when it's up, simulated otherwise.",
+    "description": "BitsXLaMarató 2022 winner: a tool to segment the aorta in ultrasound videos with Mask R-CNN and reconstruct it in 3D to help detect aneurysms.",
     "tags": [
       "PyTorch",
       "OpenCV",
@@ -46,7 +46,7 @@
   {
     "slug": "matriculas",
     "title": "License Plate Detection",
-    "description": "Computer vision project to locate and read license plates from car photos, originally built as a classical MATLAB pipeline. On this page: run the full pipeline on sample images, ported to TypeScript and running in your browser.",
+    "description": "Computer vision project to locate and read license plates from car photos, originally built as a classical MATLAB pipeline.",
     "tags": [
       "Computer Vision",
       "TypeScript"
@@ -58,7 +58,7 @@
   {
     "slug": "joc-eda",
     "title": "Programming Game Viewer",
-    "description": "Data structures course project: a grid-based game where C++ bots compete as warriors and builders in a class-wide tournament. On this page: watch matches replay with live C++ engine execution, Canvas rendering, and interactive playback controls.",
+    "description": "Data structures course project: a grid-based game where C++ bots compete as warriors and builders in a class-wide tournament.",
     "tags": [
       "Mithril.js",
       "Canvas",
@@ -72,7 +72,7 @@
   {
     "slug": "jsbach",
     "title": "JSBach Interpreter",
-    "description": "Compilers course project: JSBach, a small programming language where you describe musical pieces as code, built with an ANTLR4 grammar. On this page: write JSBach code and hear it played back live through a Web Audio interpreter.",
+    "description": "Compilers course project: JSBach, a small programming language where you describe musical pieces as code, built with an ANTLR4 grammar.",
     "tags": [
       "ANTLR4",
       "Web Audio",
@@ -85,7 +85,7 @@
   {
     "slug": "tenda",
     "title": "Tenda Online",
-    "description": "Web applications course project: a full e-commerce store built in PHP and MySQL, covering product catalog, shopping cart, and checkout flow. On this page: browse the store — against the real backend when it's up, otherwise a static rebuilt version you can still explore.",
+    "description": "Web applications course project: a full e-commerce store built in PHP and MySQL, covering product catalog, shopping cart, and checkout flow.",
     "tags": [
       "PHP",
       "MySQL",
@@ -98,7 +98,7 @@
   {
     "slug": "pro2",
     "title": "WPGMA Clustering",
-    "description": "Programming course project: implementing WPGMA clustering in C++ to build phylogenetic trees from species gene sequences. On this page: enter species and watch the algorithm merge clusters into a dendrogram — against the real C++ engine when the backend is up, or a static walkthrough otherwise.",
+    "description": "Programming course project: implementing WPGMA clustering in C++ to build phylogenetic trees from species gene sequences.",
     "tags": [
       "TypeScript",
       "Algorithms",
@@ -111,7 +111,7 @@
   {
     "slug": "mpids",
     "title": "MPIDS Solver",
-    "description": "Algorithms project on the Minimum Positive Influence Dominating Set problem, solved with greedy heuristics and simulated-annealing-style local search. On this page: build or edit a graph in a D3 force-directed view and run the solver interactively.",
+    "description": "Algorithms project on the Minimum Positive Influence Dominating Set problem, solved with greedy heuristics and simulated-annealing-style local search.",
     "tags": [
       "Elm",
       "D3.js",
@@ -125,7 +125,7 @@
   {
     "slug": "phase-transitions",
     "title": "Graph Phase Transitions",
-    "description": "Algorithms research project studying connectivity and complexity phase transitions on binomial, geometric, and grid random graphs. On this page: watch real-time percolation animations and Monte Carlo sweep charts as you tune graph parameters.",
+    "description": "Algorithms research project studying connectivity and complexity phase transitions on binomial, geometric, and grid random graphs.",
     "tags": [
       "Lit",
       "Canvas",
@@ -139,7 +139,7 @@
   {
     "slug": "planificacion",
     "title": "Travel agency (PDDL)",
-    "description": "Automated planning course project: a PDDL domain for booking trips with flights, hotels, numeric constraints, and metric minimization. On this page: run the planner on custom problems when the backend is up, or inspect the domain, problem files, and sample planner outputs otherwise.",
+    "description": "Automated planning course project: a PDDL domain for booking trips with flights, hotels, numeric constraints, and metric minimization.",
     "tags": [
       "PDDL",
       "Planning",
@@ -152,7 +152,7 @@
   {
     "slug": "desastres-ia",
     "title": "Desastres IA",
-    "description": "AI course project framing disaster relief as local search, with helicopters rescuing groups from rescue centers via hill climbing and simulated annealing. On this page: run the solver on an interactive 2D map and compare experiments in a dashboard.",
+    "description": "AI course project framing disaster relief as local search, with helicopters rescuing groups from rescue centers via hill climbing and simulated annealing.",
     "tags": [
       "Solid.js",
       "FastAPI",
@@ -167,7 +167,7 @@
   {
     "slug": "apa-practica",
     "title": "Machine Learning — Hypothyroid",
-    "description": "Machine learning course practica: training and comparing nine sklearn model families to predict hypothyroidism from clinical data. On this page: open the notebook, try a live logistic regression predictor, and classify points on a k-NN PCA projection.",
+    "description": "Machine learning course practica: training and comparing nine sklearn model families to predict hypothyroidism from clinical data.",
     "tags": [
       "Python",
       "Jupyter",
@@ -181,7 +181,7 @@
   {
     "slug": "prop",
     "title": "Recommendation System",
-    "description": "Software engineering course project: a content-based recommendation system built in Java with Spring Boot and Thymeleaf, including a full web interface. On this page: browse the recommendation flow and inspect the underlying Java/Spring architecture.",
+    "description": "Software engineering course project: a content-based recommendation system built in Java with Spring Boot and Thymeleaf, including a full web interface.",
     "tags": [
       "Java",
       "Spring Boot",
@@ -194,7 +194,7 @@
   {
     "slug": "caim",
     "title": "CAIM IR Explorer",
-    "description": "Information retrieval course labs: computing PageRank over the global airport network and verifying Zipf's Law on text corpora. On this page: run PageRank on a D3 world map and fit Zipf curves on real text interactively.",
+    "description": "Information retrieval course labs: computing PageRank over the global airport network and verifying Zipf's Law on text corpora.",
     "tags": [
       "Vanilla TS",
       "D3.js",
@@ -208,7 +208,7 @@
   {
     "slug": "sbc-ia",
     "title": "Trip Planner (Expert System)",
-    "description": "Knowledge-based systems course project: an expert system trip planner originally written with CLIPS production rules, reimplemented in Python. On this page: answer 10 questions about your travel preferences and get a full itinerary with cities, hotels, activities, transport, and cost.",
+    "description": "Knowledge-based systems course project: an expert system trip planner originally written with CLIPS production rules, reimplemented in Python.",
     "tags": [
       "HTMX",
       "Alpine.js",
@@ -222,7 +222,7 @@
   {
     "slug": "par-parallel",
     "title": "Parallel Computing Labs",
-    "description": "Parallel computing course labs in C with OpenMP: Mandelbrot, heat equation, 4-way merge sort, π estimation, and speedup benchmarks. On this page: run all five compiled to WebAssembly in-browser and inspect parallel scaling.",
+    "description": "Parallel computing course labs in C with OpenMP: Mandelbrot, heat equation, 4-way merge sort, π estimation, and speedup benchmarks.",
     "tags": [
       "C",
       "OpenMP",
@@ -237,7 +237,7 @@
   {
     "slug": "rob-robotics",
     "title": "Robotics Dashboard",
-    "description": "Robotics course labs covering odometry, wall-following, 3D arm forward kinematics (Puma560 / 3-Link), trajectory planning, sensors, and EKF state estimation. On this page: replay and interact with each lab using real captured data in a unified dashboard.",
+    "description": "Robotics course labs covering odometry, wall-following, 3D arm forward kinematics (Puma560 / 3-Link), trajectory planning, sensors, and EKF state estimation.",
     "tags": [
       "Ember.js",
       "Babylon.js",
@@ -252,7 +252,7 @@
   {
     "slug": "algorithms",
     "title": "Algorithm Visualizer",
-    "description": "Algorithms and data structures coursework covering 18 classical algorithms across graphs, sorting, search, and combinatorial problems. On this page: step through each one with interactive Canvas visualizations and adjustable inputs.",
+    "description": "Algorithms and data structures coursework covering 18 classical algorithms across graphs, sorting, search, and combinatorial problems.",
     "tags": [
       "Qwik",
       "Canvas",
@@ -267,7 +267,7 @@
   {
     "slug": "grafics",
     "title": "Computer Graphics Shader Playground",
-    "description": "Computer graphics course labs originally written against desktop OpenGL, covering vertex transforms, Phong lighting, procedural textures, fragment patterns, and geometry shader emulation. On this page: edit the GLSL live in a WebGL2 playground and see the shader output update in real time.",
+    "description": "Computer graphics course labs originally written against desktop OpenGL, covering vertex transforms, Phong lighting, procedural textures, fragment patterns, and geometry shader emulation.",
     "tags": [
       "WebGL2",
       "GLSL",
