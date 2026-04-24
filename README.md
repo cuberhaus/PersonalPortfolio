@@ -1,6 +1,6 @@
 # Personal Portfolio
 
-**Live:** [polcasacubertagil.me](https://polcasacubertagil.me)
+**Live:** [polcasacubertagil.com](https://polcasacubertagil.com)
 
 Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 19** islands for 20 interactive demos. Three-locale i18n (EN / ES / CA). Deployed to **GitHub Pages** via Actions.
 

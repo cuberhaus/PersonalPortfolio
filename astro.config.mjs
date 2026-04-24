@@ -4,7 +4,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://polcasacubertagil.me',
+  site: 'https://polcasacubertagil.com',
   integrations: [react(), sitemap()],
   i18n: {
     defaultLocale: 'en',
