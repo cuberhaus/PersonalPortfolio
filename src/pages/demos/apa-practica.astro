@@ -3,55 +3,23 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import ApaPracticaDemo from '../../components/demos/ApaPracticaDemo';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Hypothyroid Classification",
-  es: "Clasificación de Hipotiroidismo",
-  ca: "Classificació d'Hipotiroïdisme"
-};
-
-const leads = {
-  en: "Explore an end-to-end hypothyroidism classification pipeline with <strong>9 sklearn model families</strong>. The interactive demos below run <strong>real trained models</strong> directly in your browser.",
-  es: "Explora un pipeline completo de clasificación de hipotiroidismo con <strong>9 familias de modelos sklearn</strong>. Las demos interactivas a continuación ejecutan <strong>modelos entrenados reales</strong> directamente en tu navegador.",
-  ca: "Explora un pipeline complet de classificació d'hipotiroïdisme amb <strong>9 famílies de models sklearn</strong>. Les demos interactives a continuació executen <strong>models entrenats reals</strong> directament al teu navegador."
-};
-
-const badges = {
-  en: "Machine Learning · FIB-UPC",
-  es: "Machine Learning · FIB-UPC",
-  ca: "Machine Learning · FIB-UPC"
-};
-
-const metaTitles = {
-  en: "Machine Learning — Hypothyroid",
-  es: "Machine Learning — Hipotiroidismo",
-  ca: "Machine Learning — Hipotiroïdisme"
-};
-
-const metaDescs = {
-  en: "Machine learning course practica comparing 9 sklearn model families to predict hypothyroidism. Interactive notebook, live predictor, and k-NN PCA classifier.",
-  es: "Práctica de aprendizaje automático comparando 9 familias de modelos sklearn para predecir hipotiroidismo. Notebook, predictor en vivo y clasificador k-NN sobre PCA.",
-  ca: "Pràctica d'aprenentatge automàtic comparant 9 famílies de models sklearn per predir hipotiroïdisme. Notebook, predictor en viu i classificador k-NN sobre PCA."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('apa-practica', lang);
 ---
 
 <DemoLayout
-  title={metaTitles[lang] || metaTitles.en}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.metaTitle ?? demo.title}
+  description={demo.metaDescription}
   slug="apa-practica"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/APA_Practica"
       githubLabel={t('demo.viewSource')}
       accentFrom="#818cf8"

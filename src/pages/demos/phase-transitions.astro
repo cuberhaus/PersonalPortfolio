@@ -4,57 +4,19 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import PhaseTransitionsDemo from '../../components/demos/PhaseTransitionsDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Graph Phase Transitions",
-  es: "Transiciones de Fase en Grafos",
-  ca: "Transicions de Fase en Grafs"
-};
-
-const leads = {
-  en: "Watch <strong>random graphs</strong> transition from connected to disconnected as you remove nodes or edges. Generate <strong>binomial</strong> (Erdős–Rényi), <strong>geometric</strong>, or <strong>grid</strong> graphs, apply percolation, and see the phase transition in real time.",
-  es: "Observa cómo los <strong>grafos aleatorios</strong> transicionan de conectados a desconectados al eliminar nodos o aristas. Genera grafos <strong>binomiales</strong> (Erdős–Rényi), <strong>geométricos</strong> o de <strong>cuadrícula</strong>, aplica percolación y ve la transición de fase en tiempo real.",
-  ca: "Observa com els <strong>grafs aleatoris</strong> transicionen de connectats a desconnectats en eliminar nodes o arestes. Genera grafs <strong>binomials</strong> (Erdős–Rényi), <strong>geomètrics</strong> o de <strong>quadrícula</strong>, aplica percolació i mira la transició de fase en temps real."
-};
-
-const badges = {
-  en: "Algorithmics \u00b7 FIB-UPC",
-  es: "Algoritmia \u00b7 FIB-UPC",
-  ca: "Algorísmia \u00b7 FIB-UPC"
-};
-
-const aboutTitles = {
-  en: "About this project",
-  es: "Sobre este proyecto",
-  ca: "Sobre aquest projecte"
-};
-
-const aboutDescs = {
-  en: "Originally a Python project for the Algorithmics course at FIB-UPC, studying phase transitions in random graphs using NetworkX. This full-stack web app wraps the original Python/NetworkX logic in a FastAPI backend with a Lit (Web Components) + Canvas + D3.js frontend for interactive graph visualization and Monte Carlo phase transition charts.",
-  es: "Originalmente un proyecto de Python para el curso de Algoritmia en la FIB-UPC, estudiando transiciones de fase en grafos aleatorios usando NetworkX. Esta app web full-stack envuelve la lógica original de Python/NetworkX en un backend FastAPI con un frontend Lit (Web Components) + Canvas + D3.js para visualización interactiva de grafos y gráficas de transición de fase Monte Carlo.",
-  ca: "Originalment un projecte de Python per al curs d'Algorísmia a la FIB-UPC, estudiant transicions de fase en grafs aleatoris usant NetworkX. Aquesta app web full-stack encapsula la lògica original de Python/NetworkX en un backend FastAPI amb un frontend Lit (Web Components) + Canvas + D3.js per a visualització interactiva de grafs i gràfiques de transició de fase Monte Carlo."
-};
-
-const metaDescs = {
-  en: "Algorithms research on connectivity and complexity phase transitions in binomial, geometric, and grid random graphs. Interactive percolation animations and Monte Carlo charts.",
-  es: "Investigación en algoritmos sobre transiciones de fase de conectividad y complejidad en grafos aleatorios binomiales, geométricos y de cuadrícula. Animaciones de percolación y gráficas Monte Carlo interactivas.",
-  ca: "Recerca en algorismes sobre transicions de fase de connectivitat i complexitat en grafs aleatoris binomials, geomètrics i de quadrícula. Animacions de percolació i gràfiques Monte Carlo interactives."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('phase-transitions', lang);
 ---
 
-<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="phase-transitions">
+<DemoLayout title={demo.title} description={demo.metaDescription} slug="phase-transitions">
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/projectA2"
       githubLabel={t('demo.viewSource')}
       accentFrom="#14b8a6"
@@ -73,8 +35,8 @@ const badge = badges[lang] || badges.en;
     <PhaseTransitionsDemo lang={lang} client:visible />
 
     <div class="demo-info">
-      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
-      <p>{aboutDescs[lang] || aboutDescs.en}</p>
+      <h3>{demo.aboutTitle}</h3>
+      <p>{demo.aboutDescription}</p>
       
     </div>
   </div>

@@ -4,49 +4,23 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import FibDemo from '../../components/demos/FibDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Algorithm Visualizer",
-  es: "Visualizador de Algoritmos",
-  ca: "Visualitzador d'Algoritmes"
-};
-
-const leads = {
-  en: "Step through 18 classic <strong>algorithms</strong> — Dijkstra, Prim's MST, BFS/DFS, sorting, N-Queens, 2-opt TSP, and more — with interactive visualizations built in <strong>Qwik</strong> and <strong>Canvas</strong>.",
-  es: "Recorre paso a paso 18 <strong>algoritmos</strong> clásicos — Dijkstra, MST de Prim, BFS/DFS, ordenación, N-Reinas, 2-opt TSP y más — con visualizaciones interactivas en <strong>Qwik</strong> y <strong>Canvas</strong>.",
-  ca: "Recorre pas a pas 18 <strong>algorismes</strong> clàssics — Dijkstra, MST de Prim, BFS/DFS, ordenació, N-Reines, 2-opt TSP i més — amb visualitzacions interactives en <strong>Qwik</strong> i <strong>Canvas</strong>."
-};
-
-const badges = {
-  en: "Algorithms · Qwik + Canvas · FIB-UPC",
-  es: "Algoritmos · Qwik + Canvas · FIB-UPC",
-  ca: "Algoritmes · Qwik + Canvas · FIB-UPC"
-};
-
-const metaDescs = {
-  en: "Algorithms and data structures coursework — 18 classical algorithms across graphs, sorting, search, and combinatorics. Interactive Qwik + Canvas visualizer.",
-  es: "Trabajos de Algoritmos y Estructuras de Datos — 18 algoritmos clásicos de grafos, ordenación, búsqueda y combinatoria. Visualizador interactivo con Qwik y Canvas.",
-  ca: "Treballs d'Algorismes i Estructures de Dades — 18 algorismes clàssics de grafs, ordenació, cerca i combinatòria. Visualitzador interactiu amb Qwik i Canvas."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('algorithms', lang);
 ---
 
 <DemoLayout
-  title={title}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.title}
+  description={demo.metaDescription}
   slug="algorithms"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/fib"
       githubLabel={t('demo.viewSource')}
       accentFrom="#a78bfa"

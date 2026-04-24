@@ -4,49 +4,23 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import ParDemo from '../../components/demos/ParDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Parallel Computing Labs",
-  es: "Laboratorios de Computación Paralela",
-  ca: "Laboratoris de Computació Paral·lela"
-};
-
-const leads = {
-  en: "Run five <strong>OpenMP</strong> labs compiled to <strong>WebAssembly</strong>: the <strong>Mandelbrot set</strong>, the <strong>heat equation</strong> with Jacobi iteration, <strong>4-way merge-sort</strong>, numerical <strong>π</strong>, and <strong>parallel speedup</strong> benchmarks.",
-  es: "Ejecuta cinco prácticas de <strong>OpenMP</strong> compiladas a <strong>WebAssembly</strong>: el <strong>conjunto de Mandelbrot</strong>, la <strong>ecuación del calor</strong> con iteración Jacobi, <strong>merge-sort de 4 vías</strong>, <strong>π</strong> numérico y benchmarks de <strong>speedup paralelo</strong>.",
-  ca: "Executa cinc pràctiques d'<strong>OpenMP</strong> compilades a <strong>WebAssembly</strong>: el <strong>conjunt de Mandelbrot</strong>, l'<strong>equació de la calor</strong> amb iteració Jacobi, <strong>merge-sort de 4 vies</strong>, <strong>π</strong> numèric i benchmarks d'<strong>speedup paral·lel</strong>."
-};
-
-const badges = {
-  en: "Parallel Computing · Preact + Canvas + WASM · FIB-UPC",
-  es: "Computación Paralela · Preact + Canvas + WASM · FIB-UPC",
-  ca: "Computació Paral·lela · Preact + Canvas + WASM · FIB-UPC"
-};
-
-const metaDescs = {
-  en: "Parallel computing course labs in C with OpenMP — Mandelbrot, heat equation, 4-way merge sort, π, and speedup — compiled to WebAssembly in-browser.",
-  es: "Prácticas de Computación Paralela en C con OpenMP — Mandelbrot, ecuación del calor, merge sort de 4 vías, π y speedup — compiladas a WebAssembly en el navegador.",
-  ca: "Pràctiques de Computació Paral·lela en C amb OpenMP — Mandelbrot, equació de la calor, merge sort de 4 vies, π i speedup — compilades a WebAssembly al navegador."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('par-parallel', lang);
 ---
 
 <DemoLayout
-  title={title}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.title}
+  description={demo.metaDescription}
   slug="par-parallel"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/PAR"
       githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"

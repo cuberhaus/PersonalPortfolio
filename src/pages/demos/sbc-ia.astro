@@ -4,49 +4,23 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import SbcDemo from '../../components/demos/SbcDemo';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Trip Planner (Expert System)",
-  es: "Planificador de Viajes (Sistema Experto)",
-  ca: "Planificador de Viatges (Sistema Expert)"
-};
-
-const leads = {
-  en: "Answer <strong>10 questions</strong> on trip type, budget, duration, and hotel preferences, and get a full <strong>itinerary</strong> with cities, hotels, activities, transport, and cost. A <strong>CLIPS</strong> expert system reimplemented in Python with an <strong>HTMX + Alpine.js</strong> frontend.",
-  es: "Responde <strong>10 preguntas</strong> sobre tipo de viaje, presupuesto, duración y preferencias de hotel, y obtén un <strong>itinerario</strong> completo con ciudades, hoteles, actividades, transporte y coste. Un sistema experto en <strong>CLIPS</strong> reimplementado en Python con un frontend <strong>HTMX + Alpine.js</strong>.",
-  ca: "Respon <strong>10 preguntes</strong> sobre tipus de viatge, pressupost, durada i preferències d'hotel, i obtén un <strong>itinerari</strong> complet amb ciutats, hotels, activitats, transport i cost. Un sistema expert en <strong>CLIPS</strong> reimplementat en Python amb un frontend <strong>HTMX + Alpine.js</strong>."
-};
-
-const badges = {
-  en: "Knowledge-Based Systems · HTMX + Alpine.js + FastAPI · FIB-UPC",
-  es: "Sistemas Basados en Conocimiento · HTMX + Alpine.js + FastAPI · FIB-UPC",
-  ca: "Sistemes Basats en Coneixement · HTMX + Alpine.js + FastAPI · FIB-UPC"
-};
-
-const metaDescs = {
-  en: "Knowledge-based systems course project: a CLIPS-style expert system trip planner reimplemented in Python with an HTMX + Alpine.js frontend.",
-  es: "Proyecto de Sistemas Basados en Conocimiento: un planificador de viajes estilo sistema experto CLIPS reimplementado en Python con frontend HTMX + Alpine.js.",
-  ca: "Projecte de Sistemes Basats en Coneixement: un planificador de viatges estil sistema expert CLIPS reimplementat en Python amb frontend HTMX + Alpine.js."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('sbc-ia', lang);
 ---
 
 <DemoLayout
-  title={title}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.title}
+  description={demo.metaDescription}
   slug="sbc-ia"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/SBC_IA"
       githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"

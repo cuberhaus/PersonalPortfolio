@@ -3,57 +3,19 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import SPMatriculasDemo from '../../components/demos/SPMatriculasDemo';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "License Plate Detection",
-  es: "Detección de Matrículas",
-  ca: "Detecció de Matrícules"
-};
-
-const leads = {
-  en: "Detect and read <strong>license plates</strong> from car photos. Pick a sample or upload your own and watch the 3-stage pipeline — <strong>plate detection</strong>, <strong>character segmentation</strong>, <strong>OCR</strong> — run entirely in your browser.",
-  es: "Detecta y lee <strong>matrículas</strong> de fotos de coches. Elige una muestra o sube la tuya y observa cómo el pipeline de 3 etapas — <strong>detección de matrícula</strong>, <strong>segmentación de caracteres</strong>, <strong>OCR</strong> — se ejecuta íntegramente en tu navegador.",
-  ca: "Detecta i llegeix <strong>matrícules</strong> de fotos de cotxes. Tria una mostra o puja la teva i observa com el pipeline de 3 etapes — <strong>detecció de matrícula</strong>, <strong>segmentació de caràcters</strong>, <strong>OCR</strong> — s'executa íntegrament al teu navegador."
-};
-
-const badges = {
-  en: "Computer Vision \u00b7 FIB-UPC",
-  es: "Visión por Computador \u00b7 FIB-UPC",
-  ca: "Visió per Computador \u00b7 FIB-UPC"
-};
-
-const aboutTitles = {
-  en: "About this project",
-  es: "Sobre este proyecto",
-  ca: "Sobre aquest projecte"
-};
-
-const aboutDescs = {
-  en: "Originally a MATLAB project for the Computer Vision course at FIB-UPC. This browser demo is a port of the original pipeline to JavaScript \u2014 it uses adaptive binarization, morphological filtering, connected component analysis, and template matching to detect license plates and read their characters, all running client-side with no external dependencies.",
-  es: "Originalmente un proyecto de MATLAB para el curso de Visión por Computador en la FIB-UPC. Esta demo de navegador es un port del pipeline original a JavaScript \u2014 utiliza binarización adaptativa, filtrado morfológico, análisis de componentes conectadas y coincidencia de plantillas para detectar matrículas y leer sus caracteres, ejecutándose completamente en el cliente sin dependencias externas.",
-  ca: "Originalment un projecte de MATLAB per al curs de Visió per Computador a la FIB-UPC. Aquesta demo de navegador és un port del pipeline original a JavaScript \u2014 utilitza binarització adaptativa, filtrat morfològic, anàlisi de components connectades i coincidència de plantilles per detectar matrícules i llegir els seus caràcters, executant-se completament al client sense dependències externes."
-};
-
-const metaDescs = {
-  en: "Computer vision project to locate and read license plates, originally in MATLAB and ported to TypeScript. Runs entirely in the browser.",
-  es: "Proyecto de visión por computador para localizar y leer matrículas, originalmente en MATLAB y portado a TypeScript. Se ejecuta íntegramente en el navegador.",
-  ca: "Projecte de visió per computador per localitzar i llegir matrícules, originalment en MATLAB i portat a TypeScript. S'executa íntegrament al navegador."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('matriculas', lang);
 ---
 
-<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="matriculas">
+<DemoLayout title={demo.title} description={demo.metaDescription} slug="matriculas">
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/SPMatriculas"
       githubLabel={t('demo.viewSource')}
       accentFrom="#0ea5e9"
@@ -63,8 +25,8 @@ const badge = badges[lang] || badges.en;
     <SPMatriculasDemo lang={lang} client:visible />
 
     <div class="demo-info">
-      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
-      <p>{aboutDescs[lang] || aboutDescs.en}</p>
+      <h3>{demo.aboutTitle}</h3>
+      <p>{demo.aboutDescription}</p>
       
     </div>
   </div>

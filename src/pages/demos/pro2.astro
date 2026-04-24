@@ -3,57 +3,19 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import Pro2Demo from '../../components/demos/Pro2Demo';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "WPGMA Phylogenetic Clustering",
-  es: "Clustering Filogenético WPGMA",
-  ca: "Clustering Filogenètic WPGMA"
-};
-
-const leads = {
-  en: "Build <strong>phylogenetic trees</strong> step by step. Add species with gene sequences, inspect the <strong>k-mer distance matrix</strong>, and watch <strong>WPGMA</strong> merge the closest clusters into a dendrogram.",
-  es: "Construye <strong>árboles filogenéticos</strong> paso a paso. Añade especies con secuencias de genes, inspecciona la <strong>matriz de distancias k-mer</strong>, y observa cómo <strong>WPGMA</strong> fusiona los clústeres más cercanos en un dendrograma.",
-  ca: "Construeix <strong>arbres filogenètics</strong> pas a pas. Afegeix espècies amb seqüències de gens, inspecciona la <strong>matriu de distàncies k-mer</strong>, i observa com <strong>WPGMA</strong> fusiona els clústers més propers en un dendrograma."
-};
-
-const badges = {
-  en: "Programming II \u00b7 FIB-UPC",
-  es: "Programación II \u00b7 FIB-UPC",
-  ca: "Programació II \u00b7 FIB-UPC"
-};
-
-const aboutTitles = {
-  en: "About this project",
-  es: "Sobre este proyecto",
-  ca: "Sobre aquest projecte"
-};
-
-const aboutDescs = {
-  en: "Originally a C++17 project for the PRO2 course at FIB-UPC. The algorithm computes pairwise distances between species using k-mer frequency analysis, then iteratively merges the closest pair using Weighted Pair Group Method with Arithmetic Mean (WPGMA) to build a phylogenetic tree.",
-  es: "Originalmente un proyecto de C++17 para el curso de PRO2 en la FIB-UPC. El algoritmo calcula las distancias entre pares de especies utilizando análisis de frecuencia k-mer, luego fusiona iterativamente el par más cercano utilizando el Método del Grupo de Pares Ponderados con Media Aritmética (WPGMA) para construir un árbol filogenético.",
-  ca: "Originalment un projecte de C++17 per al curs de PRO2 a la FIB-UPC. L'algorisme calcula les distàncies entre parells d'espècies utilitzant anàlisi de freqüència k-mer, després fusiona iterativament el parell més proper utilitzant el Mètode del Grup de Parells Ponderats amb Mitjana Aritmètica (WPGMA) per construir un arbre filogenètic."
-};
-
-const metaDescs = {
-  en: "Programming course project: WPGMA clustering in C++ building phylogenetic trees from gene sequences. Interactive D3 dendrogram.",
-  es: "Proyecto de Programación: clustering WPGMA en C++ construyendo árboles filogenéticos a partir de secuencias de genes. Dendrograma interactivo en D3.",
-  ca: "Projecte de Programació: clustering WPGMA en C++ construint arbres filogenètics a partir de seqüències de gens. Dendrograma interactiu en D3."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('pro2', lang);
 ---
 
-<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="pro2">
+<DemoLayout title={demo.title} description={demo.metaDescription} slug="pro2">
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/pracpro2"
       githubLabel={t('demo.viewSource')}
       accentFrom="#22c55e"
@@ -63,8 +25,8 @@ const badge = badges[lang] || badges.en;
     <Pro2Demo lang={lang} client:visible />
 
     <div class="demo-info">
-      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
-      <p>{aboutDescs[lang] || aboutDescs.en}</p>
+      <h3>{demo.aboutTitle}</h3>
+      <p>{demo.aboutDescription}</p>
       
     </div>
   </div>

@@ -4,49 +4,23 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import DesastresIADemo from '../../components/demos/DesastresIADemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Desastres IA",
-  es: "Desastres IA",
-  ca: "Desastres IA"
-};
-
-const leads = {
-  en: "Solve <strong>disaster-relief</strong> assignment as local search — helicopters rescuing groups from centers on an interactive <strong>2D map</strong>. Compare <strong>hill climbing</strong> vs <strong>simulated annealing</strong> with 3 heuristics and 6 successor functions.",
-  es: "Resuelve la asignación en <strong>ayuda en desastres</strong> como búsqueda local — helicópteros rescatando grupos desde centros sobre un <strong>mapa 2D</strong> interactivo. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> con 3 heurísticos y 6 funciones sucesoras.",
-  ca: "Resol l'assignació en <strong>ajuda en desastres</strong> com a cerca local — helicòpters rescatant grups des de centres sobre un <strong>mapa 2D</strong> interactiu. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> amb 3 heurístics i 6 funcions successores."
-};
-
-const badges = {
-  en: "Artificial Intelligence · Solid.js + FastAPI · FIB-UPC",
-  es: "Inteligencia Artificial · Solid.js + FastAPI · FIB-UPC",
-  ca: "Intel·ligència Artificial · Solid.js + FastAPI · FIB-UPC"
-};
-
-const metaDescs = {
-  en: "AI course project framing disaster relief as local search: helicopters rescuing groups via hill climbing and simulated annealing. Solid.js + FastAPI interactive solver.",
-  es: "Proyecto de IA que plantea la asistencia en desastres como búsqueda local: helicópteros rescatando grupos mediante hill climbing y simulated annealing. Solver interactivo con Solid.js + FastAPI.",
-  ca: "Projecte d'IA que planteja l'assistència en desastres com a cerca local: helicòpters rescatant grups mitjançant hill climbing i simulated annealing. Solver interactiu amb Solid.js + FastAPI."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('desastres-ia', lang);
 ---
 
 <DemoLayout
-  title={title}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.title}
+  description={demo.metaDescription}
   slug="desastres-ia"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/desastresIA"
       githubLabel={t('demo.viewSource')}
       accentFrom="#6366f1"

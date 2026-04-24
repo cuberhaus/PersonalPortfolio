@@ -4,49 +4,23 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import GraficsDemo from '../../components/demos/GraficsDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Computer Graphics Shader Playground",
-  es: "Playground de Shaders de Gráficos",
-  ca: "Playground de Shaders de Gràfics"
-};
-
-const leads = {
-  en: "Edit <strong>WebGL2</strong> shaders live — vertex transforms, <strong>Phong</strong> lighting, procedural textures, fragment patterns, geometry effects, and more. Ports the FIB-UPC <strong>Gràfics</strong> course labs to the browser.",
-  es: "Edita shaders <strong>WebGL2</strong> en vivo — transformaciones de vértices, iluminación <strong>Phong</strong>, texturas procedurales, patrones de fragmento, efectos de geometry shader y más. Porta las prácticas de <strong>Gràfics</strong> de FIB-UPC al navegador.",
-  ca: "Edita shaders <strong>WebGL2</strong> en viu — transformacions de vèrtexs, il·luminació <strong>Phong</strong>, textures procedurals, patrons de fragment, efectes de geometry shader i més. Porta les pràctiques de <strong>Gràfics</strong> de FIB-UPC al navegador."
-};
-
-const badges = {
-  en: "Computer Graphics · WebGL2 + GLSL · FIB-UPC",
-  es: "Gráficos por Computador · WebGL2 + GLSL · FIB-UPC",
-  ca: "Gràfics per Computador · WebGL2 + GLSL · FIB-UPC"
-};
-
-const metaDescs = {
-  en: "Computer graphics course labs originally for desktop OpenGL, covering vertex transforms, Phong lighting, procedural textures, and geometry effects. Live WebGL2 shader playground.",
-  es: "Prácticas de Gráficos por Computador originalmente en OpenGL de escritorio: transformaciones de vértices, iluminación Phong, texturas procedurales y efectos de geometría. Playground de shaders WebGL2 en vivo.",
-  ca: "Pràctiques de Gràfics per Computador originalment en OpenGL d'escriptori: transformacions de vèrtexs, il·luminació Phong, textures procedurals i efectes de geometria. Playground de shaders WebGL2 en viu."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('grafics', lang);
 ---
 
 <DemoLayout
-  title={title}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.title}
+  description={demo.metaDescription}
   slug="grafics"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/fib"
       githubLabel={t('demo.viewSource')}
       accentFrom="#58a6ff"

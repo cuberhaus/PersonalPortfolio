@@ -3,121 +3,21 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
+import { getPropCopy } from '../../i18n/demos/prop-page';
 
 const lang = getLangFromUrl(Astro.url);
-
-const TRANSLATIONS = {
-  en: {
-    title: "Recommendation System",
-    desc: "Software engineering course project: a Java Spring Boot content-based recommender with a Thymeleaf web UI. Browse the flow live or as a static mockup.",
-    badge: "Java \u00b7 Spring Boot \u00b7 FIB-UPC",
-    lead: "Browse a content-based recommendation system built in <strong>Java</strong> with <strong>Spring Boot</strong> and <strong>Thymeleaf</strong> — modelling users, items, and ratings to deliver personalized picks.",
-    liveApp: "Live app (runs locally)",
-    startHint: "Start the Spring Boot app: <code>cd subgrup-prop7.1 && make web</code>",
-    openNewTab: "Open in new tab",
-    demoUnavail: "Demo unavailable",
-    unavailDesc: "This Java Spring Boot application only runs locally during development. <br/>Check out the source code below to run it yourself!",
-    aboutTitle: "About this project",
-    aboutDesc: "A university project for the \"Projectes de Programaci\u00f3\" course at FIB-UPC. The core domain logic is written in pure Java and features complex data structures and algorithms for filtering and recommending items based on past user ratings and item attributes (K-Nearest Neighbors and Collaborative Filtering concepts). The web interface is powered by Spring Boot and server-side rendered with Thymeleaf and Bootstrap 5.",
-    runLocal: "Run the real app locally",
-    step1: "<code>cd subgrup-prop7.1</code>",
-    step2: "<code>make web</code> \u2014 compiles and starts the Spring Boot server",
-    step3: "The app will run at <a href=\"http://localhost:8081\" target=\"_blank\" rel=\"noopener\">localhost:8081</a>",
-    mockNavBrand: "Recommendation System",
-    mockNavHome: "Home",
-    mockNavTypes: "Item Types",
-    mockNavItems: "Items",
-    mockNavUsers: "Users",
-    mockNavRatings: "Ratings",
-    mockNavRecs: "Recommendations",
-    mockDashTitle: "System Status",
-    mockDashType: "Active item type",
-    mockDashUsers: "System users",
-    mockDashItems: "Loaded items",
-    mockDashRatings: "Total ratings",
-    mockDashSession: "Session Status",
-    mockSessionActive: "Session active",
-    mockNoSelection: "None selected",
-    mockHint: "This is an interactive mock of the Spring Boot application interface."
-  },
-  es: {
-    title: "Sistema de Recomendaci\u00f3n",
-    desc: "Proyecto de Ingenier\u00eda del Software: un recomendador basado en contenido en Java Spring Boot con UI web en Thymeleaf. Recorre el flujo en vivo o como mockup est\u00e1tico.",
-    badge: "Java \u00b7 Spring Boot \u00b7 FIB-UPC",
-    lead: "Explora un sistema de recomendaci\u00f3n basado en contenido construido en <strong>Java</strong> con <strong>Spring Boot</strong> y <strong>Thymeleaf</strong> \u2014 modelando usuarios, \u00edtems y valoraciones para ofrecer recomendaciones personalizadas.",
-    liveApp: "App en vivo (se ejecuta localmente)",
-    startHint: "Inicia la app Spring Boot: <code>cd subgrup-prop7.1 && make web</code>",
-    openNewTab: "Abrir en nueva pesta\u00f1a",
-    demoUnavail: "Demo no disponible",
-    unavailDesc: "Esta aplicaci\u00f3n Java Spring Boot solo se ejecuta localmente durante el desarrollo. <br/>\u00a1Revisa el c\u00f3digo fuente a continuaci\u00f3n para ejecutarla t\u00fa mismo!",
-    aboutTitle: "Sobre este proyecto",
-    aboutDesc: "Un proyecto universitario para el curso \"Projectes de Programaci\u00f3\" en la FIB-UPC. La l\u00f3gica central del dominio est\u00e1 escrita en Java puro e incluye complejas estructuras de datos y algoritmos para filtrar y recomendar \u00edtems bas\u00e1ndose en valoraciones pasadas de usuarios y atributos de \u00edtems (conceptos de K-Nearest Neighbors y Filtrado Colaborativo). La interfaz web est\u00e1 impulsada por Spring Boot y renderizada en el servidor con Thymeleaf y Bootstrap 5.",
-    runLocal: "Ejecutar la app real localmente",
-    step1: "<code>cd subgrup-prop7.1</code>",
-    step2: "<code>make web</code> \u2014 compila e inicia el servidor Spring Boot",
-    step3: "La app se ejecutar\u00e1 en <a href=\"http://localhost:8081\" target=\"_blank\" rel=\"noopener\">localhost:8081</a>",
-    mockNavBrand: "Sistema de Recomendaci\u00f3n",
-    mockNavHome: "Inicio",
-    mockNavTypes: "Tipos de \u00edtem",
-    mockNavItems: "\u00cdtems",
-    mockNavUsers: "Usuarios",
-    mockNavRatings: "Valoraciones",
-    mockNavRecs: "Recomendaciones",
-    mockDashTitle: "Estado del Sistema",
-    mockDashType: "Tipo de \u00edtem actual",
-    mockDashUsers: "Usuarios del sistema",
-    mockDashItems: "\u00cdtems cargados",
-    mockDashRatings: "Valoraciones totales",
-    mockDashSession: "Estado de la Sesi\u00f3n",
-    mockSessionActive: "Sesi\u00f3n iniciada",
-    mockNoSelection: "Ninguno seleccionado",
-    mockHint: "Este es un mock interactivo de la interfaz de la aplicaci\u00f3n Spring Boot."
-  },
-  ca: {
-    title: "Sistema de Recomanaci\u00f3",
-    desc: "Projecte d'Enginyeria del Programari: un recomanador basat en contingut en Java Spring Boot amb UI web en Thymeleaf. Recorre el flux en viu o com a mockup est\u00e0tic.",
-    badge: "Java \u00b7 Spring Boot \u00b7 FIB-UPC",
-    lead: "Explora un sistema de recomanaci\u00f3 basat en contingut constru\u00eft en <strong>Java</strong> amb <strong>Spring Boot</strong> i <strong>Thymeleaf</strong> — modelant usuaris, \u00edtems i valoracions per oferir recomanacions personalitzades.",
-    liveApp: "App en viu (s'executa localment)",
-    startHint: "Inicia l'app Spring Boot: <code>cd subgrup-prop7.1 && make web</code>",
-    openNewTab: "Obrir en nova pestanya",
-    demoUnavail: "Demo no disponible",
-    unavailDesc: "Aquesta aplicaci\u00f3 Java Spring Boot nom\u00e9s s'executa localment durant el desenvolupament. <br/>Revisa el codi font a continuaci\u00f3 per executar-la tu mateix!",
-    aboutTitle: "Sobre aquest projecte",
-    aboutDesc: "Un projecte universitari per al curs \"Projectes de Programaci\u00f3\" a la FIB-UPC. La l\u00f2gica central del domini est\u00e0 escrita en Java pur i inclou complexes estructures de dades i algorismes per filtrar i recomanar \u00edtems basant-se en valoracions passades d'usuaris i atributs d'\u00edtems (conceptes de K-Nearest Neighbors i Filtratge Col\u00b7laboratiu). La interf\u00edcie web est\u00e0 impulsada per Spring Boot i renderitzada al servidor amb Thymeleaf i Bootstrap 5.",
-    runLocal: "Executar l'app real localment",
-    step1: "<code>cd subgrup-prop7.1</code>",
-    step2: "<code>make web</code> \u2014 compila i inicia el servidor Spring Boot",
-    step3: "L'app s'executar\u00e0 a <a href=\"http://localhost:8081\" target=\"_blank\" rel=\"noopener\">localhost:8081</a>",
-    mockNavBrand: "Sistema de Recomanaci\u00f3",
-    mockNavHome: "Inici",
-    mockNavTypes: "Tipus d'\u00edtem",
-    mockNavItems: "\u00cdtems",
-    mockNavUsers: "Usuaris",
-    mockNavRatings: "Valoracions",
-    mockNavRecs: "Recomanacions",
-    mockDashTitle: "Estat del Sistema",
-    mockDashType: "Tipus d'\u00edtem actual",
-    mockDashUsers: "Usuaris al sistema",
-    mockDashItems: "\u00cdtems carregats",
-    mockDashRatings: "Valoracions totals",
-    mockDashSession: "Estat de la Sessi\u00f3",
-    mockSessionActive: "Sessi\u00f3 iniciada",
-    mockNoSelection: "Cap seleccionat",
-    mockHint: "Aquest \u00e9s un mock interactiu de la interf\u00edcie de l'aplicaci\u00f3 Spring Boot."
-  }
-};
-
-const tr = TRANSLATIONS[lang] || TRANSLATIONS.en;
+const demo = getDemo('prop', lang);
+const tr = getPropCopy(lang);
 const t = useTranslations(lang);
 ---
 
-<DemoLayout title={tr.title} description={tr.desc} slug="prop">
+<DemoLayout title={demo.metaTitle ?? demo.title} description={demo.metaDescription} slug="prop">
   <div class="container">
     <DemoHeader
-      badge={tr.badge}
-      title={tr.title}
-      lead={tr.lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/subgrup-prop7.1"
       githubLabel={t('demo.viewSource')}
       accentFrom="#ea580c"
@@ -347,8 +247,8 @@ const t = useTranslations(lang);
     </div>
 
     <div class="demo-info">
-      <h3>{tr.aboutTitle}</h3>
-      <p>{tr.aboutDesc}</p>
+      <h3>{demo.aboutTitle}</h3>
+      <p>{demo.aboutDescription}</p>
       
     </div>
     <script is:inline>

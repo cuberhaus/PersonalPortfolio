@@ -4,49 +4,23 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import RobDemo from '../../components/demos/RobDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "Robotics Dashboard",
-  es: "Panel de Robótica",
-  ca: "Panell de Robòtica"
-};
-
-const leads = {
-  en: "Step through six interactive <strong>robotics</strong> visualizations built with <strong>Ember.js</strong> and <strong>Babylon.js</strong>: mobile-robot odometry with laser scans, wall-following, 3D arm kinematics (Puma560/3-Link), trajectory planning, sensor dashboards, and <strong>EKF</strong> state estimation.",
-  es: "Recorre seis visualizaciones interactivas de <strong>robótica</strong> con <strong>Ember.js</strong> y <strong>Babylon.js</strong>: odometría móvil con escáneres láser, seguimiento de paredes, cinemática 3D de brazos robóticos (Puma560/3-Link), planificación de trayectorias, panel de sensores y estimación de estado <strong>EKF</strong>.",
-  ca: "Recorre sis visualitzacions interactives de <strong>robòtica</strong> amb <strong>Ember.js</strong> i <strong>Babylon.js</strong>: odometria mòbil amb escàners làser, seguiment de parets, cinemàtica 3D de braços robòtics (Puma560/3-Link), planificació de trajectòries, tauler de sensors i estimació d'estat <strong>EKF</strong>."
-};
-
-const badges = {
-  en: "Robotics · Ember.js + Babylon.js + Canvas · FIB-UPC",
-  es: "Robótica · Ember.js + Babylon.js + Canvas · FIB-UPC",
-  ca: "Robòtica · Ember.js + Babylon.js + Canvas · FIB-UPC"
-};
-
-const metaDescs = {
-  en: "Robotics course labs: odometry, wall-following, 3D arm kinematics, trajectory planning, sensors, and EKF. Interactive Ember.js + Babylon.js dashboard.",
-  es: "Prácticas de Robótica: odometría, seguimiento de paredes, cinemática 3D de brazos, planificación de trayectorias, sensores y EKF. Panel interactivo con Ember.js y Babylon.js.",
-  ca: "Pràctiques de Robòtica: odometria, seguiment de parets, cinemàtica 3D de braços, planificació de trajectòries, sensors i EKF. Tauler interactiu amb Ember.js i Babylon.js."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('rob-robotics', lang);
 ---
 
 <DemoLayout
-  title={title}
-  description={metaDescs[lang] || metaDescs.en}
+  title={demo.title}
+  description={demo.metaDescription}
   slug="rob-robotics"
 >
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/ROB"
       githubLabel={t('demo.viewSource')}
       accentFrom="#4dabf7"

@@ -4,70 +4,21 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import TendaDemo from '../../components/demos/TendaDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
+import { getTendaCopy } from '../../i18n/demos/tenda-page';
 
 const lang = getLangFromUrl(Astro.url);
-
-const TRANSLATIONS = {
-  en: {
-    title: "Tenda Online",
-    desc: "Web applications course project: full PHP + MySQL e-commerce store with catalog, cart, and checkout. Browse against the live backend or a static rebuild.",
-    badge: "Web Development \u00b7 FIB-UPC",
-    lead: "Browse an <strong>e-commerce store</strong> built in <strong>PHP</strong> and <strong>MySQL</strong>: explore products by category, add to cart, and walk through the checkout flow.",
-    liveApp: "Live app (runs locally)",
-    startHint: "Start the PHP app: <code>cd tenda_online && docker compose up -d && ./start.sh</code>",
-    openNewTab: "Open in new tab",
-    aboutTitle: "About this project",
-    aboutDesc: "A complete e-commerce platform with product catalog, category browsing, shopping cart, checkout flow, and an admin order management panel. Features include dynamic product pages, cart persistence, and order processing.",
-    runLocal: "Run the real app locally",
-    step1: "<code>cd tenda_online</code>",
-    step2: "<code>docker compose up -d</code> \u2014 starts MySQL and loads the schema",
-    step3: "<code>./start.sh</code> \u2014 starts the PHP server at <a href=\"http://localhost:8888\" target=\"_blank\" rel=\"noopener\">localhost:8888</a>",
-    runNote: "Requires: PHP, Docker (for MySQL). The iframe above shows the live app when it's running.",
-  },
-  es: {
-    title: "Tienda Online",
-    desc: "Proyecto de Aplicaciones Web: tienda e-commerce completa en PHP + MySQL con cat\u00e1logo, carrito y pago. Rec\u00f3rrela contra el backend en vivo o una reconstrucci\u00f3n est\u00e1tica.",
-    badge: "Desarrollo Web \u00b7 FIB-UPC",
-    lead: "Explora una <strong>tienda e-commerce</strong> construida en <strong>PHP</strong> y <strong>MySQL</strong>: navega productos por categor\u00eda, a\u00f1ade al carrito y recorre el proceso de pago.",
-    liveApp: "App en vivo (se ejecuta localmente)",
-    startHint: "Inicia la app PHP: <code>cd tenda_online && docker compose up -d && ./start.sh</code>",
-    openNewTab: "Abrir en nueva pesta\u00f1a",
-    aboutTitle: "Sobre este proyecto",
-    aboutDesc: "Una plataforma de comercio electr\u00f3nico completa con cat\u00e1logo de productos, exploraci\u00f3n de categor\u00edas, carrito de compras, flujo de pago y un panel de administraci\u00f3n de pedidos. Las caracter\u00edsticas incluyen p\u00e1ginas de productos din\u00e1micas, persistencia de carrito y procesamiento de pedidos.",
-    runLocal: "Ejecutar la app real localmente",
-    step1: "<code>cd tenda_online</code>",
-    step2: "<code>docker compose up -d</code> \u2014 inicia MySQL y carga el esquema",
-    step3: "<code>./start.sh</code> \u2014 inicia el servidor PHP en <a href=\"http://localhost:8888\" target=\"_blank\" rel=\"noopener\">localhost:8888</a>",
-    runNote: "Requiere: PHP, Docker (para MySQL). El iframe de arriba muestra la app en vivo cuando se est\u00e1 ejecutando.",
-  },
-  ca: {
-    title: "Botiga Online",
-    desc: "Projecte d'Aplicacions Web: botiga e-commerce completa en PHP + MySQL amb cat\u00e0leg, carret i pagament. Recorre-la contra el backend en viu o una reconstrucci\u00f3 est\u00e0tica.",
-    badge: "Desenvolupament Web \u00b7 FIB-UPC",
-    lead: "Explora una <strong>botiga e-commerce</strong> constru\u00efda en <strong>PHP</strong> i <strong>MySQL</strong>: navega productes per categoria, afegeix al carret i recorre el proc\u00e9s de pagament.",
-    liveApp: "App en viu (s'executa localment)",
-    startHint: "Inicia l'app PHP: <code>cd tenda_online && docker compose up -d && ./start.sh</code>",
-    openNewTab: "Obrir en nova pestanya",
-    aboutTitle: "Sobre aquest projecte",
-    aboutDesc: "Una plataforma de comer\u00e7 electr\u00f2nic completa amb cat\u00e0leg de productes, exploraci\u00f3 de categories, carret de la compra, flux de pagament i un tauler d'administraci\u00f3 de comandes. Les caracter\u00edstiques inclouen p\u00e0gines de productes din\u00e0miques, persist\u00e8ncia de carret i processament de comandes.",
-    runLocal: "Executar l'app real localment",
-    step1: "<code>cd tenda_online</code>",
-    step2: "<code>docker compose up -d</code> \u2014 inicia MySQL i carrega l'esquema",
-    step3: "<code>./start.sh</code> \u2014 inicia el servidor PHP a <a href=\"http://localhost:8888\" target=\"_blank\" rel=\"noopener\">localhost:8888</a>",
-    runNote: "Requereix: PHP, Docker (per a MySQL). L'iframe de dalt mostra l'app en viu quan s'est\u00e0 executant.",
-  }
-};
-
-const tr = TRANSLATIONS[lang] || TRANSLATIONS.en;
+const demo = getDemo('tenda', lang);
+const tr = getTendaCopy(lang);
 const t = useTranslations(lang);
 ---
 
-<DemoLayout title={tr.title} description={tr.desc} slug="tenda">
+<DemoLayout title={demo.metaTitle ?? demo.title} description={demo.metaDescription} slug="tenda">
   <div class="container">
     <DemoHeader
-      badge={tr.badge}
-      title={tr.title}
-      lead={tr.lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/tenda_online"
       githubLabel={t('demo.viewSource')}
       accentFrom="#10b981"
@@ -88,8 +39,8 @@ const t = useTranslations(lang);
     </div>
 
     <div class="demo-info">
-      <h3>{tr.aboutTitle}</h3>
-      <p>{tr.aboutDesc}</p>
+      <h3>{demo.aboutTitle}</h3>
+      <p>{demo.aboutDescription}</p>
       
     </div>
   </div>

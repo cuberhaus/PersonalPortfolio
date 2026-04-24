@@ -4,57 +4,19 @@ import DemoHeader from '../../components/DemoHeader.astro';
 import CAIMDemo from '../../components/demos/CAIMDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const titles = {
-  en: "CAIM IR Explorer",
-  es: "CAIM Explorador RI",
-  ca: "CAIM Explorador RI"
-};
-
-const leads = {
-  en: "Explore core <strong>information retrieval</strong> ideas interactively: run <strong>PageRank</strong> on the global airport network with a world-map visualization, and fit <strong>Zipf's Law</strong> on real text corpora.",
-  es: "Explora conceptos fundamentales de <strong>recuperación de información</strong>: ejecuta <strong>PageRank</strong> sobre la red global de aeropuertos con un mapa mundial, y ajusta la <strong>Ley de Zipf</strong> sobre corpus de texto reales.",
-  ca: "Explora conceptes fonamentals de <strong>recuperació d'informació</strong>: executa <strong>PageRank</strong> sobre la xarxa global d'aeroports amb un mapa mundial, i ajusta la <strong>Llei de Zipf</strong> sobre corpus de text reals."
-};
-
-const badges = {
-  en: "Information Retrieval · FIB-UPC",
-  es: "Recuperación de Información · FIB-UPC",
-  ca: "Recuperació d'Informació · FIB-UPC"
-};
-
-const aboutTitles = {
-  en: "About this project",
-  es: "Sobre este proyecto",
-  ca: "Sobre aquest projecte"
-};
-
-const aboutDescs = {
-  en: "Originally lab exercises for the CAIM (Search and Analysis of Information) course at FIB-UPC, covering PageRank, Zipf/Heap laws, TF-IDF, Rocchio, MapReduce, and graph analysis. This full-stack web app reimplements the PageRank and Zipf algorithms in Python (FastAPI) with a Vanilla TypeScript + D3.js frontend — no UI framework, just plain TypeScript managing the DOM directly.",
-  es: "Originalmente ejercicios de laboratorio del curso CAIM (Cerca i Anàlisi de la Informació) en la FIB-UPC, cubriendo PageRank, leyes de Zipf/Heap, TF-IDF, Rocchio, MapReduce y análisis de grafos. Esta app web full-stack reimplementa los algoritmos de PageRank y Zipf en Python (FastAPI) con un frontend de Vanilla TypeScript + D3.js — sin framework de UI, solo TypeScript puro manejando el DOM directamente.",
-  ca: "Originalment exercicis de laboratori del curs CAIM (Cerca i Anàlisi de la Informació) a la FIB-UPC, cobrint PageRank, lleis de Zipf/Heap, TF-IDF, Rocchio, MapReduce i anàlisi de grafs. Aquesta app web full-stack reimplementa els algorismes de PageRank i Zipf en Python (FastAPI) amb un frontend de Vanilla TypeScript + D3.js — sense framework d'UI, només TypeScript pur gestionant el DOM directament."
-};
-
-const metaDescs = {
-  en: "Information retrieval course labs: PageRank on the global airport network and Zipf's Law on text corpora. Interactive D3 world map and curve-fitting tool.",
-  es: "Prácticas de Recuperación de Información: PageRank sobre la red global de aeropuertos y Ley de Zipf sobre corpus de texto. Mapa mundial D3 y ajuste de curvas interactivos.",
-  ca: "Pràctiques de Recuperació d'Informació: PageRank sobre la xarxa global d'aeroports i Llei de Zipf sobre corpus de text. Mapa mundial D3 i ajust de corbes interactius."
-};
-
-const title = titles[lang] || titles.en;
-const lead = leads[lang] || leads.en;
-const badge = badges[lang] || badges.en;
+const demo = getDemo('caim', lang);
 ---
 
-<DemoLayout title={title} description={metaDescs[lang] || metaDescs.en} slug="caim">
+<DemoLayout title={demo.title} description={demo.metaDescription} slug="caim">
   <div class="container">
     <DemoHeader
-      badge={badge}
-      title={title}
-      lead={lead}
+      badge={demo.badge}
+      title={demo.title}
+      lead={demo.lead}
       githubUrl="https://github.com/cuberhaus/CAIM"
       githubLabel={t('demo.viewSource')}
       accentFrom="#06b6d4"
@@ -74,8 +36,8 @@ const badge = badges[lang] || badges.en;
     <CAIMDemo lang={lang} client:visible />
 
     <div class="demo-info">
-      <h3>{aboutTitles[lang] || aboutTitles.en}</h3>
-      <p>{aboutDescs[lang] || aboutDescs.en}</p>
+      <h3>{demo.aboutTitle}</h3>
+      <p>{demo.aboutDescription}</p>
     </div>
   </div>
 </DemoLayout>

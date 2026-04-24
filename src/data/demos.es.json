@@ -11,7 +11,11 @@
     ],
     "icon": "microscope",
     "github": "https://github.com/cuberhaus/TFG",
-    "image": ""
+    "image": "",
+    "lead": "Entrena detectores <strong>Faster R-CNN</strong>, <strong>RetinaNet</strong> y <strong>SSD</strong> en datos de colonoscopia, aumentados con imágenes sintéticas de modelos generativos <strong>CycleGAN</strong> y <strong>SPADE</strong>. Búsqueda de hiperparámetros vía <strong>Optuna</strong> y <strong>Ray Tune</strong>.",
+    "badge": "Deep Learning · Trabajo de Fin de Grado · FIB-UPC",
+    "metaTitle": "Trabajo de Fin de Grado — Detección de Pólipos",
+    "metaDescription": "Trabajo de Fin de Grado sobre detección de pólipos en colonoscopia con deep learning, usando CycleGAN y SPADE para datos sintéticos. Demo interactiva con PyTorch + Optuna."
   },
   {
     "slug": "draculin",
@@ -27,7 +31,12 @@
       "https://github.com/cuberhaus/Draculin-Front",
       "https://github.com/cuberhaus/Draculin-Backend"
     ],
-    "image": ""
+    "image": "",
+    "lead": "Recorre <strong>Draculin</strong>: una app de salud en Flutter + Django con un <strong>chatbot de IA</strong> y asistencia por <strong>visión por computador</strong>. Finalista en <strong>BitsXLaMarató 2023</strong>.",
+    "badge": "Salud Móvil · Hackathon",
+    "metaDescription": "App de seguimiento de salud en Flutter + Django con chatbot de IA y visión por computador. Finalista de BitsXLaMarató 2023 — recorre la UI y los flujos interactivos.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Draculin se desarrolló para el hackathon BitsXLaMarató 2023, donde llegó a la final. La app usa un chatbot impulsado por un LLM de Google para orientación sanitaria y visión por computador para analizar imágenes en el seguimiento de la salud menstrual. El frontend está construido con Flutter (compatible con iOS, Android y web), mientras que el backend corre en Django con capacidades de inferencia de imágenes."
   },
   {
     "slug": "bitsx-marato",
@@ -41,7 +50,11 @@
     ],
     "icon": "aorta",
     "github": "https://github.com/cuberhaus/bitsXlaMarato",
-    "image": ""
+    "image": "",
+    "lead": "Ejecuta el pipeline de la aorta en vivo: ecografía abdominal → segmentación <strong>Mask R-CNN</strong> → reconstrucción de <strong>malla 3D</strong> → estimación del <strong>diámetro</strong> aórtico. Construido para la hackathon <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a>.",
+    "badge": "Visión por Computador · Hackathon",
+    "metaTitle": "BitsXLaMarató — Aorta / AAA (Mask R-CNN)",
+    "metaDescription": "Ganador de BitsXLaMarató 2022: segmentación de aorta con Mask R-CNN y reconstrucción 3D para detección de aneurismas. Demo interactiva de inferencia con PyTorch + OpenCV."
   },
   {
     "slug": "matriculas",
@@ -53,7 +66,12 @@
     ],
     "icon": "camera",
     "github": "https://github.com/cuberhaus/SPMatriculas",
-    "image": ""
+    "image": "",
+    "lead": "Detecta y lee <strong>matrículas</strong> de fotos de coches. Elige una muestra o sube la tuya y observa cómo el pipeline de 3 etapas — <strong>detección de matrícula</strong>, <strong>segmentación de caracteres</strong>, <strong>OCR</strong> — se ejecuta íntegramente en tu navegador.",
+    "badge": "Visión por Computador · FIB-UPC",
+    "metaDescription": "Proyecto de visión por computador para localizar y leer matrículas, originalmente en MATLAB y portado a TypeScript. Se ejecuta íntegramente en el navegador.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Originalmente un proyecto de MATLAB para el curso de Visión por Computador en la FIB-UPC. Esta demo de navegador es un port del pipeline original a JavaScript — utiliza binarización adaptativa, filtrado morfológico, análisis de componentes conectadas y coincidencia de plantillas para detectar matrículas y leer sus caracteres, ejecutándose completamente en el cliente sin dependencias externas."
   },
   {
     "slug": "joc-eda",
@@ -66,7 +84,12 @@
     ],
     "icon": "gamepad",
     "github": "https://github.com/cuberhaus/joc_eda",
-    "image": ""
+    "image": "",
+    "lead": "Mira <strong>bots de IA en C++</strong> competir en \"The Purge\" — un juego de estrategia en cuadrícula de la asignatura <strong>Estructuras de Datos y Algoritmos</strong> en FIB-UPC.",
+    "badge": "Estructuras de Datos · FIB-UPC",
+    "metaDescription": "Proyecto de Estructuras de Datos: bots de IA en C++ compitiendo en una cuadrícula. Visor de repeticiones en Canvas con partidas empaquetadas o en vivo.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Escrito en C++11, el motor del juego ejecuta 4 jugadores IA simultáneamente en una cuadrícula 2D. La IA personalizada (AIJohnnyMelavo) utiliza búsqueda BFS para priorizar la recolección de armas, cazar enemigos y recolectar recursos. Cada jugador controla guerreros (luchadores) y constructores que compiten por dinero, comida, pistolas y bazucas a través de ciclos de día/noche."
   },
   {
     "slug": "jsbach",
@@ -79,7 +102,18 @@
     ],
     "icon": "music",
     "github": "https://github.com/cuberhaus/ANTLR4_JSBach",
-    "image": ""
+    "image": "",
+    "lead": "Escribe <strong>música con código</strong>: JSBach es un pequeño lenguaje con procedimientos, variables, bucles y condicionales que reproduce <strong>notas musicales</strong>. Prueba los ejemplos o escribe el tuyo propio.",
+    "badge": "Compiladores · FIB-UPC",
+    "metaDescription": "Proyecto de Compiladores: JSBach, un pequeño lenguaje de programación musical construido con ANTLR4. Escribe código y reprodúcelo en vivo con un intérprete Web Audio.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Originalmente construido con ANTLR4 y Python para un curso de compiladores en la FIB-UPC. El lenguaje soporta procedimientos, recursión, aritmética, listas, condicionales, bucles y reproducción de notas musicales. Esta versión para navegador utiliza un parser escrito a mano y la Web Audio API para la síntesis de sonido.",
+    "hints": [
+      "toca una nota",
+      "imprimir",
+      "asignar",
+      "bloque"
+    ]
   },
   {
     "slug": "tenda",
@@ -92,7 +126,12 @@
     ],
     "icon": "store",
     "github": "https://github.com/cuberhaus/tenda_online",
-    "image": ""
+    "image": "",
+    "lead": "Explora una <strong>tienda e-commerce</strong> construida en <strong>PHP</strong> y <strong>MySQL</strong>: navega productos por categoría, añade al carrito y recorre el proceso de pago.",
+    "badge": "Desarrollo Web · FIB-UPC",
+    "metaDescription": "Proyecto de Aplicaciones Web: tienda e-commerce completa en PHP + MySQL con catálogo, carrito y pago. Recórrela contra el backend en vivo o una reconstrucción estática.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Una plataforma de comercio electrónico completa con catálogo de productos, exploración de categorías, carrito de compras, flujo de pago y un panel de administración de pedidos. Las características incluyen páginas de productos dinámicas, persistencia de carrito y procesamiento de pedidos."
   },
   {
     "slug": "pro2",
@@ -105,7 +144,12 @@
     ],
     "icon": "tree",
     "github": "https://github.com/cuberhaus/pracpro2",
-    "image": ""
+    "image": "",
+    "lead": "Construye <strong>árboles filogenéticos</strong> paso a paso. Añade especies con secuencias de genes, inspecciona la <strong>matriz de distancias k-mer</strong>, y observa cómo <strong>WPGMA</strong> fusiona los clústeres más cercanos en un dendrograma.",
+    "badge": "Programación II · FIB-UPC",
+    "metaDescription": "Proyecto de Programación: clustering WPGMA en C++ construyendo árboles filogenéticos a partir de secuencias de genes. Dendrograma interactivo en D3.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Originalmente un proyecto de C++17 para el curso de PRO2 en la FIB-UPC. El algoritmo calcula las distancias entre pares de especies utilizando análisis de frecuencia k-mer, luego fusiona iterativamente el par más cercano utilizando el Método del Grupo de Pares Ponderados con Media Aritmética (WPGMA) para construir un árbol filogenético."
   },
   {
     "slug": "mpids",
@@ -118,7 +162,12 @@
     ],
     "icon": "graph",
     "github": "https://github.com/cuberhaus/projectA",
-    "image": ""
+    "image": "",
+    "lead": "Encuentra el <strong>Minimum Positive Influence Dominating Set</strong> en un grafo — el conjunto más pequeño donde cada vértice tiene al menos la mitad de sus vecinos dentro. Elige una muestra o carga el tuyo, luego ejecuta <strong>greedy</strong> o <strong>búsqueda local</strong>.",
+    "badge": "Algoritmia · FIB-UPC",
+    "metaDescription": "Proyecto de algoritmos sobre el Minimum Positive Influence Dominating Set, resuelto con heurísticas greedy y de búsqueda local. Editor de grafos force-directed interactivo en D3.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Originalmente un proyecto en C++ para el curso de Algoritmia en la FIB-UPC, resolviendo el problema MPIDS con heurísticas voraces, simulated annealing e ILP con CPLEX. Esta app web full-stack reimplementa los algoritmos en Python (backend FastAPI) con un frontend Elm + D3.js que ofrece una visualización interactiva de grafos dirigida por fuerzas mediante ports."
   },
   {
     "slug": "phase-transitions",
@@ -131,7 +180,12 @@
     ],
     "icon": "scatter",
     "github": "https://github.com/cuberhaus/projectA2",
-    "image": ""
+    "image": "",
+    "lead": "Observa cómo los <strong>grafos aleatorios</strong> transicionan de conectados a desconectados al eliminar nodos o aristas. Genera grafos <strong>binomiales</strong> (Erdős–Rényi), <strong>geométricos</strong> o de <strong>cuadrícula</strong>, aplica percolación y ve la transición de fase en tiempo real.",
+    "badge": "Algoritmia · FIB-UPC",
+    "metaDescription": "Investigación en algoritmos sobre transiciones de fase de conectividad y complejidad en grafos aleatorios binomiales, geométricos y de cuadrícula. Animaciones de percolación y gráficas Monte Carlo interactivas.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Originalmente un proyecto de Python para el curso de Algoritmia en la FIB-UPC, estudiando transiciones de fase en grafos aleatorios usando NetworkX. Esta app web full-stack envuelve la lógica original de Python/NetworkX en un backend FastAPI con un frontend Lit (Web Components) + Canvas + D3.js para visualización interactiva de grafos y gráficas de transición de fase Monte Carlo."
   },
   {
     "slug": "planificacion",
@@ -144,7 +198,11 @@
     ],
     "icon": "map",
     "github": "https://github.com/cuberhaus/Practica_de_Planificacion",
-    "image": ""
+    "image": "",
+    "lead": "Explora un dominio <strong>PDDL</strong> de agencia de viajes — vuelos, hoteles, duración de estancia y una <strong>métrica de interés</strong> numérica a minimizar. Inspecciona los ficheros de la Extensión 2, descarga las fuentes <code>.pddl</code> o ejecuta el planificador cuando haya un backend ENHSP disponible.",
+    "badge": "Planificación Automática · FIB-UPC",
+    "metaTitle": "Planificación de Agencia de Viajes (PDDL)",
+    "metaDescription": "Proyecto de Planificación Automática: un dominio PDDL de agencia de viajes con vuelos, hoteles, restricciones numéricas y minimización de métricas. Demo interactiva del planificador."
   },
   {
     "slug": "desastres-ia",
@@ -158,7 +216,10 @@
     ],
     "icon": "helicopter",
     "github": "https://github.com/cuberhaus/desastresIA",
-    "image": ""
+    "image": "",
+    "lead": "Resuelve la asignación en <strong>ayuda en desastres</strong> como búsqueda local — helicópteros rescatando grupos desde centros sobre un <strong>mapa 2D</strong> interactivo. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> con 3 heurísticos y 6 funciones sucesoras.",
+    "badge": "Inteligencia Artificial · Solid.js + FastAPI · FIB-UPC",
+    "metaDescription": "Proyecto de IA que plantea la asistencia en desastres como búsqueda local: helicópteros rescatando grupos mediante hill climbing y simulated annealing. Solver interactivo con Solid.js + FastAPI."
   },
   {
     "slug": "apa-practica",
@@ -172,7 +233,11 @@
     ],
     "icon": "ml",
     "github": "https://github.com/cuberhaus/APA_Practica",
-    "image": ""
+    "image": "",
+    "lead": "Explora un pipeline completo de clasificación de hipotiroidismo con <strong>9 familias de modelos sklearn</strong>. Las demos interactivas a continuación ejecutan <strong>modelos entrenados reales</strong> directamente en tu navegador.",
+    "badge": "Machine Learning · FIB-UPC",
+    "metaTitle": "Machine Learning — Hipotiroidismo",
+    "metaDescription": "Práctica de aprendizaje automático comparando 9 familias de modelos sklearn para predecir hipotiroidismo. Notebook, predictor en vivo y clasificador k-NN sobre PCA."
   },
   {
     "slug": "prop",
@@ -185,7 +250,12 @@
     ],
     "icon": "server",
     "github": "https://github.com/cuberhaus/subgrup-prop7.1",
-    "image": ""
+    "image": "",
+    "lead": "Explora un sistema de recomendación basado en contenido construido en <strong>Java</strong> con <strong>Spring Boot</strong> y <strong>Thymeleaf</strong> — modelando usuarios, ítems y valoraciones para ofrecer recomendaciones personalizadas.",
+    "badge": "Java · Spring Boot · FIB-UPC",
+    "metaDescription": "Proyecto de Ingeniería del Software: un recomendador basado en contenido en Java Spring Boot con UI web en Thymeleaf. Recorre el flujo en vivo o como mockup estático.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Un proyecto universitario para el curso \"Projectes de Programació\" en la FIB-UPC. La lógica central del dominio está escrita en Java puro e incluye complejas estructuras de datos y algoritmos para filtrar y recomendar ítems basándose en valoraciones pasadas de usuarios y atributos de ítems (conceptos de K-Nearest Neighbors y Filtrado Colaborativo). La interfaz web está impulsada por Spring Boot y renderizada en el servidor con Thymeleaf y Bootstrap 5."
   },
   {
     "slug": "caim",
@@ -199,7 +269,12 @@
     ],
     "icon": "search",
     "github": "https://github.com/cuberhaus/CAIM",
-    "image": ""
+    "image": "",
+    "lead": "Explora conceptos fundamentales de <strong>recuperación de información</strong>: ejecuta <strong>PageRank</strong> sobre la red global de aeropuertos con un mapa mundial, y ajusta la <strong>Ley de Zipf</strong> sobre corpus de texto reales.",
+    "badge": "Recuperación de Información · FIB-UPC",
+    "metaDescription": "Prácticas de Recuperación de Información: PageRank sobre la red global de aeropuertos y Ley de Zipf sobre corpus de texto. Mapa mundial D3 y ajuste de curvas interactivos.",
+    "aboutTitle": "Sobre este proyecto",
+    "aboutDescription": "Originalmente ejercicios de laboratorio del curso CAIM (Cerca i Anàlisi de la Informació) en la FIB-UPC, cubriendo PageRank, leyes de Zipf/Heap, TF-IDF, Rocchio, MapReduce y análisis de grafos. Esta app web full-stack reimplementa los algoritmos de PageRank y Zipf en Python (FastAPI) con un frontend de Vanilla TypeScript + D3.js — sin framework de UI, solo TypeScript puro manejando el DOM directamente."
   },
   {
     "slug": "sbc-ia",
@@ -213,7 +288,10 @@
     ],
     "icon": "map",
     "github": "https://github.com/cuberhaus/SBC_IA",
-    "image": ""
+    "image": "",
+    "lead": "Responde <strong>10 preguntas</strong> sobre tipo de viaje, presupuesto, duración y preferencias de hotel, y obtén un <strong>itinerario</strong> completo con ciudades, hoteles, actividades, transporte y coste. Un sistema experto en <strong>CLIPS</strong> reimplementado en Python con un frontend <strong>HTMX + Alpine.js</strong>.",
+    "badge": "Sistemas Basados en Conocimiento · HTMX + Alpine.js + FastAPI · FIB-UPC",
+    "metaDescription": "Proyecto de Sistemas Basados en Conocimiento: un planificador de viajes estilo sistema experto CLIPS reimplementado en Python con frontend HTMX + Alpine.js."
   },
   {
     "slug": "par-parallel",
@@ -228,7 +306,10 @@
     ],
     "icon": "cpu",
     "github": "https://github.com/cuberhaus/PAR",
-    "image": ""
+    "image": "",
+    "lead": "Ejecuta cinco prácticas de <strong>OpenMP</strong> compiladas a <strong>WebAssembly</strong>: el <strong>conjunto de Mandelbrot</strong>, la <strong>ecuación del calor</strong> con iteración Jacobi, <strong>merge-sort de 4 vías</strong>, <strong>π</strong> numérico y benchmarks de <strong>speedup paralelo</strong>.",
+    "badge": "Computación Paralela · Preact + Canvas + WASM · FIB-UPC",
+    "metaDescription": "Prácticas de Computación Paralela en C con OpenMP — Mandelbrot, ecuación del calor, merge sort de 4 vías, π y speedup — compiladas a WebAssembly en el navegador."
   },
   {
     "slug": "rob-robotics",
@@ -243,7 +324,10 @@
     ],
     "icon": "bot",
     "github": "https://github.com/cuberhaus/ROB",
-    "image": ""
+    "image": "",
+    "lead": "Recorre seis visualizaciones interactivas de <strong>robótica</strong> con <strong>Ember.js</strong> y <strong>Babylon.js</strong>: odometría móvil con escáneres láser, seguimiento de paredes, cinemática 3D de brazos robóticos (Puma560/3-Link), planificación de trayectorias, panel de sensores y estimación de estado <strong>EKF</strong>.",
+    "badge": "Robótica · Ember.js + Babylon.js + Canvas · FIB-UPC",
+    "metaDescription": "Prácticas de Robótica: odometría, seguimiento de paredes, cinemática 3D de brazos, planificación de trayectorias, sensores y EKF. Panel interactivo con Ember.js y Babylon.js."
   },
   {
     "slug": "algorithms",
@@ -258,7 +342,10 @@
     ],
     "icon": "brain",
     "github": "https://github.com/cuberhaus/fib",
-    "image": ""
+    "image": "",
+    "lead": "Recorre paso a paso 18 <strong>algoritmos</strong> clásicos — Dijkstra, MST de Prim, BFS/DFS, ordenación, N-Reinas, 2-opt TSP y más — con visualizaciones interactivas en <strong>Qwik</strong> y <strong>Canvas</strong>.",
+    "badge": "Algoritmos · Qwik + Canvas · FIB-UPC",
+    "metaDescription": "Trabajos de Algoritmos y Estructuras de Datos — 18 algoritmos clásicos de grafos, ordenación, búsqueda y combinatoria. Visualizador interactivo con Qwik y Canvas."
   },
   {
     "slug": "grafics",
@@ -272,6 +359,9 @@
     ],
     "icon": "cube",
     "github": "https://github.com/cuberhaus/fib",
-    "image": ""
+    "image": "",
+    "lead": "Edita shaders <strong>WebGL2</strong> en vivo — transformaciones de vértices, iluminación <strong>Phong</strong>, texturas procedurales, patrones de fragmento, efectos de geometry shader y más. Porta las prácticas de <strong>Gràfics</strong> de FIB-UPC al navegador.",
+    "badge": "Gráficos por Computador · WebGL2 + GLSL · FIB-UPC",
+    "metaDescription": "Prácticas de Gráficos por Computador originalmente en OpenGL de escritorio: transformaciones de vértices, iluminación Phong, texturas procedurales y efectos de geometría. Playground de shaders WebGL2 en vivo."
   }
 ]
