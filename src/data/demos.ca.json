@@ -2,7 +2,7 @@
   {
     "slug": "tfg-polyps",
     "title": "Treball de Fi de Grau — Detecció de Pòlips",
-    "description": "Detecció de pòlips mitjançant aprenentatge profund amb augment de dades generatiu (CycleGAN/SPADE). Explora els resultats del model i el pipeline d'entrenament.",
+    "description": "Treball de Fi de Grau sobre detecció de pòlips en imatges de colonoscòpia amb aprenentatge profund, utilitzant CycleGAN i SPADE per generar dades d'entrenament sintètiques quan les etiquetes reals escassejaven. En aquesta pàgina: explora el pipeline d'entrenament i mostres de l'augment generatiu, i interactua amb el model real quan el backend està actiu — si no, explora resultats estàtics.",
     "tags": [
       "PyTorch",
       "CycleGAN",
@@ -16,7 +16,7 @@
   {
     "slug": "draculin",
     "title": "Draculin",
-    "description": "Aplicació de seguiment de salut amb xatbot d'IA i visió per computador, desenvolupada amb Flutter. Finalista a BitsXLaMarató 2023.",
+    "description": "Aplicació de seguiment de salut amb xatbot d'IA i assistència per visió per computador, desenvolupada amb Flutter i Django com a finalista de BitsXLaMarató 2023. En aquesta pàgina: recorre les funcionalitats i interactua amb els fluxos del xatbot i la visió per computador — contra el backend real quan està actiu, simulat en cas contrari.",
     "tags": [
       "Flutter",
       "Django",
@@ -32,7 +32,7 @@
   {
     "slug": "bitsx-marato",
     "title": "BitsXLaMarató — Aorta",
-    "description": "Guanyador de BitsXLaMarató 2022 — Ecografia → Segmentació d'aorta amb Mask R-CNN i reconstrucció 3D; inferència simulada en navegador + explorador de diàmetre.",
+    "description": "Guanyador de BitsXLaMarató 2022: una eina per segmentar l'aorta en vídeos d'ecografia amb Mask R-CNN i reconstruir-la en 3D per ajudar a detectar aneurismes. En aquesta pàgina: executa la segmentació i l'explorador de diàmetre — contra el backend real quan està actiu, simulat en cas contrari.",
     "tags": [
       "PyTorch",
       "OpenCV",
@@ -46,7 +46,7 @@
   {
     "slug": "matriculas",
     "title": "Detecció de Matrícules",
-    "description": "Detecta i llegeix matrícules de cotxes a partir d'imatges utilitzant visió per computador — un pipeline de MATLAB portat al navegador.",
+    "description": "Projecte de visió per computador per localitzar i llegir matrícules en fotos de cotxes, originalment construït com un pipeline clàssic en MATLAB. En aquesta pàgina: executa el pipeline complet sobre imatges d'exemple, portat a TypeScript i corrent al teu navegador.",
     "tags": [
       "Computer Vision",
       "TypeScript"
@@ -58,7 +58,7 @@
   {
     "slug": "joc-eda",
     "title": "Visor de Joc de Programació",
-    "description": "Observa com els bots d'IA lluiten en una quadrícula — guerrers, constructors, armes i estratègia. Visor de repeticions per a la competició de joc de programació d'Estructures de Dades i Algorismes.",
+    "description": "Projecte d'Estructures de Dades: un joc en quadrícula on bots en C++ competeixen com a guerrers i constructors en un torneig de l'assignatura. En aquesta pàgina: mira repeticions de partides amb execució en viu del motor C++, renderitzat en Canvas i controls interactius de reproducció.",
     "tags": [
       "C++",
       "Canvas",
@@ -71,7 +71,7 @@
   {
     "slug": "jsbach",
     "title": "Intèrpret de JSBach",
-    "description": "Escriu i reprodueix música amb un llenguatge de programació personalitzat. Un intèrpret basat en navegador per al llenguatge musical JSBach.",
+    "description": "Projecte de l'assignatura de Compiladors: JSBach, un petit llenguatge de programació on descrius peces musicals com a codi, construït amb una gramàtica ANTLR4. En aquesta pàgina: escriu codi JSBach i escolta'l reproduït en viu a través d'un intèrpret Web Audio.",
     "tags": [
       "ANTLR4",
       "Web Audio",
@@ -84,7 +84,7 @@
   {
     "slug": "tenda",
     "title": "Botiga Online",
-    "description": "Una botiga e-commerce completa amb navegació de productes, carret de compres i procés de pagament.",
+    "description": "Projecte d'Aplicacions Web: una botiga e-commerce completa construïda en PHP i MySQL, amb catàleg de productes, carret de compres i procés de pagament. En aquesta pàgina: navega per la botiga — contra el backend real quan està actiu, o una versió estàtica reconstruïda que també pots explorar.",
     "tags": [
       "PHP",
       "MySQL",
@@ -97,7 +97,7 @@
   {
     "slug": "pro2",
     "title": "Clustering WPGMA",
-    "description": "Construeix arbres filogenètics pas a pas. Introdueix espècies amb seqüències genètiques i observa com l'algorisme WPGMA fusiona clústers en un dendrograma.",
+    "description": "Projecte de Programació: implementació en C++ de clustering WPGMA per construir arbres filogenètics a partir de seqüències genètiques d'espècies. En aquesta pàgina: introdueix espècies i observa com l'algorisme fusiona clústers en un dendrograma — contra el motor C++ real quan el backend està actiu, o un recorregut estàtic en cas contrari.",
     "tags": [
       "TypeScript",
       "Algorithms",
@@ -110,7 +110,7 @@
   {
     "slug": "mpids",
     "title": "Solver MPIDS",
-    "description": "Troba el conjunt dominant mínim en un graf utilitzant algorismes de cerca local i voraç, amb visualització interactiva.",
+    "description": "Projecte d'algorismes sobre el problema del Conjunt Dominant d'Influència Positiva Mínima (MPIDS), resolt amb heurístiques voraces i cerca local estil recuit simulat. En aquesta pàgina: construeix o edita un graf en una vista force-directed de D3 i executa el solver de manera interactiva.",
     "tags": [
       "Algorithms",
       "Graph Theory",
@@ -123,7 +123,7 @@
   {
     "slug": "phase-transitions",
     "title": "Transicions de Fase en Grafs",
-    "description": "Explora transicions de fase de percolació i connectivitat en grafs binomials, geomètrics i de quadrícula.",
+    "description": "Projecte de recerca en algorismes sobre transicions de fase de connectivitat i complexitat en grafs aleatoris binomials, geomètrics i de quadrícula. En aquesta pàgina: observa animacions de percolació en temps real i gràfiques Monte Carlo mentre ajustes els paràmetres del graf.",
     "tags": [
       "Algorithms",
       "Graph Theory",
@@ -136,7 +136,7 @@
   {
     "slug": "planificacion",
     "title": "Agència de viatges (PDDL)",
-    "description": "Pràctica de planificació automàtica: domini PDDL per a viatges amb vols, hotels, restriccions numèriques i minimització de mètriques.",
+    "description": "Projecte de Planificació Automàtica: un domini PDDL per reservar viatges amb vols, hotels, restriccions numèriques i minimització de mètriques. En aquesta pàgina: executa el planificador sobre problemes personalitzats quan el backend està actiu, o inspecciona els fitxers de domini, problema i sortides d'exemple en cas contrari.",
     "tags": [
       "PDDL",
       "Planning",
@@ -149,7 +149,7 @@
   {
     "slug": "desastres-ia",
     "title": "Desastres IA",
-    "description": "Assistència en desastres com a cerca local: helicòpters rescaten grups de centres utilitzant escalada de turons i recuit simulat (AIMA).",
+    "description": "Projecte d'IA que planteja l'assistència en desastres com a cerca local, amb helicòpters rescatant grups des de centres mitjançant escalada de turons i recuit simulat. En aquesta pàgina: executa el solver en un mapa 2D interactiu i compara experiments en un tauler de control.",
     "tags": [
       "Java",
       "AIMA",
@@ -163,7 +163,7 @@
   {
     "slug": "apa-practica",
     "title": "Aprenentatge Automàtic — Hipotiroïdisme",
-    "description": "Tasca de classificació d'hipotiroïdisme: Nbviewer, enllaços a GitHub, demo de clic de k-NN vinculada a N/P de classe binària (FIB-UPC).",
+    "description": "Pràctica d'Aprenentatge Automàtic: entrenament i comparació de nou famílies de models de sklearn per predir l'hipotiroïdisme a partir de dades clíniques. En aquesta pàgina: obre el notebook, prova un predictor de regressió logística en viu i classifica punts sobre una projecció PCA amb k-NN.",
     "tags": [
       "Python",
       "Jupyter",
@@ -177,7 +177,7 @@
   {
     "slug": "prop",
     "title": "Sistema de Recomanació",
-    "description": "Una interfície web per a un sistema de recomanació basat en contingut, construït amb Java, Spring Boot i Thymeleaf.",
+    "description": "Projecte d'Enginyeria del Programari: un sistema de recomanació basat en contingut construït en Java amb Spring Boot i Thymeleaf, incloent una interfície web completa. En aquesta pàgina: recorre el flux de recomanació i inspecciona l'arquitectura Java/Spring subjacent.",
     "tags": [
       "Java",
       "Spring Boot",
@@ -190,7 +190,7 @@
   {
     "slug": "caim",
     "title": "Explorador IR — CAIM",
-    "description": "Explorador interactiu de recuperació d'informació al navegador: calcula PageRank sobre la xarxa global d'aeroports amb un mapa D3, i analitza la Llei de Zipf en corpus de text amb ajust de corbes.",
+    "description": "Pràctiques de l'assignatura de Recuperació d'Informació: càlcul de PageRank sobre la xarxa global d'aeroports i verificació de la Llei de Zipf en corpus de text. En aquesta pàgina: executa PageRank sobre un mapa mundial D3 i ajusta corbes de Zipf sobre text real de manera interactiva.",
     "tags": [
       "Vanilla TS",
       "D3.js",
@@ -204,7 +204,7 @@
   {
     "slug": "sbc-ia",
     "title": "Planificador de Viatges (Sistema Expert)",
-    "description": "Un sistema expert de planificació de viatges: respon 10 preguntes sobre les teves preferències i obtingues un itinerari complet amb ciutats, hotels, activitats, transport i cost. Reimplementa regles CLIPS en Python.",
+    "description": "Projecte de Sistemes Basats en Coneixement: un planificador de viatges com a sistema expert originalment escrit amb regles de producció CLIPS, reimplementat en Python. En aquesta pàgina: respon 10 preguntes sobre les teves preferències de viatge i obtingues un itinerari complet amb ciutats, hotels, activitats, transport i cost.",
     "tags": [
       "HTMX",
       "Alpine.js",
@@ -218,7 +218,7 @@
   {
     "slug": "par-parallel",
     "title": "Laboratoris de Computació Paral·lela",
-    "description": "Cinc pràctiques d'OpenMP compilades a WebAssembly: conjunt de Mandelbrot, equació de la calor, merge-sort de 4 vies, càlcul de π i benchmarks d'speedup paral·lel — tot executant-se al teu navegador.",
+    "description": "Pràctiques de Computació Paral·lela en C amb OpenMP: Mandelbrot, equació de la calor, merge sort de 4 vies, càlcul de π i benchmarks d'speedup. En aquesta pàgina: executa les cinc compilades a WebAssembly al navegador i inspecciona l'escalat paral·lel.",
     "tags": [
       "C",
       "OpenMP",
@@ -233,7 +233,7 @@
   {
     "slug": "rob-robotics",
     "title": "Panell de Robòtica",
-    "description": "Visualitzacions interactives de robòtica: reproducció d'odometria mòbil, simulador de seguiment de parets, cinemàtica directa 3D (Puma560/3-Link), planificador de trajectòries, dashboard de sensors i estimació d'estat EKF — tot amb dades reals de laboratori.",
+    "description": "Pràctiques de Robòtica que cobreixen odometria, seguiment de parets, cinemàtica directa 3D de braç (Puma560 / 3-Link), planificació de trajectòries, sensors i estimació d'estat EKF. En aquesta pàgina: reprodueix i interactua amb cada pràctica utilitzant dades reals capturades en un tauler unificat.",
     "tags": [
       "Ember.js",
       "Babylon.js",
@@ -248,7 +248,7 @@
   {
     "slug": "algorithms",
     "title": "Visualitzador d'Algoritmes",
-    "description": "Visualitzacions pas a pas de 18 algorismes: Dijkstra, Prim, DFS, ordenació topològica, BFS en laberint, flood fill, Sudoku, merge/insertion/radix sort, N-Reines, cerca binària, MCD, exponenciació de matrius i TSP 2-opt.",
+    "description": "Treballs d'Algorismes i Estructures de Dades reunits en un sol visor, amb 18 algorismes clàssics de grafs, ordenació, cerca i problemes combinatoris. En aquesta pàgina: recorre'ls pas a pas amb visualitzacions interactives en Canvas i paràmetres ajustables.",
     "tags": [
       "Qwik",
       "Canvas",
@@ -263,7 +263,7 @@
   {
     "slug": "grafics",
     "title": "Playground de Shaders de Gràfics",
-    "description": "Playground interactiu de shaders WebGL2 que porta les pràctiques de Gràfics de FIB-UPC al navegador: transformacions de vèrtexs, il·luminació Phong, textures procedurals, patrons, emulació de geometry shaders i efectes avançats — tot executant GLSL en temps real.",
+    "description": "Pràctiques de Gràfics Per Computador originalment escrites contra OpenGL d'escriptori, cobrint transformacions de vèrtexs, il·luminació Phong, textures procedurals, patrons de fragment i emulació de geometry shaders. En aquesta pàgina: edita el GLSL en viu en un playground WebGL2 i veu la sortida del shader actualitzar-se en temps real.",
     "tags": [
       "WebGL2",
       "GLSL",
