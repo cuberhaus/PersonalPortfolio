@@ -1,11 +1,24 @@
 import { defineConfig } from 'astro/config';
+import { writeFile } from 'node:fs/promises';
 
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 
+const SITE = process.env.SITE_URL ?? 'https://polcasacubertagil.com';
+
+/** Writes public/CNAME (for GitHub Pages) with the site's hostname at build time. */
+const cnameIntegration = {
+  name: 'write-cname',
+  hooks: {
+    'astro:build:done': async ({ dir }) => {
+      await writeFile(new URL('CNAME', dir), new URL(SITE).hostname + '\n');
+    },
+  },
+};
+
 export default defineConfig({
-  site: 'https://polcasacubertagil.me',
-  integrations: [react(), sitemap()],
+  site: SITE,
+  integrations: [react(), sitemap(), cnameIntegration],
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'es', 'ca'],
