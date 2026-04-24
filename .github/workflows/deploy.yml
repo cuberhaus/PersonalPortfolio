@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [cv-updated]
 
 permissions:
   contents: read
@@ -29,6 +31,15 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Fetch latest CV PDFs from cuberhaus/cv
+        run: |
+          set -e
+          mkdir -p public
+          BASE="https://github.com/cuberhaus/cv/releases/latest/download"
+          curl -fL -o public/cv.pdf    "$BASE/cv_english.pdf"
+          curl -fL -o public/cv_es.pdf "$BASE/cv_spanish.pdf"
+          curl -fL -o public/cv_ca.pdf "$BASE/cv_catalan.pdf"
 
       - name: Build site
         run: npm run build

@@ -10,6 +10,11 @@ coverage/
 .env.*
 .DS_Store
 
+# CV PDFs fetched from cuberhaus/cv releases at build time
+public/cv.pdf
+public/cv_es.pdf
+public/cv_ca.pdf
+
 # Playwright
 test-results/
 playwright-report/
