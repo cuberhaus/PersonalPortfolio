@@ -4,9 +4,9 @@
     "company": "Deloitte",
     "period": "Sep 2025 — Presente",
     "bullets": [
-      "Entregué el primer proyecto de IA Física de Deloitte: detección de anomalías de fabricación en tiempo real sobre líneas de producción de motores en vivo y un gemelo digital del almacén con seguimiento de paquetes por cámara, construido sobre NVIDIA Omniverse, Isaac Sim y el stack Metropolis (DeepStream, TAO, Triton)",
-      "Diseñé y desplegué infraestructura de IA y datos en AWS, Azure y GCP — inferencia en el edge, pipelines de streaming y entrenamiento y servicio de modelos en la nube",
-      "Contribuí a una iniciativa de gobernanza de datos de la Generalitat de Catalunya — catalogación y linaje con Informatica, y consultoría de cara al cliente"
+      "Entrega del primer proyecto de IA Física de Deloitte: detección de anomalías de fabricación en tiempo real sobre líneas de producción de motores en vivo y un gemelo digital del almacén con seguimiento de paquetes por cámara, construido sobre NVIDIA Omniverse, Isaac Sim y el stack Metropolis (DeepStream, TAO, Triton)",
+      "Diseño y despliegue de infraestructura de IA y datos en AWS, Azure y GCP — inferencia en el edge, pipelines de streaming y entrenamiento y servicio de modelos en la nube",
+      "Colaboración en una iniciativa de gobernanza de datos de la Generalitat de Catalunya — catalogación y linaje con Informatica, y consultoría de cara al cliente"
     ]
   },
   {
@@ -14,9 +14,9 @@
     "company": "MGS, Seguros y Reaseguros S.A.",
     "period": "Sep 2023 — Sep 2024",
     "bullets": [
-      "Desarrollé modelos de predicción de precios como parte de un equipo de IA y datos de 4 personas dando soporte al análisis de productos aseguradores",
-      "Automaticé flujos de trabajo de SQL Server con PowerShell para agilizar tareas recurrentes de procesamiento de datos y generación de informes",
-      "Desarrollé proyectos de análisis geoespacial en R / RStudio, utilizando datos cartográficos para aportar información de negocio basada en la localización"
+      "Desarrollo de modelos de predicción de precios dentro de un equipo de IA y datos de 4 personas dando soporte al análisis de productos aseguradores",
+      "Automatización de flujos de trabajo de SQL Server con PowerShell para agilizar tareas recurrentes de procesamiento de datos y generación de informes",
+      "Proyectos de análisis geoespacial en R / RStudio, utilizando datos cartográficos para aportar información de negocio basada en la localización"
     ]
   },
   {
@@ -24,9 +24,9 @@
     "company": "Hackathon bitsxlaMarató TV3 (Ganador)",
     "period": "Ene 2022",
     "bullets": [
-      "Desarrollé un detector de aneurismas utilizando una red neuronal convolucional con MaskRCNN para la salud cardiovascular",
-      "Gané el Hackathon bitsxlaMarató TV3 2022 por este proyecto",
-      "Diseñé una interfaz fácil de usar para cargar videos, detectar la aorta y visualizar modelos en 3D"
+      "Desarrollo de un detector de aneurismas utilizando una red neuronal convolucional con MaskRCNN para la salud cardiovascular",
+      "Proyecto ganador del Hackathon bitsxlaMarató TV3 2022",
+      "Diseño de una interfaz fácil de usar para cargar vídeos, detectar la aorta y visualizar modelos en 3D"
     ]
   }
 ]
