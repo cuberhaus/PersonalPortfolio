@@ -10,13 +10,13 @@
     ]
   },
   {
-    "role": "Enginyer de Dades",
+    "role": "Enginyer d'IA i Dades",
     "company": "MGS, Seguros y Reaseguros S.A.",
     "period": "Set 2023 — Set 2024",
     "bullets": [
-      "Vaig impulsar l'anàlisi predictiu, una sòlida governança de dades i processos ETL optimitzats, millorant la qualitat i eficiència de les dades",
-      "Vaig aconseguir un augment del 20% en la precisió dels informes amb visualitzacions impactants utilitzant Python, R, SQL Server i Power BI",
-      "Vaig crear quadres de comandament dinàmics per al seguiment en temps real de KPI i mètriques de negoci, permetent decisions estratègiques informades"
+      "Vaig desenvolupar models de predicció de preus com a part d'un equip d'IA i dades de 4 persones donant suport a l'anàlisi de productes asseguradors",
+      "Vaig automatitzar fluxos de treball de SQL Server amb PowerShell per agilitzar tasques recurrents de processament de dades i generació d'informes",
+      "Vaig desenvolupar projectes d'anàlisi geoespacial en R / RStudio, utilitzant dades cartogràfiques per aportar informació de negoci basada en la localització"
     ]
   },
   {

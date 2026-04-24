@@ -10,13 +10,13 @@
     ]
   },
   {
-    "role": "Ingeniero de Datos",
+    "role": "Ingeniero de IA y Datos",
     "company": "MGS, Seguros y Reaseguros S.A.",
     "period": "Sep 2023 — Sep 2024",
     "bullets": [
-      "Impulsé el análisis predictivo, una sólida gobernanza de datos y procesos ETL optimizados, mejorando la calidad y eficiencia de los datos",
-      "Logré un aumento del 20% en la precisión de los informes con visualizaciones impactantes usando Python, R, SQL Server y Power BI",
-      "Creé cuadros de mando dinámicos para el seguimiento en tiempo real de KPI y métricas de negocio, permitiendo decisiones estratégicas informadas"
+      "Desarrollé modelos de predicción de precios como parte de un equipo de IA y datos de 4 personas dando soporte al análisis de productos aseguradores",
+      "Automaticé flujos de trabajo de SQL Server con PowerShell para agilizar tareas recurrentes de procesamiento de datos y generación de informes",
+      "Desarrollé proyectos de análisis geoespacial en R / RStudio, utilizando datos cartográficos para aportar información de negocio basada en la localización"
     ]
   },
   {
