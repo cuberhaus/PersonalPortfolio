@@ -111,17 +111,72 @@ services:
 
 #### FastAPI / uvicorn (`tfg-polyps`, `bitsx-marato`, `phase-transitions`, `caim`, `sbc-ia`, `desastres-ia`, `planner-api`)
 
+The recommended path is to copy the canonical helper into your backend
+directory rather than inlining the SDK setup. The helper handles Sentry
+init + service-tag attachment (via `before_send_transaction`, immune to
+ASGI scope forking on older sentry-sdk 2.x versions) and JSON-line stdout
+logging in 99 LOC.
+
+```bash
+cp PersonalPortfolio/scripts/sentry-snippets/_sentry_obs.py \
+   <your-backend>/_sentry_obs.py
+```
+
+Then at the **very top** of `app.py` / `main.py` (before any other
+imports — Sentry needs to wrap them):
+
+```python
+# ── Phase 14 — observability bootstrap ────────────────────────────
+# IMPORTANT: use an absolute import + sys.path injection, NOT a
+# relative `from ._sentry_obs import …`. uvicorn launched as
+# `uvicorn app:app` loads the module as `__main__` (no parent
+# package) and a relative import will raise `ImportError`, which
+# the bare `except` below silently swallows — your SDK never inits
+# and events vanish. The pattern below works regardless of whether
+# uvicorn is launched as `app:app` (script context) or
+# `backend.app:app` (package context).
+import os as _os
+import sys as _sys
+
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+try:
+    from _sentry_obs import init_observability  # type: ignore[import-not-found]
+
+    init_observability(service="<slug>")
+except ImportError:
+    pass
+```
+
+Set `ENV PYTHONUNBUFFERED=1` in the Dockerfile so JSON log lines stream
+without buffering.
+
+> **Why a hook instead of `sentry_sdk.set_tag()`?** sentry-sdk 2.0–2.20
+> forks a fresh isolation scope per ASGI request that does not inherit
+> init-time tags, so `set_tag("service", …)` at startup never reaches
+> transaction events on those versions. The helper sets the tag via
+> `before_send` / `before_send_transaction` instead, which fires after
+> every scope merge and works on every SDK version (1.x through 2.x).
+
+<details>
+<summary>Inline alternative (not recommended — duplicates the helper's logic)</summary>
+
 ```python
 import os, sys, json, time, logging
 import sentry_sdk
 
+def _service_tagger(event, _hint):
+    tags = event.setdefault("tags", [])
+    if isinstance(tags, list) and not any(t[0] == "service" for t in tags):
+        tags.append(["service", "<slug>"])
+    return event
+
 sentry_sdk.init(
-    dsn=os.environ["SENTRY_DSN"],
+    dsn=os.environ.get("SENTRY_DSN", ""),
     environment=os.environ.get("SENTRY_ENVIRONMENT", "local-dev"),
     traces_sample_rate=float(os.environ.get("SENTRY_TRACES_SAMPLE_RATE", "0.1")),
-    enable_tracing=True,
+    before_send=_service_tagger,
+    before_send_transaction=_service_tagger,
 )
-sentry_sdk.set_tag("service", "<slug>")
 
 class JsonLineHandler(logging.Handler):
     def emit(self, record):
@@ -135,7 +190,7 @@ class JsonLineHandler(logging.Handler):
 logging.basicConfig(level=logging.INFO, handlers=[JsonLineHandler()], force=True)
 ```
 
-Set `ENV PYTHONUNBUFFERED=1` in the Dockerfile.
+</details>
 
 #### Flask (`mpids`)
 
