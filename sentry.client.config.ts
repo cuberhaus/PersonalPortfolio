@@ -9,22 +9,19 @@
  * without any setup. Set `PUBLIC_SENTRY_DSN` in `.env` to point at a real
  * sentry.io project.
  *
- * tracePropagationTargets: regex covers every demo backend port from
- * `src/data/demo-services.json`. Distributed traces flow from the browser
- * fetch into the backend handler when both sides have a Sentry SDK
- * configured. Bumping a port here and there is fine — keep the list in
- * sync with the registry or new backends won't appear as a single trace.
+ * tracePropagationTargets: derived from `src/data/demo-services.json` via
+ * `listTracedBackendPorts()` so the registry is the single source of truth
+ * — new backends propagate trace headers automatically as soon as their
+ * entry has `needsSentry: true`.
  */
 import * as Sentry from '@sentry/astro';
 
+import { listTracedBackendPorts } from './src/data/demo-services';
+import { getSessionId } from './src/lib/debug-session';
+
 const DSN_FALLBACK = 'https://test@test/0';
 
-const DEMO_BACKEND_PORTS = [
-  // FastAPI / uvicorn / Flask / Django
-  8001, 8082, 8083, 8084, 8085, 8086, 8088, 8089, 8765, 8889, 8890,
-  // Static / framework backends
-  8087, 8090, 8092, 8093, 8888, 8081, 8000, 3000,
-];
+const DEMO_BACKEND_PORTS = listTracedBackendPorts();
 
 Sentry.init({
   dsn: import.meta.env.PUBLIC_SENTRY_DSN ?? DSN_FALLBACK,
@@ -42,6 +39,13 @@ Sentry.init({
   replaysSessionSampleRate: 0,
   replaysOnErrorSampleRate: 1.0,
   sendDefaultPii: false,
+  // Stamp every browser event with the stable session id so it joins
+  // backend events carrying the same tag. The header propagation lives
+  // in `src/lib/debug-network.ts`; the backend side is in
+  // `_sentry_obs.py`'s SessionIdMiddleware.
+  initialScope: {
+    tags: { session_id: getSessionId() },
+  },
   // Explicit browser-tracing integration (`@sentry/astro` enables it
   // implicitly when `tracesSampleRate > 0`, but listing it here makes the
   // Web Vitals capture grep-able and lets us tune the long-task / long-

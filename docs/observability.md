@@ -290,6 +290,142 @@ docker exec tfg-app-1 env | grep SENTRY_RELEASE
 
 ---
 
+## Cross-service session correlation
+
+Every browser session is stamped with a stable random UUID
+(`debug.session_id` in localStorage, minted by
+[`src/lib/debug-session.ts`](../src/lib/debug-session.ts)). The
+[`sentry.client.config.ts`](../sentry.client.config.ts) init applies it as
+the `session_id` tag on every browser event, and the network tap
+([`src/lib/debug-network.ts`](../src/lib/debug-network.ts)) forwards it to
+known backends via the `X-Session-Id` header. Each backend's hook reads
+the header and stamps the matching tag on its own events — so a single
+filter `session_id:<uuid>` joins frontend, iframe, and backend events
+for the same user across the whole stack.
+
+The header is only injected for requests whose origin is in the demo
+registry's `iframeUrl` set (or the parent page's own origin). Cross-origin
+requests to third-party endpoints stay untouched.
+
+| Where | What sets the tag |
+|---|---|
+| Browser | `Sentry.init({ initialScope: { tags: { session_id } } })` in [`sentry.client.config.ts`](../sentry.client.config.ts) |
+| FastAPI / Litestar / async-Django | `app.add_middleware(SessionIdMiddleware)` from [`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) |
+| Flask | `register_flask_session_id(app)` from [`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) |
+| Django (sync) | `'Draculin._sentry_obs.django_session_id_middleware'` in `MIDDLEWARE` |
+| Spring Boot | [`web.config.SessionIdFilter`](../../subgrup-prop7.1/web/src/main/java/web/config/SessionIdFilter.java) |
+| Go (joc-eda) | per-request wrapper inside `withSentryHTTP` in [`observability.go`](../../joc_eda/web/backend-go/observability.go) |
+| Rust (pro2) | tower middleware `_session_id_middleware` + `NewSentryLayer` in [`main.rs`](../../pracpro2/web/backend/src/main.rs) |
+| PHP (Tenda) | `\Sentry\configureScope(...)` reads `$_SERVER['HTTP_X_SESSION_ID']` in [`observability.php`](../../tenda_online/includes/observability.php) |
+| SvelteKit | `sessionIdHandle` composed into the chain in [`hooks.server.ts`](../../Practica_de_Planificacion/web/src/hooks.server.ts) |
+
+In the Sentry UI:
+
+```text
+session_id:5b8e9c12-... AND service:bitsx-marato
+```
+
+returns every event from one specific browser session that hit the
+bitsXlaMarato backend, regardless of whether traces were sampled on the
+relevant requests.
+
+---
+
+## Sample-rate defaults
+
+Every Sentry-enabled backend (Python helper plus Go / Rust / PHP /
+SvelteKit init hooks) picks an **environment-aware default** when the
+explicit env var is unset:
+
+| `SENTRY_ENVIRONMENT` | Default `SENTRY_TRACES_SAMPLE_RATE` | Default `SENTRY_PROFILES_SAMPLE_RATE` |
+|---|---|---|
+| `production` | 0.1 | 0.1 (Python only) |
+| anything else (`local-dev`, `staging`, …) | 1.0 | 1.0 (Python only) |
+
+This keeps Sentry.io free-tier deploys safe out of the box (10 K
+transactions / month is exhausted at 1.0 within a few days of real
+traffic) while leaving development high-signal. Override either rate
+explicitly in `.env.shared` when you need a different ratio:
+
+```bash
+SENTRY_TRACES_SAMPLE_RATE=0.25
+```
+
+The frontend ([`sentry.client.config.ts`](../sentry.client.config.ts))
+follows the same convention via `import.meta.env.PROD ? 0.1 : 1.0`.
+
+Spring Boot is the one exception: its sample rate lives in
+[`application.properties`](../../subgrup-prop7.1/web/src/main/resources/application.properties)
+as `${SENTRY_TRACES_SAMPLE_RATE:0.1}` — production-safe default,
+overridden to 1.0 by `dev-all-demos.sh` for local development.
+
+---
+
+## Producer-side sampling (frontend)
+
+[`debug-sentry.ts`](../src/lib/debug-sentry.ts) bucket-aggregates the
+high-frequency `perf` channel before forwarding to Sentry. WebGL / Canvas
+demos can emit FPS samples at 60 Hz, and forwarding each as its own
+breadcrumb fills Sentry's 100-breadcrumb-per-event ring before a real
+error fires. Instead, we coalesce one second of samples per
+`kind:name` key into a single breadcrumb carrying min/avg/max/count and
+window duration.
+
+Web-vital and navigation samples bypass the bucket (their natural rate
+is low and individual values matter — LCP, INP, CLS are scalar facts,
+not distributions). Network breadcrumbs are passed through unchanged.
+
+Unit-tested in [`src/__tests__/debug-sentry.test.ts`](../src/__tests__/debug-sentry.test.ts).
+
+---
+
+## PII scrubbing
+
+The Python helper composes a defensive scrubber after the service tagger
+in `before_send` (see
+[`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py)
+`_scrub_event`). Any tag, extra, breadcrumb-data, request-header, or
+span-data value whose key matches `password`, `secret`, `authorization`,
+`token`, `cookie`, `api[-_]?key`, `csrf`, or `private[-_]key` is
+replaced with `[Filtered]`. `request.cookies` is dropped wholesale. The
+`session_id` tag is allowlisted because its value is a random UUID, not
+a credential.
+
+This complements `send_default_pii=False` in the SDK: the SDK's flag
+covers framework-injected PII (request bodies, user objects), the
+scrubber covers the application-level data the SDK has no opinion about.
+Unit-tested in
+[`scripts/sentry-snippets/test__sentry_obs.py`](../scripts/sentry-snippets/test__sentry_obs.py)
+(run with `python3 -m unittest`).
+
+Non-Python backends rely on their SDK's own scrubbing primitives — see
+each language's docs.
+
+---
+
+## Source-map upload
+
+For production builds, set the three vars below in your environment (NOT
+committed) before `npm run build`:
+
+```bash
+SENTRY_AUTH_TOKEN=sntrys_...   # https://sentry.io/settings/account/api/auth-tokens/
+SENTRY_ORG=<your-sentry-org-slug>
+SENTRY_PROJECT=<your-sentry-project-slug>
+```
+
+The Astro Sentry integration in [`astro.config.mjs`](../astro.config.mjs)
+uploads source maps tagged with the same `portfolio@<sha>` release the
+runtime uses, so production stack traces re-symbolicate automatically.
+When any of the three vars is missing the integration silently skips the
+upload network step (build still injects debug IDs into the bundles, so a
+later upload can match retroactively), so local clones work out of the
+box.
+
+The auth token only needs the `project:releases` scope.
+
+---
+
 ## Troubleshooting
 
 ### "Looks like there are no traces recorded matching the applied search & filters"
@@ -362,14 +498,19 @@ The most common cause is Snuba migrations on first ingestion — wait
 
 ### Backend SDK is initialised but still no events appear
 
-Some Sentry SDKs default to `traces_sample_rate=0` (errors only). Set in
-`.env.shared`:
+Two likely causes:
 
-```bash
-SENTRY_TRACES_SAMPLE_RATE=1.0
-```
-
-This is propagated to every backend's SDK config.
+1. **Sample rate is too low.** The helpers default to `0.1` in
+   `production` and `1.0` elsewhere (see "Sample-rate defaults" above).
+   For full visibility in dev, the orchestrator already sets
+   `SENTRY_TRACES_SAMPLE_RATE=1.0` — verify with
+   `docker exec <ctr> env | grep SAMPLE_RATE`.
+2. **PII scrubber redacted the value you were grepping.** If you see
+   `[Filtered]` in a tag where you expected real data, the key is in
+   the scrubber's sensitive-substring list (see
+   [`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py)
+   `_SENSITIVE_KEY_PARTS`). Rename the tag or add the key to
+   `_SCRUB_ALLOWLIST` if it's safe to expose.
 
 ---
 

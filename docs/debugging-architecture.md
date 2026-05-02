@@ -216,6 +216,77 @@ tag lands by filtering on `service:<slug>` in the Sentry UI (see
 
 ---
 
+## Cross-cutting design decisions
+
+These four behaviours apply uniformly across every backend regardless of
+its language stack. They are documented here, in the architectural doc,
+because the *reason* is shared even though the *implementation* differs
+per language. The operational manual ([`observability.md`](./observability.md))
+contains the per-backend file references and CLI knobs.
+
+### Cross-service session correlation
+
+A stable random UUID is minted per browser session by
+[`src/lib/debug-session.ts`](../src/lib/debug-session.ts) and injected
+into every outbound request as `X-Session-Id`. Each backend's hook reads
+the header and stamps the matching tag (`session_id`) on its own Sentry
+events, so a single Sentry filter joins frontend, iframe, and backend
+events for the same user across the whole stack.
+
+The header is gated by an allowlist (registry origins + own origin) so
+the id never leaks to third-party APIs, and Sentry's distributed-tracing
+`baggage` is *not* used because we want correlation to survive even when
+traces are sampled out (standalone errors still get joined).
+
+The session id is **not** PII — it's a random UUID that can't be
+reverse-mapped to any human identifier — so the PII scrubber explicitly
+allowlists the `session_id` key (otherwise the substring "session" would
+trigger redaction).
+
+### Environment-aware sample rate defaults
+
+Every backend's init reads `SENTRY_ENVIRONMENT` and, if the operator
+hasn't pinned an explicit `SENTRY_TRACES_SAMPLE_RATE`, picks `0.1` for
+production and `1.0` elsewhere. This means a fresh production deploy is
+free-tier-safe by default while local development stays high-signal —
+the Spring `application.properties` file is the only exception (no
+inline conditional logic available; see the operational manual).
+
+The frontend follows the same convention via
+`import.meta.env.PROD ? 0.1 : 1.0` in
+[`sentry.client.config.ts`](../sentry.client.config.ts), so the
+end-to-end sample rate is consistent across the boundary.
+
+### Producer-side sampling on the debug bus
+
+Sentry's per-event breadcrumb ring is bounded at 100 entries. WebGL /
+Canvas demos in this portfolio emit perf samples at up to 60 Hz, which
+overflows the ring within ~1.6 s and evicts the breadcrumbs that would
+have explained any later error. The frontend forwarder
+([`src/lib/debug-sentry.ts`](../src/lib/debug-sentry.ts)) coalesces
+high-frequency `perf` samples into one aggregated breadcrumb per
+`kind:name` per second carrying min/avg/max/count. Web-vital and
+navigation samples bypass the bucket because their natural rate is low
+and individual values matter (LCP / INP / CLS are scalar facts, not
+distributions). Errors and network breadcrumbs are passed through
+unchanged.
+
+### Defence-in-depth PII scrubbing
+
+`send_default_pii=False` covers framework-injected PII (request bodies,
+user objects). The application-level data (custom tags, breadcrumb
+extras, span data) is the SDK has no opinion about, so the Python
+helper composes a chained `before_send` that walks the envelope and
+redacts values whose key matches a sensitive substring. The scrubber
+runs after the service tagger and is intentionally cheap (single-pass,
+bounded recursion) so the SDK can keep its existing performance budget.
+
+Non-Python backends rely on the SDK's own scrubbing primitives — adding
+the chained scrubber to those would mean writing it in five more
+languages and is deferred until a real PII leak is observed.
+
+---
+
 ## Sketch of the chosen design
 
 ```

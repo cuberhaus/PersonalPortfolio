@@ -70,3 +70,24 @@ export function listAllowedIframeOrigins(): readonly string[] {
   }
   return Array.from(origins);
 }
+
+/**
+ * Ports of every backend that should participate in distributed tracing
+ * (i.e. has a Sentry SDK init hook). Used by `sentry.client.config.ts` to
+ * build `tracePropagationTargets` so the registry stays the single source
+ * of truth — adding a backend in the JSON automatically propagates trace
+ * headers to it without editing the Sentry config.
+ *
+ * Static-frontend demos (`needsSentry: false`) are excluded because the
+ * iframe forwarder, not the parent's fetch, is responsible for their
+ * telemetry.
+ */
+export function listTracedBackendPorts(): readonly number[] {
+  const ports = new Set<number>();
+  for (const svc of REGISTRY.services) {
+    const port = svc.backend?.port;
+    const traced = svc.backend?.needsSentry ?? false;
+    if (typeof port === "number" && traced) ports.add(port);
+  }
+  return Array.from(ports).sort((a, b) => a - b);
+}

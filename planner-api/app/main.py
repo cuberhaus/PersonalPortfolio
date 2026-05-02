@@ -12,6 +12,7 @@ try:
         breadcrumb as _crumb,
         span as _span,
         tag as _tag,
+        SessionIdMiddleware as _SessionIdMiddleware,
     )
 
     init_observability(service="planner-api")
@@ -27,6 +28,13 @@ except ImportError:
     @contextmanager
     def _span(*_a, **_kw):
         yield None
+
+    class _SessionIdMiddleware:  # type: ignore[no-redef]
+        def __init__(self, app):
+            self.app = app
+
+        async def __call__(self, scope, receive, send):
+            await self.app(scope, receive, send)
 
 import importlib.resources as ir
 import os
@@ -62,6 +70,7 @@ class PlanRequest(BaseModel):
 
 
 app = FastAPI(title="PDDL Planner API", version="1.0.0")
+app.add_middleware(_SessionIdMiddleware)
 
 _origins = [o.strip() for o in CORS_ORIGINS.split(",") if o.strip()]
 app.add_middleware(
