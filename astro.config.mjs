@@ -3,6 +3,8 @@ import { writeFile } from 'node:fs/promises';
 
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
+import sentry from '@sentry/astro';
+import spotlight from '@spotlightjs/astro';
 
 const SITE = process.env.SITE_URL ?? 'https://polcasacubertagil.com';
 
@@ -18,7 +20,13 @@ const cnameIntegration = {
 
 export default defineConfig({
   site: SITE,
-  integrations: [react(), sitemap(), cnameIntegration],
+  integrations: [
+    react(),
+    sitemap(),
+    cnameIntegration,
+    sentry({ sourceMapsUploadOptions: { disable: true } }),
+    spotlight(),
+  ],
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'es', 'ca'],

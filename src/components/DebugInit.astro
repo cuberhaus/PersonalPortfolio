@@ -1,0 +1,66 @@
+---
+/**
+ * Debug system entry point.
+ *
+ * Inserted into both `Layout.astro` and `DemoLayout.astro` next to
+ * `<ThemeInit position="head" />`. Mirrors the same enable-detection pattern
+ * (URL param + localStorage) already used by ThemeInit, so behaviour is
+ * consistent across the site.
+ *
+ * Activation rules:
+ *   - dev (`import.meta.env.DEV`)         → always-on, overlay always loaded
+ *   - prod + `?debug=1`                   → enables, persists to localStorage
+ *   - prod + `localStorage.debug='1'`     → enables on every page load
+ *   - prod + `Ctrl+Shift+D`               → toggles enabled flag
+ *   - otherwise                           → bus is silent except for errors
+ *
+ * The inline script below pre-installs error listeners *before* any other
+ * module loads, so unhandled rejections during early page parse are captured.
+ */
+import DebugOverlay from './DebugOverlay';
+const isDev = import.meta.env.DEV;
+---
+
+<script is:inline>
+  (function () {
+    var url = new URL(window.location.href);
+    var param = url.searchParams.get('debug');
+    if (param === '1') {
+      try { localStorage.setItem('debug', '1'); } catch (_) { /* private mode */ }
+      url.searchParams.delete('debug');
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+    } else if (param === '0') {
+      try { localStorage.removeItem('debug'); } catch (_) { /* private mode */ }
+      url.searchParams.delete('debug');
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+    }
+
+    var stored = false;
+    try { stored = localStorage.getItem('debug') === '1'; } catch (_) { /* private mode */ }
+    window.__DEBUG_ENABLED = stored;
+
+    var pending = [];
+    window.addEventListener('error', function (e) {
+      pending.push({ level: 'error', ns: 'global', msg: e.message || 'Uncaught error', err: e.error });
+    });
+    window.addEventListener('unhandledrejection', function (e) {
+      pending.push({ level: 'error', ns: 'global', msg: 'Unhandled promise rejection', err: e.reason });
+    });
+    window.__debugPendingErrors = pending;
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'D' && e.ctrlKey && e.shiftKey) {
+        e.preventDefault();
+        var nowEnabled = !window.__DEBUG_ENABLED;
+        window.__DEBUG_ENABLED = nowEnabled;
+        try {
+          if (nowEnabled) localStorage.setItem('debug', '1');
+          else localStorage.removeItem('debug');
+        } catch (_) { /* private mode */ }
+        document.dispatchEvent(new CustomEvent('debug:toggle', { detail: { enabled: nowEnabled } }));
+      }
+    });
+  })();
+</script>
+
+<DebugOverlay client:idle initiallyEnabled={isDev} />

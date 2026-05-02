@@ -93,10 +93,10 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 
   window.setTheme = function(id) {
     if (!VALID_THEMES.includes(id)) {
-      console.error(
-        'Unknown theme "' + id + '". Available themes:\n' +
-        VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n')
-      );
+      var msg = 'Unknown theme "' + id + '". Available themes:\n' +
+        VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n');
+      if (window.__debug) window.__debug.log('error', 'theme', msg);
+      else console.error(msg);
       return;
     }
     document.documentElement.setAttribute('data-theme', id);
@@ -105,10 +105,10 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 
   window.setDesign = function(id) {
     if (!VALID_DESIGNS.includes(id)) {
-      console.error(
-        'Unknown design "' + id + '". Available designs:\n' +
-        VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n')
-      );
+      var msg = 'Unknown design "' + id + '". Available designs:\n' +
+        VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n');
+      if (window.__debug) window.__debug.log('error', 'theme', msg);
+      else console.error(msg);
       return;
     }
     document.documentElement.setAttribute('data-design', id);

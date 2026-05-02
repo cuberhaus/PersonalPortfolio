@@ -3,6 +3,7 @@ import DemoNav from '../components/DemoNav.astro';
 import DemoSidebar from '../components/DemoSidebar.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import ThemeInit from '../components/ThemeInit.astro';
+import DebugInit from '../components/DebugInit.astro';
 import Analytics from '../components/Analytics.astro';
 
 interface Props {
@@ -50,7 +51,7 @@ const siteBase = Astro.site || Astro.url;
     <link rel="alternate" hreflang="x-default" href={new URL(base + demoPath, siteBase)} />
 
     <ThemeInit position="head" />
-
+    <DebugInit />
 
     <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
 
