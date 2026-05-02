@@ -18,7 +18,6 @@
  * module loads, so unhandled rejections during early page parse are captured.
  */
 import DebugOverlay from './DebugOverlay';
-const isDev = import.meta.env.DEV;
 ---
 
 <script is:inline>
@@ -49,9 +48,10 @@ const isDev = import.meta.env.DEV;
     window.__debugPendingErrors = pending;
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'D' && e.ctrlKey && e.shiftKey) {
+      if (e.key.toLowerCase() === 'd' && e.ctrlKey && (e.shiftKey || e.altKey)) {
         e.preventDefault();
         var nowEnabled = !window.__DEBUG_ENABLED;
+        console.log('[Debug] Toggling debug mode to:', nowEnabled);
         window.__DEBUG_ENABLED = nowEnabled;
         try {
           if (nowEnabled) localStorage.setItem('debug', '1');
@@ -63,4 +63,4 @@ const isDev = import.meta.env.DEV;
   })();
 </script>
 
-<DebugOverlay client:idle initiallyEnabled={isDev} />
+<DebugOverlay client:only="react" />

@@ -42,7 +42,9 @@ const LEVEL_COLORS: Record<DebugLevel, string> = {
 };
 
 export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayProps) {
-  const [enabled, setEnabled] = useState(initiallyEnabled || (typeof window !== 'undefined' && Boolean(window.__DEBUG_ENABLED)));
+  // Mounted client-side only (DebugInit uses `client:only="react"`), so it's
+  // safe to read window globals during the initial render.
+  const [enabled, setEnabled] = useState(initiallyEnabled || Boolean(window.__DEBUG_ENABLED));
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>('logs');
   const [logs, setLogs] = useState<DebugLogEntry[]>([]);
@@ -146,7 +148,7 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
     void navigator.clipboard?.writeText(json);
   }, [filteredLogs]);
 
-  if (!enabled || typeof window === 'undefined') return null;
+  if (!enabled) return null;
 
   return (
     <>
@@ -318,7 +320,7 @@ const OVERLAY_STYLES = `
   .debug-overlay-trigger {
     position: fixed;
     bottom: 1rem;
-    right: 1rem;
+    left: 1rem;
     z-index: 99000;
     padding: 0.35rem 0.6rem;
     border-radius: var(--radius-sm, 4px);
@@ -340,7 +342,7 @@ const OVERLAY_STYLES = `
   .debug-overlay-panel {
     position: fixed;
     bottom: 3rem;
-    right: 1rem;
+    left: 1rem;
     z-index: 99000;
     width: min(560px, calc(100vw - 2rem));
     height: min(420px, calc(100vh - 6rem));
