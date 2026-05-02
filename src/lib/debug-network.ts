@@ -10,7 +10,7 @@
  *
  * TODO: capture from Web Workers (e.g. plate-worker.ts) via BroadcastChannel.
  */
-import { emitNetwork } from './debug';
+import { emitNetwork, requireEnabled } from './debug';
 
 const INSTALLED_KEY = '__debugNetworkTapInstalled';
 
@@ -20,6 +20,7 @@ interface InstallFlag {
 
 export function installNetworkTap(): void {
   if (typeof window === 'undefined') return;
+  if (!requireEnabled()) return;
   const flagHolder = window as unknown as InstallFlag;
   if (flagHolder[INSTALLED_KEY]) return;
   flagHolder[INSTALLED_KEY] = true;

@@ -6,8 +6,8 @@ ifeq ($(OS),Windows_NT)
   .SHELLFLAGS := -c
 endif
 
-.PHONY: install dev dev-all build preview stop restart health \
-       rebuild free-ports \
+.PHONY: install dev dev-all log-relay build preview stop restart health \
+       rebuild free-ports check-registry \
        clean test help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
@@ -74,8 +74,14 @@ free-ports: ## Kill any process occupying demo backend ports
 	fi
 	@echo "Done."
 
-dev-all: free-ports ## Start Astro + ALL demo backends (Docker + planner-api + PROP)
+dev-all: free-ports ## Start Astro + ALL demo backends (Docker + planner-api + PROP + log-relay)
 	npm run dev:all
+
+log-relay: ## Start the dev-only log-relay SSE sidecar (default port 9999)
+	@node scripts/log-relay/index.mjs --port $${LOG_RELAY_PORT:-9999}
+
+check-registry: ## Run only the demo-services registry consistency tests
+	@npx vitest run src/__tests__/demo-registry.test.ts
 
 stop: ## Stop all demo backend containers/services
 	@bash scripts/dev-all-demos.sh --stop

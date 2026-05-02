@@ -7,6 +7,7 @@ import {
 
 import { T, type DemoTranslations } from "../../i18n/demos/rob-demo";
 import { getThemeColors, lighten, withAlpha } from '../../lib/demo-theme';
+import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
 type Lang = "en" | "es" | "ca";
 
@@ -146,6 +147,7 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
   const [q2, setQ2] = useState(45);
   const [q3, setQ3] = useState(-30);
   const ref = useRef<HTMLCanvasElement>(null);
+  const log = useDebug('demo:rob');
 
   const draw = useCallback(() => {
     const canvas = ref.current;
@@ -168,8 +170,9 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
       (q2 * Math.PI) / 180,
       (q3 * Math.PI) / 180,
     );
+    const ee = joints[joints.length - 1];
+    log.trace('fk-step', { ee });
 
-    // Scale and center
     const baseX = W / 2, baseY = H - 20;
     const s = 25;
 
@@ -194,13 +197,11 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
       ctx.fill();
     }
 
-    // End effector
-    const ee = joints[joints.length - 1];
     ctx.fillStyle = tc.accentEnd;
     ctx.beginPath();
     ctx.arc(baseX + ee.x * s, baseY - ee.y * s, 5, 0, Math.PI * 2);
     ctx.fill();
-  }, [q1, q2, q3]);
+  }, [q1, q2, q3, log]);
 
   useEffect(() => { draw(); }, [draw]);
 
@@ -212,15 +213,24 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', fontSize: '0.75rem' }}>
         <label style={{ color: 'var(--text-muted)' }}>q1
           <input type="range" min={-180} max={180} value={q1}
-            onChange={e => setQ1(+e.target.value)} style={{ width: 60 }} />
+            onChange={e => { setQ1(+e.target.value); log.trace('joint', { idx: 1, deg: +e.target.value }); }}
+            onMouseUp={() => log.info('joint-commit', { idx: 1, deg: q1 })}
+            onTouchEnd={() => log.info('joint-commit', { idx: 1, deg: q1 })}
+            style={{ width: 60 }} />
         </label>
         <label style={{ color: 'var(--text-muted)' }}>q2
           <input type="range" min={-180} max={180} value={q2}
-            onChange={e => setQ2(+e.target.value)} style={{ width: 60 }} />
+            onChange={e => { setQ2(+e.target.value); log.trace('joint', { idx: 2, deg: +e.target.value }); }}
+            onMouseUp={() => log.info('joint-commit', { idx: 2, deg: q2 })}
+            onTouchEnd={() => log.info('joint-commit', { idx: 2, deg: q2 })}
+            style={{ width: 60 }} />
         </label>
         <label style={{ color: 'var(--text-muted)' }}>q3
           <input type="range" min={-180} max={180} value={q3}
-            onChange={e => setQ3(+e.target.value)} style={{ width: 60 }} />
+            onChange={e => { setQ3(+e.target.value); log.trace('joint', { idx: 3, deg: +e.target.value }); }}
+            onMouseUp={() => log.info('joint-commit', { idx: 3, deg: q3 })}
+            onTouchEnd={() => log.info('joint-commit', { idx: 3, deg: q3 })}
+            style={{ width: 60 }} />
         </label>
       </div>
     </div>
@@ -231,6 +241,7 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
 
 export default function RobDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = T[lang] || T.en;
+  useDemoLifecycle('demo:rob', { lang });
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
       <MobilePanel t={t} />

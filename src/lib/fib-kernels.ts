@@ -3,8 +3,9 @@
  * These are simplified versions of the full algorithms in fib/web.
  */
 
-/** Run a few steps of Dijkstra on a small graph */
-export function dijkstraDemo(n: number): { dist: number[]; edges: [number, number, number][] } {
+type StepCb = (info: { algo: string; step: number }) => void;
+
+export function dijkstraDemo(n: number, onStep?: StepCb): { dist: number[]; edges: [number, number, number][] } {
   const edges: [number, number, number][] = [
     [0, 1, 4], [0, 2, 1], [1, 3, 1], [2, 1, 2], [2, 3, 5], [3, 4, 3],
   ];
@@ -23,6 +24,7 @@ export function dijkstraDemo(n: number): { dist: number[]; edges: [number, numbe
     }
     if (u === -1) break;
     visited[u] = true;
+    if (onStep) onStep({ algo: 'dijkstra', step: iter });
     for (const { to, w } of adj[u]) {
       if (dist[u] + w < dist[to]) dist[to] = dist[u] + w;
     }
@@ -30,10 +32,10 @@ export function dijkstraDemo(n: number): { dist: number[]; edges: [number, numbe
   return { dist, edges };
 }
 
-/** Merge sort on a small array, returning sorted + number of comparisons */
-export function mergeSortDemo(arr: number[]): { sorted: number[]; comparisons: number } {
+export function mergeSortDemo(arr: number[], onStep?: StepCb): { sorted: number[]; comparisons: number } {
   let comparisons = 0;
   const a = [...arr];
+  let stepIdx = 0;
 
   function merge(lo: number, mid: number, hi: number) {
     const left = a.slice(lo, mid + 1);
@@ -46,6 +48,7 @@ export function mergeSortDemo(arr: number[]): { sorted: number[]; comparisons: n
     }
     while (i < left.length) a[k++] = left[i++];
     while (j < right.length) a[k++] = right[j++];
+    if (onStep) onStep({ algo: 'merge-sort', step: stepIdx++ });
   }
 
   function sort(lo: number, hi: number) {
@@ -60,11 +63,11 @@ export function mergeSortDemo(arr: number[]): { sorted: number[]; comparisons: n
   return { sorted: a, comparisons };
 }
 
-/** BFS shortest path on a grid */
 export function bfsGridDemo(
   rows: number,
   cols: number,
   walls: [number, number][],
+  onStep?: StepCb,
 ): { path: [number, number][]; visited: number } {
   const grid: boolean[][] = Array.from({ length: rows }, () => new Array(cols).fill(false));
   for (const [r, c] of walls) grid[r][c] = true;
@@ -78,8 +81,10 @@ export function bfsGridDemo(
   let visitCount = 1;
   const dr = [0, 0, 1, -1], dc = [1, -1, 0, 0];
 
+  let bfsStep = 0;
   while (queue.length > 0) {
     const [r, c] = queue.shift()!;
+    if (onStep) onStep({ algo: 'bfs', step: bfsStep++ });
     if (r === rows - 1 && c === cols - 1) break;
     for (let d = 0; d < 4; d++) {
       const nr = r + dr[d], nc = c + dc[d];

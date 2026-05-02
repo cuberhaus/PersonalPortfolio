@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-log-relay",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dev-only Node SSE sidecar that tails docker logs for every backed demo and streams them to the in-page debug overlay.",
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs --port 9999"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

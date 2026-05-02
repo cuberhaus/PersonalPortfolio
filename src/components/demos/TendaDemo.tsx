@@ -9,6 +9,7 @@ import {
 type View = "home" | "category" | "product" | "cart" | "checkout";
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/tenda-demo";
 import MockBanner from "./MockBanner";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -141,6 +142,8 @@ const ProductIcon = () => (
 
 export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:tenda', { lang });
+  const log = useDebug('demo:tenda');
   const [view, setView] = useState<View>("home");
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
@@ -158,26 +161,31 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
   const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
 
   const goHome = useCallback(() => {
+    log.info('view', { view: 'home' });
     setView("home");
     setSelectedCategoryId(null);
     setSelectedProductId(null);
-  }, []);
+  }, [log]);
 
   const openCategory = useCallback((cat: Category) => {
+    log.info('view', { view: 'category', categoryId: cat.id });
     setSelectedCategoryId(cat.id);
     setView("category");
-  }, []);
+  }, [log]);
 
   const openProduct = useCallback((p: Product) => {
+    log.info('view', { view: 'product', productId: p.id });
     setSelectedProductId(p.id);
     setView("product");
-  }, []);
+  }, [log]);
 
   const addToCart = useCallback((productId: number, qty: number = 1) => {
+    log.info('cart-add', { productId, qty });
     setCart((prev) => ({ ...prev, [productId]: (prev[productId] ?? 0) + qty }));
-  }, []);
+  }, [log]);
 
   const updateCartQty = useCallback((productId: number, qty: number) => {
+    log.info('cart-update', { productId, qty });
     if (qty <= 0) {
       setCart((prev) => {
         const next = { ...prev };
@@ -187,17 +195,19 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
     } else {
       setCart((prev) => ({ ...prev, [productId]: qty }));
     }
-  }, []);
+  }, [log]);
 
   const removeFromCart = useCallback((productId: number) => {
+    log.info('cart-remove', { productId });
     setCart((prev) => {
       const next = { ...prev };
       delete next[productId];
       return next;
     });
-  }, []);
+  }, [log]);
 
   const placeOrder = useCallback(() => {
+    log.info('checkout', { items: Object.keys(cart).length });
     setOrderPlaced(true);
     setCart({});
     orderTimeoutRef.current = setTimeout(() => {
@@ -205,7 +215,7 @@ export default function TendaDemo({ lang = "en" }: { lang?: Lang }) {
       setView("home");
       setCheckoutForm({ name: "", email: "", address: "", userType: "guest", password: "" });
     }, 2500);
-  }, []);
+  }, [cart, log]);
 
   const category = selectedCategoryId ? MOCK_CATEGORIES.find((c) => c.id === selectedCategoryId) : null;
   const product = selectedProductId ? MOCK_PRODUCTS.find((p) => p.id === selectedProductId) : null;

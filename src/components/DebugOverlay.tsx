@@ -16,10 +16,12 @@ import {
   clearBuffer,
   isEnabled,
   emitPerf,
+  debug,
   type DebugLogEntry,
   type DebugNetworkEntry,
   type DebugPerfEntry,
   type DebugLevel,
+  type DebugSource,
 } from '../lib/debug';
 
 type Tab = 'logs' | 'state' | 'perf' | 'network';
@@ -41,6 +43,14 @@ const LEVEL_COLORS: Record<DebugLevel, string> = {
   error: '#ef4444',
 };
 
+const SOURCE_BADGE: Record<DebugSource, { label: string; bg: string; fg: string }> = {
+  browser: { label: 'B',  bg: 'rgba(99,102,241,0.18)',  fg: '#818cf8' },
+  iframe:  { label: 'I',  bg: 'rgba(20,184,166,0.18)',  fg: '#2dd4bf' },
+  backend: { label: 'BE', bg: 'rgba(244,114,182,0.18)', fg: '#f472b6' },
+};
+
+const SOURCES_ORDER: DebugSource[] = ['browser', 'iframe', 'backend'];
+
 export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayProps) {
   // Mounted client-side only (DebugInit uses `client:only="react"`), so it's
   // safe to read window globals during the initial render.
@@ -52,6 +62,9 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
   const [perf, setPerf] = useState<PerfState>({ fps: 0, memoryMb: null, navigation: null });
   const [filterText, setFilterText] = useState('');
   const [minLevel, setMinLevelState] = useState<DebugLevel>('trace');
+  const [sourceFilter, setSourceFilter] = useState<Set<DebugSource>>(
+    () => new Set(SOURCES_ORDER),
+  );
   const fpsFrameRef = useRef<number>(0);
 
   useEffect(() => {
@@ -62,6 +75,11 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
     document.addEventListener('debug:toggle', handler);
     return () => document.removeEventListener('debug:toggle', handler);
   }, []);
+
+  // NOTE: keyboard handling lives entirely in the inline script in
+  // `DebugInit.astro`. Adding a second keydown listener here would double-fire
+  // on every keypress and immediately cancel the toggle. The `debug:toggle`
+  // CustomEvent above is the single source of truth that updates this state.
 
   useEffect(() => {
     if (!enabled) return;
@@ -132,10 +150,21 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
     return logs.filter((l) => {
       const lvlIdx = ['trace', 'info', 'warn', 'error'].indexOf(l.level);
       if (lvlIdx < minIdx) return false;
+      const src = l.source ?? 'browser';
+      if (!sourceFilter.has(src)) return false;
       if (filterText && !l.ns.includes(filterText) && !l.msg.includes(filterText)) return false;
       return true;
     });
-  }, [logs, filterText, minLevel]);
+  }, [logs, filterText, minLevel, sourceFilter]);
+
+  const toggleSource = useCallback((s: DebugSource) => {
+    setSourceFilter((prev) => {
+      const next = new Set(prev);
+      if (next.has(s)) next.delete(s);
+      else next.add(s);
+      return next;
+    });
+  }, []);
 
   const copyLogs = useCallback(() => {
     const json = JSON.stringify(filteredLogs.map((l) => ({
@@ -146,6 +175,7 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
       err: l.err?.stack,
     })), null, 2);
     void navigator.clipboard?.writeText(json);
+    debug('debug:ui').trace('copy-logs', { count: filteredLogs.length });
   }, [filteredLogs]);
 
   if (!enabled) return null;
@@ -158,7 +188,7 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
         className="debug-overlay-trigger"
         aria-label={open ? 'Close debug overlay' : 'Open debug overlay'}
       >
-        DBG {open ? '×' : ''}
+        🐛{open ? ' ×' : ''}
       </button>
       {open && (
         <div className="debug-overlay-panel" role="dialog" aria-label="Debug overlay">
@@ -186,6 +216,8 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
                 minLevel={minLevel}
                 setMinLevel={setMinLevelState}
                 copy={copyLogs}
+                sourceFilter={sourceFilter}
+                toggleSource={toggleSource}
               />
             )}
             {tab === 'state' && <StateTab />}
@@ -206,9 +238,11 @@ interface LogsTabProps {
   minLevel: DebugLevel;
   setMinLevel: (l: DebugLevel) => void;
   copy: () => void;
+  sourceFilter: Set<DebugSource>;
+  toggleSource: (s: DebugSource) => void;
 }
 
-function LogsTab({ logs, filterText, setFilterText, minLevel, setMinLevel, copy }: LogsTabProps) {
+function LogsTab({ logs, filterText, setFilterText, minLevel, setMinLevel, copy, sourceFilter, toggleSource }: LogsTabProps) {
   return (
     <>
       <div className="debug-overlay-controls">
@@ -231,16 +265,55 @@ function LogsTab({ logs, filterText, setFilterText, minLevel, setMinLevel, copy 
         </select>
         <button type="button" onClick={copy} className="debug-overlay-tab">copy</button>
       </div>
+      <div className="debug-overlay-source-filter" role="group" aria-label="Source filter">
+        {SOURCES_ORDER.map((s) => {
+          const badge = SOURCE_BADGE[s];
+          const active = sourceFilter.has(s);
+          return (
+            <button
+              key={s}
+              type="button"
+              className={`debug-overlay-source-pill ${active ? 'active' : 'muted'}`}
+              onClick={() => toggleSource(s)}
+              style={{
+                background: active ? badge.bg : 'transparent',
+                color: active ? badge.fg : 'var(--text-muted)',
+                borderColor: active ? badge.fg : 'var(--border-color)',
+              }}
+            >
+              <span className="debug-overlay-source-badge" style={{ background: badge.fg }}>
+                {badge.label}
+              </span>
+              {s}
+            </button>
+          );
+        })}
+      </div>
       <div className="debug-overlay-list">
         {logs.length === 0 && <div className="debug-overlay-empty">no logs</div>}
-        {logs.slice(-200).reverse().map((l, i) => (
-          <div key={`${l.ts}-${i}`} className="debug-overlay-row">
-            <span className="debug-overlay-time">{new Date(l.ts).toISOString().slice(11, 23)}</span>
-            <span className="debug-overlay-level" style={{ color: LEVEL_COLORS[l.level] }}>{l.level}</span>
-            <span className="debug-overlay-ns">{l.ns}</span>
-            <span className="debug-overlay-msg">{l.msg}</span>
-          </div>
-        ))}
+        {logs.slice(-200).reverse().map((l, i) => {
+          const src = (l.source ?? 'browser') as DebugSource;
+          const badge = SOURCE_BADGE[src];
+          const isRateLimitMarker = l.ns.endsWith(':backend') && l.msg === 'rate-limited';
+          return (
+            <div
+              key={`${l.ts}-${i}`}
+              className={`debug-overlay-row ${isRateLimitMarker ? 'is-aggregate' : ''}`}
+            >
+              <span className="debug-overlay-time">{new Date(l.ts).toISOString().slice(11, 23)}</span>
+              <span
+                className="debug-overlay-source-badge"
+                style={{ background: badge.bg, color: badge.fg }}
+                title={`${src}${l.origin ? `: ${l.origin}` : ''}`}
+              >
+                {badge.label}
+              </span>
+              <span className="debug-overlay-level" style={{ color: LEVEL_COLORS[l.level] }}>{l.level}</span>
+              <span className="debug-overlay-ns">{l.ns}</span>
+              <span className="debug-overlay-msg">{l.msg}</span>
+            </div>
+          );
+        })}
       </div>
     </>
   );
@@ -319,17 +392,19 @@ function NetworkTab({ requests }: { requests: DebugNetworkEntry[] }) {
 const OVERLAY_STYLES = `
   .debug-overlay-trigger {
     position: fixed;
-    bottom: 1rem;
-    left: 1rem;
+    /* Stacked above ScrollToTop (which sits at bottom: 2rem; right: 2rem,
+       ~3rem tall) so neither widget overlaps. */
+    bottom: 6rem;
+    right: 2rem;
     z-index: 99000;
-    padding: 0.35rem 0.6rem;
+    padding: 0.35rem 0.55rem;
     border-radius: var(--radius-sm, 4px);
     background: var(--bg-card);
     color: var(--text-secondary);
     border: 1px solid var(--border-color);
     font-family: var(--font-mono, monospace);
-    font-size: 0.7rem;
-    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1;
     cursor: pointer;
     opacity: 0.6;
     transition: opacity 0.15s, color 0.15s, border-color 0.15s;
@@ -341,8 +416,8 @@ const OVERLAY_STYLES = `
   }
   .debug-overlay-panel {
     position: fixed;
-    bottom: 3rem;
-    left: 1rem;
+    bottom: 9rem;
+    right: 2rem;
     z-index: 99000;
     width: min(560px, calc(100vw - 2rem));
     height: min(420px, calc(100vh - 6rem));
@@ -424,6 +499,51 @@ const OVERLAY_STYLES = `
   }
   .debug-overlay-row:hover {
     background: var(--bg-secondary);
+  }
+  .debug-overlay-row.is-aggregate {
+    font-style: italic;
+    border-top: 1px dashed var(--border-color);
+    border-bottom: 1px dashed var(--border-color);
+    color: var(--text-muted);
+  }
+  .debug-overlay-source-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    padding: 0.4rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+  }
+  .debug-overlay-source-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.5rem 0.15rem 0.3rem;
+    border-radius: 999px;
+    border: 1px solid;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, opacity 0.15s;
+  }
+  .debug-overlay-source-pill.muted {
+    opacity: 0.55;
+  }
+  .debug-overlay-source-pill:hover {
+    opacity: 1;
+  }
+  .debug-overlay-source-badge {
+    display: inline-block;
+    min-width: 1.3em;
+    text-align: center;
+    padding: 0 0.35em;
+    border-radius: 3px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
   .debug-overlay-time {
     color: var(--text-muted);

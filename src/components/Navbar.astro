@@ -337,6 +337,7 @@ const links = [
         toggle.setAttribute('aria-expanded', String(nextOpen));
         links?.classList.toggle('open');
         setBodyScrollLocked(nextOpen);
+        window.__debug?.log?.('info', 'ui:nav', 'mobile-menu', { open: nextOpen });
       });
     }
 

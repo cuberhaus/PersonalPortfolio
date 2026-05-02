@@ -5,6 +5,14 @@ Stock Fast Downward does not support :fluents; ENHSP does.
 
 from __future__ import annotations
 
+# ── Phase 14 (Option A) — Sentry SDK + JSON-line stdout (no-op if missing) ─
+try:
+    from ._sentry_obs import init_observability  # type: ignore[import-not-found]
+
+    init_observability(service="planner-api")
+except ImportError:
+    pass
+
 import importlib.resources as ir
 import os
 import re

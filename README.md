@@ -54,9 +54,17 @@ One command starts everything the demos can use locally (then **Ctrl+C** tears i
 | planner-api | 8765 | `/demos/planificacion` Run planner | `planner-api/` (in this repo) — Python + Java 17+ |
 | **Astro** | 4321 | Site | this repo |
 
-Requires **bash** and **Docker**. Missing sibling repos are silently skipped. `planner-api/` ships with this project.
+Requires **bash**, **Docker**, and **jq** (registry parser). Missing sibling repos are silently skipped. `planner-api/` ships with this project.
 
 Flags: `--skip-docker`, `--skip-planner`.
+
+> **Service registry.** The list above is generated from
+> [`src/data/demo-services.json`](src/data/demo-services.json), which is the single source of
+> truth shared by `scripts/dev-all-demos.sh`, the in-page debug overlay
+> (`src/lib/debug-docker.ts`), `LiveAppEmbed.tsx`, the log relay sidecar in
+> `scripts/log-relay/`, the registry test, and
+> [`docs/adding-a-demo.md`](docs/adding-a-demo.md). Adding or removing a demo
+> means editing this JSON file plus following the onboarding checklist.
 
 **Windows:** use **WSL** or **Git Bash**, or start each stack manually.
 

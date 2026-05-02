@@ -11,6 +11,7 @@ set -euo pipefail
 
 SKIP_DOCKER=0
 SKIP_PLANNER=0
+SKIP_LOG_RELAY=0
 STOP_MODE=0
 LIST_MODE=0
 HEALTH_MODE=0
@@ -21,56 +22,133 @@ for arg in "${@:-}"; do
     --health) HEALTH_MODE=1 ;;
     --skip-docker) SKIP_DOCKER=1 ;;
     --skip-planner) SKIP_PLANNER=1 ;;
+    --skip-log-relay) SKIP_LOG_RELAY=1 ;;
     --help|-h)
-      echo "Usage: $0 [--stop] [--list] [--health] [--skip-docker] [--skip-planner]"
+      echo "Usage: $0 [--stop] [--list] [--health] [--skip-docker] [--skip-planner] [--skip-log-relay]"
       exit 0
       ;;
   esac
 done
 
 PORTFOLIO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TENDA_DIR="$(cd "$PORTFOLIO/../tenda_online" 2>/dev/null && pwd)" || TENDA_DIR=""
-DRAC_DIR="$(cd "$PORTFOLIO/../Draculin-Backend" 2>/dev/null && pwd)" || DRAC_DIR=""
-PLANNER_DIR="$(cd "$PORTFOLIO/planner-api" 2>/dev/null && pwd)" || PLANNER_DIR=""
-PROP_DIR="$(cd "$PORTFOLIO/../subgrup-prop7.1" 2>/dev/null && pwd)" || PROP_DIR=""
-TFG_DIR="$(cd "$PORTFOLIO/../TFG" 2>/dev/null && pwd)" || TFG_DIR=""
-BITSX_DIR="$(cd "$PORTFOLIO/../bitsXlaMarato" 2>/dev/null && pwd)" || BITSX_DIR=""
-PRO2_DIR="$(cd "$PORTFOLIO/../pracpro2" 2>/dev/null && pwd)" || PRO2_DIR=""
-PLANIF_DIR="$(cd "$PORTFOLIO/../Practica_de_Planificacion" 2>/dev/null && pwd)" || PLANIF_DIR=""
-DESASTRES_DIR="$(cd "$PORTFOLIO/../desastresIA" 2>/dev/null && pwd)" || DESASTRES_DIR=""
-MPIDS_DIR="$(cd "$PORTFOLIO/../projectA" 2>/dev/null && pwd)" || MPIDS_DIR=""
-PHASE_DIR="$(cd "$PORTFOLIO/../projectA2" 2>/dev/null && pwd)" || PHASE_DIR=""
-CAIM_DIR="$(cd "$PORTFOLIO/../CAIM" 2>/dev/null && pwd)" || CAIM_DIR=""
-JOCEDA_DIR="$(cd "$PORTFOLIO/../joc_eda" 2>/dev/null && pwd)" || JOCEDA_DIR=""
-SBCIA_DIR="$(cd "$PORTFOLIO/../SBC_IA" 2>/dev/null && pwd)" || SBCIA_DIR=""
-PAR_DIR="$(cd "$PORTFOLIO/../PAR" 2>/dev/null && pwd)" || PAR_DIR=""
-ROB_DIR="$(cd "$PORTFOLIO/../ROB" 2>/dev/null && pwd)" || ROB_DIR=""
-FIB_DIR="$(cd "$PORTFOLIO/../fib" 2>/dev/null && pwd)" || FIB_DIR=""
-GRAFICS_DIR="$(cd "$PORTFOLIO/../fib/G/web" 2>/dev/null && pwd)" || GRAFICS_DIR=""
+REGISTRY_FILE="${PORTFOLIO}/src/data/demo-services.json"
 
-# ── Single source of truth: all services (name|port|type|dir|compose-file|extra) ──
-# type: compose, run, process
-# "extra" carries display notes like "(GPU)" or "(Flutter) API :8889"
-SERVICE_REGISTRY=(
-  "Tenda Online|8888|compose|${TENDA_DIR}|docker/docker-compose.yml|"
-  "Draculin|8890|compose|${DRAC_DIR}|docker-compose.yml|(Flutter) API :8889"
-  "TFG|8082|compose|${TFG_DIR}|docker-compose.yml|"
-  "bitsXlaMarato|8001|compose|${BITSX_DIR}|docker-compose.yml|(GPU)"
-  "DesastresIA|8083|compose|${DESASTRES_DIR}|docker-compose.yml|"
-  "MPIDS|8084|compose|${MPIDS_DIR}|docker-compose.yml|"
-  "PhaseTransitions|8085|compose|${PHASE_DIR}|docker-compose.yml|"
-  "CAIM|8086|compose|${CAIM_DIR}|docker-compose.yml|"
-  "JocEDA|8087|compose|${JOCEDA_DIR}|docker-compose.yml|"
-  "SBC_IA|8088|compose|${SBCIA_DIR}|docker-compose.yml|"
-  "PAR|8089|compose|${PAR_DIR}|docker-compose.yml|"
-  "ROB|8092|compose|${ROB_DIR}|docker-compose.yml|"
-  "FIB|8090|compose|${FIB_DIR}|docker-compose.yml|"
-  "Grafics|8093|compose|${GRAFICS_DIR}|docker-compose.yml|"
-  "pracpro2|8000|run|${PRO2_DIR}|pracpro2|portfolio-pro2"
-  "Planificacion|3000|run|${PLANIF_DIR}|practica-planificacion|portfolio-planif"
-  "PROP|8081|process|||Spring Boot"
-  "planner-api|8765|process|||ENHSP"
+# ── Phase 14 (Option A): propagate the shared Sentry DSN to every backend ──
+# `.env.shared` is gitignored. Copy `.env.shared.example` to `.env.shared`,
+# fill in your DSN, and re-run. Without it, backends initialise their SDK
+# with an empty DSN and silently no-op (so `make dev-all` keeps working).
+if [[ -f "${PORTFOLIO}/.env.shared" ]]; then
+  set -a
+  # shellcheck source=/dev/null
+  source "${PORTFOLIO}/.env.shared"
+  set +a
+fi
+export SENTRY_DSN="${SENTRY_DSN:-}"
+export SENTRY_ENVIRONMENT="${SENTRY_ENVIRONMENT:-local-dev}"
+export SENTRY_TRACES_SAMPLE_RATE="${SENTRY_TRACES_SAMPLE_RATE:-1.0}"
+export SENTRY_RELEASE="${SENTRY_RELEASE:-local-dev}"
+
+# ── Single source of truth: src/data/demo-services.json ──────────────────
+# Build the SERVICE_REGISTRY array dynamically from the JSON via jq.
+# Format kept identical to the previous static array (so existing logic below
+# keeps working): "displayName|port|type|dir|composeFileOrImage|extra"
+#   - type: compose | run | process
+#   - dir : absolute path resolved from composeFile / makefile (or empty for
+#           process services like PROP / planner-api)
+#   - composeFileOrImage: relative compose path for compose; image name for run;
+#                         empty for process
+#   - extra: display annotation (e.g. "(GPU)") for compose / process,
+#            or container name for run
+if ! command -v jq >/dev/null 2>&1; then
+  echo "ERROR: jq is required to read ${REGISTRY_FILE}." >&2
+  echo "       Install with: sudo apt install jq  (or brew install jq)" >&2
+  exit 1
+fi
+if [[ ! -f "$REGISTRY_FILE" ]]; then
+  echo "ERROR: registry file not found: ${REGISTRY_FILE}" >&2
+  exit 1
+fi
+
+PLANNER_DIR="$(cd "$PORTFOLIO/planner-api" 2>/dev/null && pwd)" || PLANNER_DIR=""
+
+# Splits a "../<repo>/<rest>" path into ($repo_abs, $file_relative_to_repo).
+# Echoes "ABSDIR<TAB>FILE" or "<TAB>" when input is empty/null.
+_split_repo_path() {
+  local rel="$1"
+  if [[ -z "$rel" || "$rel" == "null" ]]; then
+    printf "\t"; return
+  fi
+  if [[ "$rel" =~ ^\.\./([^/]+)/(.+)$ ]]; then
+    local repo="${BASH_REMATCH[1]}"
+    local file="${BASH_REMATCH[2]}"
+    local abs
+    abs="$(cd "${PORTFOLIO}/../${repo}" 2>/dev/null && pwd)" || abs=""
+    printf "%s\t%s" "$abs" "$file"
+    return
+  fi
+  printf "\t%s" "$rel"
+}
+
+# Use ASCII unit separator (\x1f) instead of tab to avoid bash IFS collapsing
+# multiple consecutive whitespace separators into one.
+_US=$'\x1f'
+SERVICE_REGISTRY=()
+while IFS="$_US" read -r slug type display port compose_path makefile_path image extra container; do
+  [[ -z "$type" || "$type" == "null" ]] && continue
+  case "$type" in
+    compose)
+      pair=$(_split_repo_path "$compose_path")
+      compose_dir="${pair%$'\t'*}"
+      compose_file="${pair#*$'\t'}"
+      SERVICE_REGISTRY+=("${display}|${port}|compose|${compose_dir}|${compose_file}|${extra}")
+      ;;
+    run)
+      pair=$(_split_repo_path "$makefile_path")
+      run_dir="${pair%$'\t'*}"
+      SERVICE_REGISTRY+=("${display}|${port}|run|${run_dir}|${image}|${container}")
+      ;;
+    process)
+      SERVICE_REGISTRY+=("${display}|${port}|process|||${extra}")
+      ;;
+  esac
+done < <(
+  jq -r --arg US "$_US" '
+    .services[]
+    | select(.hasBackend == true and .backend.orchestrator)
+    | [
+        .slug,
+        .backend.orchestrator.type,
+        .backend.orchestrator.displayName,
+        (.backend.port | tostring),
+        (.backend.composeFile // ""),
+        (.backend.makefile // ""),
+        (.backend.orchestrator.image // ""),
+        (.backend.orchestrator.extra // ""),
+        (.backend.container // "")
+      ]
+    | join($US)
+  ' "$REGISTRY_FILE"
 )
+
+# Convenience: per-repo absolute paths used later (referenced by Makefile etc)
+_pp() { local r="$1"; cd "$PORTFOLIO/../$r" 2>/dev/null && pwd || echo ""; }
+TENDA_DIR="$(_pp tenda_online)"
+DRAC_DIR="$(_pp Draculin-Backend)"
+PROP_DIR="$(_pp subgrup-prop7.1)"
+TFG_DIR="$(_pp TFG)"
+BITSX_DIR="$(_pp bitsXlaMarato)"
+PRO2_DIR="$(_pp pracpro2)"
+PLANIF_DIR="$(_pp Practica_de_Planificacion)"
+DESASTRES_DIR="$(_pp desastresIA)"
+MPIDS_DIR="$(_pp projectA)"
+PHASE_DIR="$(_pp projectA2)"
+CAIM_DIR="$(_pp CAIM)"
+JOCEDA_DIR="$(_pp joc_eda)"
+SBCIA_DIR="$(_pp SBC_IA)"
+PAR_DIR="$(_pp PAR)"
+ROB_DIR="$(_pp ROB)"
+FIB_DIR="$(_pp fib)"
+GRAFICS_DIR="$(cd "$PORTFOLIO/../fib/G/web" 2>/dev/null && pwd)" || GRAFICS_DIR=""
 
 # ── List mode: print "name:port" pairs (consumed by Makefile) ────────────
 if [[ "$STOP_MODE" == 0 ]] && [[ "${LIST_MODE:-0}" == 1 ]]; then
@@ -102,6 +180,7 @@ fi
 # ── Stop mode: tear down everything in parallel, then exit ───────────────
 if [[ "$STOP_MODE" == 1 ]]; then
   echo "Stopping portfolio demo services..."
+  fuser -k "${LOG_RELAY_PORT:-9999}/tcp" 2>/dev/null || true
   (
     for entry in "${SERVICE_REGISTRY[@]}"; do
       IFS='|' read -r name port type dir file extra <<< "$entry"
@@ -127,9 +206,16 @@ fi
 # ── Runtime state flags (only used by dev / cleanup) ─────────────────────
 PLANNER_PID=""
 PROP_PID=""
+LOG_RELAY_PID=""
 
 cleanup() {
   local ec=${1:-0}
+  if [[ -n "${LOG_RELAY_PID}" ]] && kill -0 "$LOG_RELAY_PID" 2>/dev/null; then
+    echo ""
+    echo "Stopping log-relay (pid $LOG_RELAY_PID)..."
+    kill "$LOG_RELAY_PID" 2>/dev/null || true
+    wait "$LOG_RELAY_PID" 2>/dev/null || true
+  fi
   if [[ -n "${PLANNER_PID}" ]] && kill -0 "$PLANNER_PID" 2>/dev/null; then
     echo ""
     echo "Stopping planner-api (pid $PLANNER_PID)..."
@@ -234,17 +320,25 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
     }
 
     # Helper: launch a docker run service in the background (build-if-missing)
+    # Passes through SENTRY_* env vars so the per-backend SDKs (Phase 14) can
+    # initialise themselves if PersonalPortfolio/.env.shared sets a DSN.
     _docker_run() {
       local name="$1" url="$2" dir="$3" image="$4" port="$5" container="$6"
+      local sentry_env=(
+        -e "SENTRY_DSN=${SENTRY_DSN:-}"
+        -e "SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-local-dev}"
+        -e "SENTRY_TRACES_SAMPLE_RATE=${SENTRY_TRACES_SAMPLE_RATE:-1.0}"
+        -e "SENTRY_RELEASE=${SENTRY_RELEASE:-local-dev}"
+      )
       if [[ -d "${dir}" ]]; then
         echo "==> ${name}  ${url}  (docker run)"
         (
           docker rm -f "$container" 2>/dev/null || true
           _free_port "${port}"
-          docker run -d --rm -p "${port}:${port}" --name "$container" "$image" 2>/dev/null || {
+          docker run -d --rm -p "${port}:${port}" "${sentry_env[@]}" --name "$container" "$image" 2>/dev/null || {
             echo "    [${name}] Building image first..." >&2
             (cd "$dir" && docker build -t "$image" .) >/dev/null 2>&1 && \
-              docker run -d --rm -p "${port}:${port}" --name "$container" "$image" 2>/dev/null || \
+              docker run -d --rm -p "${port}:${port}" "${sentry_env[@]}" --name "$container" "$image" 2>/dev/null || \
               echo "    warning: ${name} docker run failed" >&2
           }
         ) &
@@ -334,6 +428,24 @@ if [[ "$SKIP_PLANNER" == 0 ]]; then
   fi
 else
   echo "==> planner-api skipped (--skip-planner)"
+  echo ""
+fi
+
+# --- log-relay (SSE sidecar) ---
+if [[ "$SKIP_LOG_RELAY" == 0 ]]; then
+  if command -v node >/dev/null 2>&1; then
+    LOG_RELAY_PORT="${LOG_RELAY_PORT:-9999}"
+    echo "==> log-relay        http://127.0.0.1:${LOG_RELAY_PORT}  (debug overlay sink)"
+    fuser -k "${LOG_RELAY_PORT}/tcp" 2>/dev/null || true
+    (cd "$PORTFOLIO" && node scripts/log-relay/index.mjs --port "$LOG_RELAY_PORT") &
+    LOG_RELAY_PID=$!
+    echo ""
+  else
+    echo "==> log-relay skipped (node not installed)"
+    echo ""
+  fi
+else
+  echo "==> log-relay skipped (--skip-log-relay)"
   echo ""
 fi
 

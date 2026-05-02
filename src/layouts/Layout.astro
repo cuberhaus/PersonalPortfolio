@@ -4,6 +4,7 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import ScrollToTop from '../components/ScrollToTop.astro';
 import ThemeInit from '../components/ThemeInit.astro';
 import DebugInit from '../components/DebugInit.astro';
+import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
 
 interface Props {
@@ -101,6 +102,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
       </button>
     </div>
     <ScrollToTop />
+    <DebugMount />
     <style>
       .main-bottom-design {
         display: none;
@@ -162,6 +164,38 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
         document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => {
           observer.observe(el);
         });
+      });
+    </script>
+
+    <script>
+      // Page-load nav log: emit one info entry per route. Gated on
+      // window.__debug being available so we don't lose events when
+      // astro:page-load fires before lib/debug.ts hydrates.
+      document.addEventListener('astro:page-load', () => {
+        try {
+          const w = window as unknown as { __debug?: { log: (l: string, ns: string, msg: string, ...a: unknown[]) => void } };
+          if (!w.__debug) return;
+          w.__debug.log('info', 'nav', 'navigated', {
+            path: location.pathname,
+            search: location.search,
+            lang: document.documentElement.lang,
+            title: document.title,
+          });
+        } catch {
+        }
+      });
+    </script>
+
+    <script>
+      // Open SSE streams from the dev-only log relay for every visible
+      // [data-demo-slug] element on the page. Production builds never
+      // open these connections (requireEnabled() inside subscribeAllVisible).
+      document.addEventListener('astro:page-load', async () => {
+        try {
+          const mod = await import('../lib/debug-docker');
+          mod.subscribeAllVisible();
+        } catch {
+        }
       });
     </script>
   </body>

@@ -13,8 +13,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import {
   debug,
+  emitFrom,
   emitNetwork,
   emitPerf,
+  isEnabled,
+  requireEnabled,
   subscribe,
   getBuffer,
   clearBuffer,
@@ -206,5 +209,67 @@ describe('console mirror in dev', () => {
     debug('test').info('hello', { meta: 1 });
     expect(spy).toHaveBeenCalledWith('[test]', 'hello', { meta: 1 });
     spy.mockRestore();
+  });
+
+  it('prefixes non-browser sources with the source tag', () => {
+    const spy = vi.spyOn(console, 'info').mockImplementation(() => {});
+    emitFrom('backend', 'tfg-polyps', 'info', 'demo:tfg-polyps:backend', 'served', []);
+    expect(spy).toHaveBeenCalledWith('[backend:demo:tfg-polyps:backend]', 'served');
+    spy.mockRestore();
+  });
+});
+
+describe('source / origin attribution (Phase 13)', () => {
+  it('defaults source to "browser" for `debug(ns).<level>(...)` calls', () => {
+    const seen: DebugLogEntry[] = [];
+    subscribe('log', (d) => {
+      if (d.type === 'log') seen.push(d.entry);
+    });
+    debug('demo:rob').info('mount');
+    expect(seen).toHaveLength(1);
+    expect(seen[0].source).toBe('browser');
+    expect(seen[0].origin).toBeUndefined();
+  });
+
+  it('emitFrom("iframe", origin, ...) tags the entry with iframe + origin', () => {
+    const seen: DebugLogEntry[] = [];
+    subscribe('log', (d) => {
+      if (d.type === 'log') seen.push(d.entry);
+    });
+    emitFrom('iframe', 'http://localhost:8092', 'info', 'iframe:demo:rob', 'frame-load', []);
+    expect(seen).toHaveLength(1);
+    expect(seen[0].source).toBe('iframe');
+    expect(seen[0].origin).toBe('http://localhost:8092');
+    expect(seen[0].ns).toBe('iframe:demo:rob');
+  });
+
+  it('emitFrom("backend", slug, ...) tags the entry with backend + slug', () => {
+    const seen: DebugLogEntry[] = [];
+    subscribe('log', (d) => {
+      if (d.type === 'log') seen.push(d.entry);
+    });
+    emitFrom('backend', 'tfg-polyps', 'warn', 'demo:tfg-polyps:backend', 'slow query', [{ ms: 4200 }]);
+    expect(seen).toHaveLength(1);
+    expect(seen[0].source).toBe('backend');
+    expect(seen[0].origin).toBe('tfg-polyps');
+    expect(seen[0].level).toBe('warn');
+  });
+
+  it('respects level/namespace gating for emitFrom too', () => {
+    setMinLevel('warn');
+    const seen: DebugLogEntry[] = [];
+    subscribe('log', (d) => {
+      if (d.type === 'log') seen.push(d.entry);
+    });
+    emitFrom('backend', 'x', 'info', 'demo:x:backend', 'ignored', []);
+    emitFrom('backend', 'x', 'error', 'demo:x:backend', 'kept', []);
+    expect(seen.map((e) => e.level)).toEqual(['error']);
+  });
+});
+
+describe('requireEnabled() helper', () => {
+  it('returns true in import.meta.env.DEV (vitest default)', () => {
+    expect(requireEnabled()).toBe(true);
+    expect(isEnabled()).toBe(true);
   });
 });

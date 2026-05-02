@@ -8,6 +8,10 @@ import { getAirports, ROUTES_ADJ, type Airport } from '../../../lib/caim/airport
 import { computePageRank, type PageRankResult, type InitStrategy } from '../../../lib/caim/pagerank';
 import { T } from '../../../i18n/demos/caim-pagerank';
 import { getThemeColors } from '../../../lib/demo-theme';
+import { debug } from '../../../lib/debug';
+
+const netLog = debug('net:caim');
+const demoLog = debug('demo:caim');
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -28,7 +32,7 @@ export default function PageRankTab({ lang }: Props) {
 
   const runPageRank = useCallback(() => {
     setComputing(true);
-    // Use requestAnimationFrame to let UI update before heavy computation
+    demoLog.info('pagerank-run', { damping, init: initStrategy });
     requestAnimationFrame(() => {
       const airports = getAirports();
       const nodes = airports.map((a) => a.code);
@@ -39,6 +43,7 @@ export default function PageRankTab({ lang }: Props) {
       const res = computePageRank({ adj, nodes, damping, initStrategy, maxIterations: 200, tolerance: 1e-10 });
       setResult(res);
       setComputing(false);
+      demoLog.info('pagerank-done', { iterations: res.convergence?.length, damping, init: initStrategy });
     });
   }, [damping, initStrategy]);
 
@@ -178,7 +183,9 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
       .attr('fill', tc.borderColor)
       .attr('stroke', tc.borderColorHover)
       .attr('stroke-width', 0.5);
-  } catch { /* offline fallback: just graticule */ }
+  } catch (err) {
+    netLog.warn('world-atlas-failed', { url: WORLD_URL, err: String(err) });
+  }
 
   const airportMap = new Map(airports.map((a) => [a.code, a]));
   const maxScore = result.rankings[0]?.score ?? 1;

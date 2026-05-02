@@ -331,6 +331,308 @@ the heaviest.
 
 ---
 
+## Backend observability options (for Docker-served demos)
+
+The original `## Recommendation` above only addressed the **frontend**. Once
+the centralized debugging scope was extended to capture logs from the 18
+Docker backends consumed by the portfolio (Draculin, TFG, MPIDS, BitsX,
+Spring `prop`, Tenda PHP, etc.), a new decision opened up: **what stack
+should those backends use to talk to the same observability surface?**
+
+The portfolio backends span 9 different language stacks (FastAPI, Django,
+Flask, Spring Boot, SvelteKit, Rust/axum, Go, Node, PHP), so any choice has
+to cover all of them.
+
+### Why this is a separate decision
+
+- The frontend choice (Sentry hosted) was driven by **session replay** and
+  **error grouping** — features that are uniquely strong in Sentry.
+- The backend choice can either match the frontend (shared dashboard, more
+  vendor lock-in) or diverge (lower lock-in, more dashboards to operate).
+- A "no third-party at all on the backend" path is also viable since the
+  portfolio backends only run in dev/showcase mode — production errors come
+  from the static frontend.
+
+### Lock-in vocabulary
+
+| Lock-in level | Meaning |
+|---|---|
+| **Hard** | Migrating away requires re-instrumenting every call site (e.g. session replay, error grouping UI). |
+| **Medium** | Migrating away means swapping SDKs and rebuilding dashboards but keeping call sites mostly intact. |
+| **Soft** | Migrating away means changing one URL or DSN. |
+| **None** | Pure stdout / standard formats; portable to anything that can read JSON lines. |
+
+The Sentry SDK's lock-in is "medium" — it's open-source (MIT/BSD), the data
+flow is also OSS (you can self-host Sentry or use GlitchTip with the same
+SDK), but session replay and error grouping are unique enough that you'd
+lose them on full migration to OTel + Grafana.
+
+### Option A — Sentry SDKs in every backend (matches frontend)
+
+**Architecture**: same as the frontend choice, extended through the
+backends. One Sentry org, multiple projects (or one shared project with
+`tags.service = <slug>`). Backends emit errors, breadcrumbs, and traces
+into the same dashboard the browser uses.
+
+```mermaid
+flowchart LR
+    browser["Astro frontend"] -->|"@sentry/astro"| sentry["Sentry hosted"]
+    fastapi["FastAPI backend"] -->|"sentry-sdk[fastapi]"| sentry
+    django["Django backend"] -->|"sentry-sdk[django]"| sentry
+    spring["Spring Boot backend"] -->|"sentry-spring-boot-starter"| sentry
+    rust["Rust axum backend"] -->|"sentry, sentry-tower"| sentry
+    others["...6 more backend stacks"] -->|"language SDK"| sentry
+    sentry --> dash["Single dashboard with replay + traces"]
+```
+
+**Lock-in**: medium (mitigated by the option to self-host Sentry later).
+
+**Free tier**: shared with frontend — 5K errors / 50 replays / 10K spans
+per month per Sentry org. For a portfolio this is plenty.
+
+**Per-backend changes** (all approximate):
+
+| Stack | Package | Init lines | Example |
+|---|---|---|---|
+| FastAPI | `sentry-sdk[fastapi]` | ~5 | `sentry_sdk.init(dsn=DSN, traces_sample_rate=0.1)` then `app.add_middleware(SentryAsgiMiddleware)` |
+| Django | `sentry-sdk[django]` | ~3 in `settings.py` | `sentry_sdk.init(dsn=DSN, integrations=[DjangoIntegration()], traces_sample_rate=0.1)` |
+| Flask | `sentry-sdk[flask]` | ~5 | Same pattern as FastAPI with `FlaskIntegration()` |
+| Spring Boot | `sentry-spring-boot-starter` | ~3 yaml | `sentry.dsn`, `sentry.traces-sample-rate` in `application.yml` |
+| SvelteKit | `@sentry/sveltekit` | ~5 | `Sentry.init({...})` in `hooks.server.ts` and `hooks.client.ts` |
+| Rust (axum) | `sentry`, `sentry-tower` | ~10 | `let _guard = sentry::init((DSN, ...))` + `ServiceBuilder::new().layer(NewSentryLayer)` |
+| Go | `sentry-go`, `sentry-go-http` | ~10 | `sentry.Init(sentry.ClientOptions{Dsn: DSN})` + `sentryhttp.New()` middleware |
+| Node | `@sentry/node` | ~5 | `Sentry.init({...})` + `Sentry.Handlers.requestHandler()` middleware |
+| PHP (Tenda) | `sentry/sentry` | ~5 | `Sentry\init(['dsn' => DSN])` early in `bootstrap.php` |
+
+**What also changes**:
+
+- Add a `SENTRY_DSN` env var to each backend's docker-compose service.
+- Add a `SENTRY_ENVIRONMENT=local-dev` (or `production`) env var.
+- Update each project's README with a one-line "Sentry is on" note.
+- Update [`scripts/dev-all-demos.sh`](../scripts/dev-all-demos.sh) to source a
+  shared `.env` for the DSN.
+- The local relay (Phase 9 of the implementation plan) still runs and
+  captures stdout into the in-page overlay — Sentry is the **persistent**
+  dashboard; the overlay remains the **immediate** view.
+
+### Option B — OpenTelemetry + Grafana Cloud (replace frontend Sentry too)
+
+**Architecture**: vendor-neutral telemetry. Browser uses Grafana Faro
+(OTel-based); backends use language-specific OTel SDKs. All data flows
+into Grafana Cloud's free tier (Loki for logs, Tempo for traces, Mimir
+for metrics) with Grafana for dashboards.
+
+```mermaid
+flowchart LR
+    browser["Astro frontend"] -->|"@grafana/faro-web-sdk"| collector["OTel Collector (or direct OTLP)"]
+    fastapi["FastAPI backend"] -->|"opentelemetry-instrument-fastapi"| collector
+    django["Django backend"] -->|"opentelemetry-instrumentation-django"| collector
+    spring["Spring Boot backend"] -->|"opentelemetry-spring-boot"| collector
+    others["...6 more backend stacks"] -->|"OTel SDK"| collector
+    collector -->|"OTLP HTTP/gRPC"| grafana["Grafana Cloud (Loki + Tempo + Mimir)"]
+    grafana --> dash["Custom dashboards, LogQL, TraceQL"]
+```
+
+**Lock-in**: low (W3C standard format; can swap any backend or vendor).
+
+**Free tier**: Grafana Cloud free — 50 GB logs, 50 GB traces, 14-day
+retention. Generous. No replay equivalent on the free tier (Faro has
+a session-replay add-on but it's beta).
+
+**What you lose vs Option A**:
+
+- Sentry session replay (timeline-aligned DOM mutations).
+- Sentry error grouping with auto-deduplication.
+- The polished error inbox UI.
+
+**What you gain**:
+
+- Build any dashboard you want with PromQL/LogQL/TraceQL.
+- Trivial swap to Honeycomb, Datadog, New Relic, Jaeger, self-hosted Tempo,
+  etc. — all speak OTLP.
+- Single standardised wire format for browser, iframe, and 9 backend stacks.
+
+**Per-backend changes**:
+
+| Stack | Package | Init lines |
+|---|---|---|
+| FastAPI | `opentelemetry-instrumentation-fastapi`, `opentelemetry-exporter-otlp` | ~10 |
+| Django | `opentelemetry-instrumentation-django` | ~10 |
+| Flask | `opentelemetry-instrumentation-flask` | ~10 |
+| Spring Boot | `opentelemetry-spring-boot-starter` (auto-config) | ~3 yaml |
+| SvelteKit | `@opentelemetry/sdk-node` + auto-instrumentations | ~15 |
+| Rust (axum) | `opentelemetry`, `tracing-opentelemetry`, `opentelemetry-otlp` | ~20 |
+| Go | `go.opentelemetry.io/otel`, `otelhttp` middleware | ~15 |
+| Node | `@opentelemetry/sdk-node`, `@opentelemetry/auto-instrumentations-node` | ~10 |
+| PHP | `open-telemetry/sdk`, `open-telemetry/instrumentation-symfony` | ~15 |
+
+**Frontend changes**:
+
+- Remove `@sentry/astro` and the [`sentry.client.config.ts`](../sentry.client.config.ts)
+  / [`sentry.server.config.ts`](../sentry.server.config.ts) files.
+- Add `@grafana/faro-web-sdk` and `@grafana/faro-web-tracing`.
+- Replace [`src/lib/debug-sentry.ts`](../src/lib/debug-sentry.ts) with a Faro
+  forwarder that maps bus events to `faro.api.pushLog`/`pushError`.
+- Set up `OTEL_EXPORTER_OTLP_ENDPOINT` in every backend env.
+
+**Migration cost**: ~6 hours — substantial because the frontend choice
+also flips. Only do this if you really want vendor neutrality.
+
+### Option C — Hybrid (Sentry frontend + OTel backends, dual export)
+
+**Architecture**: keep Sentry on the frontend (where session replay is
+worth the lock-in) and use OTel on the backends. An OTel Collector
+duplicates traffic: spans go to both Sentry (so you keep one trace ID
+across browser + backend) and Grafana Tempo (for vendor-neutral storage).
+
+```mermaid
+flowchart LR
+    browser["Astro frontend"] -->|"@sentry/astro"| sentry["Sentry hosted"]
+    fastapi["FastAPI backend"] -->|"OTel SDK"| collector["OTel Collector"]
+    django["Django backend"] -->|"OTel SDK"| collector
+    others["...7 more backends"] -->|"OTel SDK"| collector
+    collector -->|"sentry exporter"| sentry
+    collector -->|"OTLP"| grafana["Grafana Cloud"]
+    sentry --> sd["Errors + replay + tracing"]
+    grafana --> gd["Custom dashboards + LogQL"]
+```
+
+**Lock-in**: low on backends (OTel), medium on frontend (Sentry).
+
+**Free tier**: shared between Sentry (frontend) and Grafana Cloud (backends).
+
+**Pros**:
+
+- Keep the polished frontend experience.
+- Keep distributed tracing across the boundary because Sentry has an
+  official OTLP ingestion endpoint.
+- Backends are vendor-neutral; if you want to drop Sentry later, the
+  backend instrumentation already speaks OTel.
+
+**Cons**:
+
+- Two dashboards to learn.
+- An OTel Collector to deploy and maintain (Docker container, ~20 MB).
+- Configuration drift risk between the two exporters.
+
+**Per-backend changes**: same as Option B (OTel SDKs).
+
+**Additional changes**:
+
+- New service in [`scripts/log-relay/`](../scripts/log-relay/) or a sibling
+  folder: `scripts/otel-collector/` with a `config.yaml` that exports to
+  both Sentry and Grafana. Runs as a Docker container.
+- [`scripts/dev-all-demos.sh`](../scripts/dev-all-demos.sh) starts the
+  collector before backends.
+- Set `OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318` in every
+  backend's env.
+
+**Migration cost**: ~8 hours — most complex of the four.
+
+### Option D — Structured stdout only (no SDK in any backend)
+
+**Architecture**: backends emit JSON lines to stdout; the existing local
+relay parses them; the in-page overlay renders them. **Production errors
+remain Sentry-frontend-only.** The relay is dev-only — production
+backends are not deployed.
+
+```mermaid
+flowchart LR
+    browser["Astro frontend"] -->|"@sentry/astro"| sentry["Sentry hosted"]
+    fastapi["FastAPI backend"] -->|"JSON stdout"| relay["log-relay (dev only)"]
+    others["...8 more backends"] -->|"JSON stdout"| relay
+    relay -->|"SSE"| overlay["DebugOverlay panel"]
+```
+
+**Lock-in**: none on backends, medium on frontend (unchanged from current
+state).
+
+**Free tier**: irrelevant — no third-party for backends.
+
+**Pros**:
+
+- Zero per-backend SDK install.
+- Zero ongoing maintenance for backend observability.
+- Backends print useful JSON logs anyway, which is good practice.
+- Trivial migration to any SDK later.
+
+**Cons**:
+
+- No backend errors in any persistent dashboard. (For a portfolio this is
+  often fine — the backends only matter when you're actively demoing.)
+- No distributed tracing.
+- No source-mapped backend stack traces.
+
+**Per-backend changes** (Tier 1 from the implementation plan):
+
+| Stack | Logger | Init |
+|---|---|---|
+| FastAPI / Flask | `python-json-logger` | `logging.getLogger().handlers[0].setFormatter(JsonFormatter())` + ASGI middleware that injects `request_id` |
+| Django | `LOGGING` config | Built-in JSON formatter via `python-json-logger`; `MIDDLEWARE` adds `RequestIdMiddleware` |
+| Spring Boot | `logback-spring.xml` | `<encoder class="net.logstash.logback.encoder.LogstashEncoder"/>` + `OncePerRequestFilter` for request id |
+| SvelteKit | `pino` | `hooks.server.ts` middleware + `pino-http` |
+| Rust (axum) | `tracing-subscriber` | JSON layer + `TraceLayer` extracting `x-request-id` |
+| Go | `slog` | `slog.NewJSONHandler(os.Stdout, ...)` + middleware that injects request id |
+| Node | `pino` | `pino()` + `pino-http()` middleware |
+| PHP (Tenda) | wrapper | small `json_log()` helper that calls `error_log(json_encode([...]))` |
+
+**Common to all**: every backend's Dockerfile sets the appropriate
+unbuffered-output env (`PYTHONUNBUFFERED=1`, `JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8`,
+etc.) so the relay sees lines immediately.
+
+### Comparison table
+
+| Axis | Option A (Sentry all) | Option B (OTel + Grafana) | Option C (Hybrid) | Option D (stdout only) |
+|---|---|---|---|---|
+| Browser stack | Sentry (unchanged) | Faro (replaces Sentry) | Sentry (unchanged) | Sentry (unchanged) |
+| Backend stack | Sentry SDKs | OTel SDKs | OTel SDKs | none (stdout) |
+| Dashboards | 1 | 1 | 2 | 0 (overlay only) |
+| Distributed tracing | Yes | Yes | Yes (via dual export) | No |
+| Session replay | Yes | No (Faro beta) | Yes | Yes (frontend only) |
+| Backend errors in production | If backends run in prod | If backends run in prod | If backends run in prod | No |
+| Lock-in (frontend) | Medium | Low | Medium | Medium |
+| Lock-in (backend) | Medium | Low | Low | None |
+| Setup time | ~3 h across 9 stacks | ~6 h (front + back) | ~8 h | ~2 h across 9 stacks |
+| Ongoing maintenance | Near zero | Collector + dashboards | Collector + dashboards | Near zero |
+| Free tier headroom | Comfortable | Very comfortable | Comfortable on both | N/A |
+
+### Recommended choice for this portfolio
+
+For a personal portfolio with 18 demos, mostly browsed in dev / showcase
+mode:
+
+- **If you keep Sentry on the frontend (current state)**: pick **Option A**.
+  Lowest cost-of-change, single dashboard, polished UI. The lock-in concern
+  is hypothetical for portfolio scope and reversible later.
+- **If you want vendor neutrality more than polish**: pick **Option B** —
+  but accept the work to also rip out Sentry on the frontend. Half-measures
+  (Sentry on frontend, OTel on backend, no collector to bridge) split your
+  observability and aren't worth it.
+- **If you don't care about persistent backend observability**: pick
+  **Option D**. Backends only matter when you're at the keyboard demoing,
+  and the in-page overlay is enough for that.
+- **Skip Option C** unless you're specifically planning to migrate off
+  Sentry and want to instrument backends cleanly first.
+
+### What does NOT need to change regardless of option
+
+- The bus pattern in [`src/lib/debug.ts`](../src/lib/debug.ts) — it's the
+  producer surface for browser code; it doesn't care what subscribers do
+  with the events.
+- The local relay in `scripts/log-relay/` — it tails Docker stdout for the
+  in-page overlay; that's useful in every option (most useful in D, least
+  in B where Faro/OTel can also surface things, but still nice for
+  immediate feedback at the laptop).
+- The iframe forwarder in [`src/lib/debug-iframe.ts`](../src/lib/debug-iframe.ts)
+  (Phase 8 of the plan) — boundary-only postMessage receiver, agnostic to
+  the backend stack chosen.
+- The service registry [`src/data/demo-services.json`](../src/data/demo-services.json) —
+  its `stack` field becomes more useful in Options A/B/C because the
+  onboarding doc snippets diverge per stack, but the file itself is the
+  same.
+
+---
+
 ## Sketch of the chosen design
 
 ```

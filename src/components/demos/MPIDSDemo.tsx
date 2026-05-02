@@ -13,6 +13,11 @@ import {
 } from "../../lib/mpids";
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/mpidsdemo";
+import { debug } from "../../lib/debug";
+import { useDemoLifecycle } from "../../lib/useDebug";
+
+const log = debug("net:mpids");
+const demoLog = debug("demo:mpids");
 
 type Lang = "en" | "es" | "ca";
 
@@ -100,6 +105,7 @@ interface Tooltip {
 
 export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:mpids', { lang });
   const [graphText, setGraphText] = useState<string | null>(null);
   const [graph, setGraph] = useState<Graph | null>(null);
   const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
@@ -134,7 +140,7 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     setGraph(g);
     const iters = g.n <= 50 ? 400 : g.n <= 200 ? 250 : 150;
     setLayoutIter(iters);
-    setPositions(forceLayout(g, SVG_W, SVG_H, iters));
+    setPositions(forceLayout(g, SVG_W, SVG_H, iters, ({ i, energy }) => demoLog.trace('layout-iter', { i, energy })));
   }, []);
 
   // Load default sample on mount
@@ -154,6 +160,7 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
 
   const solve = useCallback(() => {
     if (!graph) return;
+    demoLog.info('solve', { algorithm, n: graph.n });
     setComputing(true);
     setTooltip(null);
     solveTimeoutRef.current = setTimeout(() => {
@@ -162,10 +169,12 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
         : localSearchSolver(graph, Math.max(2000, graph.n * 10));
       setResult(r);
       setComputing(false);
+      demoLog.info('solve-done', { size: r.set.length, valid: isDominant(graph, r.set) });
     }, 16);
   }, [graph, algorithm]);
 
   const handleSampleSelect = useCallback((idx: number) => {
+    demoLog.info('sample', { idx, name: SAMPLE_GRAPHS[idx]?.name });
     setSelectedSample(idx);
     loadGraph(SAMPLE_GRAPHS[idx].data);
   }, [loadGraph]);
@@ -173,13 +182,23 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
   const handleLoadFile = useCallback((name: string) => {
     const rawBase = (typeof import.meta !== "undefined" && (import.meta as any).env?.BASE_URL) || "/";
     const basePath = rawBase.endsWith("/") ? rawBase : rawBase + "/";
+    log.info("load-sample", { name });
     fetch(`${basePath}demos/mpids/${name}`)
       .then((r) => r.text())
-      .then((text) => { setSelectedSample(-1); setLoadError(null); loadGraph(text); })
-      .catch(() => { setLoadError('Failed to load sample graph'); });
+      .then((text) => {
+        setSelectedSample(-1);
+        setLoadError(null);
+        loadGraph(text);
+        log.info("load-sample-ok", { name, bytes: text.length });
+      })
+      .catch((err) => {
+        setLoadError('Failed to load sample graph');
+        log.error("load-sample-failed", { name, err: String(err) });
+      });
   }, [loadGraph]);
 
   const handleRandom = useCallback(() => {
+    demoLog.info('random', { n: randomN, p: randomP });
     setSelectedSample(-1);
     loadGraph(generateRandomGraph(randomN, randomP));
   }, [randomN, randomP, loadGraph]);
@@ -187,6 +206,7 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
   const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    demoLog.info('upload', { name: file.name, size: file.size });
     file.text().then((text) => { setSelectedSample(-1); loadGraph(text); });
   }, [loadGraph]);
 

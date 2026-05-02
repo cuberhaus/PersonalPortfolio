@@ -6,6 +6,9 @@ import { getCorpusData, CORPUS_LABELS, type CorpusId, type WordFreq } from '../.
 import { fitZipf, countWords, type ZipfFitResult } from '../../../lib/caim/zipf-fit';
 import { T } from '../../../i18n/demos/caim-zipf';
 import { getThemeColors } from '../../../lib/demo-theme';
+import { debug } from '../../../lib/debug';
+
+const demoLog = debug('demo:caim');
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -30,6 +33,7 @@ export default function ZipfTab({ lang }: Props) {
   const chartRef = useRef<HTMLDivElement>(null);
 
   const analyzeCorpus = useCallback((corpusId: CorpusId) => {
+    demoLog.info('zipf-corpus', { corpus: corpusId });
     setActiveCorpus(corpusId);
     setError(null);
     const data = getCorpusData(corpusId);
@@ -39,6 +43,7 @@ export default function ZipfTab({ lang }: Props) {
   }, []);
 
   const analyzeCustom = useCallback(() => {
+    demoLog.info('zipf-custom', { length: customText.length });
     setActiveCorpus('custom');
     setError(null);
     const counted = countWords(customText);

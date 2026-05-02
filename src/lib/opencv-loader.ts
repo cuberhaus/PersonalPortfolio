@@ -1,5 +1,8 @@
 // Main-thread API for the plate-detection Web Worker.
 // The worker now uses pure JS image processing — no external downloads needed.
+import { debug } from "./debug";
+
+const log = debug("demo:matriculas");
 
 export type LoadProgress = {
   phase: "downloading" | "initializing" | "ready";
@@ -30,7 +33,11 @@ let readyPromise: Promise<void> | null = null;
 
 function getWorker(): Worker {
   if (!worker) {
+    log.info("worker-spawn");
     worker = new Worker(new URL("./plate-worker.ts", import.meta.url), { type: "module" });
+    worker.addEventListener("error", (ev: ErrorEvent) => {
+      log.error("worker-error", { message: ev.message, filename: ev.filename, lineno: ev.lineno });
+    });
   }
   return worker;
 }
@@ -46,9 +53,11 @@ export function initWorker(onProgress?: ProgressCb): Promise<void> {
         onProgress?.(msg as LoadProgress);
       } else if (msg.type === "ready") {
         w.removeEventListener("message", handler);
+        log.info("worker-ready");
         resolve();
       } else if (msg.type === "error") {
         w.removeEventListener("message", handler);
+        log.error("worker-error", { message: msg.message });
         reject(new Error(msg.message));
       }
     };
@@ -133,10 +142,14 @@ export async function runWorkerPipeline(
   };
 
   return new Promise((resolve, reject) => {
+    log.trace("pipeline-progress", { stage: "submitted", pct: 0 });
     const handler = (e: MessageEvent) => {
       const msg = e.data;
-      if (msg.type === "result") {
+      if (msg.type === "stage" && typeof msg.stage === "string") {
+        log.trace("pipeline-progress", { stage: msg.stage, pct: msg.pct ?? null });
+      } else if (msg.type === "result") {
         w.removeEventListener("message", handler);
+        log.trace("pipeline-progress", { stage: "result", pct: 100 });
         resolve(msg as WorkerPipelineResult);
       } else if (msg.type === "error") {
         w.removeEventListener("message", handler);

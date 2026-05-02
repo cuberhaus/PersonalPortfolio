@@ -7,6 +7,7 @@ const FRAME = { w: 472, h: 296, maskPolygon: "2,205 470,185 470,215 2,236" };
 const TEAM = ["Pol Casacuberta", "Tatiana Meyer", "Pablo Vega", "Ton Vilà"];
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/bits-xmarato-demo";
+import { useDemoLifecycle } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -188,11 +189,12 @@ function DiameterExplorer({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 export default function BitsXMaratoDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:bitsx', { lang });
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
       <LiveAppEmbed
-        url="http://localhost:8001"
+        slug="bitsx-marato"
         title="Aorta Viewer — bitsXlaMarato"
         dockerCmd="cd bitsXlaMarato && docker compose up"
         devCmd="cd bitsXlaMarato && make dev"

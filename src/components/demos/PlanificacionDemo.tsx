@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import LiveAppEmbed from "./LiveAppEmbed";
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/planificacion-demo";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -165,19 +166,25 @@ function FlightNetwork() {
 /* ════════════════════════════════════════════════════════════════════════ */
 export default function PlanificacionDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:planificacion', { lang });
+  const log = useDebug('demo:planificacion');
   const pDomain = `${basePath}demos/planificacion/agencia_de_viajes_domain_ext2.pddl`;
   const pProblem = `${basePath}demos/planificacion/agencia_de_viajes_problem_ext2.pddl`;
   const [mockState, setMockState] = useState<"idle" | "running" | "done">("idle");
 
   function simulatePlanner() {
+    log.info('plan-recompute');
     setMockState("running");
-    setTimeout(() => setMockState("done"), 800 + Math.random() * 600);
+    setTimeout(() => {
+      setMockState("done");
+      log.info('plan-recompute-done');
+    }, 800 + Math.random() * 600);
   }
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
       <LiveAppEmbed
-        url="http://localhost:3000"
+        slug="planificacion"
         title="PDDL Planning Web App"
         dockerCmd="cd Practica_de_Planificacion && make docker-run"
         devCmd="cd Practica_de_Planificacion && make dev"

@@ -17,6 +17,7 @@ import {
 import { forceLayout } from "../../lib/mpids";
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/phase-transitions-demo";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -223,6 +224,8 @@ function SweepChart({ points, t }: { points: SweepPoint[]; t: typeof TRANSLATION
 
 export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:phase', { lang });
+  const log = useDebug('demo:phase');
   const [family, setFamily] = useState<GraphFamily>("grid");
   const [percolation, setPercolation] = useState<PercolationType>("edge");
   const [nodeCount, setNodeCount] = useState(100);
@@ -287,18 +290,19 @@ export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
     setComps(connectedComponents(g));
   }, [baseGraph, percProb, percolation]);
 
-  // Run sweep
   const handleSweep = useCallback(() => {
     setSweeping(true);
+    log.info('sweep', { family, nodeCount, gridSide, percolation });
     sweepTimeoutRef.current = setTimeout(() => {
       const n = family === "grid" ? gridSide * gridSide : nodeCount;
       const trials = n <= 100 ? 20 : n <= 500 ? 10 : 5;
       const steps = 20;
-      const pts = runSweep(family, n, percolation, steps, trials);
+      const pts = runSweep(family, n, percolation, steps, trials, ({ p, runs }) => log.trace('sweep-trial', { p, runs }));
       setSweepResults(pts);
       setSweeping(false);
+      log.info('sweep-done', { points: pts.length });
     }, 16);
-  }, [family, nodeCount, gridSide, percolation]);
+  }, [family, nodeCount, gridSide, percolation, log]);
 
   return (
     <div style={s.wrapper}>
@@ -319,13 +323,13 @@ export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
       <div style={s.card}>
         <div style={s.row}>
           <span style={s.label}>{t.graphFamily}</span>
-          <button style={s.btn(family === "binomial")} onClick={() => setFamily("binomial")}>
+          <button style={s.btn(family === "binomial")} onClick={() => { setFamily("binomial"); log.info('family', { family: 'binomial' }); }}>
             {t.binomial}
           </button>
-          <button style={s.btn(family === "geometric")} onClick={() => setFamily("geometric")}>
+          <button style={s.btn(family === "geometric")} onClick={() => { setFamily("geometric"); log.info('family', { family: 'geometric' }); }}>
             {t.geometric}
           </button>
-          <button style={s.btn(family === "grid")} onClick={() => setFamily("grid")}>
+          <button style={s.btn(family === "grid")} onClick={() => { setFamily("grid"); log.info('family', { family: 'grid' }); }}>
             {t.grid}
           </button>
         </div>
@@ -358,9 +362,9 @@ export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
       <div style={s.card}>
         <div style={s.row}>
           <span style={s.label}>{t.percolation}</span>
-          <button style={s.btn(percolation === "node")} onClick={() => setPercolation("node")}>{t.node}</button>
-          <button style={s.btn(percolation === "edge")} onClick={() => setPercolation("edge")}>{t.edge}</button>
-          <button style={s.btn(percolation === "both")} onClick={() => setPercolation("both")}>{t.both}</button>
+          <button style={s.btn(percolation === "node")} onClick={() => { setPercolation("node"); log.info('percolation', { percolation: 'node' }); }}>{t.node}</button>
+          <button style={s.btn(percolation === "edge")} onClick={() => { setPercolation("edge"); log.info('percolation', { percolation: 'edge' }); }}>{t.edge}</button>
+          <button style={s.btn(percolation === "both")} onClick={() => { setPercolation("both"); log.info('percolation', { percolation: 'both' }); }}>{t.both}</button>
         </div>
 
         <div style={s.row}>

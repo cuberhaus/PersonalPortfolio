@@ -4,6 +4,7 @@ import DemoSidebar from '../components/DemoSidebar.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import ThemeInit from '../components/ThemeInit.astro';
 import DebugInit from '../components/DebugInit.astro';
+import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
 
 interface Props {
@@ -73,7 +74,7 @@ const siteBase = Astro.site || Astro.url;
     <title>{title} — Pol Casacuberta</title>
     <Analytics />
   </head>
-  <body>
+  <body data-demo-slug={slug ?? undefined}>
     <ThemeInit position="body" />
     <a href="#main-content" class="skip-to-content">{t('aria.skipToContent')}</a>
     <DemoSidebar currentSlug={slug} />
@@ -159,6 +160,43 @@ const siteBase = Astro.site || Astro.url;
       initDesignBtn();
       document.addEventListener('astro:page-load', initDesignBtn);
     </script>
+
+    <script>
+      // Page-load nav log for demo pages. Mirrors the listener in Layout.astro.
+      // DemoLayout doesn't ship view-transitions, but astro:page-load still
+      // fires on initial paint so the nav entry shows up on every demo route.
+      function logNav() {
+        try {
+          const w = window as unknown as { __debug?: { log: (l: string, ns: string, msg: string, ...a: unknown[]) => void } };
+          if (!w.__debug) return;
+          w.__debug.log('info', 'nav', 'navigated', {
+            path: location.pathname,
+            search: location.search,
+            lang: document.documentElement.lang,
+            title: document.title,
+          });
+        } catch {
+        }
+      }
+      logNav();
+      document.addEventListener('astro:page-load', logNav);
+    </script>
+
+    <script>
+      // Subscribe to backend log SSE streams for every visible
+      // [data-demo-slug] element. Dev-only — `requireEnabled()` inside
+      // subscribeAllVisible() blocks this in production builds.
+      async function subscribeBackends() {
+        try {
+          const mod = await import('../lib/debug-docker');
+          mod.subscribeAllVisible();
+        } catch {
+        }
+      }
+      subscribeBackends();
+      document.addEventListener('astro:page-load', subscribeBackends);
+    </script>
+    <DebugMount />
   </body>
 </html>
 

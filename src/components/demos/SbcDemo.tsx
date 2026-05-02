@@ -6,6 +6,7 @@ import {
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/sbc-demo";
 import MockBanner from "./MockBanner";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -157,6 +158,8 @@ function planTrip(prefs: Prefs): TripResult {
 /* ── Component ── */
 export default function SbcDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:sbc', { lang });
+  const log = useDebug('demo:sbc');
 
   const [step, setStep] = useState(1);
   const [ages, setAges] = useState([30]);
@@ -174,16 +177,18 @@ export default function SbcDemo({ lang = "en" }: { lang?: Lang }) {
   const [priority, setPriority] = useState<"cost" | "days" | "cities">("cost");
   const [result, setResult] = useState<TripResult | null>(null);
 
-  const goNext = () => { if (step < 10) setStep(step + 1); };
-  const goBack = () => { if (step > 1) setStep(step - 1); };
+  const goNext = () => { if (step < 10) { const next = step + 1; log.info('step', { step: next }); setStep(next); } };
+  const goBack = () => { if (step > 1) { const next = step - 1; log.info('step', { step: next }); setStep(next); } };
   const doPlan = () => {
+    log.info('plan', { ages, tripType, budget, priority });
     const r = planTrip({
       ages, tripType, daysMin, daysMax, daysPerCityMin, daysPerCityMax,
       citiesMin, citiesMax, budget, avoidTransport, minStars, preferUnknown, priority,
     });
     setResult(r);
+    log.info('plan-done', { ok: !!r });
   };
-  const reset = () => { setStep(1); setResult(null); };
+  const reset = () => { log.info('reset'); setStep(1); setResult(null); };
 
   const toggleAvoid = (mode: string) => {
     setAvoidTransport((prev) =>

@@ -1,0 +1,393 @@
+{
+  "version": 1,
+  "comment": "Single source of truth for demo pages, components, and the Docker backends they consume. Read by scripts/dev-all-demos.sh, scripts/log-relay/, src/lib/debug-docker.ts, src/components/demos/LiveAppEmbed.tsx, src/__tests__/demo-registry.test.ts, and docs/adding-a-demo.md. Schema documented in docs/adding-a-demo.md.",
+  "services": [
+    {
+      "slug": "tenda",
+      "page": "src/pages/demos/tenda.astro",
+      "component": "src/components/demos/TendaDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "tenda_online-web-1",
+        "port": 8888,
+        "iframeUrl": "http://localhost:8888",
+        "composeFile": "../tenda_online/docker/docker-compose.yml",
+        "makefile": "../tenda_online/Makefile",
+        "stack": "php",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "Tenda Online",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "draculin",
+      "page": "src/pages/demos/draculin.astro",
+      "component": "src/components/demos/DraculinDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "draculin-backend-backend-1",
+        "port": 8890,
+        "iframeUrl": "http://localhost:8890",
+        "composeFile": "../Draculin-Backend/docker-compose.yml",
+        "makefile": null,
+        "stack": "django",
+        "needsSentry": true,
+        "notes": "Django on :8889 (API), Flutter web nginx on :8890 (UI). Sentry SDK goes in the Django backend.",
+        "orchestrator": {
+          "displayName": "Draculin",
+          "type": "compose",
+          "extra": "(Flutter) API :8889"
+        }
+      }
+    },
+    {
+      "slug": "tfg-polyps",
+      "page": "src/pages/demos/tfg-polyps.astro",
+      "component": "src/components/demos/TfgPolypDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "tfg-app-1",
+        "port": 8082,
+        "iframeUrl": "http://localhost:8082",
+        "composeFile": "../TFG/docker-compose.yml",
+        "makefile": "../TFG/Makefile",
+        "stack": "fastapi",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "TFG",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "bitsx-marato",
+      "page": "src/pages/demos/bitsx-marato.astro",
+      "component": "src/components/demos/BitsXMaratoDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "bitsxlamarato-app-1",
+        "port": 8001,
+        "iframeUrl": "http://localhost:8001",
+        "composeFile": "../bitsXlaMarato/docker-compose.yml",
+        "makefile": "../bitsXlaMarato/Makefile",
+        "stack": "fastapi",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "bitsXlaMarato",
+          "type": "compose",
+          "extra": "(GPU)"
+        }
+      }
+    },
+    {
+      "slug": "desastres-ia",
+      "page": "src/pages/demos/desastres-ia.astro",
+      "component": "src/components/demos/DesastresIADemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "desastresia-web-1",
+        "port": 8083,
+        "iframeUrl": "http://localhost:8083",
+        "composeFile": "../desastresIA/docker-compose.yml",
+        "makefile": "../desastresIA/Makefile",
+        "stack": "fastapi",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "DesastresIA",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "mpids",
+      "page": "src/pages/demos/mpids.astro",
+      "component": "src/components/demos/MPIDSDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "projecta-web-1",
+        "port": 8084,
+        "iframeUrl": "http://localhost:8084",
+        "composeFile": "../projectA/docker-compose.yml",
+        "makefile": "../projectA/Makefile",
+        "stack": "flask",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "MPIDS",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "phase-transitions",
+      "page": "src/pages/demos/phase-transitions.astro",
+      "component": "src/components/demos/PhaseTransitionsDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "projecta2-web-1",
+        "port": 8085,
+        "iframeUrl": "http://localhost:8085",
+        "composeFile": "../projectA2/docker-compose.yml",
+        "makefile": "../projectA2/Makefile",
+        "stack": "fastapi",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "PhaseTransitions",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "caim",
+      "page": "src/pages/demos/caim.astro",
+      "component": "src/components/demos/CAIMDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "caim-web-1",
+        "port": 8086,
+        "iframeUrl": "http://localhost:8086",
+        "composeFile": "../CAIM/docker-compose.yml",
+        "makefile": "../CAIM/Makefile",
+        "stack": "fastapi",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "CAIM",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "joc-eda",
+      "page": "src/pages/demos/joc-eda.astro",
+      "component": null,
+      "hasBackend": true,
+      "backend": {
+        "container": "joc_eda-web-1",
+        "port": 8087,
+        "iframeUrl": "http://localhost:8087",
+        "composeFile": "../joc_eda/docker-compose.yml",
+        "makefile": "../joc_eda/Makefile",
+        "stack": "go",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "JocEDA",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "sbc-ia",
+      "page": "src/pages/demos/sbc-ia.astro",
+      "component": "src/components/demos/SbcDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "sbc_ia-web-1",
+        "port": 8088,
+        "iframeUrl": "http://localhost:8088",
+        "composeFile": "../SBC_IA/docker-compose.yml",
+        "makefile": "../SBC_IA/Makefile",
+        "stack": "fastapi",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "SBC_IA",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "par-parallel",
+      "page": "src/pages/demos/par-parallel.astro",
+      "component": "src/components/demos/ParDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "par-par-web-1",
+        "port": 8089,
+        "iframeUrl": "http://localhost:8089",
+        "composeFile": "../PAR/docker-compose.yml",
+        "makefile": "../PAR/Makefile",
+        "stack": "qwik",
+        "needsSentry": false,
+        "notes": "Static Preact + Vite + WASM — no backend code to instrument",
+        "orchestrator": {
+          "displayName": "PAR",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "rob-robotics",
+      "page": "src/pages/demos/rob-robotics.astro",
+      "component": "src/components/demos/RobDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "rob-rob-dashboard-1",
+        "port": 8092,
+        "iframeUrl": "http://localhost:8092",
+        "composeFile": "../ROB/docker-compose.yml",
+        "makefile": "../ROB/Makefile",
+        "stack": "ember",
+        "needsSentry": false,
+        "notes": "Ember + Babylon dashboard. Browser code; iframe forwarder captures runtime errors.",
+        "orchestrator": {
+          "displayName": "ROB",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "algorithms",
+      "page": "src/pages/demos/algorithms.astro",
+      "component": "src/components/demos/FibDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "fib-algo-viz-1",
+        "port": 8090,
+        "iframeUrl": "http://localhost:8090",
+        "composeFile": "../fib/docker-compose.yml",
+        "makefile": "../fib/Makefile",
+        "stack": "qwik",
+        "needsSentry": false,
+        "notes": "Static Qwik build served by nginx — no backend code to instrument",
+        "orchestrator": {
+          "displayName": "FIB",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "grafics",
+      "page": "src/pages/demos/grafics.astro",
+      "component": "src/components/demos/GraficsDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "grafics-grafics-1",
+        "port": 8093,
+        "iframeUrl": "http://localhost:8093",
+        "composeFile": "../fib/G/web/docker-compose.yml",
+        "makefile": "../fib/G/web/Makefile",
+        "stack": "qwik",
+        "needsSentry": false,
+        "notes": "Static WebGL/shader app — no backend code to instrument",
+        "orchestrator": {
+          "displayName": "Grafics",
+          "type": "compose",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "pro2",
+      "page": "src/pages/demos/pro2.astro",
+      "component": "src/components/demos/Pro2Demo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "portfolio-pro2",
+        "port": 8000,
+        "iframeUrl": "http://localhost:8000",
+        "composeFile": null,
+        "makefile": "../pracpro2/Makefile",
+        "stack": "rust",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "pracpro2",
+          "type": "run",
+          "image": "pracpro2",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "planificacion",
+      "page": "src/pages/demos/planificacion.astro",
+      "component": "src/components/demos/PlanificacionDemo.tsx",
+      "hasBackend": true,
+      "backend": {
+        "container": "portfolio-planif",
+        "port": 3000,
+        "iframeUrl": "http://localhost:3000",
+        "composeFile": null,
+        "makefile": "../Practica_de_Planificacion/Makefile",
+        "stack": "sveltekit",
+        "needsSentry": true,
+        "orchestrator": {
+          "displayName": "Planificacion",
+          "type": "run",
+          "image": "practica-planificacion",
+          "extra": ""
+        }
+      }
+    },
+    {
+      "slug": "prop",
+      "page": "src/pages/demos/prop.astro",
+      "component": null,
+      "hasBackend": true,
+      "backend": {
+        "container": null,
+        "port": 8081,
+        "iframeUrl": "http://localhost:8081",
+        "composeFile": null,
+        "makefile": "../subgrup-prop7.1/Makefile",
+        "stack": "spring",
+        "needsSentry": true,
+        "notes": "Spring Boot run via mvnw spring-boot:run; not container-based",
+        "orchestrator": {
+          "displayName": "PROP",
+          "type": "process",
+          "extra": "Spring Boot"
+        }
+      }
+    },
+    {
+      "slug": "planner-api",
+      "page": null,
+      "component": null,
+      "hasBackend": true,
+      "backend": {
+        "container": null,
+        "port": 8765,
+        "iframeUrl": null,
+        "composeFile": null,
+        "makefile": null,
+        "stack": "fastapi",
+        "needsSentry": true,
+        "notes": "Internal API used by PlanificacionDemo when PUBLIC_PLANNER_URL is set. No standalone page.",
+        "orchestrator": {
+          "displayName": "planner-api",
+          "type": "process",
+          "extra": "ENHSP"
+        }
+      }
+    },
+    {
+      "slug": "apa-practica",
+      "page": "src/pages/demos/apa-practica.astro",
+      "component": "src/components/demos/ApaPracticaDemo.tsx",
+      "hasBackend": false
+    },
+    {
+      "slug": "matriculas",
+      "page": "src/pages/demos/matriculas.astro",
+      "component": "src/components/demos/SPMatriculasDemo.tsx",
+      "hasBackend": false
+    },
+    {
+      "slug": "jsbach",
+      "page": "src/pages/demos/jsbach.astro",
+      "component": "src/components/demos/JSBachDemo.tsx",
+      "hasBackend": false
+    }
+  ]
+}

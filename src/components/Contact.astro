@@ -231,13 +231,16 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
         btn.style.pointerEvents = 'none';
       }
 
+      type DebugApi = { log: (lvl: string, ns: string, msg: string, ...args: unknown[]) => void };
+      const dbg = (window as unknown as { __debug?: DebugApi }).__debug;
+      dbg?.log('info', 'net:contact', 'submit');
       fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: payload,
       })
         .then(async (response) => {
-          await response.json().catch(() => ({}));
+          const body = await response.json().catch(() => ({} as Record<string, unknown>));
           if (!result) return;
           if (response.ok) {
             result.textContent = msgs.success;
@@ -246,19 +249,22 @@ const web3FormsKey = "ca12b98d-ade0-4844-b3a5-24bbd4197c8a";
             result.style.display = 'block';
             form.reset();
             if (emailHint) clearHint(emailHint);
+            dbg?.log('info', 'net:contact', 'submit-ok', { id: (body as Record<string, unknown>).id ?? null });
           } else {
             result.textContent = msgs.error;
             result.classList.remove('success');
             result.classList.add('error');
             result.style.display = 'block';
+            dbg?.log('error', 'net:contact', 'submit-failed', { status: response.status, body });
           }
         })
-        .catch(() => {
+        .catch((err) => {
           if (!result) return;
           result.textContent = msgs.error;
           result.classList.remove('success');
           result.classList.add('error');
           result.style.display = 'block';
+          dbg?.log('error', 'net:contact', 'submit-failed', { err: String(err) });
         })
         .finally(() => {
           if (btnText) btnText.textContent = msgs.send;

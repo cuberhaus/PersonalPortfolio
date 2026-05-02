@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import modelData from "../../data/tfg-model-results.json";
 import LiveAppEmbed from "./LiveAppEmbed";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 /* ── constants ── */
 const accent1 = "var(--accent-start)";
@@ -63,6 +64,7 @@ function PipelineStrip({ t }: { t: typeof TRANSLATIONS.en }) {
 function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
   const [metric, setMetric] = useState<"ap50" | "ap5095" | "ar100" | "f1">("f1");
   const [sortBy, setSortBy] = useState<"metric" | "lr" | "epochs">("metric");
+  const log = useDebug('demo:tfg-polyps');
 
   const sorted = useMemo(() => {
     const arr = [...modelData];
@@ -90,7 +92,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
 
       <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
         {(["f1", "ap50", "ap5095", "ar100"] as const).map((m) => (
-          <button key={m} type="button" onClick={() => setMetric(m)} style={{
+          <button key={m} type="button" onClick={() => { setMetric(m); log.info('metric', { metric: m }); }} style={{
             padding: "0.3rem 0.65rem", borderRadius: "0.4rem", fontSize: "0.72rem", fontWeight: 600, cursor: "pointer",
             border: metric === m ? "1px solid var(--accent-start)" : "1px solid var(--border-color)",
             background: metric === m ? "color-mix(in srgb, var(--accent-start) 10%, transparent)" : "var(--bg-card-hover)",
@@ -99,7 +101,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
         ))}
         <span style={{ margin: "auto 0 auto auto", fontSize: "0.68rem", color: "var(--border-color-hover)" }}>{t.sort}</span>
         {(["metric", "lr", "epochs"] as const).map((s) => (
-          <button key={s} type="button" onClick={() => setSortBy(s)} style={{
+          <button key={s} type="button" onClick={() => { setSortBy(s); log.info('sort', { sortBy: s }); }} style={{
             padding: "0.25rem 0.5rem", borderRadius: "0.35rem", fontSize: "0.65rem", fontWeight: 600, cursor: "pointer",
             border: "none", background: sortBy === s ? "var(--border-color)" : "transparent",
             color: sortBy === s ? "var(--text-primary)" : "var(--text-muted)",
@@ -405,11 +407,12 @@ function DetectorTable({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 export default function TfgPolypDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:tfg-polyps', { lang });
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
       <LiveAppEmbed
-        url="http://localhost:8082"
+        slug="tfg-polyps"
         title="TFG Polyp Detection Dashboard"
         dockerCmd="cd TFG && docker compose up"
         devCmd="cd TFG && make run"

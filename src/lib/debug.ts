@@ -21,6 +21,14 @@
 
 export type DebugLevel = 'trace' | 'info' | 'warn' | 'error';
 
+/**
+ * Where a log entry originated. `browser` is the default for in-page code
+ * (Astro components, React islands). `iframe` is forwarded via postMessage by
+ * `src/lib/debug-iframe.ts`. `backend` is forwarded from a Docker container's
+ * stdout via `src/lib/debug-docker.ts` and the `scripts/log-relay/` sidecar.
+ */
+export type DebugSource = 'browser' | 'iframe' | 'backend';
+
 export interface DebugLogEntry {
   ns: string;
   level: DebugLevel;
@@ -28,6 +36,14 @@ export interface DebugLogEntry {
   args: unknown[];
   ts: number;
   err?: Error;
+  /** Where the entry originated. Defaults to `'browser'`. */
+  source: DebugSource;
+  /**
+   * Origin discriminator. Slug for backend (e.g. `"tfg-polyps"`),
+   * `URL.origin` for iframe (e.g. `"http://localhost:8092"`), undefined for
+   * browser.
+   */
+  origin?: string;
 }
 
 export interface DebugNetworkEntry {
@@ -82,6 +98,7 @@ declare global {
       enable: () => void;
       disable: () => void;
     };
+    __toggleDebug?: () => void;
   }
 }
 
@@ -119,6 +136,17 @@ export function isEnabled(): boolean {
 }
 
 /**
+ * Used by side-effecting subscribers (iframe forwarder, Docker SSE subscriber,
+ * network tap) to refuse to install in production unless the user opted in.
+ * Production builds with no `?debug=1` therefore never open localhost
+ * connections. The bus itself stays usable in pure-pull mode — callers can
+ * still emit entries; nothing auto-installs.
+ */
+export function requireEnabled(): boolean {
+  return isEnabled();
+}
+
+/**
  * Match a namespace against a glob pattern with `*` wildcards.
  * `'demo:rob:fk'` matches `'demo:*'` and `'demo:rob:*'` but not `'theme:*'`.
  */
@@ -148,6 +176,10 @@ function dispatchDetail(detail: DebugEventDetail): void {
 /**
  * Public namespaced logger factory.
  * Usage: `const log = debug('demo:rob'); log.info('mounted', { joints: 6 });`
+ *
+ * All entries emitted through this factory are tagged `source: 'browser'`.
+ * For iframe / backend entries, use `emitFrom()` from the corresponding
+ * subscriber module.
  */
 export function debug(ns: string) {
   return {
@@ -159,6 +191,23 @@ export function debug(ns: string) {
 }
 
 function emit(level: DebugLevel, ns: string, msg: string, args: unknown[]): void {
+  emitFrom('browser', undefined, level, ns, msg, args);
+}
+
+/**
+ * Internal emit used by the iframe forwarder (`src/lib/debug-iframe.ts`) and
+ * the Docker SSE subscriber (`src/lib/debug-docker.ts`) to attribute the
+ * entry to the correct source. Existing call sites keep using `emit()` with
+ * `source: 'browser'`.
+ */
+export function emitFrom(
+  source: DebugSource,
+  origin: string | undefined,
+  level: DebugLevel,
+  ns: string,
+  msg: string,
+  args: unknown[],
+): void {
   const state = getState();
 
   if (LEVEL_ORDER[level] < LEVEL_ORDER[state.minLevel]) return;
@@ -172,6 +221,8 @@ function emit(level: DebugLevel, ns: string, msg: string, args: unknown[]): void
     args,
     ts: Date.now(),
     err: errArg,
+    source,
+    origin,
   };
 
   pushBuffer(state.logs, entry);
@@ -181,7 +232,8 @@ function emit(level: DebugLevel, ns: string, msg: string, args: unknown[]): void
       : level === 'info' ? console.info
       : level === 'warn' ? console.warn
       : console.error;
-    fn(`[${ns}]`, msg, ...args);
+    const prefix = source === 'browser' ? `[${ns}]` : `[${source}:${ns}]`;
+    fn(prefix, msg, ...args);
   }
 
   dispatchDetail({ type: 'log', entry });

@@ -40,15 +40,24 @@ type SentryApi = typeof import('@sentry/astro');
 function forwardLog(detail: DebugEventDetail, S: SentryApi): void {
   if (detail.type !== 'log') return;
   const { entry } = detail;
+  const sourceTag = { source: entry.source, origin: entry.origin ?? '' };
 
   if (entry.level === 'error') {
-    if (entry.err instanceof Error) {
+    if (entry.err instanceof Error && entry.source === 'browser') {
       S.captureException(entry.err, {
-        tags: { ns: entry.ns },
+        tags: { ns: entry.ns, ...sourceTag },
         extra: { msg: entry.msg, args: entry.args },
       });
     } else {
+      // Iframe / backend errors lack a JS stack on the parent side, so a
+      // captureMessage is more useful than a synthetic exception.
       S.captureMessage(`${entry.msg} [${entry.ns}]`, 'error');
+      S.setContext('debug-error', {
+        ns: entry.ns,
+        source: entry.source,
+        origin: entry.origin,
+        args: entry.args,
+      });
     }
     return;
   }
@@ -57,7 +66,11 @@ function forwardLog(detail: DebugEventDetail, S: SentryApi): void {
     category: `debug:${entry.ns}`,
     message: entry.msg,
     level: entry.level === 'warn' ? 'warning' : entry.level === 'trace' ? 'debug' : 'info',
-    data: entry.args.length > 0 ? { args: entry.args } : undefined,
+    data: {
+      source: entry.source,
+      ...(entry.origin ? { origin: entry.origin } : {}),
+      ...(entry.args.length > 0 ? { args: entry.args } : {}),
+    },
     timestamp: entry.ts / 1000,
   });
 }

@@ -1,37 +1,86 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { TRANSLATIONS } from "../../i18n/demos/live-app-embed";
+import { getIframeUrl } from "../../data/demo-services";
+import { debug } from "../../lib/debug";
+import { installIframeForwarder } from "../../lib/debug-iframe";
+
+const log = debug("net:embed");
+const uiLog = debug("ui:embed");
 
 type Lang = "en" | "es" | "ca";
 
 interface LiveAppEmbedProps {
-  url: string;
+  /**
+   * Demo slug from src/data/demo-services.json. Preferred — the iframe URL is
+   * resolved from the registry so port changes happen in one place.
+   */
+  slug?: string;
+  /**
+   * Explicit iframe URL. Used when no slug is registered (or for ad-hoc demos).
+   * Overrides the registry value when both are provided.
+   */
+  url?: string;
   title: string;
   dockerCmd: string;
   devCmd?: string;
   lang?: Lang;
-  /** CSS selector for a static fallback element to hide when the app is online */
   fallbackSelector?: string;
 }
 
-export default function LiveAppEmbed({ url, title, dockerCmd, devCmd, lang = "en", fallbackSelector }: LiveAppEmbedProps) {
+export default function LiveAppEmbed({ slug, url: explicitUrl, title, dockerCmd, devCmd, lang = "en", fallbackSelector }: LiveAppEmbedProps) {
+  const url = useMemo(() => {
+    if (explicitUrl) return explicitUrl;
+    if (slug) {
+      const fromRegistry = getIframeUrl(slug);
+      if (fromRegistry) return fromRegistry;
+      console.warn(`[LiveAppEmbed] slug="${slug}" not found or has no iframeUrl in demo-services.json`);
+    }
+    return "";
+  }, [slug, explicitUrl]);
   const [status, setStatus] = useState<"checking" | "online" | "offline">("checking");
   const [expanded, setExpanded] = useState(true);
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   const probe = useCallback(() => {
     const ctrl = new AbortController();
+    if (!url) {
+      setStatus("offline");
+      return ctrl;
+    }
+    log.info("probe", { url, slug });
     const timer = setTimeout(() => ctrl.abort(), 2000);
     fetch(url, { mode: "no-cors", signal: ctrl.signal })
-      .then(() => setStatus("online"))
-      .catch(() => setStatus("offline"))
+      .then(() => {
+        setStatus("online");
+        log.info("probe-result", { url, slug, status: "online" });
+      })
+      .catch((err) => {
+        setStatus("offline");
+        if (err instanceof DOMException && err.name === "AbortError") {
+          log.warn("probe-aborted", { url, slug });
+        } else {
+          log.warn("probe-failed", { url, slug, err: String(err) });
+        }
+      })
       .finally(() => clearTimeout(timer));
     return ctrl;
-  }, [url]);
+  }, [url, slug]);
 
   useEffect(() => {
     const ctrl = probe();
     return () => ctrl.abort();
   }, [probe]);
+
+  useEffect(() => {
+    if (!url) return;
+    let origin: string;
+    try {
+      origin = new URL(url).origin;
+    } catch {
+      return;
+    }
+    installIframeForwarder({ allowedOrigins: [origin] });
+  }, [url]);
 
   useEffect(() => {
     if (!fallbackSelector) return;
@@ -97,12 +146,16 @@ export default function LiveAppEmbed({ url, title, dockerCmd, devCmd, lang = "en
           </span>
         </div>
         <div style={{ display: "flex", gap: "0.4rem" }}>
-          <a href={url} target="_blank" rel="noopener noreferrer" style={{
+          <a href={url} target="_blank" rel="noopener noreferrer" onClick={() => uiLog.info("open-tab", { url, slug })} style={{
             padding: "0.3rem 0.65rem", borderRadius: "0.35rem", fontSize: "0.72rem", fontWeight: 600,
             background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
             color: "var(--text-secondary)", textDecoration: "none", cursor: "pointer",
           }}>{t.openTab} &#8599;</a>
-          <button onClick={() => setExpanded(!expanded)} style={{
+          <button onClick={() => {
+            const next = !expanded;
+            setExpanded(next);
+            uiLog.info(next ? "expand" : "collapse", { url, slug });
+          }} style={{
             padding: "0.3rem 0.65rem", borderRadius: "0.35rem", fontSize: "0.72rem", fontWeight: 600,
             background: "var(--bg-secondary)", border: "1px solid var(--border-color)",
             color: "var(--text-secondary)", cursor: "pointer",
