@@ -6,7 +6,7 @@ ifeq ($(OS),Windows_NT)
   .SHELLFLAGS := -c
 endif
 
-.PHONY: install dev dev-bare all all-stop log-relay build preview stop restart health \
+.PHONY: install dev dev-bare all all-stop log-relay build build-images preview stop restart health \
        rebuild free-ports check-registry \
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
@@ -76,8 +76,15 @@ free-ports: ## Kill any process occupying demo backend ports
 	fi
 	@echo "Done."
 
-dev-bare: free-ports ## Start Astro + ALL demo backends — NO observability stacks (use `make all` for that)
+dev-bare: build-images free-ports ## Start Astro + ALL demo backends — NO observability stacks (use `make all` for that)
 	npm run dev:all
+# Note: depends on `build-images` so any source-tree change since the last
+# build is rebaked into the demo Docker images before `docker compose up -d`
+# starts them. The `build_if_changed` stamp system makes the no-change case
+# sub-second per demo, so this adds essentially zero overhead when nothing
+# changed and saves you from staring at a stale UI when something did.
+# To skip (e.g. you intentionally want to run a known-old image), use
+# `npm run dev:all` directly or invoke the underlying script.
 
 log-relay: ## Start the dev-only log-relay SSE sidecar (default port 9999)
 	@node scripts/log-relay/index.mjs --port $${LOG_RELAY_PORT:-9999}
@@ -215,7 +222,7 @@ all-stop: ## Stop everything started by `make all` (demos + MLOps + Sentry)
 		echo "  ⏭  Sentry not installed; nothing to stop."; \
 	fi
 
-build: ## Build Astro site for production and all demo Docker images
+build-images: ## Build all demo Docker images (incremental — sub-second when nothing changed)
 	@echo ""
 	@echo "━━━ Building $(words $(DEMO_TARGETS)) demo Docker images ($(NPROC) parallel) ━━━"
 	@echo ""
@@ -231,6 +238,8 @@ build: ## Build Astro site for production and all demo Docker images
 	else \
 		echo "❌ Docker builds failed  ($${MIN}m $${SEC}s)"; exit $$rc; \
 	fi
+
+build: build-images ## Build everything: demo Docker images + Astro site for production
 	@echo ""
 	@echo "━━━ Building Astro site ━━━"
 	@echo ""
