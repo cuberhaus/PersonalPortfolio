@@ -8,6 +8,7 @@ endif
 
 .PHONY: install dev dev-all log-relay build preview stop restart health \
        rebuild free-ports check-registry \
+       obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        clean test help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
@@ -90,6 +91,49 @@ restart: stop dev-all ## Restart all demo backends and Astro dev server
 
 health: ## Check if all demo backends are responding
 	@bash scripts/dev-all-demos.sh --health
+
+# ── Self-hosted Sentry observability stack ─────────────────────────────
+# Cloned at $(PARENT)/sentry-self-hosted (pinned to tag 26.4.1).
+# Web UI: http://localhost:9000  — paste the project DSN into .env.shared
+# Full setup + troubleshooting: docs/observability.md
+SENTRY_DIR      = $(PARENT)/sentry-self-hosted
+SENTRY_COMPOSE  = docker compose -f "$(SENTRY_DIR)/docker-compose.yml"
+
+obs-install: ## Run the one-time Sentry installer (~15-20 min, prompts for admin email/password)
+	@if [ ! -d "$(SENTRY_DIR)" ]; then \
+		echo "Sentry repo not found at: $(SENTRY_DIR)"; \
+		echo "Clone it first:"; \
+		echo "  git clone --depth 1 --branch 26.4.1 https://github.com/getsentry/self-hosted.git $(SENTRY_DIR)"; \
+		exit 1; \
+	fi
+	@echo "Running Sentry installer in $(SENTRY_DIR) (interactive)..."
+	@cd "$(SENTRY_DIR)" && ./install.sh
+
+obs-up: ## Start the self-hosted Sentry stack (UI: http://localhost:9000)
+	@if [ ! -f "$(SENTRY_DIR)/.env" ]; then \
+		echo "Sentry not installed yet. Run: make obs-install"; \
+		exit 1; \
+	fi
+	$(SENTRY_COMPOSE) up -d
+	@echo ""
+	@echo "Sentry starting. UI reachable at http://localhost:9000 in ~30-60s."
+	@echo "  make obs-status   # show containers"
+	@echo "  make obs-logs     # tail logs"
+
+obs-down: ## Stop the self-hosted Sentry stack (data preserved on disk)
+	$(SENTRY_COMPOSE) stop
+
+obs-restart: obs-down obs-up ## Restart the Sentry stack
+
+obs-status: ## Show status of all Sentry containers
+	@$(SENTRY_COMPOSE) ps
+
+obs-logs: ## Tail logs from all Sentry containers (Ctrl+C to exit)
+	$(SENTRY_COMPOSE) logs -f --tail=50
+
+obs-wipe: ## DESTRUCTIVE: stop Sentry and delete ALL data (events, users, projects)
+	@printf "This will delete ALL Sentry data. Type 'yes' to confirm: " && read ans && [ "$$ans" = "yes" ] || (echo "Aborted." && exit 1)
+	$(SENTRY_COMPOSE) down -v
 
 build: ## Build Astro site for production and all demo Docker images
 	@echo ""

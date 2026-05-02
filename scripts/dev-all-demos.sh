@@ -48,6 +48,21 @@ export SENTRY_ENVIRONMENT="${SENTRY_ENVIRONMENT:-local-dev}"
 export SENTRY_TRACES_SAMPLE_RATE="${SENTRY_TRACES_SAMPLE_RATE:-1.0}"
 export SENTRY_RELEASE="${SENTRY_RELEASE:-local-dev}"
 
+# When backends run inside Docker, `localhost` resolves to the container,
+# not the host. Rewrite the DSN host portion so the Sentry SDKs inside
+# containers can reach Spotlight (or any other host-bound DSN sidecar).
+# Each backend's docker-compose.yml reads `SENTRY_DSN_DOCKER` first, then
+# falls back to `SENTRY_DSN`. Host-only processes (PROP, planner-api)
+# keep the original `SENTRY_DSN` so they still resolve `localhost` fine.
+SENTRY_DSN_DOCKER="$SENTRY_DSN"
+case "$SENTRY_DSN" in
+  *@localhost:*|*@127.0.0.1:*)
+    SENTRY_DSN_DOCKER="${SENTRY_DSN/@localhost:/@host.docker.internal:}"
+    SENTRY_DSN_DOCKER="${SENTRY_DSN_DOCKER/@127.0.0.1:/@host.docker.internal:}"
+    ;;
+esac
+export SENTRY_DSN_DOCKER
+
 # ── Single source of truth: src/data/demo-services.json ──────────────────
 # Build the SERVICE_REGISTRY array dynamically from the JSON via jq.
 # Format kept identical to the previous static array (so existing logic below
@@ -322,13 +337,16 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
     # Helper: launch a docker run service in the background (build-if-missing)
     # Passes through SENTRY_* env vars so the per-backend SDKs (Phase 14) can
     # initialise themselves if PersonalPortfolio/.env.shared sets a DSN.
+    # Uses SENTRY_DSN_DOCKER so `localhost`-based DSNs (e.g. Spotlight) are
+    # auto-rewritten to `host.docker.internal` for the container.
     _docker_run() {
       local name="$1" url="$2" dir="$3" image="$4" port="$5" container="$6"
       local sentry_env=(
-        -e "SENTRY_DSN=${SENTRY_DSN:-}"
+        -e "SENTRY_DSN=${SENTRY_DSN_DOCKER:-${SENTRY_DSN:-}}"
         -e "SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-local-dev}"
         -e "SENTRY_TRACES_SAMPLE_RATE=${SENTRY_TRACES_SAMPLE_RATE:-1.0}"
         -e "SENTRY_RELEASE=${SENTRY_RELEASE:-local-dev}"
+        --add-host=host.docker.internal:host-gateway
       )
       if [[ -d "${dir}" ]]; then
         echo "==> ${name}  ${url}  (docker run)"
