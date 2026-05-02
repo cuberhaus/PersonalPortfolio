@@ -48,6 +48,29 @@ export SENTRY_ENVIRONMENT="${SENTRY_ENVIRONMENT:-local-dev}"
 export SENTRY_TRACES_SAMPLE_RATE="${SENTRY_TRACES_SAMPLE_RATE:-1.0}"
 export SENTRY_RELEASE="${SENTRY_RELEASE:-local-dev}"
 
+# ── Auto-derive SENTRY_RELEASE from this repo's git SHA ─────────────────
+# Format (from scripts/_release_id.sh, single source of truth):
+#   portfolio@<short-sha>          — clean checkout
+#   portfolio@<short-sha>-dirty    — uncommitted changes
+#   portfolio@local-dev            — git missing / not a checkout
+#
+# We only auto-derive when the user hasn't pinned a release explicitly;
+# the placeholder "local-dev" counts as unset so the .env.shared.example
+# default doesn't pin everyone to a literal "local-dev" release tag.
+if [[ -z "$SENTRY_RELEASE" || "$SENTRY_RELEASE" == "local-dev" ]]; then
+  if [[ -x "${PORTFOLIO}/scripts/_release_id.sh" ]]; then
+    SENTRY_RELEASE="$("${PORTFOLIO}/scripts/_release_id.sh")"
+  else
+    SENTRY_RELEASE="portfolio@local-dev"
+  fi
+  export SENTRY_RELEASE
+fi
+
+# Astro reads PUBLIC_*-prefixed env vars at build/dev time; mirror the
+# release into PUBLIC_SENTRY_RELEASE so the frontend SDK picks it up
+# alongside the backends.
+export PUBLIC_SENTRY_RELEASE="$SENTRY_RELEASE"
+
 # When backends run inside Docker, `localhost` resolves to the container,
 # not the host. Rewrite the DSN host portion so the Sentry SDKs inside
 # containers can reach Spotlight (or any other host-bound DSN sidecar).

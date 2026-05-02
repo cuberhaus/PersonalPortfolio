@@ -12,5 +12,9 @@ const DSN_FALLBACK = 'https://test@test/0';
 Sentry.init({
   dsn: process.env.PUBLIC_SENTRY_DSN ?? DSN_FALLBACK,
   environment: process.env.NODE_ENV === 'production' ? 'production' : 'local',
+  // Mirror the same `portfolio@<sha>[-dirty]` identifier the client and
+  // backends use, so build-time errors land on the same release in the
+  // Sentry UI as the runtime traffic they correspond to.
+  release: process.env.PUBLIC_SENTRY_RELEASE ?? 'portfolio@local-dev',
   tracesSampleRate: 0,
 });

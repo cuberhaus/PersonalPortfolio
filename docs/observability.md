@@ -209,6 +209,82 @@ The frontend re-reads the DSN on every Astro dev-server restart.
 
 ---
 
+## Releases
+
+Every event is stamped with a `release` tag so the Sentry UI's Releases
+tab can attribute issues to the deploy that introduced them.
+
+### Format
+
+```text
+portfolio@<short-sha>           # clean checkout
+portfolio@<short-sha>-dirty     # working tree has uncommitted changes
+portfolio@local-dev             # git unavailable / not a checkout
+```
+
+The `portfolio@` prefix follows Sentry's idiomatic `<project>@<version>`
+schema. It groups every event from this codebase together in the
+Releases tab and leaves room to namespace future projects under
+different prefixes.
+
+### Auto-derivation
+
+The release identifier is computed by
+[`scripts/_release_id.sh`](../scripts/_release_id.sh) — single source of
+truth used by both runtime (`dev-all-demos.sh`) and build
+(`make build`). The script runs `git rev-parse --short HEAD` plus
+`git status --porcelain` and prints the result.
+
+Auto-derivation runs only when the user hasn't pinned a release
+explicitly. Specifically, [`scripts/dev-all-demos.sh`](../scripts/dev-all-demos.sh)
+and [`Makefile`](../Makefile) override `SENTRY_RELEASE` when:
+
+- `SENTRY_RELEASE` is empty, **or**
+- `SENTRY_RELEASE` equals the placeholder `local-dev` (the default that
+  ships in `.env.shared.example`).
+
+The orchestrator then mirrors the value into `PUBLIC_SENTRY_RELEASE`
+which Astro picks up via `import.meta.env.PUBLIC_SENTRY_RELEASE` (see
+[`sentry.client.config.ts`](../sentry.client.config.ts) and
+[`sentry.server.config.ts`](../sentry.server.config.ts)). End result:
+backend events, browser pageloads, and build-time errors all share
+the same release tag.
+
+### The `-dirty` suffix
+
+Whenever you have uncommitted changes (modified, staged, or untracked
+files), the SHA is suffixed with `-dirty`. This is intentionally noisy
+so you can spot when a Sentry event came from an uncommitted local
+build versus a real published commit. Treat dirty events as throwaway —
+once you commit, the next launch picks up the clean SHA again.
+
+### Overriding the identifier
+
+For CI deploys (or any time you want a hand-picked label), set
+`SENTRY_RELEASE` explicitly in `.env.shared`:
+
+```bash
+SENTRY_RELEASE=portfolio@v1.2.3
+```
+
+Anything other than empty / `local-dev` skips auto-derivation
+entirely. The frontend (`make build`) currently uses the SHA helper
+unconditionally; if you also want to override it there, export
+`PUBLIC_SENTRY_RELEASE` in the shell before running `make build`.
+
+### Verifying the release reached Sentry
+
+```bash
+# Confirm the env var is set in a running container:
+docker exec tfg-app-1 env | grep SENTRY_RELEASE
+# expected: SENTRY_RELEASE=portfolio@a1e3fc0
+
+# Then in the Sentry UI, open Releases tab — the new identifier
+# should be listed within ~30 seconds of the next event ingestion.
+```
+
+---
+
 ## Troubleshooting
 
 ### "Looks like there are no traces recorded matching the applied search & filters"
@@ -288,6 +364,64 @@ SENTRY_TRACES_SAMPLE_RATE=1.0
 ```
 
 This is propagated to every backend's SDK config.
+
+---
+
+## Tag conventions
+
+Every event is automatically stamped with `service:<demo-slug>` (set by
+[`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py)) plus
+`environment` and `release`. On top of those globals, individual handlers
+add **content tags** to make per-request behaviour grep-able in Sentry's
+search box and dashboards.
+
+The axes below are the canonical names — if you instrument a new
+endpoint, **reuse an existing axis** rather than coining a synonym. New
+axes are fine if the concept is genuinely new; just add them to the table
+in the same PR so the convention stays a single source of truth.
+
+| Backend | `service` value | Tag axes (in addition to the globals) |
+|---|---|---|
+| TFG (FastAPI) | `tfg-polyps` | `model`, `dataset`, `experiment` |
+| MPIDS (Flask) | `mpids` | `algorithm`, `n`, `p`, `iterations`, `temperature` |
+| Phase Transitions (Flask) | `phase-transitions` | `model`, `n`, `param`, `trials`, `percolation_type`, `q` |
+| CAIM (Flask) | `caim` | `dataset`, `top_n`, `damping`, `init_strategy`, `max_iterations` |
+| SBC_IA (Litestar) | `sbc-ia` | `trip_type`, `priority`, `budget`, `n_cities`, `transport_pref` |
+| DesastresIA (Flask) | `desastres-ia` | `algorithm`, `n_grupos`, `n_centros`, `successor_fn`, `heuristic_fn`, `sa_steps` |
+| bitsXlaMarato (FastAPI) | `bitsx-marato` | `job_id`, `model`, `confidence`, `roi_size` |
+| Draculin (Django) | `draculin` | `has_bard`, `image_size_kb` |
+| planner-api (FastAPI, host) | `planner-api` | `domain_size_kb`, `problem_size_kb`, `outcome` |
+
+### Conventions worth following
+
+- **High-cardinality fields → tags only when bucketed.** Sentry indexes
+  every tag value, so unbounded values (file paths, full text, raw IDs)
+  blow up the schema. Bucket them first: `image_size_kb` is fine,
+  `image_size_bytes:1234567` is not.
+- **`outcome` is `ok` / `timeout` / `error`** — keep the vocabulary tiny
+  so future alert rules can match it precisely without explosion.
+- **Parameters with > 3 categorical values** (e.g. `algorithm:greedy`)
+  are great tags. Continuous values (e.g. `temperature:0.973`) are
+  better passed as **span data** via `span("op", description, k=v)`,
+  which shows up in the trace waterfall but doesn't index in search.
+- **Span ops** follow `<domain>.<verb>` (e.g. `solver.search`,
+  `enhsp.subprocess`, `cv.frames`, `ml.infer`). Sentry groups by `op` in
+  the Performance tab, so reusing names across backends gives free
+  cross-service comparison ("how slow is `ml.infer` vs `solver.search`?").
+
+### Where each backend's instrumentation lives
+
+| Backend | Handler file |
+|---|---|
+| TFG | [`TFG/backend/main.py`](../../TFG/backend/main.py) |
+| MPIDS | [`projectA/web/backend/app.py`](../../projectA/web/backend/app.py) |
+| Phase | [`projectA2/web/backend/app.py`](../../projectA2/web/backend/app.py) |
+| CAIM | [`CAIM/web/backend/app.py`](../../CAIM/web/backend/app.py) |
+| SBC_IA | [`SBC_IA/web/backend/app.py`](../../SBC_IA/web/backend/app.py) |
+| DesastresIA | [`desastresIA/web/backend/app.py`](../../desastresIA/web/backend/app.py) |
+| bitsXlaMarato | [`bitsXlaMarato/web/backend/app.py`](../../bitsXlaMarato/web/backend/app.py) |
+| Draculin | [`Draculin-Backend/dracu/views.py`](../../Draculin-Backend/dracu/views.py) |
+| planner-api | [`planner-api/app/main.py`](../planner-api/app/main.py) |
 
 ---
 

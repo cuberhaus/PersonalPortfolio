@@ -154,7 +154,9 @@ build: ## Build Astro site for production and all demo Docker images
 	@echo ""
 	@echo "━━━ Building Astro site ━━━"
 	@echo ""
-	npm run build
+	@RELEASE="$$(./scripts/_release_id.sh 2>/dev/null || echo portfolio@local-dev)"; \
+	echo "  PUBLIC_SENTRY_RELEASE=$$RELEASE"; \
+	PUBLIC_SENTRY_RELEASE="$$RELEASE" npm run build
 
 rebuild: ## Force rebuild all Docker images (ignore cache) and Astro site
 	@rm -rf "$(STAMPS)" dist/

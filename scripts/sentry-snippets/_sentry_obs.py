@@ -30,11 +30,13 @@ KEEP THIS FILE IN SYNC across all backend repos. To resync:
 
 from __future__ import annotations
 
+import contextlib
 import json
 import logging
 import os
 import sys
 import time
+from typing import Any, Iterator
 
 
 _LEVEL_MAP = {
@@ -112,17 +114,34 @@ def init_observability(service: str) -> None:
             import sentry_sdk  # type: ignore[import-not-found]
 
             tagger = _make_service_tagger(service)
-            sentry_sdk.init(
+            init_kwargs = dict(
                 dsn=dsn,
                 environment=os.environ.get("SENTRY_ENVIRONMENT", "local-dev"),
                 release=os.environ.get("SENTRY_RELEASE", "local-dev"),
                 traces_sample_rate=float(
                     os.environ.get("SENTRY_TRACES_SAMPLE_RATE", "1.0"),
                 ),
+                # Transaction-based profiling — sentry-sdk 1.18+
+                profiles_sample_rate=float(
+                    os.environ.get("SENTRY_PROFILES_SAMPLE_RATE", "1.0"),
+                ),
+                # Continuous session profiling — sentry-sdk 2.21+. Older
+                # SDKs raise TypeError on this kwarg, so we strip it on
+                # the retry below.
+                profile_session_sample_rate=float(
+                    os.environ.get("SENTRY_PROFILE_SESSION_SAMPLE_RATE", "1.0"),
+                ),
                 send_default_pii=False,
                 before_send=tagger,
                 before_send_transaction=tagger,
             )
+            try:
+                sentry_sdk.init(**init_kwargs)
+            except TypeError:
+                # Unknown kwarg on older SDK — drop the newest one and retry
+                # so we don't lose the rest of the config.
+                init_kwargs.pop("profile_session_sample_rate", None)
+                sentry_sdk.init(**init_kwargs)
             sentry_sdk.set_tag("service", service)
         except ImportError:
             pass
@@ -132,3 +151,91 @@ def init_observability(service: str) -> None:
         handlers=[JsonLineHandler()],
         force=True,
     )
+
+
+# ── Per-handler instrumentation helpers ────────────────────────────────
+#
+# Backends use these so each `app.py` / `main.py` / `views.py` doesn't
+# have to repeat the `try: import sentry_sdk` + nullcontext shim. All
+# three are no-ops when `sentry_sdk` is missing OR when no DSN was set
+# (the SDK's own no-op hub already handles the "DSN missing" case, this
+# layer also handles the "package missing" case).
+#
+# Usage:
+#
+#     from _sentry_obs import tag, breadcrumb, span
+#
+#     tag("model", req.model_name)
+#     breadcrumb("ml", "predict received", model_file=req.model_file)
+#     with span("ml.infer", description="FasterRCNN forward pass",
+#               model=req.model_name):
+#         output = model(tensor)
+#
+# `span(...)` returns a context manager either way. Any kwargs are
+# forwarded as `set_data(k, v)` on the span (they show up in the trace
+# waterfall) — Sentry will reject unserialisable values, so we wrap the
+# `set_data` call in try/except as well.
+
+
+try:
+    import sentry_sdk as _sentry_sdk  # type: ignore[import-not-found]
+except ImportError:
+    _sentry_sdk = None  # type: ignore[assignment]
+
+
+def tag(key: str, value: Any) -> None:
+    """Add a tag to the current Sentry scope. No-op when SDK absent."""
+    if _sentry_sdk is None:
+        return
+    try:
+        _sentry_sdk.set_tag(key, value)
+    except Exception:
+        pass
+
+
+def breadcrumb(
+    category: str,
+    message: str,
+    *,
+    level: str = "info",
+    **data: Any,
+) -> None:
+    """Add a Sentry breadcrumb. Any extra kwargs land in `data`."""
+    if _sentry_sdk is None:
+        return
+    try:
+        _sentry_sdk.add_breadcrumb(
+            category=category,
+            message=message,
+            level=level,
+            data=data or None,
+        )
+    except Exception:
+        pass
+
+
+@contextlib.contextmanager
+def span(op: str, description: str | None = None, **data: Any) -> Iterator[Any]:
+    """Start a Sentry span. Yields the span (or `None` when SDK absent).
+
+    All `data` kwargs are recorded with `span.set_data(k, v)` for the
+    waterfall view.
+    """
+    if _sentry_sdk is None:
+        yield None
+        return
+    try:
+        cm = _sentry_sdk.start_span(op=op, description=description)
+    except Exception:
+        # Any SDK-level failure → degrade to no-op rather than crashing
+        # the request handler.
+        yield None
+        return
+    with cm as s:
+        if s is not None and data:
+            for k, v in data.items():
+                try:
+                    s.set_data(k, v)
+                except Exception:
+                    pass
+        yield s

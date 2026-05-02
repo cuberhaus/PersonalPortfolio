@@ -7,11 +7,26 @@ from __future__ import annotations
 
 # ── Phase 14 (Option A) — Sentry SDK + JSON-line stdout (no-op if missing) ─
 try:
-    from ._sentry_obs import init_observability  # type: ignore[import-not-found]
+    from ._sentry_obs import (  # type: ignore[import-not-found]
+        init_observability,
+        breadcrumb as _crumb,
+        span as _span,
+        tag as _tag,
+    )
 
     init_observability(service="planner-api")
 except ImportError:
-    pass
+    from contextlib import contextmanager
+
+    def _tag(*_a, **_kw):
+        return None
+
+    def _crumb(*_a, **_kw):
+        return None
+
+    @contextmanager
+    def _span(*_a, **_kw):
+        yield None
 
 import importlib.resources as ir
 import os
@@ -103,6 +118,15 @@ def plan(req: PlanRequest, request: Request):
     if not domain or not problem:
         raise HTTPException(status_code=400, detail="domain and problem required")
 
+    domain_kb = len(domain.encode("utf-8")) // 1024
+    problem_kb = len(problem.encode("utf-8")) // 1024
+    _tag("domain_size_kb", domain_kb)
+    _tag("problem_size_kb", problem_kb)
+    _crumb(
+        "planner", "plan request received",
+        domain_size_kb=domain_kb, problem_size_kb=problem_kb,
+    )
+
     jar = _enhsp_jar()
     if not jar.is_file():
         raise HTTPException(status_code=500, detail="ENHSP jar not found")
@@ -127,16 +151,31 @@ def plan(req: PlanRequest, request: Request):
                 str(spath),
                 "-npm",
             ]
-            t0 = time.monotonic()
-            proc = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=PLAN_TIMEOUT_SEC,
-                encoding="utf-8",
-                errors="replace",
+            _crumb(
+                "planner", "subprocess start",
+                jar=str(jar), timeout_sec=PLAN_TIMEOUT_SEC,
             )
+            t0 = time.monotonic()
+            with _span(
+                "enhsp.subprocess",
+                description="java -jar enhsp",
+                domain_size_kb=domain_kb,
+                problem_size_kb=problem_kb,
+                timeout_sec=PLAN_TIMEOUT_SEC,
+            ):
+                proc = subprocess.run(
+                    cmd,
+                    capture_output=True,
+                    text=True,
+                    timeout=PLAN_TIMEOUT_SEC,
+                    encoding="utf-8",
+                    errors="replace",
+                )
             elapsed = time.monotonic() - t0
+            _crumb(
+                "planner", "subprocess return",
+                returncode=proc.returncode, elapsed_sec=round(elapsed, 3),
+            )
             log = proc.stdout + ("\n" + proc.stderr if proc.stderr else "")
 
             plan_lines: list[str] = []
@@ -167,6 +206,7 @@ def plan(req: PlanRequest, request: Request):
 
             ok = proc.returncode == 0 and bool(plan_lines)
             if proc.returncode != 0 and not plan_lines:
+                _tag("outcome", "error")
                 return {
                     "ok": False,
                     "error": log.strip()[:8000] or f"exit {proc.returncode}",
@@ -176,6 +216,7 @@ def plan(req: PlanRequest, request: Request):
                 }
 
             if not plan_lines:
+                _tag("outcome", "error")
                 return {
                     "ok": False,
                     "error": "No plan in output; check domain/problem PDDL.",
@@ -184,6 +225,7 @@ def plan(req: PlanRequest, request: Request):
                     "time_sec": round(elapsed, 3),
                 }
 
+            _tag("outcome", "ok")
             return {
                 "ok": True,
                 "plan": plan_lines,
@@ -191,6 +233,9 @@ def plan(req: PlanRequest, request: Request):
                 "time_sec": round(elapsed, 3),
             }
     except subprocess.TimeoutExpired:
+        _tag("outcome", "timeout")
+        _crumb("planner", "subprocess timeout", level="warning",
+               timeout_sec=PLAN_TIMEOUT_SEC)
         return {
             "ok": False,
             "error": f"Planner timed out after {PLAN_TIMEOUT_SEC}s",
@@ -198,6 +243,8 @@ def plan(req: PlanRequest, request: Request):
             "plan": [],
         }
     except Exception as e:
+        _tag("outcome", "error")
+        _crumb("planner", "exception", level="error", error=str(e)[:200])
         return {
             "ok": False,
             "error": str(e)[:2000],
