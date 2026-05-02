@@ -30,7 +30,7 @@ You can switch by editing `.env.shared` and bouncing the backends.
 ## Option 1 — Sentry Spotlight (default)
 
 Spotlight is integrated by `@spotlightjs/astro` in [`astro.config.mjs`](../astro.config.mjs).
-It starts automatically when you run `npm run dev` or `make dev-all`.
+It starts automatically when you run `npm run dev`, `make dev-bare`, or `make all`.
 
 **To use it:**
 
@@ -38,7 +38,7 @@ It starts automatically when you run `npm run dev` or `make dev-all`.
    ```bash
    SENTRY_DSN=http://public@localhost:8969/1
    ```
-2. `make stop && make dev-all`
+2. `make stop && make dev-bare`
 3. Open <http://localhost:8969> (or click the Spotlight badge in the
    bottom-left of any page).
 
@@ -104,7 +104,7 @@ After `make obs-up` succeeds and <http://localhost:9000> loads:
    ```
 5. Bounce the backends:
    ```bash
-   make stop && make dev-all
+   make stop && make dev-bare
    ```
 
 The `dev-all-demos.sh` orchestrator detects that the DSN host is
@@ -207,7 +207,7 @@ All four options use the same `SENTRY_DSN` env variable, so switching is:
 sed -i 's|^SENTRY_DSN=.*|SENTRY_DSN=http://public@localhost:8969/1|' .env.shared
 
 # Bounce the backends so they reinitialise their SDKs:
-make stop && make dev-all
+make stop && make dev-bare
 ```
 
 The frontend re-reads the DSN on every Astro dev-server restart.
@@ -442,7 +442,7 @@ grep SENTRY_DSN PersonalPortfolio/.env.shared
 ```
 
 If empty/commented, the SDKs initialise as no-ops by design. Set a DSN and
-`make stop && make dev-all`.
+`make stop && make dev-bare`.
 
 ### Frontend events appear but backend events don't
 

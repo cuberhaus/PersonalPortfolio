@@ -20,7 +20,7 @@ cd PersonalPortfolio
 node scripts/log-relay/index.mjs --port 9999
 ```
 
-`make dev-all` boots it automatically together with the demo backends.
+`make dev-bare` (or `make all`) boots it automatically together with the demo backends.
 
 ## Adding a new demo
 

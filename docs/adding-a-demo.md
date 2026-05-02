@@ -4,7 +4,7 @@ This is the end-to-end checklist for adding a new project demo so it
 plugs into every system the portfolio already runs:
 
 - the centralized debug overlay (logs, network, perf, source filter)
-- the dev orchestrator (`make dev-all`)
+- the dev orchestrator (`make dev-bare` / `make all`)
 - the log relay (Docker `stdout` → in-page overlay)
 - the Sentry forwarder (errors + breadcrumbs)
 - the i18n machinery
@@ -385,7 +385,7 @@ No edit. The orchestrator already reads the registry. Confirm with:
 
 ```bash
 make help          # prints the registry-derived service list
-make dev-all       # boots everything + log-relay + Astro
+make dev-bare      # boots everything + log-relay + Astro
 ```
 
 ## 9. Tests
@@ -411,7 +411,7 @@ The registry test enforces all of:
 ## 10. Verify the wiring
 
 ```bash
-make dev-all
+make dev-bare
 # in another shell
 open http://localhost:4321/demos/<slug>/?debug=1
 # press Alt+Shift+D

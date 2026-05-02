@@ -14,7 +14,7 @@
  * Reads `src/data/demo-services.json` so the registry is the single
  * source of truth. Picks up new demos with no code change here.
  *
- * Production note: this server is for `npm run dev` / `make dev-all`
+ * Production note: this server is for `npm run dev` / `make dev-bare`
  * only. The portfolio is a static site in production; production logs
  * flow through Sentry.
  */

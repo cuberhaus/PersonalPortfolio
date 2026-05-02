@@ -36,7 +36,7 @@ REGISTRY_FILE="${PORTFOLIO}/src/data/demo-services.json"
 # ── Phase 14 (Option A): propagate the shared Sentry DSN to every backend ──
 # `.env.shared` is gitignored. Copy `.env.shared.example` to `.env.shared`,
 # fill in your DSN, and re-run. Without it, backends initialise their SDK
-# with an empty DSN and silently no-op (so `make dev-all` keeps working).
+# with an empty DSN and silently no-op (so `make dev-bare` keeps working).
 if [[ -f "${PORTFOLIO}/.env.shared" ]]; then
   set -a
   # shellcheck source=/dev/null
