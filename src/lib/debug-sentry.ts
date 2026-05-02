@@ -4,7 +4,7 @@
  * automatically targets sentry.io once a real DSN is configured via
  * `PUBLIC_SENTRY_DSN` in `.env`.
  *
- * Mapping rationale (see docs/debugging-architecture.md, "Concept mapping"):
+ * Mapping rationale (see docs/decisions.md, "Concept mapping cheat sheet"):
  *   info / warn      → addBreadcrumb({ level })
  *   error w/ Error   → captureException(err)
  *   error w/o Error  → captureMessage(msg, 'error')

@@ -122,8 +122,13 @@ service:tfg-polyps
 
 Returns events from the TFG backend only. The `service` tag is set by
 [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py)
-(Python backends) and the equivalent `set_tag("service", ...)` calls in
-each non-Python stack's observability hook.
+(Python backends) and a language-equivalent init-time scope API in each
+non-Python stack's observability hook — see
+[Per-stack observability hooks](#per-stack-observability-hooks) below for
+the exact files. The defensive `before_send` envelope hook the Python helper
+uses is documented in
+[`debugging-architecture.md` § Why the Python helper has a `before_send`
+hook](./debugging-architecture.md#why-the-python-helper-has-a-before_send-hook-and-the-others-dont).
 
 Other useful tags to filter on:
 
@@ -322,7 +327,8 @@ If `host.docker.internal` doesn't resolve, the container's
 `docker-compose.yml` is missing `extra_hosts: ["host.docker.internal:host-gateway"]`.
 This was added in Phase 14 to every backend compose file — see
 [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py)
-and the per-stack files referenced from `debugging-architecture.md`.
+and the per-stack files in
+[Per-stack observability hooks](#per-stack-observability-hooks) below.
 
 ### Port 9000 is already in use
 
@@ -409,7 +415,11 @@ in the same PR so the convention stays a single source of truth.
   the Performance tab, so reusing names across backends gives free
   cross-service comparison ("how slow is `ml.infer` vs `solver.search`?").
 
-### Where each backend's instrumentation lives
+### Where each backend's per-handler instrumentation lives
+
+These files contain the **content tags** (model, dataset, algorithm, etc.) —
+the per-request `tag(...)`, `breadcrumb(...)`, `span(...)` calls that
+distinguish one request from another inside the same `service`.
 
 | Backend | Handler file |
 |---|---|
@@ -423,12 +433,37 @@ in the same PR so the convention stays a single source of truth.
 | Draculin | [`Draculin-Backend/dracu/views.py`](../../Draculin-Backend/dracu/views.py) |
 | planner-api | [`planner-api/app/main.py`](../planner-api/app/main.py) |
 
+Non-Python backends currently emit only the global tags (`service`,
+`environment`, `release`) — they don't have rich per-handler content tags
+yet. If/when they grow them, list the handler files here.
+
+---
+
+## Per-stack observability hooks
+
+The `service` tag and SDK init for each backend live in the file below.
+Source of truth for which backends have a hook is the `needsSentry` field
+in [`src/data/demo-services.json`](../src/data/demo-services.json).
+
+| Backend | Stack | Init hook |
+|---|---|---|
+| TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api | Python (FastAPI / Flask / Litestar) | [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) — canonical, copied verbatim into each backend repo |
+| Draculin | Django | [`Draculin-Backend/Draculin/settings.py`](../../Draculin-Backend/Draculin/settings.py) — calls `init_observability("draculin")` from the same canonical helper |
+| PROP | Spring Boot | [`subgrup-prop7.1/web/src/main/resources/application.properties`](../../subgrup-prop7.1/web/src/main/resources/application.properties) — `sentry.dsn` + `sentry.tags.service=prop` |
+| Tenda | PHP | [`tenda_online/includes/observability.php`](../../tenda_online/includes/observability.php) — `\Sentry\init(...)` + `\Sentry\configureScope(...)` |
+| joc-eda | Go | [`joc_eda/web/backend-go/observability.go`](../../joc_eda/web/backend-go/observability.go) — `initSentry`, `withSentryHTTP` |
+| pro2 | Rust (axum) | [`pracpro2/web/backend/src/main.rs`](../../pracpro2/web/backend/src/main.rs) — `_init_sentry()` |
+| planificacion | SvelteKit | [`Practica_de_Planificacion/web/src/hooks.server.ts`](../../Practica_de_Planificacion/web/src/hooks.server.ts) — `@sentry/sveltekit` + `sentryHandle()` |
+| PAR / FIB / Grafics / ROB | static frontend | n/a — `needsSentry: false`. Browser errors caught by the parent page's Sentry SDK via the iframe forwarder |
+
 ---
 
 ## Cross-references
 
-- [`debugging-architecture.md`](./debugging-architecture.md) — *why* Sentry was
-  chosen and the full Option A vs B vs C vs D trade-off matrix.
+- [`debugging-architecture.md`](./debugging-architecture.md) — *why* Sentry
+  was chosen and the Option A vs B vs C vs D trade-off matrix.
+- [`decisions.md`](./decisions.md) — full decision-rationale catalogue
+  (foundations, patterns, alternatives, migration costs).
 - [`adding-a-demo.md`](./adding-a-demo.md) — how to wire a brand-new demo's
   backend into this observability pipeline (per-stack SDK init).
 - [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) —
