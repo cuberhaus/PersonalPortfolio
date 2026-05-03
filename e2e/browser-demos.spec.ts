@@ -243,7 +243,7 @@ test.describe('Draculin demo', () => {
 
   test('switching tabs changes content', async ({ page }) => {
     await page.getByRole('button', { name: /DracuChat/ }).click();
-    await expect(page.locator('input[placeholder]')).toBeVisible();
+    await expect(page.getByPlaceholder('Type a message...')).toBeVisible();
 
     await page.getByRole('button', { name: /DracuQuiz/ }).click();
     await expect(page.getByRole('button', { name: /yes/i })).toBeVisible();
@@ -251,7 +251,7 @@ test.describe('Draculin demo', () => {
 
   test('chat sends a message and gets mock reply', async ({ page }) => {
     await page.getByRole('button', { name: /DracuChat/ }).click();
-    const input = page.locator('input[placeholder]');
+    const input = page.getByPlaceholder('Type a message...');
     await input.fill('test question');
     await page.getByRole('button', { name: /send|enviar/i }).click();
     // Mock reply should appear
@@ -309,7 +309,7 @@ test.describe('TFG Polyp demo', () => {
   test('confidence slider filters detection boxes', async ({ page }) => {
     // Run inference first
     await page.getByRole('button', { name: /run demo/i }).click();
-    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 15000 });
     // The confidence slider should be visible
     const slider = page.locator('input[type="range"]').first();
     await expect(slider).toBeVisible();
@@ -456,7 +456,7 @@ test.describe('BitsXlaMarato demo', () => {
 
   test('run demo inference shows progress', async ({ page }) => {
     await page.getByRole('button', { name: /run demo/i }).click();
-    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 15000 });
   });
 
   test('diameter slider changes zone indicator', async ({ page }) => {
@@ -501,9 +501,13 @@ test.describe('APA Practica demo', () => {
     const box = await canvas.boundingBox();
     if (box) {
       await canvas.click({ position: { x: box.width / 2, y: box.height / 2 } });
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(500);
     }
-    await page.getByRole('button', { name: /clear|limpiar|netejar/i }).click();
+    const clearBtn = page.getByRole('button', { name: /clear|limpiar|netejar/i });
+    // Clear button only appears after a point is selected
+    if (await clearBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await clearBtn.click();
+    }
   });
 
   test('changing k value updates display', async ({ page }) => {

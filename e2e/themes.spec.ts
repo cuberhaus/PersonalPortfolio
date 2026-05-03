@@ -91,19 +91,19 @@ test.describe('Ctrl+K customize modal', () => {
   });
 
   test('window.setDesign API works and validates ids', async ({ page }) => {
-    await page.evaluate(() => (window as unknown as { setDesign(id: string): void }).setDesign('glass'));
-    await expect(page.locator('html')).toHaveAttribute('data-design', 'glass');
+    await page.evaluate(() => (window as unknown as { setDesign(id: string): void }).setDesign('swiss'));
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'swiss');
 
     const errors: string[] = [];
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     await page.evaluate(() => (window as unknown as { setDesign(id: string): void }).setDesign('not-a-design'));
-    await expect(page.locator('html')).toHaveAttribute('data-design', 'glass');
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'swiss');
     expect(errors.some(e => /not-a-design/.test(e))).toBe(true);
   });
 
   test('URL ?design=… is honored then stripped', async ({ page }) => {
-    await page.goto('/?design=neumorphic', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('html')).toHaveAttribute('data-design', 'neumorphic');
+    await page.goto('/?design=editorial', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'editorial');
     expect(page.url()).not.toContain('design=');
   });
 
@@ -111,7 +111,7 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     for (const id of [
       'minimal', 'editorial', 'swiss', 'pixel',
-      'terminal', 'cyber', 'clay',
+      'terminal', 'cyber',
       'notebook', 'brutalist', 'blueprint',
       'academic', 'ide', 'risograph',
       'deco', 'wabisabi',
@@ -225,14 +225,15 @@ test.describe('Ctrl+K customize modal', () => {
     expect(font.toLowerCase()).toMatch(/shippori|mincho|serif|garamond/);
   });
 
-  test('Dashboard design (hidden) still applies via window.setDesign API', async ({ page }) => {
+  test('setDesign API validates unknown ids and keeps current design', async ({ page }) => {
+    await page.evaluate(() => (window as unknown as { setDesign(id: string): void }).setDesign('brutalist'));
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'brutalist');
+    // Try setting a non-existent design — should stay on brutalist
+    const errors: string[] = [];
+    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     await page.evaluate(() => (window as unknown as { setDesign(id: string): void }).setDesign('dashboard'));
-    await expect(page.locator('html')).toHaveAttribute('data-design', 'dashboard');
-    const greeting = page.locator('.hero-greeting').first();
-    const display = await greeting.evaluate(el => getComputedStyle(el).display);
-    expect(display).toMatch(/inline-flex|flex/);
-    const radius = await greeting.evaluate(el => getComputedStyle(el).borderRadius);
-    expect(radius).not.toBe('0px');
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'brutalist');
+    expect(errors.some(e => /dashboard/.test(e))).toBe(true);
   });
 
   test('Zine design applies a heavy box-shadow offset to cards (photocopied feel)', async ({ page }) => {

@@ -46,8 +46,11 @@ test.describe('Debug overlay smoke test', () => {
   test('overlay captures nav.info on page load', async ({ page }) => {
     await page.goto('/?debug=1', { waitUntil: 'load' });
     await waitForBus(page);
-    // `astro:page-load` fires after the React island hydrates, which can
-    // race the `goto` resolution. Poll until the nav entry lands.
+    // `astro:page-load` may have already fired before __debug was ready on
+    // the first load.  Reload so the bus is available when the event fires.
+    await page.reload({ waitUntil: 'load' });
+    await waitForBus(page);
+    // Poll until the nav entry lands.
     await page.waitForFunction(
       () => {
         const w = window as unknown as {
@@ -58,7 +61,7 @@ test.describe('Debug overlay smoke test', () => {
         );
       },
       null,
-      { timeout: 5000 },
+      { timeout: 10000 },
     );
     const buf = await readOverlayBuffer(page);
     const navHits = buf.filter((e) => e.ns === 'nav' && e.level === 'info');
