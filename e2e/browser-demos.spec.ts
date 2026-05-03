@@ -30,7 +30,7 @@ test.describe('All demo pages load', () => {
         }
       });
 
-      await page.goto(`/demos/${slug}`, { waitUntil: 'networkidle' });
+      await page.goto(`/demos/${slug}`, { waitUntil: 'domcontentloaded' });
       await expect(page).toHaveTitle(/.+/);
       expect(errors).toEqual([]);
     });
@@ -48,7 +48,7 @@ test.describe('DemoNav sidebar', () => {
   });
 
   test('clicking a sidebar link navigates to that demo', async ({ page }) => {
-    await page.goto('/demos/jsbach', { waitUntil: 'networkidle' });
+    await page.goto('/demos/jsbach', { waitUntil: 'domcontentloaded' });
     const tendaLink = page.locator('nav a[href*="/demos/tenda"]').first();
     if (await tendaLink.isVisible()) {
       // Sidebar may clip the element outside the viewport; dispatch click via JS
@@ -63,12 +63,12 @@ test.describe('DemoNav sidebar', () => {
 
 test.describe('i18n demo pages', () => {
   test('/es/demos/jsbach loads in Spanish', async ({ page }) => {
-    await page.goto('/es/demos/jsbach', { waitUntil: 'networkidle' });
+    await page.goto('/es/demos/jsbach', { waitUntil: 'domcontentloaded' });
     await expect(page).toHaveTitle(/.+/);
   });
 
   test('/ca/demos/jsbach loads in Catalan', async ({ page }) => {
-    await page.goto('/ca/demos/jsbach', { waitUntil: 'networkidle' });
+    await page.goto('/ca/demos/jsbach', { waitUntil: 'domcontentloaded' });
     await expect(page).toHaveTitle(/.+/);
   });
 });
@@ -77,14 +77,14 @@ test.describe('i18n demo pages', () => {
 
 test.describe('JSBach demo', () => {
   test('loads example and shows code editor', async ({ page }) => {
-    await page.goto('/demos/jsbach', { waitUntil: 'networkidle' });
+    await page.goto('/demos/jsbach', { waitUntil: 'domcontentloaded' });
     // Should have a code editor area and example selector
     const codeArea = page.locator('textarea, pre, [contenteditable]').first();
     await expect(codeArea).toBeVisible();
   });
 
   test('run button produces output', async ({ page }) => {
-    await page.goto('/demos/jsbach', { waitUntil: 'networkidle' });
+    await page.goto('/demos/jsbach', { waitUntil: 'domcontentloaded' });
     // Select an example if available
     const select = page.locator('select').first();
     if (await select.isVisible()) {
@@ -106,7 +106,7 @@ test.describe('JSBach demo', () => {
 
 test.describe('Tenda demo', () => {
   test('displays product categories on home', async ({ page }) => {
-    await page.goto('/demos/tenda', { waitUntil: 'networkidle' });
+    await page.goto('/demos/tenda', { waitUntil: 'domcontentloaded' });
     // Wait for LiveAppEmbed probe to complete
     await page.waitForTimeout(3000);
     // Force fallback visible in case backend is running
@@ -126,7 +126,7 @@ test.describe('Tenda demo', () => {
   });
 
   test('add to cart updates badge count', async ({ page }) => {
-    await page.goto('/demos/tenda', { waitUntil: 'networkidle' });
+    await page.goto('/demos/tenda', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3000);
     await page.evaluate(() => {
       const el = document.querySelector('#tenda-mock-fallback') as HTMLElement;
@@ -155,7 +155,7 @@ test.describe('Tenda demo', () => {
 
 test.describe('Desastres IA demo', () => {
   test('shows solver controls', async ({ page }) => {
-    await page.goto('/demos/desastres-ia', { waitUntil: 'networkidle' });
+    await page.goto('/demos/desastres-ia', { waitUntil: 'domcontentloaded' });
     // Should have HC/SA selector or solve button
     const solveBtn = page.getByRole('button', { name: /solve|resolver/i }).first();
     const visible = await solveBtn.isVisible().catch(() => false);
@@ -167,7 +167,7 @@ test.describe('Desastres IA demo', () => {
 
 test.describe('Pro2 WPGMA demo', () => {
   test('loads sample data and shows species list', async ({ page }) => {
-    await page.goto('/demos/pro2', { waitUntil: 'networkidle' });
+    await page.goto('/demos/pro2', { waitUntil: 'domcontentloaded' });
     // Should show species input or sample loader
     const loadBtn = page.getByRole('button', { name: /sample|exemple|cargar/i }).first();
     const hasBtn = await loadBtn.isVisible().catch(() => false);
@@ -179,14 +179,14 @@ test.describe('Pro2 WPGMA demo', () => {
 
 test.describe('Planificacion demo', () => {
   test('shows PDDL domain and problem cards', async ({ page }) => {
-    await page.goto('/demos/planificacion', { waitUntil: 'networkidle' });
+    await page.goto('/demos/planificacion', { waitUntil: 'domcontentloaded' });
     const preBlocks = page.locator('pre');
     const count = await preBlocks.count();
     expect(count).toBeGreaterThanOrEqual(1);
   });
 
   test('simulate planner button works', async ({ page }) => {
-    await page.goto('/demos/planificacion', { waitUntil: 'networkidle' });
+    await page.goto('/demos/planificacion', { waitUntil: 'domcontentloaded' });
     const mockBtn = page.getByRole('button', { name: /simulate|simular/i }).first();
     if (await mockBtn.isVisible()) {
       await mockBtn.click();
@@ -203,7 +203,7 @@ test.describe('LiveAppEmbed offline fallback', () => {
   // the offline instructional block (not crash)
   for (const slug of ['tenda', 'draculin', 'desastres-ia', 'planificacion']) {
     test(`${slug} shows offline instructions when backend is down`, async ({ page }) => {
-      await page.goto(`/demos/${slug}`, { waitUntil: 'networkidle' });
+      await page.goto(`/demos/${slug}`, { waitUntil: 'domcontentloaded' });
       // After probe fails (2s timeout), the offline block appears
       await page.waitForTimeout(3000);
       // Should have docker command visible or the mock demo should be shown
@@ -218,7 +218,7 @@ test.describe('LiveAppEmbed offline fallback', () => {
 
 test.describe('Draculin demo', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/demos/draculin', { waitUntil: 'networkidle' });
+    await page.goto('/demos/draculin', { waitUntil: 'domcontentloaded' });
     // Wait for LiveAppEmbed probe to complete (2s timeout)
     await page.waitForTimeout(3000);
     // Force fallback visible — the backend may be running (online → display:none)
@@ -280,7 +280,7 @@ test.describe('Draculin demo', () => {
 
 test.describe('TFG Polyp demo', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/demos/tfg-polyps', { waitUntil: 'networkidle' });
+    await page.goto('/demos/tfg-polyps', { waitUntil: 'domcontentloaded' });
   });
 
   test('model comparison table is visible with metric buttons', async ({ page }) => {
@@ -320,7 +320,7 @@ test.describe('TFG Polyp demo', () => {
 
 test.describe('Matriculas demo', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/demos/matriculas', { waitUntil: 'networkidle' });
+    await page.goto('/demos/matriculas', { waitUntil: 'domcontentloaded' });
   });
 
   test('shows sample plate images', async ({ page }) => {
@@ -358,7 +358,7 @@ test.describe('Matriculas demo', () => {
 
 test.describe('MPIDS demo', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/demos/mpids', { waitUntil: 'networkidle' });
+    await page.goto('/demos/mpids', { waitUntil: 'domcontentloaded' });
   });
 
   test('shows graph controls and algorithm buttons', async ({ page }) => {
@@ -399,7 +399,7 @@ test.describe('MPIDS demo', () => {
 
 test.describe('Phase Transitions demo', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/demos/phase-transitions', { waitUntil: 'networkidle' });
+    await page.goto('/demos/phase-transitions', { waitUntil: 'domcontentloaded' });
   });
 
   test('shows graph family and percolation selectors', async ({ page }) => {
@@ -445,7 +445,7 @@ test.describe('Phase Transitions demo', () => {
 
 test.describe('BitsXlaMarato demo', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/demos/bitsx-marato', { waitUntil: 'networkidle' });
+    await page.goto('/demos/bitsx-marato', { waitUntil: 'domcontentloaded' });
   });
 
   test('shows inference button and diameter explorer', async ({ page }) => {
@@ -469,7 +469,7 @@ test.describe('BitsXlaMarato demo', () => {
 
 test.describe('APA Practica demo', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/demos/apa-practica', { waitUntil: 'networkidle' });
+    await page.goto('/demos/apa-practica', { waitUntil: 'domcontentloaded' });
   });
 
   test('shows k-NN selector buttons', async ({ page }) => {
@@ -524,19 +524,19 @@ test.describe('APA Practica demo', () => {
 
 test.describe('Prev/Next demo cards', () => {
   test('jsbach page has prev/next navigation links', async ({ page }) => {
-    await page.goto('/demos/jsbach', { waitUntil: 'networkidle' });
+    await page.goto('/demos/jsbach', { waitUntil: 'domcontentloaded' });
     const prevNext = page.locator('a[href*="/demos/"]');
     expect(await prevNext.count()).toBeGreaterThan(2); // sidebar + prev/next
   });
 
   test('first demo has no "previous" card', async ({ page }) => {
-    await page.goto(`/demos/${ALL_SLUGS[0]}`, { waitUntil: 'networkidle' });
+    await page.goto(`/demos/${ALL_SLUGS[0]}`, { waitUntil: 'domcontentloaded' });
     // Should still load fine
     await expect(page).toHaveTitle(/.+/);
   });
 
   test('last demo has no "next" card', async ({ page }) => {
-    await page.goto(`/demos/${ALL_SLUGS[ALL_SLUGS.length - 1]}`, { waitUntil: 'networkidle' });
+    await page.goto(`/demos/${ALL_SLUGS[ALL_SLUGS.length - 1]}`, { waitUntil: 'domcontentloaded' });
     await expect(page).toHaveTitle(/.+/);
   });
 });
@@ -545,7 +545,7 @@ test.describe('Prev/Next demo cards', () => {
 
 test.describe('CAIM IR Explorer demo', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/demos/caim', { waitUntil: 'networkidle' });
+    await page.goto('/demos/caim', { waitUntil: 'domcontentloaded' });
     // Wait for LiveAppEmbed probe + component hydration
     await page.waitForTimeout(3000);
     // Skip mock tests when live backend is running (it hides the fallback)
@@ -628,7 +628,7 @@ test.describe('CAIM IR Explorer demo', () => {
 
 test.describe('CAIM demo i18n', () => {
   test('Spanish CAIM page shows translated tab labels', async ({ page }) => {
-    await page.goto('/es/demos/caim', { waitUntil: 'networkidle' });
+    await page.goto('/es/demos/caim', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3000);
     const mockVisible = await page.locator('.caim-mock').isVisible();
     test.skip(!mockVisible, 'Live backend running – mock demo hidden');
@@ -640,7 +640,7 @@ test.describe('CAIM demo i18n', () => {
   });
 
   test('Catalan CAIM page shows translated tab labels', async ({ page }) => {
-    await page.goto('/ca/demos/caim', { waitUntil: 'networkidle' });
+    await page.goto('/ca/demos/caim', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3000);
     const mockVisible = await page.locator('.caim-mock').isVisible();
     test.skip(!mockVisible, 'Live backend running – mock demo hidden');
@@ -656,12 +656,12 @@ test.describe('CAIM demo i18n', () => {
 
 test.describe('PAR Parallel Computing demo', () => {
   test('renders demo header with correct title', async ({ page }) => {
-    await page.goto('/demos/par-parallel', { waitUntil: 'networkidle' });
+    await page.goto('/demos/par-parallel', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('h1.demo-hdr-title')).toContainText('Parallel Computing');
   });
 
   test('renders three canvas elements for mini demos', async ({ page }) => {
-    await page.goto('/demos/par-parallel', { waitUntil: 'networkidle' });
+    await page.goto('/demos/par-parallel', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(2000);
     // Scroll to demo section
     await page.evaluate(() => {
@@ -673,7 +673,7 @@ test.describe('PAR Parallel Computing demo', () => {
   });
 
   test('heat equation play button starts iteration', async ({ page }) => {
-    await page.goto('/demos/par-parallel', { waitUntil: 'networkidle' });
+    await page.goto('/demos/par-parallel', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(2000);
     // Skip when live backend is running (it hides the mock fallback)
     const mockVisible = await page.locator('#par-mock-fallback').isVisible();
@@ -691,7 +691,7 @@ test.describe('PAR Parallel Computing demo', () => {
   });
 
   test('Spanish PAR page shows translated title', async ({ page }) => {
-    await page.goto('/es/demos/par-parallel', { waitUntil: 'networkidle' });
+    await page.goto('/es/demos/par-parallel', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('h1.demo-hdr-title')).toContainText('Computación Paralela');
   });
 });
