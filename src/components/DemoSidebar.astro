@@ -67,8 +67,18 @@ function demoHref(slug: string) {
     const toggleBtn = document.getElementById('sidebar-toggle');
     if (!sidebar) return;
 
-    function open() { sidebar!.classList.add('open'); document.body.style.overflow = 'hidden'; }
-    function close() { sidebar!.classList.remove('open'); document.body.style.overflow = ''; }
+    const dbg = (lvl: string, ns: string, msg: string, ...rest: unknown[]) =>
+      (window as any).__debug?.log?.(lvl, ns, msg, ...rest);
+    function open() {
+      sidebar!.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      dbg('info', 'ui:sidebar', 'toggle', { open: true });
+    }
+    function close() {
+      sidebar!.classList.remove('open');
+      document.body.style.overflow = '';
+      dbg('info', 'ui:sidebar', 'toggle', { open: false });
+    }
 
     toggleBtn?.addEventListener('click', () => {
       sidebar!.classList.contains('open') ? close() : open();

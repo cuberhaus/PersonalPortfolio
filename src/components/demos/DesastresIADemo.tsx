@@ -16,6 +16,7 @@ import {
 } from "./DesastresVisual";
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/desastres-iademo";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -82,6 +83,8 @@ function SchematicSvg({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:desastres-ia', { lang });
+  const log = useDebug('demo:desastres-ia');
   const [algo, setAlgo] = useState<"HC" | "SA">("HC");
   const [seed, setSeed] = useState(42);
   const [running, setRunning] = useState(false);
@@ -93,6 +96,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
   const runSearch = useCallback(() => {
     setRunOut(null); setRunning(true);
     const seedVal = seed, algoVal = algo;
+    log.info('run', { algo: algoVal, seed: seedVal });
     queueMicrotask(() => {
       try {
         const { board, nHelis, nGroups } = defaultToyScenario(seedVal);
@@ -109,7 +113,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
         });
       } finally { setRunning(false); }
     });
-  }, [algo, seed, t]);
+  }, [algo, seed, t, log]);
 
   return (
     <div style={{ fontFamily: "var(--font-sans, 'Inter', sans-serif)", color: "var(--text-primary)" }}>
@@ -258,7 +262,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center", marginBottom: "1rem" }}>
           <label style={{ color: "var(--text-secondary)", fontSize: "0.85rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
             {t.algorithm}
-            <select value={algo} onChange={(e) => setAlgo(e.target.value as "HC" | "SA")}
+            <select value={algo} onChange={(e) => { const v = e.target.value as "HC" | "SA"; setAlgo(v); log.info('algo', { algo: v }); }}
               style={{
                 padding: "0.4rem 0.5rem", borderRadius: "0.35rem", border: "1px solid var(--border-color-hover)",
                 background: "var(--bg-secondary)", color: "var(--text-primary)", fontSize: "0.85rem",
@@ -269,7 +273,7 @@ export default function DesastresIADemo({ lang = "en" }: { lang?: Lang }) {
           </label>
           <label style={{ color: "var(--text-secondary)", fontSize: "0.85rem", display: "flex", alignItems: "center", gap: "0.35rem" }}>
             {t.seed}
-            <input type="number" value={seed} onChange={(e) => setSeed(parseInt(e.target.value, 10) || 0)}
+            <input type="number" value={seed} onChange={(e) => { const v = parseInt(e.target.value, 10) || 0; setSeed(v); log.info('seed', { seed: v }); }}
               style={{
                 width: 80, padding: "0.4rem 0.5rem", borderRadius: "0.35rem",
                 border: "1px solid var(--border-color-hover)", background: "var(--bg-secondary)", color: "var(--text-primary)", fontSize: "0.85rem",

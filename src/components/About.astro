@@ -1,5 +1,6 @@
 ---
-import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
@@ -17,12 +18,17 @@ const cvFile = existsSync(resolve(`./public/${cvByLang[lang]}`))
   ? cvByLang[lang]
   : (existsSync(resolve('./public/cv.pdf')) ? 'cv.pdf' : null);
 
+// Hash the PDF bytes so the URL changes whenever the file changes,
+// busting both browser and CDN caches without manual purges.
+const cvHash = cvFile
+  ? createHash('sha1').update(readFileSync(resolve(`./public/${cvFile}`))).digest('hex').slice(0, 8)
+  : '';
+
 // We calculate the path dynamically so it evaluates correctly at build time
 const hasProfileImage = existsSync(resolve('./public/profile.jpg'));
 const hasCV = cvFile !== null;
-const cvHref = cvFile
-  ? (import.meta.env.BASE_URL === '/' ? `/${cvFile}` : `${import.meta.env.BASE_URL}/${cvFile}`)
-  : '#';
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
 ---
 
 <section class="section about" id="about" data-num="01">
@@ -42,7 +48,7 @@ const cvHref = cvFile
           <li>SQL & Power BI</li>
           <li>AWS & Azure</li>
           <li>Machine Learning</li>
-          <li>Informatica</li>
+          <li>Generative AI</li>
           <li>Computer Vision</li>
         </ul>
         

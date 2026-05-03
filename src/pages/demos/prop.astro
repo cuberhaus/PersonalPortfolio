@@ -25,7 +25,7 @@ const t = useTranslations(lang);
     />
 
     <LiveAppEmbed
-      url="http://localhost:8081"
+      slug="prop"
       title="PROP Recommendation System"
       dockerCmd="cd subgrup-prop7.1 && make web"
       lang={lang}
@@ -251,8 +251,13 @@ const t = useTranslations(lang);
       <p>{demo.aboutDescription}</p>
       
     </div>
-    <script is:inline>
+    <script is:inline define:vars={{ pageLang: lang }}>
       document.addEventListener('DOMContentLoaded', () => {
+        const dbg = (lvl, ns, msg, ...rest) =>
+          window.__debug?.log?.(lvl, ns, msg, ...rest);
+        dbg('info', 'demo:prop', 'mount', { lang: pageLang });
+        dbg('trace', 'i18n', 'lang', { ns: 'demo:prop', lang: pageLang });
+
         const initTabs = () => {
           const tabs = document.querySelectorAll('.mock-nav-link');
           const contents = document.querySelectorAll('.mock-tab-content');
@@ -260,13 +265,12 @@ const t = useTranslations(lang);
           if (tabs.length === 0 || contents.length === 0) return;
 
           tabs.forEach(tab => {
-            // Remove old listeners to prevent duplicates if initTabs runs multiple times
             const newTab = tab.cloneNode(true);
             tab.parentNode.replaceChild(newTab, tab);
 
             newTab.addEventListener('click', (e) => {
               e.preventDefault();
-              
+
               const allTabs = document.querySelectorAll('.mock-nav-link');
               const allContents = document.querySelectorAll('.mock-tab-content');
 
@@ -275,7 +279,9 @@ const t = useTranslations(lang);
 
               newTab.classList.add('active');
 
-              const targetId = `mock-${newTab.getAttribute('data-mock-tab')}`;
+              const tabId = newTab.getAttribute('data-mock-tab');
+              dbg('info', 'demo:prop', 'tab', { tab: tabId });
+              const targetId = `mock-${tabId}`;
               const targetContent = document.getElementById(targetId);
               if (targetContent) {
                 targetContent.classList.add('active');
@@ -284,10 +290,8 @@ const t = useTranslations(lang);
           });
         };
 
-        // Run on initial load
         initTabs();
-        
-        // Also run on Astro page load events if using ViewTransitions
+
         document.addEventListener('astro:page-load', initTabs);
       });
     </script>

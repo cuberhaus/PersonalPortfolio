@@ -101,6 +101,7 @@ const t = useTranslations(lang);
       scrollBtn.setAttribute('data-initialized', 'true');
       scrollBtn.addEventListener('click', () => {
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.__debug?.log?.('info', 'ui:scroll', 'to-top');
         window.scrollTo({
           top: 0,
           behavior: prefersReduced ? 'auto' : 'smooth'

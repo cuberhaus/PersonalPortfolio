@@ -86,6 +86,8 @@ const t = useTranslations(lang);
 
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
+        const dbg = (window as unknown as { __debug?: { log: (l: string, ns: string, m: string, ...a: unknown[]) => void } }).__debug;
+        dbg?.log('info', 'theme', 'quick-toggle', { from: current, to: newTheme });
       });
     });
   };

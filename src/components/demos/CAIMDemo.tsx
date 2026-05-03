@@ -1,6 +1,7 @@
 import { useState, lazy, Suspense } from 'react';
 
 import { T, type DemoTranslations } from "../../i18n/demos/caimdemo";
+import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
 type Lang = "en" | "es" | "ca";
 
@@ -15,21 +16,27 @@ interface Props {
 
 export default function CAIMDemo({ lang = 'en' }: Props) {
   const t = T[lang] || T.en;
+  const log = useDemoLifecycle('demo:caim', { lang });
   const [activeTab, setActiveTab] = useState<Tab>('pagerank');
+
+  const switchTab = (tab: Tab) => {
+    setActiveTab(tab);
+    log.info('tab', { tab });
+  };
 
   return (
     <div className="caim-mock" style={styles.wrapper}>
       {/* Tab navigation */}
       <div style={styles.tabBar}>
         <button
-          onClick={() => setActiveTab('pagerank')}
+          onClick={() => switchTab('pagerank')}
           style={{ ...styles.tab, ...(activeTab === 'pagerank' ? styles.tabActive : {}) }}
           data-tab="pagerank"
         >
           {t.pagerank}
         </button>
         <button
-          onClick={() => setActiveTab('zipf')}
+          onClick={() => switchTab('zipf')}
           style={{ ...styles.tab, ...(activeTab === 'zipf' ? styles.tabActive : {}) }}
           data-tab="zipf"
         >

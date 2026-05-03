@@ -1,0 +1,12 @@
+---
+/**
+ * Mounts the React `DebugOverlay` island. Must live inside `<body>` (not
+ * `<head>`) because browsers refuse to render visible elements inside
+ * `<head>` and Astro's `<astro-island>` custom element triggers implicit
+ * head-closing when placed there. Pair this with `<DebugInit />` in `<head>`
+ * for the early-error-capture inline script.
+ */
+import DebugOverlay from './DebugOverlay';
+---
+
+<DebugOverlay client:only="react" />

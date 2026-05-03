@@ -2,11 +2,15 @@ import { useState, useCallback, useEffect, useRef } from "react";
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/draculin-demo";
 import MockBanner from "./MockBanner";
+import { debug } from "../../lib/debug";
+import { useDemoLifecycle } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 type Tab = "news" | "chat" | "quiz" | "vision" | "stats";
 
 const BACKEND_URL = "http://localhost:8889";
+const netLog = debug("net:draculin");
+const demoLog = debug("demo:draculin");
 
 import { FALLBACK_NEWS, BLOOD_DATA, PERIOD_DAYS, scoreBand } from "../../lib/draculin-quiz";
 
@@ -28,6 +32,7 @@ function NewsTab({ t }: { t: typeof TRANSLATIONS.en }) {
 
   useEffect(() => {
     let cancelled = false;
+    netLog.info("fetch-news");
     fetch(`${BACKEND_URL}/api/news/`)
       .then((r) => r.json())
       .then((data) => {
@@ -35,8 +40,12 @@ function NewsTab({ t }: { t: typeof TRANSLATIONS.en }) {
         const items = Object.values(data.news as Record<string, { title: string; link: string; img: string }>);
         setNews(items);
         setBackendUp(true);
+        netLog.info("fetch-news-ok", { count: items.length });
       })
-      .catch(() => { if (!cancelled) setBackendUp(false); });
+      .catch((err) => {
+        if (!cancelled) setBackendUp(false);
+        netLog.warn("fetch-news-fallback", { err: String(err) });
+      });
     return () => { cancelled = true; };
   }, []);
 
@@ -67,6 +76,7 @@ function ChatTab({ t }: { t: typeof TRANSLATIONS.en }) {
 
   useEffect(() => {
     let cancelled = false;
+    netLog.info("chat-prefetch");
     fetch(`${BACKEND_URL}/api/chat/`)
       .then((r) => r.json())
       .then((data) => {
@@ -74,9 +84,11 @@ function ChatTab({ t }: { t: typeof TRANSLATIONS.en }) {
         const msgs = Object.values(data.messages_dict as Record<string, string>);
         setMessages(msgs);
         setBackendUp(true);
+        netLog.info("chat-prefetch-ok", { count: msgs.length });
       })
-      .catch(() => {
+      .catch((err) => {
         if (!cancelled) setMessages([t.mockChatInit]);
+        netLog.warn("chat-prefetch-fallback", { err: String(err) });
       });
     return () => { cancelled = true; };
   }, [t.mockChatInit]);
@@ -90,6 +102,7 @@ function ChatTab({ t }: { t: typeof TRANSLATIONS.en }) {
     setMessages((prev) => [...prev, msg]);
     setLoading(true);
 
+    netLog.info("chat-send", { len: msg.length, backendUp });
     if (backendUp) {
       fetch(`${BACKEND_URL}/api/chat/`, {
         method: "POST",
@@ -100,8 +113,12 @@ function ChatTab({ t }: { t: typeof TRANSLATIONS.en }) {
         .then((data) => {
           const msgs = Object.values(data.messages_dict as Record<string, string>);
           setMessages(msgs);
+          netLog.info("chat-send-ok", { count: msgs.length });
         })
-        .catch(() => setMessages((prev) => [...prev, "[Error contacting backend]"]))
+        .catch((err) => {
+          setMessages((prev) => [...prev, "[Error contacting backend]"]);
+          netLog.warn("chat-parse-failed", { err: String(err) });
+        })
         .finally(() => setLoading(false));
     } else {
       setTimeout(() => {
@@ -286,6 +303,7 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
 
 export default function DraculinDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:draculin', { lang });
   const [tab, setTab] = useState<Tab>("news");
 
   const tabs: { id: Tab; label: string; icon: string }[] = [

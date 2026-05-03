@@ -181,7 +181,8 @@ export function forceLayout(
   graph: Graph,
   width: number,
   height: number,
-  iterations = 300
+  iterations = 300,
+  onIter?: (info: { i: number; energy: number }) => void,
 ): { x: number; y: number }[] {
   const n = graph.n;
   if (n === 0) return [];
@@ -276,6 +277,14 @@ export function forceLayout(
       const pad = 20;
       nodes[i].x = Math.max(pad, Math.min(width - pad, nodes[i].x));
       nodes[i].y = Math.max(pad, Math.min(height - pad, nodes[i].y));
+    }
+
+    if (onIter && iter % Math.max(1, Math.floor(iterations / 30)) === 0) {
+      let energy = 0;
+      for (let i = 0; i < n; i++) {
+        energy += nodes[i].vx * nodes[i].vx + nodes[i].vy * nodes[i].vy;
+      }
+      onIter({ i: iter, energy });
     }
 
     temp *= cooling;

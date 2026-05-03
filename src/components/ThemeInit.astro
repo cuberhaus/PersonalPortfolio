@@ -30,6 +30,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   const VALID_THEMES = THEME_IDS;
   const VALID_DESIGNS = DESIGN_IDS;
 
+  var __themeSource = 'fallback';
   const __theme = (() => {
     const url = new URL(window.location.href);
     const param = url.searchParams.get('theme');
@@ -37,19 +38,27 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       localStorage.setItem('theme', param);
       url.searchParams.delete('theme');
       history.replaceState(null, '', url.pathname + url.search + url.hash);
+      __themeSource = 'url-param';
       return param;
     }
     if (typeof localStorage !== 'undefined') {
       const saved = localStorage.getItem('theme');
-      if (saved && VALID_THEMES.includes(saved)) return saved;
+      if (saved && VALID_THEMES.includes(saved)) {
+        __themeSource = 'localStorage';
+        return saved;
+      }
     }
     if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      __themeSource = 'system-light';
       return 'light';
     }
+    __themeSource = 'system-dark';
     return 'dark';
   })();
   document.documentElement.setAttribute('data-theme', __theme);
+  if (window.__debug) window.__debug.log('info', 'theme', 'resolved', { theme: __theme, source: __themeSource });
 
+  var __designSource = 'fallback';
   const __design = (() => {
     const url = new URL(window.location.href);
     const param = url.searchParams.get('design');
@@ -57,15 +66,20 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       localStorage.setItem('design', param);
       url.searchParams.delete('design');
       history.replaceState(null, '', url.pathname + url.search + url.hash);
+      __designSource = 'url-param';
       return param;
     }
     if (typeof localStorage !== 'undefined') {
       const saved = localStorage.getItem('design');
-      if (saved && VALID_DESIGNS.includes(saved)) return saved;
+      if (saved && VALID_DESIGNS.includes(saved)) {
+        __designSource = 'localStorage';
+        return saved;
+      }
     }
     return DEFAULT_DESIGN;
   })();
   document.documentElement.setAttribute('data-design', __design);
+  if (window.__debug) window.__debug.log('info', 'design', 'resolved', { design: __design, source: __designSource });
 
   // Load design-specific fonts on demand instead of all 14 families upfront.
   // Core fonts (Inter, Inter Tight, JetBrains Mono) are in the main <link>.
@@ -88,32 +102,49 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     link.rel = 'stylesheet';
     link.href = 'https://fonts.googleapis.com/css2?' + __designFonts[id] + '&display=swap';
     document.head.appendChild(link);
+    if (window.__debug) window.__debug.log('info', 'design', 'font-load', { design: id, families: __designFonts[id] });
   };
   window.__loadDesignFonts(__design);
 
+  // Re-render theme when system color scheme flips. Browsers fire this
+  // whenever the OS toggles dark/light, so we get a free `theme.info` for
+  // free even if no UI is touched.
+  try {
+    var __scQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (__scQuery && typeof __scQuery.addEventListener === 'function') {
+      __scQuery.addEventListener('change', function(e) {
+        if (window.__debug) {
+          window.__debug.log('info', 'theme', 'system-changed', { matches: e.matches });
+        }
+      });
+    }
+  } catch (_e) {}
+
   window.setTheme = function(id) {
     if (!VALID_THEMES.includes(id)) {
-      console.error(
-        'Unknown theme "' + id + '". Available themes:\n' +
-        VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n')
-      );
+      var msg = 'Unknown theme "' + id + '". Available themes:\n' +
+        VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n');
+      if (window.__debug) window.__debug.log('error', 'theme', msg);
+      else console.error(msg);
       return;
     }
     document.documentElement.setAttribute('data-theme', id);
     localStorage.setItem('theme', id);
+    if (window.__debug) window.__debug.log('info', 'theme', 'set', { id: id });
   };
 
   window.setDesign = function(id) {
     if (!VALID_DESIGNS.includes(id)) {
-      console.error(
-        'Unknown design "' + id + '". Available designs:\n' +
-        VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n')
-      );
+      var msg = 'Unknown design "' + id + '". Available designs:\n' +
+        VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n');
+      if (window.__debug) window.__debug.log('error', 'theme', msg);
+      else console.error(msg);
       return;
     }
     document.documentElement.setAttribute('data-design', id);
     localStorage.setItem('design', id);
     window.__loadDesignFonts(id);
+    if (window.__debug) window.__debug.log('info', 'design', 'set', { id: id });
   };
 </script>
 )}
@@ -1042,7 +1073,10 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       });
     };
 
-    const open = () => {
+    type DebugApi = { log: (level: string, ns: string, msg: string, ...args: unknown[]) => void };
+    const __debug = (): DebugApi | undefined => (window as unknown as { __debug?: DebugApi }).__debug;
+
+    const open = (source: string = 'click') => {
       previouslyFocused = document.activeElement;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
@@ -1053,17 +1087,19 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       if (activeEl) activeEl.focus();
       else (modal.querySelector('.theme-modal-design, .theme-modal-swatch') as HTMLElement)?.focus();
       modal.addEventListener('keydown', trapFocus);
+      __debug()?.log('info', 'ui:modal', 'open', { source });
     };
 
-    const close = () => {
+    const close = (source: string = 'click') => {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       modal.removeEventListener('keydown', trapFocus);
       if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
+      __debug()?.log('info', 'ui:modal', 'close', { source });
     };
 
-    modal.querySelector('.theme-modal-backdrop')?.addEventListener('click', close);
-    modal.querySelector('.theme-modal-close')?.addEventListener('click', close);
+    modal.querySelector('.theme-modal-backdrop')?.addEventListener('click', () => close('backdrop'));
+    modal.querySelector('.theme-modal-close')?.addEventListener('click', () => close('close-button'));
 
     modal.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
@@ -1074,6 +1110,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
         document.documentElement.setAttribute('data-design', id);
         try { localStorage.setItem('design', id); } catch (_err) { /* private mode */ }
         refreshActive();
+        __debug()?.log('info', 'design', 'select', { id, source: 'modal' });
         return;
       }
       const swatch = target.closest('.theme-modal-swatch') as HTMLElement | null;
@@ -1083,6 +1120,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
         document.documentElement.setAttribute('data-theme', id);
         try { localStorage.setItem('theme', id); } catch (_err) { /* private mode */ }
         refreshActive();
+        __debug()?.log('info', 'theme', 'select', { id, source: 'modal' });
         return;
       }
     });
@@ -1090,16 +1128,16 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     document.addEventListener('keydown', (e) => {
       if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
-        if (modal.classList.contains('open')) close();
-        else open();
+        if (modal.classList.contains('open')) close('shortcut');
+        else open('shortcut');
       }
       if (e.key === 'Escape' && modal.classList.contains('open')) {
-        close();
+        close('escape');
       }
     });
 
     document.addEventListener('open-theme-modal', () => {
-      if (!modal.classList.contains('open')) open();
+      if (!modal.classList.contains('open')) open('event');
     });
   };
 

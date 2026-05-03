@@ -2,6 +2,9 @@
  * Lightweight WebGL2 helpers for the GraficsDemo fallback panels.
  * Self-contained — no external deps beyond React refs.
  */
+import { debug } from './debug';
+
+const log = debug('demo:grafics');
 
 // ── Shader compilation ──
 
@@ -10,9 +13,12 @@ function compile(gl: WebGL2RenderingContext, type: number, src: string): WebGLSh
   gl.shaderSource(s, src);
   gl.compileShader(s);
   if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(s));
+    const infoLog = gl.getShaderInfoLog(s);
+    const typeName = type === gl.VERTEX_SHADER ? 'vertex' : 'fragment';
+    const err = new Error('shader compile failed');
+    log.error('shader-compile-failed', { type: typeName, log: infoLog }, err);
     gl.deleteShader(s);
-    throw new Error('shader compile failed');
+    throw err;
   }
   return s;
 }

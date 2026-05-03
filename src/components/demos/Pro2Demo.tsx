@@ -14,6 +14,7 @@ import {
 } from "../../lib/wpgma";
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/pro2demo";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -118,6 +119,8 @@ const styles = {
 
 export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:pro2', { lang });
+  const log = useDebug('demo:pro2');
   const [species, setSpecies] = useState<Species[]>([...SAMPLE_SPECIES]);
   const [k, setK] = useState(DEFAULT_K);
   const [newId, setNewId] = useState("");
@@ -142,52 +145,58 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
     if (!trimId || !trimGene) return;
     if (species.some((s) => s.id === trimId)) return;
     if (!/^[ACGT]+$/.test(trimGene)) return;
+    log.info('add-species', { id: trimId, gene: trimGene });
     setSpecies((prev) => [...prev, { id: trimId, gene: trimGene }]);
     setNewId("");
     setNewGene("");
     setClusterState(null);
     setHistory([]);
     setTree(null);
-  }, [newId, newGene, species]);
+  }, [newId, newGene, species, log]);
 
   const removeSpecies = useCallback(
     (id: string) => {
+      log.info('remove-species', { id });
       setSpecies((prev) => prev.filter((s) => s.id !== id));
       setClusterState(null);
       setHistory([]);
       setTree(null);
     },
-    []
+    [log]
   );
 
   const loadSample = useCallback(() => {
+    log.info('load-sample');
     setSpecies([...SAMPLE_SPECIES]);
     setK(DEFAULT_K);
     setClusterState(null);
     setHistory([]);
     setTree(null);
-  }, []);
+  }, [log]);
 
   const startClustering = useCallback(() => {
     if (!distTable) return;
+    log.info('start-clustering', { species: species.length, k });
     setClusterState(initClusters(distTable));
     setHistory([]);
     setTree(null);
-  }, [distTable]);
+  }, [distTable, log, species.length, k]);
 
   const doStep = useCallback(() => {
     if (!clusterState) return;
     const step = wpgmaStep(clusterState);
     if (!step) return;
+    log.info('step', { merged: `${step.merged.id1}+${step.merged.id2}`, distance: step.merged.distance });
     setClusterState(step.state);
     setHistory((prev) => [...prev, step]);
     if (step.state.clusters.size === 1) {
       setTree([...step.state.clusters.values()][0]);
     }
-  }, [clusterState]);
+  }, [clusterState, log]);
 
   const runAll = useCallback(() => {
     if (!distTable) return;
+    log.info('run-all');
     let state = clusterState ?? initClusters(distTable);
     const steps: WpgmaStep[] = [...history];
     while (state.clusters.size > 1) {
@@ -201,18 +210,19 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
     if (state.clusters.size === 1) {
       setTree([...state.clusters.values()][0]);
     }
-  }, [distTable, clusterState, history]);
+  }, [distTable, clusterState, history, log]);
 
   const reset = useCallback(() => {
+    log.info('reset');
     setClusterState(null);
     setHistory([]);
     setTree(null);
-  }, []);
+  }, [log]);
 
   return (
     <div style={styles.wrapper}>
       <LiveAppEmbed
-        url="http://localhost:8000"
+        slug="pro2"
         title="PRO2 Phylogenetic Tree Web App"
         dockerCmd="cd pracpro2 && make docker-run"
         devCmd="cd pracpro2 && make dev"

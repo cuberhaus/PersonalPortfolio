@@ -616,7 +616,11 @@ export function interpret(source: string, inputValues: number[] = []): JSBachRes
 
 // ---------- Audio Playback ----------
 
-export function playNotes(noteInts: number[], tempo = 120): Promise<void> {
+export function playNotes(
+  noteInts: number[],
+  tempo = 120,
+  onTick?: (info: { pitch: number; freq: number; idx: number; dur: number }) => void,
+): Promise<void> {
   return new Promise((resolve) => {
     if (noteInts.length === 0) { resolve(); return; }
     const ctx = new AudioContext();
@@ -634,6 +638,9 @@ export function playNotes(noteInts: number[], tempo = 120): Promise<void> {
       gain.connect(ctx.destination);
       osc.start(ctx.currentTime + i * beatDuration);
       osc.stop(ctx.currentTime + (i + 1) * beatDuration);
+      if (onTick) {
+        setTimeout(() => onTick({ pitch: n, freq, idx: i, dur: beatDuration }), i * beatDuration * 1000);
+      }
     });
 
     setTimeout(() => {

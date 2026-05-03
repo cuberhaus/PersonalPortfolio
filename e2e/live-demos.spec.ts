@@ -37,7 +37,7 @@ for (const demo of LIVE_DEMOS) {
     });
 
     test('shows green live indicator', async ({ page }) => {
-      await page.goto(`/demos/${demo.slug}`, { waitUntil: 'networkidle' });
+      await page.goto(`/demos/${demo.slug}`, { waitUntil: 'domcontentloaded' });
       // Wait for probe to complete
       await page.waitForTimeout(3000);
       // Should show green dot
@@ -46,14 +46,14 @@ for (const demo of LIVE_DEMOS) {
     });
 
     test('renders iframe with correct src', async ({ page }) => {
-      await page.goto(`/demos/${demo.slug}`, { waitUntil: 'networkidle' });
+      await page.goto(`/demos/${demo.slug}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(3000);
       const iframe = page.locator(`iframe[src*="localhost:${demo.port}"]`);
       await expect(iframe).toBeVisible();
     });
 
     test('collapse/expand button works', async ({ page }) => {
-      await page.goto(`/demos/${demo.slug}`, { waitUntil: 'networkidle' });
+      await page.goto(`/demos/${demo.slug}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(3000);
 
       // Find collapse button
@@ -72,7 +72,7 @@ for (const demo of LIVE_DEMOS) {
     });
 
     test('open-in-new-tab link has correct URL', async ({ page }) => {
-      await page.goto(`/demos/${demo.slug}`, { waitUntil: 'networkidle' });
+      await page.goto(`/demos/${demo.slug}`, { waitUntil: 'domcontentloaded' });
       await page.waitForTimeout(3000);
       const link = page.locator(`a[href*="localhost:${demo.port}"][target="_blank"]`);
       await expect(link.first()).toBeVisible();

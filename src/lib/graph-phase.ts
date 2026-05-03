@@ -216,6 +216,7 @@ export function runSweep(
   percolation: PercolationType,
   steps: number,
   trials: number,
+  onTrial?: (info: { p: number; runs: number }) => void,
 ): SweepPoint[] {
   const points: SweepPoint[] = [];
 
@@ -223,6 +224,7 @@ export function runSweep(
     const param = s / steps;
     let nConnected = 0;
     let nComplex = 0;
+    if (onTrial) onTrial({ p: param, runs: trials });
 
     for (let t = 0; t < trials; t++) {
       let g: SimpleGraph;

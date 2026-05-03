@@ -13,6 +13,7 @@ const MAIN_NB = "PracticaAPA-Hipotiroidismo-PolCasacubertaMartaGranero.ipynb";
 const LINEAR_NB = "PracticaAPA-Hipotiroidismo-ModelsLineals.ipynb";
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/apa-practica-demo";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -40,7 +41,7 @@ const positive = "var(--accent-start)";
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  KNN CANVAS                                                            */
 /* ════════════════════════════════════════════════════════════════════════ */
-function KnnCanvas({ t }: { t: typeof TRANSLATIONS.en }) {
+function KnnCanvas({ t, log }: { t: typeof TRANSLATIONS.en; log: ReturnType<typeof useDebug> }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const points = useMemo(() => loadRealPoints(), []);
   const [k, setK] = useState(5);
@@ -139,7 +140,7 @@ function KnnCanvas({ t }: { t: typeof TRANSLATIONS.en }) {
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem", flexWrap: "wrap" }}>
         <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600 }}>k =</span>
         {[3, 5, 7, 11].map((kv) => (
-          <button key={kv} type="button" onClick={() => setK(kv)} style={{
+          <button key={kv} type="button" onClick={() => { log.info('knn-k', { k: kv }); setK(kv); }} style={{
             padding: "0.3rem 0.65rem", borderRadius: "0.4rem", border: "none",
             fontSize: "0.78rem", fontWeight: 700, cursor: "pointer",
             background: k === kv ? `linear-gradient(135deg, ${accent1}, ${accent2})` : "var(--bg-card-hover)",
@@ -295,6 +296,8 @@ function FeatureImportance({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 export default function ApaPracticaDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:apa', { lang });
+  const log = useDebug('demo:apa');
   const [showNb, setShowNb] = useState(false);
   const [nbFile, setNbFile] = useState(MAIN_NB);
 
@@ -383,7 +386,7 @@ export default function ApaPracticaDemo({ lang = "en" }: { lang?: Lang }) {
               <p style={{ margin: 0, fontSize: "0.72rem", color: "var(--text-muted)" }}>{t.knnSub}</p>
             </div>
           </div>
-          <KnnCanvas t={t} />
+          <KnnCanvas t={t} log={log} />
         </div>
       </div>
 
@@ -422,7 +425,7 @@ export default function ApaPracticaDemo({ lang = "en" }: { lang?: Lang }) {
         <div style={{
           display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap",
           cursor: "pointer",
-        }} onClick={() => setShowNb(!showNb)}>
+        }} onClick={() => { const next = !showNb; log.info('nb-toggle', { open: next }); setShowNb(next); }}>
           <h4 style={{ margin: 0, fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
             {showNb ? "▾" : "▸"} {t.nbPreview}
           </h4>
@@ -432,7 +435,7 @@ export default function ApaPracticaDemo({ lang = "en" }: { lang?: Lang }) {
               { file: LINEAR_NB, label: t.linModels },
             ].map((nb) => (
               <button key={nb.file} type="button"
-                onClick={(e) => { e.stopPropagation(); setNbFile(nb.file); setShowNb(true); }}
+                onClick={(e) => { e.stopPropagation(); log.info('nb-open', { file: nb.file }); setNbFile(nb.file); setShowNb(true); }}
                 style={{
                   padding: "0.25rem 0.6rem", borderRadius: "0.35rem", border: "none",
                   fontSize: "0.72rem", fontWeight: 600, cursor: "pointer",

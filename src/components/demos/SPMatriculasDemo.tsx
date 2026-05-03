@@ -7,6 +7,7 @@ import {
 } from "../../lib/opencv-loader";
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/spmatriculas-demo";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -257,6 +258,8 @@ function StageVis({ items }: { items: ImageBuffer[] }) {
 
 export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:matriculas', { lang });
+  const log = useDebug('demo:matriculas');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedGT, setSelectedGT] = useState<string>("");
   const [status, setStatus] = useState<Status>("idle");
@@ -272,23 +275,26 @@ export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
   }, []);
 
   const selectSample = useCallback((sample: (typeof SAMPLES)[number]) => {
+    log.info('sample', { file: sample.file, plate: sample.plate });
     const path = `${basePath}demos/matriculas/samples/${sample.file}`;
     setSelectedImage(path);
     setSelectedGT(sample.plate);
     setResult(null);
-  }, [basePath]);
+  }, [basePath, log]);
 
   const handleUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    log.info('upload', { name: file.name, size: file.size });
     const url = URL.createObjectURL(file);
     setSelectedImage(url);
     setSelectedGT("");
     setResult(null);
-  }, []);
+  }, [log]);
 
   const run = useCallback(async () => {
     if (!selectedImage) return;
+    log.info('run', { hasGT: !!selectedGT });
     setError("");
     setResult(null);
     setStatus("processing");
@@ -299,11 +305,13 @@ export default function SPMatriculasDemo({ lang = "en" }: { lang?: Lang }) {
       const res = await runWorkerPipeline(selectedImage, fontPath);
       setResult(res);
       setStatus("done");
+      log.info('ocr-done', { plate: res?.plate, gt: selectedGT, match: res?.plate === selectedGT });
     } catch (err: any) {
       setError(err.message || "Unknown error");
       setStatus("error");
+      log.error('ocr-failed', { err: String(err) });
     }
-  }, [selectedImage, basePath]);
+  }, [selectedImage, basePath, selectedGT, log]);
 
   return (
     <div style={s.wrapper}>

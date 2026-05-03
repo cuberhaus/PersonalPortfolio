@@ -20,7 +20,7 @@ Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 
 ```bash
 make install             # npm install + Go/Rust toolchains
 make dev                 # Astro only — http://localhost:4321
-make dev-all             # All local demo backends + Astro (see below)
+make dev-bare            # All local demo backends + Astro (no observability — see `make all` for that)
 make build               # Build all Docker images + Astro static site
 make preview             # Serve dist/ locally
 make test                # Run ALL test suites (Vitest + Playwright + backend pytests + Go + Rust + …)
@@ -28,7 +28,7 @@ make clean               # Remove dist/, node_modules/, .astro/, .build-stamps/
 make help                # Show all available targets
 ```
 
-### `make dev-all`
+### `make dev-bare`
 
 One command starts everything the demos can use locally (then **Ctrl+C** tears it all down). Use `make stop` to tear down leftover containers, and `make health` to verify all backends are responding.
 
@@ -54,9 +54,17 @@ One command starts everything the demos can use locally (then **Ctrl+C** tears i
 | planner-api | 8765 | `/demos/planificacion` Run planner | `planner-api/` (in this repo) — Python + Java 17+ |
 | **Astro** | 4321 | Site | this repo |
 
-Requires **bash** and **Docker**. Missing sibling repos are silently skipped. `planner-api/` ships with this project.
+Requires **bash**, **Docker**, and **jq** (registry parser). Missing sibling repos are silently skipped. `planner-api/` ships with this project.
 
 Flags: `--skip-docker`, `--skip-planner`.
+
+> **Service registry.** The list above is generated from
+> [`src/data/demo-services.json`](src/data/demo-services.json), which is the single source of
+> truth shared by `scripts/dev-all-demos.sh`, the in-page debug overlay
+> (`src/lib/debug-docker.ts`), `LiveAppEmbed.tsx`, the log relay sidecar in
+> `scripts/log-relay/`, the registry test, and
+> [`docs/adding-a-demo.md`](docs/adding-a-demo.md). Adding or removing a demo
+> means editing this JSON file plus following the onboarding checklist.
 
 **Windows:** use **WSL** or **Git Bash**, or start each stack manually.
 

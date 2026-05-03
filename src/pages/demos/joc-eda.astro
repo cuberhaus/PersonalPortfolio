@@ -26,7 +26,7 @@ const t = useTranslations(lang);
     />
 
     <LiveAppEmbed
-      url="http://localhost:8087"
+      slug="joc-eda"
       title="ThePurge Viewer"
       dockerCmd="cd joc_eda && docker compose up -d"
       devCmd="cd joc_eda && make web-dev"
@@ -115,46 +115,60 @@ const t = useTranslations(lang);
   </div>
 </DemoLayout>
 
-<script>
+<script is:inline define:vars={{ pageLang: lang }}>
+  const dbg = (lvl, ns, msg, ...rest) =>
+    window.__debug?.log?.(lvl, ns, msg, ...rest);
+  dbg('info', 'demo:joc-eda', 'mount', { lang: pageLang });
+  dbg('trace', 'i18n', 'lang', { ns: 'demo:joc-eda', lang: pageLang });
+
   const base = document.querySelector('link[rel="icon"]')?.getAttribute('href')?.replace('/favicon.svg', '') || '';
   const viewerBase = `${base}/demos/joc-eda/viewer.html`;
 
-  // Sample game launcher
-  document.getElementById('launch-sample')!.setAttribute('href', viewerBase);
+  const launchSample = document.getElementById('launch-sample');
+  if (launchSample) {
+    launchSample.setAttribute('href', viewerBase);
+    launchSample.addEventListener('click', () => {
+      dbg('info', 'demo:joc-eda', 'launch-sample');
+    });
+  }
 
-  // File upload handler
-  const fileInput = document.getElementById('file-upload') as HTMLInputElement;
-  const statusEl = document.getElementById('upload-status')!;
+  const fileInput = document.getElementById('file-upload');
+  const statusEl = document.getElementById('upload-status');
 
-  fileInput.addEventListener('change', (e) => {
-    const file = (e.target as HTMLInputElement).files?.[0];
-    if (!file) return;
+  if (fileInput && statusEl) {
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      dbg('info', 'demo:joc-eda', 'upload', { name: file.name, size: file.size });
 
-    statusEl.textContent = statusEl.dataset.msgReading || 'Reading file...';
-    statusEl.style.color = '#a1a1aa';
+      statusEl.textContent = statusEl.dataset.msgReading || 'Reading file...';
+      statusEl.style.color = '#a1a1aa';
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const text = reader.result as string;
-      if (!text.includes('ThePurge')) {
-        statusEl.textContent = statusEl.dataset.msgInvalid || 'Invalid file.';
-        statusEl.style.color = '#f87171';
-        return;
-      }
-      // Store in sessionStorage and open viewer with a flag
-      try {
-        sessionStorage.setItem('joc_eda_custom_game', text);
-        const msgTpl = statusEl.dataset.msgLoaded || 'Loaded "{0}"';
-        statusEl.textContent = msgTpl.replace('{0}', file.name);
-        statusEl.style.color = '#4ade80';
-        window.open(`${viewerBase}?custom=1`, '_blank');
-      } catch (err) {
-        statusEl.textContent = statusEl.dataset.msgToolarge || 'File too large.';
-        statusEl.style.color = '#f87171';
-      }
-    };
-    reader.readAsText(file);
-  });
+      const reader = new FileReader();
+      reader.onload = () => {
+        const text = reader.result;
+        if (!text.includes('ThePurge')) {
+          dbg('warn', 'demo:joc-eda', 'upload-invalid', { name: file.name });
+          statusEl.textContent = statusEl.dataset.msgInvalid || 'Invalid file.';
+          statusEl.style.color = '#f87171';
+          return;
+        }
+        try {
+          sessionStorage.setItem('joc_eda_custom_game', text);
+          const msgTpl = statusEl.dataset.msgLoaded || 'Loaded "{0}"';
+          statusEl.textContent = msgTpl.replace('{0}', file.name);
+          statusEl.style.color = '#4ade80';
+          dbg('info', 'demo:joc-eda', 'upload-ok', { name: file.name });
+          window.open(`${viewerBase}?custom=1`, '_blank');
+        } catch (err) {
+          dbg('error', 'demo:joc-eda', 'upload-failed', { name: file.name, err: String(err) });
+          statusEl.textContent = statusEl.dataset.msgToolarge || 'File too large.';
+          statusEl.style.color = '#f87171';
+        }
+      };
+      reader.readAsText(file);
+    });
+  }
 </script>
 
 <style is:global>

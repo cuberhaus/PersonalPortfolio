@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { interpret, playNotes, SAMPLE_PROGRAMS, type JSBachResult } from "../../lib/jsbach/interpreter";
 
 import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/jsbach-demo";
+import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";
 
@@ -121,6 +122,8 @@ function noteToColor(n: number): string {
 
 export default function JSBachDemo({ lang = "en" }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  useDemoLifecycle('demo:jsbach', { lang });
+  const log = useDebug('demo:jsbach');
   const [code, setCode] = useState(SAMPLE_PROGRAMS[0].code);
   const [result, setResult] = useState<JSBachResult | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -135,13 +138,17 @@ export default function JSBachDemo({ lang = "en" }: { lang?: Lang }) {
   }, []);
 
   const run = useCallback(() => {
+    log.info('run', { codeLen: code.length });
     const r = interpret(code);
     setResult(r);
     setActiveNote(-1);
-  }, [code]);
+    if (r.error) log.warn('run-error', { error: r.error });
+    else log.info('run-ok', { notes: r.notes.length, output: r.output.length });
+  }, [code, log]);
 
   const play = useCallback(async () => {
     if (!result || result.notes.length === 0) return;
+    log.info('play', { notes: result.notes.length });
     setPlaying(true);
 
     const tempo = 120;
@@ -159,9 +166,11 @@ export default function JSBachDemo({ lang = "en" }: { lang?: Lang }) {
       setTimeout(() => setActiveNote(-1), result.notes.length * beatMs)
     );
 
-    await playNotes(result.notes, tempo);
+    await playNotes(result.notes, tempo, ({ pitch, freq, idx, dur }) => {
+      log.trace('note', { pitch, freq, idx, dur });
+    });
     setPlaying(false);
-  }, [result]);
+  }, [result, log]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Tab") {
@@ -185,7 +194,7 @@ export default function JSBachDemo({ lang = "en" }: { lang?: Lang }) {
             <button
               key={prog.name}
               style={styles.sampleBtn}
-              onClick={() => { setCode(prog.code); setResult(null); setActiveNote(-1); }}
+              onClick={() => { log.info('sample', { name: prog.name }); setCode(prog.code); setResult(null); setActiveNote(-1); }}
             >
               {prog.name}
             </button>

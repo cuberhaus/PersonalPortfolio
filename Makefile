@@ -6,8 +6,10 @@ ifeq ($(OS),Windows_NT)
   .SHELLFLAGS := -c
 endif
 
-.PHONY: install dev dev-all build preview stop restart health \
-       rebuild free-ports \
+.PHONY: install dev dev-bare all all-stop log-relay build build-images preview stop restart health \
+       rebuild free-ports check-registry \
+       obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
+       mlops-up mlops-down \
        clean test help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
@@ -74,18 +76,153 @@ free-ports: ## Kill any process occupying demo backend ports
 	fi
 	@echo "Done."
 
-dev-all: free-ports ## Start Astro + ALL demo backends (Docker + planner-api + PROP)
+dev-bare: build-images free-ports ## Start Astro + ALL demo backends — NO observability stacks (use `make all` for that)
 	npm run dev:all
+# Note: depends on `build-images` so any source-tree change since the last
+# build is rebaked into the demo Docker images before `docker compose up -d`
+# starts them. The `build_if_changed` stamp system makes the no-change case
+# sub-second per demo, so this adds essentially zero overhead when nothing
+# changed and saves you from staring at a stale UI when something did.
+# To skip (e.g. you intentionally want to run a known-old image), use
+# `npm run dev:all` directly or invoke the underlying script.
+
+log-relay: ## Start the dev-only log-relay SSE sidecar (default port 9999)
+	@node scripts/log-relay/index.mjs --port $${LOG_RELAY_PORT:-9999}
+
+check-registry: ## Run only the demo-services registry consistency tests
+	@npx vitest run src/__tests__/demo-registry.test.ts
 
 stop: ## Stop all demo backend containers/services
 	@bash scripts/dev-all-demos.sh --stop
 
-restart: stop dev-all ## Restart all demo backends and Astro dev server
+restart: stop dev-bare ## Restart all demo backends and Astro dev server
 
 health: ## Check if all demo backends are responding
 	@bash scripts/dev-all-demos.sh --health
 
-build: ## Build Astro site for production and all demo Docker images
+# ── Self-hosted Sentry observability stack ─────────────────────────────
+# Cloned at $(PARENT)/sentry-self-hosted (pinned to tag 26.4.1).
+# Web UI: http://localhost:9000  — paste the project DSN into .env.shared
+# Full setup + troubleshooting: docs/observability.md
+SENTRY_DIR      = $(PARENT)/sentry-self-hosted
+SENTRY_COMPOSE  = docker compose -f "$(SENTRY_DIR)/docker-compose.yml"
+
+obs-install: ## Run the one-time Sentry installer (~15-20 min, prompts for admin email/password)
+	@if [ ! -d "$(SENTRY_DIR)" ]; then \
+		echo "Sentry repo not found at: $(SENTRY_DIR)"; \
+		echo "Clone it first:"; \
+		echo "  git clone --depth 1 --branch 26.4.1 https://github.com/getsentry/self-hosted.git $(SENTRY_DIR)"; \
+		exit 1; \
+	fi
+	@echo "Running Sentry installer in $(SENTRY_DIR) (interactive)..."
+	@cd "$(SENTRY_DIR)" && ./install.sh
+
+obs-up: ## Start the self-hosted Sentry stack (UI: http://localhost:9000)
+	@if [ ! -f "$(SENTRY_DIR)/.env" ]; then \
+		echo "Sentry not installed yet. Run: make obs-install"; \
+		exit 1; \
+	fi
+	$(SENTRY_COMPOSE) up -d
+	@echo ""
+	@echo "Sentry starting. UI reachable at http://localhost:9000 in ~30-60s."
+	@echo "  make obs-status   # show containers"
+	@echo "  make obs-logs     # tail logs"
+
+obs-down: ## Stop the self-hosted Sentry stack (data preserved on disk)
+	$(SENTRY_COMPOSE) stop
+
+obs-restart: obs-down obs-up ## Restart the Sentry stack
+
+obs-status: ## Show status of all Sentry containers
+	@$(SENTRY_COMPOSE) ps
+
+obs-logs: ## Tail logs from all Sentry containers (Ctrl+C to exit)
+	$(SENTRY_COMPOSE) logs -f --tail=50
+
+obs-wipe: ## DESTRUCTIVE: stop Sentry and delete ALL data (events, users, projects)
+	@printf "This will delete ALL Sentry data. Type 'yes' to confirm: " && read ans && [ "$$ans" = "yes" ] || (echo "Aborted." && exit 1)
+	$(SENTRY_COMPOSE) down -v
+
+# ── MLOps observability overlay (TFG-internal — MLflow + Evidently) ────
+# This is a thin pass-through to TFG's own `make mlops-up` / `mlops-down`.
+# The actual Compose definitions live in TFG/docker-compose.mlops.yml and
+# TFG/observability/.env.mlops.example — by design, since the stack
+# observes a TFG-internal concern (training experiments, prediction-log
+# drift). PersonalPortfolio is the orchestrator, not the owner.
+TFG_DIR_MAKE = $(PARENT)/TFG
+
+mlops-up: ## Start the TFG MLOps overlay (MLflow :15000, Evidently :15001, prediction-log :15432)
+	@$(MAKE) --no-print-directory -C "$(TFG_DIR_MAKE)" mlops-up
+
+mlops-down: ## Stop the TFG MLOps overlay (volumes preserved)
+	@$(MAKE) --no-print-directory -C "$(TFG_DIR_MAKE)" mlops-down
+
+# ── "Everything on" / "Everything off" master targets ──────────────────
+# `make all` brings up the entire portfolio: Sentry self-hosted +
+# MLOps overlay + every demo backend + the Astro dev server. Designed
+# for the "I'm clicking through the whole portfolio and want every
+# observability surface lit up" demo scenario. Each step degrades
+# gracefully — Sentry is skipped if not installed, MLOps env file is
+# auto-defaulted if absent.
+#
+# The trick here is wiring `MLOPS_PREDICTION_LOG_DSN` into the
+# environment that `dev-bare` inherits, so the TFG container's
+# `${MLOPS_PREDICTION_LOG_DSN:-}` interpolation in TFG/docker-compose.yml
+# actually picks up the in-Docker hostname `host.docker.internal:15432`.
+# Without that, the TFG container starts with the var unset and the
+# `MlopsStatusCard` shows "MLOps observability offline" even though the
+# stack is up. We source TFG/observability/.env.mlops (if present) for
+# the canonical port + credentials and fall back to the documented
+# defaults otherwise — so `make all` works even on a fresh checkout
+# before the user has copied .env.mlops.example.
+#
+# `make dev-bare` is the no-observability counterpart — same demos,
+# but without the Sentry / MLOps step. Use that for day-to-day demo
+# work and `make all` when you want the full observability surface.
+TFG_MLOPS_ENV = $(PARENT)/TFG/observability/.env.mlops
+
+all: ## Spin up EVERYTHING: Sentry + MLOps overlay + all demos + Astro
+	@echo ""
+	@echo "━━━ 1/3: Sentry self-hosted ━━━"
+	@if [ -f "$(SENTRY_DIR)/.env" ]; then \
+		$(MAKE) --no-print-directory obs-up; \
+	else \
+		echo "  ⏭  Sentry not installed at $(SENTRY_DIR)."; \
+		echo "     Run 'make obs-install' to set it up; skipping for now."; \
+	fi
+	@echo ""
+	@echo "━━━ 2/3: MLflow + Evidently MLOps overlay (TFG) ━━━"
+	@$(MAKE) --no-print-directory -C "$(TFG_DIR_MAKE)" mlops-up
+	@echo ""
+	@echo "━━━ 3/3: All demo backends + Astro dev server ━━━"
+	@if [ -f "$(TFG_MLOPS_ENV)" ]; then \
+		echo "  Sourcing $(TFG_MLOPS_ENV) for canonical port/credentials"; \
+		set -a; . "$(TFG_MLOPS_ENV)"; set +a; \
+	else \
+		echo "  ⓘ  $(TFG_MLOPS_ENV) not found — using documented defaults."; \
+		echo "     Copy TFG/observability/.env.mlops.example to .env.mlops to customize."; \
+	fi; \
+	export MLOPS_PREDICTION_LOG_DSN="postgresql://$${PREDICTION_LOG_USER:-mlops}:$${PREDICTION_LOG_PASSWORD:-mlops}@host.docker.internal:$${PREDICTION_LOG_HOST_PORT:-15432}/$${PREDICTION_LOG_DB:-prediction_log}"; \
+	echo "  TFG container env: MLOPS_PREDICTION_LOG_DSN=$$MLOPS_PREDICTION_LOG_DSN"; \
+	echo ""; \
+	$(MAKE) --no-print-directory dev-bare
+
+all-stop: ## Stop everything started by `make all` (demos + MLOps + Sentry)
+	@echo ""
+	@echo "━━━ 1/3: Demo backends + Astro ━━━"
+	@$(MAKE) --no-print-directory stop || true
+	@echo ""
+	@echo "━━━ 2/3: MLOps overlay ━━━"
+	@$(MAKE) --no-print-directory -C "$(TFG_DIR_MAKE)" mlops-down || true
+	@echo ""
+	@echo "━━━ 3/3: Sentry self-hosted ━━━"
+	@if [ -f "$(SENTRY_DIR)/.env" ]; then \
+		$(MAKE) --no-print-directory obs-down || true; \
+	else \
+		echo "  ⏭  Sentry not installed; nothing to stop."; \
+	fi
+
+build-images: ## Build all demo Docker images (incremental — sub-second when nothing changed)
 	@echo ""
 	@echo "━━━ Building $(words $(DEMO_TARGETS)) demo Docker images ($(NPROC) parallel) ━━━"
 	@echo ""
@@ -101,10 +238,14 @@ build: ## Build Astro site for production and all demo Docker images
 	else \
 		echo "❌ Docker builds failed  ($${MIN}m $${SEC}s)"; exit $$rc; \
 	fi
+
+build: build-images ## Build everything: demo Docker images + Astro site for production
 	@echo ""
 	@echo "━━━ Building Astro site ━━━"
 	@echo ""
-	npm run build
+	@RELEASE="$$(./scripts/_release_id.sh 2>/dev/null || echo portfolio@local-dev)"; \
+	echo "  PUBLIC_SENTRY_RELEASE=$$RELEASE"; \
+	PUBLIC_SENTRY_RELEASE="$$RELEASE" npm run build
 
 rebuild: ## Force rebuild all Docker images (ignore cache) and Astro site
 	@rm -rf "$(STAMPS)" dist/
@@ -157,7 +298,7 @@ help: ## Show this help message
 	@echo "Available commands:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
-	@echo "Demo backends started by dev-all:"
+	@echo "Demo backends started by dev-bare / all:"
 	@bash scripts/dev-all-demos.sh --list
 
 PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
