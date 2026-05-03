@@ -307,8 +307,12 @@ test.describe('TFG Polyp demo', () => {
   });
 
   test('confidence slider filters detection boxes', async ({ page }) => {
+    // Wait for React hydration before clicking
+    await page.waitForTimeout(1500);
     // Run inference first
     await page.getByRole('button', { name: /run demo/i }).click();
+    // Verify the click registered by checking for progress text
+    await expect(page.locator('text=/loading|preprocessing|forward|nms/i').first()).toBeVisible({ timeout: 5000 });
     await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 15000 });
     // The confidence slider should be visible
     const slider = page.locator('input[type="range"]').first();
