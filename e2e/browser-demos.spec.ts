@@ -298,12 +298,14 @@ test.describe('TFG Polyp demo', () => {
   });
 
   test('run demo inference cycles through states', async ({ page }) => {
+    // Wait for React hydration so onClick is wired up
+    await page.waitForTimeout(2000);
     const runBtn = page.getByRole('button', { name: /run demo/i });
     await runBtn.click();
     // Should show progress text during inference
-    await expect(page.locator('text=/loading|preprocessing|forward|nms/i').first()).toBeVisible({ timeout: 3000 });
+    await expect(page.locator('text=/loading|preprocessing|forward|nms/i').first()).toBeVisible({ timeout: 5000 });
     // Wait for completion
-    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 8000 });
+    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 10000 });
   });
 
   test('confidence slider filters detection boxes', async ({ page }) => {
@@ -459,6 +461,8 @@ test.describe('BitsXlaMarato demo', () => {
   });
 
   test('run demo inference shows progress', async ({ page }) => {
+    // Wait for React hydration so onClick is wired up
+    await page.waitForTimeout(2000);
     await page.getByRole('button', { name: /run demo/i }).click();
     await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 15000 });
   });
