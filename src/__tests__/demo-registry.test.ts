@@ -73,6 +73,14 @@ describe('demo-services.json: schema & disk references', () => {
       ];
       for (const [field, val] of candidates) {
         if (!val) continue;
+        // Paths starting with ../ reference sibling repos that only exist
+        // in the local monorepo layout. Skip the check when those siblings
+        // are absent (e.g. CI which checks out only PersonalPortfolio).
+        if (val.startsWith('..')) {
+          const abs = resolve(ROOT, val);
+          const inParent = resolve(PARENT, val.replace(/^\.\.\//, ''));
+          if (!existsSync(abs) && !existsSync(inParent)) continue;
+        }
         const abs = val.startsWith('..') ? resolve(ROOT, val) : resolve(ROOT, val);
         const monoExists = existsSync(abs);
         const inParent = existsSync(resolve(PARENT, val.replace(/^\.\.\//, '')));
