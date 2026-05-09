@@ -154,24 +154,38 @@ test.describe('Tenda demo', () => {
 // ─── Desastres IA Demo ───────────────────────────────────────────
 
 test.describe('Desastres IA demo', () => {
-  test('shows solver controls', async ({ page }) => {
+  test('runs the browser solver and renders optimized output', async ({ page }) => {
     await page.goto('/demos/desastres-ia', { waitUntil: 'domcontentloaded' });
-    // Should have HC/SA selector or solve button
-    const solveBtn = page.getByRole('button', { name: /solve|resolver/i }).first();
-    const visible = await solveBtn.isVisible().catch(() => false);
-    expect(visible || true).toBe(true); // Passes even if button not yet visible
+    const runButton = page.getByRole('button', { name: /run search|ejecutar búsqueda|executar cerca/i }).first();
+    await runButton.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(2000);
+
+    await expect(page.locator('select').first()).toBeVisible();
+    await expect(page.locator('input[type="number"]').first()).toBeVisible();
+    await expect(runButton).toBeVisible();
+
+    await runButton.dispatchEvent('click');
+    await expect(page.locator('text=/H2 cost|Coste H2|Cost H2/i').first()).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('text=/Final queues|Colas finales|Cues finals/i').first()).toBeVisible();
   });
 });
 
 // ─── Pro2 WPGMA Demo ────────────────────────────────────────────
 
 test.describe('Pro2 WPGMA demo', () => {
-  test('loads sample data and shows species list', async ({ page }) => {
+  test('loads sample data and completes clustering', async ({ page }) => {
     await page.goto('/demos/pro2', { waitUntil: 'domcontentloaded' });
-    // Should show species input or sample loader
-    const loadBtn = page.getByRole('button', { name: /sample|exemple|cargar/i }).first();
-    const hasBtn = await loadBtn.isVisible().catch(() => false);
-    expect(hasBtn || true).toBe(true);
+    const speciesHeading = page.locator('text=/Species|Especies|Espècies/i').first();
+    await speciesHeading.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1000);
+
+    await expect(page.getByRole('button', { name: /load sample|cargar muestra|carregar mostra/i })).toBeVisible();
+    await expect(page.locator('table').first()).toContainText('A');
+    await expect(page.locator('text=/Distance Table|Tabla de Distancias|Taula de Distàncies/i').first()).toBeVisible();
+
+    await page.getByRole('button', { name: /initialize clusters|inicializar clústeres|inicialitzar clústers/i }).dispatchEvent('click');
+    await page.getByRole('button', { name: /run all|ejecutar todo|executar tot/i }).dispatchEvent('click');
+    await expect(page.locator('text=/Phylogenetic Tree|Árbol Filogenético|Arbre Filogenètic/i').first()).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -461,9 +475,11 @@ test.describe('BitsXlaMarato demo', () => {
   });
 
   test('run demo inference shows progress', async ({ page }) => {
-    // Wait for React hydration so onClick is wired up
-    await page.waitForTimeout(2000);
-    await page.getByRole('button', { name: /run demo/i }).click();
+    const runButton = page.getByRole('button', { name: /run demo inference|ejecutar inferencia|executar inferència/i }).first();
+    await runButton.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1000);
+    await runButton.click();
+    await expect(page.locator('text=/extracting|extrayendo|extraient|mask r-cnn|fitting|ajustando|ajustant/i').first()).toBeVisible({ timeout: 5000 });
     await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 15000 });
   });
 
@@ -696,7 +712,8 @@ test.describe('PAR Parallel Computing demo', () => {
     await page.waitForTimeout(2000);
     // Click play on heat panel
     const playBtn = page.locator('.par-panel').nth(1).getByRole('button', { name: /Play|Iniciar|Inicia/i });
-    await playBtn.click();
+    await expect(playBtn).toBeVisible();
+    await playBtn.dispatchEvent('click');
     await page.waitForTimeout(500);
     // Should now show Pause
     await expect(page.locator('.par-panel').nth(1).getByRole('button', { name: /Pause|Pausar|Pausa/i })).toBeVisible();
