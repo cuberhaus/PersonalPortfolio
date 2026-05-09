@@ -44,23 +44,56 @@ describe('Icon parity: demo-icons.ts covers all demos.json icons', () => {
 
 describe('Navbar anchors match homepage section IDs', () => {
   const navbar = read('components/Navbar.astro');
-  const navAnchors = [...navbar.matchAll(/href:\s*'#(\w+)'/g)].map(m => m[1]).sort();
+  const navAnchorsInOrder = [...navbar.matchAll(/href:\s*'#([\w-]+)'/g)].map(m => m[1]);
+  const navAnchors = [...navAnchorsInOrder].sort();
 
   const sectionComponents = [
-    'components/Hero.astro',
-    'components/About.astro',
-    'components/Demos.astro',
-    'components/Skills.astro',
-    'components/Experience.astro',
-    'components/WorkProjects.astro',
-    'components/Education.astro',
-    'components/Contact.astro',
+    { name: 'Hero', file: 'components/Hero.astro' },
+    { name: 'About', file: 'components/About.astro' },
+    { name: 'Demos', file: 'components/Demos.astro' },
+    { name: 'Skills', file: 'components/Skills.astro' },
+    { name: 'Experience', file: 'components/Experience.astro' },
+    { name: 'WorkProjects', file: 'components/WorkProjects.astro' },
+    { name: 'Education', file: 'components/Education.astro' },
+    { name: 'Contact', file: 'components/Contact.astro' },
   ];
 
-  const sectionIds = sectionComponents
-    .map(f => read(f))
-    .flatMap(src => [...src.matchAll(/<section[\s][^>]*\bid="([a-z][\w-]*)"/g)].map(m => m[1]))
+  const sectionMeta = sectionComponents.map(({ name, file }) => {
+    const src = read(file);
+    const id = src.match(/<section[\s][^>]*\bid="([a-z][\w-]*)"/)?.[1];
+    const dataNum = src.match(/<section[\s][^>]*\bdata-num="(\d{2})"/)?.[1];
+
+    return { name, id, dataNum };
+  });
+
+  const componentToSectionId = new Map(sectionMeta.map(section => [section.name, section.id]));
+  const componentToDataNum = new Map(sectionMeta.map(section => [section.name, section.dataNum]));
+
+  const sectionIds = sectionMeta
+    .map(section => section.id)
+    .filter((id): id is string => Boolean(id))
     .sort();
+
+  const extractMainComponentNames = (rel: string) => {
+    const main = read(rel).match(/<main id="main-content">([\s\S]*?)<\/main>/)?.[1] ?? '';
+    return [...main.matchAll(/<([A-Z]\w+)\s*\/>/g)].map(m => m[1]);
+  };
+
+  const sectionIdsFromPage = (rel: string) =>
+    extractMainComponentNames(rel)
+      .map(component => componentToSectionId.get(component))
+      .filter((id): id is string => Boolean(id));
+
+  const numberedSectionsFromPage = (rel: string) =>
+    extractMainComponentNames(rel)
+      .map(component => ({
+        component,
+        id: componentToSectionId.get(component),
+        dataNum: componentToDataNum.get(component),
+      }))
+      .filter((section): section is { component: string; id: string; dataNum: string | undefined } =>
+        Boolean(section.id) && section.id !== 'hero',
+      );
 
   it('every navbar anchor points to a real section ID', () => {
     for (const anchor of navAnchors) {
@@ -77,6 +110,25 @@ describe('Navbar anchors match homepage section IDs', () => {
   it('every main section is reachable from the navbar', () => {
     for (const id of mainSectionIds) {
       expect(navAnchors, `section #${id} exists but navbar has no link to it`).toContain(id);
+    }
+  });
+
+  it('default and localized homepages render sections in the same order', () => {
+    expect(sectionIdsFromPage('pages/[lang]/index.astro')).toEqual(sectionIdsFromPage('pages/index.astro'));
+  });
+
+  it('navbar link order follows the default homepage section order', () => {
+    const defaultHomepageAnchors = sectionIdsFromPage('pages/index.astro').filter(id => id !== 'hero');
+    expect(navAnchorsInOrder).toEqual(defaultHomepageAnchors);
+  });
+
+  it('section data numbers follow the default homepage order', () => {
+    const numberedSections = numberedSectionsFromPage('pages/index.astro');
+
+    for (let index = 0; index < numberedSections.length; index++) {
+      const expected = String(index + 1).padStart(2, '0');
+      const section = numberedSections[index];
+      expect(section.dataNum, `${section.component} should use data-num="${expected}"`).toBe(expected);
     }
   });
 });
