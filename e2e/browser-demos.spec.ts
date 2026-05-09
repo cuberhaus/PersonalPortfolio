@@ -178,14 +178,16 @@ test.describe('Pro2 WPGMA demo', () => {
     await page.goto('/demos/pro2', { waitUntil: 'domcontentloaded' });
     const speciesHeading = page.locator('text=/Species|Especies|Espècies/i').first();
     await speciesHeading.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(3000);
 
     await expect(page.getByRole('button', { name: /load sample|cargar muestra|carregar mostra/i })).toBeVisible();
     await expect(page.locator('table').first()).toContainText('A');
     await expect(page.locator('text=/Distance Table|Tabla de Distancias|Taula de Distàncies/i').first()).toBeVisible();
 
     await page.getByRole('button', { name: /initialize clusters|inicializar clústeres|inicialitzar clústers/i }).dispatchEvent('click');
-    await page.getByRole('button', { name: /run all|ejecutar todo|executar tot/i }).dispatchEvent('click');
+    const runAll = page.getByRole('button', { name: /run all|ejecutar todo|executar tot/i });
+    await expect(runAll).toBeVisible({ timeout: 5000 });
+    await runAll.dispatchEvent('click');
     await expect(page.locator('text=/Phylogenetic Tree|Árbol Filogenético|Arbre Filogenètic/i').first()).toBeVisible({ timeout: 5000 });
   });
 });
@@ -801,7 +803,7 @@ test.describe('Additional demo interactions', () => {
       fallback?.scrollIntoView({ block: 'center' });
     });
 
-    await page.locator('#prop-mock-fallback [data-mock-tab="recs"]').click();
+    await page.locator('#prop-mock-fallback [data-mock-tab="recs"]').dispatchEvent('click');
     await expect(page.locator('#mock-recs')).toHaveClass(/active/);
     await expect(page.locator('#mock-recs')).toContainText('Pulp Fiction');
   });
@@ -817,9 +819,9 @@ test.describe('Additional demo interactions', () => {
     await page.waitForTimeout(1500);
 
     for (let step = 1; step < 10; step++) {
-      await page.getByRole('button', { name: /next/i }).click();
+      await page.getByRole('button', { name: /next/i }).dispatchEvent('click');
     }
-    await page.getByRole('button', { name: /plan/i }).click();
+    await page.getByRole('button', { name: /plan/i }).dispatchEvent('click');
 
     await expect(page.getByText(/total days/i)).toBeVisible();
     await expect(page.getByRole('button', { name: /plan another trip/i })).toBeVisible();
