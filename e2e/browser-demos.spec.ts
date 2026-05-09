@@ -51,12 +51,11 @@ test.describe('DemoNav sidebar', () => {
   test('clicking a sidebar link navigates to that demo', async ({ page }) => {
     await page.goto('/demos/jsbach', { waitUntil: 'domcontentloaded' });
     const tendaLink = page.locator('nav a[href*="/demos/tenda"]').first();
-    if (await tendaLink.isVisible()) {
-      // Sidebar may clip the element outside the viewport; dispatch click via JS
-      await tendaLink.dispatchEvent('click');
-      await page.waitForURL('**/demos/tenda**', { timeout: 10_000 });
-      expect(page.url()).toContain('/demos/tenda');
-    }
+    await expect(tendaLink).toHaveCount(1);
+    // Sidebar may clip the element outside the viewport; dispatch click via JS
+    await tendaLink.dispatchEvent('click');
+    await page.waitForURL('**/demos/tenda**', { waitUntil: 'domcontentloaded', timeout: 10_000 });
+    expect(page.url()).toContain('/demos/tenda');
   });
 });
 
@@ -86,20 +85,13 @@ test.describe('JSBach demo', () => {
 
   test('run button produces output', async ({ page }) => {
     await page.goto('/demos/jsbach', { waitUntil: 'domcontentloaded' });
-    // Select an example if available
-    const select = page.locator('select').first();
-    if (await select.isVisible()) {
-      await select.selectOption({ index: 1 });
-    }
-    // Click run button
     const runBtn = page.getByRole('button', { name: /run|execute|interpret/i }).first();
-    if (await runBtn.isVisible()) {
-      await runBtn.click();
-      // Wait for output to appear
-      await page.waitForTimeout(500);
-      const output = page.locator('[class*="output"], [class*="result"], pre').last();
-      await expect(output).not.toBeEmpty();
-    }
+    await runBtn.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(3000);
+    await expect(runBtn).toBeVisible();
+    await runBtn.dispatchEvent('click');
+    await expect(page.getByText(/output|salida|sortida/i).first()).toBeVisible();
+    await expect(page.getByText(/notes? generated|notas generadas|notes generades/i).first()).toBeVisible();
   });
 });
 
@@ -136,19 +128,15 @@ test.describe('Tenda demo', () => {
     await page.evaluate(() => {
       document.querySelector('#tenda-mock-fallback')?.scrollIntoView({ block: 'center' });
     });
-    await page.waitForTimeout(1500);
-    // Navigate to a category, then a product
-    const firstClickable = page.locator('#tenda-mock-fallback [style*="cursor:pointer"]').first();
-    if (await firstClickable.isVisible()) {
-      await firstClickable.click();
-      await page.waitForTimeout(300);
-      // Try to find and click an "add to cart" button
-      const addBtn = page.getByRole('button', { name: /add to cart|añadir|afegir/i }).first();
-      if (await addBtn.isVisible()) {
-        await addBtn.click();
-        await page.waitForTimeout(200);
-      }
-    }
+    await page.waitForTimeout(3000);
+    await page.getByText('Camises').first().dispatchEvent('click');
+    const firstProduct = page.getByText('Camisa blanca clàssica');
+    await expect(firstProduct).toBeVisible();
+    await firstProduct.dispatchEvent('click');
+    const addBtn = page.getByRole('button', { name: /add to cart|añadir|afegir/i }).first();
+    await expect(addBtn).toBeVisible();
+    await addBtn.dispatchEvent('click');
+    await expect(page.locator('#tenda-mock-fallback nav')).toContainText(/cart\s*1|carrito\s*1|carret\s*1/i);
   });
 });
 
@@ -205,11 +193,12 @@ test.describe('Planificacion demo', () => {
   test('simulate planner button works', async ({ page }) => {
     await page.goto('/demos/planificacion', { waitUntil: 'domcontentloaded' });
     const mockBtn = page.getByRole('button', { name: /simulate|simular/i }).first();
-    if (await mockBtn.isVisible()) {
-      await mockBtn.click();
-      // Wait for simulated "running" state and then "done"
-      await page.waitForTimeout(2000);
-    }
+    await mockBtn.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(3000);
+    await expect(mockBtn).toBeVisible();
+    await mockBtn.dispatchEvent('click');
+    await expect(page.getByText(/solving|resolviendo|resolent/i)).toBeVisible();
+    await expect(page.getByText(/steps|pasos|passos/i).first()).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -355,25 +344,24 @@ test.describe('Matriculas demo', () => {
   });
 
   test('selecting a sample enables detect button', async ({ page }) => {
-    // Click first sample image
-    const firstSample = page.locator('img[style*="cursor: pointer"]').first();
-    if (await firstSample.isVisible()) {
-      await firstSample.click();
-      const detectBtn = page.getByRole('button', { name: /detect|detectar/i });
-      await expect(detectBtn).toBeEnabled();
-    }
+    const firstSample = page.getByRole('img', { name: 'zmz9157' });
+    await firstSample.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(3000);
+    await expect(firstSample).toBeVisible();
+    await firstSample.dispatchEvent('click');
+    const detectBtn = page.getByRole('button', { name: /detect|detectar/i });
+    await expect(detectBtn).toBeEnabled();
   });
 
   test('detect plate shows pipeline stages', async ({ page }) => {
-    const firstSample = page.locator('img[style*="cursor: pointer"]').first();
-    if (await firstSample.isVisible()) {
-      await firstSample.click();
-      await page.getByRole('button', { name: /detect|detectar/i }).click();
-      // Should show processing or result
-      await page.waitForTimeout(2000);
-      const resultText = page.locator('text=/detected|detectada|stage|etapa/i');
-      await expect(resultText.first()).toBeVisible({ timeout: 5000 });
-    }
+    const firstSample = page.getByRole('img', { name: 'zmz9157' });
+    await firstSample.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(3000);
+    await expect(firstSample).toBeVisible();
+    await firstSample.dispatchEvent('click');
+    await page.getByRole('button', { name: /detect|detectar/i }).dispatchEvent('click');
+    const resultText = page.locator('text=/detected|detectada|stage|etapa/i');
+    await expect(resultText.first()).toBeVisible({ timeout: 10000 });
   });
 });
 
