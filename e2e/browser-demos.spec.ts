@@ -6,7 +6,7 @@
  * Run: npx playwright test --project=browser-demos
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 const ALL_SLUGS = [
   'tfg-polyps', 'draculin', 'bitsx-marato', 'matriculas',
@@ -506,6 +506,20 @@ test.describe('APA Practica demo', () => {
     await page.goto('/demos/apa-practica', { waitUntil: 'domcontentloaded' });
   });
 
+  const clickKnnCanvas = async (page: Page, xRatio = 0.5, yRatio = 0.5) => {
+    const canvas = page.locator('canvas').first();
+    await canvas.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(3000);
+    await canvas.evaluate((el: HTMLCanvasElement, point: { xRatio: number; yRatio: number }) => {
+      const rect = el.getBoundingClientRect();
+      el.dispatchEvent(new MouseEvent('click', {
+        bubbles: true,
+        clientX: rect.left + rect.width * point.xRatio,
+        clientY: rect.top + rect.height * point.yRatio,
+      }));
+    }, { xRatio, yRatio });
+  };
+
   test('shows k-NN selector buttons', async ({ page }) => {
     for (const k of [3, 5, 7, 11]) {
       await expect(page.getByRole('button', { name: String(k) })).toBeVisible();
@@ -518,37 +532,25 @@ test.describe('APA Practica demo', () => {
   });
 
   test('clicking canvas triggers prediction', async ({ page }) => {
-    const canvas = page.locator('canvas').first();
-    const box = await canvas.boundingBox();
-    if (box) {
-      await canvas.click({ position: { x: box.width / 3, y: box.height / 3 } });
-      await page.waitForTimeout(500);
-      // Prediction or nearest-neighbor info should appear
-      const predText = page.locator('text=/Prediction|Predicción|Predicció|Negative|Positive|N |P /i');
-      const count = await predText.count();
-      expect(count).toBeGreaterThanOrEqual(0); // graceful: some coords may miss data points
-    }
+    await clickKnnCanvas(page, 1 / 3, 1 / 3);
+    await expect(page.getByText(/Prediction:|Predicción:|Predicció:/i)).toBeVisible();
+    await expect(page.getByText(/nearest neighbors|vecinos más cercanos|veïns més propers/i)).toBeVisible();
   });
 
   test('clear button resets selection', async ({ page }) => {
-    const canvas = page.locator('canvas').first();
-    const box = await canvas.boundingBox();
-    if (box) {
-      await canvas.click({ position: { x: box.width / 2, y: box.height / 2 } });
-      await page.waitForTimeout(500);
-    }
+    await clickKnnCanvas(page);
     const clearBtn = page.getByRole('button', { name: /clear|limpiar|netejar/i });
-    // Clear button only appears after a point is selected
-    if (await clearBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await clearBtn.click();
-    }
+    await expect(clearBtn).toBeVisible({ timeout: 3000 });
+    await clearBtn.click();
+    await expect(page.getByText(/Click the plot|Haz clic en el gráfico|Fes clic al gràfic/i)).toBeVisible();
   });
 
   test('changing k value updates display', async ({ page }) => {
+    await clickKnnCanvas(page);
     await page.getByRole('button', { name: '3' }).click();
-    // k=3 should now be active
+    await expect(page.getByText(/3 nearest neighbors/i)).toBeVisible();
     await page.getByRole('button', { name: '11' }).click();
-    // Changed to k=11
+    await expect(page.getByText(/11 nearest neighbors/i)).toBeVisible();
   });
 
   test('feature importance bars are visible', async ({ page }) => {
