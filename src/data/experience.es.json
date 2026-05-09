@@ -18,15 +18,5 @@
       "Automatización de flujos de trabajo de SQL Server con PowerShell para agilizar tareas recurrentes de procesamiento de datos y generación de informes",
       "Proyectos de análisis geoespacial en R / RStudio, utilizando datos cartográficos para aportar información de negocio basada en la localización"
     ]
-  },
-  {
-    "role": "Ingeniero de Desarrollo de Software",
-    "company": "Hackathon bitsxlaMarató TV3 (Ganador)",
-    "period": "Ene 2022",
-    "bullets": [
-      "Desarrollo de un detector de aneurismas utilizando una red neuronal convolucional con MaskRCNN para la salud cardiovascular",
-      "Proyecto ganador del Hackathon bitsxlaMarató TV3 2022",
-      "Diseño de una interfaz fácil de usar para cargar vídeos, detectar la aorta y visualizar modelos en 3D"
-    ]
   }
 ]

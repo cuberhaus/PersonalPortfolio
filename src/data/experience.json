@@ -18,15 +18,5 @@
       "Automated SQL Server workflows with PowerShell to streamline recurring data processing and reporting tasks",
       "Developed geospatial analysis projects in R / RStudio, using map data to support location-based business insights"
     ]
-  },
-  {
-    "role": "Software Development Engineer",
-    "company": "bitsxlaMarató TV3 Hackathon (Winner)",
-    "period": "Jan 2022",
-    "bullets": [
-      "Developed an aneurysm detector using a convolutional neural network with MaskRCNN for cardiovascular health",
-      "Won the bitsxlaMarató TV3 Hackathon 2022 for this project",
-      "Designed a user-friendly interface for uploading video, detecting the aorta, and visualizing 3D models"
-    ]
   }
 ]

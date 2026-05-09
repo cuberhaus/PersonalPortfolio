@@ -18,15 +18,5 @@
       "Automatització de fluxos de treball de SQL Server amb PowerShell per agilitzar tasques recurrents de processament de dades i generació d'informes",
       "Projectes d'anàlisi geoespacial en R / RStudio, utilitzant dades cartogràfiques per aportar informació de negoci basada en la localització"
     ]
-  },
-  {
-    "role": "Enginyer de Desenvolupament de Programari",
-    "company": "Hackathon bitsxlaMarató TV3 (Guanyador)",
-    "period": "Gen 2022",
-    "bullets": [
-      "Desenvolupament d'un detector d'aneurismes utilitzant una xarxa neuronal convolucional amb MaskRCNN per a la salut cardiovascular",
-      "Projecte guanyador del Hackathon bitsxlaMarató TV3 2022",
-      "Disseny d'una interfície fàcil d'utilitzar per penjar vídeos, detectar l'aorta i visualitzar models en 3D"
-    ]
   }
 ]
