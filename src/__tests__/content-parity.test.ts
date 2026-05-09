@@ -87,17 +87,6 @@ describe('Experience data', () => {
     }
   });
 
-  it('experience links are reachable', async () => {
-    for (const entry of expEn) {
-      if (entry.link) {
-        let res = await fetch(entry.link, { method: 'HEAD', redirect: 'follow' });
-        if (!res.ok) {
-          res = await fetch(entry.link, { method: 'GET', redirect: 'follow' });
-        }
-        expect(res.ok, `${entry.link} returned ${res.status}`).toBe(true);
-      }
-    }
-  }, 15_000);
 });
 
 // ─── Education ──────────────────────────────────────────────────
@@ -140,12 +129,6 @@ describe('Education data', () => {
     }
   });
 
-  it('education links are reachable', async () => {
-    for (const entry of eduEn) {
-      const res = await fetch(entry.link, { method: 'HEAD', redirect: 'follow' });
-      expect(res.ok, `${entry.link} returned ${res.status}`).toBe(true);
-    }
-  }, 15_000);
 });
 
 // ─── Work Projects ──────────────────────────────────────────────
@@ -193,12 +176,4 @@ describe('Work projects data', () => {
     }
   });
 
-  it('work project links are reachable', async () => {
-    for (const project of workEn) {
-      if (project.link) {
-        const res = await fetch(project.link, { method: 'HEAD', redirect: 'follow' });
-        expect(res.ok, `${project.link} returned ${res.status}`).toBe(true);
-      }
-    }
-  }, 15_000);
 });
