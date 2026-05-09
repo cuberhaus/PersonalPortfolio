@@ -29,7 +29,11 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
           <div class="timeline-content">
             <span class="timeline-period">{job.period}</span>
             <h3 class="timeline-role">
-              {job.role} <span class="timeline-company">@ {job.company}</span>
+              {job.role} {job.link ? (
+                <a href={job.link} target="_blank" rel="noopener noreferrer" class="timeline-company">@ {job.company}</a>
+              ) : (
+                <span class="timeline-company">@ {job.company}</span>
+              )}
             </h3>
             <ul class="timeline-bullets">
               {job.bullets.map((bullet) => (
@@ -118,6 +122,15 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
   .timeline-company {
     color: var(--accent-start);
     font-weight: 600;
+  }
+
+  a.timeline-company {
+    text-decoration: none;
+    transition: color var(--transition-base);
+  }
+
+  a.timeline-company:hover {
+    text-decoration: underline;
   }
 
   .timeline-bullets {

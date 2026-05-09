@@ -75,6 +75,29 @@ describe('Experience data', () => {
       expect(expEn[i].bullets.length).toBe(expCa[i].bullets.length);
     }
   });
+
+  it('links match across translations and are valid HTTPS URLs', () => {
+    for (let i = 0; i < expEn.length; i++) {
+      if (expEn[i].link) {
+        expect(expEs[i].link).toBe(expEn[i].link);
+        expect(expCa[i].link).toBe(expEn[i].link);
+        expect(() => new URL(expEn[i].link)).not.toThrow();
+        expect(expEn[i].link).toMatch(/^https:\/\//);
+      }
+    }
+  });
+
+  it('experience links are reachable', async () => {
+    for (const entry of expEn) {
+      if (entry.link) {
+        let res = await fetch(entry.link, { method: 'HEAD', redirect: 'follow' });
+        if (!res.ok) {
+          res = await fetch(entry.link, { method: 'GET', redirect: 'follow' });
+        }
+        expect(res.ok, `${entry.link} returned ${res.status}`).toBe(true);
+      }
+    }
+  }, 15_000);
 });
 
 // ─── Education ──────────────────────────────────────────────────

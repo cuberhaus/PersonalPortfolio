@@ -2,6 +2,7 @@
   {
     "role": "Consultor de IA y Datos",
     "company": "Deloitte",
+    "link": "https://www.deloitte.com/es/es.html",
     "period": "Sep 2025 — Presente",
     "bullets": [
       "Entrega del primer proyecto de IA Física de Deloitte: detección de anomalías de fabricación en tiempo real sobre líneas de producción de motores en vivo y un gemelo digital del almacén con seguimiento de paquetes por cámara, construido sobre NVIDIA Omniverse, Isaac Sim y el stack Metropolis (DeepStream, TAO, Triton)",
@@ -12,6 +13,7 @@
   {
     "role": "Ingeniero de IA",
     "company": "MGS, Seguros y Reaseguros S.A.",
+    "link": "https://www.mgs.es/wps/",
     "period": "Sep 2023 — Sep 2024",
     "bullets": [
       "Desarrollo de modelos de predicción de precios dentro de un equipo de IA y datos de 4 personas dando soporte al análisis de productos aseguradores",

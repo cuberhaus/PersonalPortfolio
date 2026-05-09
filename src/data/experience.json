@@ -2,6 +2,7 @@
   {
     "role": "AI & Data Consultant",
     "company": "Deloitte",
+    "link": "https://www.deloitte.com/es/es.html",
     "period": "Sep 2025 — Present",
     "bullets": [
       "Delivered Deloitte's first Physical AI project: real-time manufacturing anomaly detection on live motor production lines and a warehouse digital twin with camera-based package tracking, built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton)",
@@ -12,6 +13,7 @@
   {
     "role": "AI Engineer",
     "company": "MGS, Seguros y Reaseguros S.A.",
+    "link": "https://www.mgs.es/wps/",
     "period": "Sep 2023 — Sep 2024",
     "bullets": [
       "Built pricing prediction models as part of a 4-person AI and data team supporting insurance product analytics",
