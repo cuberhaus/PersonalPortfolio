@@ -13,6 +13,7 @@ const ALL_SLUGS = [
   'joc-eda', 'jsbach', 'tenda', 'pro2', 'mpids',
   'phase-transitions', 'planificacion', 'desastres-ia',
   'apa-practica', 'prop', 'caim', 'sbc-ia', 'par-parallel',
+  'rob-robotics', 'algorithms', 'grafics',
 ];
 
 // ─── Demo pages load without errors ─────────────────────────────
@@ -486,8 +487,13 @@ test.describe('BitsXlaMarato demo', () => {
   });
 
   test('diameter slider changes zone indicator', async ({ page }) => {
-    const text = page.locator('text=/typical|follow-up|concern|típico|seguimiento|preocupación/i');
-    await expect(text.first()).toBeVisible();
+    const slider = page.locator('input[type="range"]').first();
+    await slider.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(3000);
+    await expect(page.getByText(/typical range/i)).toBeVisible();
+    await slider.focus();
+    await page.keyboard.press('End');
+    await expect(page.getByText(/high concern/i)).toBeVisible();
   });
 });
 
@@ -724,5 +730,49 @@ test.describe('PAR Parallel Computing demo', () => {
   test('Spanish PAR page shows translated title', async ({ page }) => {
     await page.goto('/es/demos/par-parallel', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('h1.demo-hdr-title')).toContainText('Computación Paralela');
+  });
+});
+
+// ─── Robotics, Algorithms, and Graphics canvas demos ────────────
+
+test.describe('Canvas fallback demos', () => {
+  test('Robotics dashboard renders robot canvases and joint controls', async ({ page }) => {
+    await page.goto('/demos/rob-robotics', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3000);
+    await page.evaluate(() => {
+      const fallback = document.querySelector('#rob-mock-fallback') as HTMLElement;
+      if (fallback) fallback.style.display = '';
+      fallback?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(1500);
+
+    await expect(page.locator('#rob-mock-fallback canvas')).toHaveCount(3);
+    await expect(page.locator('#rob-mock-fallback input[type="range"]')).toHaveCount(3);
+  });
+
+  test('Algorithm visualizer renders all mini visualizations', async ({ page }) => {
+    await page.goto('/demos/algorithms', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3000);
+    await page.evaluate(() => {
+      const fallback = document.querySelector('#fib-mock-fallback') as HTMLElement;
+      if (fallback) fallback.style.display = '';
+      fallback?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(1500);
+
+    await expect(page.locator('#fib-mock-fallback canvas')).toHaveCount(3);
+  });
+
+  test('Graphics shader playground renders all canvas panels', async ({ page }) => {
+    await page.goto('/demos/grafics', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3000);
+    await page.evaluate(() => {
+      const fallback = document.querySelector('#grafics-mock-fallback') as HTMLElement;
+      if (fallback) fallback.style.display = '';
+      fallback?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(1500);
+
+    await expect(page.locator('#grafics-mock-fallback canvas')).toHaveCount(4);
   });
 });
