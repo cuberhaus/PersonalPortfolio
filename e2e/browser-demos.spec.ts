@@ -776,3 +776,52 @@ test.describe('Canvas fallback demos', () => {
     await expect(page.locator('#grafics-mock-fallback canvas')).toHaveCount(4);
   });
 });
+
+// ─── Remaining route-only demo interactions ─────────────────────
+
+test.describe('Additional demo interactions', () => {
+  test('Joc EDA page wires sample replay and validates uploads', async ({ page }) => {
+    await page.goto('/demos/joc-eda', { waitUntil: 'domcontentloaded' });
+
+    await expect(page.locator('#launch-sample')).toHaveAttribute('href', /viewer\.html/);
+    await page.locator('#file-upload').setInputFiles({
+      name: 'not-a-replay.txt',
+      mimeType: 'text/plain',
+      buffer: Buffer.from('plain text without the expected replay marker'),
+    });
+    await expect(page.locator('#upload-status')).toContainText(/valid game file|ThePurge/i);
+  });
+
+  test('PROP mock dashboard switches to recommendations', async ({ page }) => {
+    await page.goto('/demos/prop', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3000);
+    await page.evaluate(() => {
+      const fallback = document.querySelector('#prop-mock-fallback') as HTMLElement;
+      if (fallback) fallback.style.display = '';
+      fallback?.scrollIntoView({ block: 'center' });
+    });
+
+    await page.locator('#prop-mock-fallback [data-mock-tab="recs"]').click();
+    await expect(page.locator('#mock-recs')).toHaveClass(/active/);
+    await expect(page.locator('#mock-recs')).toContainText('Pulp Fiction');
+  });
+
+  test('SBC trip planner completes the mock wizard', async ({ page }) => {
+    await page.goto('/demos/sbc-ia', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(3000);
+    await page.evaluate(() => {
+      const fallback = document.querySelector('#sbc-mock-fallback') as HTMLElement;
+      if (fallback) fallback.style.display = '';
+      fallback?.scrollIntoView({ block: 'center' });
+    });
+    await page.waitForTimeout(1500);
+
+    for (let step = 1; step < 10; step++) {
+      await page.getByRole('button', { name: /next/i }).click();
+    }
+    await page.getByRole('button', { name: /plan/i }).click();
+
+    await expect(page.getByText(/total days/i)).toBeVisible();
+    await expect(page.getByRole('button', { name: /plan another trip/i })).toBeVisible();
+  });
+});
