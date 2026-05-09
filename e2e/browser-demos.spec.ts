@@ -477,10 +477,12 @@ test.describe('BitsXlaMarato demo', () => {
   test('run demo inference shows progress', async ({ page }) => {
     const runButton = page.getByRole('button', { name: /run demo inference|ejecutar inferencia|executar inferència/i }).first();
     await runButton.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(1000);
-    await runButton.click();
-    await expect(page.locator('text=/extracting|extrayendo|extraient|mask r-cnn|fitting|ajustando|ajustant/i').first()).toBeVisible({ timeout: 5000 });
+    await page.waitForTimeout(3000);
+    await runButton.dispatchEvent('click');
+    await expect(runButton).toBeHidden({ timeout: 5000 });
+    await expect(page.locator('text=/extracting frame|extrayendo frame|extraient frame/i').first()).toBeVisible({ timeout: 5000 });
     await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText(/opacity|opacidad|opacitat/i).first()).toBeVisible();
   });
 
   test('diameter slider changes zone indicator', async ({ page }) => {
