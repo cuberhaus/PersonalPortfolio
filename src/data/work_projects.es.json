@@ -14,6 +14,7 @@
     "role": "AI & Data Consultant @ Deloitte",
     "description": "Software integral que analiza currículums en PDF, los estandariza en JSON estructurado y los indexa en una base de datos RAG. Permite realizar búsquedas semánticas para encontrar los mejores candidatos para una oferta de trabajo y viceversa.",
     "tags": ["LLMs", "RAG", "Búsqueda Vectorial", "Parsing PDF"],
-    "icon": "users"
+    "icon": "users",
+    "link": "https://www.aragon.es/"
   }
 ]

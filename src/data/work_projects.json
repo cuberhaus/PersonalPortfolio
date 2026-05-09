@@ -14,6 +14,7 @@
     "role": "AI & Data Consultant @ Deloitte",
     "description": "End-to-end software that parses PDF resumes, standardizes them into structured JSON, and indexes them in a RAG database. Allows semantic querying to find the best candidates for a job description and vice versa.",
     "tags": ["LLMs", "RAG", "Vector Search", "PDF Parsing"],
-    "icon": "users"
+    "icon": "users",
+    "link": "https://www.aragon.es/"
   }
 ]
