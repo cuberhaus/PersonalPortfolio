@@ -13,6 +13,11 @@ export default defineConfig({
   },
   projects: [
     {
+      name: 'portfolio-smoke',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /portfolio-smoke\.spec\.ts/,
+    },
+    {
       name: 'browser-demos',
       use: { ...devices['Desktop Chrome'] },
       testMatch: /browser-demos\.spec\.ts/,
