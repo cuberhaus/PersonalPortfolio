@@ -8,9 +8,10 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { SECTION_IDS, SECTION_IDS_WITH_HERO } from '../src/config/section-ids';
 
-const SECTION_ORDER = ['about', 'experience', 'work', 'projects', 'skills', 'education', 'certifications', 'contact'];
-const SECTION_SELECTOR = ['hero', ...SECTION_ORDER].map(id => `section#${id}`).join(', ');
+const SECTION_ORDER = SECTION_IDS;
+const SECTION_SELECTOR = SECTION_IDS_WITH_HERO.map(id => `section#${id}`).join(', ');
 
 async function navHrefs(page: import('@playwright/test').Page) {
   return page.locator('.nav-links-primary a.nav-link').evaluateAll(links =>

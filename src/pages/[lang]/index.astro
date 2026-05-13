@@ -2,22 +2,13 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Hero from '../../components/Hero.astro';
-import About from '../../components/About.astro';
-import Demos from '../../components/Demos.astro';
-import Skills from '../../components/Skills.astro';
-import Experience from '../../components/Experience.astro';
-import WorkProjects from '../../components/WorkProjects.astro';
-import Education from '../../components/Education.astro';
-import Certifications from '../../components/Certifications.astro';
-import Contact from '../../components/Contact.astro';
 import Footer from '../../components/Footer.astro';
+import { sections } from '../../config/sections';
+import { PREFIXED_LOCALES } from '../../config/locales';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 export function getStaticPaths() {
-  return [
-    { params: { lang: 'es' } },
-    { params: { lang: 'ca' } }
-  ];
+  return PREFIXED_LOCALES.map(lang => ({ params: { lang } }));
 }
 
 const lang = getLangFromUrl(Astro.url);
@@ -28,14 +19,7 @@ const t = useTranslations(lang);
   <Navbar />
   <main id="main-content">
     <Hero />
-    <About />
-    <Experience />
-    <WorkProjects />
-    <Demos />
-    <Skills />
-    <Education />
-    <Certifications />
-    <Contact />
+    {sections.map(({ component: Section }, i) => <Section num={String(i + 1).padStart(2, '0')} />)}
   </main>
   <Footer />
 </Layout>

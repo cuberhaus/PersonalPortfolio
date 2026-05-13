@@ -1,10 +1,12 @@
+import { DEFAULT_LOCALE } from '../config/locales';
+
 export const languages = {
   en: 'English',
   es: 'Español',
   ca: 'Català',
 };
 
-export const defaultLang = 'en';
+export const defaultLang: keyof typeof languages = DEFAULT_LOCALE;
 
 export const ui = {
   en: {
@@ -15,6 +17,7 @@ export const ui = {
     'nav.experience': 'Experience',
     'nav.education': 'Education',
     'nav.certifications': 'Certifications',
+    'nav.work': 'Professional Work',
     'nav.contact': 'Contact',
 
     // Hero
@@ -153,6 +156,7 @@ export const ui = {
     'nav.experience': 'Experiencia',
     'nav.education': 'Educación',
     'nav.certifications': 'Certificaciones',
+    'nav.work': 'Trabajo Profesional',
     'nav.contact': 'Contacto',
 
     // Hero
@@ -291,6 +295,7 @@ export const ui = {
     'nav.experience': 'Experiència',
     'nav.education': 'Educació',
     'nav.certifications': 'Certificacions',
+    'nav.work': 'Treball Professional',
     'nav.contact': 'Contacte',
 
     // Hero

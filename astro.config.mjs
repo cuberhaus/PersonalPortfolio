@@ -5,6 +5,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import sentry from '@sentry/astro';
 import spotlight from '@spotlightjs/astro';
+import { LOCALES, DEFAULT_LOCALE } from './src/config/locales.ts';
 
 const SITE = process.env.SITE_URL ?? 'https://polcasacubertagil.com';
 
@@ -53,8 +54,8 @@ export default defineConfig({
     spotlight(),
   ],
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'es', 'ca'],
+    defaultLocale: DEFAULT_LOCALE,
+    locales: [...LOCALES],
     routing: {
       prefixDefaultLocale: false
     }

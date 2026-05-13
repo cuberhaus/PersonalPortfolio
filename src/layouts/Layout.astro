@@ -7,6 +7,7 @@ import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
 import certificationsData from '../data/certifications.json';
+import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
 
 interface Props {
   title?: string;
@@ -57,9 +58,10 @@ const hasCredential = certificationsData.map(cert => ({
     <meta name="twitter:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
 
     <link rel="canonical" href={Astro.url} />
-    <link rel="alternate" hreflang="en" href={new URL(base + '/', Astro.site || Astro.url)} />
-    <link rel="alternate" hreflang="es" href={new URL(base + '/es/', Astro.site || Astro.url)} />
-    <link rel="alternate" hreflang="ca" href={new URL(base + '/ca/', Astro.site || Astro.url)} />
+    {LOCALES.map((locale) => {
+      const path = locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;
+      return <link rel="alternate" hreflang={locale} href={new URL(base + path, Astro.site || Astro.url)} />;
+    })}
     <link rel="alternate" hreflang="x-default" href={new URL(base + '/', Astro.site || Astro.url)} />
     <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
 

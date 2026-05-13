@@ -163,15 +163,16 @@ describe('Dynamic demo router ([lang]/demos/[demo].astro)', () => {
   const routerPath = join(__dirname, '..', 'pages', '[lang]', 'demos', '[demo].astro');
   const routerContent = require('fs').readFileSync(routerPath, 'utf-8') as string;
 
-  it('every demo slug appears in the getStaticPaths array', () => {
-    for (const demo of demosEn) {
-      expect(routerContent, `slug "${demo.slug}" missing from router getStaticPaths`).toContain(`'${demo.slug}'`);
-    }
+  // The router globs every page in src/pages/demos/ at build time, so slug
+  // coverage is enforced by the "every slug has a corresponding .astro page"
+  // and "every .astro page has a corresponding slug" assertions above. Here
+  // we just verify the router is using the SSOT-compatible glob pattern.
+
+  it('uses import.meta.glob to discover demo pages', () => {
+    expect(routerContent).toMatch(/import\.meta\.glob\(\s*['"]\.\.\/\.\.\/demos\/\*\.astro['"]/);
   });
 
-  it('every demo slug has a conditional render line', () => {
-    for (const demo of demosEn) {
-      expect(routerContent, `slug "${demo.slug}" missing conditional render`).toContain(`demo === '${demo.slug}'`);
-    }
+  it('imports the locale list from the locales SSOT', () => {
+    expect(routerContent).toMatch(/from\s+['"](\.\.\/){3}config\/locales['"]/);
   });
 });
