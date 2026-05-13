@@ -9,7 +9,7 @@
 
 import { test, expect } from '@playwright/test';
 
-const SECTION_ORDER = ['about', 'experience', 'work', 'projects', 'skills', 'education', 'contact'];
+const SECTION_ORDER = ['about', 'experience', 'work', 'projects', 'skills', 'education', 'certifications', 'contact'];
 const SECTION_SELECTOR = ['hero', ...SECTION_ORDER].map(id => `section#${id}`).join(', ');
 
 async function navHrefs(page: import('@playwright/test').Page) {

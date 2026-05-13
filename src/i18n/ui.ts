@@ -14,6 +14,7 @@ export const ui = {
     'nav.skills': 'Skills',
     'nav.experience': 'Experience',
     'nav.education': 'Education',
+    'nav.certifications': 'Certifications',
     'nav.contact': 'Contact',
 
     // Hero
@@ -57,6 +58,14 @@ export const ui = {
     // Education
     'education.label': 'Education',
     'education.title': 'Where I studied',
+
+    // Certifications
+    'certifications.label': 'Credentials',
+    'certifications.title': 'Licenses & certifications',
+    'certifications.subtitle': 'Professional certifications I have earned along the way.',
+    'certifications.viewCredential': 'View credential',
+    'certifications.showMore': 'Show more',
+    'certifications.showLess': 'Show less',
 
     // Contact
     'contact.label': 'Contact',
@@ -143,6 +152,7 @@ export const ui = {
     'nav.skills': 'Habilidades',
     'nav.experience': 'Experiencia',
     'nav.education': 'Educación',
+    'nav.certifications': 'Certificaciones',
     'nav.contact': 'Contacto',
 
     // Hero
@@ -186,6 +196,14 @@ export const ui = {
     // Education
     'education.label': 'Educación',
     'education.title': 'Dónde estudié',
+
+    // Certifications
+    'certifications.label': 'Credenciales',
+    'certifications.title': 'Licencias y certificaciones',
+    'certifications.subtitle': 'Certificaciones profesionales que he obtenido por el camino.',
+    'certifications.viewCredential': 'Ver credencial',
+    'certifications.showMore': 'Ver más',
+    'certifications.showLess': 'Ver menos',
 
     // Contact
     'contact.label': 'Contacto',
@@ -272,6 +290,7 @@ export const ui = {
     'nav.skills': 'Habilitats',
     'nav.experience': 'Experiència',
     'nav.education': 'Educació',
+    'nav.certifications': 'Certificacions',
     'nav.contact': 'Contacte',
 
     // Hero
@@ -315,6 +334,14 @@ export const ui = {
     // Education
     'education.label': 'Educació',
     'education.title': 'On he estudiat',
+
+    // Certifications
+    'certifications.label': 'Credencials',
+    'certifications.title': 'Llicències i certificacions',
+    'certifications.subtitle': 'Certificacions professionals que he obtingut pel camí.',
+    'certifications.viewCredential': 'Veure credencial',
+    'certifications.showMore': 'Veure més',
+    'certifications.showLess': 'Veure menys',
 
     // Contact
     'contact.label': 'Contacte',

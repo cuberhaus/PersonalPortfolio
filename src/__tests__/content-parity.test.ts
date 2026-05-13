@@ -25,6 +25,12 @@ import workEn from '../data/work_projects.json';
 import workEs from '../data/work_projects.es.json';
 import workCa from '../data/work_projects.ca.json';
 
+import certsEn from '../data/certifications.json';
+import certsEs from '../data/certifications.es.json';
+import certsCa from '../data/certifications.ca.json';
+
+import { ISSUER_ICON_PATHS } from '../lib/issuer-icons';
+
 // ─── Skills ─────────────────────────────────────────────────────
 
 describe('Skills data', () => {
@@ -176,4 +182,59 @@ describe('Work projects data', () => {
     }
   });
 
+});
+
+// ─── Certifications ─────────────────────────────────────────────
+
+describe('Certifications data', () => {
+  it('EN, ES, CA have the same number of entries', () => {
+    expect(certsEn.length).toBe(certsEs.length);
+    expect(certsEn.length).toBe(certsCa.length);
+  });
+
+  it('every entry has required fields', () => {
+    for (const certs of [certsEn, certsEs, certsCa]) {
+      for (const entry of certs) {
+        expect(entry.name.trim().length).toBeGreaterThan(0);
+        expect(entry.issuer.trim().length).toBeGreaterThan(0);
+        expect(entry.issuerIcon.trim().length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('issuer, issuerIcon and link match across translations', () => {
+    for (let i = 0; i < certsEn.length; i++) {
+      expect(certsEs[i].issuer).toBe(certsEn[i].issuer);
+      expect(certsCa[i].issuer).toBe(certsEn[i].issuer);
+      expect(certsEs[i].issuerIcon).toBe(certsEn[i].issuerIcon);
+      expect(certsCa[i].issuerIcon).toBe(certsEn[i].issuerIcon);
+      expect(certsEs[i].link).toBe(certsEn[i].link);
+      expect(certsCa[i].link).toBe(certsEn[i].link);
+    }
+  });
+
+  it('every non-empty link is a valid HTTPS URL', () => {
+    for (const entry of certsEn) {
+      if (entry.link) {
+        expect(() => new URL(entry.link)).not.toThrow();
+        expect(entry.link).toMatch(/^https:\/\//);
+      }
+    }
+  });
+
+  it('credential URLs do not carry LinkedIn tracking params', () => {
+    for (const entry of certsEn) {
+      if (entry.link) {
+        expect(entry.link, `LinkedIn trk param leaked into ${entry.name}`).not.toMatch(/[?&]trk=/);
+      }
+    }
+  });
+
+  it('every issuerIcon slug exists in issuer-icons.ts', () => {
+    const registered = new Set(Object.keys(ISSUER_ICON_PATHS));
+    const used = new Set(certsEn.map(c => c.issuerIcon));
+    for (const slug of used) {
+      expect(registered, `issuer-icons.ts missing slug "${slug}"`).toContain(slug);
+    }
+  });
 });

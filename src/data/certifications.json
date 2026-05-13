@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Microsoft Certified: Azure Fundamentals (AZ-900)",
+    "issuer": "Microsoft",
+    "issuerIcon": "microsoft",
+    "issued": "May 2025",
+    "link": "https://learn.microsoft.com/api/credentials/share/en-us/CasacubertaGilPol-4021/D3813A9ED6F473"
+  },
+  {
+    "name": "Getting Started with Deep Learning",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "issued": "Sep 2024",
+    "link": "https://learn.nvidia.com/certificates"
+  },
+  {
+    "name": "Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate (1Z0-1122-25)",
+    "issuer": "Oracle",
+    "issuerIcon": "oracle",
+    "issued": "Apr 2024",
+    "link": "https://catalog-education.oracle.com/ords/certview/sharebadge?id=DD0D5772371BBE33ABF90101B3D050A1F32460C1883B805FA16656015CF5AB00"
+  },
+  {
+    "name": "e-Series Application Track",
+    "issuer": "Universal Robots",
+    "issuerIcon": "universal-robots",
+    "issued": "",
+    "link": ""
+  },
+  {
+    "name": "e-Series Core Track",
+    "issuer": "Universal Robots",
+    "issuerIcon": "universal-robots",
+    "issued": "",
+    "link": ""
+  },
+  {
+    "name": "e-Series Pro Track",
+    "issuer": "Universal Robots",
+    "issuerIcon": "universal-robots",
+    "issued": "",
+    "link": ""
+  },
+  {
+    "name": "Stratio Generative AI Data Fabric — Operaciones 14.1",
+    "issuer": "Stratio",
+    "issuerIcon": "stratio",
+    "issued": "Mar 2025",
+    "link": "https://certificate.stratio.com/user/certificate/3aa56e2ee5536c425ceca705be635041"
+  },
+  {
+    "name": "Stratio Generative AI Data Processing 14.1",
+    "issuer": "Stratio",
+    "issuerIcon": "stratio",
+    "issued": "Mar 2025",
+    "link": "https://certificate.stratio.com/user/certificate/f0ea41ec4fbdfa7518290851a10382fe"
+  },
+  {
+    "name": "Stratio Generative AI Data Fabric Basics 14.1",
+    "issuer": "Stratio",
+    "issuerIcon": "stratio",
+    "issued": "Jan 2025",
+    "link": "https://certificate.stratio.com/user/certificate/a4f162421762d5cd35d9f4e66552e4ad"
+  }
+]

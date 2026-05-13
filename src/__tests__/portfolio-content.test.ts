@@ -18,6 +18,10 @@ import workEn from '../data/work_projects.json';
 import workEs from '../data/work_projects.es.json';
 import workCa from '../data/work_projects.ca.json';
 
+import certsEn from '../data/certifications.json';
+import certsEs from '../data/certifications.es.json';
+import certsCa from '../data/certifications.ca.json';
+
 type JsonRecord = Record<string, unknown>;
 
 const sortedKeys = (item: JsonRecord) => Object.keys(item).sort();
@@ -49,6 +53,11 @@ describe('localized portfolio content schemas', () => {
   it('work project entries expose the same keys across locales', () => {
     expectSameKeys('work_projects.es', workEn, workEs);
     expectSameKeys('work_projects.ca', workEn, workCa);
+  });
+
+  it('certification entries expose the same keys across locales', () => {
+    expectSameKeys('certifications.es', certsEn, certsEs);
+    expectSameKeys('certifications.ca', certsEn, certsCa);
   });
 });
 

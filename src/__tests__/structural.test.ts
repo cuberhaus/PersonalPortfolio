@@ -55,6 +55,7 @@ describe('Navbar anchors match homepage section IDs', () => {
     { name: 'Experience', file: 'components/Experience.astro' },
     { name: 'WorkProjects', file: 'components/WorkProjects.astro' },
     { name: 'Education', file: 'components/Education.astro' },
+    { name: 'Certifications', file: 'components/Certifications.astro' },
     { name: 'Contact', file: 'components/Contact.astro' },
   ];
 

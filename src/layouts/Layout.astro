@@ -6,6 +6,7 @@ import ThemeInit from '../components/ThemeInit.astro';
 import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
+import certificationsData from '../data/certifications.json';
 
 interface Props {
   title?: string;
@@ -20,6 +21,14 @@ const {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+
+const hasCredential = certificationsData.map(cert => ({
+  '@type': 'EducationalOccupationalCredential',
+  name: cert.name,
+  credentialCategory: 'certification',
+  recognizedBy: { '@type': 'Organization', name: cert.issuer },
+  ...(cert.link ? { url: cert.link } : {}),
+}));
 ---
 
 <!doctype html>
@@ -79,7 +88,8 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
       "sameAs": [
         "https://github.com/cuberhaus",
         "https://linkedin.com/in/polcasacubertagil"
-      ]
+      ],
+      "hasCredential": hasCredential
     })} />
     <ViewTransitions />
     <Analytics />
