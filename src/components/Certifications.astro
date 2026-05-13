@@ -33,7 +33,8 @@ const certs = lang === 'es' ? certsEs : lang === 'ca' ? certsCa : certsEn;
           <li class={`certification-card${i >= 4 ? ' certification-card--extra' : ''}`}>
             {c.link ? (
               <a href={c.link} target="_blank" rel="noopener noreferrer" class="certification-link"
-                 aria-label={`${c.name} — ${c.issuer}`}>
+                 aria-label={`${c.name} — ${c.issuer}`}
+                 {...(c.fallback ? { 'data-fallback': c.fallback } : {})}>
                 {Inner}
               </a>
             ) : (
@@ -169,6 +170,7 @@ const certs = lang === 'es' ? certsEs : lang === 'ca' ? certsCa : certsEn;
 </style>
 
 <script>
+  // Show more / Show less toggle
   const btn = document.getElementById('certifications-toggle');
   const grid = document.getElementById('certifications-grid');
   if (btn && grid) {
@@ -180,4 +182,21 @@ const certs = lang === 'es' ? certsEs : lang === 'ca' ? certsCa : certsEn;
         : btn.dataset.showMore!;
     });
   }
+
+  // Fallback: if the external cert link is unreachable, swap to the local copy
+  document.querySelectorAll<HTMLAnchorElement>('a.certification-link[data-fallback]').forEach((link) => {
+    link.addEventListener('click', async (e) => {
+      const fallback = link.dataset.fallback;
+      if (!fallback) return;
+      try {
+        const res = await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
+        // mode: 'no-cors' returns opaque response (type "opaque", status 0) on success
+        // A network error throws, so if we get here the server responded
+      } catch {
+        // Network error — external link is down, redirect to local fallback
+        e.preventDefault();
+        window.open(fallback, '_blank', 'noopener,noreferrer');
+      }
+    });
+  });
 </script>
