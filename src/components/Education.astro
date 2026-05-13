@@ -7,9 +7,11 @@ import educationCa from '../data/education.ca.json';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const education = lang === 'es' ? educationEs : lang === 'ca' ? educationCa : educationEn;
+
+const { num } = Astro.props;
 ---
 
-<section class="section education" id="education" data-num="06">
+<section class="section education" id="education" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('education.label')}</span>

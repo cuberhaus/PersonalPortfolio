@@ -8,9 +8,11 @@ import certsCa from '../data/certifications.ca.json';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const certs = lang === 'es' ? certsEs : lang === 'ca' ? certsCa : certsEn;
+
+const { num } = Astro.props;
 ---
 
-<section class="section certifications" id="certifications" data-num="07">
+<section class="section certifications" id="certifications" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('certifications.label')}</span>

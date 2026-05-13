@@ -6,7 +6,8 @@
     "description": "El primer projecte d'IA Física entregat a nivell mundial a Deloitte. Construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton) per detectar anomalies de fabricació en línies de producció de motors en viu i en temps real, a més d'un bessó digital del magatzem amb seguiment de paquets per càmera.",
     "tags": ["IA Física", "NVIDIA Omniverse", "Isaac Sim", "Metropolis", "Bessó Digital", "Temps Real"],
     "icon": "cpu",
-    "link": "https://www.deloitte.com/global/en/about/press-room/physical-ai-nvidia-omniverse-industrial-transformation.html"
+    "link": "https://www.deloitte.com/global/en/about/press-room/physical-ai-nvidia-omniverse-industrial-transformation.html",
+    "fallback": "/deloitte-physical-ai-press-release.html"
   },
   {
     "title": "Plataforma E2E d'Emparellament de Talent IA",

@@ -29,9 +29,11 @@ const hasProfileImage = existsSync(resolve('./public/profile.jpg'));
 const hasCV = cvFile !== null;
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
+
+const { num } = Astro.props;
 ---
 
-<section class="section about" id="about" data-num="01">
+<section class="section about" id="about" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('about.label')}</span>
@@ -51,7 +53,7 @@ const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
           <li>Generative AI</li>
           <li>Computer Vision</li>
         </ul>
-        
+
         {hasCV && (
           <div class="about-actions">
             <a href={cvHref} class="about-cv-btn" target="_blank" rel="noopener noreferrer">
@@ -124,7 +126,7 @@ const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
   .about-actions {
     margin-top: 2rem;
   }
-  
+
   .about-cv-btn {
     display: inline-flex;
     align-items: center;

@@ -51,9 +51,11 @@ const SKILL_CONTEXT: Record<string, string> = {
   'WebAssembly':        'PAR (C → WASM via Emscripten)',
   'Robotics':           'ROB (FK, odometry, EKF, wall-following, Babylon.js 3D)',
 };
+
+const { num } = Astro.props;
 ---
 
-<section class="section skills" id="skills" data-num="05">
+<section class="section skills" id="skills" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('skills.label')}</span>

@@ -7,9 +7,11 @@ import projectsCa from '../data/work_projects.ca.json';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : projectsEn;
+
+const { num } = Astro.props;
 ---
 
-<section class="section work-projects" id="work" data-num="03">
+<section class="section work-projects" id="work" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('work.label')}</span>
@@ -23,7 +25,8 @@ const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : proje
       {projects.map((project) => (
         <div class="work-card">
           {project.link ? (
-            <a href={project.link} target="_blank" rel="noopener noreferrer" class="work-card-inner work-card-link">
+            <a href={project.link} target="_blank" rel="noopener noreferrer" class="work-card-inner work-card-link"
+               {...(project.fallback ? { 'data-fallback': project.fallback } : {})}>
               <div class="work-icon">
                 {project.icon === 'cpu' && (
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -233,3 +236,18 @@ const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : proje
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('a.work-card-link[data-fallback]').forEach((link) => {
+    link.addEventListener('click', async (e) => {
+      const fallback = link.dataset.fallback;
+      if (!fallback) return;
+      try {
+        await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
+      } catch {
+        e.preventDefault();
+        window.open(fallback, '_blank', 'noopener,noreferrer');
+      }
+    });
+  });
+</script>

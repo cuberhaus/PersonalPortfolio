@@ -3,28 +3,23 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
-import Demos from '../components/Demos.astro';
-import Skills from '../components/Skills.astro';
 import Experience from '../components/Experience.astro';
 import WorkProjects from '../components/WorkProjects.astro';
+import Demos from '../components/Demos.astro';
 import Education from '../components/Education.astro';
 import Certifications from '../components/Certifications.astro';
+import Skills from '../components/Skills.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+
+const sections = [About, Experience, WorkProjects, Demos, Education, Certifications, Skills, Contact];
 ---
 
 <Layout>
   <Navbar />
   <main id="main-content">
     <Hero />
-    <About />
-    <Experience />
-    <WorkProjects />
-    <Demos />
-    <Skills />
-    <Education />
-    <Certifications />
-    <Contact />
+    {sections.map((Section, i) => <Section num={String(i + 1).padStart(2, '0')} />)}
   </main>
   <Footer />
 </Layout>

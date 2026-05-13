@@ -7,9 +7,11 @@ import experienceCa from '../data/experience.ca.json';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa : experienceEn;
+
+const { num } = Astro.props;
 ---
 
-<section class="section experience" id="experience" data-num="02">
+<section class="section experience" id="experience" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('experience.label')}</span>
