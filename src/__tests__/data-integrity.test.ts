@@ -14,6 +14,7 @@ import { listDemos } from '../i18n/demo';
 import { LOCALES } from '../config/locales';
 import { ui, languages } from '../i18n/ui';
 import { ICON_PATHS } from '../lib/demo-icons';
+import type { AnyLocalized as LocalizedEntry } from '../i18n/load';
 
 const DEMO_PAGES_DIR = join(__dirname, '..', 'pages', 'demos');
 const demoPageFiles = readdirSync(DEMO_PAGES_DIR)
@@ -21,11 +22,6 @@ const demoPageFiles = readdirSync(DEMO_PAGES_DIR)
   .map(f => f.replace('.astro', ''));
 
 const VALID_ICONS = Object.keys(ICON_PATHS);
-
-type LocalizedEntry = {
-  identity: Record<string, unknown>;
-  copy: Record<string, Record<string, unknown>>;
-};
 
 const demosCanonical = demosData as LocalizedEntry[];
 const demosEn = listDemos('en');

@@ -1,36 +1,47 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { useTranslations } from '../i18n/utils';
+import { DEFAULT_LOCALE } from '../config/locales';
+
+// 404 is a static page so it ships the default-locale copy at build time;
+// the inline script below upgrades the strings to the visitor's locale
+// (derived from the URL prefix) using the same `ui` dictionary as the rest
+// of the site.
+const t = useTranslations(DEFAULT_LOCALE);
 ---
 
-<Layout title="404 — Page Not Found" description="Page not found.">
+<Layout title={`404 — ${t('notFound.title')}`} description={t('notFound.message')}>
   <main class="error-page" id="main-content">
     <div class="container text-center">
       <h1 class="error-code gradient-text">404</h1>
-      <h2 class="error-title" id="error-title">Page Not Found</h2>
-      <p class="error-message" id="error-message">
-        The page you're looking for doesn't exist or has been moved.
-      </p>
+      <h2 class="error-title" id="error-title">{t('notFound.title')}</h2>
+      <p class="error-message" id="error-message">{t('notFound.message')}</p>
       <a href={import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL} class="back-btn" id="back-btn">
-        &larr; Portfolio
+        &larr; <span id="back-label">{t('notFound.back')}</span>
       </a>
     </div>
   </main>
 </Layout>
 
 <script>
+  import { ui } from '../i18n/ui';
+  import { pickLang } from '../i18n/utils';
+  import { PREFIXED_LOCALES } from '../config/locales';
+
+  // Pull the locale prefix out of the URL (e.g. `/es/foo` → `'es'`); fall
+  // back to the default locale's already-server-rendered copy when the URL
+  // has no recognised prefix.
   const segments = window.location.pathname.replace(/^\/+/, '').split('/');
-  const lang = ['es', 'ca'].find(l => segments.includes(l));
-  const title = document.getElementById('error-title');
-  const msg = document.getElementById('error-message');
-  const btn = document.getElementById('back-btn');
-  if (lang === 'es' && title && msg && btn) {
-    title.textContent = 'Página no encontrada';
-    msg.textContent = 'La página que buscas no existe o ha sido movida.';
-    btn.innerHTML = '&larr; Portafolio';
-  } else if (lang === 'ca' && title && msg && btn) {
-    title.textContent = 'Pàgina no trobada';
-    msg.textContent = 'La pàgina que busques no existeix o ha estat moguda.';
-    btn.innerHTML = '&larr; Portafolis';
+  const detected = PREFIXED_LOCALES.find((l) => segments.includes(l));
+  if (detected) {
+    const lang = pickLang(detected);
+    const bundle = ui[lang];
+    const title = document.getElementById('error-title');
+    const msg = document.getElementById('error-message');
+    const back = document.getElementById('back-label');
+    if (title) title.textContent = bundle['notFound.title'];
+    if (msg) msg.textContent = bundle['notFound.message'];
+    if (back) back.textContent = bundle['notFound.back'];
   }
 </script>
 

@@ -8,13 +8,8 @@ import education from '../data/education.json';
 import workProjects from '../data/work_projects.json';
 import certifications from '../data/certifications.json';
 
-import { flattenForLocale } from '../i18n/load';
+import { flattenForLocale, type AnyLocalized as LocalizedEntry } from '../i18n/load';
 import { LOCALES } from '../config/locales';
-
-type LocalizedEntry = {
-  identity: Record<string, unknown>;
-  copy: Record<string, Record<string, unknown>>;
-};
 
 /**
  * After the nested-locale refactor, content lives in ONE file per entity with
@@ -109,12 +104,15 @@ describe('work projects content quality', () => {
     expect(new Set(links).size, 'work projects have duplicate links').toBe(links.length);
   });
 
-  it('renders every icon used by work project data', () => {
-    const source = readFileSync(join(__dirname, '..', 'components', 'WorkProjects.astro'), 'utf-8');
-    const renderedIcons = new Set([...source.matchAll(/project\.icon === '([^']+)'/g)].map(match => match[1]));
+  it('every work project icon has a registered SVG in demo-icons.ts', async () => {
+    // WorkProjects.astro renders icons via `renderIconSvg(project.icon, 28)`,
+    // so the icon set is enforced by the shared registry rather than per-page
+    // conditionals. This test asserts every data icon resolves to a real entry.
+    const { ICON_PATHS } = await import('../lib/demo-icons');
+    const registered = new Set(Object.keys(ICON_PATHS));
     const dataIcons = new Set((workProjects as LocalizedEntry[]).map(e => e.identity.icon as string));
     for (const icon of dataIcons) {
-      expect(renderedIcons, `WorkProjects.astro does not render icon "${icon}"`).toContain(icon);
+      expect(registered, `demo-icons.ts has no entry for work-project icon "${icon}"`).toContain(icon);
     }
   });
 });

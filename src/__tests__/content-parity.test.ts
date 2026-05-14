@@ -22,12 +22,7 @@ import demos from '../data/demos.json';
 
 import { ISSUER_ICON_PATHS } from '../lib/issuer-icons';
 import { LOCALES } from '../config/locales';
-import { flattenForLocale } from '../i18n/load';
-
-type LocalizedEntry = {
-  identity: Record<string, unknown>;
-  copy: Record<string, Record<string, unknown>>;
-};
+import { flattenForLocale, type AnyLocalized as LocalizedEntry } from '../i18n/load';
 
 function assertLocaleParity(label: string, entries: LocalizedEntry[]) {
   for (let i = 0; i < entries.length; i++) {
@@ -36,10 +31,12 @@ function assertLocaleParity(label: string, entries: LocalizedEntry[]) {
     for (const locale of LOCALES) {
       expect(present, `${label}[${i}] missing copy.${locale}`).toContain(locale);
     }
-    // All copy locales should expose the same keys.
-    const refKeys = Object.keys(entry.copy[LOCALES[0]]).sort();
+    // All copy locales should expose the same keys. Every locale's bundle is
+    // guaranteed present by the previous loop, so the `!` non-null asserts
+    // are safe here.
+    const refKeys = Object.keys(entry.copy[LOCALES[0]]!).sort();
     for (const locale of LOCALES) {
-      const localeKeys = Object.keys(entry.copy[locale]).sort();
+      const localeKeys = Object.keys(entry.copy[locale]!).sort();
       expect(
         localeKeys,
         `${label}[${i}] copy.${locale} keys differ from copy.${LOCALES[0]}`,
