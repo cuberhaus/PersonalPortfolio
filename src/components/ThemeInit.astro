@@ -988,21 +988,14 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 </style>
 
 <script>
-  import { ui, defaultLang } from '../i18n/ui';
+  import { pickLang, useTranslations, type Lang } from '../i18n/utils';
   import { getDesignName, getDesignBlurb } from '../lib/designs';
 
-  type Lang = keyof typeof ui;
-
-  const pickLang = (raw: string | null): Lang => {
-    if (raw && raw in ui) return raw as Lang;
-    return defaultLang as Lang;
-  };
-
-  const tr = (lang: Lang, key: keyof typeof ui[typeof defaultLang]): string => {
-    const bundle = ui[lang] as Record<string, string>;
-    const fallback = ui[defaultLang as Lang] as Record<string, string>;
-    return bundle[key as string] ?? fallback[key as string] ?? '';
-  };
+  // Lightweight wrapper so the modal call sites read `tr(lang, key)` like
+  // they did before the refactor; under the hood we lean on the shared
+  // `useTranslations(lang)` accessor + a string fallback for missing keys.
+  type UiKey = Parameters<ReturnType<typeof useTranslations>>[0];
+  const tr = (lang: Lang, key: UiKey): string => useTranslations(lang)(key) || '';
 
   const initThemeModal = () => {
     const modal = document.getElementById('theme-modal');

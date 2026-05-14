@@ -1,12 +1,15 @@
-import { DEFAULT_LOCALE } from '../config/locales';
+import { DEFAULT_LOCALE, type Locale } from '../config/locales';
 
-export const languages = {
+// `Record<Locale, string>` enforces a label for every locale at compile time,
+// so adding a 4th locale in `src/config/locales.ts` makes this dictionary fail
+// to type-check until the new label is added.
+export const languages: Record<Locale, string> = {
   en: 'English',
   es: 'Español',
   ca: 'Català',
 };
 
-export const defaultLang: keyof typeof languages = DEFAULT_LOCALE;
+export const defaultLang: Locale = DEFAULT_LOCALE;
 
 export const ui = {
   en: {

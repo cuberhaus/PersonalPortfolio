@@ -19,14 +19,12 @@ const demo = getDemo('draculin', lang);
       lead={demo.lead}
       githubUrl={demo.github}
       githubLabel={[t('demo.viewFrontend'), t('demo.viewBackend')]}
-      accentFrom="#ec4899"
-      accentTo="#a855f7"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="draculin"
       title="Draculin Flutter App"
-      dockerCmd="cd Draculin-Backend && docker compose up -d"
       lang={lang}
       fallbackSelector="#draculin-mock-fallback"
       client:load

@@ -19,15 +19,9 @@ import { LOCALES } from '../config/locales';
 
 const designsCss = readFileSync(resolve('./src/styles/designs.css'), 'utf8');
 
-const MODAL_KEYS = [
-  'theme.customize',
-  'theme.design',
-  'theme.palette',
-  'theme.dark',
-  'theme.light',
-  'theme.recommended',
-  'theme.closeHint',
-] as const;
+// Derive the modal key list from the EN bundle so adding a new theme.* key
+// in ui.ts is automatically required to exist in every locale.
+const MODAL_KEYS = Object.keys(ui.en).filter(k => k.startsWith('theme.')) as Array<keyof typeof ui.en>;
 
 describe('DESIGNS registry', () => {
   it('contains at least 17 designs', () => {

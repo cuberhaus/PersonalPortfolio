@@ -5,7 +5,16 @@ interface Props {
   lead: string;
   githubUrl: string | string[];
   githubLabel: string | string[];
+  /**
+   * Brand accent gradient for the header. Prefer passing `demo.accent` from
+   * `getDemo()` so the colors stay co-located with the demo metadata in
+   * `src/data/demos.json`. Falls back to the global accent variables when
+   * neither this nor the legacy `accentFrom`/`accentTo` props are provided.
+   */
+  accent?: { from: string; to: string };
+  /** @deprecated Pass `accent={{ from, to }}` instead — kept for back-compat. */
   accentFrom?: string;
+  /** @deprecated Pass `accent={{ from, to }}` instead — kept for back-compat. */
   accentTo?: string;
 }
 
@@ -15,15 +24,19 @@ const {
   lead,
   githubUrl,
   githubLabel,
-  accentFrom = 'var(--accent-start)',
-  accentTo = 'var(--accent-end)',
+  accent,
+  accentFrom,
+  accentTo,
 } = Astro.props;
+
+const fromColor = accent?.from ?? accentFrom ?? 'var(--accent-start)';
+const toColor = accent?.to ?? accentTo ?? 'var(--accent-end)';
 
 const urls = Array.isArray(githubUrl) ? githubUrl : [githubUrl];
 const labels = Array.isArray(githubLabel) ? githubLabel : [githubLabel];
 ---
 
-<div class="demo-header" style={`--hdr-from: ${accentFrom}; --hdr-to: ${accentTo};`}>
+<div class="demo-header" style={`--hdr-from: ${fromColor}; --hdr-to: ${toColor};`}>
   <div class="demo-hdr-badge">{badge}</div>
   <h1 class="demo-hdr-title">{title}</h1>
   <p class="demo-hdr-lead" set:html={lead} />

@@ -23,15 +23,12 @@ const demo = getDemo('par-parallel', lang);
       lead={demo.lead}
       githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#6366f1"
-      accentTo="#06b6d4"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="par-parallel"
       title="PAR Parallel Computing"
-      dockerCmd="cd PAR && docker compose up -d"
-      devCmd="cd PAR && make dev"
       lang={lang}
       fallbackSelector="#par-mock-fallback"
       client:load

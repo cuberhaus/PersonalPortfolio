@@ -55,8 +55,9 @@ describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
     }
   });
 
-  it('every section component reads its data-num from the `num` prop', () => {
+  it('every numbered section component reads its data-num from the `num` prop', () => {
     for (const section of SECTION_META) {
+      if (!section.numbered) continue;
       const path = `components/${componentFileName(section.id)}.astro`;
       const src = read(path);
       expect(src, `${path} should write data-num={num}`).toMatch(/<section[^>]*\bdata-num=\{num\}/);
@@ -79,13 +80,15 @@ describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
     const importPattern = /import\s*\{\s*sections\s*\}\s*from\s*['"](\.\.\/)+config\/sections['"]/;
     expect(en).toMatch(importPattern);
     expect(localized).toMatch(importPattern);
-    const renderPattern = /\{sections\.map\([\s\S]*?<Section\s+num=/;
+    // The unified loop renders every section, hero included; the `Section`
+    // identifier is the destructured component reference per iteration.
+    const renderPattern = /<Section\s+num=/;
     expect(en).toMatch(renderPattern);
     expect(localized).toMatch(renderPattern);
   });
 
-  it('SECTION_IDS export matches the order of section entries', () => {
-    expect(SECTION_IDS).toEqual(SECTION_META.map(s => s.id));
+  it('SECTION_IDS export excludes the hero', () => {
+    expect(SECTION_IDS).toEqual(SECTION_META.filter(s => s.id !== 'hero').map(s => s.id));
   });
 });
 

@@ -1,3 +1,4 @@
+import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import Experience from '../components/Experience.astro';
 import WorkProjects from '../components/WorkProjects.astro';
@@ -11,18 +12,20 @@ import { SECTION_META } from './section-ids';
 /**
  * Single source of truth for the homepage sections.
  *
- * Joins the lightweight id/navKey list from `section-ids.ts` with the actual
- * Astro component for each section. Astro consumers (pages, navbar, tests)
- * import this; pure-JS consumers (e.g. Playwright) import `section-ids.ts`
- * instead so they don't pull `.astro` files into a Node context.
+ * Joins the lightweight id/navKey/flag list from `section-ids.ts` with the
+ * actual Astro component for each section. Astro consumers (pages, navbar,
+ * tests) import this; pure-JS consumers (e.g. Playwright) import
+ * `section-ids.ts` instead so they don't pull `.astro` files into a Node
+ * context.
  *
  * To add, remove or reorder a section:
- *   1. Edit `section-ids.ts` (the order list).
+ *   1. Edit `section-ids.ts` (the order list + flags).
  *   2. Add/remove the matching component import here.
- *   3. Section components read their `data-num` from the `num` prop, so
- *      renumbering is automatic.
+ *   3. Numbered section components read their `data-num` from the `num` prop,
+ *      so renumbering is automatic when entries are reordered or flagged.
  */
 const COMPONENTS = {
+  hero: Hero,
   about: About,
   experience: Experience,
   work: WorkProjects,
@@ -33,9 +36,11 @@ const COMPONENTS = {
   contact: Contact,
 } as const;
 
-export const sections = SECTION_META.map(({ id, navKey }) => ({
+export const sections = SECTION_META.map(({ id, navKey, numbered, inNav }) => ({
   id,
   navKey,
+  numbered,
+  inNav,
   component: COMPONENTS[id],
 }));
 

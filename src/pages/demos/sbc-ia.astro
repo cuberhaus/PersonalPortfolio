@@ -23,15 +23,12 @@ const demo = getDemo('sbc-ia', lang);
       lead={demo.lead}
       githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#6366f1"
-      accentTo="#22c55e"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="sbc-ia"
       title="SBC_IA Trip Planner"
-      dockerCmd="cd SBC_IA && docker compose up -d"
-      devCmd="cd SBC_IA && make web-dev"
       lang={lang}
       fallbackSelector="#sbc-mock-fallback"
       client:load

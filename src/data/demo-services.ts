@@ -29,6 +29,13 @@ export interface DemoBackend {
   stack: BackendStack;
   needsSentry: boolean;
   notes?: string;
+  /**
+   * Hint strings rendered by `<LiveAppEmbed>` when the backend isn't
+   * reachable. The component falls back to these defaults when the page
+   * doesn't pass `dockerCmd` / `devCmd` props explicitly.
+   */
+  dockerCmd?: string;
+  devCmd?: string;
 }
 
 export interface DemoService {
@@ -57,6 +64,20 @@ export function getDemoService(slug: string): DemoService | undefined {
 export function getIframeUrl(slug: string): string | null {
   const svc = getDemoService(slug);
   return svc?.backend?.iframeUrl ?? null;
+}
+
+/**
+ * Run-hint strings shown by `<LiveAppEmbed>` when the backend is offline.
+ * Pulled from the registry so the docker/dev incantations live in one place.
+ */
+export function getRunHints(slug: string): { dockerCmd?: string; devCmd?: string } {
+  const svc = getDemoService(slug);
+  const backend = svc?.backend;
+  if (!backend) return {};
+  return {
+    dockerCmd: backend.dockerCmd,
+    devCmd: backend.devCmd,
+  };
 }
 
 export function listBackedSlugs(): readonly string[] {

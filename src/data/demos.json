@@ -10,7 +10,11 @@
       ],
       "icon": "microscope",
       "github": "https://github.com/cuberhaus/TFG",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#10b981",
+        "to": "#0ea5e9"
+      }
     },
     "copy": {
       "en": {
@@ -53,7 +57,11 @@
         "https://github.com/cuberhaus/Draculin-Front",
         "https://github.com/cuberhaus/Draculin-Backend"
       ],
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#ec4899",
+        "to": "#a855f7"
+      }
     },
     "copy": {
       "en": {
@@ -95,7 +103,11 @@
       "icon": "aorta",
       "github": "https://github.com/cuberhaus/bitsXlaMarato",
       "image": "",
-      "metaTitle": "BitsXLaMarató — Aorta / AAA (Mask R-CNN)"
+      "metaTitle": "BitsXLaMarató — Aorta / AAA (Mask R-CNN)",
+      "accent": {
+        "from": "#be123c",
+        "to": "#0ea5e9"
+      }
     },
     "copy": {
       "en": {
@@ -127,7 +139,11 @@
       ],
       "icon": "camera",
       "github": "https://github.com/cuberhaus/SPMatriculas",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#0ea5e9",
+        "to": "#6366f1"
+      }
     },
     "copy": {
       "en": {
@@ -164,7 +180,11 @@
       "slug": "joc-eda",
       "icon": "gamepad",
       "github": "https://github.com/cuberhaus/joc_eda",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#6366f1",
+        "to": "#f59e0b"
+      }
     },
     "copy": {
       "en": {
@@ -222,7 +242,11 @@
       ],
       "icon": "music",
       "github": "https://github.com/cuberhaus/ANTLR4_JSBach",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#f59e0b",
+        "to": "#f97316"
+      }
     },
     "copy": {
       "en": {
@@ -282,7 +306,11 @@
       ],
       "icon": "store",
       "github": "https://github.com/cuberhaus/tenda_online",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#10b981",
+        "to": "#06b6d4"
+      }
     },
     "copy": {
       "en": {
@@ -324,7 +352,11 @@
       ],
       "icon": "tree",
       "github": "https://github.com/cuberhaus/pracpro2",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#22c55e",
+        "to": "#06b6d4"
+      }
     },
     "copy": {
       "en": {
@@ -361,7 +393,11 @@
       "slug": "mpids",
       "icon": "graph",
       "github": "https://github.com/cuberhaus/projectA",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#6366f1",
+        "to": "#a855f7"
+      }
     },
     "copy": {
       "en": {
@@ -414,7 +450,11 @@
       "slug": "phase-transitions",
       "icon": "scatter",
       "github": "https://github.com/cuberhaus/projectA2",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#14b8a6",
+        "to": "#22c55e"
+      }
     },
     "copy": {
       "en": {
@@ -472,7 +512,11 @@
       ],
       "icon": "map",
       "github": "https://github.com/cuberhaus/Practica_de_Planificacion",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#6366f1",
+        "to": "#a855f7"
+      }
     },
     "copy": {
       "en": {
@@ -507,7 +551,11 @@
       "title": "Desastres IA",
       "icon": "helicopter",
       "github": "https://github.com/cuberhaus/desastresIA",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#6366f1",
+        "to": "#22c55e"
+      }
     },
     "copy": {
       "en": {
@@ -561,7 +609,11 @@
       "icon": "ml",
       "github": "https://github.com/cuberhaus/APA_Practica",
       "image": "",
-      "badge": "Machine Learning · FIB-UPC"
+      "badge": "Machine Learning · FIB-UPC",
+      "accent": {
+        "from": "#818cf8",
+        "to": "#2dd4bf"
+      }
     },
     "copy": {
       "en": {
@@ -598,7 +650,11 @@
       "icon": "server",
       "github": "https://github.com/cuberhaus/subgrup-prop7.1",
       "image": "",
-      "badge": "Java · Spring Boot · FIB-UPC"
+      "badge": "Java · Spring Boot · FIB-UPC",
+      "accent": {
+        "from": "#ea580c",
+        "to": "#f97316"
+      }
     },
     "copy": {
       "en": {
@@ -638,7 +694,11 @@
       ],
       "icon": "search",
       "github": "https://github.com/cuberhaus/CAIM",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#06b6d4",
+        "to": "#6366f1"
+      }
     },
     "copy": {
       "en": {
@@ -681,7 +741,11 @@
       ],
       "icon": "map",
       "github": "https://github.com/cuberhaus/SBC_IA",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#6366f1",
+        "to": "#22c55e"
+      }
     },
     "copy": {
       "en": {
@@ -719,7 +783,11 @@
       ],
       "icon": "cpu",
       "github": "https://github.com/cuberhaus/PAR",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#6366f1",
+        "to": "#06b6d4"
+      }
     },
     "copy": {
       "en": {
@@ -750,7 +818,11 @@
       "slug": "rob-robotics",
       "icon": "bot",
       "github": "https://github.com/cuberhaus/ROB",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#4dabf7",
+        "to": "#69db7c"
+      }
     },
     "copy": {
       "en": {
@@ -802,7 +874,11 @@
       "slug": "algorithms",
       "icon": "brain",
       "github": "https://github.com/cuberhaus/fib",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#a78bfa",
+        "to": "#22d3ee"
+      }
     },
     "copy": {
       "en": {
@@ -860,7 +936,11 @@
       ],
       "icon": "cube",
       "github": "https://github.com/cuberhaus/fib",
-      "image": ""
+      "image": "",
+      "accent": {
+        "from": "#58a6ff",
+        "to": "#da77f2"
+      }
     },
     "copy": {
       "en": {

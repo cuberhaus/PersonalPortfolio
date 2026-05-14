@@ -23,15 +23,12 @@ const demo = getDemo('desastres-ia', lang);
       lead={demo.lead}
       githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#6366f1"
-      accentTo="#22c55e"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="desastres-ia"
       title="DesastresIA Solver"
-      dockerCmd="cd desastresIA && docker compose up -d"
-      devCmd="cd desastresIA && make dev"
       lang={lang}
       client:load
     />

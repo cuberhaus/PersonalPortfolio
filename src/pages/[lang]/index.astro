@@ -1,7 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
-import Hero from '../../components/Hero.astro';
 import Footer from '../../components/Footer.astro';
 import { sections } from '../../config/sections';
 import { PREFIXED_LOCALES } from '../../config/locales';
@@ -13,13 +12,18 @@ export function getStaticPaths() {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+let numberedIndex = 0;
+const rendered = sections.map((s) => {
+  const num = s.numbered ? String(++numberedIndex).padStart(2, '0') : undefined;
+  return { ...s, num };
+});
 ---
 
 <Layout title={t('meta.title')} description={t('meta.description')}>
   <Navbar />
   <main id="main-content">
-    <Hero />
-    {sections.map(({ component: Section }, i) => <Section num={String(i + 1).padStart(2, '0')} />)}
+    {rendered.map(({ component: Section, num }) => <Section num={num} />)}
   </main>
   <Footer />
 </Layout>

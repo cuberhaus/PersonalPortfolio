@@ -234,7 +234,9 @@ export const DESIGNS: DesignMeta[] = [
 ];
 
 export const DESIGN_IDS = DESIGNS.map(d => d.id);
-export const DEFAULT_DESIGN = 'minimal';
+// The first entry doubles as the default design. Reordering DESIGNS picks a
+// new default automatically, with no separate constant to keep in sync.
+export const DEFAULT_DESIGN = DESIGNS[0].id;
 
 const designsById = new Map(DESIGNS.map(d => [d.id, d]));
 

@@ -10,6 +10,8 @@ export interface Demo {
   description: string;
   tags: string[];
   icon: string;
+  /** Brand accent for the demo page header, sourced from demos.json identity. */
+  accent?: { from: string; to: string };
   github?: string | string[];
   image: string;
   lead: string;

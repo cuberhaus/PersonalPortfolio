@@ -15,7 +15,7 @@ import {
   QueueStrips,
 } from "./DesastresVisual";
 
-import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/desastres-iademo";
+import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/desastres-ia-demo";
 import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";

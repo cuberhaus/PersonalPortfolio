@@ -19,15 +19,12 @@ const demo = getDemo('mpids', lang);
       lead={demo.lead}
       githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#6366f1"
-      accentTo="#a855f7"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="mpids"
       title="MPIDS Solver"
-      dockerCmd="cd projectA && docker compose up -d"
-      devCmd="cd projectA && make dev"
       lang={lang}
       client:load
     />

@@ -19,7 +19,8 @@
           "displayName": "Tenda Online",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd tenda_online && docker compose up -d && ./start.sh"
       }
     },
     {
@@ -30,7 +31,9 @@
       "backend": {
         "container": "draculin-backend-backend-1",
         "port": 8890,
-        "extraPorts": [8889],
+        "extraPorts": [
+          8889
+        ],
         "iframeUrl": "http://localhost:8890",
         "composeFile": "../Draculin-Backend/docker-compose.yml",
         "makefile": null,
@@ -41,7 +44,8 @@
           "displayName": "Draculin",
           "type": "compose",
           "extra": "(Flutter) API :8889"
-        }
+        },
+        "dockerCmd": "cd Draculin-Backend && docker compose up -d"
       }
     },
     {
@@ -101,7 +105,9 @@
           "displayName": "DesastresIA",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd desastresIA && docker compose up -d",
+        "devCmd": "cd desastresIA && make dev"
       }
     },
     {
@@ -121,7 +127,9 @@
           "displayName": "MPIDS",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd projectA && docker compose up -d",
+        "devCmd": "cd projectA && make dev"
       }
     },
     {
@@ -141,7 +149,9 @@
           "displayName": "PhaseTransitions",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd projectA2 && docker compose up -d",
+        "devCmd": "cd projectA2 && make dev"
       }
     },
     {
@@ -161,7 +171,9 @@
           "displayName": "CAIM",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd CAIM && docker compose up -d",
+        "devCmd": "cd CAIM && make dev"
       }
     },
     {
@@ -181,7 +193,9 @@
           "displayName": "JocEDA",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd joc_eda && docker compose up -d",
+        "devCmd": "cd joc_eda && make web-dev"
       }
     },
     {
@@ -201,7 +215,9 @@
           "displayName": "SBC_IA",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd SBC_IA && docker compose up -d",
+        "devCmd": "cd SBC_IA && make web-dev"
       }
     },
     {
@@ -222,7 +238,9 @@
           "displayName": "PAR",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd PAR && docker compose up -d",
+        "devCmd": "cd PAR && make dev"
       }
     },
     {
@@ -243,7 +261,9 @@
           "displayName": "ROB",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd ROB && docker compose up -d",
+        "devCmd": "cd ROB && make dev"
       }
     },
     {
@@ -264,7 +284,9 @@
           "displayName": "FIB",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd fib && docker compose up -d",
+        "devCmd": "cd fib/web && npm run dev"
       }
     },
     {
@@ -285,7 +307,9 @@
           "displayName": "Grafics",
           "type": "compose",
           "extra": ""
-        }
+        },
+        "dockerCmd": "cd fib/G/web && docker compose up -d",
+        "devCmd": "cd fib/G/web && make dev"
       }
     },
     {
@@ -348,7 +372,8 @@
           "displayName": "PROP",
           "type": "process",
           "extra": "Spring Boot"
-        }
+        },
+        "dockerCmd": "cd subgrup-prop7.1 && make web"
       }
     },
     {

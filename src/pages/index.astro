@@ -1,16 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
-import Hero from '../components/Hero.astro';
 import Footer from '../components/Footer.astro';
 import { sections } from '../config/sections';
+
+// Numbered sections get their auto-incremented `num` from the order in the
+// `numbered` subset; non-numbered sections (hero) just render without it.
+let numberedIndex = 0;
+const rendered = sections.map((s) => {
+  const num = s.numbered ? String(++numberedIndex).padStart(2, '0') : undefined;
+  return { ...s, num };
+});
 ---
 
 <Layout>
   <Navbar />
   <main id="main-content">
-    <Hero />
-    {sections.map(({ component: Section }, i) => <Section num={String(i + 1).padStart(2, '0')} />)}
+    {rendered.map(({ component: Section, num }) => <Section num={num} />)}
   </main>
   <Footer />
 </Layout>

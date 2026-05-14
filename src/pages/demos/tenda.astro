@@ -21,14 +21,12 @@ const t = useTranslations(lang);
       lead={demo.lead}
       githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#10b981"
-      accentTo="#06b6d4"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="tenda"
       title="Tenda Online"
-      dockerCmd="cd tenda_online && docker compose up -d && ./start.sh"
       lang={lang}
       fallbackSelector="#tenda-mock-fallback"
       client:load

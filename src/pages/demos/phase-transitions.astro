@@ -19,15 +19,12 @@ const demo = getDemo('phase-transitions', lang);
       lead={demo.lead}
       githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#14b8a6"
-      accentTo="#22c55e"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="phase-transitions"
       title="Phase Transitions Explorer"
-      dockerCmd="cd projectA2 && docker compose up -d"
-      devCmd="cd projectA2 && make dev"
       lang={lang}
       client:load
     />

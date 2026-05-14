@@ -23,15 +23,12 @@ const demo = getDemo('rob-robotics', lang);
       lead={demo.lead}
       githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#4dabf7"
-      accentTo="#69db7c"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="rob-robotics"
       title="ROB Robotics Dashboard"
-      dockerCmd="cd ROB && docker compose up -d"
-      devCmd="cd ROB && make dev"
       lang={lang}
       fallbackSelector="#rob-mock-fallback"
       client:load
