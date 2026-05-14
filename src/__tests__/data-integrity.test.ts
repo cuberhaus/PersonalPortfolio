@@ -9,9 +9,9 @@
 import { describe, it, expect } from 'vitest';
 import { readdirSync } from 'fs';
 import { join } from 'path';
-import demosEn from '../data/demos.json';
-import demosEs from '../data/demos.es.json';
-import demosCa from '../data/demos.ca.json';
+import demosData from '../data/demos.json';
+import { listDemos } from '../i18n/demo';
+import { LOCALES } from '../config/locales';
 import { ui, languages } from '../i18n/ui';
 import { ICON_PATHS } from '../lib/demo-icons';
 
@@ -22,20 +22,21 @@ const demoPageFiles = readdirSync(DEMO_PAGES_DIR)
 
 const VALID_ICONS = Object.keys(ICON_PATHS);
 
+type LocalizedEntry = {
+  identity: Record<string, unknown>;
+  copy: Record<string, Record<string, unknown>>;
+};
+
+const demosCanonical = demosData as LocalizedEntry[];
+const demosEn = listDemos('en');
+
 // ─── Demo data consistency ──────────────────────────────────────
 
 describe('Demo data files', () => {
-  it('EN, ES, and CA have the same number of demos', () => {
-    expect(demosEn.length).toBe(demosEs.length);
-    expect(demosEn.length).toBe(demosCa.length);
-  });
-
-  it('EN, ES, and CA have identical slugs in the same order', () => {
-    const slugsEn = demosEn.map(d => d.slug);
-    const slugsEs = demosEs.map(d => d.slug);
-    const slugsCa = demosCa.map(d => d.slug);
-    expect(slugsEn).toEqual(slugsEs);
-    expect(slugsEn).toEqual(slugsCa);
+  it('flattens to the same number of demos in every locale', () => {
+    for (const locale of LOCALES) {
+      expect(listDemos(locale).length).toBe(demosEn.length);
+    }
   });
 
   it('every demo has a unique slug', () => {
@@ -43,11 +44,11 @@ describe('Demo data files', () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it('every demo has a non-empty title and description', () => {
-    for (const demos of [demosEn, demosEs, demosCa]) {
-      for (const demo of demos) {
-        expect(demo.title.trim().length, `empty title for ${demo.slug}`).toBeGreaterThan(0);
-        expect(demo.description.trim().length, `empty description for ${demo.slug}`).toBeGreaterThan(0);
+  it('every demo has a non-empty title and description in every locale', () => {
+    for (const locale of LOCALES) {
+      for (const demo of listDemos(locale)) {
+        expect(demo.title.trim().length, `${locale}: empty title for ${demo.slug}`).toBeGreaterThan(0);
+        expect(demo.description.trim().length, `${locale}: empty description for ${demo.slug}`).toBeGreaterThan(0);
       }
     }
   });
@@ -78,10 +79,10 @@ describe('Demo data files', () => {
     }
   });
 
-  it('EN, ES, and CA have matching icons per slug', () => {
-    for (let i = 0; i < demosEn.length; i++) {
-      expect(demosEn[i].icon).toBe(demosEs[i].icon);
-      expect(demosEn[i].icon).toBe(demosCa[i].icon);
+  it('icon and slug live in identity (shared across locales by construction)', () => {
+    for (const entry of demosCanonical) {
+      expect(typeof entry.identity.slug, `entry missing identity.slug`).toBe('string');
+      expect(typeof entry.identity.icon, `entry ${entry.identity.slug} missing identity.icon`).toBe('string');
     }
   });
 });
@@ -107,21 +108,21 @@ describe('Demo pages match demo data', () => {
   });
 });
 
-// ─── Homepage section parity ─────────────────────────────────────
+// ─── Homepage SSOT consumption ──────────────────────────────────
 
-describe('Homepage sections match across locales', () => {
+describe('Homepage pages consume the sections SSOT', () => {
   const enHomePath = join(__dirname, '..', 'pages', 'index.astro');
   const langHomePath = join(__dirname, '..', 'pages', '[lang]', 'index.astro');
   const enHome = require('fs').readFileSync(enHomePath, 'utf-8') as string;
   const langHome = require('fs').readFileSync(langHomePath, 'utf-8') as string;
 
-  const extractComponents = (src: string) =>
-    [...src.matchAll(/<([A-Z]\w+)\s*\/>/g)].map(m => m[1]).sort();
-
-  it('[lang]/index.astro renders the same components as index.astro', () => {
-    const enComponents = extractComponents(enHome);
-    const langComponents = extractComponents(langHome);
-    expect(langComponents).toEqual(enComponents);
+  // Both pages MUST import { sections } from config/sections so the order
+  // is centralised in one place. Detailed structural assertions live in
+  // structural.test.ts; this test is a smoke check at the integrity layer.
+  it('default and localized homepages both import { sections } from the SSOT', () => {
+    const pattern = /import\s*\{\s*sections\s*\}\s*from\s*['"](\.\.\/)+config\/sections['"]/;
+    expect(enHome).toMatch(pattern);
+    expect(langHome).toMatch(pattern);
   });
 });
 

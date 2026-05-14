@@ -7,7 +7,9 @@ import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
 import certificationsData from '../data/certifications.json';
+import { flattenForLocale } from '../i18n/load';
 import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
+import { SITE_URLS } from '../config/site';
 
 interface Props {
   title?: string;
@@ -23,7 +25,11 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
-const hasCredential = certificationsData.map(cert => ({
+// schema.org/Person.hasCredential — locale-aware so search engines see cert
+// names in the same language as the rest of the page.
+type LayoutCert = { name: string; issuer: string; link?: string };
+const certs = flattenForLocale<LayoutCert>(certificationsData as never, lang);
+const hasCredential = certs.map((cert) => ({
   '@type': 'EducationalOccupationalCredential',
   name: cert.name,
   credentialCategory: 'certification',
@@ -88,8 +94,8 @@ const hasCredential = certificationsData.map(cert => ({
       "url": Astro.site?.toString() || Astro.url.origin,
       "jobTitle": "AI & Data Consultant",
       "sameAs": [
-        "https://github.com/cuberhaus",
-        "https://linkedin.com/in/polcasacubertagil"
+        SITE_URLS.github,
+        SITE_URLS.linkedin
       ],
       "hasCredential": hasCredential
     })} />

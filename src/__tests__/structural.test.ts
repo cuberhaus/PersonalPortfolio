@@ -11,9 +11,11 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
-import demosEn from '../data/demos.json';
+import { listDemos } from '../i18n/demo';
 import { ICON_PATHS } from '../lib/demo-icons';
 import { SECTION_META, SECTION_IDS } from '../config/section-ids';
+
+const demosEn = listDemos('en');
 
 const SRC = join(__dirname, '..');
 const read = (rel: string) => readFileSync(join(SRC, rel), 'utf-8');

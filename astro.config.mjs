@@ -6,8 +6,9 @@ import sitemap from '@astrojs/sitemap';
 import sentry from '@sentry/astro';
 import spotlight from '@spotlightjs/astro';
 import { LOCALES, DEFAULT_LOCALE } from './src/config/locales.ts';
+import { SITE as SITE_CONFIG } from './src/config/site.ts';
 
-const SITE = process.env.SITE_URL ?? 'https://polcasacubertagil.com';
+const SITE = process.env.SITE_URL ?? SITE_CONFIG.url;
 
 /** Writes public/CNAME (for GitHub Pages) with the site's hostname at build time. */
 const cnameIntegration = {

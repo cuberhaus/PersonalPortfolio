@@ -2,97 +2,61 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import skillsEn from '../data/skills.json';
-import skillsEs from '../data/skills.es.json';
-import skillsCa from '../data/skills.ca.json';
+import skills from '../data/skills.json';
+import experience from '../data/experience.json';
+import education from '../data/education.json';
+import workProjects from '../data/work_projects.json';
+import certifications from '../data/certifications.json';
 
-import experienceEn from '../data/experience.json';
-import experienceEs from '../data/experience.es.json';
-import experienceCa from '../data/experience.ca.json';
+import { flattenForLocale } from '../i18n/load';
+import { LOCALES } from '../config/locales';
 
-import educationEn from '../data/education.json';
-import educationEs from '../data/education.es.json';
-import educationCa from '../data/education.ca.json';
+type LocalizedEntry = {
+  identity: Record<string, unknown>;
+  copy: Record<string, Record<string, unknown>>;
+};
 
-import workEn from '../data/work_projects.json';
-import workEs from '../data/work_projects.es.json';
-import workCa from '../data/work_projects.ca.json';
+/**
+ * After the nested-locale refactor, content lives in ONE file per entity with
+ * the `{identity, copy:{en,es,ca}}` shape. Identity-vs-copy parity is enforced
+ * by the file structure itself — no more triple-locale parity tests. These
+ * tests focus on per-locale content quality (no empty bullets, no duplicate
+ * tags, valid HTTPS URLs, etc.).
+ */
 
-import certsEn from '../data/certifications.json';
-import certsEs from '../data/certifications.es.json';
-import certsCa from '../data/certifications.ca.json';
-
-type JsonRecord = Record<string, unknown>;
-
-const sortedKeys = (item: JsonRecord) => Object.keys(item).sort();
-
-function expectSameKeys(label: string, base: JsonRecord[], localized: JsonRecord[]) {
-  expect(localized.length, `${label} length differs`).toBe(base.length);
-
-  for (let index = 0; index < base.length; index++) {
-    expect(sortedKeys(localized[index]), `${label}[${index}] keys differ`).toEqual(sortedKeys(base[index]));
-  }
-}
-
-describe('localized portfolio content schemas', () => {
-  it('skills entries expose the same keys across locales', () => {
-    expectSameKeys('skills.es', skillsEn, skillsEs);
-    expectSameKeys('skills.ca', skillsEn, skillsCa);
-  });
-
-  it('experience entries expose the same keys across locales', () => {
-    expectSameKeys('experience.es', experienceEn, experienceEs);
-    expectSameKeys('experience.ca', experienceEn, experienceCa);
-  });
-
-  it('education entries expose the same keys across locales', () => {
-    expectSameKeys('education.es', educationEn, educationEs);
-    expectSameKeys('education.ca', educationEn, educationCa);
-  });
-
-  it('work project entries expose the same keys across locales', () => {
-    expectSameKeys('work_projects.es', workEn, workEs);
-    expectSameKeys('work_projects.ca', workEn, workCa);
-  });
-
-  it('certification entries expose the same keys across locales', () => {
-    expectSameKeys('certifications.es', certsEn, certsEs);
-    expectSameKeys('certifications.ca', certsEn, certsCa);
-  });
-});
+// ─── Skills content quality ───────────────────────────────────
 
 describe('skills content quality', () => {
-  const localizedSkills = [
-    ['en', skillsEn],
-    ['es', skillsEs],
-    ['ca', skillsCa],
-  ] as const;
-
-  it('has no empty or duplicate skill labels within a category', () => {
-    for (const [locale, groups] of localizedSkills) {
-      for (const group of groups) {
-        const trimmedItems = group.items.map(item => item.trim());
-
-        for (const item of trimmedItems) {
+  it('has no empty or duplicate skill labels within a category, in every locale', () => {
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(skills as LocalizedEntry[], locale) as Array<{
+        category: string;
+        items: string[];
+      }>;
+      for (const group of flat) {
+        const trimmed = group.items.map(item => item.trim());
+        for (const item of trimmed) {
           expect(item.length, `${locale}.${group.category} has an empty skill`).toBeGreaterThan(0);
         }
-
-        expect(new Set(trimmedItems).size, `${locale}.${group.category} has duplicate skills`).toBe(trimmedItems.length);
+        expect(
+          new Set(trimmed).size,
+          `${locale}.${group.category} has duplicate skills`,
+        ).toBe(trimmed.length);
       }
     }
   });
 });
 
-describe('experience content quality', () => {
-  const localizedExperience = [
-    ['en', experienceEn],
-    ['es', experienceEs],
-    ['ca', experienceCa],
-  ] as const;
+// ─── Experience content quality ───────────────────────────────
 
-  it('has no empty bullet text', () => {
-    for (const [locale, entries] of localizedExperience) {
-      for (const entry of entries) {
+describe('experience content quality', () => {
+  it('has no empty bullet text, in every locale', () => {
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(experience as LocalizedEntry[], locale) as Array<{
+        company: string;
+        bullets: string[];
+      }>;
+      for (const entry of flat) {
         for (const bullet of entry.bullets) {
           expect(bullet.trim().length, `${locale}.${entry.company} has an empty bullet`).toBeGreaterThan(0);
         }
@@ -101,77 +65,77 @@ describe('experience content quality', () => {
   });
 });
 
+// ─── Education content quality ────────────────────────────────
+
 describe('education content quality', () => {
-  const localizedEducation = [
-    ['en', educationEn],
-    ['es', educationEs],
-    ['ca', educationCa],
-  ] as const;
-
-  it('uses stable institution/link identity across translations', () => {
-    const identity = (entry: { institution: string; link: string }) => `${entry.institution}|${entry.link}`;
-
-    expect(educationEs.map(identity)).toEqual(educationEn.map(identity));
-    expect(educationCa.map(identity)).toEqual(educationEn.map(identity));
-  });
-
-  it('has unique links per locale', () => {
-    for (const [locale, entries] of localizedEducation) {
-      const links = entries.map(entry => entry.link);
-      expect(new Set(links).size, `${locale} education has duplicate links`).toBe(links.length);
-    }
+  it('has unique links across entries', () => {
+    const links = (education as LocalizedEntry[]).map(e => e.identity.link as string);
+    expect(new Set(links).size, 'education has duplicate links').toBe(links.length);
   });
 });
 
+// ─── Work projects content quality ────────────────────────────
+
 describe('work projects content quality', () => {
-  const localizedWorkProjects = [
-    ['en', workEn],
-    ['es', workEs],
-    ['ca', workCa],
-  ] as const;
-
-  it('keeps icon/link identity aligned across translations', () => {
-    const identity = (project: { icon: string; link?: string }) => `${project.icon}|${project.link ?? ''}`;
-
-    expect(workEs.map(identity)).toEqual(workEn.map(identity));
-    expect(workCa.map(identity)).toEqual(workEn.map(identity));
-  });
-
-  it('has a non-empty role and clean tag labels for every project', () => {
-    for (const [locale, projects] of localizedWorkProjects) {
-      for (const project of projects) {
+  it('every project has a non-empty role and clean, unique tags in every locale', () => {
+    const data = workProjects as LocalizedEntry[];
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(data, locale) as Array<{
+        title: string;
+        role: string;
+        tags: string[];
+      }>;
+      for (const project of flat) {
         expect(project.role.trim().length, `${locale}.${project.title} has an empty role`).toBeGreaterThan(0);
-
-        const trimmedTags = project.tags.map(tag => tag.trim());
-        for (const tag of trimmedTags) {
+        const trimmed = project.tags.map(t => t.trim());
+        for (const tag of trimmed) {
           expect(tag.length, `${locale}.${project.title} has an empty tag`).toBeGreaterThan(0);
         }
-
-        expect(new Set(trimmedTags).size, `${locale}.${project.title} has duplicate tags`).toBe(trimmedTags.length);
+        expect(
+          new Set(trimmed).size,
+          `${locale}.${project.title} has duplicate tags`,
+        ).toBe(trimmed.length);
       }
     }
   });
 
   it('uses valid, unique HTTPS links when projects are linked', () => {
-    for (const [locale, projects] of localizedWorkProjects) {
-      const links = projects.map(project => project.link).filter((link): link is string => Boolean(link));
-
-      for (const link of links) {
-        expect(() => new URL(link), `${locale} has invalid work project URL ${link}`).not.toThrow();
-        expect(link, `${locale} work project URL is not HTTPS`).toMatch(/^https:\/\//);
-      }
-
-      expect(new Set(links).size, `${locale} work projects have duplicate links`).toBe(links.length);
+    const data = workProjects as LocalizedEntry[];
+    const links = data.map(e => e.identity.link as string | undefined).filter((l): l is string => Boolean(l));
+    for (const link of links) {
+      expect(() => new URL(link), `invalid work project URL ${link}`).not.toThrow();
+      expect(link, `work project URL is not HTTPS: ${link}`).toMatch(/^https:\/\//);
     }
+    expect(new Set(links).size, 'work projects have duplicate links').toBe(links.length);
   });
 
   it('renders every icon used by work project data', () => {
     const source = readFileSync(join(__dirname, '..', 'components', 'WorkProjects.astro'), 'utf-8');
     const renderedIcons = new Set([...source.matchAll(/project\.icon === '([^']+)'/g)].map(match => match[1]));
-    const dataIcons = new Set([...workEn, ...workEs, ...workCa].map(project => project.icon));
-
+    const dataIcons = new Set((workProjects as LocalizedEntry[]).map(e => e.identity.icon as string));
     for (const icon of dataIcons) {
       expect(renderedIcons, `WorkProjects.astro does not render icon "${icon}"`).toContain(icon);
+    }
+  });
+});
+
+// ─── Certifications content quality ───────────────────────────
+
+describe('certifications content quality', () => {
+  it('every entry has a name and issuer in identity, plus an issued string in every locale', () => {
+    const data = certifications as LocalizedEntry[];
+    for (const entry of data) {
+      const name = entry.identity.name as string;
+      const issuer = entry.identity.issuer as string;
+      expect(name.trim().length, `cert "${name}" missing name`).toBeGreaterThan(0);
+      expect(issuer.trim().length, `cert "${name}" missing issuer`).toBeGreaterThan(0);
+      for (const locale of LOCALES) {
+        const issued = entry.copy[locale]?.issued as string | undefined;
+        expect(
+          typeof issued,
+          `cert "${name}" missing copy.${locale}.issued`,
+        ).toBe('string');
+      }
     }
   });
 });

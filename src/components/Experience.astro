@@ -1,12 +1,19 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import experienceEn from '../data/experience.json';
-import experienceEs from '../data/experience.es.json';
-import experienceCa from '../data/experience.ca.json';
+import experienceData from '../data/experience.json';
+import { flattenForLocale } from '../i18n/load';
+
+type ExpEntry = {
+  role: string;
+  company: string;
+  period: string;
+  link?: string;
+  bullets: string[];
+};
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa : experienceEn;
+const experience = flattenForLocale<ExpEntry>(experienceData as never, lang);
 
 const { num } = Astro.props;
 ---

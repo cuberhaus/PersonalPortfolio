@@ -1,24 +1,72 @@
 [
   {
-    "role": "AI & Data Consultant",
-    "company": "Deloitte",
-    "link": "https://www.deloitte.com/es/es.html",
-    "period": "Sep 2025 — Present",
-    "bullets": [
-      "Delivered Deloitte's first Physical AI project: real-time manufacturing anomaly detection on live motor production lines and a warehouse digital twin with camera-based package tracking, built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton)",
-      "Designed and deployed AI and data infrastructure across AWS, Azure, and GCP — edge inference, streaming pipelines, and cloud-hosted training and model serving",
-      "Embedded in the Generalitat de Catalunya's Data Governance Office (OGD) to help define the institution-wide data strategy — established data catalogues, mapped asset lineage with Informatica, and delivered governance advisory to cross-departmental teams across the public administration"
-    ]
+    "identity": {
+      "company": "Deloitte",
+      "link": "https://www.deloitte.com/es/es.html"
+    },
+    "copy": {
+      "en": {
+        "role": "AI & Data Consultant",
+        "period": "Sep 2025 — Present",
+        "bullets": [
+          "Delivered Deloitte's first Physical AI project: real-time manufacturing anomaly detection on live motor production lines and a warehouse digital twin with camera-based package tracking, built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton)",
+          "Designed and deployed AI and data infrastructure across AWS, Azure, and GCP — edge inference, streaming pipelines, and cloud-hosted training and model serving",
+          "Embedded in the Generalitat de Catalunya's Data Governance Office (OGD) to help define the institution-wide data strategy — established data catalogues, mapped asset lineage with Informatica, and delivered governance advisory to cross-departmental teams across the public administration"
+        ]
+      },
+      "es": {
+        "role": "Consultor de IA y Datos",
+        "period": "Sep 2025 — Presente",
+        "bullets": [
+          "Entrega del primer proyecto de IA Física de Deloitte: detección de anomalías de fabricación en tiempo real sobre líneas de producción de motores en vivo y un gemelo digital del almacén con seguimiento de paquetes por cámara, construido sobre NVIDIA Omniverse, Isaac Sim y el stack Metropolis (DeepStream, TAO, Triton)",
+          "Diseño y despliegue de infraestructura de IA y datos en AWS, Azure y GCP — inferencia en el edge, pipelines de streaming y entrenamiento y servicio de modelos en la nube",
+          "Integración en la Oficina de Gobierno de Datos (OGD) de la Generalitat de Catalunya para co-definir la estrategia de datos a nivel institucional — implementación de catálogo de activos y linaje con Informatica, y consultoría de gobernanza a equipos interdepartamentales de la administración pública"
+        ]
+      },
+      "ca": {
+        "role": "Consultor d'IA i Dades",
+        "period": "Set 2025 — Actualitat",
+        "bullets": [
+          "Lliurament del primer projecte d'IA Física de Deloitte: detecció d'anomalies de fabricació en temps real en línies de producció de motors en viu i un bessó digital del magatzem amb seguiment de paquets per càmera, construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton)",
+          "Disseny i desplegament d'infraestructura d'IA i dades a AWS, Azure i GCP — inferència a l'edge, pipelines de streaming i entrenament i servei de models al núvol",
+          "Integració a l'Oficina de Govern de Dades (OGD) de la Generalitat de Catalunya per co-definir l'estratègia de dades a nivell institucional — implementació de catàleg d'actius i llinatge amb Informatica, i assessoria de governança a equips interdepartamentals de l'administració pública"
+        ]
+      }
+    }
   },
   {
-    "role": "AI Engineer",
-    "company": "MGS, Seguros y Reaseguros S.A.",
-    "link": "https://www.mgs.es/wps/",
-    "period": "Sep 2023 — Sep 2024",
-    "bullets": [
-      "Built pricing prediction models as part of a 4-person AI and data team supporting insurance product analytics",
-      "Automated SQL Server workflows with PowerShell to streamline recurring data processing and reporting tasks",
-      "Developed geospatial analysis projects in R / RStudio, using map data to support location-based business insights"
-    ]
+    "identity": {
+      "company": "MGS, Seguros y Reaseguros S.A.",
+      "link": "https://www.mgs.es/wps/"
+    },
+    "copy": {
+      "en": {
+        "role": "AI Engineer",
+        "period": "Sep 2023 — Sep 2024",
+        "bullets": [
+          "Built pricing prediction models as part of a 4-person AI and data team supporting insurance product analytics",
+          "Automated SQL Server workflows with PowerShell to streamline recurring data processing and reporting tasks",
+          "Developed geospatial analysis projects in R / RStudio, using map data to support location-based business insights"
+        ]
+      },
+      "es": {
+        "role": "Ingeniero de IA",
+        "period": "Sep 2023 — Sep 2024",
+        "bullets": [
+          "Desarrollo de modelos de predicción de precios dentro de un equipo de IA y datos de 4 personas dando soporte al análisis de productos aseguradores",
+          "Automatización de flujos de trabajo de SQL Server con PowerShell para agilizar tareas recurrentes de procesamiento de datos y generación de informes",
+          "Proyectos de análisis geoespacial en R / RStudio, utilizando datos cartográficos para aportar información de negocio basada en la localización"
+        ]
+      },
+      "ca": {
+        "role": "Enginyer d'IA",
+        "period": "Set 2023 — Set 2024",
+        "bullets": [
+          "Desenvolupament de models de predicció de preus dins d'un equip d'IA i dades de 4 persones donant suport a l'anàlisi de productes asseguradors",
+          "Automatització de fluxos de treball de SQL Server amb PowerShell per agilitzar tasques recurrents de processament de dades i generació d'informes",
+          "Projectes d'anàlisi geoespacial en R / RStudio, utilitzant dades cartogràfiques per aportar informació de negoci basada en la localització"
+        ]
+      }
+    }
   }
 ]

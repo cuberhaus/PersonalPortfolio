@@ -31,8 +31,11 @@ endif
 dev: ## Start Astro dev server with hot-reload (no demo backends)
 	npm run dev
 
-# All ports used by demo backends (keep in sync with SERVICE_REGISTRY in dev-all-demos.sh)
-DEMO_PORTS := 8888 8889 8890 8082 8001 8083 8084 8085 8086 8087 8088 8089 8092 8090 8093 8000 3000 8081 8765
+# All ports used by demo backends — derived from the registry at parse time
+# so Makefile, dev-all-demos.sh, LiveAppEmbed and Sentry all read from one
+# source. `jq` is a documented prerequisite (see README); the literal list
+# below is a defensive fallback only.
+DEMO_PORTS := $(shell jq -r '[ .services[].backend | select(.) | (.port, (.extraPorts // [])[]) ] | unique | join(" ")' src/data/demo-services.json 2>/dev/null || echo "8888 8889 8890 8082 8001 8083 8084 8085 8086 8087 8088 8089 8090 8081 8092 8093 8000 3000 8765")
 
 free-ports: ## Kill any process occupying demo backend ports
 	@echo "Freeing demo ports..."

@@ -1,57 +1,82 @@
 /**
- * Content parity: do the non-demo content JSON files have the same shape
+ * Content parity: do the nested-locale content JSON files have the same shape
  * across languages?
  *
- * These tests compare the English, Spanish, and Catalan versions of each
- * content data file (skills, experience, education, work projects) to ensure
- * they have matching array lengths, identical structural keys, and consistent
- * untranslated fields (e.g. tags, icon names, company identifiers).
+ * After the SSOT refactor every entity lives in ONE file with the
+ * `[{identity, copy:{en,es,ca}}]` shape. These tests verify:
+ *   - every entry has all three copy locales populated,
+ *   - the keys present in each locale's copy block match (no fields silently
+ *     missing from one locale),
+ *   - identity-typed fields (links, icons, slugs) look valid,
+ *   - flattening for each locale yields the legacy shape with the right
+ *     fields populated.
  */
 import { describe, it, expect } from 'vitest';
 
-import skillsEn from '../data/skills.json';
-import skillsEs from '../data/skills.es.json';
-import skillsCa from '../data/skills.ca.json';
-
-import expEn from '../data/experience.json';
-import expEs from '../data/experience.es.json';
-import expCa from '../data/experience.ca.json';
-
-import eduEn from '../data/education.json';
-import eduEs from '../data/education.es.json';
-import eduCa from '../data/education.ca.json';
-
-import workEn from '../data/work_projects.json';
-import workEs from '../data/work_projects.es.json';
-import workCa from '../data/work_projects.ca.json';
-
-import certsEn from '../data/certifications.json';
-import certsEs from '../data/certifications.es.json';
-import certsCa from '../data/certifications.ca.json';
+import skills from '../data/skills.json';
+import experience from '../data/experience.json';
+import education from '../data/education.json';
+import workProjects from '../data/work_projects.json';
+import certifications from '../data/certifications.json';
+import demos from '../data/demos.json';
 
 import { ISSUER_ICON_PATHS } from '../lib/issuer-icons';
+import { LOCALES } from '../config/locales';
+import { flattenForLocale } from '../i18n/load';
+
+type LocalizedEntry = {
+  identity: Record<string, unknown>;
+  copy: Record<string, Record<string, unknown>>;
+};
+
+function assertLocaleParity(label: string, entries: LocalizedEntry[]) {
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const present = Object.keys(entry.copy);
+    for (const locale of LOCALES) {
+      expect(present, `${label}[${i}] missing copy.${locale}`).toContain(locale);
+    }
+    // All copy locales should expose the same keys.
+    const refKeys = Object.keys(entry.copy[LOCALES[0]]).sort();
+    for (const locale of LOCALES) {
+      const localeKeys = Object.keys(entry.copy[locale]).sort();
+      expect(
+        localeKeys,
+        `${label}[${i}] copy.${locale} keys differ from copy.${LOCALES[0]}`,
+      ).toEqual(refKeys);
+    }
+  }
+}
+
+function assertNonEmptyEntries(label: string, entries: LocalizedEntry[]) {
+  expect(entries.length, `${label} is empty`).toBeGreaterThan(0);
+  for (let i = 0; i < entries.length; i++) {
+    expect(entries[i].identity, `${label}[${i}] missing identity`).toBeDefined();
+    expect(entries[i].copy, `${label}[${i}] missing copy`).toBeDefined();
+  }
+}
 
 // ─── Skills ─────────────────────────────────────────────────────
 
 describe('Skills data', () => {
-  it('EN, ES, CA have the same number of categories', () => {
-    expect(skillsEn.length).toBe(skillsEs.length);
-    expect(skillsEn.length).toBe(skillsCa.length);
+  const data = skills as LocalizedEntry[];
+
+  it('has at least one category', () => {
+    expect(data.length).toBeGreaterThan(0);
   });
 
-  it('every category has a non-empty name and at least one item', () => {
-    for (const skills of [skillsEn, skillsEs, skillsCa]) {
-      for (const cat of skills) {
-        expect(cat.category.trim().length).toBeGreaterThan(0);
-        expect(cat.items.length).toBeGreaterThanOrEqual(1);
+  it('exposes the same keys in every locale', () => {
+    assertNonEmptyEntries('skills', data);
+    assertLocaleParity('skills', data);
+  });
+
+  it('every category has a non-empty category name in every locale and at least one item', () => {
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(data, locale) as Array<{ category: string; items: string[] }>;
+      for (const group of flat) {
+        expect(group.category.trim().length).toBeGreaterThan(0);
+        expect(group.items.length).toBeGreaterThanOrEqual(1);
       }
-    }
-  });
-
-  it('EN, ES, CA have the same items per category (skills are not translated)', () => {
-    for (let i = 0; i < skillsEn.length; i++) {
-      expect(skillsEn[i].items).toEqual(skillsEs[i].items);
-      expect(skillsEn[i].items).toEqual(skillsCa[i].items);
     }
   });
 });
@@ -59,14 +84,23 @@ describe('Skills data', () => {
 // ─── Experience ─────────────────────────────────────────────────
 
 describe('Experience data', () => {
-  it('EN, ES, CA have the same number of entries', () => {
-    expect(expEn.length).toBe(expEs.length);
-    expect(expEn.length).toBe(expCa.length);
+  const data = experience as LocalizedEntry[];
+
+  it('locales match', () => {
+    assertNonEmptyEntries('experience', data);
+    assertLocaleParity('experience', data);
   });
 
-  it('every entry has required fields', () => {
-    for (const exp of [expEn, expEs, expCa]) {
-      for (const entry of exp) {
+  it('every entry has role, period and at least one bullet per locale', () => {
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(data, locale) as Array<{
+        role: string;
+        company: string;
+        period: string;
+        bullets: string[];
+        link?: string;
+      }>;
+      for (const entry of flat) {
         expect(entry.role.trim().length).toBeGreaterThan(0);
         expect(entry.company.trim().length).toBeGreaterThan(0);
         expect(entry.period.trim().length).toBeGreaterThan(0);
@@ -75,37 +109,36 @@ describe('Experience data', () => {
     }
   });
 
-  it('same number of bullets per entry across translations', () => {
-    for (let i = 0; i < expEn.length; i++) {
-      expect(expEn[i].bullets.length).toBe(expEs[i].bullets.length);
-      expect(expEn[i].bullets.length).toBe(expCa[i].bullets.length);
-    }
-  });
-
-  it('links match across translations and are valid HTTPS URLs', () => {
-    for (let i = 0; i < expEn.length; i++) {
-      if (expEn[i].link) {
-        expect(expEs[i].link).toBe(expEn[i].link);
-        expect(expCa[i].link).toBe(expEn[i].link);
-        expect(() => new URL(expEn[i].link)).not.toThrow();
-        expect(expEn[i].link).toMatch(/^https:\/\//);
+  it('every link in identity is a valid HTTPS URL', () => {
+    for (const entry of data) {
+      const link = entry.identity.link as string | undefined;
+      if (link) {
+        expect(() => new URL(link)).not.toThrow();
+        expect(link).toMatch(/^https:\/\//);
       }
     }
   });
-
 });
 
 // ─── Education ──────────────────────────────────────────────────
 
 describe('Education data', () => {
-  it('EN, ES, CA have the same number of entries', () => {
-    expect(eduEn.length).toBe(eduEs.length);
-    expect(eduEn.length).toBe(eduCa.length);
+  const data = education as LocalizedEntry[];
+
+  it('locales match', () => {
+    assertNonEmptyEntries('education', data);
+    assertLocaleParity('education', data);
   });
 
-  it('every entry has required fields', () => {
-    for (const edu of [eduEn, eduEs, eduCa]) {
-      for (const entry of edu) {
+  it('every entry has degree, institution, period per locale', () => {
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(data, locale) as Array<{
+        degree: string;
+        institution: string;
+        period: string;
+        link: string;
+      }>;
+      for (const entry of flat) {
         expect(entry.degree.trim().length).toBeGreaterThan(0);
         expect(entry.institution.trim().length).toBeGreaterThan(0);
         expect(entry.period.trim().length).toBeGreaterThan(0);
@@ -114,40 +147,35 @@ describe('Education data', () => {
     }
   });
 
-  it('institutions match across translations (not translated)', () => {
-    for (let i = 0; i < eduEn.length; i++) {
-      expect(eduEn[i].institution).toBe(eduEs[i].institution);
-      expect(eduEn[i].institution).toBe(eduCa[i].institution);
-    }
-  });
-
-  it('links match across translations', () => {
-    for (let i = 0; i < eduEn.length; i++) {
-      expect(eduEn[i].link).toBe(eduEs[i].link);
-      expect(eduEn[i].link).toBe(eduCa[i].link);
-    }
-  });
-
   it('every link is a valid HTTPS URL', () => {
-    for (const entry of eduEn) {
-      expect(() => new URL(entry.link)).not.toThrow();
-      expect(entry.link).toMatch(/^https:\/\//);
+    for (const entry of data) {
+      const link = entry.identity.link as string;
+      expect(() => new URL(link)).not.toThrow();
+      expect(link).toMatch(/^https:\/\//);
     }
   });
-
 });
 
 // ─── Work Projects ──────────────────────────────────────────────
 
 describe('Work projects data', () => {
-  it('EN, ES, CA have the same number of projects', () => {
-    expect(workEn.length).toBe(workEs.length);
-    expect(workEn.length).toBe(workCa.length);
+  const data = workProjects as LocalizedEntry[];
+
+  it('locales match', () => {
+    assertNonEmptyEntries('work_projects', data);
+    assertLocaleParity('work_projects', data);
   });
 
-  it('every project has required fields', () => {
-    for (const work of [workEn, workEs, workCa]) {
-      for (const project of work) {
+  it('every project has title, company, description and tags per locale', () => {
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(data, locale) as Array<{
+        title: string;
+        company: string;
+        description: string;
+        tags: string[];
+        icon: string;
+      }>;
+      for (const project of flat) {
         expect(project.title.trim().length).toBeGreaterThan(0);
         expect(project.company.trim().length).toBeGreaterThan(0);
         expect(project.description.trim().length).toBeGreaterThan(0);
@@ -157,84 +185,109 @@ describe('Work projects data', () => {
     }
   });
 
-  it('same number of tags per project across translations', () => {
-    for (let i = 0; i < workEn.length; i++) {
-      expect(workEn[i].tags.length).toBe(workEs[i].tags.length);
-      expect(workEn[i].tags.length).toBe(workCa[i].tags.length);
-    }
-  });
-
-  it('icons match across translations', () => {
-    for (let i = 0; i < workEn.length; i++) {
-      expect(workEn[i].icon).toBe(workEs[i].icon);
-      expect(workEn[i].icon).toBe(workCa[i].icon);
-    }
-  });
-
-  it('links match across translations and are valid HTTPS URLs', () => {
-    for (let i = 0; i < workEn.length; i++) {
-      if (workEn[i].link) {
-        expect(workEs[i].link).toBe(workEn[i].link);
-        expect(workCa[i].link).toBe(workEn[i].link);
-        expect(() => new URL(workEn[i].link)).not.toThrow();
-        expect(workEn[i].link).toMatch(/^https:\/\//);
+  it('every link in identity is a valid HTTPS URL', () => {
+    for (const entry of data) {
+      const link = entry.identity.link as string | undefined;
+      if (link) {
+        expect(() => new URL(link)).not.toThrow();
+        expect(link).toMatch(/^https:\/\//);
       }
     }
   });
-
 });
 
 // ─── Certifications ─────────────────────────────────────────────
 
 describe('Certifications data', () => {
-  it('EN, ES, CA have the same number of entries', () => {
-    expect(certsEn.length).toBe(certsEs.length);
-    expect(certsEn.length).toBe(certsCa.length);
+  const data = certifications as LocalizedEntry[];
+
+  it('locales match', () => {
+    assertNonEmptyEntries('certifications', data);
+    assertLocaleParity('certifications', data);
   });
 
-  it('every entry has required fields', () => {
-    for (const certs of [certsEn, certsEs, certsCa]) {
-      for (const entry of certs) {
-        expect(entry.name.trim().length).toBeGreaterThan(0);
-        expect(entry.issuer.trim().length).toBeGreaterThan(0);
-        expect(entry.issuerIcon.trim().length).toBeGreaterThan(0);
-      }
-    }
-  });
-
-  it('issuer, issuerIcon and link match across translations', () => {
-    for (let i = 0; i < certsEn.length; i++) {
-      expect(certsEs[i].issuer).toBe(certsEn[i].issuer);
-      expect(certsCa[i].issuer).toBe(certsEn[i].issuer);
-      expect(certsEs[i].issuerIcon).toBe(certsEn[i].issuerIcon);
-      expect(certsCa[i].issuerIcon).toBe(certsEn[i].issuerIcon);
-      expect(certsEs[i].link).toBe(certsEn[i].link);
-      expect(certsCa[i].link).toBe(certsEn[i].link);
+  it('every entry has name + issuer + issuerIcon in identity', () => {
+    for (const entry of data) {
+      const id = entry.identity as { name?: string; issuer?: string; issuerIcon?: string };
+      expect((id.name ?? '').trim().length).toBeGreaterThan(0);
+      expect((id.issuer ?? '').trim().length).toBeGreaterThan(0);
+      expect((id.issuerIcon ?? '').trim().length).toBeGreaterThan(0);
     }
   });
 
   it('every non-empty link is a valid HTTPS URL', () => {
-    for (const entry of certsEn) {
-      if (entry.link) {
-        expect(() => new URL(entry.link)).not.toThrow();
-        expect(entry.link).toMatch(/^https:\/\//);
+    for (const entry of data) {
+      const link = (entry.identity.link as string | undefined) ?? '';
+      if (link) {
+        expect(() => new URL(link)).not.toThrow();
+        expect(link).toMatch(/^https:\/\//);
       }
     }
   });
 
   it('credential URLs do not carry LinkedIn tracking params', () => {
-    for (const entry of certsEn) {
-      if (entry.link) {
-        expect(entry.link, `LinkedIn trk param leaked into ${entry.name}`).not.toMatch(/[?&]trk=/);
+    for (const entry of data) {
+      const link = (entry.identity.link as string | undefined) ?? '';
+      if (link) {
+        expect(link).not.toMatch(/[?&]trk=/);
       }
     }
   });
 
   it('every issuerIcon slug exists in issuer-icons.ts', () => {
     const registered = new Set(Object.keys(ISSUER_ICON_PATHS));
-    const used = new Set(certsEn.map(c => c.issuerIcon));
-    for (const slug of used) {
+    for (const entry of data) {
+      const slug = entry.identity.issuerIcon as string;
       expect(registered, `issuer-icons.ts missing slug "${slug}"`).toContain(slug);
+    }
+  });
+});
+
+// ─── Demos ──────────────────────────────────────────────────────
+
+describe('Demos data', () => {
+  const data = demos as LocalizedEntry[];
+
+  it('locales match', () => {
+    assertNonEmptyEntries('demos', data);
+    assertLocaleParity('demos', data);
+  });
+
+  it('every demo has a unique slug in identity', () => {
+    const slugs = data.map(e => e.identity.slug as string);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    for (const slug of slugs) {
+      expect(slug.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it('every demo has a non-empty icon in identity', () => {
+    for (const entry of data) {
+      expect((entry.identity.icon as string).trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it('every demo flattens to at least one tag in every locale', () => {
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(data, locale) as Array<{ slug: string; tags: string[] }>;
+      for (const d of flat) {
+        expect(Array.isArray(d.tags), `${locale}.${d.slug} has no tags array`).toBe(true);
+        expect(d.tags.length, `${locale}.${d.slug} has zero tags`).toBeGreaterThanOrEqual(1);
+      }
+    }
+  });
+
+  it('every demo flattens to legacy shape with title/description in every locale', () => {
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(data, locale) as Array<{
+        slug: string;
+        title: string;
+        description: string;
+      }>;
+      for (const d of flat) {
+        expect(d.title.trim().length, `${locale}.${d.slug} has empty title`).toBeGreaterThan(0);
+        expect(d.description.trim().length, `${locale}.${d.slug} has empty description`).toBeGreaterThan(0);
+      }
     }
   });
 });

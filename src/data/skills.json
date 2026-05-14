@@ -1,18 +1,42 @@
 [
   {
-    "category": "Programming Languages",
-    "items": ["Python", "TypeScript", "JavaScript", "C", "C++", "Java", "SQL"]
+    "identity": {
+      "items": ["Python", "TypeScript", "JavaScript", "C", "C++", "Java", "SQL"]
+    },
+    "copy": {
+      "en": { "category": "Programming Languages" },
+      "es": { "category": "Lenguajes de Programación" },
+      "ca": { "category": "Llenguatges de Programació" }
+    }
   },
   {
-    "category": "AI & Data Science",
-    "items": ["Machine Learning", "Computer Vision", "PyTorch", "scikit-learn", "OpenCV", "LangChain", "Object Detection", "Generative Models", "MLOps", "Data Mining", "Statistics"]
+    "identity": {
+      "items": ["Machine Learning", "Computer Vision", "PyTorch", "scikit-learn", "OpenCV", "LangChain", "Object Detection", "Generative Models", "MLOps", "Data Mining", "Statistics"]
+    },
+    "copy": {
+      "en": { "category": "AI & Data Science" },
+      "es": { "category": "IA y Ciencia de Datos" },
+      "ca": { "category": "IA i Ciència de Dades" }
+    }
   },
   {
-    "category": "Tools & Platforms",
-    "items": ["AWS", "Azure", "GCP", "Docker", "GitHub Actions", "PostgreSQL", "FastAPI", "Git", "Jupyter"]
+    "identity": {
+      "items": ["AWS", "Azure", "GCP", "Docker", "GitHub Actions", "PostgreSQL", "FastAPI", "Git", "Jupyter"]
+    },
+    "copy": {
+      "en": { "category": "Tools & Platforms" },
+      "es": { "category": "Herramientas y Plataformas" },
+      "ca": { "category": "Eines i Plataformes" }
+    }
   },
   {
-    "category": "CS Fundamentals",
-    "items": ["Algorithms", "Software Architecture", "Parallel Processing", "CI/CD", "Compiler Design", "Cybersecurity"]
+    "identity": {
+      "items": ["Algorithms", "Software Architecture", "Parallel Processing", "CI/CD", "Compiler Design", "Cybersecurity"]
+    },
+    "copy": {
+      "en": { "category": "CS Fundamentals" },
+      "es": { "category": "Fundamentos de Informática" },
+      "ca": { "category": "Fonaments d'Informàtica" }
+    }
   }
 ]

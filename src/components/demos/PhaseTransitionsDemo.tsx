@@ -311,9 +311,9 @@ export default function PhaseTransitionsDemo({ lang = "en" }: { lang?: Lang }) {
         <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
           <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>📊</span>
           <div>
-            <strong style={{ color: "var(--text-primary)" }}>{t.title}</strong>
+            <strong style={{ color: "var(--text-primary)" }}>{t.panelHeading}</strong>
             <p style={{ color: "var(--text-secondary)", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
-              {t.desc}
+              {t.panelDesc}
             </p>
           </div>
         </div>

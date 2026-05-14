@@ -1,16 +1,24 @@
 [
   {
-    "degree": "Computer Science and Engineering Degree",
-    "institution": "UPC — Facultat d'Informàtica de Barcelona (FIB)",
-    "location": "Barcelona, Spain",
-    "period": "Mar 2019 — 2023",
-    "link": "https://www.fib.upc.edu/en"
+    "identity": {
+      "institution": "UPC — Facultat d'Informàtica de Barcelona (FIB)",
+      "link": "https://www.fib.upc.edu/en"
+    },
+    "copy": {
+      "en": { "degree": "Computer Science and Engineering Degree", "location": "Barcelona, Spain", "period": "Mar 2019 — 2023" },
+      "es": { "degree": "Grado en Ingeniería Informática",          "location": "Barcelona, España", "period": "Mar 2019 — 2023" },
+      "ca": { "degree": "Grau en Enginyeria Informàtica",            "location": "Barcelona, Espanya", "period": "Mar 2019 — 2023" }
+    }
   },
   {
-    "degree": "Cambridge C1 English Certificate",
-    "institution": "Cambridge",
-    "location": "Barcelona, Spain",
-    "period": "June 2019",
-    "link": "https://www.cambridgeenglish.org/exams-and-tests/advanced/"
+    "identity": {
+      "institution": "Cambridge",
+      "link": "https://www.cambridgeenglish.org/exams-and-tests/advanced/"
+    },
+    "copy": {
+      "en": { "degree": "Cambridge C1 English Certificate", "location": "Barcelona, Spain",   "period": "June 2019" },
+      "es": { "degree": "Certificado de Inglés C1",         "location": "Barcelona, España", "period": "Jun 2019" },
+      "ca": { "degree": "Certificat d'Anglès C1",           "location": "Barcelona, Espanya", "period": "Jun 2019" }
+    }
   }
 ]

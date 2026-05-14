@@ -12,9 +12,10 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { DESIGNS, DESIGN_IDS, DEFAULT_DESIGN } from '../lib/designs';
+import { DESIGNS, DESIGN_IDS, DEFAULT_DESIGN, getDesignName, getDesignBlurb } from '../lib/designs';
 import { THEME_IDS } from '../lib/themes';
 import { ui, languages } from '../i18n/ui';
+import { LOCALES } from '../config/locales';
 
 const designsCss = readFileSync(resolve('./src/styles/designs.css'), 'utf8');
 
@@ -80,19 +81,16 @@ describe('designs.css coverage', () => {
 });
 
 describe('design i18n coverage', () => {
-  const langs = Object.keys(languages) as (keyof typeof ui)[];
-
-  it.each(langs)('%s has every design name + blurb key', (lang) => {
-    const bundle = ui[lang] as Record<string, string>;
+  it.each(LOCALES)('%s resolves a non-empty name and blurb for every design via designs.ts', (locale) => {
     for (const id of DESIGN_IDS) {
-      const nameKey = `design.${id}.name`;
-      const blurbKey = `design.${id}.blurb`;
-      expect(bundle[nameKey], `${lang}: missing ${nameKey}`).toBeTruthy();
-      expect(bundle[blurbKey], `${lang}: missing ${blurbKey}`).toBeTruthy();
+      const name = getDesignName(id, locale);
+      const blurb = getDesignBlurb(id, locale);
+      expect(name, `${locale}: missing name for design "${id}"`).toBeTruthy();
+      expect(blurb, `${locale}: missing blurb for design "${id}"`).toBeTruthy();
     }
   });
 
-  it.each(langs)('%s has every Ctrl+K modal label', (lang) => {
+  it.each(Object.keys(languages) as (keyof typeof ui)[])('%s has every Ctrl+K modal label', (lang) => {
     const bundle = ui[lang] as Record<string, string>;
     for (const key of MODAL_KEYS) {
       expect(bundle[key], `${lang}: missing ${key}`).toBeTruthy();

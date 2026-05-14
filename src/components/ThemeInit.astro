@@ -989,6 +989,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 
 <script>
   import { ui, defaultLang } from '../i18n/ui';
+  import { getDesignName, getDesignBlurb } from '../lib/designs';
 
   type Lang = keyof typeof ui;
 
@@ -1030,12 +1031,12 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 
     modal.querySelectorAll<HTMLElement>('[data-i18n-design-name]').forEach(el => {
       const id = el.getAttribute('data-i18n-design-name') ?? '';
-      const localized = tr(lang, `design.${id}.name` as keyof typeof ui[typeof defaultLang]);
+      const localized = getDesignName(id, lang as Parameters<typeof getDesignName>[1]);
       if (localized) el.textContent = localized;
     });
     modal.querySelectorAll<HTMLElement>('[data-i18n-design-blurb]').forEach(el => {
       const id = el.getAttribute('data-i18n-design-blurb') ?? '';
-      const localized = tr(lang, `design.${id}.blurb` as keyof typeof ui[typeof defaultLang]);
+      const localized = getDesignBlurb(id, lang as Parameters<typeof getDesignBlurb>[1]);
       if (localized) el.textContent = localized;
     });
 

@@ -1,12 +1,22 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import projectsEn from '../data/work_projects.json';
-import projectsEs from '../data/work_projects.es.json';
-import projectsCa from '../data/work_projects.ca.json';
+import projectsData from '../data/work_projects.json';
+import { flattenForLocale } from '../i18n/load';
+
+type WorkEntry = {
+  title: string;
+  company: string;
+  role: string;
+  description: string;
+  tags: string[];
+  icon: string;
+  link?: string;
+  fallback?: string;
+};
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : projectsEn;
+const projects = flattenForLocale<WorkEntry>(projectsData as never, lang);
 
 const { num } = Astro.props;
 ---
