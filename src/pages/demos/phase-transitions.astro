@@ -17,17 +17,14 @@ const demo = getDemo('phase-transitions', lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/projectA2"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#14b8a6"
-      accentTo="#22c55e"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="phase-transitions"
       title="Phase Transitions Explorer"
-      dockerCmd="cd projectA2 && docker compose up -d"
-      devCmd="cd projectA2 && make dev"
       lang={lang}
       client:load
     />

@@ -1,0 +1,212 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { renderIssuerIconSvg } from '../lib/issuer-icons';
+import certsData from '../data/certifications.json';
+import { flattenForLocale } from '../i18n/load';
+
+type CertEntry = {
+  name: string;
+  issuer: string;
+  issuerIcon: string;
+  issued: string;
+  link?: string;
+  fallback?: string;
+};
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const certs = flattenForLocale<CertEntry>(certsData as never, lang);
+
+const { num } = Astro.props;
+---
+
+<section class="section certifications" id="certifications" data-num={num}>
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">{t('certifications.label')}</span>
+      <h2 class="section-title">{t('certifications.title')}</h2>
+      <p class="section-subtitle">{t('certifications.subtitle')}</p>
+    </div>
+
+    <ul class="certifications-grid reveal-stagger" id="certifications-grid" data-mobile-limit="4">
+      {certs.map((c, i) => {
+        const Inner = (
+          <>
+            <div class="certification-icon" aria-hidden="true" set:html={renderIssuerIconSvg(c.issuerIcon, 24)} />
+            {c.issued && <span class="certification-period">{c.issued}</span>}
+            <h3 class="certification-name">{c.name}</h3>
+            <p class="certification-issuer">{c.issuer}</p>
+            {c.link && <p class="certification-credential">{t('certifications.viewCredential')} <span aria-hidden="true">↗</span></p>}
+          </>
+        );
+        return (
+          <li class={`certification-card${i >= 4 ? ' certification-card--extra' : ''}`}>
+            {c.link ? (
+              <a href={c.link} target="_blank" rel="noopener noreferrer" class="certification-link"
+                 aria-label={`${c.name} — ${c.issuer}`}
+                 {...(c.fallback ? { 'data-fallback': c.fallback } : {})}>
+                {Inner}
+              </a>
+            ) : (
+              <div class="certification-link">{Inner}</div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+
+    {certs.length > 4 && (
+      <button class="certifications-toggle" id="certifications-toggle"
+              data-show-more={t('certifications.showMore')}
+              data-show-less={t('certifications.showLess')}>
+        {t('certifications.showMore')}
+      </button>
+    )}
+  </div>
+</section>
+
+<style>
+  .certifications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0 0;
+  }
+
+  .certification-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .certification-card:hover {
+    border-color: var(--accent-start);
+    box-shadow: 0 12px 40px var(--glow-color);
+  }
+
+  .certification-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    height: 100%;
+  }
+
+  .certification-icon {
+    color: var(--accent-start);
+    margin-bottom: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .certification-period {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent-start);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .certification-name {
+    font-size: 1.05rem;
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+  }
+
+  .certification-issuer {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+  }
+
+  .certification-credential {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+    transition: color var(--transition-fast);
+  }
+
+  .certification-link:hover .certification-credential,
+  .certification-link:focus-visible .certification-credential {
+    color: var(--accent-start);
+  }
+
+  @media (max-width: 768px) {
+    .certifications-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .certification-card--extra {
+      display: none;
+    }
+
+    .certifications-grid.expanded .certification-card--extra {
+      display: block;
+    }
+  }
+
+  .certifications-toggle {
+    display: none;
+    margin: 1.5rem auto 0;
+    padding: 0.6rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    color: var(--accent-start);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .certifications-toggle:hover {
+    border-color: var(--accent-start);
+    box-shadow: 0 4px 20px var(--glow-color);
+  }
+
+  @media (max-width: 768px) {
+    .certifications-toggle {
+      display: block;
+    }
+
+    .certifications-toggle.expanded {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  // Show more / Show less toggle
+  const btn = document.getElementById('certifications-toggle');
+  const grid = document.getElementById('certifications-grid');
+  if (btn && grid) {
+    btn.addEventListener('click', () => {
+      const expanded = grid.classList.toggle('expanded');
+      btn.classList.toggle('expanded', expanded);
+      btn.textContent = expanded
+        ? btn.dataset.showLess!
+        : btn.dataset.showMore!;
+    });
+  }
+
+  // Fallback: if the external cert link is unreachable, swap to the local copy
+  document.querySelectorAll<HTMLAnchorElement>('a.certification-link[data-fallback]').forEach((link) => {
+    link.addEventListener('click', async (e) => {
+      const fallback = link.dataset.fallback;
+      if (!fallback) return;
+      try {
+        const res = await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
+        // mode: 'no-cors' returns opaque response (type "opaque", status 0) on success
+        // A network error throws, so if we get here the server responded
+      } catch {
+        // Network error — external link is down, redirect to local fallback
+        e.preventDefault();
+        window.open(fallback, '_blank', 'noopener,noreferrer');
+      }
+    });
+  });
+</script>

@@ -18,16 +18,14 @@ const t = useTranslations(lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/subgrup-prop7.1"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#ea580c"
-      accentTo="#f97316"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="prop"
       title="PROP Recommendation System"
-      dockerCmd="cd subgrup-prop7.1 && make web"
       lang={lang}
       fallbackSelector="#prop-mock-fallback"
       client:load

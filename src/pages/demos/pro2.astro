@@ -16,10 +16,9 @@ const demo = getDemo('pro2', lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/pracpro2"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#22c55e"
-      accentTo="#06b6d4"
+      accent={demo.accent}
     />
 
     <Pro2Demo lang={lang} client:visible />

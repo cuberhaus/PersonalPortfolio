@@ -2,19 +2,14 @@
 import LanguagePicker from './LanguagePicker.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { sections } from '../config/sections';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const links = [
-  { label: t('nav.about'), href: '#about' },
-  { label: t('nav.experience'), href: '#experience' },
-  { label: t('work.label'), href: '#work' },
-  { label: t('nav.projects'), href: '#projects' },
-  { label: t('nav.skills'), href: '#skills' },
-  { label: t('nav.education'), href: '#education' },
-  { label: t('nav.contact'), href: '#contact' },
-];
+const links = sections
+  .filter((s) => s.inNav)
+  .map((s) => ({ label: t(s.navKey), href: `#${s.id}` }));
 ---
 
 <nav class="navbar" id="navbar">

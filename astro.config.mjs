@@ -5,8 +5,10 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import sentry from '@sentry/astro';
 import spotlight from '@spotlightjs/astro';
+import { LOCALES, DEFAULT_LOCALE } from './src/config/locales.ts';
+import { SITE as SITE_CONFIG } from './src/config/site.ts';
 
-const SITE = process.env.SITE_URL ?? 'https://polcasacubertagil.com';
+const SITE = process.env.SITE_URL ?? SITE_CONFIG.url;
 
 /** Writes public/CNAME (for GitHub Pages) with the site's hostname at build time. */
 const cnameIntegration = {
@@ -53,8 +55,8 @@ export default defineConfig({
     spotlight(),
   ],
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'es', 'ca'],
+    defaultLocale: DEFAULT_LOCALE,
+    locales: [...LOCALES],
     routing: {
       prefixDefaultLocale: false
     }

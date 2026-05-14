@@ -1,15 +1,24 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import experienceEn from '../data/experience.json';
-import experienceEs from '../data/experience.es.json';
-import experienceCa from '../data/experience.ca.json';
+import experienceData from '../data/experience.json';
+import { flattenForLocale } from '../i18n/load';
+
+type ExpEntry = {
+  role: string;
+  company: string;
+  period: string;
+  link?: string;
+  bullets: string[];
+};
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa : experienceEn;
+const experience = flattenForLocale<ExpEntry>(experienceData as never, lang);
+
+const { num } = Astro.props;
 ---
 
-<section class="section experience" id="experience" data-num="02">
+<section class="section experience" id="experience" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('experience.label')}</span>
@@ -27,13 +36,12 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
           </div>
 
           <div class="timeline-content">
+            {job.link && (
+              <a href={job.link} target="_blank" rel="noopener noreferrer" class="timeline-card-link" aria-label={`${job.role} @ ${job.company}`}></a>
+            )}
             <span class="timeline-period">{job.period}</span>
             <h3 class="timeline-role">
-              {job.role} {job.link ? (
-                <a href={job.link} target="_blank" rel="noopener noreferrer" class="timeline-company">@ {job.company}</a>
-              ) : (
-                <span class="timeline-company">@ {job.company}</span>
-              )}
+              {job.role} <span class="timeline-company">@ {job.company}</span>
             </h3>
             <ul class="timeline-bullets">
               {job.bullets.map((bullet) => (
@@ -94,6 +102,7 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
   }
 
   .timeline-content {
+    position: relative;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
@@ -124,13 +133,17 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
     font-weight: 600;
   }
 
-  a.timeline-company {
-    text-decoration: none;
-    transition: color var(--transition-base);
+  .timeline-card-link {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg);
+    z-index: 1;
+    cursor: pointer;
   }
 
-  a.timeline-company:hover {
-    text-decoration: underline;
+  .timeline-card-link:focus-visible {
+    outline: 2px solid var(--accent-start);
+    outline-offset: 2px;
   }
 
   .timeline-bullets {

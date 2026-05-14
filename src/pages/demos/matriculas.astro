@@ -16,10 +16,9 @@ const demo = getDemo('matriculas', lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/SPMatriculas"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#0ea5e9"
-      accentTo="#6366f1"
+      accent={demo.accent}
     />
 
     <SPMatriculasDemo lang={lang} client:visible />

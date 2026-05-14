@@ -21,17 +21,14 @@ const demo = getDemo('grafics', lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/fib"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#58a6ff"
-      accentTo="#da77f2"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="grafics"
       title="Gràfics Shader Playground"
-      dockerCmd="cd fib/G/web && docker compose up -d"
-      devCmd="cd fib/G/web && make dev"
       lang={lang}
       fallbackSelector="#grafics-mock-fallback"
       client:load

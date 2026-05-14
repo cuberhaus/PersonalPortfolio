@@ -1,57 +1,38 @@
 ---
-import ApaPractica from '../../demos/apa-practica.astro';
-import BitsxMarato from '../../demos/bitsx-marato.astro';
-import Caim from '../../demos/caim.astro';
-import DesastresIa from '../../demos/desastres-ia.astro';
-import Draculin from '../../demos/draculin.astro';
-import JocEda from '../../demos/joc-eda.astro';
-import Jsbach from '../../demos/jsbach.astro';
-import Matriculas from '../../demos/matriculas.astro';
-import Mpids from '../../demos/mpids.astro';
-import PhaseTransitions from '../../demos/phase-transitions.astro';
-import Planificacion from '../../demos/planificacion.astro';
-import Pro2 from '../../demos/pro2.astro';
-import Prop from '../../demos/prop.astro';
-import SbcIa from '../../demos/sbc-ia.astro';
-import Tenda from '../../demos/tenda.astro';
-import TfgPolyps from '../../demos/tfg-polyps.astro';
-import ParParallel from '../../demos/par-parallel.astro';
-import RobRobotics from '../../demos/rob-robotics.astro';
-import Grafics from '../../demos/grafics.astro';
-import Algorithms from '../../demos/algorithms.astro';
+/**
+ * Localized demo router.
+ *
+ * Adding a new demo? Drop a new file at `src/pages/demos/<slug>.astro` and
+ * the corresponding entry in `src/data/demos.json` (+ .es.json / .ca.json).
+ * `import.meta.glob` picks the page up automatically — no edits needed here.
+ */
+import { LOCALES } from '../../../config/locales';
+
+const demoModules = import.meta.glob('../../demos/*.astro', { eager: true }) as
+  Record<string, { default: unknown }>;
+
+const demosBySlug = Object.fromEntries(
+  Object.entries(demoModules).map(([path, mod]) => {
+    const slug = path.match(/\/([^/]+)\.astro$/)![1];
+    return [slug, mod.default];
+  })
+);
 
 export function getStaticPaths() {
-  const langs = ['es', 'ca'];
-  const demos = [
-    'apa-practica', 'bitsx-marato', 'caim', 'desastres-ia', 'draculin',
-    'joc-eda', 'jsbach', 'matriculas', 'mpids',
-    'phase-transitions', 'planificacion', 'pro2', 'prop',
-    'sbc-ia', 'tenda', 'tfg-polyps', 'par-parallel', 'rob-robotics', 'grafics',
-    'algorithms'
-  ];
-  return langs.flatMap(lang => demos.map(demo => ({ params: { lang, demo } })));
+  const localeModules = import.meta.glob('../../demos/*.astro', { eager: true });
+  const slugs = Object.keys(localeModules).map(
+    p => p.match(/\/([^/]+)\.astro$/)![1]
+  );
+  // Default locale is served from /demos/<slug>; this dynamic route only
+  // exists for the prefixed locales (es, ca, …).
+  const langs = LOCALES.filter(l => l !== 'en');
+  return langs.flatMap(lang => slugs.map(demo => ({ params: { lang, demo } })));
 }
 
 const { demo } = Astro.params;
+const Component = demosBySlug[demo as string] as
+  | ((props: Record<string, unknown>) => unknown)
+  | undefined;
 ---
 
-{demo === 'apa-practica' && <ApaPractica />}
-{demo === 'bitsx-marato' && <BitsxMarato />}
-{demo === 'caim' && <Caim />}
-{demo === 'desastres-ia' && <DesastresIa />}
-{demo === 'draculin' && <Draculin />}
-{demo === 'joc-eda' && <JocEda />}
-{demo === 'jsbach' && <Jsbach />}
-{demo === 'matriculas' && <Matriculas />}
-{demo === 'mpids' && <Mpids />}
-{demo === 'phase-transitions' && <PhaseTransitions />}
-{demo === 'planificacion' && <Planificacion />}
-{demo === 'pro2' && <Pro2 />}
-{demo === 'prop' && <Prop />}
-{demo === 'sbc-ia' && <SbcIa />}
-{demo === 'tenda' && <Tenda />}
-{demo === 'tfg-polyps' && <TfgPolyps />}
-{demo === 'par-parallel' && <ParParallel />}
-{demo === 'rob-robotics' && <RobRobotics />}
-{demo === 'grafics' && <Grafics />}
-{demo === 'algorithms' && <Algorithms />}
+{Component && <Component />}

@@ -104,6 +104,7 @@ html[data-design='editorial'] .skill-group,
 html[data-design='editorial'] .timeline-content,
 html[data-design='editorial'] .work-card,
 html[data-design='editorial'] .education-card,
+html[data-design='editorial'] .certification-card,
 html[data-design='editorial'] .demo-card,
 html[data-design='editorial'] .contact-form {
   background: transparent;
@@ -260,6 +261,7 @@ html[data-design='swiss'] .skill-group,
 html[data-design='swiss'] .timeline-content,
 html[data-design='swiss'] .work-card,
 html[data-design='swiss'] .education-card,
+html[data-design='swiss'] .certification-card,
 html[data-design='swiss'] .demo-card,
 html[data-design='swiss'] .contact-form {
   background: transparent;
@@ -360,6 +362,7 @@ html[data-design='pixel'] .skill-group,
 html[data-design='pixel'] .timeline-content,
 html[data-design='pixel'] .work-card,
 html[data-design='pixel'] .education-card,
+html[data-design='pixel'] .certification-card,
 html[data-design='pixel'] .demo-card,
 html[data-design='pixel'] .contact-form {
   background: var(--bg-card);
@@ -373,6 +376,7 @@ html[data-design='pixel'] .skill-group:hover,
 html[data-design='pixel'] .timeline-content:hover,
 html[data-design='pixel'] .work-card:hover,
 html[data-design='pixel'] .education-card:hover,
+html[data-design='pixel'] .certification-card:hover,
 html[data-design='pixel'] .demo-card:hover {
   transform: translate(-2px, -2px);
   box-shadow: 8px 8px 0 var(--accent-start);
@@ -578,6 +582,7 @@ html[data-design='terminal'] .skill-group,
 html[data-design='terminal'] .timeline-content,
 html[data-design='terminal'] .work-card,
 html[data-design='terminal'] .education-card,
+html[data-design='terminal'] .certification-card,
 html[data-design='terminal'] .demo-card,
 html[data-design='terminal'] .contact-form {
   background: var(--bg-card);
@@ -592,6 +597,7 @@ html[data-design='terminal'] .skill-group::before,
 html[data-design='terminal'] .timeline-content::before,
 html[data-design='terminal'] .work-card::before,
 html[data-design='terminal'] .education-card::before,
+html[data-design='terminal'] .certification-card::before,
 html[data-design='terminal'] .demo-card::before,
 html[data-design='terminal'] .contact-form::before {
   content: '┌─';
@@ -790,6 +796,7 @@ html[data-design='cyber'] .skill-group,
 html[data-design='cyber'] .timeline-content,
 html[data-design='cyber'] .work-card,
 html[data-design='cyber'] .education-card,
+html[data-design='cyber'] .certification-card,
 html[data-design='cyber'] .demo-card,
 html[data-design='cyber'] .contact-form {
   background: color-mix(in oklab, var(--bg-card) 85%, transparent);
@@ -813,7 +820,8 @@ html[data-design='cyber'] .card:hover,
 html[data-design='cyber'] .skill-group:hover,
 html[data-design='cyber'] .work-card:hover,
 html[data-design='cyber'] .demo-card:hover,
-html[data-design='cyber'] .education-card:hover {
+html[data-design='cyber'] .education-card:hover,
+html[data-design='cyber'] .certification-card:hover {
   box-shadow:
     0 0 0 1px var(--accent-start),
     0 0 40px color-mix(in oklab, var(--accent-start) 35%, transparent),
@@ -1037,6 +1045,7 @@ html[data-design='notebook'] .skill-group,
 html[data-design='notebook'] .timeline-content,
 html[data-design='notebook'] .work-card,
 html[data-design='notebook'] .education-card,
+html[data-design='notebook'] .certification-card,
 html[data-design='notebook'] .demo-card,
 html[data-design='notebook'] .contact-form {
   background: var(--bg-card);
@@ -1053,6 +1062,7 @@ html[data-design='notebook'] .card:nth-of-type(odd),
 html[data-design='notebook'] .timeline-content:nth-of-type(odd),
 html[data-design='notebook'] .work-card:nth-of-type(odd),
 html[data-design='notebook'] .education-card:nth-of-type(odd),
+html[data-design='notebook'] .certification-card:nth-of-type(odd),
 html[data-design='notebook'] .demo-card:nth-of-type(odd) {
   transform: rotate(-0.4deg);
 }
@@ -1061,6 +1071,7 @@ html[data-design='notebook'] .card:nth-of-type(even),
 html[data-design='notebook'] .timeline-content:nth-of-type(even),
 html[data-design='notebook'] .work-card:nth-of-type(even),
 html[data-design='notebook'] .education-card:nth-of-type(even),
+html[data-design='notebook'] .certification-card:nth-of-type(even),
 html[data-design='notebook'] .demo-card:nth-of-type(even) {
   transform: rotate(0.35deg);
 }
@@ -1068,6 +1079,7 @@ html[data-design='notebook'] .demo-card:nth-of-type(even) {
 html[data-design='notebook'] .card:hover,
 html[data-design='notebook'] .work-card:hover,
 html[data-design='notebook'] .education-card:hover,
+html[data-design='notebook'] .certification-card:hover,
 html[data-design='notebook'] .demo-card:hover {
   transform: rotate(0deg) translateY(-2px);
   box-shadow:
@@ -1079,7 +1091,8 @@ html[data-design='notebook'] .demo-card:hover {
 html[data-design='notebook'] .card::before,
 html[data-design='notebook'] .work-card::before,
 html[data-design='notebook'] .demo-card::before,
-html[data-design='notebook'] .education-card::before {
+html[data-design='notebook'] .education-card::before,
+html[data-design='notebook'] .certification-card::before {
   content: '';
   position: absolute;
   top: -10px;
@@ -1283,6 +1296,7 @@ html[data-design='brutalist'] .skill-group,
 html[data-design='brutalist'] .timeline-content,
 html[data-design='brutalist'] .work-card,
 html[data-design='brutalist'] .education-card,
+html[data-design='brutalist'] .certification-card,
 html[data-design='brutalist'] .demo-card,
 html[data-design='brutalist'] .contact-form {
   background: var(--bg-card);
@@ -1294,6 +1308,7 @@ html[data-design='brutalist'] .contact-form {
 html[data-design='brutalist'] .card:hover,
 html[data-design='brutalist'] .work-card:hover,
 html[data-design='brutalist'] .education-card:hover,
+html[data-design='brutalist'] .certification-card:hover,
 html[data-design='brutalist'] .demo-card:hover,
 html[data-design='brutalist'] .skill-group:hover,
 html[data-design='brutalist'] .timeline-content:hover {
@@ -1566,6 +1581,7 @@ html[data-design='blueprint'] .skill-group,
 html[data-design='blueprint'] .timeline-content,
 html[data-design='blueprint'] .work-card,
 html[data-design='blueprint'] .education-card,
+html[data-design='blueprint'] .certification-card,
 html[data-design='blueprint'] .demo-card,
 html[data-design='blueprint'] .contact-form {
   background: color-mix(in oklab, var(--bg-card) 50%, transparent);
@@ -1582,6 +1598,8 @@ html[data-design='blueprint'] .work-card::before,
 html[data-design='blueprint'] .work-card::after,
 html[data-design='blueprint'] .education-card::before,
 html[data-design='blueprint'] .education-card::after,
+html[data-design='blueprint'] .certification-card::before,
+html[data-design='blueprint'] .certification-card::after,
 html[data-design='blueprint'] .demo-card::before,
 html[data-design='blueprint'] .demo-card::after {
   content: '';
@@ -1595,6 +1613,7 @@ html[data-design='blueprint'] .demo-card::after {
 html[data-design='blueprint'] .card::before,
 html[data-design='blueprint'] .work-card::before,
 html[data-design='blueprint'] .education-card::before,
+html[data-design='blueprint'] .certification-card::before,
 html[data-design='blueprint'] .demo-card::before {
   top: -5px;
   left: -5px;
@@ -1605,6 +1624,7 @@ html[data-design='blueprint'] .demo-card::before {
 html[data-design='blueprint'] .card::after,
 html[data-design='blueprint'] .work-card::after,
 html[data-design='blueprint'] .education-card::after,
+html[data-design='blueprint'] .certification-card::after,
 html[data-design='blueprint'] .demo-card::after {
   bottom: -5px;
   right: -5px;
@@ -1847,6 +1867,7 @@ html[data-design='academic'] .skill-group,
 html[data-design='academic'] .timeline-content,
 html[data-design='academic'] .work-card,
 html[data-design='academic'] .education-card,
+html[data-design='academic'] .certification-card,
 html[data-design='academic'] .demo-card,
 html[data-design='academic'] .contact-form {
   background: transparent;
@@ -1858,7 +1879,8 @@ html[data-design='academic'] .contact-form {
 
 html[data-design='academic'] .work-card h3::before,
 html[data-design='academic'] .demo-card h3::before,
-html[data-design='academic'] .education-card h3::before {
+html[data-design='academic'] .education-card h3::before,
+html[data-design='academic'] .certification-card h3::before {
   content: '§  ';
   font-family: var(--font-display);
   color: var(--accent-start);
@@ -2146,6 +2168,7 @@ html[data-design='ide'] .skill-group,
 html[data-design='ide'] .timeline-content,
 html[data-design='ide'] .work-card,
 html[data-design='ide'] .education-card,
+html[data-design='ide'] .certification-card,
 html[data-design='ide'] .demo-card,
 html[data-design='ide'] .contact-form {
   background: var(--ide-tab-active);
@@ -2161,6 +2184,7 @@ html[data-design='ide'] .contact-form {
 html[data-design='ide'] .card::before,
 html[data-design='ide'] .work-card::before,
 html[data-design='ide'] .education-card::before,
+html[data-design='ide'] .certification-card::before,
 html[data-design='ide'] .demo-card::before,
 html[data-design='ide'] .contact-form::before {
   content: '● card.tsx  ×';
@@ -2222,6 +2246,7 @@ html[data-design='ide'] .skill-group::after,
 html[data-design='ide'] .timeline-content::after,
 html[data-design='ide'] .work-card::after,
 html[data-design='ide'] .education-card::after,
+html[data-design='ide'] .certification-card::after,
 html[data-design='ide'] .demo-card::after,
 html[data-design='ide'] .contact-form::after {
   content: '';
@@ -2455,6 +2480,7 @@ html[data-design='risograph'] .skill-group,
 html[data-design='risograph'] .timeline-content,
 html[data-design='risograph'] .work-card,
 html[data-design='risograph'] .education-card,
+html[data-design='risograph'] .certification-card,
 html[data-design='risograph'] .demo-card,
 html[data-design='risograph'] .contact-form {
   background-color: var(--bg-card);
@@ -2473,6 +2499,7 @@ html[data-design='risograph'] .contact-form {
 html[data-design='risograph'] .section:nth-of-type(even) .card,
 html[data-design='risograph'] .section:nth-of-type(even) .work-card,
 html[data-design='risograph'] .section:nth-of-type(even) .education-card,
+html[data-design='risograph'] .section:nth-of-type(even) .certification-card,
 html[data-design='risograph'] .section:nth-of-type(even) .demo-card,
 html[data-design='risograph'] .section:nth-of-type(even) .skill-group,
 html[data-design='risograph'] .section:nth-of-type(even) .timeline-content {
@@ -2487,6 +2514,7 @@ html[data-design='risograph'] .section:nth-of-type(even) .timeline-content {
 html[data-design='risograph'] .card:hover,
 html[data-design='risograph'] .work-card:hover,
 html[data-design='risograph'] .education-card:hover,
+html[data-design='risograph'] .certification-card:hover,
 html[data-design='risograph'] .demo-card:hover {
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 color-mix(in oklab, var(--accent-start) 85%, var(--text-primary));
@@ -2725,6 +2753,7 @@ html[data-design='deco'] .skill-group,
 html[data-design='deco'] .timeline-content,
 html[data-design='deco'] .work-card,
 html[data-design='deco'] .education-card,
+html[data-design='deco'] .certification-card,
 html[data-design='deco'] .demo-card,
 html[data-design='deco'] .contact-form {
   background: color-mix(in oklab, var(--bg-card) 80%, transparent);
@@ -2749,6 +2778,7 @@ html[data-design='deco'] .contact-form {
 html[data-design='deco'] .card h3,
 html[data-design='deco'] .work-card h3,
 html[data-design='deco'] .education-card h3,
+html[data-design='deco'] .certification-card h3,
 html[data-design='deco'] .demo-card h3 {
   text-align: center;
   color: var(--deco-gold);
@@ -2761,6 +2791,7 @@ html[data-design='deco'] .demo-card h3 {
 html[data-design='deco'] .card h3::after,
 html[data-design='deco'] .work-card h3::after,
 html[data-design='deco'] .education-card h3::after,
+html[data-design='deco'] .certification-card h3::after,
 html[data-design='deco'] .demo-card h3::after {
   content: '◆';
   display: block;
@@ -2990,6 +3021,7 @@ html[data-design='wabisabi'] .skill-group,
 html[data-design='wabisabi'] .timeline-content,
 html[data-design='wabisabi'] .work-card,
 html[data-design='wabisabi'] .education-card,
+html[data-design='wabisabi'] .certification-card,
 html[data-design='wabisabi'] .demo-card,
 html[data-design='wabisabi'] .contact-form {
   background: transparent;
@@ -3235,6 +3267,7 @@ html[data-design='zine'] .skill-group,
 html[data-design='zine'] .timeline-content,
 html[data-design='zine'] .work-card,
 html[data-design='zine'] .education-card,
+html[data-design='zine'] .certification-card,
 html[data-design='zine'] .demo-card,
 html[data-design='zine'] .contact-form {
   background: var(--zine-paper);
@@ -3249,13 +3282,15 @@ html[data-design='zine'] .contact-form {
 html[data-design='zine'] .card:nth-of-type(odd),
 html[data-design='zine'] .work-card:nth-of-type(odd),
 html[data-design='zine'] .demo-card:nth-of-type(odd),
-html[data-design='zine'] .education-card:nth-of-type(odd) {
+html[data-design='zine'] .education-card:nth-of-type(odd),
+html[data-design='zine'] .certification-card:nth-of-type(odd) {
   transform: rotate(-0.6deg);
 }
 html[data-design='zine'] .card:nth-of-type(even),
 html[data-design='zine'] .work-card:nth-of-type(even),
 html[data-design='zine'] .demo-card:nth-of-type(even),
-html[data-design='zine'] .education-card:nth-of-type(even) {
+html[data-design='zine'] .education-card:nth-of-type(even),
+html[data-design='zine'] .certification-card:nth-of-type(even) {
   transform: rotate(0.8deg);
 }
 
@@ -3263,7 +3298,8 @@ html[data-design='zine'] .education-card:nth-of-type(even) {
 html[data-design='zine'] .card::before,
 html[data-design='zine'] .work-card::before,
 html[data-design='zine'] .demo-card::before,
-html[data-design='zine'] .education-card::before {
+html[data-design='zine'] .education-card::before,
+html[data-design='zine'] .certification-card::before {
   content: '';
   position: absolute;
   top: -10px;
@@ -3281,7 +3317,8 @@ html[data-design='zine'] .education-card::before {
 html[data-design='zine'] .card::after,
 html[data-design='zine'] .work-card::after,
 html[data-design='zine'] .demo-card::after,
-html[data-design='zine'] .education-card::after {
+html[data-design='zine'] .education-card::after,
+html[data-design='zine'] .certification-card::after {
   content: '';
   position: absolute;
   top: 10px;
@@ -3296,7 +3333,8 @@ html[data-design='zine'] .education-card::after {
 html[data-design='zine'] .card h3,
 html[data-design='zine'] .work-card h3,
 html[data-design='zine'] .demo-card h3,
-html[data-design='zine'] .education-card h3 {
+html[data-design='zine'] .education-card h3,
+html[data-design='zine'] .certification-card h3 {
   font-family: var(--font-display);
   font-weight: 900;
   font-size: 1.2rem;
@@ -3577,6 +3615,7 @@ html[data-design='comic'] .skill-group,
 html[data-design='comic'] .timeline-content,
 html[data-design='comic'] .work-card,
 html[data-design='comic'] .education-card,
+html[data-design='comic'] .certification-card,
 html[data-design='comic'] .demo-card,
 html[data-design='comic'] .contact-form {
   background: var(--comic-panel);
@@ -3590,7 +3629,8 @@ html[data-design='comic'] .contact-form {
 html[data-design='comic'] .card h3,
 html[data-design='comic'] .work-card h3,
 html[data-design='comic'] .demo-card h3,
-html[data-design='comic'] .education-card h3 {
+html[data-design='comic'] .education-card h3,
+html[data-design='comic'] .certification-card h3 {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: 1.6rem;
@@ -3893,6 +3933,7 @@ html[data-design='newspaper'] .skill-group,
 html[data-design='newspaper'] .timeline-content,
 html[data-design='newspaper'] .work-card,
 html[data-design='newspaper'] .education-card,
+html[data-design='newspaper'] .certification-card,
 html[data-design='newspaper'] .demo-card,
 html[data-design='newspaper'] .contact-form {
   background: var(--news-paper);
@@ -3906,7 +3947,8 @@ html[data-design='newspaper'] .contact-form {
 /* Classified-ad small-caps label strip across top of work / demo / education cards */
 html[data-design='newspaper'] .work-card::before,
 html[data-design='newspaper'] .demo-card::before,
-html[data-design='newspaper'] .education-card::before {
+html[data-design='newspaper'] .education-card::before,
+html[data-design='newspaper'] .certification-card::before {
   content: 'ADVERTISEMENT';
   display: block;
   font-family: 'EB Garamond', Georgia, serif;
@@ -3925,6 +3967,10 @@ html[data-design='newspaper'] .education-card::before {
   content: 'ACADEMIC RECORD';
 }
 
+html[data-design='newspaper'] .certification-card::before {
+  content: 'CREDENTIAL ON FILE';
+}
+
 html[data-design='newspaper'] .work-card::before {
   content: 'EMPLOYMENT NOTICE';
 }
@@ -3936,7 +3982,8 @@ html[data-design='newspaper'] .demo-card::before {
 html[data-design='newspaper'] .card h3,
 html[data-design='newspaper'] .work-card h3,
 html[data-design='newspaper'] .demo-card h3,
-html[data-design='newspaper'] .education-card h3 {
+html[data-design='newspaper'] .education-card h3,
+html[data-design='newspaper'] .certification-card h3 {
   font-family: var(--font-subhead);
   font-weight: 800;
   font-size: 1.3rem;

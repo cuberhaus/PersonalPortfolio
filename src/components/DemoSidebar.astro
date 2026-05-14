@@ -3,9 +3,7 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIconSvg } from '../lib/demo-icons';
 import LanguagePicker from './LanguagePicker.astro';
 import ThemeToggle from './ThemeToggle.astro';
-import demosEn from '../data/demos.json';
-import demosEs from '../data/demos.es.json';
-import demosCa from '../data/demos.ca.json';
+import { listDemos } from '../i18n/demo';
 
 interface Props {
   currentSlug?: string;
@@ -14,7 +12,7 @@ interface Props {
 const { currentSlug } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const allDemos = lang === 'es' ? demosEs : lang === 'ca' ? demosCa : demosEn;
+const allDemos = listDemos(lang);
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
 function demoHref(slug: string) {

@@ -20,10 +20,9 @@ const demo = getDemo('bitsx-marato', lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/bitsXlaMarato"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#be123c"
-      accentTo="#0ea5e9"
+      accent={demo.accent}
     />
 
     <BitsXMaratoDemo lang={lang} client:visible />

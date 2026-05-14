@@ -7,20 +7,27 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { listLivePortfolioBackends } from '../src/data/demo-services';
 
-const LIVE_DEMOS = [
-  { slug: 'tenda', port: 8888, name: 'Tenda Online' },
-  { slug: 'draculin', port: 8890, name: 'Draculin' },
-  { slug: 'desastres-ia', port: 8083, name: 'Desastres IA' },
-  { slug: 'sbc-ia', port: 8088, name: 'SBC IA Trip Planner' },
-  // CAIM is now a browser-native mock demo; iframe fallback still works but tested in browser-demos.spec.ts
-  // { slug: 'caim', port: 8086, name: 'CAIM IR Explorer' },
-  { slug: 'planificacion', port: 3000, name: 'Planificación' },
-  { slug: 'joc-eda', port: 8087, name: 'Joc EDA' },
-  { slug: 'mpids', port: 8084, name: 'MPIDS Solver' },
-  { slug: 'phase-transitions', port: 8085, name: 'Phase Transitions' },
-  { slug: 'prop', port: 8081, name: 'Prop Recommendation' },
-];
+// Curated allowlist of slugs we e2e-test live. Heavy backends (tfg-polyps,
+// bitsx-marato, par, rob, etc.) and ones that have moved to browser-native
+// mocks (caim) are excluded so we don't waste CI time probing services that
+// rarely run locally. Add a slug here once you want it covered.
+const LIVE_E2E_SLUGS = new Set<string>([
+  'tenda',
+  'draculin',
+  'desastres-ia',
+  'sbc-ia',
+  'planificacion',
+  'joc-eda',
+  'mpids',
+  'phase-transitions',
+  'prop',
+]);
+
+const LIVE_DEMOS = listLivePortfolioBackends()
+  .filter((d) => LIVE_E2E_SLUGS.has(d.slug))
+  .map((d) => ({ slug: d.slug, port: d.port, name: d.displayName }));
 
 // ─── Check if backends are reachable before testing ─────────────
 

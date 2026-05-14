@@ -13,7 +13,7 @@ import {
   DEFAULT_K,
 } from "../../lib/wpgma";
 
-import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/pro2demo";
+import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/pro2-demo";
 import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
 
 type Lang = "en" | "es" | "ca";

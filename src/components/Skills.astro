@@ -1,12 +1,13 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import skillsEn from '../data/skills.json';
-import skillsEs from '../data/skills.es.json';
-import skillsCa from '../data/skills.ca.json';
+import skillsData from '../data/skills.json';
+import { flattenForLocale } from '../i18n/load';
+
+type SkillGroup = { category: string; items: string[] };
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const skills = lang === 'es' ? skillsEs : lang === 'ca' ? skillsCa : skillsEn;
+const skills = flattenForLocale<SkillGroup>(skillsData as never, lang);
 
 const LOC_DATA: Record<string, { lines: string; pct: number }> = {
   Python:      { lines: '~55K', pct: 22 },
@@ -51,9 +52,11 @@ const SKILL_CONTEXT: Record<string, string> = {
   'WebAssembly':        'PAR (C → WASM via Emscripten)',
   'Robotics':           'ROB (FK, odometry, EKF, wall-following, Babylon.js 3D)',
 };
+
+const { num } = Astro.props;
 ---
 
-<section class="section skills" id="skills" data-num="05">
+<section class="section skills" id="skills" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('skills.label')}</span>

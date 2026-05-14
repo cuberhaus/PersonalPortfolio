@@ -1,8 +1,8 @@
-import demosEn from '../data/demos.json';
-import demosEs from '../data/demos.es.json';
-import demosCa from '../data/demos.ca.json';
+import demosData from '../data/demos.json';
+import { flattenForLocale } from './load';
+import type { Locale } from '../config/locales';
 
-export type DemoLang = 'en' | 'es' | 'ca';
+export type DemoLang = Locale;
 
 export interface Demo {
   slug: string;
@@ -10,6 +10,8 @@ export interface Demo {
   description: string;
   tags: string[];
   icon: string;
+  /** Brand accent for the demo page header, sourced from demos.json identity. */
+  accent?: { from: string; to: string };
   github?: string | string[];
   image: string;
   lead: string;
@@ -21,17 +23,27 @@ export interface Demo {
   hints?: string[];
 }
 
-const sources: Record<DemoLang, Demo[]> = {
-  en: demosEn as Demo[],
-  es: demosEs as Demo[],
-  ca: demosCa as Demo[],
-};
+const cache = new Map<DemoLang, Demo[]>();
+
+/** Flat, legacy-shape demo array for a given locale (cached). */
+export function listDemos(lang: string): Demo[] {
+  const locale = (['en', 'es', 'ca'] as const).includes(lang as DemoLang)
+    ? (lang as DemoLang)
+    : 'en';
+  const cached = cache.get(locale);
+  if (cached) return cached;
+  const flat = flattenForLocale(
+    demosData as Parameters<typeof flattenForLocale>[0],
+    locale,
+  ) as unknown as Demo[];
+  cache.set(locale, flat);
+  return flat;
+}
 
 /** Look up a demo entry by slug for a given locale, falling back to English. */
 export function getDemo(slug: string, lang: string): Demo {
-  const locale = (lang in sources ? lang : 'en') as DemoLang;
-  const entry = sources[locale].find((d) => d.slug === slug)
-    ?? sources.en.find((d) => d.slug === slug);
+  const entry = listDemos(lang).find((d) => d.slug === slug)
+    ?? listDemos('en').find((d) => d.slug === slug);
   if (!entry) {
     throw new Error(`getDemo: unknown slug "${slug}"`);
   }

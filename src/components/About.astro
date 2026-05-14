@@ -3,17 +3,17 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../config/locales';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 // Pick the PDF for the current locale; fall back to English if the localized
-// PDF hasn't been fetched for this build.
-const cvByLang: Record<string, string> = {
-  en: 'cv.pdf',
-  es: 'cv_es.pdf',
-  ca: 'cv_ca.pdf',
-};
+// PDF hasn't been fetched for this build. Names follow the upstream CV repo's
+// `cv_<locale>.pdf` convention, with English as the unsuffixed default.
+const cvByLang: Record<Locale, string> = Object.fromEntries(
+  LOCALES.map((l) => [l, l === DEFAULT_LOCALE ? 'cv.pdf' : `cv_${l}.pdf`])
+) as Record<Locale, string>;
 const cvFile = existsSync(resolve(`./public/${cvByLang[lang]}`))
   ? cvByLang[lang]
   : (existsSync(resolve('./public/cv.pdf')) ? 'cv.pdf' : null);
@@ -29,9 +29,11 @@ const hasProfileImage = existsSync(resolve('./public/profile.jpg'));
 const hasCV = cvFile !== null;
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
+
+const { num } = Astro.props;
 ---
 
-<section class="section about" id="about" data-num="01">
+<section class="section about" id="about" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('about.label')}</span>
@@ -51,7 +53,7 @@ const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
           <li>Generative AI</li>
           <li>Computer Vision</li>
         </ul>
-        
+
         {hasCV && (
           <div class="about-actions">
             <a href={cvHref} class="about-cv-btn" target="_blank" rel="noopener noreferrer">
@@ -124,7 +126,7 @@ const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
   .about-actions {
     margin-top: 2rem;
   }
-  
+
   .about-cv-btn {
     display: inline-flex;
     align-items: center;

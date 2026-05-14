@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from 'react';
 
-import { T, type DemoTranslations } from "../../i18n/demos/caimdemo";
+import { T, type DemoTranslations } from "../../i18n/demos/caim-demo";
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
 type Lang = "en" | "es" | "ca";

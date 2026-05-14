@@ -1,15 +1,28 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import projectsEn from '../data/work_projects.json';
-import projectsEs from '../data/work_projects.es.json';
-import projectsCa from '../data/work_projects.ca.json';
+import projectsData from '../data/work_projects.json';
+import { flattenForLocale } from '../i18n/load';
+import { renderIconSvg } from '../lib/demo-icons';
+
+type WorkEntry = {
+  title: string;
+  company: string;
+  role: string;
+  description: string;
+  tags: string[];
+  icon: string;
+  link?: string;
+  fallback?: string;
+};
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : projectsEn;
+const projects = flattenForLocale<WorkEntry>(projectsData as never, lang);
+
+const { num } = Astro.props;
 ---
 
-<section class="section work-projects" id="work" data-num="03">
+<section class="section work-projects" id="work" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('work.label')}</span>
@@ -23,31 +36,9 @@ const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : proje
       {projects.map((project) => (
         <div class="work-card">
           {project.link ? (
-            <a href={project.link} target="_blank" rel="noopener noreferrer" class="work-card-inner work-card-link">
-              <div class="work-icon">
-                {project.icon === 'cpu' && (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                    <rect x="9" y="9" width="6" height="6"></rect>
-                    <line x1="9" y1="1" x2="9" y2="4"></line>
-                    <line x1="15" y1="1" x2="15" y2="4"></line>
-                    <line x1="9" y1="20" x2="9" y2="23"></line>
-                    <line x1="15" y1="20" x2="15" y2="23"></line>
-                    <line x1="20" y1="9" x2="23" y2="9"></line>
-                    <line x1="20" y1="14" x2="23" y2="14"></line>
-                    <line x1="1" y1="9" x2="4" y2="9"></line>
-                    <line x1="1" y1="14" x2="4" y2="14"></line>
-                  </svg>
-                )}
-                {project.icon === 'users' && (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                  </svg>
-                )}
-              </div>
+            <a href={project.link} target="_blank" rel="noopener noreferrer" class="work-card-inner work-card-link"
+               {...(project.fallback ? { 'data-fallback': project.fallback } : {})}>
+              <div class="work-icon" set:html={renderIconSvg(project.icon, 28)} />
 
               <div class="work-badge">
                 <span>{project.company}</span>
@@ -65,30 +56,7 @@ const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : proje
             </a>
           ) : (
             <div class="work-card-inner">
-              <div class="work-icon">
-                {project.icon === 'cpu' && (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                    <rect x="9" y="9" width="6" height="6"></rect>
-                    <line x1="9" y1="1" x2="9" y2="4"></line>
-                    <line x1="15" y1="1" x2="15" y2="4"></line>
-                    <line x1="9" y1="20" x2="9" y2="23"></line>
-                    <line x1="15" y1="20" x2="15" y2="23"></line>
-                    <line x1="20" y1="9" x2="23" y2="9"></line>
-                    <line x1="20" y1="14" x2="23" y2="14"></line>
-                    <line x1="1" y1="9" x2="4" y2="9"></line>
-                    <line x1="1" y1="14" x2="4" y2="14"></line>
-                  </svg>
-                )}
-                {project.icon === 'users' && (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                  </svg>
-                )}
-              </div>
+              <div class="work-icon" set:html={renderIconSvg(project.icon, 28)} />
 
               <div class="work-badge">
                 <span>{project.company}</span>
@@ -233,3 +201,18 @@ const projects = lang === 'es' ? projectsEs : lang === 'ca' ? projectsCa : proje
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('a.work-card-link[data-fallback]').forEach((link) => {
+    link.addEventListener('click', async (e) => {
+      const fallback = link.dataset.fallback;
+      if (!fallback) return;
+      try {
+        await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
+      } catch {
+        e.preventDefault();
+        window.open(fallback, '_blank', 'noopener,noreferrer');
+      }
+    });
+  });
+</script>

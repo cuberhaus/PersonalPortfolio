@@ -21,17 +21,14 @@ const demo = getDemo('algorithms', lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/fib"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#a78bfa"
-      accentTo="#22d3ee"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="algorithms"
       title="Algorithm Visualizer"
-      dockerCmd="cd fib && docker compose up -d"
-      devCmd="cd fib/web && npm run dev"
       lang={lang}
       fallbackSelector="#fib-mock-fallback"
       client:load

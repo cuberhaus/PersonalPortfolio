@@ -17,17 +17,14 @@ const demo = getDemo('mpids', lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/projectA"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#6366f1"
-      accentTo="#a855f7"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="mpids"
       title="MPIDS Solver"
-      dockerCmd="cd projectA && docker compose up -d"
-      devCmd="cd projectA && make dev"
       lang={lang}
       client:load
     />

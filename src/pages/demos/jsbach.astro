@@ -17,10 +17,9 @@ const hint = demo.hints ?? [];
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/ANTLR4_JSBach"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#f59e0b"
-      accentTo="#f97316"
+      accent={demo.accent}
     >
       <div class="syntax-hints">
         <code>&lt;:&gt; C4</code> {hint[0]} &nbsp;

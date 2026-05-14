@@ -1,28 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
-import Hero from '../components/Hero.astro';
-import About from '../components/About.astro';
-import Demos from '../components/Demos.astro';
-import Skills from '../components/Skills.astro';
-import Experience from '../components/Experience.astro';
-import WorkProjects from '../components/WorkProjects.astro';
-import Education from '../components/Education.astro';
-import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import { sections } from '../config/sections';
+
+// Numbered sections get their auto-incremented `num` from the order in the
+// `numbered` subset; non-numbered sections (hero) just render without it.
+let numberedIndex = 0;
+const rendered = sections.map((s) => {
+  const num = s.numbered ? String(++numberedIndex).padStart(2, '0') : undefined;
+  return { ...s, num };
+});
 ---
 
 <Layout>
   <Navbar />
   <main id="main-content">
-    <Hero />
-    <About />
-    <Experience />
-    <WorkProjects />
-    <Demos />
-    <Skills />
-    <Education />
-    <Contact />
+    {rendered.map(({ component: Section, num }) => <Section num={num} />)}
   </main>
   <Footer />
 </Layout>

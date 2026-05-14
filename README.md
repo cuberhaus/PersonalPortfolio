@@ -60,10 +60,13 @@ Flags: `--skip-docker`, `--skip-planner`.
 
 > **Service registry.** The list above is generated from
 > [`src/data/demo-services.json`](src/data/demo-services.json), which is the single source of
-> truth shared by `scripts/dev-all-demos.sh`, the in-page debug overlay
-> (`src/lib/debug-docker.ts`), `LiveAppEmbed.tsx`, the log relay sidecar in
-> `scripts/log-relay/`, the registry test, and
-> [`docs/adding-a-demo.md`](docs/adding-a-demo.md). Adding or removing a demo
+> truth shared by `scripts/dev-all-demos.sh`, `LiveAppEmbed.tsx` (via
+> `getIframeUrl`), the `Makefile`'s `DEMO_PORTS`, `e2e/live-demos.spec.ts`,
+> `sentry.client.config.ts` (via `listTracedBackendPorts`), the log relay
+> sidecar in `scripts/log-relay/`, the registry test, and
+> [`docs/adding-a-demo.md`](docs/adding-a-demo.md). The in-page debug overlay
+> (`src/lib/debug-docker.ts`) reads slug + log-relay paths only and does not
+> consume the registry. Adding or removing a demo
 > means editing this JSON file plus following the onboarding checklist.
 
 **Windows:** use **WSL** or **Git Bash**, or start each stack manually.

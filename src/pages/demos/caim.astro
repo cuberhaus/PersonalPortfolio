@@ -17,17 +17,14 @@ const demo = getDemo('caim', lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/CAIM"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#06b6d4"
-      accentTo="#6366f1"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="caim"
       title="CAIM IR Explorer"
-      dockerCmd="cd CAIM && docker compose up -d"
-      devCmd="cd CAIM && make dev"
       lang={lang}
       fallbackSelector=".caim-mock"
       client:load

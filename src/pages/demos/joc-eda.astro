@@ -19,17 +19,14 @@ const t = useTranslations(lang);
       badge={demo.badge}
       title={demo.title}
       lead={demo.lead}
-      githubUrl="https://github.com/cuberhaus/joc_eda"
+      githubUrl={demo.github}
       githubLabel={t('demo.viewSource')}
-      accentFrom="#6366f1"
-      accentTo="#f59e0b"
+      accent={demo.accent}
     />
 
     <LiveAppEmbed
       slug="joc-eda"
       title="ThePurge Viewer"
-      dockerCmd="cd joc_eda && docker compose up -d"
-      devCmd="cd joc_eda && make web-dev"
       lang={lang}
       client:load
     />

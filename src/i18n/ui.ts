@@ -1,10 +1,15 @@
-export const languages = {
+import { DEFAULT_LOCALE, type Locale } from '../config/locales';
+
+// `Record<Locale, string>` enforces a label for every locale at compile time,
+// so adding a 4th locale in `src/config/locales.ts` makes this dictionary fail
+// to type-check until the new label is added.
+export const languages: Record<Locale, string> = {
   en: 'English',
   es: 'Español',
   ca: 'Català',
 };
 
-export const defaultLang = 'en';
+export const defaultLang: Locale = DEFAULT_LOCALE;
 
 export const ui = {
   en: {
@@ -14,6 +19,8 @@ export const ui = {
     'nav.skills': 'Skills',
     'nav.experience': 'Experience',
     'nav.education': 'Education',
+    'nav.certifications': 'Certifications',
+    'nav.work': 'Professional Work',
     'nav.contact': 'Contact',
 
     // Hero
@@ -58,6 +65,14 @@ export const ui = {
     'education.label': 'Education',
     'education.title': 'Where I studied',
 
+    // Certifications
+    'certifications.label': 'Credentials',
+    'certifications.title': 'Licenses & certifications',
+    'certifications.subtitle': 'Professional certifications I have earned along the way.',
+    'certifications.viewCredential': 'View credential',
+    'certifications.showMore': 'Show more',
+    'certifications.showLess': 'Show less',
+
     // Contact
     'contact.label': 'Contact',
     'contact.title': 'Get in touch',
@@ -74,6 +89,7 @@ export const ui = {
     'contact.invalidEmail': 'Please enter a valid email address (e.g., name@gmail.com).',
     'contact.sending': 'Sending...',
     'contact.didYouMean': 'Did you mean',
+    'contact.useSuggestion': 'Use this',
 
     // Demos Layout
     'demo.portfolio': 'Portfolio',
@@ -87,6 +103,9 @@ export const ui = {
     'demo.allDemos': 'All Demos',
     'meta.title': 'Pol Casacuberta — Portfolio',
     'meta.description': 'Pol Casacuberta — AI & Data Consultant from Barcelona. I build things with AI and data.',
+    'notFound.title': 'Page Not Found',
+    'notFound.message': "The page you're looking for doesn't exist or has been moved.",
+    'notFound.back': 'Portfolio',
     'aria.toggleMenu': 'Toggle menu',
     'aria.toggleTheme': 'Toggle theme (Ctrl+K for more themes)',
     'aria.scrollTop': 'Scroll to top of page',
@@ -101,40 +120,9 @@ export const ui = {
     'theme.light': 'Light',
     'theme.recommended': 'recommended for this design',
     'theme.closeHint': 'Press <kbd>Esc</kbd> to close',
-    'design.minimal.name':    'Minimal',
-    'design.minimal.blurb':   'Clean modern portfolio with gradient accents',
-    'design.editorial.name':  'Editorial',
-    'design.editorial.blurb': 'Serif headlines, drop caps, magazine columns',
-    'design.swiss.name':      'Swiss',
-    'design.swiss.blurb':     'Strict grid, giant numerals, hairline rules',
-    'design.pixel.name':      'Pixel',
-    'design.pixel.blurb':     '8-bit pixel font, chunky buttons, hard shadows',
-    'design.terminal.name':   'Terminal',
-    'design.terminal.blurb':  'CRT vibes, monospace everywhere, blinking cursor',
-    'design.cyber.name':      'Cyberpunk',
-    'design.cyber.blurb':     'Neon glow, chromatic aberration, synthwave grid',
-    'design.notebook.name':   'Notebook',
-    'design.notebook.blurb':  'Graph paper, handwritten ink, highlighter marks',
-    'design.brutalist.name':  'Brutalist',
-    'design.brutalist.blurb': 'Raw HTML energy: Times, yellow tape, thick borders',
-    'design.blueprint.name':  'Blueprint',
-    'design.blueprint.blurb': 'Cyan grid, hairlines, dimension marks, tech labels',
-    'design.academic.name':   'Academic',
-    'design.academic.blurb':  'LaTeX paper: Garamond, numbered sections, abstracts',
-    'design.ide.name':        'IDE',
-    'design.ide.blurb':       'VSCode vibes: tab cards, gutter, syntax-coloured hero',
-    'design.risograph.name':  'Risograph',
-    'design.risograph.blurb': 'Duotone print, halftone dots, grain and misregister',
-    'design.deco.name':       'Art Deco',
-    'design.deco.blurb':      'Sunbursts, gold gradients, stepped pyramid borders',
-    'design.wabisabi.name':   'Wabi-sabi',
-    'design.wabisabi.blurb':  'Serene Japanese minimalism, vast negative space',
-    'design.zine.name':       'Zine',
-    'design.zine.blurb':      'Photocopied ransom-note collage, staples and tape',
-    'design.comic.name':      'Comic',
-    'design.comic.blurb':     'Bangers titles, Ben-Day dots, speech bubbles',
-    'design.newspaper.name':  'Newspaper',
-    'design.newspaper.blurb': 'Blackletter masthead, columns, classified ads',
+    // Design names + blurbs are owned by src/lib/designs.ts (see translations
+    // field on each DesignMeta entry); look them up via getDesignName /
+    // getDesignBlurb so adding a new design only touches one file.
   },
   es: {
     // Nav
@@ -143,6 +131,8 @@ export const ui = {
     'nav.skills': 'Habilidades',
     'nav.experience': 'Experiencia',
     'nav.education': 'Educación',
+    'nav.certifications': 'Certificaciones',
+    'nav.work': 'Trabajo Profesional',
     'nav.contact': 'Contacto',
 
     // Hero
@@ -187,6 +177,14 @@ export const ui = {
     'education.label': 'Educación',
     'education.title': 'Dónde estudié',
 
+    // Certifications
+    'certifications.label': 'Credenciales',
+    'certifications.title': 'Licencias y certificaciones',
+    'certifications.subtitle': 'Certificaciones profesionales que he obtenido por el camino.',
+    'certifications.viewCredential': 'Ver credencial',
+    'certifications.showMore': 'Ver más',
+    'certifications.showLess': 'Ver menos',
+
     // Contact
     'contact.label': 'Contacto',
     'contact.title': 'Ponte en contacto',
@@ -203,6 +201,7 @@ export const ui = {
     'contact.invalidEmail': 'Por favor, introduce un correo válido (ej. nombre@gmail.com).',
     'contact.sending': 'Enviando...',
     'contact.didYouMean': 'Quisiste decir',
+    'contact.useSuggestion': 'Usar esta',
 
     // Demos Layout
     'demo.portfolio': 'Portafolio',
@@ -216,6 +215,9 @@ export const ui = {
     'demo.allDemos': 'Todos los Demos',
     'meta.title': 'Pol Casacuberta — Portafolio',
     'meta.description': 'Pol Casacuberta — Consultor de IA y Datos de Barcelona. Construyo cosas con IA y datos.',
+    'notFound.title': 'Página no encontrada',
+    'notFound.message': 'La página que buscas no existe o ha sido movida.',
+    'notFound.back': 'Portafolio',
     'aria.toggleMenu': 'Abrir menú',
     'aria.toggleTheme': 'Cambiar tema (Ctrl+K para más temas)',
     'aria.scrollTop': 'Ir arriba',
@@ -230,40 +232,7 @@ export const ui = {
     'theme.light': 'Claro',
     'theme.recommended': 'recomendada para este diseño',
     'theme.closeHint': 'Pulsa <kbd>Esc</kbd> para cerrar',
-    'design.minimal.name':    'Minimalista',
-    'design.minimal.blurb':   'Portfolio moderno y limpio con acentos degradados',
-    'design.editorial.name':  'Editorial',
-    'design.editorial.blurb': 'Titulares serif, capitulares y columnas de revista',
-    'design.swiss.name':      'Suizo',
-    'design.swiss.blurb':     'Retícula estricta, números enormes, filetes finos',
-    'design.pixel.name':      'Píxel',
-    'design.pixel.blurb':     'Tipografía 8-bit, botones robustos, sombras duras',
-    'design.terminal.name':   'Terminal',
-    'design.terminal.blurb':  'Aire CRT, monoespaciado, cursor parpadeante',
-    'design.cyber.name':      'Cyberpunk',
-    'design.cyber.blurb':     'Brillo neón, aberración cromática, rejilla synthwave',
-    'design.notebook.name':   'Libreta',
-    'design.notebook.blurb':  'Papel cuadriculado, tinta manuscrita, marcas de fluorescente',
-    'design.brutalist.name':  'Brutalista',
-    'design.brutalist.blurb': 'Energía HTML cruda: Times, cinta amarilla, bordes gruesos',
-    'design.blueprint.name':  'Plano técnico',
-    'design.blueprint.blurb': 'Cuadrícula cian, líneas finas, marcas de cota y etiquetas',
-    'design.academic.name':   'Académico',
-    'design.academic.blurb':  'Paper LaTeX: Garamond, secciones numeradas, resumen',
-    'design.ide.name':        'IDE',
-    'design.ide.blurb':       'Vibes VSCode: pestañas, gutter, héroe con sintaxis',
-    'design.risograph.name':  'Risograph',
-    'design.risograph.blurb': 'Impresión dúo-tono, trama de puntos, grano y desregistro',
-    'design.deco.name':       'Art Déco',
-    'design.deco.blurb':      'Soles radiantes, degradados dorados, bordes escalonados',
-    'design.wabisabi.name':   'Wabi-sabi',
-    'design.wabisabi.blurb':  'Minimalismo japonés sereno, gran espacio en blanco',
-    'design.zine.name':       'Fanzine',
-    'design.zine.blurb':      'Collage fotocopiado estilo recorte, grapas y cinta',
-    'design.comic.name':      'Cómic',
-    'design.comic.blurb':     'Títulos Bangers, puntos Ben-Day, bocadillos',
-    'design.newspaper.name':  'Periódico',
-    'design.newspaper.blurb': 'Cabecera gótica, columnas, anuncios clasificados',
+    // Design name/blurb translations live in src/lib/designs.ts (see ES entries on each DesignMeta).
   },
   ca: {
     // Nav
@@ -272,6 +241,8 @@ export const ui = {
     'nav.skills': 'Habilitats',
     'nav.experience': 'Experiència',
     'nav.education': 'Educació',
+    'nav.certifications': 'Certificacions',
+    'nav.work': 'Treball Professional',
     'nav.contact': 'Contacte',
 
     // Hero
@@ -316,6 +287,14 @@ export const ui = {
     'education.label': 'Educació',
     'education.title': 'On he estudiat',
 
+    // Certifications
+    'certifications.label': 'Credencials',
+    'certifications.title': 'Llicències i certificacions',
+    'certifications.subtitle': 'Certificacions professionals que he obtingut pel camí.',
+    'certifications.viewCredential': 'Veure credencial',
+    'certifications.showMore': 'Veure més',
+    'certifications.showLess': 'Veure menys',
+
     // Contact
     'contact.label': 'Contacte',
     'contact.title': "Posa't en contacte",
@@ -332,6 +311,7 @@ export const ui = {
     'contact.invalidEmail': 'Si us plau, introdueix un correu vàlid (ex. nom@gmail.com).',
     'contact.sending': 'Enviant...',
     'contact.didYouMean': 'Volies dir',
+    'contact.useSuggestion': 'Fer servir aquesta',
 
     // Demos Layout
     'demo.portfolio': 'Portafolis',
@@ -345,6 +325,9 @@ export const ui = {
     'demo.allDemos': 'Totes les Demos',
     'meta.title': 'Pol Casacuberta — Portafolis',
     'meta.description': "Pol Casacuberta — Consultor d'IA i Dades de Barcelona. Construeixo coses amb IA i dades.",
+    'notFound.title': 'Pàgina no trobada',
+    'notFound.message': 'La pàgina que busques no existeix o ha estat moguda.',
+    'notFound.back': 'Portafolis',
     'aria.toggleMenu': 'Obrir menú',
     'aria.toggleTheme': 'Canviar tema (Ctrl+K per a més temes)',
     'aria.scrollTop': 'Anar a dalt',
@@ -359,39 +342,6 @@ export const ui = {
     'theme.light': 'Clar',
     'theme.recommended': 'recomanada per a aquest disseny',
     'theme.closeHint': 'Prem <kbd>Esc</kbd> per tancar',
-    'design.minimal.name':    'Minimalista',
-    'design.minimal.blurb':   'Portfoli modern i net amb accents degradats',
-    'design.editorial.name':  'Editorial',
-    'design.editorial.blurb': 'Titulars serif, caplletres i columnes de revista',
-    'design.swiss.name':      'Suís',
-    'design.swiss.blurb':     'Retícula estricta, números enormes, filets fins',
-    'design.pixel.name':      'Píxel',
-    'design.pixel.blurb':     'Tipografia 8-bit, botons robustos, ombres dures',
-    'design.terminal.name':   'Terminal',
-    'design.terminal.blurb':  'Aire CRT, monoespaiat arreu, cursor parpellejant',
-    'design.cyber.name':      'Cyberpunk',
-    'design.cyber.blurb':     'Brillantor neó, aberració cromàtica, graella synthwave',
-    'design.notebook.name':   'Llibreta',
-    'design.notebook.blurb':  'Paper quadriculat, tinta manuscrita, marques de fluorescent',
-    'design.brutalist.name':  'Brutalista',
-    'design.brutalist.blurb': 'Energia HTML crua: Times, cinta groga, vores gruixudes',
-    'design.blueprint.name':  'Plànol tècnic',
-    'design.blueprint.blurb': 'Quadrícula cian, línies fines, marques de cota i etiquetes',
-    'design.academic.name':   'Acadèmic',
-    'design.academic.blurb':  'Paper LaTeX: Garamond, seccions numerades, resum',
-    'design.ide.name':        'IDE',
-    'design.ide.blurb':       'Vibes VSCode: pestanyes, gutter, heroi amb sintaxi',
-    'design.risograph.name':  'Risograph',
-    'design.risograph.blurb': 'Impressió duotò, trama de punts, gra i desregistre',
-    'design.deco.name':       'Art Déco',
-    'design.deco.blurb':      'Sols radiants, degradats daurats, vores esglaonades',
-    'design.wabisabi.name':   'Wabi-sabi',
-    'design.wabisabi.blurb':  'Minimalisme japonès serè, gran espai en blanc',
-    'design.zine.name':       'Fanzine',
-    'design.zine.blurb':      'Collage fotocopiat estil retall, grapes i cinta',
-    'design.comic.name':      'Còmic',
-    'design.comic.blurb':     'Títols Bangers, punts Ben-Day, bafarades',
-    'design.newspaper.name':  'Diari',
-    'design.newspaper.blurb': 'Capçalera gòtica, columnes, anuncis classificats',
+    // Les traduccions del nom/descripció dels dissenys viuen a src/lib/designs.ts.
   },
 } as const;

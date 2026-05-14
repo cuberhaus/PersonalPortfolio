@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { TRANSLATIONS } from "../../i18n/demos/live-app-embed";
-import { getIframeUrl } from "../../data/demo-services";
+import { getIframeUrl, getRunHints } from "../../data/demo-services";
 import { debug } from "../../lib/debug";
 import { installIframeForwarder } from "../../lib/debug-iframe";
 
@@ -21,13 +21,23 @@ interface LiveAppEmbedProps {
    */
   url?: string;
   title: string;
-  dockerCmd: string;
+  /** Override the dockerCmd hint from the registry. Optional — defaults to demo-services.json. */
+  dockerCmd?: string;
+  /** Override the devCmd hint from the registry. Optional — defaults to demo-services.json. */
   devCmd?: string;
   lang?: Lang;
   fallbackSelector?: string;
 }
 
-export default function LiveAppEmbed({ slug, url: explicitUrl, title, dockerCmd, devCmd, lang = "en", fallbackSelector }: LiveAppEmbedProps) {
+export default function LiveAppEmbed({
+  slug,
+  url: explicitUrl,
+  title,
+  dockerCmd: dockerCmdProp,
+  devCmd: devCmdProp,
+  lang = "en",
+  fallbackSelector,
+}: LiveAppEmbedProps) {
   const url = useMemo(() => {
     if (explicitUrl) return explicitUrl;
     if (slug) {
@@ -37,6 +47,14 @@ export default function LiveAppEmbed({ slug, url: explicitUrl, title, dockerCmd,
     }
     return "";
   }, [slug, explicitUrl]);
+
+  const { dockerCmd, devCmd } = useMemo(() => {
+    const registry = slug ? getRunHints(slug) : {};
+    return {
+      dockerCmd: dockerCmdProp ?? registry.dockerCmd ?? "",
+      devCmd: devCmdProp ?? registry.devCmd,
+    };
+  }, [slug, dockerCmdProp, devCmdProp]);
   const [status, setStatus] = useState<"checking" | "online" | "offline">("checking");
   const [expanded, setExpanded] = useState(true);
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;

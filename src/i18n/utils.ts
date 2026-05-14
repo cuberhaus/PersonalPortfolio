@@ -1,6 +1,19 @@
 import { ui, defaultLang } from './ui';
 
-export function getLangFromUrl(url: URL) {
+export type Lang = keyof typeof ui;
+
+/**
+ * Validate an arbitrary string (e.g. `document.documentElement.lang`) and
+ * return a `Lang` known to the `ui` dictionary, falling back to `defaultLang`
+ * for unknown / missing input. Shared by Astro components and any browser
+ * scripts that need to relabel UI from the current page locale.
+ */
+export function pickLang(raw: string | null | undefined): Lang {
+  if (raw && raw in ui) return raw as Lang;
+  return defaultLang;
+}
+
+export function getLangFromUrl(url: URL): Lang {
   const basePath = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
   let path = url.pathname;
   if (basePath && path.startsWith(basePath)) {
@@ -9,10 +22,7 @@ export function getLangFromUrl(url: URL) {
   if (!path.startsWith('/')) path = '/' + path;
   // Only check the first path segment (e.g. "/es/..." → "es")
   const firstSegment = path.split('/')[1];
-  if (firstSegment && firstSegment in ui) {
-    return firstSegment as keyof typeof ui;
-  }
-  return defaultLang;
+  return pickLang(firstSegment);
 }
 
 export function useTranslations(lang: keyof typeof ui) {

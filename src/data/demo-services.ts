@@ -16,12 +16,26 @@ export type BackendStack =
 export interface DemoBackend {
   container: string | null;
   port: number;
+  /**
+   * Additional host ports that the backend binds to but doesn't surface as
+   * the iframe URL — e.g. Draculin's Django API on :8889 alongside the
+   * Flutter UI nginx on :8890. Included by `listAllBackendPorts()` so the
+   * Makefile's `free-ports` target sees every port the backend can occupy.
+   */
+  extraPorts?: number[];
   iframeUrl: string | null;
   composeFile: string | null;
   makefile: string | null;
   stack: BackendStack;
   needsSentry: boolean;
   notes?: string;
+  /**
+   * Hint strings rendered by `<LiveAppEmbed>` when the backend isn't
+   * reachable. The component falls back to these defaults when the page
+   * doesn't pass `dockerCmd` / `devCmd` props explicitly.
+   */
+  dockerCmd?: string;
+  devCmd?: string;
 }
 
 export interface DemoService {
@@ -50,6 +64,20 @@ export function getDemoService(slug: string): DemoService | undefined {
 export function getIframeUrl(slug: string): string | null {
   const svc = getDemoService(slug);
   return svc?.backend?.iframeUrl ?? null;
+}
+
+/**
+ * Run-hint strings shown by `<LiveAppEmbed>` when the backend is offline.
+ * Pulled from the registry so the docker/dev incantations live in one place.
+ */
+export function getRunHints(slug: string): { dockerCmd?: string; devCmd?: string } {
+  const svc = getDemoService(slug);
+  const backend = svc?.backend;
+  if (!backend) return {};
+  return {
+    dockerCmd: backend.dockerCmd,
+    devCmd: backend.devCmd,
+  };
 }
 
 export function listBackedSlugs(): readonly string[] {
@@ -90,4 +118,42 @@ export function listTracedBackendPorts(): readonly number[] {
     if (typeof port === "number" && traced) ports.add(port);
   }
   return Array.from(ports).sort((a, b) => a - b);
+}
+
+/**
+ * All host ports any backend may bind to (primary `port` + `extraPorts`).
+ * Used by the `Makefile`'s `free-ports` target and any port-conflict tooling
+ * so the registry stays the single source of truth for the port universe.
+ */
+export function listAllBackendPorts(): readonly number[] {
+  const ports = new Set<number>();
+  for (const svc of REGISTRY.services) {
+    if (typeof svc.backend?.port === "number") ports.add(svc.backend.port);
+    for (const extra of svc.backend?.extraPorts ?? []) ports.add(extra);
+  }
+  return Array.from(ports).sort((a, b) => a - b);
+}
+
+/**
+ * Slug + port pairs for every service that has both a backend and a portfolio
+ * page (i.e. excludes `planner-api`). Used by `e2e/live-demos.spec.ts` to
+ * decide which iframes to probe.
+ */
+export function listLivePortfolioBackends(): readonly {
+  slug: string;
+  port: number;
+  iframeUrl: string;
+  displayName: string;
+}[] {
+  const out: { slug: string; port: number; iframeUrl: string; displayName: string }[] = [];
+  for (const svc of REGISTRY.services) {
+    if (!svc.hasBackend || !svc.page) continue;
+    const port = svc.backend?.port;
+    const iframeUrl = svc.backend?.iframeUrl;
+    const displayName = (svc.backend as { orchestrator?: { displayName?: string } } | undefined)
+      ?.orchestrator?.displayName ?? svc.slug;
+    if (typeof port !== "number" || !iframeUrl) continue;
+    out.push({ slug: svc.slug, port, iframeUrl, displayName });
+  }
+  return out;
 }
