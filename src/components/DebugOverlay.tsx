@@ -38,9 +38,9 @@ interface PerfState {
 
 const LEVEL_COLORS: Record<DebugLevel, string> = {
   trace: 'var(--text-muted)',
-  info: 'var(--accent-start)',
-  warn: '#f59e0b',
-  error: '#ef4444',
+  info: 'var(--accent-text)',
+  warn: 'var(--status-warning)',
+  error: 'var(--status-error)',
 };
 
 const SOURCE_BADGE: Record<DebugSource, { label: string; bg: string; fg: string }> = {
@@ -429,13 +429,13 @@ function NetworkTab({ requests }: { requests: DebugNetworkEntry[] }) {
             </span>
             <span
               className="debug-overlay-level"
-              style={{ color: r.ok ? 'var(--accent-start)' : '#ef4444' }}
+              style={{ color: r.ok ? 'var(--accent-text)' : 'var(--status-error)' }}
             >
               {r.method}
             </span>
             <span
               className="debug-overlay-level"
-              style={{ color: r.ok ? 'var(--text-secondary)' : '#ef4444' }}
+              style={{ color: r.ok ? 'var(--text-secondary)' : 'var(--status-error)' }}
             >
               {r.status || 'ERR'}
             </span>
