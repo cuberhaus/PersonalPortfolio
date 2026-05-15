@@ -129,12 +129,12 @@ make test   # runs everything: Vitest + Playwright + backend pytests + Go + Rust
 
 A `visual` Playwright project diffs each route against a committed PNG baseline so theme/layout drift surfaces in CI with a side-by-side diff in the artifact.
 
-Baselines live at `e2e/visual.spec.ts-snapshots/` and **must be generated on Linux** (font hinting is OS-specific). Two ways:
+Baselines live at `e2e/visual.spec.ts-snapshots/` and **must be generated on Linux** (font hinting is OS-specific). To refresh after an intentional design change:
 
-- **Recommended** — trigger the `Visual baselines (manual)` GitHub Action (`Actions → Run workflow`), download the `visual-baselines` artifact, unzip it into `e2e/visual.spec.ts-snapshots/`, and commit on a feature branch.
-- **Locally on Linux/WSL** — `make test-visual-update` regenerates them in place.
+- **Recommended** — trigger the `Refresh visual baselines` GitHub Action (`Actions → Run workflow`). It regenerates the PNGs on a Linux runner and opens a PR with the diff so you can eyeball each route's change inline. Merge if the changes match an intended design shift.
+- **Locally on Linux/WSL** — `make test-visual-update` regenerates them in place; commit and push manually.
 
-Once baselines are committed, the `playwright-visual` CI job auto-enables. Use `make test-visual` for a local diff run against existing baselines.
+Use `make test-visual` for a local diff run against existing baselines.
 
 ## Project layout
 
