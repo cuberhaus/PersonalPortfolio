@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import modelData from '../../data/tfg-model-results.json' with { type: 'json' };
 import LiveAppEmbed from './LiveAppEmbed';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 /* ── constants ── */
 const accent1 = 'var(--accent-start)';
@@ -735,7 +736,7 @@ function DetectorTable({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  MAIN EXPORT                                                           */
 /* ════════════════════════════════════════════════════════════════════════ */
-export default function TfgPolypDemo({ lang = 'en' }: { lang?: Lang }) {
+function TfgPolypDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:tfg-polyps', { lang });
 
@@ -908,3 +909,5 @@ export default function TfgPolypDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(TfgPolypDemo, 'tfg-polyps');

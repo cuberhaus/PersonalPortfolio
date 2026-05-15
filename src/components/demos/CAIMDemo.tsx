@@ -2,6 +2,7 @@ import { useState, lazy, Suspense } from 'react';
 
 import { T, type DemoTranslations } from '../../i18n/demos/caim-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -14,7 +15,7 @@ interface Props {
   lang?: Lang;
 }
 
-export default function CAIMDemo({ lang = 'en' }: Props) {
+function CAIMDemo({ lang = 'en' }: Props) {
   const t = T[lang] || T.en;
   const log = useDemoLifecycle('demo:caim', { lang });
   const [activeTab, setActiveTab] = useState<Tab>('pagerank');
@@ -93,3 +94,5 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '0.85rem',
   },
 };
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(CAIMDemo, 'caim');

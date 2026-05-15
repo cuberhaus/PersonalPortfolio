@@ -13,6 +13,7 @@ import { AssignmentMapFigure, PerHeliBreakdown, QueueStrips } from './DesastresV
 
 import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/desastres-ia-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -176,7 +177,7 @@ function SchematicSvg({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  MAIN EXPORT                                                           */
 /* ════════════════════════════════════════════════════════════════════════ */
-export default function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
+function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:desastres-ia', { lang });
   const log = useDebug('demo:desastres-ia');
@@ -775,3 +776,5 @@ export default function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(DesastresIADemo, 'desastres-ia');

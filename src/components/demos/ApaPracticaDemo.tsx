@@ -3,6 +3,7 @@ import pcaPointsData from '../../data/pca_points.json' with { type: 'json' };
 import { clamp, dist2, knnVote, predict, absCoefs, maxCoef } from '../../lib/apa-predictor';
 import type { Pt } from '../../lib/apa-predictor';
 import { getThemeColors, lighten, withAlpha } from '../../lib/demo-theme';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 /* ── constants ── */
 const CW = 520;
@@ -492,7 +493,7 @@ function FeatureImportance({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  MAIN EXPORT                                                           */
 /* ════════════════════════════════════════════════════════════════════════ */
-export default function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
+function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:apa', { lang });
   const log = useDebug('demo:apa');
@@ -869,3 +870,5 @@ jupyter lab ${MAIN_NB}`}</pre>
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(ApaPracticaDemo, 'apa-practica');

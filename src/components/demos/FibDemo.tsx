@@ -3,8 +3,9 @@ import { dijkstraDemo, mergeSortDemo, bfsGridDemo } from '../../lib/fib-kernels'
 import { T } from '../../i18n/demos/fib-demo';
 import { getThemeColors, lighten } from '../../lib/demo-theme';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
-export default function FibDemo({ lang = 'en' }: { lang?: string }) {
+function FibDemo({ lang = 'en' }: { lang?: string }) {
   const t = T[lang] || T.en;
   useDemoLifecycle('demo:algorithms', { lang });
   return (
@@ -211,3 +212,5 @@ function MazePanel({ label }: { label: string }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(FibDemo, 'algorithms');

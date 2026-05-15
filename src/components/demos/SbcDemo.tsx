@@ -15,6 +15,7 @@ import {
 import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/sbc-demo';
 import MockBanner from './MockBanner';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -264,7 +265,7 @@ function planTrip(prefs: Prefs): TripResult {
 }
 
 /* ── Component ── */
-export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
+function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:sbc', { lang });
   const log = useDebug('demo:sbc');
@@ -799,3 +800,5 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(SbcDemo, 'sbc-ia');

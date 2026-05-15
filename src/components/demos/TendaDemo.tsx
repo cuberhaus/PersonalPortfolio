@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { MOCK_CATEGORIES, MOCK_PRODUCTS, type Category, type Product } from '../../data/tenda-mock';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type View = 'home' | 'category' | 'product' | 'cart' | 'checkout';
 import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/tenda-demo';
@@ -144,7 +145,7 @@ const ProductIcon = () => (
   </svg>
 );
 
-export default function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
+function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:tenda', { lang });
   const log = useDebug('demo:tenda');
@@ -715,3 +716,5 @@ export default function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(TendaDemo, 'tenda');

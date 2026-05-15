@@ -15,6 +15,7 @@ import {
 import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/mpids-demo';
 import { debug } from '../../lib/debug';
 import { useDemoLifecycle } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 const log = debug('net:mpids');
 const demoLog = debug('demo:mpids');
@@ -172,7 +173,7 @@ interface Tooltip {
 
 // ─── Component ───
 
-export default function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
+function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:mpids', { lang });
   const [graphText, setGraphText] = useState<string | null>(null);
@@ -613,3 +614,5 @@ export default function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(MPIDSDemo, 'mpids');

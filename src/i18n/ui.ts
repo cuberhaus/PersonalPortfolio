@@ -112,6 +112,14 @@ export const ui = {
     'notFound.title': 'Page Not Found',
     'notFound.message': "The page you're looking for doesn't exist or has been moved.",
     'notFound.back': 'Portfolio',
+    'serverError.title': 'Something went wrong',
+    'serverError.message':
+      'Something broke on our end. Try reloading, or head back to the portfolio.',
+    'serverError.back': 'Portfolio',
+    'serverError.demoTitle': "This demo couldn't load",
+    'serverError.demoMessage':
+      'An error happened while running this demo. The rest of the site is unaffected — you can reload to try again.',
+    'serverError.reload': 'Reload',
     'aria.toggleMenu': 'Toggle menu',
     'aria.toggleTheme': 'Toggle theme (Ctrl+K for more themes)',
     'aria.scrollTop': 'Scroll to top of page',
@@ -231,6 +239,14 @@ export const ui = {
     'notFound.title': 'Página no encontrada',
     'notFound.message': 'La página que buscas no existe o ha sido movida.',
     'notFound.back': 'Portafolio',
+    'serverError.title': 'Algo ha salido mal',
+    'serverError.message':
+      'Algo se ha roto por nuestra parte. Prueba a recargar o vuelve al portafolio.',
+    'serverError.back': 'Portafolio',
+    'serverError.demoTitle': 'Esta demo no se ha podido cargar',
+    'serverError.demoMessage':
+      'Ha ocurrido un error al ejecutar esta demo. El resto del sitio no está afectado — puedes recargar para volver a intentarlo.',
+    'serverError.reload': 'Recargar',
     'aria.toggleMenu': 'Abrir menú',
     'aria.toggleTheme': 'Cambiar tema (Ctrl+K para más temas)',
     'aria.scrollTop': 'Ir arriba',
@@ -348,6 +364,14 @@ export const ui = {
     'notFound.title': 'Pàgina no trobada',
     'notFound.message': 'La pàgina que busques no existeix o ha estat moguda.',
     'notFound.back': 'Portafolis',
+    'serverError.title': 'Alguna cosa ha anat malament',
+    'serverError.message':
+      "Alguna cosa s'ha trencat per la nostra banda. Prova de tornar a carregar o torna al portafolis.",
+    'serverError.back': 'Portafolis',
+    'serverError.demoTitle': "Aquesta demo no s'ha pogut carregar",
+    'serverError.demoMessage':
+      'Hi ha hagut un error en executar aquesta demo. La resta del lloc no està afectada — pots tornar a carregar per intentar-ho de nou.',
+    'serverError.reload': 'Tornar a carregar',
     'aria.toggleMenu': 'Obrir menú',
     'aria.toggleTheme': 'Canviar tema (Ctrl+K per a més temes)',
     'aria.scrollTop': 'Anar a dalt',
