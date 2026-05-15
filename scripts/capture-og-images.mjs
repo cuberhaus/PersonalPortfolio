@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 /**
- * Capture per-demo OpenGraph screenshots.
+ * Capture OpenGraph screenshots — one global card from the homepage,
+ * plus one per demo from src/data/demos.json.
  *
- * - Reads slugs from src/data/demos.json
- * - Hits the running dev server (defaults to http://localhost:4321)
- * - Saves 1200x630 PNGs to public/og/<slug>-og.png
+ * - Hits a running server (defaults to http://localhost:4321)
+ * - Writes 1200x630 PNGs:
+ *     <out>/og-image.png       ← global, referenced by Layout/DemoLayout
+ *     <out>/og/<slug>-og.png   ← per-demo, referenced by each demo page
  *
- * Usage:
- *   npm run dev          # in another terminal
- *   npm run og:capture   # writes public/og/*-og.png
+ * Output dir is `public/` by default; CI overrides it to `dist/` so the
+ * images land directly in the build artifact and never get committed.
  *
- * Wire each captured image into the demo page by passing
- * `ogImage="/og/<slug>-og.png"` to <DemoLayout>.
+ * Env:
+ *   OG_BASE_URL   server URL to screenshot (default http://localhost:4321)
+ *   OG_OUT_DIR    output dir relative to repo root (default "public")
  */
 
 import { chromium } from 'playwright';
@@ -23,7 +25,8 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const BASE = process.env.OG_BASE_URL ?? 'http://localhost:4321';
-const OUT_DIR = resolve(ROOT, 'public/og');
+const OUT_ROOT = resolve(ROOT, process.env.OG_OUT_DIR ?? 'public');
+const DEMO_OUT_DIR = resolve(OUT_ROOT, 'og');
 
 async function loadSlugs() {
   const raw = await readFile(resolve(ROOT, 'src/data/demos.json'), 'utf8');
@@ -31,38 +34,48 @@ async function loadSlugs() {
   return demos.map((d) => d.identity.slug).filter(Boolean);
 }
 
+async function capture(context, url, outPath) {
+  const page = await context.newPage();
+  try {
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 30_000 });
+    await page.waitForTimeout(500);
+    const buffer = await page.screenshot({ type: 'png', fullPage: false });
+    await writeFile(outPath, buffer);
+    console.info(`[og] captured ${url} → ${outPath}`);
+    return true;
+  } catch (err) {
+    console.error(`[og] failed ${url}: ${err.message}`);
+    return false;
+  } finally {
+    await page.close();
+  }
+}
+
 async function main() {
-  if (!existsSync(OUT_DIR)) {
-    await mkdir(OUT_DIR, { recursive: true });
+  if (!existsSync(DEMO_OUT_DIR)) {
+    await mkdir(DEMO_OUT_DIR, { recursive: true });
   }
 
-  const slugs = await loadSlugs();
   const browser = await chromium.launch();
   const context = await browser.newContext({
     viewport: { width: 1200, height: 630 },
     deviceScaleFactor: 1,
   });
 
+  const targets = [
+    { url: `${BASE}/`, out: resolve(OUT_ROOT, 'og-image.png') },
+    ...(await loadSlugs()).map((slug) => ({
+      url: `${BASE}/demos/${slug}`,
+      out: resolve(DEMO_OUT_DIR, `${slug}-og.png`),
+    })),
+  ];
+
   let captured = 0;
   let failed = 0;
-
-  for (const slug of slugs) {
-    const url = `${BASE}/demos/${slug}`;
-    const out = resolve(OUT_DIR, `${slug}-og.png`);
-    const page = await context.newPage();
-    try {
-      await page.goto(url, { waitUntil: 'networkidle', timeout: 30_000 });
-      await page.waitForTimeout(500);
-      const buffer = await page.screenshot({ type: 'png', fullPage: false });
-      await writeFile(out, buffer);
-      console.info(`[og] captured ${slug} → ${out}`);
-      captured += 1;
-    } catch (err) {
-      console.error(`[og] failed ${slug}: ${err.message}`);
-      failed += 1;
-    } finally {
-      await page.close();
-    }
+  for (const t of targets) {
+    const ok = await capture(context, t.url, t.out);
+    if (ok) captured += 1;
+    else failed += 1;
   }
 
   await browser.close();
