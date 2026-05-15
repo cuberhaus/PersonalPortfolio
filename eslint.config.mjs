@@ -72,6 +72,12 @@ export default [
       'jsx-a11y/anchor-is-valid': 'warn',
       'jsx-a11y/media-has-caption': 'warn',
       'jsx-a11y/iframe-has-title': 'warn',
+      // Allow tabIndex on <pre>, <div>, <section> when used to make a
+      // scrollable region focusable (axe rule scrollable-region-focusable).
+      'jsx-a11y/no-noninteractive-tabindex': [
+        'error',
+        { tags: ['div', 'section', 'pre'], roles: ['tabpanel'] },
+      ],
       'react-hooks/rules-of-hooks': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
     },

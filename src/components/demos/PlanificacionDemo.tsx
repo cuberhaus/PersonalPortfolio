@@ -524,6 +524,8 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
             </a>
           </div>
           <pre
+            tabIndex={0}
+            aria-label="PDDL domain"
             style={{
               margin: 0,
               padding: '0.85rem',
@@ -569,6 +571,8 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
             </a>
           </div>
           <pre
+            tabIndex={0}
+            aria-label="PDDL problem"
             style={{
               margin: 0,
               padding: '0.85rem',

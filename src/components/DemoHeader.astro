@@ -113,4 +113,19 @@ const labels = Array.isArray(githubLabel) ? githubLabel : [githubLabel];
   .demo-hdr-lead :global(strong) {
     color: var(--text-primary, #e4e4e7);
   }
+
+  /* Inline links in lead copy must be visually distinguishable from
+     surrounding text to satisfy WCAG SC 1.4.1. Use --text-primary for
+     contrast with --text-secondary, plus an underline. */
+  .demo-hdr-lead :global(a) {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  .demo-hdr-lead :global(a:hover),
+  .demo-hdr-lead :global(a:focus-visible) {
+    color: var(--accent-start);
+  }
 </style>
