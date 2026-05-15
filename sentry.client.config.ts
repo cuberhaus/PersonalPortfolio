@@ -33,8 +33,7 @@ Sentry.init({
   // outside the orchestrator). Keep this value identical to the backends'
   // `SENTRY_RELEASE` so the Sentry Releases tab can correlate frontend
   // and backend events for the same deploy.
-  release:
-    import.meta.env.PUBLIC_SENTRY_RELEASE ?? 'portfolio@local-dev',
+  release: import.meta.env.PUBLIC_SENTRY_RELEASE ?? 'portfolio@local-dev',
   tracesSampleRate: import.meta.env.PROD ? 0.1 : 1.0,
   replaysSessionSampleRate: 0,
   replaysOnErrorSampleRate: 1.0,
@@ -63,8 +62,6 @@ Sentry.init({
   ],
   tracePropagationTargets: [
     'localhost',
-    new RegExp(
-      `^http:\\/\\/localhost:(${DEMO_BACKEND_PORTS.join('|')})(\\/|$)`,
-    ),
+    new RegExp(`^http:\\/\\/localhost:(${DEMO_BACKEND_PORTS.join('|')})(\\/|$)`),
   ],
 });

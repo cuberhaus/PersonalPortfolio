@@ -77,10 +77,7 @@ describe('grayToRGBA', () => {
 
 describe('otsuThreshold', () => {
   it('finds threshold between two peaks', () => {
-    const values = [
-      ...new Array(50).fill(30),
-      ...new Array(50).fill(200),
-    ];
+    const values = [...new Array(50).fill(30), ...new Array(50).fill(200)];
     const gray = makeGray(100, 1, values);
     const t = otsuThreshold(gray);
     expect(t).toBeGreaterThanOrEqual(30);
@@ -146,11 +143,7 @@ describe('bitwiseOr', () => {
 describe('floodFill', () => {
   it('fills a connected region', () => {
     // 3x3 grid with a white square in the middle
-    const g = makeGray(3, 3, [
-      0, 0, 0,
-      0, 255, 0,
-      0, 0, 0,
-    ]);
+    const g = makeGray(3, 3, [0, 0, 0, 0, 255, 0, 0, 0, 0]);
     floodFill(g, 1, 1, 128);
     expect(g.data[4]).toBe(128);
     expect(g.data[0]).toBe(0); // other pixels unchanged
@@ -208,7 +201,13 @@ describe('extractContours', () => {
 
 describe('boundingRect', () => {
   it('computes correct bounding box', () => {
-    const contour = { points: [{ x: 1, y: 2 }, { x: 4, y: 5 }, { x: 3, y: 3 }] };
+    const contour = {
+      points: [
+        { x: 1, y: 2 },
+        { x: 4, y: 5 },
+        { x: 3, y: 3 },
+      ],
+    };
     const r = boundingRect(contour);
     expect(r).toEqual({ x: 1, y: 2, w: 4, h: 4 });
   });
@@ -218,23 +217,40 @@ describe('boundingRect', () => {
 
 describe('convexHullArea', () => {
   it('computes area of a unit square', () => {
-    const pts = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 0, y: 1 }];
+    const pts = [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+      { x: 0, y: 1 },
+    ];
     expect(convexHullArea(pts)).toBeCloseTo(1, 5);
   });
 
   it('computes area of a right triangle', () => {
-    const pts = [{ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 0, y: 3 }];
+    const pts = [
+      { x: 0, y: 0 },
+      { x: 4, y: 0 },
+      { x: 0, y: 3 },
+    ];
     expect(convexHullArea(pts)).toBeCloseTo(6, 5);
   });
 
   it('returns 0 for fewer than 3 points', () => {
-    expect(convexHullArea([{ x: 0, y: 0 }, { x: 1, y: 1 }])).toBe(0);
+    expect(
+      convexHullArea([
+        { x: 0, y: 0 },
+        { x: 1, y: 1 },
+      ])
+    ).toBe(0);
     expect(convexHullArea([])).toBe(0);
   });
 
   it('ignores interior points', () => {
     const pts = [
-      { x: 0, y: 0 }, { x: 4, y: 0 }, { x: 4, y: 4 }, { x: 0, y: 4 },
+      { x: 0, y: 0 },
+      { x: 4, y: 0 },
+      { x: 4, y: 4 },
+      { x: 0, y: 4 },
       { x: 2, y: 2 }, // interior
     ];
     expect(convexHullArea(pts)).toBeCloseTo(16, 5);
@@ -264,11 +280,7 @@ describe('resizeGray', () => {
 describe('cropGray', () => {
   it('extracts subregion', () => {
     // 3x3, crop center 1x1
-    const g = makeGray(3, 3, [
-      1, 2, 3,
-      4, 5, 6,
-      7, 8, 9,
-    ]);
+    const g = makeGray(3, 3, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
     const c = cropGray(g, { x: 1, y: 1, w: 1, h: 1 });
     expect(c.width).toBe(1);
     expect(c.height).toBe(1);

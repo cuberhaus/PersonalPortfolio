@@ -63,7 +63,12 @@ describe('SPMatriculasDemo — sample data', () => {
 });
 
 describe('SPMatriculasDemo — pipeline state transitions', () => {
-  const initial: PipelineState = { status: 'idle', selectedImage: null, selectedGT: null, error: null };
+  const initial: PipelineState = {
+    status: 'idle',
+    selectedImage: null,
+    selectedGT: null,
+    error: null,
+  };
 
   it('starts in idle with no image', () => {
     expect(initial.status).toBe('idle');
@@ -140,17 +145,23 @@ describe('SPMatriculasDemo — plate matching logic', () => {
 describe('SPMatriculasDemo — pipeline stage outputs', () => {
   // The pipeline has 3 stages producing image arrays
   interface StageOutput {
-    images: string[];  // base64 or blob URLs
+    images: string[]; // base64 or blob URLs
     label: string;
   }
 
   it('stage 1 (plate detection) produces at least one image', () => {
-    const stage: StageOutput = { images: ['binarized', 'morphological', 'plate_region'], label: 'Plate Detection' };
+    const stage: StageOutput = {
+      images: ['binarized', 'morphological', 'plate_region'],
+      label: 'Plate Detection',
+    };
     expect(stage.images.length).toBeGreaterThan(0);
   });
 
   it('stage 2 (character segmentation) produces character crops', () => {
-    const stage: StageOutput = { images: ['char1', 'char2', 'char3'], label: 'Character Segmentation' };
+    const stage: StageOutput = {
+      images: ['char1', 'char2', 'char3'],
+      label: 'Character Segmentation',
+    };
     expect(stage.images.length).toBeGreaterThan(0);
   });
 

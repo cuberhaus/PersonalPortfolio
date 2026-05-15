@@ -1,4 +1,4 @@
-import modelWeights from "../data/model_weights.json";
+import modelWeights from '../data/model_weights.json';
 
 export interface Pt {
   x: number;
@@ -18,11 +18,9 @@ export function knnVote(
   px: number,
   py: number,
   points: Pt[],
-  k: number,
+  k: number
 ): { cls: 0 | 1; neighbors: Pt[] } {
-  const sorted = [...points].sort(
-    (a, b) => dist2(px, py, a.x, a.y) - dist2(px, py, b.x, b.y),
-  );
+  const sorted = [...points].sort((a, b) => dist2(px, py, a.x, a.y) - dist2(px, py, b.x, b.y));
   const neighbors = sorted.slice(0, k);
   let c0 = 0,
     c1 = 0;
@@ -35,7 +33,7 @@ export function predict(
   age: number,
   tsh: number,
   tt4: number,
-  t3: number,
+  t3: number
 ): { isHypo: boolean; probability: number; z: number } {
   const vals = [age, tsh, tt4, t3];
   let z = modelWeights.intercept;

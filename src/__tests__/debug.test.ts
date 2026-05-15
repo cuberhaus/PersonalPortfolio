@@ -248,7 +248,9 @@ describe('source / origin attribution (Phase 13)', () => {
     subscribe('log', (d) => {
       if (d.type === 'log') seen.push(d.entry);
     });
-    emitFrom('backend', 'tfg-polyps', 'warn', 'demo:tfg-polyps:backend', 'slow query', [{ ms: 4200 }]);
+    emitFrom('backend', 'tfg-polyps', 'warn', 'demo:tfg-polyps:backend', 'slow query', [
+      { ms: 4200 },
+    ]);
     expect(seen).toHaveLength(1);
     expect(seen[0].source).toBe('backend');
     expect(seen[0].origin).toBe('tfg-polyps');

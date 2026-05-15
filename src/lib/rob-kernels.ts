@@ -30,7 +30,9 @@ export function computeOdometryPath(steps: number) {
 /** Simplified wall-following simulation path. */
 export function wallFollowingStep(steps: number) {
   const trail: { x: number; y: number }[] = [];
-  let x = 40, y = 90, theta = 0;
+  let x = 40,
+    y = 90,
+    theta = 0;
 
   for (let i = 0; i < steps; i++) {
     trail.push({ x, y });
@@ -40,17 +42,31 @@ export function wallFollowingStep(steps: number) {
     x += Math.cos(theta) * 1.5;
     y += Math.sin(theta) * 1.2;
     // Bounce off walls
-    if (x < 30) { x = 30; theta = -theta; }
-    if (x > 250) { x = 250; theta = Math.PI - theta; }
-    if (y < 30) { y = 30; theta = -theta; }
-    if (y > 150) { y = 150; theta = Math.PI - theta; }
+    if (x < 30) {
+      x = 30;
+      theta = -theta;
+    }
+    if (x > 250) {
+      x = 250;
+      theta = Math.PI - theta;
+    }
+    if (y < 30) {
+      y = 30;
+      theta = -theta;
+    }
+    if (y > 150) {
+      y = 150;
+      theta = Math.PI - theta;
+    }
   }
   return trail;
 }
 
 /** 2D 3-Link forward kinematics (simplified for the mock). */
 export function forwardKinematicsPositions(q1: number, q2: number, q3: number) {
-  const L1 = 2, L2 = 1.5, L3 = 1;
+  const L1 = 2,
+    L2 = 1.5,
+    L3 = 1;
   const joints: { x: number; y: number }[] = [];
 
   // First joint

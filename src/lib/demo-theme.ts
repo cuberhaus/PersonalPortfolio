@@ -7,8 +7,8 @@
  */
 
 /* ── Read a CSS variable from the root element ── */
-function css(prop: string, fallback = ""): string {
-  if (typeof document === "undefined") return fallback;
+function css(prop: string, fallback = ''): string {
+  if (typeof document === 'undefined') return fallback;
   return getComputedStyle(document.documentElement).getPropertyValue(prop).trim() || fallback;
 }
 
@@ -31,17 +31,17 @@ export interface DemoColors {
 /** Snapshot of the current theme for canvas / imperative drawing. */
 export function getThemeColors(): DemoColors {
   return {
-    bgPrimary: css("--bg-primary", "#0a0a0f"),
-    bgSecondary: css("--bg-secondary", "#12121a"),
-    bgCard: css("--bg-card", "#16161f"),
-    textPrimary: css("--text-primary", "#e4e4e7"),
-    textSecondary: css("--text-secondary", "#a1a1aa"),
-    textMuted: css("--text-muted", "#71717a"),
-    accentStart: css("--accent-start", "#6366f1"),
-    accentEnd: css("--accent-end", "#a855f7"),
-    borderColor: css("--border-color", "#27272a"),
-    borderColorHover: css("--border-color-hover", "#3f3f46"),
-    glowColor: css("--glow-color", "rgba(99,102,241,0.15)"),
+    bgPrimary: css('--bg-primary', '#0a0a0f'),
+    bgSecondary: css('--bg-secondary', '#12121a'),
+    bgCard: css('--bg-card', '#16161f'),
+    textPrimary: css('--text-primary', '#e4e4e7'),
+    textSecondary: css('--text-secondary', '#a1a1aa'),
+    textMuted: css('--text-muted', '#71717a'),
+    accentStart: css('--accent-start', '#6366f1'),
+    accentEnd: css('--accent-end', '#a855f7'),
+    borderColor: css('--border-color', '#27272a'),
+    borderColorHover: css('--border-color-hover', '#3f3f46'),
+    glowColor: css('--glow-color', 'rgba(99,102,241,0.15)'),
   };
 }
 
@@ -53,7 +53,7 @@ export function lighten(hex: string, amount = 0.3): string {
   const lr = Math.round(r + (255 - r) * amount);
   const lg = Math.round(g + (255 - g) * amount);
   const lb = Math.round(b + (255 - b) * amount);
-  return `#${lr.toString(16).padStart(2, "0")}${lg.toString(16).padStart(2, "0")}${lb.toString(16).padStart(2, "0")}`;
+  return `#${lr.toString(16).padStart(2, '0')}${lg.toString(16).padStart(2, '0')}${lb.toString(16).padStart(2, '0')}`;
 }
 
 /** Build an alpha variant from a hex color (for canvas). */

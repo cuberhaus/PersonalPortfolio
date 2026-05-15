@@ -5,7 +5,9 @@ describe('Tenda mock data', () => {
   it('every product references a valid category', () => {
     const catIds = new Set(MOCK_CATEGORIES.map((c) => c.id));
     for (const p of MOCK_PRODUCTS) {
-      expect(catIds, `product "${p.name}" has invalid categoryId ${p.categoryId}`).toContain(p.categoryId);
+      expect(catIds, `product "${p.name}" has invalid categoryId ${p.categoryId}`).toContain(
+        p.categoryId
+      );
     }
   });
 

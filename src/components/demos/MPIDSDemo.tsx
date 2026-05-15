@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
   parseGraph,
   greedySolver,
@@ -10,90 +10,159 @@ import {
   SAMPLE_GRAPHS,
   type Graph,
   type MPIDSResult,
-} from "../../lib/mpids";
+} from '../../lib/mpids';
 
-import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/mpids-demo";
-import { debug } from "../../lib/debug";
-import { useDemoLifecycle } from "../../lib/useDebug";
+import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/mpids-demo';
+import { debug } from '../../lib/debug';
+import { useDemoLifecycle } from '../../lib/useDebug';
 
-const log = debug("net:mpids");
-const demoLog = debug("demo:mpids");
+const log = debug('net:mpids');
+const demoLog = debug('demo:mpids');
 
-type Lang = "en" | "es" | "ca";
+type Lang = 'en' | 'es' | 'ca';
 
 // ─── Styles ───
 
 const s = {
-  wrapper: { fontFamily: "'Inter', system-ui, sans-serif", maxWidth: 900, margin: "0 auto" } as const,
+  wrapper: {
+    fontFamily: "'Inter', system-ui, sans-serif",
+    maxWidth: 900,
+    margin: '0 auto',
+  } as const,
   card: {
-    background: "var(--bg-card)",
-    borderRadius: 16, border: "1px solid var(--border-color)",
-    padding: "1.5rem", marginBottom: "1.25rem",
+    background: 'var(--bg-card)',
+    borderRadius: 16,
+    border: '1px solid var(--border-color)',
+    padding: '1.5rem',
+    marginBottom: '1.25rem',
   } as const,
   infoCard: {
-    background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 8%, transparent), color-mix(in srgb, var(--accent-end) 5%, transparent))",
-    borderRadius: 16, border: "1px solid color-mix(in srgb, var(--accent-start) 15%, transparent)",
-    padding: "1.25rem 1.5rem", marginBottom: "1.25rem",
+    background:
+      'linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 8%, transparent), color-mix(in srgb, var(--accent-end) 5%, transparent))',
+    borderRadius: 16,
+    border: '1px solid color-mix(in srgb, var(--accent-start) 15%, transparent)',
+    padding: '1.25rem 1.5rem',
+    marginBottom: '1.25rem',
   } as const,
-  row: { display: "flex", gap: "0.75rem", flexWrap: "wrap" as const, alignItems: "center", marginBottom: "0.75rem" },
+  row: {
+    display: 'flex',
+    gap: '0.75rem',
+    flexWrap: 'wrap' as const,
+    alignItems: 'center',
+    marginBottom: '0.75rem',
+  },
   btn: (active = false) => ({
-    padding: "0.5rem 1rem", borderRadius: 8, border: "1px solid var(--border-color)",
-    background: active ? "linear-gradient(135deg, var(--accent-start), var(--accent-end))" : "var(--bg-secondary)",
-    color: "var(--text-primary)", cursor: "pointer", fontSize: "0.85rem", fontWeight: 500,
-    transition: "all 0.15s",
+    padding: '0.5rem 1rem',
+    borderRadius: 8,
+    border: '1px solid var(--border-color)',
+    background: active
+      ? 'linear-gradient(135deg, var(--accent-start), var(--accent-end))'
+      : 'var(--bg-secondary)',
+    color: 'var(--text-primary)',
+    cursor: 'pointer',
+    fontSize: '0.85rem',
+    fontWeight: 500,
+    transition: 'all 0.15s',
   }),
   btnPrimary: {
-    padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",
-    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
-    color: "var(--text-primary)", cursor: "pointer", fontSize: "0.9rem", fontWeight: 600,
+    padding: '0.6rem 1.25rem',
+    borderRadius: 8,
+    border: 'none',
+    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
+    color: 'var(--text-primary)',
+    cursor: 'pointer',
+    fontSize: '0.9rem',
+    fontWeight: 600,
   } as const,
   btnDisabled: {
-    padding: "0.6rem 1.25rem", borderRadius: 8, border: "none",
-    background: "var(--border-color)", color: "var(--text-muted)",
-    cursor: "not-allowed", fontSize: "0.9rem", fontWeight: 600,
+    padding: '0.6rem 1.25rem',
+    borderRadius: 8,
+    border: 'none',
+    background: 'var(--border-color)',
+    color: 'var(--text-muted)',
+    cursor: 'not-allowed',
+    fontSize: '0.9rem',
+    fontWeight: 600,
   } as const,
-  label: { color: "var(--text-secondary)", fontSize: "0.8rem", fontWeight: 500 } as const,
-  value: { color: "var(--text-primary)", fontSize: "0.9rem", fontWeight: 600 } as const,
+  label: { color: 'var(--text-secondary)', fontSize: '0.8rem', fontWeight: 500 } as const,
+  value: { color: 'var(--text-primary)', fontSize: '0.9rem', fontWeight: 600 } as const,
   svgContainer: {
-    borderRadius: 12, border: "1px solid var(--border-color)",
-    background: "var(--bg-secondary)", overflow: "hidden", position: "relative" as const,
+    borderRadius: 12,
+    border: '1px solid var(--border-color)',
+    background: 'var(--bg-secondary)',
+    overflow: 'hidden',
+    position: 'relative' as const,
   },
-  legend: { display: "flex", gap: "1rem", flexWrap: "wrap" as const, marginTop: "0.75rem", fontSize: "0.8rem", color: "var(--text-secondary)" },
+  legend: {
+    display: 'flex',
+    gap: '1rem',
+    flexWrap: 'wrap' as const,
+    marginTop: '0.75rem',
+    fontSize: '0.8rem',
+    color: 'var(--text-secondary)',
+  },
   legendDot: (color: string) => ({
-    width: 10, height: 10, borderRadius: "50%", background: color, display: "inline-block", marginRight: 4,
+    width: 10,
+    height: 10,
+    borderRadius: '50%',
+    background: color,
+    display: 'inline-block',
+    marginRight: 4,
   }),
   statBadge: (color: string) => ({
-    display: "inline-flex", alignItems: "center", gap: "0.35rem",
-    padding: "0.3rem 0.75rem", borderRadius: 8,
-    background: `${color}15`, border: `1px solid ${color}30`,
-    color, fontSize: "0.85rem", fontWeight: 600,
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.35rem',
+    padding: '0.3rem 0.75rem',
+    borderRadius: 8,
+    background: `${color}15`,
+    border: `1px solid ${color}30`,
+    color,
+    fontSize: '0.85rem',
+    fontWeight: 600,
   }),
   tooltip: {
-    position: "absolute" as const, pointerEvents: "none" as const,
-    background: "var(--bg-card)", border: "1px solid var(--border-color)",
-    borderRadius: 10, padding: "0.6rem 0.8rem", fontSize: "0.78rem",
-    color: "var(--text-primary)", lineHeight: 1.6, zIndex: 100, whiteSpace: "nowrap" as const,
-    backdropFilter: "blur(8px)",
+    position: 'absolute' as const,
+    pointerEvents: 'none' as const,
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border-color)',
+    borderRadius: 10,
+    padding: '0.6rem 0.8rem',
+    fontSize: '0.78rem',
+    color: 'var(--text-primary)',
+    lineHeight: 1.6,
+    zIndex: 100,
+    whiteSpace: 'nowrap' as const,
+    backdropFilter: 'blur(8px)',
   },
   select: {
-    padding: "0.5rem 0.75rem", borderRadius: 8, border: "1px solid var(--border-color)",
-    background: "var(--bg-secondary)", color: "var(--text-primary)", fontSize: "0.85rem",
+    padding: '0.5rem 0.75rem',
+    borderRadius: 8,
+    border: '1px solid var(--border-color)',
+    background: 'var(--bg-secondary)',
+    color: 'var(--text-primary)',
+    fontSize: '0.85rem',
   } as const,
   input: {
-    padding: "0.45rem 0.75rem", borderRadius: 8, border: "1px solid var(--border-color)",
-    background: "var(--bg-secondary)", color: "var(--text-primary)", fontSize: "0.85rem", width: 60,
+    padding: '0.45rem 0.75rem',
+    borderRadius: 8,
+    border: '1px solid var(--border-color)',
+    background: 'var(--bg-secondary)',
+    color: 'var(--text-primary)',
+    fontSize: '0.85rem',
+    width: 60,
   } as const,
 } as const;
 
 const COLORS = {
-  inSet: "var(--accent-start)",
-  dominated: "var(--accent-end)",
-  undominated: "var(--text-muted)",
-  edge: "var(--border-color)",
-  edgeHighlight: "var(--glow-color-strong)",
+  inSet: 'var(--accent-start)',
+  dominated: 'var(--accent-end)',
+  undominated: 'var(--text-muted)',
+  edge: 'var(--border-color)',
+  edgeHighlight: 'var(--glow-color-strong)',
 };
 
-type Algorithm = "greedy" | "local-search";
+type Algorithm = 'greedy' | 'local-search';
 
 interface Tooltip {
   x: number;
@@ -103,14 +172,14 @@ interface Tooltip {
 
 // ─── Component ───
 
-export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
+export default function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:mpids', { lang });
   const [graphText, setGraphText] = useState<string | null>(null);
   const [graph, setGraph] = useState<Graph | null>(null);
   const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
   const [result, setResult] = useState<MPIDSResult | null>(null);
-  const [algorithm, setAlgorithm] = useState<Algorithm>("greedy");
+  const [algorithm, setAlgorithm] = useState<Algorithm>('greedy');
   const [computing, setComputing] = useState(false);
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
   const [selectedSample, setSelectedSample] = useState(0);
@@ -140,7 +209,11 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     setGraph(g);
     const iters = g.n <= 50 ? 400 : g.n <= 200 ? 250 : 150;
     setLayoutIter(iters);
-    setPositions(forceLayout(g, SVG_W, SVG_H, iters, ({ i, energy }) => demoLog.trace('layout-iter', { i, energy })));
+    setPositions(
+      forceLayout(g, SVG_W, SVG_H, iters, ({ i, energy }) =>
+        demoLog.trace('layout-iter', { i, energy })
+      )
+    );
   }, []);
 
   // Load default sample on mount
@@ -164,38 +237,46 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     setComputing(true);
     setTooltip(null);
     solveTimeoutRef.current = setTimeout(() => {
-      const r = algorithm === "greedy"
-        ? greedySolver(graph)
-        : localSearchSolver(graph, Math.max(2000, graph.n * 10));
+      const r =
+        algorithm === 'greedy'
+          ? greedySolver(graph)
+          : localSearchSolver(graph, Math.max(2000, graph.n * 10));
       setResult(r);
       setComputing(false);
-      demoLog.info('solve-done', { size: r.set.length, valid: isDominant(graph, r.set) });
+      demoLog.info('solve-done', { size: r.set.size, valid: isDominant(graph, r.set) });
     }, 16);
   }, [graph, algorithm]);
 
-  const handleSampleSelect = useCallback((idx: number) => {
-    demoLog.info('sample', { idx, name: SAMPLE_GRAPHS[idx]?.name });
-    setSelectedSample(idx);
-    loadGraph(SAMPLE_GRAPHS[idx].data);
-  }, [loadGraph]);
+  const handleSampleSelect = useCallback(
+    (idx: number) => {
+      demoLog.info('sample', { idx, name: SAMPLE_GRAPHS[idx]?.name });
+      setSelectedSample(idx);
+      loadGraph(SAMPLE_GRAPHS[idx].data);
+    },
+    [loadGraph]
+  );
 
-  const handleLoadFile = useCallback((name: string) => {
-    const rawBase = (typeof import.meta !== "undefined" && (import.meta as any).env?.BASE_URL) || "/";
-    const basePath = rawBase.endsWith("/") ? rawBase : rawBase + "/";
-    log.info("load-sample", { name });
-    fetch(`${basePath}demos/mpids/${name}`)
-      .then((r) => r.text())
-      .then((text) => {
-        setSelectedSample(-1);
-        setLoadError(null);
-        loadGraph(text);
-        log.info("load-sample-ok", { name, bytes: text.length });
-      })
-      .catch((err) => {
-        setLoadError('Failed to load sample graph');
-        log.error("load-sample-failed", { name, err: String(err) });
-      });
-  }, [loadGraph]);
+  const handleLoadFile = useCallback(
+    (name: string) => {
+      const rawBase =
+        (typeof import.meta !== 'undefined' && (import.meta as any).env?.BASE_URL) || '/';
+      const basePath = rawBase.endsWith('/') ? rawBase : rawBase + '/';
+      log.info('load-sample', { name });
+      fetch(`${basePath}demos/mpids/${name}`)
+        .then((r) => r.text())
+        .then((text) => {
+          setSelectedSample(-1);
+          setLoadError(null);
+          loadGraph(text);
+          log.info('load-sample-ok', { name, bytes: text.length });
+        })
+        .catch((err) => {
+          setLoadError('Failed to load sample graph');
+          log.error('load-sample-failed', { name, err: String(err) });
+        });
+    },
+    [loadGraph]
+  );
 
   const handleRandom = useCallback(() => {
     demoLog.info('random', { n: randomN, p: randomP });
@@ -203,36 +284,50 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     loadGraph(generateRandomGraph(randomN, randomP));
   }, [randomN, randomP, loadGraph]);
 
-  const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    demoLog.info('upload', { name: file.name, size: file.size });
-    file.text().then((text) => { setSelectedSample(-1); loadGraph(text); });
-  }, [loadGraph]);
+  const handleFileUpload = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      demoLog.info('upload', { name: file.name, size: file.size });
+      file.text().then((text) => {
+        setSelectedSample(-1);
+        loadGraph(text);
+      });
+    },
+    [loadGraph]
+  );
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!graph || !positions.length || !svgRef.current) return;
-    const rect = svgRef.current.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const scaleX = SVG_W / rect.width;
-    const scaleY = SVG_H / rect.height;
-    const sx = mx * scaleX, sy = my * scaleY;
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!graph || !positions.length || !svgRef.current) return;
+      const rect = svgRef.current.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const scaleX = SVG_W / rect.width;
+      const scaleY = SVG_H / rect.height;
+      const sx = mx * scaleX,
+        sy = my * scaleY;
 
-    const r = graph.n <= 50 ? 14 : graph.n <= 200 ? 8 : 5;
-    let closest = -1;
-    let closestDist = (r + 12) * (r + 12);
-    for (let i = 0; i < positions.length; i++) {
-      const dx = positions[i].x - sx, dy = positions[i].y - sy;
-      const d = dx * dx + dy * dy;
-      if (d < closestDist) { closestDist = d; closest = i; }
-    }
-    if (closest >= 0) {
-      setTooltip({ x: e.clientX - rect.left + 12, y: e.clientY - rect.top - 10, node: closest });
-    } else {
-      setTooltip(null);
-    }
-  }, [graph, positions]);
+      const r = graph.n <= 50 ? 14 : graph.n <= 200 ? 8 : 5;
+      let closest = -1;
+      let closestDist = (r + 12) * (r + 12);
+      for (let i = 0; i < positions.length; i++) {
+        const dx = positions[i].x - sx,
+          dy = positions[i].y - sy;
+        const d = dx * dx + dy * dy;
+        if (d < closestDist) {
+          closestDist = d;
+          closest = i;
+        }
+      }
+      if (closest >= 0) {
+        setTooltip({ x: e.clientX - rect.left + 12, y: e.clientY - rect.top - 10, node: closest });
+      } else {
+        setTooltip(null);
+      }
+    },
+    [graph, positions]
+  );
 
   // Node radius based on graph size
   const nodeR = graph ? (graph.n <= 30 ? 12 : graph.n <= 100 ? 7 : graph.n <= 200 ? 5 : 3) : 7;
@@ -242,21 +337,41 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
     <div style={s.wrapper}>
       {/* Info card */}
       <div style={s.infoCard}>
-        <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
-          <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>🔵</span>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+          <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>🔵</span>
           <div>
-            <strong style={{ color: "var(--text-primary)" }}>{t.mpidsTitle}</strong>
-            <p style={{ color: "var(--text-secondary)", margin: "0.4rem 0 0", lineHeight: 1.6, fontSize: "0.85rem" }}>
-              {t.mpidsDesc1}<span style={{ color: COLORS.inSet, fontWeight: 600 }}>{t.mpidsDesc2}</span>
-              {t.mpidsDesc3}<span style={{ color: COLORS.dominated, fontWeight: 600 }}>{t.mpidsDesc4}</span>
-              {t.mpidsDesc5}<span style={{ color: COLORS.undominated, fontWeight: 600 }}>{t.mpidsDesc6}</span>.
+            <strong style={{ color: 'var(--text-primary)' }}>{t.mpidsTitle}</strong>
+            <p
+              style={{
+                color: 'var(--text-secondary)',
+                margin: '0.4rem 0 0',
+                lineHeight: 1.6,
+                fontSize: '0.85rem',
+              }}
+            >
+              {t.mpidsDesc1}
+              <span style={{ color: COLORS.inSet, fontWeight: 600 }}>{t.mpidsDesc2}</span>
+              {t.mpidsDesc3}
+              <span style={{ color: COLORS.dominated, fontWeight: 600 }}>{t.mpidsDesc4}</span>
+              {t.mpidsDesc5}
+              <span style={{ color: COLORS.undominated, fontWeight: 600 }}>{t.mpidsDesc6}</span>.
             </p>
           </div>
         </div>
       </div>
 
       {loadError && (
-        <div style={{ padding: "0.5rem 1rem", marginBottom: "1rem", borderRadius: 8, background: "color-mix(in srgb, var(--accent-end) 8%, transparent)", border: "1px solid color-mix(in srgb, var(--accent-end) 19%, transparent)", color: "var(--accent-end)", fontSize: "0.85rem" }}>
+        <div
+          style={{
+            padding: '0.5rem 1rem',
+            marginBottom: '1rem',
+            borderRadius: 8,
+            background: 'color-mix(in srgb, var(--accent-end) 8%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent-end) 19%, transparent)',
+            color: 'var(--accent-end)',
+            fontSize: '0.85rem',
+          }}
+        >
           {loadError}
         </div>
       )}
@@ -266,14 +381,21 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
         <div style={s.row}>
           <span style={s.label}>{t.builtin}</span>
           {SAMPLE_GRAPHS.map((sg, i) => (
-            <button key={i} style={s.btn(selectedSample === i)} onClick={() => handleSampleSelect(i)}>
+            <button
+              key={i}
+              style={s.btn(selectedSample === i)}
+              onClick={() => handleSampleSelect(i)}
+            >
               {sg.name}
             </button>
           ))}
-          <button style={s.btn(selectedSample === -2)} onClick={() => handleLoadFile("football.txt")}>
+          <button
+            style={s.btn(selectedSample === -2)}
+            onClick={() => handleLoadFile('football.txt')}
+          >
             Football (115)
           </button>
-          <button style={s.btn(selectedSample === -3)} onClick={() => handleLoadFile("jazz.txt")}>
+          <button style={s.btn(selectedSample === -3)} onClick={() => handleLoadFile('jazz.txt')}>
             Jazz (198)
           </button>
         </div>
@@ -281,18 +403,37 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
         <div style={s.row}>
           <span style={s.label}>{t.random}</span>
           <label style={s.label}>N=</label>
-          <input type="number" min={3} max={300} value={randomN}
-            onChange={(e) => setRandomN(Math.min(300, Math.max(3, +e.target.value)))} style={s.input} />
+          <input
+            type="number"
+            min={3}
+            max={300}
+            value={randomN}
+            onChange={(e) => setRandomN(Math.min(300, Math.max(3, +e.target.value)))}
+            style={s.input}
+          />
           <label style={s.label}>p=</label>
-          <input type="number" min={0.01} max={1} step={0.01} value={randomP}
-            onChange={(e) => setRandomP(Math.min(1, Math.max(0.01, +e.target.value)))} style={s.input} />
-          <button style={s.btn()} onClick={handleRandom}>{t.generate}</button>
+          <input
+            type="number"
+            min={0.01}
+            max={1}
+            step={0.01}
+            value={randomP}
+            onChange={(e) => setRandomP(Math.min(1, Math.max(0.01, +e.target.value)))}
+            style={s.input}
+          />
+          <button style={s.btn()} onClick={handleRandom}>
+            {t.generate}
+          </button>
         </div>
 
         <div style={s.row}>
           <span style={s.label}>{t.upload}</span>
-          <input type="file" accept=".txt" onChange={handleFileUpload}
-            style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }} />
+          <input
+            type="file"
+            accept=".txt"
+            onChange={handleFileUpload}
+            style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}
+          />
         </div>
       </div>
 
@@ -300,10 +441,13 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
       <div style={s.card}>
         <div style={s.row}>
           <span style={s.label}>{t.algorithm}</span>
-          <button style={s.btn(algorithm === "greedy")} onClick={() => setAlgorithm("greedy")}>
+          <button style={s.btn(algorithm === 'greedy')} onClick={() => setAlgorithm('greedy')}>
             {t.greedy}
           </button>
-          <button style={s.btn(algorithm === "local-search")} onClick={() => setAlgorithm("local-search")}>
+          <button
+            style={s.btn(algorithm === 'local-search')}
+            onClick={() => setAlgorithm('local-search')}
+          >
             {t.localSearch}
           </button>
           <div style={{ flex: 1 }} />
@@ -317,12 +461,14 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
         </div>
 
         {result && (
-          <div style={{ ...s.row, marginTop: "0.5rem", marginBottom: 0 }}>
-            <span style={s.statBadge(COLORS.inSet)}>{t.setSize} {result.size} / {graph?.n}</span>
+          <div style={{ ...s.row, marginTop: '0.5rem', marginBottom: 0 }}>
+            <span style={s.statBadge(COLORS.inSet)}>
+              {t.setSize} {result.size} / {graph?.n}
+            </span>
             <span style={s.statBadge(isValid ? COLORS.dominated : COLORS.undominated)}>
               {isValid ? t.validDom : t.invalidDom}
             </span>
-            <span style={s.statBadge("var(--accent-start)")}>{result.timeMs.toFixed(1)} ms</span>
+            <span style={s.statBadge('var(--accent-start)')}>{result.timeMs.toFixed(1)} ms</span>
           </div>
         )}
       </div>
@@ -330,19 +476,27 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
       {/* Graph visualization */}
       {graph && positions.length > 0 && (
         <div style={s.card}>
-          <div ref={containerRef} style={s.svgContainer} onMouseMove={handleMouseMove} onMouseLeave={() => setTooltip(null)}>
+          <div
+            ref={containerRef}
+            style={s.svgContainer}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => setTooltip(null)}
+          >
             <svg
               ref={svgRef}
               viewBox={`0 0 ${SVG_W} ${SVG_H}`}
-              style={{ width: "100%", height: "auto", display: "block" }}
+              style={{ width: '100%', height: 'auto', display: 'block' }}
             >
               {/* Edges */}
               {graph.edges.map(([u, v], i) => {
                 const highlighted = result && (result.set.has(u) || result.set.has(v));
                 return (
-                  <line key={i}
-                    x1={positions[u].x} y1={positions[u].y}
-                    x2={positions[v].x} y2={positions[v].y}
+                  <line
+                    key={i}
+                    x1={positions[u].x}
+                    y1={positions[u].y}
+                    x2={positions[v].x}
+                    y2={positions[v].y}
                     stroke={highlighted ? COLORS.edgeHighlight : COLORS.edge}
                     strokeWidth={graph.n <= 50 ? 1.5 : 0.8}
                   />
@@ -351,29 +505,40 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
 
               {/* Nodes */}
               {positions.map((pos, i) => {
-                let fill = "var(--border-color-hover)";
-                let stroke = "var(--border-color)";
+                let fill = 'var(--border-color-hover)';
+                let stroke = 'var(--border-color)';
                 if (result) {
                   if (result.set.has(i)) {
                     fill = COLORS.inSet;
-                    stroke = "var(--accent-start)";
+                    stroke = 'var(--accent-start)';
                   } else if (domInfo) {
                     fill = domInfo[i].dominated ? COLORS.dominated : COLORS.undominated;
-                    stroke = domInfo[i].dominated ? "var(--accent-end)" : "var(--text-muted)";
+                    stroke = domInfo[i].dominated ? 'var(--accent-end)' : 'var(--text-muted)';
                   }
                 }
                 const isHovered = tooltip?.node === i;
                 return (
                   <g key={i}>
                     <circle
-                      cx={pos.x} cy={pos.y}
+                      cx={pos.x}
+                      cy={pos.y}
                       r={isHovered ? nodeR + 3 : nodeR}
-                      fill={fill} stroke={stroke} strokeWidth={isHovered ? 2.5 : 1.5}
+                      fill={fill}
+                      stroke={stroke}
+                      strokeWidth={isHovered ? 2.5 : 1.5}
                       opacity={isHovered ? 1 : 0.9}
                     />
                     {showLabels && (
-                      <text x={pos.x} y={pos.y + 1} textAnchor="middle" dominantBaseline="middle"
-                        fill="var(--text-primary)" fontSize={nodeR > 8 ? 8 : 6} fontWeight="bold" pointerEvents="none">
+                      <text
+                        x={pos.x}
+                        y={pos.y + 1}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        fill="var(--text-primary)"
+                        fontSize={nodeR > 8 ? 8 : 6}
+                        fontWeight="bold"
+                        pointerEvents="none"
+                      >
                         {i + 1}
                       </text>
                     )}
@@ -385,14 +550,26 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
             {/* Tooltip */}
             {tooltip && graph && (
               <div style={{ ...s.tooltip, left: tooltip.x, top: tooltip.y }}>
-                <div><strong>{t.node} {tooltip.node + 1}</strong> ({t.degree} {graph.adj[tooltip.node].length})</div>
+                <div>
+                  <strong>
+                    {t.node} {tooltip.node + 1}
+                  </strong>{' '}
+                  ({t.degree} {graph.adj[tooltip.node].length})
+                </div>
                 {result && domInfo && (
                   <>
                     {result.set.has(tooltip.node) ? (
                       <div style={{ color: COLORS.inSet }}>{t.inDomSet}</div>
                     ) : (
-                      <div style={{ color: domInfo[tooltip.node].dominated ? COLORS.dominated : COLORS.undominated }}>
-                        {domInfo[tooltip.node].count}/{domInfo[tooltip.node].needed} {t.neighborsInSet}
+                      <div
+                        style={{
+                          color: domInfo[tooltip.node].dominated
+                            ? COLORS.dominated
+                            : COLORS.undominated,
+                        }}
+                      >
+                        {domInfo[tooltip.node].count}/{domInfo[tooltip.node].needed}{' '}
+                        {t.neighborsInSet}
                         {domInfo[tooltip.node].dominated ? t.domYes : t.domNo}
                       </div>
                     )}
@@ -405,14 +582,22 @@ export default function MPIDSDemo({ lang = "en" }: { lang?: Lang }) {
           <div style={s.legend}>
             {result ? (
               <>
-                <span><span style={s.legendDot(COLORS.inSet)} /> {t.inSet} ({result.size})</span>
-                <span><span style={s.legendDot(COLORS.dominated)} /> {t.dominated}</span>
-                <span><span style={s.legendDot(COLORS.undominated)} /> {t.undominated}</span>
+                <span>
+                  <span style={s.legendDot(COLORS.inSet)} /> {t.inSet} ({result.size})
+                </span>
+                <span>
+                  <span style={s.legendDot(COLORS.dominated)} /> {t.dominated}
+                </span>
+                <span>
+                  <span style={s.legendDot(COLORS.undominated)} /> {t.undominated}
+                </span>
               </>
             ) : (
               <span>{t.selectAlgo}</span>
             )}
-            <span style={{ marginLeft: "auto" }}>{graph.n} {t.nodes}, {graph.edges.length} {t.edges}</span>
+            <span style={{ marginLeft: 'auto' }}>
+              {graph.n} {t.nodes}, {graph.edges.length} {t.edges}
+            </span>
           </div>
         </div>
       )}

@@ -5,11 +5,11 @@ import {
   forwardKinematicsPositions,
 } from '../../lib/rob-kernels';
 
-import { T, type DemoTranslations } from "../../i18n/demos/rob-demo";
+import { T, type DemoTranslations } from '../../i18n/demos/rob-demo';
 import { getThemeColors, lighten, withAlpha } from '../../lib/demo-theme';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
-type Lang = "en" | "es" | "ca";
+type Lang = 'en' | 'es' | 'ca';
 
 // ─── Mini Mobile Robot Panel ─────────────────────────────────────────────────
 
@@ -21,7 +21,8 @@ function MobilePanel({ t }: { t: (typeof T)['en'] }) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d')!;
     const dpr = window.devicePixelRatio || 1;
-    const W = 280, H = 180;
+    const W = 280,
+      H = 180;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width = W + 'px';
@@ -36,10 +37,12 @@ function MobilePanel({ t }: { t: (typeof T)['en'] }) {
     ctx.fillRect(0, 0, W, H);
 
     // Auto-scale
-    const xs = path.map(p => p.x);
-    const ys = path.map(p => p.y);
-    const minX = Math.min(...xs), maxX = Math.max(...xs);
-    const minY = Math.min(...ys), maxY = Math.max(...ys);
+    const xs = path.map((p) => p.x);
+    const ys = path.map((p) => p.y);
+    const minX = Math.min(...xs),
+      maxX = Math.max(...xs);
+    const minY = Math.min(...ys),
+      maxY = Math.max(...ys);
     const rangeX = maxX - minX || 1;
     const rangeY = maxY - minY || 1;
     const scale = Math.min((W - 40) / rangeX, (H - 40) / rangeY);
@@ -86,7 +89,8 @@ function WallPanel({ t }: { t: (typeof T)['en'] }) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d')!;
     const dpr = window.devicePixelRatio || 1;
-    const W = 280, H = 180;
+    const W = 280,
+      H = 180;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width = W + 'px';
@@ -101,11 +105,18 @@ function WallPanel({ t }: { t: (typeof T)['en'] }) {
     ctx.strokeStyle = tc.borderColorHover;
     ctx.lineWidth = 2;
     const walls = [
-      [20, 20, 260, 20], [260, 20, 260, 160], [260, 160, 20, 160],
-      [20, 160, 20, 20], [80, 60, 200, 60], [200, 60, 200, 110],
+      [20, 20, 260, 20],
+      [260, 20, 260, 160],
+      [260, 160, 20, 160],
+      [20, 160, 20, 20],
+      [80, 60, 200, 60],
+      [200, 60, 200, 110],
     ];
     for (const [x1, y1, x2, y2] of walls) {
-      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
     }
 
     // Simulated path
@@ -154,7 +165,8 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d')!;
     const dpr = window.devicePixelRatio || 1;
-    const W = 280, H = 180;
+    const W = 280,
+      H = 180;
     canvas.width = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width = W + 'px';
@@ -168,12 +180,13 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
     const joints = forwardKinematicsPositions(
       (q1 * Math.PI) / 180,
       (q2 * Math.PI) / 180,
-      (q3 * Math.PI) / 180,
+      (q3 * Math.PI) / 180
     );
     const ee = joints[joints.length - 1];
     log.trace('fk-step', { ee });
 
-    const baseX = W / 2, baseY = H - 20;
+    const baseX = W / 2,
+      baseY = H - 20;
     const s = 25;
 
     ctx.strokeStyle = tc.textSecondary;
@@ -203,7 +216,9 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
     ctx.fill();
   }, [q1, q2, q3, log]);
 
-  useEffect(() => { draw(); }, [draw]);
+  useEffect(() => {
+    draw();
+  }, [draw]);
 
   return (
     <div style={panelStyle}>
@@ -211,26 +226,53 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
       <p style={descStyle}>{t.armDesc}</p>
       <canvas ref={ref} style={{ borderRadius: '6px' }} />
       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', fontSize: '0.75rem' }}>
-        <label style={{ color: 'var(--text-muted)' }}>q1
-          <input type="range" min={-180} max={180} value={q1}
-            onChange={e => { setQ1(+e.target.value); log.trace('joint', { idx: 1, deg: +e.target.value }); }}
+        <label style={{ color: 'var(--text-muted)' }}>
+          q1
+          <input
+            type="range"
+            min={-180}
+            max={180}
+            value={q1}
+            onChange={(e) => {
+              setQ1(+e.target.value);
+              log.trace('joint', { idx: 1, deg: +e.target.value });
+            }}
             onMouseUp={() => log.info('joint-commit', { idx: 1, deg: q1 })}
             onTouchEnd={() => log.info('joint-commit', { idx: 1, deg: q1 })}
-            style={{ width: 60 }} />
+            style={{ width: 60 }}
+          />
         </label>
-        <label style={{ color: 'var(--text-muted)' }}>q2
-          <input type="range" min={-180} max={180} value={q2}
-            onChange={e => { setQ2(+e.target.value); log.trace('joint', { idx: 2, deg: +e.target.value }); }}
+        <label style={{ color: 'var(--text-muted)' }}>
+          q2
+          <input
+            type="range"
+            min={-180}
+            max={180}
+            value={q2}
+            onChange={(e) => {
+              setQ2(+e.target.value);
+              log.trace('joint', { idx: 2, deg: +e.target.value });
+            }}
             onMouseUp={() => log.info('joint-commit', { idx: 2, deg: q2 })}
             onTouchEnd={() => log.info('joint-commit', { idx: 2, deg: q2 })}
-            style={{ width: 60 }} />
+            style={{ width: 60 }}
+          />
         </label>
-        <label style={{ color: 'var(--text-muted)' }}>q3
-          <input type="range" min={-180} max={180} value={q3}
-            onChange={e => { setQ3(+e.target.value); log.trace('joint', { idx: 3, deg: +e.target.value }); }}
+        <label style={{ color: 'var(--text-muted)' }}>
+          q3
+          <input
+            type="range"
+            min={-180}
+            max={180}
+            value={q3}
+            onChange={(e) => {
+              setQ3(+e.target.value);
+              log.trace('joint', { idx: 3, deg: +e.target.value });
+            }}
             onMouseUp={() => log.info('joint-commit', { idx: 3, deg: q3 })}
             onTouchEnd={() => log.info('joint-commit', { idx: 3, deg: q3 })}
-            style={{ width: 60 }} />
+            style={{ width: 60 }}
+          />
         </label>
       </div>
     </div>
@@ -243,7 +285,13 @@ export default function RobDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = T[lang] || T.en;
   useDemoLifecycle('demo:rob', { lang });
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '1rem',
+      }}
+    >
       <MobilePanel t={t} />
       <WallPanel t={t} />
       <ArmPanel t={t} />

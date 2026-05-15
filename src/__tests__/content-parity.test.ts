@@ -39,7 +39,7 @@ function assertLocaleParity(label: string, entries: LocalizedEntry[]) {
       const localeKeys = Object.keys(entry.copy[locale]!).sort();
       expect(
         localeKeys,
-        `${label}[${i}] copy.${locale} keys differ from copy.${LOCALES[0]}`,
+        `${label}[${i}] copy.${locale} keys differ from copy.${LOCALES[0]}`
       ).toEqual(refKeys);
     }
   }
@@ -251,7 +251,7 @@ describe('Demos data', () => {
   });
 
   it('every demo has a unique slug in identity', () => {
-    const slugs = data.map(e => e.identity.slug as string);
+    const slugs = data.map((e) => e.identity.slug as string);
     expect(new Set(slugs).size).toBe(slugs.length);
     for (const slug of slugs) {
       expect(slug.trim().length).toBeGreaterThan(0);
@@ -283,7 +283,10 @@ describe('Demos data', () => {
       }>;
       for (const d of flat) {
         expect(d.title.trim().length, `${locale}.${d.slug} has empty title`).toBeGreaterThan(0);
-        expect(d.description.trim().length, `${locale}.${d.slug} has empty description`).toBeGreaterThan(0);
+        expect(
+          d.description.trim().length,
+          `${locale}.${d.slug} has empty description`
+        ).toBeGreaterThan(0);
       }
     }
   });

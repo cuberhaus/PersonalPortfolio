@@ -7,11 +7,11 @@ subscribe to.
 
 ## Endpoints
 
-| Method | Path                | Description                                         |
-| ------ | ------------------- | --------------------------------------------------- |
-| GET    | `/health`           | `{ ok: true, services: [slug...] }`                 |
-| GET    | `/services`         | JSON list of `{ slug, container, stack }`           |
-| GET    | `/stream/<slug>`    | `text/event-stream` tailing the matching container  |
+| Method | Path             | Description                                        |
+| ------ | ---------------- | -------------------------------------------------- |
+| GET    | `/health`        | `{ ok: true, services: [slug...] }`                |
+| GET    | `/services`      | JSON list of `{ slug, container, stack }`          |
+| GET    | `/stream/<slug>` | `text/event-stream` tailing the matching container |
 
 ## Running
 

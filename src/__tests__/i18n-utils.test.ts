@@ -44,7 +44,9 @@ describe('getRouteFromUrl', () => {
 
   it('removes supported locale prefixes from nested routes', () => {
     expect(getRouteFromUrl(new URL('https://example.com/es/demos/tenda'))).toBe('/demos/tenda');
-    expect(getRouteFromUrl(new URL('https://example.com/ca/demos/tfg-polyps'))).toBe('/demos/tfg-polyps');
+    expect(getRouteFromUrl(new URL('https://example.com/ca/demos/tfg-polyps'))).toBe(
+      '/demos/tfg-polyps'
+    );
   });
 
   it('keeps non-localized routes unchanged', () => {

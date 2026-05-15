@@ -8,8 +8,10 @@
  */
 import { LOCALES } from '../../../config/locales';
 
-const demoModules = import.meta.glob('../../demos/*.astro', { eager: true }) as
-  Record<string, { default: unknown }>;
+const demoModules = import.meta.glob('../../demos/*.astro', { eager: true }) as Record<
+  string,
+  { default: unknown }
+>;
 
 const demosBySlug = Object.fromEntries(
   Object.entries(demoModules).map(([path, mod]) => {
@@ -20,13 +22,11 @@ const demosBySlug = Object.fromEntries(
 
 export function getStaticPaths() {
   const localeModules = import.meta.glob('../../demos/*.astro', { eager: true });
-  const slugs = Object.keys(localeModules).map(
-    p => p.match(/\/([^/]+)\.astro$/)![1]
-  );
+  const slugs = Object.keys(localeModules).map((p) => p.match(/\/([^/]+)\.astro$/)![1]);
   // Default locale is served from /demos/<slug>; this dynamic route only
   // exists for the prefixed locales (es, ca, …).
-  const langs = LOCALES.filter(l => l !== 'en');
-  return langs.flatMap(lang => slugs.map(demo => ({ params: { lang, demo } })));
+  const langs = LOCALES.filter((l) => l !== 'en');
+  return langs.flatMap((lang) => slugs.map((demo) => ({ params: { lang, demo } })));
 }
 
 const { demo } = Astro.params;

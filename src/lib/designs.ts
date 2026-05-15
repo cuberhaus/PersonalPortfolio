@@ -12,7 +12,9 @@ export interface DesignMeta {
    * the top level (`label`, `blurb`) so they double as the default-locale
    * value and the fallback for missing translations.
    */
-  translations?: Partial<Record<Exclude<Locale, typeof DEFAULT_LOCALE>, { name?: string; blurb?: string }>>;
+  translations?: Partial<
+    Record<Exclude<Locale, typeof DEFAULT_LOCALE>, { name?: string; blurb?: string }>
+  >;
   /** Representative preview hints rendered in the modal swatch (pure CSS). */
   preview: {
     /** Font family sample rendered in the tile. */
@@ -21,12 +23,23 @@ export interface DesignMeta {
     radius: string;
     /** Pictorial style keyword used to pick the tile's mini-mockup. */
     style:
-      | 'gradient' | 'serif' | 'grid' | 'pixel'
-      | 'terminal' | 'neon'
-      | 'paper' | 'raw' | 'schematic'
-      | 'tex' | 'editor' | 'riso'
-      | 'deco' | 'zen'
-      | 'zine' | 'comic' | 'news';
+      | 'gradient'
+      | 'serif'
+      | 'grid'
+      | 'pixel'
+      | 'terminal'
+      | 'neon'
+      | 'paper'
+      | 'raw'
+      | 'schematic'
+      | 'tex'
+      | 'editor'
+      | 'riso'
+      | 'deco'
+      | 'zen'
+      | 'zine'
+      | 'comic'
+      | 'news';
   };
   /**
    * Retired designs: kept registered (so persisted `localStorage.design`
@@ -115,8 +128,14 @@ export const DESIGNS: DesignMeta[] = [
     label: 'Notebook',
     blurb: 'Graph paper, handwritten ink, highlighter marks',
     translations: {
-      es: { name: 'Libreta', blurb: 'Papel cuadriculado, tinta manuscrita, marcas de fluorescente' },
-      ca: { name: 'Llibreta', blurb: 'Paper quadriculat, tinta manuscrita, marques de fluorescent' },
+      es: {
+        name: 'Libreta',
+        blurb: 'Papel cuadriculado, tinta manuscrita, marcas de fluorescente',
+      },
+      ca: {
+        name: 'Llibreta',
+        blurb: 'Paper quadriculat, tinta manuscrita, marques de fluorescent',
+      },
     },
     preview: { font: 'Caveat, "Comic Sans MS", cursive', radius: '0.5rem', style: 'paper' },
     recommendedThemes: ['paper', 'solarized-light', 'sepia'],
@@ -126,7 +145,10 @@ export const DESIGNS: DesignMeta[] = [
     label: 'Brutalist',
     blurb: 'Raw HTML energy: Times, yellow tape, thick borders',
     translations: {
-      es: { name: 'Brutalista', blurb: 'Energía HTML cruda: Times, cinta amarilla, bordes gruesos' },
+      es: {
+        name: 'Brutalista',
+        blurb: 'Energía HTML cruda: Times, cinta amarilla, bordes gruesos',
+      },
       ca: { name: 'Brutalista', blurb: 'Energia HTML crua: Times, cinta groga, vores gruixudes' },
     },
     preview: { font: '"Times New Roman", Times, serif', radius: '0', style: 'raw' },
@@ -137,8 +159,14 @@ export const DESIGNS: DesignMeta[] = [
     label: 'Blueprint',
     blurb: 'Cyan grid, hairlines, dimension marks, tech labels',
     translations: {
-      es: { name: 'Plano técnico', blurb: 'Cuadrícula cian, líneas finas, marcas de cota y etiquetas' },
-      ca: { name: 'Plànol tècnic', blurb: 'Quadrícula cian, línies fines, marques de cota i etiquetes' },
+      es: {
+        name: 'Plano técnico',
+        blurb: 'Cuadrícula cian, líneas finas, marcas de cota y etiquetas',
+      },
+      ca: {
+        name: 'Plànol tècnic',
+        blurb: 'Quadrícula cian, línies fines, marques de cota i etiquetes',
+      },
     },
     preview: { font: '"JetBrains Mono", ui-monospace, monospace', radius: '0', style: 'schematic' },
     recommendedThemes: ['nord', 'tokyo-night', 'dark'],
@@ -162,7 +190,11 @@ export const DESIGNS: DesignMeta[] = [
       es: { name: 'IDE', blurb: 'Vibes VSCode: pestañas, gutter, héroe con sintaxis' },
       ca: { name: 'IDE', blurb: 'Vibes VSCode: pestanyes, gutter, heroi amb sintaxi' },
     },
-    preview: { font: '"JetBrains Mono", ui-monospace, monospace', radius: '0.25rem', style: 'editor' },
+    preview: {
+      font: '"JetBrains Mono", ui-monospace, monospace',
+      radius: '0.25rem',
+      style: 'editor',
+    },
     recommendedThemes: ['dark', 'gruvbox-dark', 'tokyo-night'],
   },
   {
@@ -233,12 +265,12 @@ export const DESIGNS: DesignMeta[] = [
   },
 ];
 
-export const DESIGN_IDS = DESIGNS.map(d => d.id);
+export const DESIGN_IDS = DESIGNS.map((d) => d.id);
 // The first entry doubles as the default design. Reordering DESIGNS picks a
 // new default automatically, with no separate constant to keep in sync.
 export const DEFAULT_DESIGN = DESIGNS[0].id;
 
-const designsById = new Map(DESIGNS.map(d => [d.id, d]));
+const designsById = new Map(DESIGNS.map((d) => [d.id, d]));
 
 /**
  * Localized name for a design id, falling back to the English `label` when no

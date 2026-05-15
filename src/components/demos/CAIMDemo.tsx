@@ -1,9 +1,9 @@
 import { useState, lazy, Suspense } from 'react';
 
-import { T, type DemoTranslations } from "../../i18n/demos/caim-demo";
+import { T, type DemoTranslations } from '../../i18n/demos/caim-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
-type Lang = "en" | "es" | "ca";
+type Lang = 'en' | 'es' | 'ca';
 
 const PageRankTab = lazy(() => import('./caim/PageRankTab'));
 const ZipfTab = lazy(() => import('./caim/ZipfTab'));
@@ -59,17 +59,24 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '1.5rem',
   },
   tabBar: {
-    display: 'flex', gap: '0.25rem',
-    padding: '0.35rem', marginBottom: '1rem',
+    display: 'flex',
+    gap: '0.25rem',
+    padding: '0.35rem',
+    marginBottom: '1rem',
     background: 'var(--bg-card)',
     border: '1px solid var(--border-color)',
     borderRadius: '0.75rem',
     width: 'fit-content',
   },
   tab: {
-    padding: '0.5rem 1.25rem', borderRadius: '0.5rem', border: 'none',
-    background: 'transparent', color: 'var(--text-muted)',
-    fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer',
+    padding: '0.5rem 1.25rem',
+    borderRadius: '0.5rem',
+    border: 'none',
+    background: 'transparent',
+    color: 'var(--text-muted)',
+    fontWeight: 600,
+    fontSize: '0.82rem',
+    cursor: 'pointer',
     transition: 'all 0.15s',
   },
   tabActive: {
@@ -80,6 +87,9 @@ const styles: Record<string, React.CSSProperties> = {
     minHeight: 300,
   },
   loading: {
-    textAlign: 'center', padding: '3rem', color: 'var(--text-muted)', fontSize: '0.85rem',
+    textAlign: 'center',
+    padding: '3rem',
+    color: 'var(--text-muted)',
+    fontSize: '0.85rem',
   },
 };

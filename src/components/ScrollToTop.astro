@@ -23,7 +23,7 @@ const t = useTranslations(lang);
     stroke-linecap="round"
     stroke-linejoin="round"
   >
-    <path d="M12 19V5M5 12l7-7 7 7" />
+    <path d="M12 19V5M5 12l7-7 7 7"></path>
   </svg>
 </button>
 
@@ -45,7 +45,10 @@ const t = useTranslations(lang);
     opacity: 0;
     pointer-events: none;
     transform: translateY(20px);
-    transition: opacity var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+    transition:
+      opacity var(--transition-base),
+      transform var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
   .scroll-to-top.visible {
@@ -104,7 +107,7 @@ const t = useTranslations(lang);
         window.__debug?.log?.('info', 'ui:scroll', 'to-top');
         window.scrollTo({
           top: 0,
-          behavior: prefersReduced ? 'auto' : 'smooth'
+          behavior: prefersReduced ? 'auto' : 'smooth',
         });
       });
     }

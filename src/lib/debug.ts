@@ -112,9 +112,16 @@ function getState(): BusState {
   const holder = getStateHolder();
   if (holder.__debugBusState) return holder.__debugBusState;
   const state: BusState = {
-    target: typeof EventTarget !== 'undefined'
-      ? new EventTarget()
-      : ({ addEventListener() {}, removeEventListener() {}, dispatchEvent() { return true; } } as unknown as EventTarget),
+    target:
+      typeof EventTarget !== 'undefined'
+        ? new EventTarget()
+        : ({
+            addEventListener() {},
+            removeEventListener() {},
+            dispatchEvent() {
+              return true;
+            },
+          } as unknown as EventTarget),
     logs: [],
     network: [],
     perf: [],
@@ -206,7 +213,7 @@ export function emitFrom(
   level: DebugLevel,
   ns: string,
   msg: string,
-  args: unknown[],
+  args: unknown[]
 ): void {
   const state = getState();
 
@@ -228,10 +235,14 @@ export function emitFrom(
   pushBuffer(state.logs, entry);
 
   if (import.meta.env.DEV) {
-    const fn = level === 'trace' ? console.debug
-      : level === 'info' ? console.info
-      : level === 'warn' ? console.warn
-      : console.error;
+    const fn =
+      level === 'trace'
+        ? console.debug
+        : level === 'info'
+          ? console.info
+          : level === 'warn'
+            ? console.warn
+            : console.error;
     const prefix = source === 'browser' ? `[${ns}]` : `[${source}:${ns}]`;
     fn(prefix, msg, ...args);
   }
@@ -252,7 +263,7 @@ export function emitPerf(entry: DebugPerfEntry): void {
 /** Subscribe to a single channel. Returns an unsubscribe function. */
 export function subscribe(
   channel: 'log' | 'network' | 'perf',
-  handler: (detail: DebugEventDetail) => void,
+  handler: (detail: DebugEventDetail) => void
 ): () => void {
   const state = getState();
   const eventName = `debug:${channel}`;
@@ -301,7 +312,11 @@ export function __resetBusForTesting(): void {
 if (isBrowser) {
   window.__debug = {
     log: (level, ns, msg, ...args) => emit(level, ns, msg, args),
-    enable: () => { window.__DEBUG_ENABLED = true; },
-    disable: () => { window.__DEBUG_ENABLED = false; },
+    enable: () => {
+      window.__DEBUG_ENABLED = true;
+    },
+    disable: () => {
+      window.__DEBUG_ENABLED = false;
+    },
   };
 }

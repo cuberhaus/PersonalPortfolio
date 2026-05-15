@@ -28,8 +28,7 @@ export const ISSUER_ICON_PATHS: Record<string, string> = {
     '<path d="M3 6h12M5 12h14M7 18h12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>',
   'universal-robots':
     '<path d="M9 4h6a2 2 0 0 1 2 2v2H7V6a2 2 0 0 1 2-2zM7 8h10v6H7zM5 16h14M5 16v4M19 16v4M12 14v2"/><circle cx="12" cy="11" r="1.5" fill="currentColor" stroke="none"/>',
-  medal:
-    '<circle cx="12" cy="9" r="6"/><path d="M8 14l-2 7 6-3 6 3-2-7"/>',
+  medal: '<circle cx="12" cy="9" r="6"/><path d="M8 14l-2 7 6-3 6 3-2-7"/>',
 };
 
 export function renderIssuerIconSvg(icon: string, size: number): string {

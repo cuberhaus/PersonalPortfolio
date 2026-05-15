@@ -54,4 +54,4 @@ export const T = {
   },
 };
 
-export type PageRankTranslations = typeof T[Lang];
+export type PageRankTranslations = (typeof T)[Lang];

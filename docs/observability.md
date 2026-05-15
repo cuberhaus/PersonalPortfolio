@@ -14,12 +14,12 @@ this document only covers running and using the dashboards.
 
 ## Where do my events go? — quick chooser
 
-| Need | Pick | Setup time | Resource cost | Queryable tags? | Trace waterfalls? |
-|---|---|---|---|---|---|
-| "Is anything reaching me at all" while coding | **Spotlight** | 0 (built-in) | ~0 MB | No | Basic |
-| Real local dashboard with full Sentry parity | **Self-hosted Sentry** | 15-25 min first run | ~3-10 GB RAM, 30 GB disk | **Yes** | **Full** |
-| Lightest queryable local dashboard, less polished | **GlitchTip** | 3-5 min | ~1-2 GB RAM | Yes | Basic |
-| Persistent + remote-accessible, don't care about data ownership | **Sentry.io free tier** | 5 min signup | 0 (cloud) | Yes | Full |
+| Need                                                            | Pick                    | Setup time          | Resource cost            | Queryable tags? | Trace waterfalls? |
+| --------------------------------------------------------------- | ----------------------- | ------------------- | ------------------------ | --------------- | ----------------- |
+| "Is anything reaching me at all" while coding                   | **Spotlight**           | 0 (built-in)        | ~0 MB                    | No              | Basic             |
+| Real local dashboard with full Sentry parity                    | **Self-hosted Sentry**  | 15-25 min first run | ~3-10 GB RAM, 30 GB disk | **Yes**         | **Full**          |
+| Lightest queryable local dashboard, less polished               | **GlitchTip**           | 3-5 min             | ~1-2 GB RAM              | Yes             | Basic             |
+| Persistent + remote-accessible, don't care about data ownership | **Sentry.io free tier** | 5 min signup        | 0 (cloud)                | Yes             | Full              |
 
 The four options are **mutually exclusive at the DSN level**: every backend
 reads `SENTRY_DSN` from `.env.shared` and points at exactly one collector.
@@ -43,12 +43,14 @@ It starts automatically when you run `npm run dev`, `make dev-bare`, or `make al
    bottom-left of any page).
 
 **What works:**
+
 - All errors, transactions, and breadcrumbs from frontend + every backend
   (Python, Java/Spring, SvelteKit, Rust, Go, PHP) appear within seconds.
 - Frontend ↔ backend traces are linked by `sentry-trace` headers — click
   a `</>` browser pageload to see the chained 🐍 backend handler underneath.
 
 **What's intentionally limited:**
+
 - The search box only filters on transaction names. **Tag filtering like
   `service:tfg-polyps` does NOT work** — Spotlight is a notification bus,
   not a queryable database. Use Option 2 or 4 for that.
@@ -78,14 +80,14 @@ The installer is **interactive** and will:
 
 ### Daily operation
 
-| Command | What it does |
-|---|---|
-| `make obs-up` | Start the stack (UI ready in ~30-60s) |
-| `make obs-down` | Stop the stack (volumes preserved — data survives) |
-| `make obs-restart` | `obs-down` + `obs-up` |
-| `make obs-status` | `docker compose ps` for the Sentry stack |
-| `make obs-logs` | `docker compose logs -f` for all Sentry containers |
-| `make obs-wipe` | **DESTRUCTIVE** — stop and delete all volumes (asks for `yes`) |
+| Command            | What it does                                                   |
+| ------------------ | -------------------------------------------------------------- |
+| `make obs-up`      | Start the stack (UI ready in ~30-60s)                          |
+| `make obs-down`    | Stop the stack (volumes preserved — data survives)             |
+| `make obs-restart` | `obs-down` + `obs-up`                                          |
+| `make obs-status`  | `docker compose ps` for the Sentry stack                       |
+| `make obs-logs`    | `docker compose logs -f` for all Sentry containers             |
+| `make obs-wipe`    | **DESTRUCTIVE** — stop and delete all volumes (asks for `yes`) |
 
 ### First-time configuration
 
@@ -132,13 +134,13 @@ hook](./debugging-architecture.md#why-the-python-helper-has-a-before_send-hook-a
 
 Other useful tags to filter on:
 
-| Filter | Effect |
-|---|---|
-| `environment:local-dev` | Only events from local dev (vs production) |
-| `release:local-dev` | Only the current release |
-| `http.status_code:5xx` | Only 500-class responses |
-| `transaction:/api/dataset/{split}` | A specific endpoint |
-| `service:tfg-polyps AND http.status_code:5xx` | Combine with `AND` |
+| Filter                                        | Effect                                     |
+| --------------------------------------------- | ------------------------------------------ |
+| `environment:local-dev`                       | Only events from local dev (vs production) |
+| `release:local-dev`                           | Only the current release                   |
+| `http.status_code:5xx`                        | Only 500-class responses                   |
+| `transaction:/api/dataset/{split}`            | A specific endpoint                        |
+| `service:tfg-polyps AND http.status_code:5xx` | Combine with `AND`                         |
 
 ### Resource footprint
 
@@ -307,17 +309,17 @@ The header is only injected for requests whose origin is in the demo
 registry's `iframeUrl` set (or the parent page's own origin). Cross-origin
 requests to third-party endpoints stay untouched.
 
-| Where | What sets the tag |
-|---|---|
-| Browser | `Sentry.init({ initialScope: { tags: { session_id } } })` in [`sentry.client.config.ts`](../sentry.client.config.ts) |
-| FastAPI / Litestar / async-Django | `app.add_middleware(SessionIdMiddleware)` from [`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) |
-| Flask | `register_flask_session_id(app)` from [`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) |
-| Django (sync) | `'Draculin._sentry_obs.django_session_id_middleware'` in `MIDDLEWARE` |
-| Spring Boot | [`web.config.SessionIdFilter`](../../subgrup-prop7.1/web/src/main/java/web/config/SessionIdFilter.java) |
-| Go (joc-eda) | per-request wrapper inside `withSentryHTTP` in [`observability.go`](../../joc_eda/web/backend-go/observability.go) |
-| Rust (pro2) | tower middleware `_session_id_middleware` + `NewSentryLayer` in [`main.rs`](../../pracpro2/web/backend/src/main.rs) |
-| PHP (Tenda) | `\Sentry\configureScope(...)` reads `$_SERVER['HTTP_X_SESSION_ID']` in [`observability.php`](../../tenda_online/includes/observability.php) |
-| SvelteKit | `sessionIdHandle` composed into the chain in [`hooks.server.ts`](../../Practica_de_Planificacion/web/src/hooks.server.ts) |
+| Where                             | What sets the tag                                                                                                                           |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Browser                           | `Sentry.init({ initialScope: { tags: { session_id } } })` in [`sentry.client.config.ts`](../sentry.client.config.ts)                        |
+| FastAPI / Litestar / async-Django | `app.add_middleware(SessionIdMiddleware)` from [`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py)                                |
+| Flask                             | `register_flask_session_id(app)` from [`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py)                                         |
+| Django (sync)                     | `'Draculin._sentry_obs.django_session_id_middleware'` in `MIDDLEWARE`                                                                       |
+| Spring Boot                       | [`web.config.SessionIdFilter`](../../subgrup-prop7.1/web/src/main/java/web/config/SessionIdFilter.java)                                     |
+| Go (joc-eda)                      | per-request wrapper inside `withSentryHTTP` in [`observability.go`](../../joc_eda/web/backend-go/observability.go)                          |
+| Rust (pro2)                       | tower middleware `_session_id_middleware` + `NewSentryLayer` in [`main.rs`](../../pracpro2/web/backend/src/main.rs)                         |
+| PHP (Tenda)                       | `\Sentry\configureScope(...)` reads `$_SERVER['HTTP_X_SESSION_ID']` in [`observability.php`](../../tenda_online/includes/observability.php) |
+| SvelteKit                         | `sessionIdHandle` composed into the chain in [`hooks.server.ts`](../../Practica_de_Planificacion/web/src/hooks.server.ts)                   |
 
 In the Sentry UI:
 
@@ -337,10 +339,10 @@ Every Sentry-enabled backend (Python helper plus Go / Rust / PHP /
 SvelteKit init hooks) picks an **environment-aware default** when the
 explicit env var is unset:
 
-| `SENTRY_ENVIRONMENT` | Default `SENTRY_TRACES_SAMPLE_RATE` | Default `SENTRY_PROFILES_SAMPLE_RATE` |
-|---|---|---|
-| `production` | 0.1 | 0.1 (Python only) |
-| anything else (`local-dev`, `staging`, …) | 1.0 | 1.0 (Python only) |
+| `SENTRY_ENVIRONMENT`                      | Default `SENTRY_TRACES_SAMPLE_RATE` | Default `SENTRY_PROFILES_SAMPLE_RATE` |
+| ----------------------------------------- | ----------------------------------- | ------------------------------------- |
+| `production`                              | 0.1                                 | 0.1 (Python only)                     |
+| anything else (`local-dev`, `staging`, …) | 1.0                                 | 1.0 (Python only)                     |
 
 This keeps Sentry.io free-tier deploys safe out of the box (10 K
 transactions / month is exhausted at 1.0 within a few days of real
@@ -527,17 +529,17 @@ endpoint, **reuse an existing axis** rather than coining a synonym. New
 axes are fine if the concept is genuinely new; just add them to the table
 in the same PR so the convention stays a single source of truth.
 
-| Backend | `service` value | Tag axes (in addition to the globals) |
-|---|---|---|
-| TFG (FastAPI) | `tfg-polyps` | `model`, `dataset`, `experiment` |
-| MPIDS (Flask) | `mpids` | `algorithm`, `n`, `p`, `iterations`, `temperature` |
-| Phase Transitions (Flask) | `phase-transitions` | `model`, `n`, `param`, `trials`, `percolation_type`, `q` |
-| CAIM (Flask) | `caim` | `dataset`, `top_n`, `damping`, `init_strategy`, `max_iterations` |
-| SBC_IA (Litestar) | `sbc-ia` | `trip_type`, `priority`, `budget`, `n_cities`, `transport_pref` |
-| DesastresIA (Flask) | `desastres-ia` | `algorithm`, `n_grupos`, `n_centros`, `successor_fn`, `heuristic_fn`, `sa_steps` |
-| bitsXlaMarato (FastAPI) | `bitsx-marato` | `job_id`, `model`, `confidence`, `roi_size` |
-| Draculin (Django) | `draculin` | `has_bard`, `image_size_kb` |
-| planner-api (FastAPI, host) | `planner-api` | `domain_size_kb`, `problem_size_kb`, `outcome` |
+| Backend                     | `service` value     | Tag axes (in addition to the globals)                                            |
+| --------------------------- | ------------------- | -------------------------------------------------------------------------------- |
+| TFG (FastAPI)               | `tfg-polyps`        | `model`, `dataset`, `experiment`                                                 |
+| MPIDS (Flask)               | `mpids`             | `algorithm`, `n`, `p`, `iterations`, `temperature`                               |
+| Phase Transitions (Flask)   | `phase-transitions` | `model`, `n`, `param`, `trials`, `percolation_type`, `q`                         |
+| CAIM (Flask)                | `caim`              | `dataset`, `top_n`, `damping`, `init_strategy`, `max_iterations`                 |
+| SBC_IA (Litestar)           | `sbc-ia`            | `trip_type`, `priority`, `budget`, `n_cities`, `transport_pref`                  |
+| DesastresIA (Flask)         | `desastres-ia`      | `algorithm`, `n_grupos`, `n_centros`, `successor_fn`, `heuristic_fn`, `sa_steps` |
+| bitsXlaMarato (FastAPI)     | `bitsx-marato`      | `job_id`, `model`, `confidence`, `roi_size`                                      |
+| Draculin (Django)           | `draculin`          | `has_bard`, `image_size_kb`                                                      |
+| planner-api (FastAPI, host) | `planner-api`       | `domain_size_kb`, `problem_size_kb`, `outcome`                                   |
 
 ### Conventions worth following
 
@@ -562,17 +564,17 @@ These files contain the **content tags** (model, dataset, algorithm, etc.) —
 the per-request `tag(...)`, `breadcrumb(...)`, `span(...)` calls that
 distinguish one request from another inside the same `service`.
 
-| Backend | Handler file |
-|---|---|
-| TFG | [`TFG/backend/main.py`](../../TFG/backend/main.py) |
-| MPIDS | [`projectA/web/backend/app.py`](../../projectA/web/backend/app.py) |
-| Phase | [`projectA2/web/backend/app.py`](../../projectA2/web/backend/app.py) |
-| CAIM | [`CAIM/web/backend/app.py`](../../CAIM/web/backend/app.py) |
-| SBC_IA | [`SBC_IA/web/backend/app.py`](../../SBC_IA/web/backend/app.py) |
-| DesastresIA | [`desastresIA/web/backend/app.py`](../../desastresIA/web/backend/app.py) |
+| Backend       | Handler file                                                                 |
+| ------------- | ---------------------------------------------------------------------------- |
+| TFG           | [`TFG/backend/main.py`](../../TFG/backend/main.py)                           |
+| MPIDS         | [`projectA/web/backend/app.py`](../../projectA/web/backend/app.py)           |
+| Phase         | [`projectA2/web/backend/app.py`](../../projectA2/web/backend/app.py)         |
+| CAIM          | [`CAIM/web/backend/app.py`](../../CAIM/web/backend/app.py)                   |
+| SBC_IA        | [`SBC_IA/web/backend/app.py`](../../SBC_IA/web/backend/app.py)               |
+| DesastresIA   | [`desastresIA/web/backend/app.py`](../../desastresIA/web/backend/app.py)     |
 | bitsXlaMarato | [`bitsXlaMarato/web/backend/app.py`](../../bitsXlaMarato/web/backend/app.py) |
-| Draculin | [`Draculin-Backend/dracu/views.py`](../../Draculin-Backend/dracu/views.py) |
-| planner-api | [`planner-api/app/main.py`](../planner-api/app/main.py) |
+| Draculin      | [`Draculin-Backend/dracu/views.py`](../../Draculin-Backend/dracu/views.py)   |
+| planner-api   | [`planner-api/app/main.py`](../planner-api/app/main.py)                      |
 
 Non-Python backends currently emit only the global tags (`service`,
 `environment`, `release`) — they don't have rich per-handler content tags
@@ -586,22 +588,22 @@ The `service` tag and SDK init for each backend live in the file below.
 Source of truth for which backends have a hook is the `needsSentry` field
 in [`src/data/demo-services.json`](../src/data/demo-services.json).
 
-| Backend | Stack | Init hook |
-|---|---|---|
-| TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api | Python (FastAPI / Flask / Litestar) | [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) — canonical, copied verbatim into each backend repo |
-| Draculin | Django | [`Draculin-Backend/Draculin/settings.py`](../../Draculin-Backend/Draculin/settings.py) — calls `init_observability("draculin")` from the same canonical helper |
-| PROP | Spring Boot | [`subgrup-prop7.1/web/src/main/resources/application.properties`](../../subgrup-prop7.1/web/src/main/resources/application.properties) — `sentry.dsn` + `sentry.tags.service=prop` |
-| Tenda | PHP | [`tenda_online/includes/observability.php`](../../tenda_online/includes/observability.php) — `\Sentry\init(...)` + `\Sentry\configureScope(...)` |
-| joc-eda | Go | [`joc_eda/web/backend-go/observability.go`](../../joc_eda/web/backend-go/observability.go) — `initSentry`, `withSentryHTTP` |
-| pro2 | Rust (axum) | [`pracpro2/web/backend/src/main.rs`](../../pracpro2/web/backend/src/main.rs) — `_init_sentry()` |
-| planificacion | SvelteKit | [`Practica_de_Planificacion/web/src/hooks.server.ts`](../../Practica_de_Planificacion/web/src/hooks.server.ts) — `@sentry/sveltekit` + `sentryHandle()` |
-| PAR / FIB / Grafics / ROB | static frontend | n/a — `needsSentry: false`. Browser errors caught by the parent page's Sentry SDK via the iframe forwarder |
+| Backend                                                          | Stack                               | Init hook                                                                                                                                                                          |
+| ---------------------------------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api | Python (FastAPI / Flask / Litestar) | [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) — canonical, copied verbatim into each backend repo                                          |
+| Draculin                                                         | Django                              | [`Draculin-Backend/Draculin/settings.py`](../../Draculin-Backend/Draculin/settings.py) — calls `init_observability("draculin")` from the same canonical helper                     |
+| PROP                                                             | Spring Boot                         | [`subgrup-prop7.1/web/src/main/resources/application.properties`](../../subgrup-prop7.1/web/src/main/resources/application.properties) — `sentry.dsn` + `sentry.tags.service=prop` |
+| Tenda                                                            | PHP                                 | [`tenda_online/includes/observability.php`](../../tenda_online/includes/observability.php) — `\Sentry\init(...)` + `\Sentry\configureScope(...)`                                   |
+| joc-eda                                                          | Go                                  | [`joc_eda/web/backend-go/observability.go`](../../joc_eda/web/backend-go/observability.go) — `initSentry`, `withSentryHTTP`                                                        |
+| pro2                                                             | Rust (axum)                         | [`pracpro2/web/backend/src/main.rs`](../../pracpro2/web/backend/src/main.rs) — `_init_sentry()`                                                                                    |
+| planificacion                                                    | SvelteKit                           | [`Practica_de_Planificacion/web/src/hooks.server.ts`](../../Practica_de_Planificacion/web/src/hooks.server.ts) — `@sentry/sveltekit` + `sentryHandle()`                            |
+| PAR / FIB / Grafics / ROB                                        | static frontend                     | n/a — `needsSentry: false`. Browser errors caught by the parent page's Sentry SDK via the iframe forwarder                                                                         |
 
 ---
 
 ## Cross-references
 
-- [`debugging-architecture.md`](./debugging-architecture.md) — *why* Sentry
+- [`debugging-architecture.md`](./debugging-architecture.md) — _why_ Sentry
   was chosen and the Option A vs B vs C vs D trade-off matrix.
 - [`decisions.md`](./decisions.md) — full decision-rationale catalogue
   (foundations, patterns, alternatives, migration costs).

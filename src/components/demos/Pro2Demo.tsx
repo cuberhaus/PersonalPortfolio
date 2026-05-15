@@ -1,5 +1,5 @@
-import { useState, useCallback, useMemo } from "react";
-import LiveAppEmbed from "./LiveAppEmbed";
+import { useState, useCallback, useMemo } from 'react';
+import LiveAppEmbed from './LiveAppEmbed';
 import {
   type Species,
   type ClusterState,
@@ -11,120 +11,120 @@ import {
   distanceTableToArray,
   SAMPLE_SPECIES,
   DEFAULT_K,
-} from "../../lib/wpgma";
+} from '../../lib/wpgma';
 
-import { TRANSLATIONS, type DemoTranslations } from "../../i18n/demos/pro2-demo";
-import { useDemoLifecycle, useDebug } from "../../lib/useDebug";
+import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/pro2-demo';
+import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
-type Lang = "en" | "es" | "ca";
+type Lang = 'en' | 'es' | 'ca';
 
 const styles = {
   wrapper: {
     fontFamily: "var(--font-sans, 'Inter', sans-serif)",
-    color: "var(--text-primary)",
+    color: 'var(--text-primary)',
   },
   card: {
-    background: "var(--bg-card)",
-    border: "1px solid var(--border-color)",
-    borderRadius: "0.75rem",
-    padding: "1.5rem",
-    marginBottom: "1.5rem",
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border-color)',
+    borderRadius: '0.75rem',
+    padding: '1.5rem',
+    marginBottom: '1.5rem',
   },
   h3: {
-    fontSize: "1.1rem",
+    fontSize: '1.1rem',
     fontWeight: 600,
-    marginBottom: "1rem",
-    color: "var(--text-primary)",
+    marginBottom: '1rem',
+    color: 'var(--text-primary)',
   },
   inputGroup: {
-    display: "flex" as const,
-    gap: "0.5rem",
-    marginBottom: "0.75rem",
-    flexWrap: "wrap" as const,
+    display: 'flex' as const,
+    gap: '0.5rem',
+    marginBottom: '0.75rem',
+    flexWrap: 'wrap' as const,
   },
   input: {
-    background: "var(--bg-secondary)",
-    border: "1px solid var(--border-color)",
-    borderRadius: "0.5rem",
-    padding: "0.5rem 0.75rem",
-    color: "var(--text-primary)",
-    fontSize: "0.85rem",
-    fontFamily: "monospace",
-    outline: "none",
+    background: 'var(--bg-secondary)',
+    border: '1px solid var(--border-color)',
+    borderRadius: '0.5rem',
+    padding: '0.5rem 0.75rem',
+    color: 'var(--text-primary)',
+    fontSize: '0.85rem',
+    fontFamily: 'monospace',
+    outline: 'none',
   },
   button: {
-    padding: "0.5rem 1.25rem",
-    borderRadius: "0.5rem",
-    border: "none",
+    padding: '0.5rem 1.25rem',
+    borderRadius: '0.5rem',
+    border: 'none',
     fontWeight: 600,
-    fontSize: "0.85rem",
-    cursor: "pointer",
-    transition: "all 0.15s ease",
+    fontSize: '0.85rem',
+    cursor: 'pointer',
+    transition: 'all 0.15s ease',
   },
   primaryBtn: {
-    background: "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
-    color: "var(--text-primary)",
+    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
+    color: 'var(--text-primary)',
   },
   secondaryBtn: {
-    background: "var(--border-color)",
-    color: "var(--text-secondary)",
+    background: 'var(--border-color)',
+    color: 'var(--text-secondary)',
   },
   dangerBtn: {
-    background: "color-mix(in srgb, var(--accent-end) 10%, transparent)",
-    color: "var(--accent-end)",
+    background: 'color-mix(in srgb, var(--accent-end) 10%, transparent)',
+    color: 'var(--accent-end)',
   },
   tag: {
-    display: "inline-block",
-    fontFamily: "monospace",
-    fontSize: "0.75rem",
-    color: "var(--text-secondary)",
-    background: "var(--bg-secondary)",
-    padding: "0.2rem 0.6rem",
-    borderRadius: "0.5rem",
-    marginRight: "0.35rem",
-    marginBottom: "0.35rem",
+    display: 'inline-block',
+    fontFamily: 'monospace',
+    fontSize: '0.75rem',
+    color: 'var(--text-secondary)',
+    background: 'var(--bg-secondary)',
+    padding: '0.2rem 0.6rem',
+    borderRadius: '0.5rem',
+    marginRight: '0.35rem',
+    marginBottom: '0.35rem',
   },
   table: {
-    width: "100%",
-    borderCollapse: "collapse" as const,
-    fontSize: "0.8rem",
-    fontFamily: "monospace",
+    width: '100%',
+    borderCollapse: 'collapse' as const,
+    fontSize: '0.8rem',
+    fontFamily: 'monospace',
   },
   th: {
-    padding: "0.5rem",
-    borderBottom: "1px solid var(--border-color)",
-    color: "var(--text-secondary)",
+    padding: '0.5rem',
+    borderBottom: '1px solid var(--border-color)',
+    color: 'var(--text-secondary)',
     fontWeight: 500,
-    textAlign: "left" as const,
+    textAlign: 'left' as const,
   },
   td: {
-    padding: "0.5rem",
-    borderBottom: "1px solid var(--bg-card-hover)",
-    color: "var(--text-primary)",
+    padding: '0.5rem',
+    borderBottom: '1px solid var(--bg-card-hover)',
+    color: 'var(--text-primary)',
   },
   tdMuted: {
-    padding: "0.5rem",
-    borderBottom: "1px solid var(--bg-card-hover)",
-    color: "var(--text-muted)",
+    padding: '0.5rem',
+    borderBottom: '1px solid var(--bg-card-hover)',
+    color: 'var(--text-muted)',
   },
   stepInfo: {
-    background: "var(--bg-secondary)",
-    borderRadius: "0.5rem",
-    padding: "0.75rem 1rem",
-    fontSize: "0.85rem",
-    marginBottom: "1rem",
-    borderLeft: "3px solid var(--accent-start)",
+    background: 'var(--bg-secondary)',
+    borderRadius: '0.5rem',
+    padding: '0.75rem 1rem',
+    fontSize: '0.85rem',
+    marginBottom: '1rem',
+    borderLeft: '3px solid var(--accent-start)',
   },
 } as const;
 
-export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
+export default function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:pro2', { lang });
   const log = useDebug('demo:pro2');
   const [species, setSpecies] = useState<Species[]>([...SAMPLE_SPECIES]);
   const [k, setK] = useState(DEFAULT_K);
-  const [newId, setNewId] = useState("");
-  const [newGene, setNewGene] = useState("");
+  const [newId, setNewId] = useState('');
+  const [newGene, setNewGene] = useState('');
   const [clusterState, setClusterState] = useState<ClusterState | null>(null);
   const [history, setHistory] = useState<WpgmaStep[]>([]);
   const [tree, setTree] = useState<TreeNode | null>(null);
@@ -147,8 +147,8 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
     if (!/^[ACGT]+$/.test(trimGene)) return;
     log.info('add-species', { id: trimId, gene: trimGene });
     setSpecies((prev) => [...prev, { id: trimId, gene: trimGene }]);
-    setNewId("");
-    setNewGene("");
+    setNewId('');
+    setNewGene('');
     setClusterState(null);
     setHistory([]);
     setTree(null);
@@ -186,7 +186,10 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
     if (!clusterState) return;
     const step = wpgmaStep(clusterState);
     if (!step) return;
-    log.info('step', { merged: `${step.merged.id1}+${step.merged.id2}`, distance: step.merged.distance });
+    log.info('step', {
+      merged: `${step.merged.id1}+${step.merged.id2}`,
+      distance: step.merged.distance,
+    });
     setClusterState(step.state);
     setHistory((prev) => [...prev, step]);
     if (step.state.clusters.size === 1) {
@@ -230,80 +233,122 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
       />
 
       {/* How it works */}
-      <div style={{
-        ...styles.card,
-        borderLeft: "3px solid var(--accent-start)",
-        background: "linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 5%, transparent), color-mix(in srgb, var(--accent-end) 3%, transparent))",
-      }}>
-        <h3 style={{ ...styles.h3, marginBottom: "0.75rem" }}>{t.howItWorks}</h3>
-        <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.8 }}>
-          <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "var(--text-primary)" }}>{t.step1}</strong>{t.step1Desc1}<strong style={{ color: "var(--accent-end)" }}>{t.step1Desc2}</strong>{t.step1Desc3}<strong style={{ color: "var(--accent-end)" }}>{t.step1Desc4}</strong>{t.step1Desc5}
+      <div
+        style={{
+          ...styles.card,
+          borderLeft: '3px solid var(--accent-start)',
+          background:
+            'linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 5%, transparent), color-mix(in srgb, var(--accent-end) 3%, transparent))',
+        }}
+      >
+        <h3 style={{ ...styles.h3, marginBottom: '0.75rem' }}>{t.howItWorks}</h3>
+        <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+          <p style={{ marginBottom: '0.5rem' }}>
+            <strong style={{ color: 'var(--text-primary)' }}>{t.step1}</strong>
+            {t.step1Desc1}
+            <strong style={{ color: 'var(--accent-end)' }}>{t.step1Desc2}</strong>
+            {t.step1Desc3}
+            <strong style={{ color: 'var(--accent-end)' }}>{t.step1Desc4}</strong>
+            {t.step1Desc5}
           </p>
-          <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "var(--text-primary)" }}>{t.step2}</strong>{t.step2Desc1}<strong style={{ color: "var(--accent-end)" }}>{t.step2Desc2}</strong>{t.step2Desc3}<em>{t.step2Desc4}</em>{t.step2Desc5}
+          <p style={{ marginBottom: '0.5rem' }}>
+            <strong style={{ color: 'var(--text-primary)' }}>{t.step2}</strong>
+            {t.step2Desc1}
+            <strong style={{ color: 'var(--accent-end)' }}>{t.step2Desc2}</strong>
+            {t.step2Desc3}
+            <em>{t.step2Desc4}</em>
+            {t.step2Desc5}
           </p>
-          <p style={{ marginBottom: "0.5rem" }}>
-            <strong style={{ color: "var(--text-primary)" }}>{t.step3}</strong>{t.step3Desc1}<em>{t.step3Desc2}</em>{t.step3Desc3}<em>{t.step3Desc4}</em>{t.step3Desc5}
+          <p style={{ marginBottom: '0.5rem' }}>
+            <strong style={{ color: 'var(--text-primary)' }}>{t.step3}</strong>
+            {t.step3Desc1}
+            <em>{t.step3Desc2}</em>
+            {t.step3Desc3}
+            <em>{t.step3Desc4}</em>
+            {t.step3Desc5}
           </p>
           <p style={{ marginBottom: 0 }}>
-            <strong style={{ color: "var(--text-primary)" }}>{t.step4}</strong>{t.step4Desc}
+            <strong style={{ color: 'var(--text-primary)' }}>{t.step4}</strong>
+            {t.step4Desc}
           </p>
         </div>
       </div>
 
       {/* Species input */}
       <div style={styles.card}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '1rem',
+          }}
+        >
           <h3 style={{ ...styles.h3, marginBottom: 0 }}>{t.speciesTitle}</h3>
-          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
             {species.length} {t.speciesLoaded}
           </span>
         </div>
 
         {species.length > 0 && (
-          <div style={{ overflowX: "auto", marginBottom: "1rem" }}>
-            <table style={{ ...styles.table, fontSize: "0.8rem" }}>
+          <div style={{ overflowX: 'auto', marginBottom: '1rem' }}>
+            <table style={{ ...styles.table, fontSize: '0.8rem' }}>
               <thead>
                 <tr>
-                  <th style={{ ...styles.th, width: "60px" }}>ID</th>
+                  <th style={{ ...styles.th, width: '60px' }}>ID</th>
                   <th style={styles.th}>{t.geneSequence}</th>
-                  <th style={{ ...styles.th, width: "50px" }}></th>
+                  <th style={{ ...styles.th, width: '50px' }}></th>
                 </tr>
               </thead>
               <tbody>
                 {species.map((s) => (
                   <tr key={s.id}>
-                    <td style={{ ...styles.td, fontWeight: 600, color: "var(--accent-end)" }}>{s.id}</td>
-                    <td style={{
-                      ...styles.td,
-                      fontFamily: "monospace",
-                      fontSize: "0.75rem",
-                      letterSpacing: "0.05em",
-                      wordBreak: "break-all" as const,
-                    }}>
-                      {s.gene.split("").map((c, i) => (
-                        <span key={i} style={{
-                          color: c === "A" ? "#4ade80" : c === "C" ? "#60a5fa" : c === "G" ? "#facc15" : "#f87171",
-                        }}>{c}</span>
+                    <td style={{ ...styles.td, fontWeight: 600, color: 'var(--accent-end)' }}>
+                      {s.id}
+                    </td>
+                    <td
+                      style={{
+                        ...styles.td,
+                        fontFamily: 'monospace',
+                        fontSize: '0.75rem',
+                        letterSpacing: '0.05em',
+                        wordBreak: 'break-all' as const,
+                      }}
+                    >
+                      {s.gene.split('').map((c, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            color:
+                              c === 'A'
+                                ? '#4ade80'
+                                : c === 'C'
+                                  ? '#60a5fa'
+                                  : c === 'G'
+                                    ? '#facc15'
+                                    : '#f87171',
+                          }}
+                        >
+                          {c}
+                        </span>
                       ))}
                     </td>
                     <td style={styles.td}>
                       <button
                         onClick={() => removeSpecies(s.id)}
                         style={{
-                          background: "none",
-                          border: "none",
-                          color: "var(--text-muted)",
-                          cursor: "pointer",
-                          padding: "0.2rem 0.4rem",
-                          fontSize: "0.85rem",
-                          borderRadius: "0.25rem",
-                          transition: "color 0.15s",
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--text-muted)',
+                          cursor: 'pointer',
+                          padding: '0.2rem 0.4rem',
+                          fontSize: '0.85rem',
+                          borderRadius: '0.25rem',
+                          transition: 'color 0.15s',
                         }}
                         title="Remove species"
-                        onMouseOver={(e) => (e.currentTarget.style.color = "var(--accent-end)")}
-                        onMouseOut={(e) => (e.currentTarget.style.color = "var(--text-muted)")}
+                        onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-end)')}
+                        onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
                       >
                         ×
                       </button>
@@ -316,45 +361,54 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
         )}
 
         {species.length === 0 && (
-          <div style={{
-            padding: "2rem",
-            textAlign: "center" as const,
-            color: "var(--text-muted)",
-            fontSize: "0.85rem",
-            marginBottom: "1rem",
-          }}>
+          <div
+            style={{
+              padding: '2rem',
+              textAlign: 'center' as const,
+              color: 'var(--text-muted)',
+              fontSize: '0.85rem',
+              marginBottom: '1rem',
+            }}
+          >
             {t.noSpecies}
           </div>
         )}
 
-        <div style={{
-          background: "var(--bg-secondary)",
-          borderRadius: "0.5rem",
-          padding: "1rem",
-        }}>
-          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginBottom: "0.65rem" }}>
+        <div
+          style={{
+            background: 'var(--bg-secondary)',
+            borderRadius: '0.5rem',
+            padding: '1rem',
+          }}
+        >
+          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.65rem' }}>
             {t.addInstruction}
           </div>
           <div style={styles.inputGroup}>
             <input
-              style={{ ...styles.input, width: "80px" }}
+              style={{ ...styles.input, width: '80px' }}
               placeholder="e.g. F"
               value={newId}
               onChange={(e) => setNewId(e.target.value)}
               maxLength={8}
             />
             <input
-              style={{ ...styles.input, flex: 1, minWidth: "150px" }}
+              style={{ ...styles.input, flex: 1, minWidth: '150px' }}
               placeholder="e.g. AACTGCTTGA"
               value={newGene}
               onChange={(e) => setNewGene(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addSpecies()}
+              onKeyDown={(e) => e.key === 'Enter' && addSpecies()}
             />
-            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
-              <label style={{ fontSize: "0.75rem", color: "var(--text-muted)" }} title={t.kmerTooltip}>k=</label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <label
+                style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
+                title={t.kmerTooltip}
+              >
+                k=
+              </label>
               <input
                 type="number"
-                style={{ ...styles.input, width: "55px" }}
+                style={{ ...styles.input, width: '55px' }}
                 value={k}
                 min={1}
                 max={10}
@@ -366,24 +420,36 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
                 }}
               />
             </div>
-            <button
-              style={{ ...styles.button, ...styles.primaryBtn }}
-              onClick={addSpecies}
-            >
+            <button style={{ ...styles.button, ...styles.primaryBtn }} onClick={addSpecies}>
               {t.addBtn}
             </button>
           </div>
-          <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.65rem" }}>
+          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.65rem' }}>
             <button
-              style={{ ...styles.button, ...styles.secondaryBtn, fontSize: "0.75rem", padding: "0.35rem 0.85rem" }}
+              style={{
+                ...styles.button,
+                ...styles.secondaryBtn,
+                fontSize: '0.75rem',
+                padding: '0.35rem 0.85rem',
+              }}
               onClick={loadSample}
             >
               {t.loadSample}
             </button>
             {species.length > 0 && (
               <button
-                style={{ ...styles.button, ...styles.dangerBtn, fontSize: "0.75rem", padding: "0.35rem 0.85rem" }}
-                onClick={() => { setSpecies([]); setClusterState(null); setHistory([]); setTree(null); }}
+                style={{
+                  ...styles.button,
+                  ...styles.dangerBtn,
+                  fontSize: '0.75rem',
+                  padding: '0.35rem 0.85rem',
+                }}
+                onClick={() => {
+                  setSpecies([]);
+                  setClusterState(null);
+                  setHistory([]);
+                  setTree(null);
+                }}
               >
                 {t.clearAll}
               </button>
@@ -396,7 +462,7 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
       {currentDistArray && (
         <div style={styles.card}>
           <h3 style={styles.h3}>{t.distanceTable}</h3>
-          <div style={{ overflowX: "auto" }}>
+          <div style={{ overflowX: 'auto' }}>
             <table style={styles.table}>
               <thead>
                 <tr>
@@ -446,62 +512,52 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
           <h3 style={styles.h3}>{t.wpgmaClustering}</h3>
 
           {history.length > 0 && (
-            <div style={{ marginBottom: "1rem" }}>
+            <div style={{ marginBottom: '1rem' }}>
               {history.map((step, i) => (
                 <div key={i} style={styles.stepInfo}>
-                  <strong>{t.stepWord} {i + 1}:</strong> {t.merged}{" "}
-                  <span style={{ color: "var(--accent-end)" }}>{step.merged.id1}</span>{" "}
-                  +{" "}
-                  <span style={{ color: "var(--accent-end)" }}>{step.merged.id2}</span>{" "}
-                  → <span style={{ color: "var(--accent-start)" }}>{step.merged.newId}</span>{" "}
-                  ({t.distanceWord} {step.merged.distance.toFixed(2)})
+                  <strong>
+                    {t.stepWord} {i + 1}:
+                  </strong>{' '}
+                  {t.merged} <span style={{ color: 'var(--accent-end)' }}>{step.merged.id1}</span> +{' '}
+                  <span style={{ color: 'var(--accent-end)' }}>{step.merged.id2}</span> →{' '}
+                  <span style={{ color: 'var(--accent-start)' }}>{step.merged.newId}</span> (
+                  {t.distanceWord} {step.merged.distance.toFixed(2)})
                 </div>
               ))}
             </div>
           )}
 
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             {!clusterState && (
-              <button
-                style={{ ...styles.button, ...styles.primaryBtn }}
-                onClick={startClustering}
-              >
+              <button style={{ ...styles.button, ...styles.primaryBtn }} onClick={startClustering}>
                 {t.initClusters}
               </button>
             )}
             {clusterState && clusterState.clusters.size > 1 && (
               <>
-                <button
-                  style={{ ...styles.button, ...styles.primaryBtn }}
-                  onClick={doStep}
-                >
+                <button style={{ ...styles.button, ...styles.primaryBtn }} onClick={doStep}>
                   {t.nextStep}
                 </button>
-                <button
-                  style={{ ...styles.button, ...styles.secondaryBtn }}
-                  onClick={runAll}
-                >
+                <button style={{ ...styles.button, ...styles.secondaryBtn }} onClick={runAll}>
                   {t.runAll}
                 </button>
               </>
             )}
             {clusterState && (
-              <button
-                style={{ ...styles.button, ...styles.dangerBtn }}
-                onClick={reset}
-              >
+              <button style={{ ...styles.button, ...styles.dangerBtn }} onClick={reset}>
                 {t.reset}
               </button>
             )}
             {clusterState && (
               <span
                 style={{
-                  fontSize: "0.8rem",
-                  color: "var(--text-muted)",
-                  alignSelf: "center",
+                  fontSize: '0.8rem',
+                  color: 'var(--text-muted)',
+                  alignSelf: 'center',
                 }}
               >
-                {clusterState.clusters.size} {clusterState.clusters.size !== 1 ? t.clusterPlural : t.clusterSingular}
+                {clusterState.clusters.size}{' '}
+                {clusterState.clusters.size !== 1 ? t.clusterPlural : t.clusterSingular}
               </span>
             )}
           </div>
@@ -512,7 +568,7 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
       {tree && (
         <div style={styles.card}>
           <h3 style={styles.h3}>{t.phyloTree}</h3>
-          <div style={{ overflowX: "auto" }}>
+          <div style={{ overflowX: 'auto' }}>
             <Dendrogram tree={tree} />
           </div>
         </div>
@@ -523,10 +579,7 @@ export default function Pro2Demo({ lang = "en" }: { lang?: Lang }) {
 
 function getLeaves(node: TreeNode): string[] {
   if (!node.left && !node.right) return [node.id];
-  return [
-    ...(node.left ? getLeaves(node.left) : []),
-    ...(node.right ? getLeaves(node.right) : []),
-  ];
+  return [...(node.left ? getLeaves(node.left) : []), ...(node.right ? getLeaves(node.right) : [])];
 }
 
 function getMaxDepth(node: TreeNode): number {
@@ -546,8 +599,7 @@ function Dendrogram({ tree }: { tree: TreeNode }) {
   const margin = { top: 40, bottom: 40, left: 20, right: 20 };
   const plotH = height - margin.top - margin.bottom;
 
-  const maxDist =
-    tree.distance > 0 ? tree.distance : getMaxDepth(tree) * 10 + 10;
+  const maxDist = tree.distance > 0 ? tree.distance : getMaxDepth(tree) * 10 + 10;
 
   const leafX = new Map<string, number>();
   leaves.forEach((id, i) => {
@@ -588,11 +640,7 @@ function Dendrogram({ tree }: { tree: TreeNode }) {
   layout(tree);
 
   return (
-    <svg
-      width={width}
-      height={height}
-      style={{ display: "block", margin: "0 auto" }}
-    >
+    <svg width={width} height={height} style={{ display: 'block', margin: '0 auto' }}>
       {lines.map((l, i) => (
         <line
           key={i}

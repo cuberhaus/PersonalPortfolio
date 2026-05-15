@@ -18,8 +18,8 @@ import type { AnyLocalized as LocalizedEntry } from '../i18n/load';
 
 const DEMO_PAGES_DIR = join(__dirname, '..', 'pages', 'demos');
 const demoPageFiles = readdirSync(DEMO_PAGES_DIR)
-  .filter(f => f.endsWith('.astro'))
-  .map(f => f.replace('.astro', ''));
+  .filter((f) => f.endsWith('.astro'))
+  .map((f) => f.replace('.astro', ''));
 
 const VALID_ICONS = Object.keys(ICON_PATHS);
 
@@ -36,15 +36,20 @@ describe('Demo data files', () => {
   });
 
   it('every demo has a unique slug', () => {
-    const slugs = demosEn.map(d => d.slug);
+    const slugs = demosEn.map((d) => d.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
   it('every demo has a non-empty title and description in every locale', () => {
     for (const locale of LOCALES) {
       for (const demo of listDemos(locale)) {
-        expect(demo.title.trim().length, `${locale}: empty title for ${demo.slug}`).toBeGreaterThan(0);
-        expect(demo.description.trim().length, `${locale}: empty description for ${demo.slug}`).toBeGreaterThan(0);
+        expect(demo.title.trim().length, `${locale}: empty title for ${demo.slug}`).toBeGreaterThan(
+          0
+        );
+        expect(
+          demo.description.trim().length,
+          `${locale}: empty description for ${demo.slug}`
+        ).toBeGreaterThan(0);
       }
     }
   });
@@ -78,7 +83,9 @@ describe('Demo data files', () => {
   it('icon and slug live in identity (shared across locales by construction)', () => {
     for (const entry of demosCanonical) {
       expect(typeof entry.identity.slug, `entry missing identity.slug`).toBe('string');
-      expect(typeof entry.identity.icon, `entry ${entry.identity.slug} missing identity.icon`).toBe('string');
+      expect(typeof entry.identity.icon, `entry ${entry.identity.slug} missing identity.icon`).toBe(
+        'string'
+      );
     }
   });
 });
@@ -97,7 +104,7 @@ describe('Demo pages match demo data', () => {
   });
 
   it('every .astro page has a corresponding slug in demos.json', () => {
-    const slugs = demosEn.map(d => d.slug);
+    const slugs = demosEn.map((d) => d.slug);
     for (const page of demoPageFiles) {
       expect(slugs, `page "${page}.astro" has no matching slug in demos.json`).toContain(page);
     }

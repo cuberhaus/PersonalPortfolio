@@ -8,27 +8,30 @@ const route = getRouteFromUrl(Astro.url);
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const cleanBase = base === '/' ? '' : base;
 ---
+
 <div class="language-picker">
-  {Object.entries(languages).map(([key, label]) => {
-    // If English, we use the root route. Otherwise, prefix with /es or /ca.
-    // Also include the base path if we are in production
-    const targetRoute = key === 'en' ? route : `/${key}${route === '/' ? '' : route}`;
-    const href = `${cleanBase}${targetRoute}`;
-    
-    return (
-      <a 
-        href={href} 
-        class={`lang-link ${key === currentLang ? 'active' : ''}`}
-        hreflang={key}
-        aria-label={label}
-        aria-current={key === currentLang ? 'page' : undefined}
-        title={label}
-        data-astro-reload
-      >
-        {key.toUpperCase()}
-      </a>
-    );
-  })}
+  {
+    Object.entries(languages).map(([key, label]) => {
+      // If English, we use the root route. Otherwise, prefix with /es or /ca.
+      // Also include the base path if we are in production
+      const targetRoute = key === 'en' ? route : `/${key}${route === '/' ? '' : route}`;
+      const href = `${cleanBase}${targetRoute}`;
+
+      return (
+        <a
+          href={href}
+          class={`lang-link ${key === currentLang ? 'active' : ''}`}
+          hreflang={key}
+          aria-label={label}
+          aria-current={key === currentLang ? 'page' : undefined}
+          title={label}
+          data-astro-reload
+        >
+          {key.toUpperCase()}
+        </a>
+      );
+    })
+  }
 </div>
 
 <style>
@@ -47,10 +50,11 @@ const cleanBase = base === '/' ? '' : base;
     color: var(--text-secondary);
     transition: color var(--transition-fast);
   }
-  .lang-link:hover, .lang-link.active {
+  .lang-link:hover,
+  .lang-link.active {
     color: var(--accent-start);
   }
-  
+
   @media (max-width: 768px) {
     .language-picker {
       margin-left: auto;
@@ -73,7 +77,9 @@ const cleanBase = base === '/' ? '' : base;
       border-radius: calc(var(--radius-md) - 2px);
       font-size: 0.8rem;
       font-weight: 600;
-      transition: color var(--transition-fast), background-color var(--transition-fast);
+      transition:
+        color var(--transition-fast),
+        background-color var(--transition-fast);
     }
     .lang-link.active {
       background: var(--bg-primary);
