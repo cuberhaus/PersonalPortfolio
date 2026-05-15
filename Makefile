@@ -10,7 +10,7 @@ endif
        rebuild free-ports check-registry \
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
-       clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update help \
+       clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update help ports \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
        _db-rob _db-par _db-fib _db-grafics
@@ -339,12 +339,13 @@ help: ## Show this help message
 			printf "  \033[36m%-20s\033[0m %s\n", parts[1], parts[2] \
 		} \
 	' $(MAKEFILE_LIST)
-	@echo ""
-	@echo "Demo backends started by dev-bare / all:"
+
+ports: ## List demo backend ports (started by dev-bare / all)
 	@if command -v jq >/dev/null 2>&1; then \
 		bash scripts/dev-all-demos.sh --list; \
 	else \
-		echo "  (install jq to see the demo backend list: apt install jq / brew install jq)"; \
+		echo "jq is required. Install with: apt install jq  /  brew install jq"; \
+		exit 1; \
 	fi
 
 PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
