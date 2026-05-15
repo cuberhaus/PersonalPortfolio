@@ -183,7 +183,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
           style={{
             margin: 'auto 0 auto auto',
             fontSize: '0.68rem',
-            color: 'var(--border-color-hover)',
+            color: 'var(--text-muted)',
           }}
         >
           {t.sort}
@@ -265,7 +265,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
         })}
       </div>
 
-      <p style={{ margin: '0.75rem 0 0', fontSize: '0.68rem', color: 'var(--border-color-hover)' }}>
+      <p style={{ margin: '0.75rem 0 0', fontSize: '0.68rem', color: 'var(--text-muted)' }}>
         {t.allModels}
       </p>
     </div>
@@ -666,7 +666,7 @@ function CycleGanVisualizer({ t }: { t: typeof TRANSLATIONS.en }) {
         </div>
       </div>
 
-      <p style={{ margin: '0.6rem 0 0', fontSize: '0.68rem', color: 'var(--border-color-hover)' }}>
+      <p style={{ margin: '0.6rem 0 0', fontSize: '0.68rem', color: 'var(--text-muted)' }}>
         {t.cgNote}
       </p>
     </div>

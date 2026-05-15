@@ -254,7 +254,7 @@ function KnnCanvas({ t, log }: { t: typeof TRANSLATIONS.en; log: ReturnType<type
             </span>
           </span>
         ) : (
-          <span style={{ color: 'var(--border-color-hover)' }}>{t.clickToPlot}</span>
+          <span style={{ color: 'var(--text-muted)' }}>{t.clickToPlot}</span>
         )}
       </div>
     </div>
@@ -407,7 +407,13 @@ function FeatureSlider({
         <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}>
           {label}
         </span>
-        <span style={{ fontSize: '0.82rem', fontFamily: 'ui-monospace, monospace', color }}>
+        <span
+          style={{
+            fontSize: '0.82rem',
+            fontFamily: 'ui-monospace, monospace',
+            color: 'var(--text-primary)',
+          }}
+        >
           {value} <span style={{ color: 'var(--text-muted)', fontSize: '0.72rem' }}>{unit}</span>
         </span>
       </div>
@@ -437,7 +443,7 @@ function FeatureImportance({ t }: { t: typeof TRANSLATIONS.en }) {
               width: 36,
               fontSize: '0.78rem',
               fontWeight: 700,
-              color: f.color,
+              color: 'var(--text-primary)',
               textAlign: 'right',
             }}
           >
@@ -475,7 +481,7 @@ function FeatureImportance({ t }: { t: typeof TRANSLATIONS.en }) {
           </span>
         </div>
       ))}
-      <p style={{ margin: '0.25rem 0 0', fontSize: '0.68rem', color: 'var(--border-color-hover)' }}>
+      <p style={{ margin: '0.25rem 0 0', fontSize: '0.68rem', color: 'var(--text-muted)' }}>
         {t.featNote}
       </p>
     </div>
@@ -520,7 +526,7 @@ export default function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
             {t.mlPipeline}
           </div>
           <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{t.course}</span>
-          <span style={{ fontSize: '0.82rem', color: 'var(--border-color-hover)' }}>·</span>
+          <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>·</span>
           <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
             {t.with}{' '}
             <a

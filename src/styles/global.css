@@ -63,7 +63,8 @@ html[data-theme='light'] {
 
   --text-primary: #18181b;
   --text-secondary: #3f3f46;
-  --text-muted: #71717a;
+  /* #52525b on #f1f5f9 = 7.07:1 (was #71717a = 4.41:1, below WCAG AA 4.5:1) */
+  --text-muted: #52525b;
 
   --accent-start: #4f46e5;
   --accent-end: #9333ea;

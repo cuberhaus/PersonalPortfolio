@@ -350,7 +350,7 @@ function DiameterExplorer({ t }: { t: typeof TRANSLATIONS.en }) {
         </p>
       </div>
 
-      <p style={{ margin: '0.5rem 0 0', fontSize: '0.68rem', color: 'var(--border-color-hover)' }}>
+      <p style={{ margin: '0.5rem 0 0', fontSize: '0.68rem', color: 'var(--text-muted)' }}>
         {t.diamNote}
       </p>
     </div>
