@@ -423,7 +423,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: '0.4rem',
     background: 'color-mix(in srgb, var(--accent-end) 10%, transparent)',
     border: '1px solid color-mix(in srgb, var(--accent-end) 30%, transparent)',
-    color: 'var(--accent-text)',
+    color: 'var(--text-primary)',
     fontSize: '0.78rem',
   },
   chartContainer: {

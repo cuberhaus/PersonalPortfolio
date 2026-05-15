@@ -173,7 +173,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
                 metric === m
                   ? 'color-mix(in srgb, var(--accent-start) 10%, transparent)'
                   : 'var(--bg-card-hover)',
-              color: metric === m ? 'var(--accent-text)' : 'var(--text-secondary)',
+              color: metric === m ? 'var(--text-primary)' : 'var(--text-secondary)',
             }}
           >
             {t.metrics[m]}
@@ -565,7 +565,7 @@ function CycleGanVisualizer({ t }: { t: typeof TRANSLATIONS.en }) {
                 direction === d
                   ? 'color-mix(in srgb, var(--accent-start) 10%, transparent)'
                   : 'var(--bg-card-hover)',
-              color: direction === d ? 'var(--accent-text)' : 'var(--text-secondary)',
+              color: direction === d ? 'var(--text-primary)' : 'var(--text-secondary)',
             }}
           >
             {d === 'mask2polyp' ? t.m2p : t.p2m}

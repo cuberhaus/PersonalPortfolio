@@ -71,7 +71,7 @@ const styles = {
   },
   dangerBtn: {
     background: 'color-mix(in srgb, var(--accent-end) 10%, transparent)',
-    color: 'var(--accent-text)',
+    color: 'var(--text-primary)',
   },
   tag: {
     display: 'inline-block',
