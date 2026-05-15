@@ -4,6 +4,7 @@ import LiveAppEmbed from './LiveAppEmbed';
 import { TRANSLATIONS } from '../../i18n/demos/planificacion-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -640,14 +641,10 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
             type="button"
             onClick={simulatePlanner}
             style={{
+              ...gradientButton({ accent1, accent2 }),
               padding: '0.5rem 1.1rem',
               borderRadius: '0.5rem',
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: 600,
               fontSize: '0.82rem',
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-              color: '#fff',
             }}
           >
             {t.mockRun}

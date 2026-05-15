@@ -20,6 +20,7 @@ import { forceLayout } from '../../lib/mpids';
 import { TRANSLATIONS } from '../../i18n/demos/phase-transitions-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -80,26 +81,32 @@ const s = {
     alignItems: 'center',
     marginBottom: '0.75rem',
   },
-  btn: (active = false) => ({
-    padding: '0.5rem 1rem',
-    borderRadius: 8,
-    border: '1px solid var(--border-color)',
-    background: active
-      ? 'linear-gradient(135deg, var(--accent-start), var(--accent-end))'
-      : 'var(--bg-secondary)',
-    color: 'var(--text-primary)',
-    cursor: 'pointer',
-    fontSize: '0.85rem',
-    fontWeight: 500,
-    transition: 'all 0.15s',
-  }),
+  btn: (active = false) =>
+    active
+      ? {
+          ...gradientButton(),
+          padding: '0.5rem 1rem',
+          borderRadius: 8,
+          border: '1px solid var(--border-color)',
+          fontSize: '0.85rem',
+          fontWeight: 500,
+          transition: 'all 0.15s',
+        }
+      : ({
+          padding: '0.5rem 1rem',
+          borderRadius: 8,
+          border: '1px solid var(--border-color)',
+          background: 'var(--bg-secondary)',
+          color: 'var(--text-primary)',
+          cursor: 'pointer',
+          fontSize: '0.85rem',
+          fontWeight: 500,
+          transition: 'all 0.15s',
+        } as const),
   btnPrimary: {
+    ...gradientButton(),
     padding: '0.6rem 1.25rem',
     borderRadius: 8,
-    border: 'none',
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
-    cursor: 'pointer',
     fontSize: '0.9rem',
     fontWeight: 600,
   } as const,

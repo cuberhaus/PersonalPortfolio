@@ -3,6 +3,7 @@ import modelData from '../../data/tfg-model-results.json' with { type: 'json' };
 import LiveAppEmbed from './LiveAppEmbed';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { gradientButton } from './_styles';
 
 /* ── constants ── */
 const accent1 = 'var(--accent-start)';
@@ -434,16 +435,10 @@ function MockInference({ t }: { t: typeof TRANSLATIONS.en }) {
             type="button"
             onClick={run}
             style={{
+              ...gradientButton({ accent1, accent2 }),
               padding: '0.45rem 1rem',
               borderRadius: '0.5rem',
-              border: 'none',
-              fontWeight: 600,
               fontSize: '0.82rem',
-              cursor: 'pointer',
-              // Black overlay darkens light-accent gradients enough for white
-              // text to clear WCAG AA (4.5:1). See Contact.astro for the same.
-              background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, ${accent1}, ${accent2})`,
-              color: '#fff',
             }}
           >
             {t.runDemo}

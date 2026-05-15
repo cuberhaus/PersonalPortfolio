@@ -8,6 +8,7 @@ import {
 
 import { TRANSLATIONS } from '../../i18n/demos/jsbach-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { gradientButton } from './_styles';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
@@ -50,10 +51,7 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.15s ease',
   },
-  primaryBtn: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
-  },
+  primaryBtn: gradientButton(),
   secondaryBtn: {
     background: 'var(--bg-secondary)',
     color: 'var(--text-secondary)',
