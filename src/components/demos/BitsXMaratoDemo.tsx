@@ -9,6 +9,7 @@ const TEAM = ['Pol Casacuberta', 'Tatiana Meyer', 'Pablo Vega', 'Ton Vilà'];
 
 import { TRANSLATIONS } from '../../i18n/demos/bits-xmarato-demo';
 import { useDemoLifecycle } from '../../lib/useDebug';
+import { gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -172,17 +173,10 @@ function SimulatedInference({ t }: { t: typeof TRANSLATIONS.en }) {
             type="button"
             onClick={runInference}
             style={{
+              ...gradientButton({ accent1, accent2 }),
               padding: '0.45rem 1rem',
               borderRadius: '0.5rem',
-              border: 'none',
-              fontWeight: 600,
               fontSize: '0.82rem',
-              cursor: 'pointer',
-              // Black overlay darkens light-accent gradients (phosphor,
-              // amber-crt, synthwave-cyan) enough for white text to clear
-              // WCAG AA (4.5:1) without changing the visible accent palette.
-              background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, ${accent1}, ${accent2})`,
-              color: '#fff',
             }}
           >
             {t.runDemo}

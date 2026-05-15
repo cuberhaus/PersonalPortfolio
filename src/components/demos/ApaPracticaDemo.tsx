@@ -15,6 +15,7 @@ const LINEAR_NB = 'PracticaAPA-Hipotiroidismo-ModelsLineals.ipynb';
 
 import { TRANSLATIONS } from '../../i18n/demos/apa-practica-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -190,20 +191,28 @@ function KnnCanvas({ t, log }: { t: typeof TRANSLATIONS.en; log: ReturnType<type
               log.info('knn-k', { k: kv });
               setK(kv);
             }}
-            style={{
-              padding: '0.3rem 0.65rem',
-              borderRadius: '0.4rem',
-              border: 'none',
-              fontSize: '0.78rem',
-              fontWeight: 700,
-              cursor: 'pointer',
-              background:
-                k === kv
-                  ? `linear-gradient(135deg, ${accent1}, ${accent2})`
-                  : 'var(--bg-card-hover)',
-              color: k === kv ? 'var(--text-primary)' : 'var(--text-muted)',
-              transition: 'all 0.15s',
-            }}
+            style={
+              k === kv
+                ? {
+                    ...gradientButton({ accent1, accent2 }),
+                    padding: '0.3rem 0.65rem',
+                    borderRadius: '0.4rem',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    transition: 'all 0.15s',
+                  }
+                : {
+                    padding: '0.3rem 0.65rem',
+                    borderRadius: '0.4rem',
+                    border: 'none',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    background: 'var(--bg-card-hover)',
+                    color: 'var(--text-muted)',
+                    transition: 'all 0.15s',
+                  }
+            }
           >
             {kv}
           </button>

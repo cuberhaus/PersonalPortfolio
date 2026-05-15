@@ -5,6 +5,7 @@ import MockBanner from './MockBanner';
 import { debug } from '../../lib/debug';
 import { useDemoLifecycle } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 type Tab = 'news' | 'chat' | 'quiz' | 'vision' | 'stats';
@@ -42,10 +43,7 @@ const s = {
     background: 'transparent',
     color: 'var(--text-muted)',
   },
-  tabActive: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
-  },
+  tabActive: gradientButton(),
   card: {
     background: 'var(--bg-card)',
     border: '1px solid var(--border-color)',
@@ -61,10 +59,7 @@ const s = {
     cursor: 'pointer',
     transition: 'all 0.15s',
   },
-  primaryBtn: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
-  },
+  primaryBtn: gradientButton(),
   secondaryBtn: { background: 'var(--bg-secondary)', color: 'var(--text-secondary)' },
   input: {
     background: 'var(--bg-secondary)',

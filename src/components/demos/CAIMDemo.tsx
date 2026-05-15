@@ -3,6 +3,7 @@ import { useState, lazy, Suspense } from 'react';
 import { T } from '../../i18n/demos/caim-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -80,10 +81,7 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
     transition: 'all 0.15s',
   },
-  tabActive: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff',
-  },
+  tabActive: gradientButton(),
   content: {
     minHeight: 300,
   },

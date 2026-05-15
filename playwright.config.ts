@@ -47,9 +47,13 @@ export default defineConfig({
       // Theme switching + reload makes each test ~5-10s; with axe's own
       // browser-side work the default 30s isn't always enough on a busy box.
       timeout: 60_000,
-      // Parallelise but don't swamp the single Astro dev server. 4 keeps
-      // throughput up while leaving the server room to breathe.
-      workers: 4,
+      // Locally we let Playwright auto-detect (= half the cores). On CI we
+      // pin to 4 to avoid swamping the single Astro dev server, and CI also
+      // shards the suite across 4 runners (test.yml playwright-a11y job).
+      // If you see "Target page closed" / context-closed timeouts locally,
+      // drop this back to a fixed number (e.g. 8) until the dev server
+      // catches up.
+      workers: process.env.CI ? 4 : undefined,
     },
     {
       name: 'keyboard',

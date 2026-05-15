@@ -14,6 +14,7 @@ import { AssignmentMapFigure, PerHeliBreakdown, QueueStrips } from './DesastresV
 import { TRANSLATIONS } from '../../i18n/demos/desastres-ia-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -662,14 +663,11 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
             disabled={running}
             onClick={runSearch}
             style={{
+              ...gradientButton({ accent1, accent2 }),
               padding: '0.5rem 1.1rem',
               borderRadius: '0.5rem',
-              border: 'none',
-              fontWeight: 600,
               fontSize: '0.88rem',
               cursor: running ? 'not-allowed' : 'pointer',
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-              color: 'var(--text-primary)',
               opacity: running ? 0.5 : 1,
             }}
           >

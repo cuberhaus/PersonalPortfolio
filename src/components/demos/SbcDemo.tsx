@@ -16,6 +16,7 @@ import { TRANSLATIONS } from '../../i18n/demos/sbc-demo';
 import MockBanner from './MockBanner';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -41,10 +42,7 @@ const s = {
     cursor: 'pointer',
     transition: 'all 0.15s',
   },
-  primaryBtn: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
-  },
+  primaryBtn: gradientButton(),
   secondaryBtn: { background: 'var(--bg-secondary)', color: 'var(--text-secondary)' },
   input: {
     background: 'var(--bg-secondary)',

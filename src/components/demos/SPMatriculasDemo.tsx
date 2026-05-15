@@ -8,6 +8,7 @@ import {
 
 import { TRANSLATIONS } from '../../i18n/demos/spmatriculas-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { gradientButton } from './_styles';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
@@ -63,32 +64,20 @@ const s = {
       transform: selected ? 'scale(1.03)' : 'none',
     }) as React.CSSProperties,
   uploadBtn: {
+    ...gradientButton(),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '0.5rem',
     padding: '0.6rem 1.2rem',
-    // Black overlay darkens any theme's accent gradient enough for white
-    // text to clear WCAG AA (4.5:1) — see Contact.astro for the same trick.
-    background:
-      'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff',
-    border: 'none',
     borderRadius: '0.5rem',
     fontSize: '0.85rem',
-    fontWeight: 600,
-    cursor: 'pointer',
   } as React.CSSProperties,
   runBtn: {
+    ...gradientButton(),
     padding: '0.6rem 1.5rem',
-    background:
-      'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff',
-    border: 'none',
     borderRadius: '0.5rem',
     fontSize: '0.9rem',
-    fontWeight: 600,
-    cursor: 'pointer',
     marginTop: '0.75rem',
   } as React.CSSProperties,
   disabledBtn: {
