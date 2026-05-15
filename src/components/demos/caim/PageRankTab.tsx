@@ -12,6 +12,7 @@ import {
 } from '../../../lib/caim/pagerank';
 import { T } from '../../../i18n/demos/caim-pagerank';
 import { getThemeColors } from '../../../lib/demo-theme';
+import { gradientButton } from '../_styles';
 import { debug } from '../../../lib/debug';
 
 const netLog = debug('net:caim');
@@ -394,14 +395,10 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: 'pointer',
   },
   runBtn: {
+    ...gradientButton(),
     padding: '0.45rem 1rem',
     borderRadius: '0.5rem',
-    border: 'none',
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff',
-    fontWeight: 600,
     fontSize: '0.82rem',
-    cursor: 'pointer',
   },
   mapContainer: {
     width: '100%',
