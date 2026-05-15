@@ -10,12 +10,14 @@ endif
        rebuild free-ports check-registry \
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
-       clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update help \
+       clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update help ports \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
        _db-rob _db-par _db-fib _db-grafics
 
 default: help
+
+##@ Setup
 
 install: ## Install project dependencies
 	npm install
@@ -28,6 +30,8 @@ else
 	@$(CARGO_ENV) \
 	command -v cargo >/dev/null 2>&1 || { echo "Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; }
 endif
+
+##@ Dev
 
 dev: ## Start Astro dev server with hot-reload (no demo backends)
 	npm run dev
@@ -111,6 +115,8 @@ health: ## Check if all demo backends are responding
 SENTRY_DIR      = $(PARENT)/sentry-self-hosted
 SENTRY_COMPOSE  = docker compose -f "$(SENTRY_DIR)/docker-compose.yml"
 
+##@ Observability (Sentry)
+
 obs-install: ## Run the one-time Sentry installer (~15-20 min, prompts for admin email/password)
 	@if [ ! -d "$(SENTRY_DIR)" ]; then \
 		echo "Sentry repo not found at: $(SENTRY_DIR)"; \
@@ -155,6 +161,8 @@ obs-wipe: ## DESTRUCTIVE: stop Sentry and delete ALL data (events, users, projec
 # drift). PersonalPortfolio is the orchestrator, not the owner.
 TFG_DIR_MAKE = $(PARENT)/TFG
 
+##@ MLOps overlay
+
 mlops-up: ## Start the TFG MLOps overlay (MLflow :15000, Evidently :15001, prediction-log :15432)
 	@$(MAKE) --no-print-directory -C "$(TFG_DIR_MAKE)" mlops-up
 
@@ -184,6 +192,8 @@ mlops-down: ## Stop the TFG MLOps overlay (volumes preserved)
 # but without the Sentry / MLOps step. Use that for day-to-day demo
 # work and `make all` when you want the full observability surface.
 TFG_MLOPS_ENV = $(PARENT)/TFG/observability/.env.mlops
+
+##@ Full stack
 
 all: ## Spin up EVERYTHING: Sentry + MLOps overlay + all demos + Astro
 	@echo ""
@@ -226,6 +236,8 @@ all-stop: ## Stop everything started by `make all` (demos + MLOps + Sentry)
 		echo "  ⏭  Sentry not installed; nothing to stop."; \
 	fi
 
+##@ Build
+
 build-images: ## Build all demo Docker images (incremental — sub-second when nothing changed)
 	@echo ""
 	@echo "━━━ Building $(words $(DEMO_TARGETS)) demo Docker images ($(NPROC) parallel) ━━━"
@@ -263,6 +275,8 @@ test-a11y: ## Run the a11y axe sweep locally (4 workers, fast)
 
 test-a11y-grep: ## Run a11y subset, e.g. `make test-a11y-grep PATTERN=dark.*tfg`
 	npx playwright test --project=a11y --workers=4 --grep "$(PATTERN)"
+
+##@ Test
 
 test-keyboard: ## Run the keyboard-navigation e2e suite
 	npx playwright test --project=keyboard
@@ -310,15 +324,29 @@ test: ## Run ALL test suites (portfolio + every demo backend)
 	@echo ""
 	@echo "All test suites passed."
 
+##@ Cleanup
+
 clean: ## Remove build artifacts and node_modules
 	rm -rf dist/ node_modules/ .astro/ .build-stamps/
 
+##@ General
+
 help: ## Show this help message
-	@echo "Available commands:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
-	@echo ""
-	@echo "Demo backends started by dev-bare / all:"
-	@bash scripts/dev-all-demos.sh --list
+	@awk ' \
+		/^##@/      { printf "\n\033[1m%s\033[0m\n", substr($$0, 5); next } \
+		/^[a-zA-Z_-]+:.*##/ { \
+			split($$0, parts, ":.*## *"); \
+			printf "  \033[36m%-20s\033[0m %s\n", parts[1], parts[2] \
+		} \
+	' $(MAKEFILE_LIST)
+
+ports: ## List demo backend ports (started by dev-bare / all)
+	@if command -v jq >/dev/null 2>&1; then \
+		bash scripts/dev-all-demos.sh --list; \
+	else \
+		echo "jq is required. Install with: apt install jq  /  brew install jq"; \
+		exit 1; \
+	fi
 
 PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
 
