@@ -32,7 +32,7 @@ const ALL_CSS = GLOBAL_CSS + '\n' + THEMES_CSS;
 const TEXT_TOKENS = ['text-secondary', 'text-muted', 'accent-text'] as const;
 const STATUS_TOKENS = ['status-success', 'status-error', 'status-warning', 'status-info'] as const;
 const FG_TOKENS = [...TEXT_TOKENS, ...STATUS_TOKENS] as const;
-const BG_TOKENS = ['bg-primary', 'bg-secondary', 'bg-card'] as const;
+const BG_TOKENS = ['bg-primary', 'bg-secondary', 'bg-card', 'bg-card-hover'] as const;
 
 const WCAG_AA = 4.5;
 

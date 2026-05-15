@@ -102,7 +102,7 @@ const styles = {
     background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: 'var(--text-primary)',
   },
-  secondaryBtn: { background: 'var(--border-color)', color: 'var(--text-secondary)' },
+  secondaryBtn: { background: 'var(--bg-secondary)', color: 'var(--text-secondary)' },
   table: {
     width: '100%',
     borderCollapse: 'collapse' as const,

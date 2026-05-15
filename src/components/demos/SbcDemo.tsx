@@ -44,7 +44,7 @@ const s = {
     background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: 'var(--text-primary)',
   },
-  secondaryBtn: { background: 'var(--border-color)', color: 'var(--text-secondary)' },
+  secondaryBtn: { background: 'var(--bg-secondary)', color: 'var(--text-secondary)' },
   input: {
     background: 'var(--bg-secondary)',
     border: '1px solid var(--border-color)',
@@ -78,7 +78,7 @@ const s = {
   progressBar: {
     height: '4px',
     borderRadius: '2px',
-    background: 'var(--border-color)',
+    background: 'var(--bg-secondary)',
     marginBottom: '1.5rem',
     overflow: 'hidden' as const,
   },

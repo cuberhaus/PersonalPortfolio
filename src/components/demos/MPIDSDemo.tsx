@@ -78,7 +78,7 @@ const s = {
     padding: '0.6rem 1.25rem',
     borderRadius: 8,
     border: 'none',
-    background: 'var(--border-color)',
+    background: 'var(--bg-secondary)',
     color: 'var(--text-muted)',
     cursor: 'not-allowed',
     fontSize: '0.9rem',

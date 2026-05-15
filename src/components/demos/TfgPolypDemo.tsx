@@ -173,7 +173,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
                 metric === m
                   ? 'color-mix(in srgb, var(--accent-start) 10%, transparent)'
                   : 'var(--bg-card-hover)',
-              color: metric === m ? 'var(--accent-start)' : 'var(--text-secondary)',
+              color: metric === m ? 'var(--accent-text)' : 'var(--text-secondary)',
             }}
           >
             {t.metrics[m]}
@@ -461,7 +461,7 @@ function MockInference({ t }: { t: typeof TRANSLATIONS.en }) {
                 fontWeight: 600,
                 fontSize: '0.82rem',
                 cursor: 'pointer',
-                background: 'var(--border-color)',
+                background: 'var(--bg-secondary)',
                 color: 'var(--text-primary)',
               }}
             >
@@ -507,7 +507,7 @@ function MockInference({ t }: { t: typeof TRANSLATIONS.en }) {
         <div
           style={{
             height: 5,
-            background: 'var(--border-color)',
+            background: 'var(--bg-secondary)',
             borderRadius: 3,
             overflow: 'hidden',
             marginTop: '0.5rem',

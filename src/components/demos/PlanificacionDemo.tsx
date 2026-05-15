@@ -476,7 +476,7 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
         >
           {t.extensions.map((e) => (
             <div key={e.name} style={{ marginBottom: '0.25rem' }}>
-              <strong style={{ color: e.active ? 'var(--accent-start)' : 'var(--text-muted)' }}>
+              <strong style={{ color: e.active ? 'var(--accent-text)' : 'var(--text-muted)' }}>
                 {e.name}:
               </strong>{' '}
               <span style={{ color: e.active ? 'var(--text-primary)' : 'var(--text-muted)' }}>

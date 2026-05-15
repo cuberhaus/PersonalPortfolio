@@ -64,7 +64,7 @@ const s = {
     background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: 'var(--text-primary)',
   },
-  secondaryBtn: { background: 'var(--border-color)', color: 'var(--text-secondary)' },
+  secondaryBtn: { background: 'var(--bg-secondary)', color: 'var(--text-secondary)' },
   input: {
     background: 'var(--bg-secondary)',
     border: '1px solid var(--border-color)',
@@ -531,7 +531,7 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
                     ? '1px solid var(--accent-end)'
                     : '1px solid var(--border-color)',
                   borderRadius: '0.25rem',
-                  color: isPeriod ? 'var(--accent-end)' : 'var(--text-secondary)',
+                  color: isPeriod ? 'var(--accent-text)' : 'var(--text-secondary)',
                   padding: '0.35rem',
                   fontSize: '0.75rem',
                   cursor: 'pointer',

@@ -453,7 +453,7 @@ export default function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
                       fontSize: '0.72rem',
                       fontWeight: 700,
                       fontFamily: 'ui-monospace, monospace',
-                      color: h.active ? 'var(--accent-start)' : 'var(--text-muted)',
+                      color: h.active ? 'var(--accent-text)' : 'var(--text-muted)',
                     }}
                   >
                     {h.name}

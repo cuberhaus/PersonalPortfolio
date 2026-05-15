@@ -80,7 +80,11 @@
     padding: 0.1rem 0.3rem;
     border: 1px solid var(--border-color);
     border-radius: 3px;
-    background: var(--bg-surface, rgba(255, 255, 255, 0.05));
+    /* Use a defined background token; the previous fallback rgba(...,
+       0.05) made contrast against the kbd's text unpredictable across
+       themes. */
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
     line-height: 1;
   }
 

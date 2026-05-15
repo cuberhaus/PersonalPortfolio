@@ -199,7 +199,7 @@ function SimulatedInference({ t }: { t: typeof TRANSLATIONS.en }) {
                 fontWeight: 600,
                 fontSize: '0.82rem',
                 cursor: 'pointer',
-                background: 'var(--border-color)',
+                background: 'var(--bg-secondary)',
                 color: 'var(--text-primary)',
               }}
             >
@@ -233,7 +233,7 @@ function SimulatedInference({ t }: { t: typeof TRANSLATIONS.en }) {
         <div
           style={{
             height: 5,
-            background: 'var(--border-color)',
+            background: 'var(--bg-secondary)',
             borderRadius: 3,
             overflow: 'hidden',
             marginTop: '0.5rem',
