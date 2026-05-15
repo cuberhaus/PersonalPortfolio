@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import ScrollToTop from '../components/ScrollToTop.astro';
 import ThemeInit from '../components/ThemeInit.astro';
@@ -111,7 +111,7 @@ const hasCredential = certs.map((cert) => ({
         hasCredential: hasCredential,
       })}
     />
-    <ViewTransitions />
+    <ClientRouter />
     <Analytics />
   </head>
   <body>
