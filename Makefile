@@ -10,7 +10,7 @@ endif
        rebuild free-ports check-registry \
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
-       clean test test-a11y test-a11y-grep help \
+       clean test test-a11y test-a11y-grep test-visual test-visual-update help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
        _db-rob _db-par _db-fib _db-grafics
@@ -263,6 +263,12 @@ test-a11y: ## Run the a11y axe sweep locally (4 workers, fast)
 
 test-a11y-grep: ## Run a11y subset, e.g. `make test-a11y-grep PATTERN=dark.*tfg`
 	npx playwright test --project=a11y --workers=4 --grep "$(PATTERN)"
+
+test-visual: ## Run the visual-regression suite against committed baselines
+	npx playwright test --project=visual
+
+test-visual-update: ## Regenerate visual-regression baselines locally (must commit them; CI is Linux-only)
+	npx playwright test --project=visual --update-snapshots
 
 test: ## Run ALL test suites (portfolio + every demo backend)
 	npm test

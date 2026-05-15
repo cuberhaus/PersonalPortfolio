@@ -45,6 +45,24 @@ export default defineConfig({
       // on the same failure. Override the project default of 2 retries.
       retries: 0,
     },
+    {
+      name: 'visual',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 720 },
+      },
+      testMatch: /visual\.spec\.ts/,
+      // Snapshot diffs are deterministic — a flaky run is a real signal,
+      // not a retry candidate.
+      retries: 0,
+      expect: {
+        toHaveScreenshot: {
+          // 1% pixel drift tolerance covers font hinting and gradient
+          // banding while still catching real layout shifts.
+          maxDiffPixelRatio: 0.01,
+        },
+      },
+    },
   ],
   webServer: {
     command: 'npm run dev',
