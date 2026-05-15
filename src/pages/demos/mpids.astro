@@ -11,7 +11,12 @@ const t = useTranslations(lang);
 const demo = getDemo('mpids', lang);
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="mpids">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="mpids"
+  ogImage="/og/mpids-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}
@@ -22,19 +27,13 @@ const demo = getDemo('mpids', lang);
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="mpids"
-      title="MPIDS Solver"
-      lang={lang}
-      client:load
-    />
+    <LiveAppEmbed slug="mpids" title="MPIDS Solver" lang={lang} client:load />
 
     <MPIDSDemo lang={lang} client:visible />
 
     <div class="demo-info">
       <h3>{demo.aboutTitle}</h3>
       <p>{demo.aboutDescription}</p>
-      
     </div>
   </div>
 </DemoLayout>
@@ -60,5 +59,4 @@ const demo = getDemo('mpids', lang);
     line-height: 1.7;
     margin-bottom: 1.25rem;
   }
-
-    </style>
+</style>

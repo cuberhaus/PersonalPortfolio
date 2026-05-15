@@ -16,7 +16,11 @@ const t = useTranslations(DEFAULT_LOCALE);
       <h1 class="error-code gradient-text">404</h1>
       <h2 class="error-title" id="error-title">{t('notFound.title')}</h2>
       <p class="error-message" id="error-message">{t('notFound.message')}</p>
-      <a href={import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL} class="back-btn" id="back-btn">
+      <a
+        href={import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL}
+        class="back-btn"
+        id="back-btn"
+      >
         &larr; <span id="back-label">{t('notFound.back')}</span>
       </a>
     </div>
@@ -91,7 +95,10 @@ const t = useTranslations(DEFAULT_LOCALE);
     color: var(--bg-primary);
     background: var(--accent-start);
     border-radius: var(--radius-md);
-    transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+      background var(--transition-fast),
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
 
   .back-btn:hover {

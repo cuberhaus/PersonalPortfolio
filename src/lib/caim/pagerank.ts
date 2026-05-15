@@ -104,13 +104,13 @@ export function computePageRank(input: PageRankInput): PageRankResult {
     // Mass from disconnected nodes
     let discMass = 0;
     for (const di of disconnected) discMass += P[di];
-    const discContrib = L * discMass / n;
+    const discContrib = (L * discMass) / n;
 
     const Q = new Float64Array(n);
     for (let i = 0; i < n; i++) {
       let s = 0;
       for (const [srcIdx, weight] of inEdgesArr[i]) {
-        s += P[srcIdx] * weight / outWeight[srcIdx];
+        s += (P[srcIdx] * weight) / outWeight[srcIdx];
       }
       Q[i] = L * s + base + discContrib;
     }

@@ -1,17 +1,17 @@
-import registry from "./demo-services.json";
+import registry from './demo-services.json' with { type: 'json' };
 
 export type BackendStack =
-  | "fastapi"
-  | "django"
-  | "flask"
-  | "spring"
-  | "sveltekit"
-  | "qwik"
-  | "ember"
-  | "rust"
-  | "go"
-  | "php"
-  | "node";
+  | 'fastapi'
+  | 'django'
+  | 'flask'
+  | 'spring'
+  | 'sveltekit'
+  | 'qwik'
+  | 'ember'
+  | 'rust'
+  | 'go'
+  | 'php'
+  | 'node';
 
 export interface DemoBackend {
   container: string | null;
@@ -81,9 +81,7 @@ export function getRunHints(slug: string): { dockerCmd?: string; devCmd?: string
 }
 
 export function listBackedSlugs(): readonly string[] {
-  return REGISTRY.services
-    .filter((s) => s.hasBackend && s.backend?.container)
-    .map((s) => s.slug);
+  return REGISTRY.services.filter((s) => s.hasBackend && s.backend?.container).map((s) => s.slug);
 }
 
 export function listAllowedIframeOrigins(): readonly string[] {
@@ -93,8 +91,7 @@ export function listAllowedIframeOrigins(): readonly string[] {
     if (!url) continue;
     try {
       origins.add(new URL(url).origin);
-    } catch {
-    }
+    } catch {}
   }
   return Array.from(origins);
 }
@@ -115,7 +112,7 @@ export function listTracedBackendPorts(): readonly number[] {
   for (const svc of REGISTRY.services) {
     const port = svc.backend?.port;
     const traced = svc.backend?.needsSentry ?? false;
-    if (typeof port === "number" && traced) ports.add(port);
+    if (typeof port === 'number' && traced) ports.add(port);
   }
   return Array.from(ports).sort((a, b) => a - b);
 }
@@ -128,7 +125,7 @@ export function listTracedBackendPorts(): readonly number[] {
 export function listAllBackendPorts(): readonly number[] {
   const ports = new Set<number>();
   for (const svc of REGISTRY.services) {
-    if (typeof svc.backend?.port === "number") ports.add(svc.backend.port);
+    if (typeof svc.backend?.port === 'number') ports.add(svc.backend.port);
     for (const extra of svc.backend?.extraPorts ?? []) ports.add(extra);
   }
   return Array.from(ports).sort((a, b) => a - b);
@@ -150,9 +147,10 @@ export function listLivePortfolioBackends(): readonly {
     if (!svc.hasBackend || !svc.page) continue;
     const port = svc.backend?.port;
     const iframeUrl = svc.backend?.iframeUrl;
-    const displayName = (svc.backend as { orchestrator?: { displayName?: string } } | undefined)
-      ?.orchestrator?.displayName ?? svc.slug;
-    if (typeof port !== "number" || !iframeUrl) continue;
+    const displayName =
+      (svc.backend as { orchestrator?: { displayName?: string } } | undefined)?.orchestrator
+        ?.displayName ?? svc.slug;
+    if (typeof port !== 'number' || !iframeUrl) continue;
     out.push({ slug: svc.slug, port, iframeUrl, displayName });
   }
   return out;

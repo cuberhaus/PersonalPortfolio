@@ -10,11 +10,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync, readdirSync, statSync } from 'fs';
 import { join, resolve } from 'path';
-import {
-  listDemoServices,
-  type DemoService,
-  type BackendStack,
-} from '../data/demo-services';
+import { listDemoServices, type DemoService, type BackendStack } from '../data/demo-services';
 
 const SRC = join(__dirname, '..');
 const ROOT = resolve(SRC, '..');
@@ -24,9 +20,9 @@ const read = (rel: string) => readFileSync(join(ROOT, rel), 'utf-8');
 const exists = (rel: string) => existsSync(join(ROOT, rel));
 
 const services = listDemoServices();
-const backed = services.filter((s) => s.hasBackend) as readonly Required<
-  Pick<DemoService, 'slug' | 'hasBackend'>
->[] & readonly DemoService[];
+const backed = services.filter((s) => s.hasBackend) as ReadonlyArray<
+  DemoService & Required<Pick<DemoService, 'slug' | 'hasBackend'>>
+>;
 
 describe('demo-services.json: schema & disk references', () => {
   it('every page path exists on disk (when set)', () => {
@@ -120,8 +116,8 @@ describe('demo-services.json ↔ scripts/dev-all-demos.sh parity', () => {
   });
 
   it('every backed slug shows up either in `_compose_up`, `_docker_run`, or as planner-api/PROP', () => {
-    const orchestrated = backed.filter((s) =>
-      (s.backend as { orchestrator?: { type?: string } } | undefined)?.orchestrator?.type,
+    const orchestrated = backed.filter(
+      (s) => (s.backend as { orchestrator?: { type?: string } } | undefined)?.orchestrator?.type
     );
     for (const s of orchestrated) {
       const b = s.backend as { orchestrator?: { displayName?: string; type?: string } };
@@ -129,7 +125,9 @@ describe('demo-services.json ↔ scripts/dev-all-demos.sh parity', () => {
       const type = b.orchestrator?.type ?? '';
       if (type === 'compose' || type === 'run') {
         // orchestrator displayName must appear verbatim in the script
-        expect(script, `dev-all-demos.sh missing line for ${s.slug} (${display})`).toContain(display);
+        expect(script, `dev-all-demos.sh missing line for ${s.slug} (${display})`).toContain(
+          display
+        );
       }
     }
   });

@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.astro/
+playwright-report/
+test-results/
+blob-report/
+coverage/
+verification-screenshots/
+.build-stamps/
+public/
+planner-api/
+*.min.*
+package-lock.json
+src/data/*.json
+.cursor/
+.github/copilot-instructions.md
+
+# prettier-plugin-astro can't parse `is:inline` script blocks containing
+# function declarations or var statements — keep these formatted manually.
+src/components/Analytics.astro
+src/components/ThemeInit.astro

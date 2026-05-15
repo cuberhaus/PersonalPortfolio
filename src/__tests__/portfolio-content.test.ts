@@ -1,42 +1,36 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
-import skills from '../data/skills.json';
 import experience from '../data/experience.json';
-import education from '../data/education.json';
-import workProjects from '../data/work_projects.json';
-import certifications from '../data/certifications.json';
+import { skills, workProjects, education, certifications } from '../data/loaders';
 
 import { flattenForLocale, type AnyLocalized as LocalizedEntry } from '../i18n/load';
 import { LOCALES } from '../config/locales';
 
 /**
  * After the nested-locale refactor, content lives in ONE file per entity with
- * the `{identity, copy:{en,es,ca}}` shape. Identity-vs-copy parity is enforced
- * by the file structure itself — no more triple-locale parity tests. These
- * tests focus on per-locale content quality (no empty bullets, no duplicate
- * tags, valid HTTPS URLs, etc.).
+ * the `{identity, copy:{en,es,ca}}` shape. Per-entry shape (icon enum,
+ * https URLs, tag minimums, default-locale presence) is enforced by Zod via
+ * src/i18n/content-schemas.ts — see content-schemas.test.ts for negative
+ * cases. The tests below cover cross-cutting properties Zod can't express
+ * on a single entry (uniqueness, content quality, parity).
  */
 
 // ─── Skills content quality ───────────────────────────────────
 
 describe('skills content quality', () => {
-  it('has no empty or duplicate skill labels within a category, in every locale', () => {
+  it('has no duplicate skill labels within a category, in every locale', () => {
+    // Non-emptiness of items is covered by the schema; this asserts the
+    // cross-cutting "unique within group" property the schema can't express.
     for (const locale of LOCALES) {
       const flat = flattenForLocale(skills as LocalizedEntry[], locale) as Array<{
         category: string;
         items: string[];
       }>;
       for (const group of flat) {
-        const trimmed = group.items.map(item => item.trim());
-        for (const item of trimmed) {
-          expect(item.length, `${locale}.${group.category} has an empty skill`).toBeGreaterThan(0);
-        }
-        expect(
-          new Set(trimmed).size,
-          `${locale}.${group.category} has duplicate skills`,
-        ).toBe(trimmed.length);
+        const trimmed = group.items.map((item) => item.trim());
+        expect(new Set(trimmed).size, `${locale}.${group.category} has duplicate skills`).toBe(
+          trimmed.length
+        );
       }
     }
   });
@@ -53,7 +47,10 @@ describe('experience content quality', () => {
       }>;
       for (const entry of flat) {
         for (const bullet of entry.bullets) {
-          expect(bullet.trim().length, `${locale}.${entry.company} has an empty bullet`).toBeGreaterThan(0);
+          expect(
+            bullet.trim().length,
+            `${locale}.${entry.company} has an empty bullet`
+          ).toBeGreaterThan(0);
         }
       }
     }
@@ -64,7 +61,7 @@ describe('experience content quality', () => {
 
 describe('education content quality', () => {
   it('has unique links across entries', () => {
-    const links = (education as LocalizedEntry[]).map(e => e.identity.link as string);
+    const links = (education as LocalizedEntry[]).map((e) => e.identity.link as string);
     expect(new Set(links).size, 'education has duplicate links').toBe(links.length);
   });
 });
@@ -72,68 +69,42 @@ describe('education content quality', () => {
 // ─── Work projects content quality ────────────────────────────
 
 describe('work projects content quality', () => {
-  it('every project has a non-empty role and clean, unique tags in every locale', () => {
+  it('has unique tags within each project, in every locale', () => {
+    // Tag non-emptiness, role presence, https-shape, and icon-enum membership
+    // are all enforced by the schema; this test covers the cross-cutting
+    // "unique within entry" property.
     const data = workProjects as LocalizedEntry[];
     for (const locale of LOCALES) {
       const flat = flattenForLocale(data, locale) as Array<{
         title: string;
-        role: string;
         tags: string[];
       }>;
       for (const project of flat) {
-        expect(project.role.trim().length, `${locale}.${project.title} has an empty role`).toBeGreaterThan(0);
-        const trimmed = project.tags.map(t => t.trim());
-        for (const tag of trimmed) {
-          expect(tag.length, `${locale}.${project.title} has an empty tag`).toBeGreaterThan(0);
-        }
-        expect(
-          new Set(trimmed).size,
-          `${locale}.${project.title} has duplicate tags`,
-        ).toBe(trimmed.length);
+        const trimmed = project.tags.map((t) => t.trim());
+        expect(new Set(trimmed).size, `${locale}.${project.title} has duplicate tags`).toBe(
+          trimmed.length
+        );
       }
     }
   });
 
-  it('uses valid, unique HTTPS links when projects are linked', () => {
+  it('has unique link URLs across projects', () => {
     const data = workProjects as LocalizedEntry[];
-    const links = data.map(e => e.identity.link as string | undefined).filter((l): l is string => Boolean(l));
-    for (const link of links) {
-      expect(() => new URL(link), `invalid work project URL ${link}`).not.toThrow();
-      expect(link, `work project URL is not HTTPS: ${link}`).toMatch(/^https:\/\//);
-    }
+    const links = data
+      .map((e) => e.identity.link as string | undefined)
+      .filter((l): l is string => Boolean(l) && l !== '');
     expect(new Set(links).size, 'work projects have duplicate links').toBe(links.length);
-  });
-
-  it('every work project icon has a registered SVG in demo-icons.ts', async () => {
-    // WorkProjects.astro renders icons via `renderIconSvg(project.icon, 28)`,
-    // so the icon set is enforced by the shared registry rather than per-page
-    // conditionals. This test asserts every data icon resolves to a real entry.
-    const { ICON_PATHS } = await import('../lib/demo-icons');
-    const registered = new Set(Object.keys(ICON_PATHS));
-    const dataIcons = new Set((workProjects as LocalizedEntry[]).map(e => e.identity.icon as string));
-    for (const icon of dataIcons) {
-      expect(registered, `demo-icons.ts has no entry for work-project icon "${icon}"`).toContain(icon);
-    }
   });
 });
 
 // ─── Certifications content quality ───────────────────────────
 
 describe('certifications content quality', () => {
-  it('every entry has a name and issuer in identity, plus an issued string in every locale', () => {
-    const data = certifications as LocalizedEntry[];
-    for (const entry of data) {
-      const name = entry.identity.name as string;
-      const issuer = entry.identity.issuer as string;
-      expect(name.trim().length, `cert "${name}" missing name`).toBeGreaterThan(0);
-      expect(issuer.trim().length, `cert "${name}" missing issuer`).toBeGreaterThan(0);
-      for (const locale of LOCALES) {
-        const issued = entry.copy[locale]?.issued as string | undefined;
-        expect(
-          typeof issued,
-          `cert "${name}" missing copy.${locale}.issued`,
-        ).toBe('string');
-      }
-    }
+  it('has unique cert names across entries', () => {
+    // Schema enforces non-empty name, issuer, issuerIcon enum, and issued
+    // string presence per locale. This test covers the cross-cutting
+    // uniqueness check the schema can't express.
+    const names = (certifications as LocalizedEntry[]).map((e) => e.identity.name as string);
+    expect(new Set(names).size, 'certifications have duplicate names').toBe(names.length);
   });
 });

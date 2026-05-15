@@ -28,10 +28,7 @@ import { dirname, resolve } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REGISTRY_PATH = resolve(__dirname, '..', '..', 'src', 'data', 'demo-services.json');
 
-const ALLOWED_ORIGINS = [
-  'http://localhost:4321',
-  'http://127.0.0.1:4321',
-];
+const ALLOWED_ORIGINS = ['http://localhost:4321', 'http://127.0.0.1:4321'];
 
 const argv = process.argv.slice(2);
 const portArgIdx = argv.indexOf('--port');
@@ -78,9 +75,10 @@ function tryParseStructured(line) {
   try {
     const obj = JSON.parse(line);
     if (typeof obj !== 'object' || obj === null) return null;
-    const level = typeof obj.level === 'string' && ['trace', 'info', 'warn', 'error'].includes(obj.level)
-      ? obj.level
-      : 'info';
+    const level =
+      typeof obj.level === 'string' && ['trace', 'info', 'warn', 'error'].includes(obj.level)
+        ? obj.level
+        : 'info';
     const ns = typeof obj.ns === 'string' ? obj.ns : 'backend';
     const msg = typeof obj.msg === 'string' ? obj.msg : line;
     return { level, ns, msg };
@@ -111,7 +109,11 @@ function streamSse(req, res, slug) {
 
   const send = (line) => {
     if (!line) return;
-    const parsed = tryParseStructured(line) ?? { level: 'info', ns: `demo:${slug}:backend`, msg: line };
+    const parsed = tryParseStructured(line) ?? {
+      level: 'info',
+      ns: `demo:${slug}:backend`,
+      msg: line,
+    };
     const payload = JSON.stringify({
       slug,
       stack: svc.stack,
@@ -141,7 +143,11 @@ function streamSse(req, res, slug) {
 
   const cleanup = () => {
     clearInterval(heartbeat);
-    try { child.kill('SIGTERM'); } catch { /* noop */ }
+    try {
+      child.kill('SIGTERM');
+    } catch {
+      /* noop */
+    }
   };
 
   child.on('exit', (code) => {

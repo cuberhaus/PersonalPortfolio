@@ -29,7 +29,7 @@ export type AnyLocalized = Localized<Record<string, unknown>, Record<string, unk
  */
 export function flattenForLocale<Flat>(
   entries: readonly Localized<Record<string, unknown>, Record<string, unknown>>[],
-  lang: Locale,
+  lang: Locale
 ): Flat[] {
   return entries.map((entry) => {
     const copy = entry.copy[lang] ?? entry.copy[DEFAULT_LOCALE];

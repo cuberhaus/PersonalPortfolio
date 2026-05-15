@@ -29,28 +29,36 @@ const { num } = Astro.props;
     </div>
 
     <ul class="timeline">
-      {experience.map((job, index) => (
-        <li class="timeline-item reveal">
-          <div class="timeline-marker" aria-hidden="true">
-            <div class="timeline-dot"></div>
-          </div>
+      {
+        experience.map((job) => (
+          <li class="timeline-item reveal">
+            <div class="timeline-marker" aria-hidden="true">
+              <div class="timeline-dot" />
+            </div>
 
-          <div class="timeline-content">
-            {job.link && (
-              <a href={job.link} target="_blank" rel="noopener noreferrer" class="timeline-card-link" aria-label={`${job.role} @ ${job.company}`}></a>
-            )}
-            <span class="timeline-period">{job.period}</span>
-            <h3 class="timeline-role">
-              {job.role} <span class="timeline-company">@ {job.company}</span>
-            </h3>
-            <ul class="timeline-bullets">
-              {job.bullets.map((bullet) => (
-                <li>{bullet}</li>
-              ))}
-            </ul>
-          </div>
-        </li>
-      ))}
+            <div class="timeline-content">
+              {job.link && (
+                <a
+                  href={job.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="timeline-card-link"
+                  aria-label={`${job.role} @ ${job.company}`}
+                />
+              )}
+              <span class="timeline-period">{job.period}</span>
+              <h3 class="timeline-role">
+                {job.role} <span class="timeline-company">@ {job.company}</span>
+              </h3>
+              <ul class="timeline-bullets">
+                {job.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </section>
@@ -107,7 +115,9 @@ const { num } = Astro.props;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 1.75rem;
-    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
   .timeline-content:hover {
@@ -118,7 +128,7 @@ const { num } = Astro.props;
   .timeline-period {
     font-family: var(--font-mono);
     font-size: 0.8rem;
-    color: var(--accent-start);
+    color: var(--accent-text);
     margin-bottom: 0.5rem;
     display: block;
   }
@@ -129,7 +139,7 @@ const { num } = Astro.props;
   }
 
   .timeline-company {
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-weight: 600;
   }
 
@@ -164,7 +174,7 @@ const { num } = Astro.props;
     content: '▹';
     position: absolute;
     left: 0;
-    color: var(--accent-start);
+    color: var(--accent-text);
   }
 
   @media (max-width: 768px) {

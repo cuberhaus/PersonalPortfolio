@@ -16,15 +16,24 @@ const links = sections
   <div class="nav-inner container">
     <a href="#hero" class="nav-logo gradient-text">Pol C.</a>
 
-    <button class="nav-toggle" aria-label={t('aria.toggleMenu')} aria-expanded="false" aria-controls="nav-links">
+    <button
+      class="nav-toggle"
+      aria-label={t('aria.toggleMenu')}
+      aria-expanded="false"
+      aria-controls="nav-links"
+    >
       <span class="hamburger"></span>
     </button>
 
     <ul class="nav-links" id="nav-links">
       <li class="nav-links-primary">
-        {links.map((link) => (
-          <a href={link.href} class="nav-link">{link.label}</a>
-        ))}
+        {
+          links.map((link) => (
+            <a href={link.href} class="nav-link">
+              {link.label}
+            </a>
+          ))
+        }
       </li>
       <li class="nav-links-util">
         <LanguagePicker />
@@ -45,7 +54,9 @@ const links = sections
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid transparent;
-    transition: border-color var(--transition-base), background var(--transition-base);
+    transition:
+      border-color var(--transition-base),
+      background var(--transition-base);
   }
 
   .navbar.scrolled {
@@ -135,7 +146,9 @@ const links = sections
     height: 2px;
     background: var(--text-primary);
     border-radius: 2px;
-    transition: transform var(--transition-base), opacity var(--transition-base);
+    transition:
+      transform var(--transition-base),
+      opacity var(--transition-base);
   }
 
   .hamburger {
@@ -149,19 +162,23 @@ const links = sections
     left: 0;
   }
 
-  .hamburger::before { top: -6px; }
-  .hamburger::after  { top: 6px; }
+  .hamburger::before {
+    top: -6px;
+  }
+  .hamburger::after {
+    top: 6px;
+  }
 
-  .nav-toggle[aria-expanded="true"] .hamburger {
+  .nav-toggle[aria-expanded='true'] .hamburger {
     background: transparent;
   }
 
-  .nav-toggle[aria-expanded="true"] .hamburger::before {
+  .nav-toggle[aria-expanded='true'] .hamburger::before {
     top: 0;
     transform: rotate(45deg);
   }
 
-  .nav-toggle[aria-expanded="true"] .hamburger::after {
+  .nav-toggle[aria-expanded='true'] .hamburger::after {
     top: 0;
     transform: rotate(-45deg);
   }
@@ -206,7 +223,10 @@ const links = sections
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s var(--transition-base);
+      transition:
+        transform var(--transition-base),
+        opacity var(--transition-base),
+        visibility 0s var(--transition-base);
     }
 
     .nav-links.open {
@@ -214,7 +234,10 @@ const links = sections
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      transition: transform var(--transition-base), opacity var(--transition-base), visibility 0s;
+      transition:
+        transform var(--transition-base),
+        opacity var(--transition-base),
+        visibility 0s;
     }
 
     /* Mobile: Centered, large typography */
@@ -271,7 +294,7 @@ const links = sections
       border-top: 1px solid color-mix(in oklab, var(--border-color) 50%, transparent);
     }
 
-  .nav-theme-toggle {
+    .nav-theme-toggle {
       padding-top: 0;
       margin-left: 0;
     }

@@ -51,4 +51,4 @@ export const T = {
   },
 };
 
-export type DemoTranslations = typeof T[Lang];
+export type DemoTranslations = (typeof T)[Lang];

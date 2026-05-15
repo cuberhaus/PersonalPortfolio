@@ -30,7 +30,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   const VALID_THEMES = THEME_IDS;
   const VALID_DESIGNS = DESIGN_IDS;
 
-  var __themeSource = 'fallback';
+  let __themeSource = 'fallback';
   const __theme = (() => {
     const url = new URL(window.location.href);
     const param = url.searchParams.get('theme');
@@ -58,7 +58,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   document.documentElement.setAttribute('data-theme', __theme);
   if (window.__debug) window.__debug.log('info', 'theme', 'resolved', { theme: __theme, source: __themeSource });
 
-  var __designSource = 'fallback';
+  let __designSource = 'fallback';
   const __design = (() => {
     const url = new URL(window.location.href);
     const param = url.searchParams.get('design');
@@ -83,22 +83,22 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 
   // Load design-specific fonts on demand instead of all 14 families upfront.
   // Core fonts (Inter, Inter Tight, JetBrains Mono) are in the main <link>.
-  var __designFonts = {
-    editorial:  'family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400',
-    pixel:      'family=Press+Start+2P',
-    cyber:      'family=Orbitron:wght@500;700;900',
-    notebook:   'family=Caveat:wght@500;600;700',
-    academic:   'family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
-    deco:       'family=Poiret+One&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900',
-    wabisabi:   'family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
-    comic:      'family=Bangers',
-    newspaper:  'family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
-  };
-  var __loadedFonts = {};
+  const __designFonts = {
+  editorial:  'family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400',
+  pixel:      'family=Press+Start+2P',
+  cyber:      'family=Orbitron:wght@500;700;900',
+  notebook:   'family=Caveat:wght@500;600;700',
+  academic:   'family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+  deco:       'family=Poiret+One&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900',
+  wabisabi:   'family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+  comic:      'family=Bangers',
+  newspaper:  'family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+};
+  const __loadedFonts = {};
   window.__loadDesignFonts = function(id) {
     if (__loadedFonts[id] || !__designFonts[id]) return;
     __loadedFonts[id] = true;
-    var link = document.createElement('link');
+    const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://fonts.googleapis.com/css2?' + __designFonts[id] + '&display=swap';
     document.head.appendChild(link);
@@ -110,7 +110,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   // whenever the OS toggles dark/light, so we get a free `theme.info` for
   // free even if no UI is touched.
   try {
-    var __scQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const __scQuery = window.matchMedia('(prefers-color-scheme: dark)');
     if (__scQuery && typeof __scQuery.addEventListener === 'function') {
       __scQuery.addEventListener('change', function(e) {
         if (window.__debug) {
@@ -122,8 +122,8 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 
   window.setTheme = function(id) {
     if (!VALID_THEMES.includes(id)) {
-      var msg = 'Unknown theme "' + id + '". Available themes:\n' +
-        VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n');
+      const msg = 'Unknown theme "' + id + '". Available themes:\n' +
+      VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n');
       if (window.__debug) window.__debug.log('error', 'theme', msg);
       else console.error(msg);
       return;
@@ -135,8 +135,8 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 
   window.setDesign = function(id) {
     if (!VALID_DESIGNS.includes(id)) {
-      var msg = 'Unknown design "' + id + '". Available designs:\n' +
-        VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n');
+      const msg = 'Unknown design "' + id + '". Available designs:\n' +
+      VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n');
       if (window.__debug) window.__debug.log('error', 'theme', msg);
       else console.error(msg);
       return;
@@ -362,7 +362,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
 
   .theme-modal-rec-legend-star {
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-size: 0.7rem;
     line-height: 1;
   }
@@ -435,7 +435,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
 
   .theme-modal-swatch.active .theme-modal-color {
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 0 0 2px var(--glow-color);
   }
 
@@ -452,7 +452,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     margin-left: auto;
     font-size: 0.7rem;
     line-height: 1;
-    color: var(--accent-start);
+    color: var(--accent-text);
     opacity: 0;
     transform: scale(0.7);
     transition: opacity var(--transition-fast), transform var(--transition-fast);
@@ -464,7 +464,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
 
   .theme-modal-swatch[data-rec='true'] .theme-modal-color {
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--accent-start) 55%, transparent);
   }
 
@@ -493,7 +493,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
 
   .theme-modal-design.active {
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 0 0 1px var(--glow-color);
     color: var(--text-primary);
   }
@@ -578,7 +578,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
   .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-sample {
     font-size: 0.8rem;
-    color: var(--accent-start);
+    color: var(--accent-text);
   }
   .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-sample::before {
     content: '>';
@@ -693,7 +693,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     left: 3px;
     font-size: 0.5rem;
     letter-spacing: 0;
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-family: 'EB Garamond', 'Crimson Pro', serif;
     font-style: italic;
   }
@@ -845,7 +845,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     box-shadow: 3px 3px 0 #0a0a0a;
   }
   .theme-modal-design[data-preview-style='comic'] .theme-modal-design-sample {
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-family: Bangers, 'Inter Tight', sans-serif;
     font-weight: 400;
     letter-spacing: 0.05em;

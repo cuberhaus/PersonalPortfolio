@@ -76,8 +76,7 @@ export function getSessionId(): string {
   const fresh = generateUuid();
   try {
     window.localStorage.setItem(STORAGE_KEY, fresh);
-  } catch {
-  }
+  } catch {}
   cached = fresh;
   return fresh;
 }
@@ -91,6 +90,5 @@ export function __resetSessionForTesting(): void {
   if (typeof window === 'undefined') return;
   try {
     window.localStorage.removeItem(STORAGE_KEY);
-  } catch {
-  }
+  } catch {}
 }

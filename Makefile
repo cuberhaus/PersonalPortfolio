@@ -10,7 +10,7 @@ endif
        rebuild free-ports check-registry \
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
-       clean test help \
+       clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update help \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
        _db-rob _db-par _db-fib _db-grafics
@@ -21,6 +21,7 @@ default: help
 
 install: ## Install project dependencies
 	npm install
+	npx playwright install chromium
 ifeq ($(OS),Windows_NT)
 	@command -v go >/dev/null 2>&1 || echo "Go not found - install via:  choco install golang   OR   winget install GoLang.Go"
 	@$(CARGO_ENV) command -v cargo >/dev/null 2>&1 || echo "Rust not found - install via:  choco install rustup.install   OR   winget install Rustlang.Rustup"

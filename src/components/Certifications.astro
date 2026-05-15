@@ -1,7 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIssuerIconSvg } from '../lib/issuer-icons';
-import certsData from '../data/certifications.json';
+import { certifications as certsData } from '../data/loaders';
 import { flattenForLocale } from '../i18n/load';
 
 type CertEntry = {
@@ -29,39 +29,59 @@ const { num } = Astro.props;
     </div>
 
     <ul class="certifications-grid reveal-stagger" id="certifications-grid" data-mobile-limit="4">
-      {certs.map((c, i) => {
-        const Inner = (
-          <>
-            <div class="certification-icon" aria-hidden="true" set:html={renderIssuerIconSvg(c.issuerIcon, 24)} />
-            {c.issued && <span class="certification-period">{c.issued}</span>}
-            <h3 class="certification-name">{c.name}</h3>
-            <p class="certification-issuer">{c.issuer}</p>
-            {c.link && <p class="certification-credential">{t('certifications.viewCredential')} <span aria-hidden="true">↗</span></p>}
-          </>
-        );
-        return (
-          <li class={`certification-card${i >= 4 ? ' certification-card--extra' : ''}`}>
-            {c.link ? (
-              <a href={c.link} target="_blank" rel="noopener noreferrer" class="certification-link"
-                 aria-label={`${c.name} — ${c.issuer}`}
-                 {...(c.fallback ? { 'data-fallback': c.fallback } : {})}>
-                {Inner}
-              </a>
-            ) : (
-              <div class="certification-link">{Inner}</div>
-            )}
-          </li>
-        );
-      })}
+      {
+        certs.map((c, i) => {
+          const Inner = (
+            <>
+              <div
+                class="certification-icon"
+                aria-hidden="true"
+                set:html={renderIssuerIconSvg(c.issuerIcon, 24)}
+              />
+              {c.issued && <span class="certification-period">{c.issued}</span>}
+              <h3 class="certification-name">{c.name}</h3>
+              <p class="certification-issuer">{c.issuer}</p>
+              {c.link && (
+                <p class="certification-credential">
+                  {t('certifications.viewCredential')} <span aria-hidden="true">↗</span>
+                </p>
+              )}
+            </>
+          );
+          return (
+            <li class={`certification-card${i >= 4 ? ' certification-card--extra' : ''}`}>
+              {c.link ? (
+                <a
+                  href={c.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="certification-link"
+                  aria-label={`${c.name} — ${c.issuer}`}
+                  {...(c.fallback ? { 'data-fallback': c.fallback } : {})}
+                >
+                  {Inner}
+                </a>
+              ) : (
+                <div class="certification-link">{Inner}</div>
+              )}
+            </li>
+          );
+        })
+      }
     </ul>
 
-    {certs.length > 4 && (
-      <button class="certifications-toggle" id="certifications-toggle"
-              data-show-more={t('certifications.showMore')}
-              data-show-less={t('certifications.showLess')}>
-        {t('certifications.showMore')}
-      </button>
-    )}
+    {
+      certs.length > 4 && (
+        <button
+          class="certifications-toggle"
+          id="certifications-toggle"
+          data-show-more={t('certifications.showMore')}
+          data-show-less={t('certifications.showLess')}
+        >
+          {t('certifications.showMore')}
+        </button>
+      )
+    }
   </div>
 </section>
 
@@ -80,11 +100,13 @@ const { num } = Astro.props;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 1.75rem;
-    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
   .certification-card:hover {
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 12px 40px var(--glow-color);
   }
 
@@ -96,7 +118,7 @@ const { num } = Astro.props;
   }
 
   .certification-icon {
-    color: var(--accent-start);
+    color: var(--accent-text);
     margin-bottom: 1.25rem;
     display: inline-flex;
     align-items: center;
@@ -106,7 +128,7 @@ const { num } = Astro.props;
   .certification-period {
     font-family: var(--font-mono);
     font-size: 0.8rem;
-    color: var(--accent-start);
+    color: var(--accent-text);
     display: block;
     margin-bottom: 0.5rem;
   }
@@ -132,7 +154,7 @@ const { num } = Astro.props;
 
   .certification-link:hover .certification-credential,
   .certification-link:focus-visible .certification-credential {
-    color: var(--accent-start);
+    color: var(--accent-text);
   }
 
   @media (max-width: 768px) {
@@ -156,15 +178,17 @@ const { num } = Astro.props;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.85rem;
     cursor: pointer;
-    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
   .certifications-toggle:hover {
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 4px 20px var(--glow-color);
   }
 
@@ -187,26 +211,26 @@ const { num } = Astro.props;
     btn.addEventListener('click', () => {
       const expanded = grid.classList.toggle('expanded');
       btn.classList.toggle('expanded', expanded);
-      btn.textContent = expanded
-        ? btn.dataset.showLess!
-        : btn.dataset.showMore!;
+      btn.textContent = expanded ? btn.dataset.showLess! : btn.dataset.showMore!;
     });
   }
 
   // Fallback: if the external cert link is unreachable, swap to the local copy
-  document.querySelectorAll<HTMLAnchorElement>('a.certification-link[data-fallback]').forEach((link) => {
-    link.addEventListener('click', async (e) => {
-      const fallback = link.dataset.fallback;
-      if (!fallback) return;
-      try {
-        const res = await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
-        // mode: 'no-cors' returns opaque response (type "opaque", status 0) on success
-        // A network error throws, so if we get here the server responded
-      } catch {
-        // Network error — external link is down, redirect to local fallback
-        e.preventDefault();
-        window.open(fallback, '_blank', 'noopener,noreferrer');
-      }
+  document
+    .querySelectorAll<HTMLAnchorElement>('a.certification-link[data-fallback]')
+    .forEach((link) => {
+      link.addEventListener('click', async (e) => {
+        const fallback = link.dataset.fallback;
+        if (!fallback) return;
+        try {
+          const res = await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
+          // mode: 'no-cors' returns opaque response (type "opaque", status 0) on success
+          // A network error throws, so if we get here the server responded
+        } catch {
+          // Network error — external link is down, redirect to local fallback
+          e.preventDefault();
+          window.open(fallback, '_blank', 'noopener,noreferrer');
+        }
+      });
     });
-  });
 </script>

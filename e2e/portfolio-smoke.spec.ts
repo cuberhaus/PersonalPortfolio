@@ -11,12 +11,12 @@ import { test, expect } from '@playwright/test';
 import { SECTION_IDS, SECTION_IDS_WITH_HERO } from '../src/config/section-ids';
 
 const SECTION_ORDER = SECTION_IDS;
-const SECTION_SELECTOR = SECTION_IDS_WITH_HERO.map(id => `section#${id}`).join(', ');
+const SECTION_SELECTOR = SECTION_IDS_WITH_HERO.map((id) => `section#${id}`).join(', ');
 
 async function navHrefs(page: import('@playwright/test').Page) {
-  return page.locator('.nav-links-primary a.nav-link').evaluateAll(links =>
-    links.map(link => link.getAttribute('href')),
-  );
+  return page
+    .locator('.nav-links-primary a.nav-link')
+    .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
 }
 
 test.describe('portfolio homepage smoke', () => {
@@ -27,7 +27,7 @@ test.describe('portfolio homepage smoke', () => {
     await expect(page.locator('main#main-content')).toBeVisible();
     await expect(page.locator('section#hero')).toBeVisible();
     await expect(page.locator(SECTION_SELECTOR)).toHaveCount(SECTION_ORDER.length + 1);
-    expect(await navHrefs(page)).toEqual(SECTION_ORDER.map(id => `#${id}`));
+    expect(await navHrefs(page)).toEqual(SECTION_ORDER.map((id) => `#${id}`));
   });
 
   test('navbar links scroll to each homepage section', async ({ page }) => {
@@ -46,7 +46,7 @@ test.describe('portfolio homepage smoke', () => {
 
       await expect(page.locator('main#main-content')).toBeVisible();
       await expect(page.locator(SECTION_SELECTOR)).toHaveCount(SECTION_ORDER.length + 1);
-      expect(await navHrefs(page)).toEqual(SECTION_ORDER.map(id => `#${id}`));
+      expect(await navHrefs(page)).toEqual(SECTION_ORDER.map((id) => `#${id}`));
     });
   }
 
@@ -81,7 +81,9 @@ test.describe('portfolio homepage smoke', () => {
       await page.setViewportSize(viewport);
       await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+      );
       expect(overflow).toBeLessThanOrEqual(1);
     }
   });

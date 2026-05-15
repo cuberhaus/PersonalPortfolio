@@ -32,8 +32,14 @@ log-relay subscriber can wire up automatically:
 
 ```astro
 <DemoLayout title={demo.metaTitle} description={demo.metaDescription} slug="<slug>">
-  <DemoHeader badge={demo.badge} title={demo.title} lead={demo.lead}
-              githubUrl="https://github.com/..." accentFrom="#..." accentTo="#..." />
+  <DemoHeader
+    badge={demo.badge}
+    title={demo.title}
+    lead={demo.lead}
+    githubUrl="https://github.com/..."
+    accentFrom="#..."
+    accentTo="#..."
+  />
   <LiveAppEmbed slug="<slug>" title="..." dockerCmd="..." lang={lang} client:load />
   ...
 </DemoLayout>
@@ -48,11 +54,11 @@ filter pills and the registry test stay consistent.
 import { useDebug, useDemoLifecycle } from '../../lib/useDebug';
 
 export default function MyDemo({ lang = 'en' }: { lang?: 'en' | 'es' | 'ca' }) {
-  useDemoLifecycle('demo:<slug>', { lang });    // mount / unmount + i18n trace
+  useDemoLifecycle('demo:<slug>', { lang }); // mount / unmount + i18n trace
   const log = useDebug('demo:<slug>');
 
   const onRun = () => {
-    log.info('run', { params });                // user interactions
+    log.info('run', { params }); // user interactions
     try {
       doWork();
       log.info('run-ok', { result });
@@ -320,7 +326,7 @@ in-iframe logs reach the parent overlay:
 
 ```ts
 import { installEmbedDebug } from '../../lib/debug-iframe-emitter';
-installEmbedDebug();                       // mirrors console.* by default
+installEmbedDebug(); // mirrors console.* by default
 window.__embed_debug?.info('demo:<slug>', 'mounted', { build: '0.1.2' });
 ```
 

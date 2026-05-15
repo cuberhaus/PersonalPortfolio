@@ -24,7 +24,7 @@ const read = (rel: string) => readFileSync(join(SRC, rel), 'utf-8');
 
 describe('Icon parity: demo-icons.ts covers all demos.json icons', () => {
   const sharedIcons = Object.keys(ICON_PATHS).sort();
-  const jsonIcons = [...new Set(demosEn.map(d => d.icon))].sort();
+  const jsonIcons = [...new Set(demosEn.map((d) => d.icon))].sort();
 
   it('demo-icons.ts has an entry for every icon used in demos.json', () => {
     for (const icon of jsonIcons) {
@@ -88,7 +88,7 @@ describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
   });
 
   it('SECTION_IDS export excludes the hero', () => {
-    expect(SECTION_IDS).toEqual(SECTION_META.filter(s => s.id !== 'hero').map(s => s.id));
+    expect(SECTION_IDS).toEqual(SECTION_META.filter((s) => s.id !== 'hero').map((s) => s.id));
   });
 });
 
@@ -105,7 +105,7 @@ function componentFileName(id: string): string {
 
 describe('Demo pages pass correct slug to DemoLayout', () => {
   const pagesDir = join(SRC, 'pages', 'demos');
-  const pageFiles = readdirSync(pagesDir).filter(f => f.endsWith('.astro'));
+  const pageFiles = readdirSync(pagesDir).filter((f) => f.endsWith('.astro'));
 
   for (const file of pageFiles) {
     const slug = file.replace('.astro', '');

@@ -1,6 +1,6 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import projectsData from '../data/work_projects.json';
+import { workProjects as projectsData } from '../data/loaders';
 import { flattenForLocale } from '../i18n/load';
 import { renderIconSvg } from '../lib/demo-icons';
 
@@ -33,48 +33,55 @@ const { num } = Astro.props;
     </div>
 
     <div class="work-grid reveal-stagger">
-      {projects.map((project) => (
-        <div class="work-card">
-          {project.link ? (
-            <a href={project.link} target="_blank" rel="noopener noreferrer" class="work-card-inner work-card-link"
-               {...(project.fallback ? { 'data-fallback': project.fallback } : {})}>
-              <div class="work-icon" set:html={renderIconSvg(project.icon, 28)} />
+      {
+        projects.map((project) => (
+          <div class="work-card">
+            {project.link ? (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="work-card-inner work-card-link"
+                {...(project.fallback ? { 'data-fallback': project.fallback } : {})}
+              >
+                <div class="work-icon" set:html={renderIconSvg(project.icon, 28)} />
 
-              <div class="work-badge">
-                <span>{project.company}</span>
+                <div class="work-badge">
+                  <span>{project.company}</span>
+                </div>
+
+                <h3 class="work-title">{project.title}</h3>
+                <p class="work-role">{project.role}</p>
+                <p class="work-desc">{project.description}</p>
+
+                <ul class="work-tags">
+                  {project.tags.map((tag) => (
+                    <li>{tag}</li>
+                  ))}
+                </ul>
+              </a>
+            ) : (
+              <div class="work-card-inner">
+                <div class="work-icon" set:html={renderIconSvg(project.icon, 28)} />
+
+                <div class="work-badge">
+                  <span>{project.company}</span>
+                </div>
+
+                <h3 class="work-title">{project.title}</h3>
+                <p class="work-role">{project.role}</p>
+                <p class="work-desc">{project.description}</p>
+
+                <ul class="work-tags">
+                  {project.tags.map((tag) => (
+                    <li>{tag}</li>
+                  ))}
+                </ul>
               </div>
-
-              <h3 class="work-title">{project.title}</h3>
-              <p class="work-role">{project.role}</p>
-              <p class="work-desc">{project.description}</p>
-
-              <ul class="work-tags">
-                {project.tags.map((tag) => (
-                  <li>{tag}</li>
-                ))}
-              </ul>
-            </a>
-          ) : (
-            <div class="work-card-inner">
-              <div class="work-icon" set:html={renderIconSvg(project.icon, 28)} />
-
-              <div class="work-badge">
-                <span>{project.company}</span>
-              </div>
-
-              <h3 class="work-title">{project.title}</h3>
-              <p class="work-role">{project.role}</p>
-              <p class="work-desc">{project.description}</p>
-
-              <ul class="work-tags">
-                {project.tags.map((tag) => (
-                  <li>{tag}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      ))}
+            )}
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>
@@ -91,8 +98,10 @@ const { num } = Astro.props;
     border-radius: var(--radius-lg);
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    transition: transform var(--transition-base), border-color var(--transition-base),
-                box-shadow var(--transition-base);
+    transition:
+      transform var(--transition-base),
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
     overflow: hidden;
     display: flex;
   }
@@ -111,7 +120,7 @@ const { num } = Astro.props;
 
   .work-card:hover {
     transform: translateY(-4px);
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 12px 40px var(--glow-color);
   }
 
@@ -133,7 +142,7 @@ const { num } = Astro.props;
   }
 
   .work-icon {
-    color: var(--accent-start);
+    color: var(--accent-text);
     margin-bottom: 1.25rem;
   }
 
@@ -165,7 +174,7 @@ const { num } = Astro.props;
   .work-role {
     font-size: 0.85rem;
     font-family: var(--font-mono);
-    color: var(--accent-start);
+    color: var(--accent-text);
     margin-bottom: 1rem;
   }
 
@@ -203,16 +212,18 @@ const { num } = Astro.props;
 </style>
 
 <script>
-  document.querySelectorAll<HTMLAnchorElement>('a.work-card-link[data-fallback]').forEach((link) => {
-    link.addEventListener('click', async (e) => {
-      const fallback = link.dataset.fallback;
-      if (!fallback) return;
-      try {
-        await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
-      } catch {
-        e.preventDefault();
-        window.open(fallback, '_blank', 'noopener,noreferrer');
-      }
+  document
+    .querySelectorAll<HTMLAnchorElement>('a.work-card-link[data-fallback]')
+    .forEach((link) => {
+      link.addEventListener('click', async (e) => {
+        const fallback = link.dataset.fallback;
+        if (!fallback) return;
+        try {
+          await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
+        } catch {
+          e.preventDefault();
+          window.open(fallback, '_blank', 'noopener,noreferrer');
+        }
+      });
     });
-  });
 </script>

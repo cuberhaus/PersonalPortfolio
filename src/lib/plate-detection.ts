@@ -26,12 +26,33 @@ export interface PipelineResult {
 }
 
 const CHAR_LABELS = [
-  "1","2","3","4","5","6","7","8","9","0",
-  "a","b","e","h","i","k","m","n","p","t","x","y","z",
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '0',
+  'a',
+  'b',
+  'e',
+  'h',
+  'i',
+  'k',
+  'm',
+  'n',
+  'p',
+  't',
+  'x',
+  'y',
+  'z',
 ];
 
 function matToCanvas(cv: any, mat: any, label?: string): StageResult {
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = mat.cols;
   canvas.height = mat.rows;
   let display = mat;
@@ -44,7 +65,7 @@ function matToCanvas(cv: any, mat: any, label?: string): StageResult {
   }
   cv.imshow(canvas, display);
   if (display !== mat) display.delete();
-  return { canvas, label: label || "" };
+  return { canvas, label: label || '' };
 }
 
 function computeRegionProps(cv: any, contour: any, gray: any): RegionProps {
@@ -148,7 +169,10 @@ function getRegions(cv: any, binary: any): RegionProps[] {
   for (let i = 0; i < contours.size(); i++) {
     const cnt = contours.get(i);
     const area = cv.contourArea(cnt);
-    if (area < 10) { cnt.delete(); continue; }
+    if (area < 10) {
+      cnt.delete();
+      continue;
+    }
     regions.push(computeRegionProps(cv, cnt, binary));
     cnt.delete();
   }
@@ -163,7 +187,15 @@ function adaptiveThreshold(cv: any, gray: any, sensitivity: number): any {
   if (blockSize % 2 === 0) blockSize += 1;
   // Higher sensitivity → lower effective threshold → more foreground pixels
   const C = Math.round((sensitivity * 2 - 1) * 15);
-  cv.adaptiveThreshold(gray, result, 255, cv.ADAPTIVE_THRESH_MEAN_C, cv.THRESH_BINARY, blockSize, C);
+  cv.adaptiveThreshold(
+    gray,
+    result,
+    255,
+    cv.ADAPTIVE_THRESH_MEAN_C,
+    cv.THRESH_BINARY,
+    blockSize,
+    C
+  );
   return result;
 }
 
@@ -171,14 +203,15 @@ function findPlate(cv: any, src: any): { plate: any; stages: StageResult[] } | n
   const stages: StageResult[] = [];
   const gray = new cv.Mat();
   cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-  stages.push(matToCanvas(cv, gray, "Grayscale"));
+  stages.push(matToCanvas(cv, gray, 'Grayscale'));
 
   let sensitivity = 0.4;
   let bestRegion: RegionProps | null = null;
 
   while (sensitivity <= 1.0 && !bestRegion) {
     const binary = adaptiveThreshold(cv, gray, sensitivity);
-    if (sensitivity <= 0.5) stages.push(matToCanvas(cv, binary, `Binarized (s=${sensitivity.toFixed(1)})`));
+    if (sensitivity <= 0.5)
+      stages.push(matToCanvas(cv, binary, `Binarized (s=${sensitivity.toFixed(1)})`));
 
     const cleared = clearBorder(cv, binary);
     const filled = fillHoles(cv, cleared);
@@ -199,7 +232,7 @@ function findPlate(cv: any, src: any): { plate: any; stages: StageResult[] } | n
         bestRegion.bbox.y + bestRegion.bbox.h
       );
       cv.rectangle(vis, pt1, pt2, new cv.Scalar(0, 255, 0, 255), 3);
-      stages.push(matToCanvas(cv, vis, "Plate detected"));
+      stages.push(matToCanvas(cv, vis, 'Plate detected'));
       vis.delete();
     }
     filled.delete();
@@ -213,12 +246,15 @@ function findPlate(cv: any, src: any): { plate: any; stages: StageResult[] } | n
 
   const { x, y, w, h } = bestRegion.bbox;
   const plate = src.roi(new cv.Rect(x, y, w, h));
-  stages.push(matToCanvas(cv, plate, "Plate crop"));
+  stages.push(matToCanvas(cv, plate, 'Plate crop'));
   gray.delete();
   return { plate, stages };
 }
 
-function findChars(cv: any, plate: any): { chars: any[]; bboxes: RegionProps["bbox"][]; stages: StageResult[] } | null {
+function findChars(
+  cv: any,
+  plate: any
+): { chars: any[]; bboxes: RegionProps['bbox'][]; stages: StageResult[] } | null {
   const stages: StageResult[] = [];
   const gray = new cv.Mat();
   cv.cvtColor(plate, gray, cv.COLOR_RGBA2GRAY);
@@ -226,7 +262,7 @@ function findChars(cv: any, plate: any): { chars: any[]; bboxes: RegionProps["bb
   const binary = adaptiveThreshold(cv, gray, 0.7);
   const inverted = new cv.Mat();
   cv.bitwise_not(binary, inverted);
-  stages.push(matToCanvas(cv, inverted, "Inverted threshold"));
+  stages.push(matToCanvas(cv, inverted, 'Inverted threshold'));
   binary.delete();
 
   const cleared = clearBorder(cv, inverted);
@@ -236,11 +272,14 @@ function findChars(cv: any, plate: any): { chars: any[]; bboxes: RegionProps["bb
   const hierarchy = new cv.Mat();
   cv.findContours(cleared, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
-  const candidates: { bbox: RegionProps["bbox"]; props: RegionProps }[] = [];
+  const candidates: { bbox: RegionProps['bbox']; props: RegionProps }[] = [];
   for (let i = 0; i < contours.size(); i++) {
     const cnt = contours.get(i);
     const area = cv.contourArea(cnt);
-    if (area < 30) { cnt.delete(); continue; }
+    if (area < 30) {
+      cnt.delete();
+      continue;
+    }
     const props = computeRegionProps(cv, cnt, cleared);
     cnt.delete();
 
@@ -281,7 +320,7 @@ function findChars(cv: any, plate: any): { chars: any[]; bboxes: RegionProps["bb
 
   // Crop characters from original plate
   const chars: any[] = [];
-  const bboxes: RegionProps["bbox"][] = [];
+  const bboxes: RegionProps['bbox'][] = [];
   for (const c of candidates) {
     const { x, y, w, h } = c.bbox;
     const cx = Math.max(0, x);
@@ -301,12 +340,12 @@ function findChars(cv: any, plate: any): { chars: any[]; bboxes: RegionProps["bb
 function loadImageAsMat(cv: any, src: string): Promise<any> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    img.crossOrigin = 'anonymous';
     img.onload = () => {
-      const canvas = document.createElement("canvas");
+      const canvas = document.createElement('canvas');
       canvas.width = img.naturalWidth;
       canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext("2d")!;
+      const ctx = canvas.getContext('2d')!;
       ctx.drawImage(img, 0, 0);
       const mat = cv.imread(canvas);
       resolve(mat);
@@ -384,7 +423,7 @@ function identifyChars(
 ): { text: string; stages: StageResult[]; charCanvases: HTMLCanvasElement[] } {
   const stages: StageResult[] = [];
   const charCanvases: HTMLCanvasElement[] = [];
-  let text = "";
+  let text = '';
 
   for (const charMat of charMats) {
     const gray = new cv.Mat();
@@ -400,10 +439,10 @@ function identifyChars(
     const resized = new cv.Mat();
     cv.resize(bin, resized, new cv.Size(20, 30));
 
-    charCanvases.push(matToCanvas(cv, resized, "").canvas);
+    charCanvases.push(matToCanvas(cv, resized, '').canvas);
 
     let bestScore = -Infinity;
-    let bestLabel = "?";
+    let bestLabel = '?';
 
     for (const t of templates) {
       const result = new cv.Mat();
@@ -441,11 +480,11 @@ export async function runPipeline(
   // Stage 1: Plate detection
   const plateResult = findPlate(cv, src);
   if (!plateResult) {
-    const fallback = matToCanvas(cv, src, "Original — no plate detected");
+    const fallback = matToCanvas(cv, src, 'Original — no plate detected');
     src.delete();
     templates.forEach((t) => t.tmpl.delete());
     return {
-      plateText: "(no plate found)",
+      plateText: '(no plate found)',
       stage1: [fallback],
       stage2: [],
       stage3: [],
@@ -456,12 +495,12 @@ export async function runPipeline(
   // Stage 2: Character segmentation
   const charResult = findChars(cv, plateResult.plate);
   if (!charResult || charResult.chars.length === 0) {
-    const fallback = matToCanvas(cv, plateResult.plate, "Plate — no characters detected");
+    const fallback = matToCanvas(cv, plateResult.plate, 'Plate — no characters detected');
     plateResult.plate.delete();
     src.delete();
     templates.forEach((t) => t.tmpl.delete());
     return {
-      plateText: "(no characters found)",
+      plateText: '(no characters found)',
       stage1: plateResult.stages,
       stage2: [fallback],
       stage3: [],

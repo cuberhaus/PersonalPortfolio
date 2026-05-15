@@ -27,15 +27,19 @@ export const ui = {
     'hero.greeting': 'Hi, my name is',
     'hero.tagline_1': 'I like building',
     'hero.tagline_2': 'things with AI & data.',
-    'hero.description': 'Computer Science Engineer from Barcelona, currently an AI & Data Consultant at Deloitte. I enjoy exploring new tech, shipping real tools, and helping my team build things that actually work.',
+    'hero.description':
+      'Computer Science Engineer from Barcelona, currently an AI & Data Consultant at Deloitte. I enjoy exploring new tech, shipping real tools, and helping my team build things that actually work.',
     'hero.cta': 'View my work',
 
     // About
     'about.label': 'About',
     'about.title': 'A bit about me',
-    'about.p1': "Hi! I'm Pol — a Computer Science Engineer from Barcelona. I graduated from UPC's Facultat d'Informàtica de Barcelona (FIB) and now work as an AI & Data Consultant at Deloitte, where most of my days are spent at the intersection of AI, data platforms, and the messy reality of making them useful.",
-    'about.p2': "What I actually enjoy is building stuff — exploring new tools, figuring out how they fit together, and helping my team ship things we're proud of. I care more about solving the problem than about picking the trendiest stack, though I'm happy when both line up.",
-    'about.p3': "Outside of work you'll usually find me climbing, deep in a videogame, or pretending my Vim keybindings make me faster than I really am. Here's some of the tech I've been using lately:",
+    'about.p1':
+      "Hi! I'm Pol — a Computer Science Engineer from Barcelona. I graduated from UPC's Facultat d'Informàtica de Barcelona (FIB) and now work as an AI & Data Consultant at Deloitte, where most of my days are spent at the intersection of AI, data platforms, and the messy reality of making them useful.",
+    'about.p2':
+      "What I actually enjoy is building stuff — exploring new tools, figuring out how they fit together, and helping my team ship things we're proud of. I care more about solving the problem than about picking the trendiest stack, though I'm happy when both line up.",
+    'about.p3':
+      "Outside of work you'll usually find me climbing, deep in a videogame, or pretending my Vim keybindings make me faster than I really am. Here's some of the tech I've been using lately:",
     'about.cv': 'Download CV',
 
     // Projects
@@ -76,7 +80,8 @@ export const ui = {
     // Contact
     'contact.label': 'Contact',
     'contact.title': 'Get in touch',
-    'contact.text': "I'm currently open to new opportunities and collaborations. Whether you have a question, a project idea, or just want to say hi — my inbox is always open.",
+    'contact.text':
+      "I'm currently open to new opportunities and collaborations. Whether you have a question, a project idea, or just want to say hi — my inbox is always open.",
     'contact.cta': 'Send Message',
     'contact.name': 'Name',
     'contact.namePlaceholder': 'Your name',
@@ -102,10 +107,19 @@ export const ui = {
     'demo.viewBackend': 'Backend Code (GitHub)',
     'demo.allDemos': 'All Demos',
     'meta.title': 'Pol Casacuberta — Portfolio',
-    'meta.description': 'Pol Casacuberta — AI & Data Consultant from Barcelona. I build things with AI and data.',
+    'meta.description':
+      'Pol Casacuberta — AI & Data Consultant from Barcelona. I build things with AI and data.',
     'notFound.title': 'Page Not Found',
     'notFound.message': "The page you're looking for doesn't exist or has been moved.",
     'notFound.back': 'Portfolio',
+    'serverError.title': 'Something went wrong',
+    'serverError.message':
+      'Something broke on our end. Try reloading, or head back to the portfolio.',
+    'serverError.back': 'Portfolio',
+    'serverError.demoTitle': "This demo couldn't load",
+    'serverError.demoMessage':
+      'An error happened while running this demo. The rest of the site is unaffected — you can reload to try again.',
+    'serverError.reload': 'Reload',
     'aria.toggleMenu': 'Toggle menu',
     'aria.toggleTheme': 'Toggle theme (Ctrl+K for more themes)',
     'aria.scrollTop': 'Scroll to top of page',
@@ -139,21 +153,26 @@ export const ui = {
     'hero.greeting': 'Hola, mi nombre es',
     'hero.tagline_1': 'Me gusta construir',
     'hero.tagline_2': 'cosas con IA y datos.',
-    'hero.description': 'Ingeniero Informático de Barcelona, actualmente Consultor de IA y Datos en Deloitte. Disfruto explorando nuevas tecnologías, sacando adelante herramientas reales y ayudando a mi equipo a construir cosas que de verdad funcionen.',
+    'hero.description':
+      'Ingeniero Informático de Barcelona, actualmente Consultor de IA y Datos en Deloitte. Disfruto explorando nuevas tecnologías, sacando adelante herramientas reales y ayudando a mi equipo a construir cosas que de verdad funcionen.',
     'hero.cta': 'Ver mi trabajo',
 
     // About
     'about.label': 'Sobre mí',
     'about.title': 'Un poco sobre mí',
-    'about.p1': "¡Hola! Soy Pol, Ingeniero Informático de Barcelona. Me gradué en la Facultat d'Informàtica de Barcelona (FIB) de la UPC y ahora trabajo como Consultor de IA y Datos en Deloitte, donde paso la mayor parte de los días en la intersección de la IA, las plataformas de datos y la realidad algo caótica de hacerlas útiles.",
-    'about.p2': "Lo que realmente disfruto es construir: explorar herramientas nuevas, entender cómo encajan entre sí y ayudar a mi equipo a sacar adelante cosas de las que estemos orgullosos. Me importa más resolver el problema que usar el stack más de moda, aunque me alegra cuando ambas cosas coinciden.",
-    'about.p3': "Fuera del trabajo me suelen encontrar escalando, metido en un videojuego o fingiendo que mis atajos de Vim me hacen más rápido de lo que soy. Estas son algunas de las tecnologías con las que he trabajado últimamente:",
+    'about.p1':
+      "¡Hola! Soy Pol, Ingeniero Informático de Barcelona. Me gradué en la Facultat d'Informàtica de Barcelona (FIB) de la UPC y ahora trabajo como Consultor de IA y Datos en Deloitte, donde paso la mayor parte de los días en la intersección de la IA, las plataformas de datos y la realidad algo caótica de hacerlas útiles.",
+    'about.p2':
+      'Lo que realmente disfruto es construir: explorar herramientas nuevas, entender cómo encajan entre sí y ayudar a mi equipo a sacar adelante cosas de las que estemos orgullosos. Me importa más resolver el problema que usar el stack más de moda, aunque me alegra cuando ambas cosas coinciden.',
+    'about.p3':
+      'Fuera del trabajo me suelen encontrar escalando, metido en un videojuego o fingiendo que mis atajos de Vim me hacen más rápido de lo que soy. Estas son algunas de las tecnologías con las que he trabajado últimamente:',
     'about.cv': 'Descargar CV',
 
     // Projects
     'projects.label': 'Interactivo',
     'projects.title': 'Prueba mis proyectos',
-    'projects.subtitle': 'Demos interactivas y en vivo que puedes probar directamente en tu navegador.',
+    'projects.subtitle':
+      'Demos interactivas y en vivo que puedes probar directamente en tu navegador.',
     'projects.badge': 'Demo en vivo',
     'projects.showMore': 'Mostrar más',
     'projects.showLess': 'Mostrar menos',
@@ -188,7 +207,8 @@ export const ui = {
     // Contact
     'contact.label': 'Contacto',
     'contact.title': 'Ponte en contacto',
-    'contact.text': "Actualmente estoy abierto a nuevas oportunidades y colaboraciones. Ya sea que tengas una pregunta, una idea para un proyecto o simplemente quieras saludar, mi bandeja de entrada siempre está abierta.",
+    'contact.text':
+      'Actualmente estoy abierto a nuevas oportunidades y colaboraciones. Ya sea que tengas una pregunta, una idea para un proyecto o simplemente quieras saludar, mi bandeja de entrada siempre está abierta.',
     'contact.cta': 'Enviar Mensaje',
     'contact.name': 'Nombre',
     'contact.namePlaceholder': 'Tu nombre',
@@ -214,10 +234,19 @@ export const ui = {
     'demo.viewBackend': 'Código Backend (GitHub)',
     'demo.allDemos': 'Todos los Demos',
     'meta.title': 'Pol Casacuberta — Portafolio',
-    'meta.description': 'Pol Casacuberta — Consultor de IA y Datos de Barcelona. Construyo cosas con IA y datos.',
+    'meta.description':
+      'Pol Casacuberta — Consultor de IA y Datos de Barcelona. Construyo cosas con IA y datos.',
     'notFound.title': 'Página no encontrada',
     'notFound.message': 'La página que buscas no existe o ha sido movida.',
     'notFound.back': 'Portafolio',
+    'serverError.title': 'Algo ha salido mal',
+    'serverError.message':
+      'Algo se ha roto por nuestra parte. Prueba a recargar o vuelve al portafolio.',
+    'serverError.back': 'Portafolio',
+    'serverError.demoTitle': 'Esta demo no se ha podido cargar',
+    'serverError.demoMessage':
+      'Ha ocurrido un error al ejecutar esta demo. El resto del sitio no está afectado — puedes recargar para volver a intentarlo.',
+    'serverError.reload': 'Recargar',
     'aria.toggleMenu': 'Abrir menú',
     'aria.toggleTheme': 'Cambiar tema (Ctrl+K para más temas)',
     'aria.scrollTop': 'Ir arriba',
@@ -249,21 +278,26 @@ export const ui = {
     'hero.greeting': 'Hola, em dic',
     'hero.tagline_1': "M'agrada construir",
     'hero.tagline_2': 'coses amb IA i dades.',
-    'hero.description': "Enginyer Informàtic de Barcelona, actualment Consultor d'IA i Dades a Deloitte. Gaudeixo explorant noves tecnologies, tirant endavant eines reals i ajudant el meu equip a construir coses que funcionin de veritat.",
+    'hero.description':
+      "Enginyer Informàtic de Barcelona, actualment Consultor d'IA i Dades a Deloitte. Gaudeixo explorant noves tecnologies, tirant endavant eines reals i ajudant el meu equip a construir coses que funcionin de veritat.",
     'hero.cta': 'Veure el meu treball',
 
     // About
     'about.label': 'Sobre mi',
     'about.title': 'Una mica sobre mi',
-    'about.p1': "Hola! Soc el Pol, Enginyer Informàtic de Barcelona. Em vaig graduar a la Facultat d'Informàtica de Barcelona (FIB) de la UPC i ara treballo com a Consultor d'IA i Dades a Deloitte, on passo la major part dels dies a la intersecció de la IA, les plataformes de dades i la realitat una mica caòtica de fer-les útils.",
-    'about.p2': "El que realment gaudeixo és construir: explorar eines noves, entendre com encaixen entre si i ajudar el meu equip a tirar endavant coses de les quals estiguem orgullosos. M'importa més resoldre el problema que fer servir l'stack més de moda, tot i que m'alegra quan les dues coses coincideixen.",
-    'about.p3': "Fora de la feina em sol trobar escalant, ficat en un videojoc o fent veure que els meus atalls de Vim em fan més ràpid del que soc. Aquestes són algunes de les tecnologies amb què he treballat últimament:",
+    'about.p1':
+      "Hola! Soc el Pol, Enginyer Informàtic de Barcelona. Em vaig graduar a la Facultat d'Informàtica de Barcelona (FIB) de la UPC i ara treballo com a Consultor d'IA i Dades a Deloitte, on passo la major part dels dies a la intersecció de la IA, les plataformes de dades i la realitat una mica caòtica de fer-les útils.",
+    'about.p2':
+      "El que realment gaudeixo és construir: explorar eines noves, entendre com encaixen entre si i ajudar el meu equip a tirar endavant coses de les quals estiguem orgullosos. M'importa més resoldre el problema que fer servir l'stack més de moda, tot i que m'alegra quan les dues coses coincideixen.",
+    'about.p3':
+      'Fora de la feina em sol trobar escalant, ficat en un videojoc o fent veure que els meus atalls de Vim em fan més ràpid del que soc. Aquestes són algunes de les tecnologies amb què he treballat últimament:',
     'about.cv': 'Descarregar CV',
 
     // Demos
     'projects.label': 'Interactiu',
     'projects.title': 'Prova els meus projectes',
-    'projects.subtitle': 'Demos interactives i en viu que pots provar directament al teu navegador.',
+    'projects.subtitle':
+      'Demos interactives i en viu que pots provar directament al teu navegador.',
     'projects.badge': 'Demo en viu',
     'projects.showMore': 'Mostra més',
     'projects.showLess': 'Mostra menys',
@@ -298,7 +332,8 @@ export const ui = {
     // Contact
     'contact.label': 'Contacte',
     'contact.title': "Posa't en contacte",
-    'contact.text': "Actualment estic obert a noves oportunitats i col·laboracions. Tant si tens una pregunta, una idea per a un projecte o simplement vols saludar, la meva bústia sempre està oberta.",
+    'contact.text':
+      'Actualment estic obert a noves oportunitats i col·laboracions. Tant si tens una pregunta, una idea per a un projecte o simplement vols saludar, la meva bústia sempre està oberta.',
     'contact.cta': 'Enviar Missatge',
     'contact.name': 'Nom',
     'contact.namePlaceholder': 'El teu nom',
@@ -324,10 +359,19 @@ export const ui = {
     'demo.viewBackend': 'Codi Backend (GitHub)',
     'demo.allDemos': 'Totes les Demos',
     'meta.title': 'Pol Casacuberta — Portafolis',
-    'meta.description': "Pol Casacuberta — Consultor d'IA i Dades de Barcelona. Construeixo coses amb IA i dades.",
+    'meta.description':
+      "Pol Casacuberta — Consultor d'IA i Dades de Barcelona. Construeixo coses amb IA i dades.",
     'notFound.title': 'Pàgina no trobada',
     'notFound.message': 'La pàgina que busques no existeix o ha estat moguda.',
     'notFound.back': 'Portafolis',
+    'serverError.title': 'Alguna cosa ha anat malament',
+    'serverError.message':
+      "Alguna cosa s'ha trencat per la nostra banda. Prova de tornar a carregar o torna al portafolis.",
+    'serverError.back': 'Portafolis',
+    'serverError.demoTitle': "Aquesta demo no s'ha pogut carregar",
+    'serverError.demoMessage':
+      'Hi ha hagut un error en executar aquesta demo. La resta del lloc no està afectada — pots tornar a carregar per intentar-ho de nou.',
+    'serverError.reload': 'Tornar a carregar',
     'aria.toggleMenu': 'Obrir menú',
     'aria.toggleTheme': 'Canviar tema (Ctrl+K per a més temes)',
     'aria.scrollTop': 'Anar a dalt',

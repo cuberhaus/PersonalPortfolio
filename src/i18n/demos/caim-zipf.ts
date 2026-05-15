@@ -45,4 +45,4 @@ export const T = {
   },
 };
 
-export type ZipfTranslations = typeof T[Lang];
+export type ZipfTranslations = (typeof T)[Lang];

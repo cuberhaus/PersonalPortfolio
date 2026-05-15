@@ -14,10 +14,7 @@ import {
 
 function getLeaves(node: TreeNode): string[] {
   if (!node.left && !node.right) return [node.id];
-  return [
-    ...(node.left ? getLeaves(node.left) : []),
-    ...(node.right ? getLeaves(node.right) : []),
-  ];
+  return [...(node.left ? getLeaves(node.left) : []), ...(node.right ? getLeaves(node.right) : [])];
 }
 
 describe('speciesDistance', () => {

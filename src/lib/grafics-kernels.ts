@@ -35,21 +35,28 @@ function link(gl: WebGL2RenderingContext, vs: string, fs: string): WebGLProgram 
 // ── Simple sphere geometry ──
 
 function createSphereBuffers(gl: WebGL2RenderingContext, slices = 32, stacks = 16) {
-  const pos: number[] = [], norm: number[] = [], idx: number[] = [];
+  const pos: number[] = [],
+    norm: number[] = [],
+    idx: number[] = [];
   for (let j = 0; j <= stacks; j++) {
     const t = (j / stacks) * Math.PI;
-    const st = Math.sin(t), ct = Math.cos(t);
+    const st = Math.sin(t),
+      ct = Math.cos(t);
     for (let i = 0; i <= slices; i++) {
       const p = (i / slices) * 2 * Math.PI;
-      const sp = Math.sin(p), cp = Math.cos(p);
-      const x = cp * st, y = ct, z = sp * st;
+      const sp = Math.sin(p),
+        cp = Math.cos(p);
+      const x = cp * st,
+        y = ct,
+        z = sp * st;
       pos.push(x, y, z);
       norm.push(x, y, z);
     }
   }
   for (let j = 0; j < stacks; j++) {
     for (let i = 0; i < slices; i++) {
-      const a = j * (slices + 1) + i, b = a + slices + 1;
+      const a = j * (slices + 1) + i,
+        b = a + slices + 1;
       idx.push(a, b, a + 1, a + 1, b, b + 1);
     }
   }
@@ -75,37 +82,93 @@ function createSphereBuffers(gl: WebGL2RenderingContext, slices = 32, stacks = 1
 // ── Matrix math (minimal) ──
 
 function perspective(fov: number, asp: number, n: number, f: number) {
-  const t = 1 / Math.tan(fov / 2), nf = 1 / (n - f);
-  return new Float32Array([t / asp, 0, 0, 0, 0, t, 0, 0, 0, 0, (f + n) * nf, -1, 0, 0, 2 * f * n * nf, 0]);
+  const t = 1 / Math.tan(fov / 2),
+    nf = 1 / (n - f);
+  return new Float32Array([
+    t / asp,
+    0,
+    0,
+    0,
+    0,
+    t,
+    0,
+    0,
+    0,
+    0,
+    (f + n) * nf,
+    -1,
+    0,
+    0,
+    2 * f * n * nf,
+    0,
+  ]);
 }
 
 function lookAt(ex: number, ey: number, ez: number) {
   const len = Math.hypot(ex, ey, ez);
-  const zx = ex / len, zy = ey / len, zz = ez / len;
-  const ux = 0, uy = 1, uz = 0;
-  let xx = uy * zz - uz * zy, xy = uz * zx - ux * zz, xz = ux * zy - uy * zx;
-  const xl = Math.hypot(xx, xy, xz); xx /= xl; xy /= xl; xz /= xl;
-  const yx = zy * xz - zz * xy, yy = zz * xx - zx * xz, yz = zx * xy - zy * xx;
-  return new Float32Array([xx, yx, zx, 0, xy, yy, zy, 0, xz, yz, zz, 0,
-    -(xx * ex + xy * ey + xz * ez), -(yx * ex + yy * ey + yz * ez), -(zx * ex + zy * ey + zz * ez), 1]);
+  const zx = ex / len,
+    zy = ey / len,
+    zz = ez / len;
+  const ux = 0,
+    uy = 1,
+    uz = 0;
+  let xx = uy * zz - uz * zy,
+    xy = uz * zx - ux * zz,
+    xz = ux * zy - uy * zx;
+  const xl = Math.hypot(xx, xy, xz);
+  xx /= xl;
+  xy /= xl;
+  xz /= xl;
+  const yx = zy * xz - zz * xy,
+    yy = zz * xx - zx * xz,
+    yz = zx * xy - zy * xx;
+  return new Float32Array([
+    xx,
+    yx,
+    zx,
+    0,
+    xy,
+    yy,
+    zy,
+    0,
+    xz,
+    yz,
+    zz,
+    0,
+    -(xx * ex + xy * ey + xz * ez),
+    -(yx * ex + yy * ey + yz * ez),
+    -(zx * ex + zy * ey + zz * ez),
+    1,
+  ]);
 }
 
 function mul(a: Float32Array, b: Float32Array) {
   const r = new Float32Array(16);
   for (let i = 0; i < 4; i++)
     for (let j = 0; j < 4; j++)
-      r[j * 4 + i] = a[i] * b[j * 4] + a[4 + i] * b[j * 4 + 1] + a[8 + i] * b[j * 4 + 2] + a[12 + i] * b[j * 4 + 3];
+      r[j * 4 + i] =
+        a[i] * b[j * 4] +
+        a[4 + i] * b[j * 4 + 1] +
+        a[8 + i] * b[j * 4 + 2] +
+        a[12 + i] * b[j * 4 + 3];
   return r;
 }
 
 function normalMat3(mv: Float32Array): Float32Array {
   const [a, b, c, , d, e, f, , g, h, i] = mv;
   let det = a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
-  if (!det) det = 1; det = 1 / det;
+  if (!det) det = 1;
+  det = 1 / det;
   return new Float32Array([
-    (e * i - f * h) * det, (f * g - d * i) * det, (d * h - e * g) * det,
-    (c * h - b * i) * det, (a * i - c * g) * det, (g * b - a * h) * det,
-    (b * f - c * e) * det, (d * c - a * f) * det, (a * e - b * d) * det,
+    (e * i - f * h) * det,
+    (f * g - d * i) * det,
+    (d * h - e * g) * det,
+    (c * h - b * i) * det,
+    (a * i - c * g) * det,
+    (g * b - a * h) * det,
+    (b * f - c * e) * det,
+    (d * c - a * f) * det,
+    (a * e - b * d) * det,
   ]);
 }
 
@@ -123,7 +186,8 @@ export function drawWave(canvas: HTMLCanvasElement, time: number) {
   gl.clearColor(0.06, 0.07, 0.09, 1);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  const prog = link(gl,
+  const prog = link(
+    gl,
     `#version 300 es
     precision highp float;
     layout(location=0) in vec3 vertex;
@@ -172,7 +236,8 @@ export function drawPhong(canvas: HTMLCanvasElement) {
   gl.clearColor(0.06, 0.07, 0.09, 1);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  const prog = link(gl,
+  const prog = link(
+    gl,
     `#version 300 es
     precision highp float;
     layout(location=0) in vec3 vertex;
@@ -219,20 +284,30 @@ export function drawCheckerboard(canvas: HTMLCanvasElement) {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   // Need texcoords for checkerboard
-  const slices = 32, stacks = 16;
-  const pos: number[] = [], norm: number[] = [], uv: number[] = [], idx: number[] = [];
+  const slices = 32,
+    stacks = 16;
+  const pos: number[] = [],
+    norm: number[] = [],
+    uv: number[] = [],
+    idx: number[] = [];
   for (let j = 0; j <= stacks; j++) {
     const t = (j / stacks) * Math.PI;
-    const st = Math.sin(t), ct = Math.cos(t);
+    const st = Math.sin(t),
+      ct = Math.cos(t);
     for (let i = 0; i <= slices; i++) {
       const ph = (i / slices) * 2 * Math.PI;
-      const x = Math.cos(ph) * st, y = ct, z = Math.sin(ph) * st;
-      pos.push(x, y, z); norm.push(x, y, z); uv.push(i / slices, j / stacks);
+      const x = Math.cos(ph) * st,
+        y = ct,
+        z = Math.sin(ph) * st;
+      pos.push(x, y, z);
+      norm.push(x, y, z);
+      uv.push(i / slices, j / stacks);
     }
   }
   for (let j = 0; j < stacks; j++)
     for (let i = 0; i < slices; i++) {
-      const a = j * (slices + 1) + i, b = a + slices + 1;
+      const a = j * (slices + 1) + i,
+        b = a + slices + 1;
       idx.push(a, b, a + 1, a + 1, b, b + 1);
     }
   const vao = gl.createVertexArray()!;
@@ -252,7 +327,8 @@ export function drawCheckerboard(canvas: HTMLCanvasElement) {
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(idx), gl.STATIC_DRAW);
   gl.bindVertexArray(null);
 
-  const prog = link(gl,
+  const prog = link(
+    gl,
     `#version 300 es
     precision highp float;
     layout(location=0)in vec3 v;layout(location=1)in vec3 n;layout(location=2)in vec2 t;
@@ -291,7 +367,8 @@ export function drawExplode(canvas: HTMLCanvasElement, time: number) {
   gl.clearColor(0.06, 0.07, 0.09, 1);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  const prog = link(gl,
+  const prog = link(
+    gl,
     `#version 300 es
     precision highp float;
     layout(location=0)in vec3 vertex;layout(location=1)in vec3 normal;

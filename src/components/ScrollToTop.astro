@@ -23,7 +23,7 @@ const t = useTranslations(lang);
     stroke-linecap="round"
     stroke-linejoin="round"
   >
-    <path d="M12 19V5M5 12l7-7 7 7" />
+    <path d="M12 19V5M5 12l7-7 7 7"></path>
   </svg>
 </button>
 
@@ -39,13 +39,18 @@ const t = useTranslations(lang);
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    background: var(--accent-gradient);
+    /* Black overlay darkens any theme's accent gradient enough for the
+       arrow icon (white) to clear WCAG AA. Same trick as Contact.astro. */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--accent-gradient);
     color: white;
     box-shadow: 0 4px 14px var(--glow-color-strong);
     opacity: 0;
     pointer-events: none;
     transform: translateY(20px);
-    transition: opacity var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+    transition:
+      opacity var(--transition-base),
+      transform var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
   .scroll-to-top.visible {
@@ -104,7 +109,7 @@ const t = useTranslations(lang);
         window.__debug?.log?.('info', 'ui:scroll', 'to-top');
         window.scrollTo({
           top: 0,
-          behavior: prefersReduced ? 'auto' : 'smooth'
+          behavior: prefersReduced ? 'auto' : 'smooth',
         });
       });
     }

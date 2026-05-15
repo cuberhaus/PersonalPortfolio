@@ -48,7 +48,9 @@ for (const demo of LIVE_DEMOS) {
       // Wait for probe to complete
       await page.waitForTimeout(3000);
       // Should show green dot
-      const liveText = page.getByText(/Live app detected|App en vivo detectada|App en viu detectada/);
+      const liveText = page.getByText(
+        /Live app detected|App en vivo detectada|App en viu detectada/
+      );
       await expect(liveText.first()).toBeVisible();
     });
 
@@ -64,7 +66,9 @@ for (const demo of LIVE_DEMOS) {
       await page.waitForTimeout(3000);
 
       // Find collapse button
-      const collapseBtn = page.getByRole('button', { name: /collapse|colapsar|col·lapsar/i }).first();
+      const collapseBtn = page
+        .getByRole('button', { name: /collapse|colapsar|col·lapsar/i })
+        .first();
       if (await collapseBtn.isVisible()) {
         await collapseBtn.click();
         // Iframe should be hidden

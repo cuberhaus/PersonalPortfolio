@@ -6,4 +6,4 @@ export const T = {
   ca: { pagerank: 'PageRank', zipf: 'Llei de Zipf', loading: 'Carregant…' },
 };
 
-export type DemoTranslations = typeof T[Lang];
+export type DemoTranslations = (typeof T)[Lang];

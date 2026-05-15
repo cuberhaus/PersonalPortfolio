@@ -5,9 +5,17 @@
 
 type StepCb = (info: { algo: string; step: number }) => void;
 
-export function dijkstraDemo(n: number, onStep?: StepCb): { dist: number[]; edges: [number, number, number][] } {
+export function dijkstraDemo(
+  n: number,
+  onStep?: StepCb
+): { dist: number[]; edges: [number, number, number][] } {
   const edges: [number, number, number][] = [
-    [0, 1, 4], [0, 2, 1], [1, 3, 1], [2, 1, 2], [2, 3, 5], [3, 4, 3],
+    [0, 1, 4],
+    [0, 2, 1],
+    [1, 3, 1],
+    [2, 1, 2],
+    [2, 3, 5],
+    [3, 4, 3],
   ];
   const adj: { to: number; w: number }[][] = Array.from({ length: n }, () => []);
   for (const [u, v, w] of edges) {
@@ -32,7 +40,10 @@ export function dijkstraDemo(n: number, onStep?: StepCb): { dist: number[]; edge
   return { dist, edges };
 }
 
-export function mergeSortDemo(arr: number[], onStep?: StepCb): { sorted: number[]; comparisons: number } {
+export function mergeSortDemo(
+  arr: number[],
+  onStep?: StepCb
+): { sorted: number[]; comparisons: number } {
   let comparisons = 0;
   const a = [...arr];
   let stepIdx = 0;
@@ -40,11 +51,16 @@ export function mergeSortDemo(arr: number[], onStep?: StepCb): { sorted: number[
   function merge(lo: number, mid: number, hi: number) {
     const left = a.slice(lo, mid + 1);
     const right = a.slice(mid + 1, hi + 1);
-    let i = 0, j = 0, k = lo;
+    let i = 0,
+      j = 0,
+      k = lo;
     while (i < left.length && j < right.length) {
       comparisons++;
-      if (left[i] <= right[j]) { a[k++] = left[i++]; }
-      else { a[k++] = right[j++]; }
+      if (left[i] <= right[j]) {
+        a[k++] = left[i++];
+      } else {
+        a[k++] = right[j++];
+      }
     }
     while (i < left.length) a[k++] = left[i++];
     while (j < right.length) a[k++] = right[j++];
@@ -67,19 +83,20 @@ export function bfsGridDemo(
   rows: number,
   cols: number,
   walls: [number, number][],
-  onStep?: StepCb,
+  onStep?: StepCb
 ): { path: [number, number][]; visited: number } {
   const grid: boolean[][] = Array.from({ length: rows }, () => new Array(cols).fill(false));
   for (const [r, c] of walls) grid[r][c] = true;
 
   const visited: boolean[][] = Array.from({ length: rows }, () => new Array(cols).fill(false));
   const parent: [number, number][][] = Array.from({ length: rows }, () =>
-    new Array(cols).fill(null).map(() => [-1, -1] as [number, number]),
+    new Array(cols).fill(null).map(() => [-1, -1] as [number, number])
   );
   const queue: [number, number][] = [[0, 0]];
   visited[0][0] = true;
   let visitCount = 1;
-  const dr = [0, 0, 1, -1], dc = [1, -1, 0, 0];
+  const dr = [0, 0, 1, -1],
+    dc = [1, -1, 0, 0];
 
   let bfsStep = 0;
   while (queue.length > 0) {
@@ -87,7 +104,8 @@ export function bfsGridDemo(
     if (onStep) onStep({ algo: 'bfs', step: bfsStep++ });
     if (r === rows - 1 && c === cols - 1) break;
     for (let d = 0; d < 4; d++) {
-      const nr = r + dr[d], nc = c + dc[d];
+      const nr = r + dr[d],
+        nc = c + dc[d];
       if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
       if (visited[nr][nc] || grid[nr][nc]) continue;
       visited[nr][nc] = true;

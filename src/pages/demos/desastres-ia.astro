@@ -15,6 +15,7 @@ const demo = getDemo('desastres-ia', lang);
   title={demo.title}
   description={demo.metaDescription}
   slug="desastres-ia"
+  ogImage="/og/desastres-ia-og.png"
 >
   <div class="container">
     <DemoHeader
@@ -26,12 +27,7 @@ const demo = getDemo('desastres-ia', lang);
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="desastres-ia"
-      title="DesastresIA Solver"
-      lang={lang}
-      client:load
-    />
+    <LiveAppEmbed slug="desastres-ia" title="DesastresIA Solver" lang={lang} client:load />
 
     <DesastresIADemo lang={lang} client:visible />
   </div>

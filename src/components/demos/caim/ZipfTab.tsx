@@ -2,11 +2,17 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { scaleLinear, scaleLog } from 'd3-scale';
 import { select } from 'd3-selection';
 import { line } from 'd3-shape';
-import { getCorpusData, CORPUS_LABELS, type CorpusId, type WordFreq } from '../../../lib/caim/zipf-data';
+import {
+  getCorpusData,
+  CORPUS_LABELS,
+  type CorpusId,
+  type WordFreq,
+} from '../../../lib/caim/zipf-data';
 import { fitZipf, countWords, type ZipfFitResult } from '../../../lib/caim/zipf-fit';
 import { T } from '../../../i18n/demos/caim-zipf';
 import { getThemeColors } from '../../../lib/demo-theme';
 import { debug } from '../../../lib/debug';
+import { gradientButton } from '../_styles';
 
 const demoLog = debug('demo:caim');
 
@@ -58,7 +64,9 @@ export default function ZipfTab({ lang }: Props) {
   }, [customText, t.notEnoughWords]);
 
   // Initial analysis
-  useEffect(() => { analyzeCorpus('novels'); }, []);
+  useEffect(() => {
+    analyzeCorpus('novels');
+  }, []);
 
   // Draw chart
   useEffect(() => {
@@ -88,23 +96,25 @@ export default function ZipfTab({ lang }: Props) {
           </div>
         </div>
         <div style={{ ...styles.controlGroup, flex: 1, minWidth: 200 }}>
-          <label style={styles.label}>{t.customText}</label>
+          <label style={styles.label} htmlFor="caim-zipf-custom">
+            {t.customText}
+          </label>
           <div style={{ display: 'flex', gap: '0.4rem' }}>
             <textarea
+              id="caim-zipf-custom"
               value={customText}
               onChange={(e) => setCustomText(e.target.value)}
               placeholder={t.customPlaceholder}
               rows={2}
               style={styles.textarea}
             />
-            <button onClick={analyzeCustom} style={styles.analyzeBtn}>{t.analyze}</button>
+            <button onClick={analyzeCustom} style={styles.analyzeBtn}>
+              {t.analyze}
+            </button>
           </div>
         </div>
         <div style={styles.controlGroup}>
-          <button
-            onClick={() => setIsLog(!isLog)}
-            style={styles.toggleBtn}
-          >
+          <button onClick={() => setIsLog(!isLog)} style={styles.toggleBtn}>
             {isLog ? t.linearScale : t.logScale}
           </button>
         </div>
@@ -130,7 +140,9 @@ export default function ZipfTab({ lang }: Props) {
               <span style={styles.paramLabel}>R²</span>
               <span style={styles.paramValue}>{analysisResult.fit.rSquared.toFixed(4)}</span>
             </div>
-            <p style={styles.formula}>f(rank) = c / (rank + b)<sup>a</sup></p>
+            <p style={styles.formula}>
+              f(rank) = c / (rank + b)<sup>a</sup>
+            </p>
           </div>
 
           {/* Word table */}
@@ -149,7 +161,15 @@ export default function ZipfTab({ lang }: Props) {
                   {analysisResult.words.slice(0, 50).map((w, i) => (
                     <tr key={w.word}>
                       <td style={styles.td}>{i + 1}</td>
-                      <td style={{ ...styles.td, textAlign: 'left', fontFamily: 'var(--font-mono, monospace)' }}>{w.word}</td>
+                      <td
+                        style={{
+                          ...styles.td,
+                          textAlign: 'left',
+                          fontFamily: 'var(--font-mono, monospace)',
+                        }}
+                      >
+                        {w.word}
+                      </td>
                       <td style={styles.td}>{w.frequency.toLocaleString()}</td>
                     </tr>
                   ))}
@@ -168,12 +188,16 @@ export default function ZipfTab({ lang }: Props) {
 function drawZipfChart(container: HTMLElement, data: AnalysisResult, isLog: boolean) {
   container.innerHTML = '';
   const tc = getThemeColors();
-  const W = 600, H = 280;
+  const W = 600,
+    H = 280;
   const margin = { top: 15, right: 15, bottom: 35, left: 55 };
   const iw = W - margin.left - margin.right;
   const ih = H - margin.top - margin.bottom;
 
-  const svg = select(container).append('svg').attr('viewBox', `0 0 ${W} ${H}`).style('width', '100%');
+  const svg = select(container)
+    .append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .style('width', '100%');
   const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
   const freqs = data.words.map((w) => w.frequency);
@@ -191,21 +215,39 @@ function drawZipfChart(container: HTMLElement, data: AnalysisResult, isLog: bool
     ? scaleLog().domain([yMin, yMax]).range([ih, 0])
     : scaleLinear().domain([0, yMax]).range([ih, 0]);
 
-  const xTicks = isLog ? logNiceTicks(1, n) : (xScale as any).ticks(6) as number[];
-  const yTicks = isLog ? logNiceTicks(yMin, yMax) : (yScale as any).ticks(6) as number[];
+  const xTicks = isLog ? logNiceTicks(1, n) : ((xScale as any).ticks(6) as number[]);
+  const yTicks = isLog ? logNiceTicks(yMin, yMax) : ((yScale as any).ticks(6) as number[]);
 
   for (const tick of yTicks) {
-    g.append('line').attr('x1', 0).attr('x2', iw).attr('y1', yScale(tick)).attr('y2', yScale(tick))
-      .attr('stroke', tc.borderColor).attr('stroke-width', 0.5);
-    g.append('text').attr('x', -6).attr('y', yScale(tick) + 3)
-      .attr('fill', tc.textMuted).attr('font-size', '8px').attr('text-anchor', 'end')
+    g.append('line')
+      .attr('x1', 0)
+      .attr('x2', iw)
+      .attr('y1', yScale(tick))
+      .attr('y2', yScale(tick))
+      .attr('stroke', tc.borderColor)
+      .attr('stroke-width', 0.5);
+    g.append('text')
+      .attr('x', -6)
+      .attr('y', yScale(tick) + 3)
+      .attr('fill', tc.textMuted)
+      .attr('font-size', '8px')
+      .attr('text-anchor', 'end')
       .text(formatSI(tick));
   }
   for (const tick of xTicks) {
-    g.append('line').attr('x1', xScale(tick)).attr('x2', xScale(tick)).attr('y1', 0).attr('y2', ih)
-      .attr('stroke', tc.borderColor).attr('stroke-width', 0.5);
-    g.append('text').attr('x', xScale(tick)).attr('y', ih + 12)
-      .attr('fill', tc.textMuted).attr('font-size', '8px').attr('text-anchor', 'middle')
+    g.append('line')
+      .attr('x1', xScale(tick))
+      .attr('x2', xScale(tick))
+      .attr('y1', 0)
+      .attr('y2', ih)
+      .attr('stroke', tc.borderColor)
+      .attr('stroke-width', 0.5);
+    g.append('text')
+      .attr('x', xScale(tick))
+      .attr('y', ih + 12)
+      .attr('fill', tc.textMuted)
+      .attr('font-size', '8px')
+      .attr('text-anchor', 'middle')
       .text(formatSI(tick));
   }
 
@@ -215,8 +257,12 @@ function drawZipfChart(container: HTMLElement, data: AnalysisResult, isLog: bool
     const cx = xScale(i + 1);
     const cy = yScale(Math.max(freqs[i], isLog ? 1 : 0));
     if (isFinite(cx) && isFinite(cy)) {
-      g.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 1.5)
-        .attr('fill', tc.accentStart).attr('fill-opacity', 0.6);
+      g.append('circle')
+        .attr('cx', cx)
+        .attr('cy', cy)
+        .attr('r', 1.5)
+        .attr('fill', tc.accentStart)
+        .attr('fill-opacity', 0.6);
     }
   }
 
@@ -239,20 +285,48 @@ function drawZipfChart(container: HTMLElement, data: AnalysisResult, isLog: bool
     .attr('stroke-dasharray', '4,2');
 
   // Axis labels
-  g.append('text').attr('x', iw / 2).attr('y', ih + 28)
-    .attr('fill', tc.textMuted).attr('font-size', '9px').attr('text-anchor', 'middle')
+  g.append('text')
+    .attr('x', iw / 2)
+    .attr('y', ih + 28)
+    .attr('fill', tc.textMuted)
+    .attr('font-size', '9px')
+    .attr('text-anchor', 'middle')
     .text('Rank');
-  g.append('text').attr('x', -ih / 2).attr('y', -40)
-    .attr('fill', tc.textMuted).attr('font-size', '9px').attr('text-anchor', 'middle')
+  g.append('text')
+    .attr('x', -ih / 2)
+    .attr('y', -40)
+    .attr('fill', tc.textMuted)
+    .attr('font-size', '9px')
+    .attr('text-anchor', 'middle')
     .attr('transform', 'rotate(-90)')
     .text('Frequency');
 
   // Legend
-  g.append('circle').attr('cx', iw - 100).attr('cy', 8).attr('r', 3).attr('fill', tc.accentStart);
-  g.append('text').attr('x', iw - 94).attr('y', 11).attr('fill', tc.textPrimary).attr('font-size', '8px').text('Actual');
-  g.append('line').attr('x1', iw - 46).attr('x2', iw - 32).attr('y1', 8).attr('y2', 8)
-    .attr('stroke', tc.accentEnd).attr('stroke-width', 1.5).attr('stroke-dasharray', '3,1');
-  g.append('text').attr('x', iw - 28).attr('y', 11).attr('fill', tc.textPrimary).attr('font-size', '8px').text('Fitted');
+  g.append('circle')
+    .attr('cx', iw - 100)
+    .attr('cy', 8)
+    .attr('r', 3)
+    .attr('fill', tc.accentStart);
+  g.append('text')
+    .attr('x', iw - 94)
+    .attr('y', 11)
+    .attr('fill', tc.textPrimary)
+    .attr('font-size', '8px')
+    .text('Actual');
+  g.append('line')
+    .attr('x1', iw - 46)
+    .attr('x2', iw - 32)
+    .attr('y1', 8)
+    .attr('y2', 8)
+    .attr('stroke', tc.accentEnd)
+    .attr('stroke-width', 1.5)
+    .attr('stroke-dasharray', '3,1');
+  g.append('text')
+    .attr('x', iw - 28)
+    .attr('y', 11)
+    .attr('fill', tc.textPrimary)
+    .attr('font-size', '8px')
+    .text('Fitted');
 }
 
 function logNiceTicks(lo: number, hi: number): number[] {
@@ -282,70 +356,124 @@ function formatSI(n: number): string {
 
 const styles: Record<string, React.CSSProperties> = {
   controls: {
-    display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', gap: '1rem',
-    padding: '1rem', marginBottom: '1rem',
-    background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '0.75rem',
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'flex-end',
+    gap: '1rem',
+    padding: '1rem',
+    marginBottom: '1rem',
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border-color)',
+    borderRadius: '0.75rem',
   },
   controlGroup: { display: 'flex', flexDirection: 'column', gap: '0.3rem' },
   label: { fontSize: '0.78rem', color: 'var(--text-muted)' },
   btnGroup: { display: 'flex', gap: '0.3rem' },
   corpusBtn: {
-    padding: '0.35rem 0.65rem', borderRadius: '0.35rem', fontSize: '0.72rem', fontWeight: 600,
-    background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
-    color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.15s',
+    padding: '0.35rem 0.65rem',
+    borderRadius: '0.35rem',
+    fontSize: '0.72rem',
+    fontWeight: 600,
+    background: 'var(--bg-secondary)',
+    border: '1px solid var(--border-color)',
+    color: 'var(--text-secondary)',
+    cursor: 'pointer',
+    transition: 'all 0.15s',
   },
   corpusBtnActive: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff', borderColor: 'transparent',
+    ...gradientButton(),
+    borderColor: 'transparent',
   },
   textarea: {
-    flex: 1, minHeight: 40, padding: '0.4rem', borderRadius: '0.35rem',
-    background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
-    color: 'var(--text-primary)', fontSize: '0.72rem', fontFamily: 'var(--font-mono, monospace)',
+    flex: 1,
+    minHeight: 40,
+    padding: '0.4rem',
+    borderRadius: '0.35rem',
+    background: 'var(--bg-secondary)',
+    border: '1px solid var(--border-color)',
+    color: 'var(--text-primary)',
+    fontSize: '0.72rem',
+    fontFamily: 'var(--font-mono, monospace)',
     resize: 'vertical',
   },
   analyzeBtn: {
-    padding: '0.35rem 0.7rem', borderRadius: '0.35rem', border: 'none',
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff', fontWeight: 600, fontSize: '0.72rem', cursor: 'pointer', alignSelf: 'flex-end',
+    ...gradientButton(),
+    padding: '0.35rem 0.7rem',
+    borderRadius: '0.35rem',
+    fontSize: '0.72rem',
+    alignSelf: 'flex-end',
   },
   toggleBtn: {
-    padding: '0.35rem 0.65rem', borderRadius: '0.35rem', fontSize: '0.72rem', fontWeight: 600,
-    background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
-    color: 'var(--text-secondary)', cursor: 'pointer',
+    padding: '0.35rem 0.65rem',
+    borderRadius: '0.35rem',
+    fontSize: '0.72rem',
+    fontWeight: 600,
+    background: 'var(--bg-secondary)',
+    border: '1px solid var(--border-color)',
+    color: 'var(--text-secondary)',
+    cursor: 'pointer',
   },
   errorMsg: {
-    padding: '0.5rem 0.75rem', marginBottom: '0.75rem', borderRadius: '0.4rem',
-    background: 'color-mix(in srgb, var(--accent-end) 10%, transparent)', border: '1px solid color-mix(in srgb, var(--accent-end) 30%, transparent)',
-    color: 'var(--accent-end)', fontSize: '0.78rem',
+    padding: '0.5rem 0.75rem',
+    marginBottom: '0.75rem',
+    borderRadius: '0.4rem',
+    background: 'color-mix(in srgb, var(--accent-end) 10%, transparent)',
+    border: '1px solid color-mix(in srgb, var(--accent-end) 30%, transparent)',
+    color: 'var(--text-primary)',
+    fontSize: '0.78rem',
   },
   chartContainer: {
-    width: '100%', minHeight: 200, borderRadius: '0.5rem', overflow: 'hidden',
-    background: 'var(--bg-secondary)', padding: '0.5rem',
+    width: '100%',
+    minHeight: 200,
+    borderRadius: '0.5rem',
+    overflow: 'hidden',
+    background: 'var(--bg-secondary)',
+    padding: '0.5rem',
   },
   card: {
-    padding: '1rem', background: 'var(--bg-card)',
-    border: '1px solid var(--border-color)', borderRadius: '0.75rem',
+    padding: '1rem',
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border-color)',
+    borderRadius: '0.75rem',
   },
   cardTitle: { margin: '0 0 0.5rem', fontSize: '0.9rem', color: 'var(--text-primary)' },
   paramGrid: {
-    display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '0.25rem 0.75rem',
+    display: 'grid',
+    gridTemplateColumns: 'auto 1fr',
+    gap: '0.25rem 0.75rem',
     fontSize: '0.82rem',
   },
-  paramLabel: { color: 'var(--text-muted)', fontFamily: 'var(--font-mono, monospace)', fontStyle: 'italic' },
-  paramValue: { color: 'var(--text-primary)', fontFamily: 'var(--font-mono, monospace)', fontWeight: 600 },
+  paramLabel: {
+    color: 'var(--text-muted)',
+    fontFamily: 'var(--font-mono, monospace)',
+    fontStyle: 'italic',
+  },
+  paramValue: {
+    color: 'var(--text-primary)',
+    fontFamily: 'var(--font-mono, monospace)',
+    fontWeight: 600,
+  },
   formula: {
-    marginTop: '0.75rem', fontSize: '0.75rem', color: 'var(--text-muted)',
-    fontFamily: 'var(--font-mono, monospace)', fontStyle: 'italic',
+    marginTop: '0.75rem',
+    fontSize: '0.75rem',
+    color: 'var(--text-muted)',
+    fontFamily: 'var(--font-mono, monospace)',
+    fontStyle: 'italic',
   },
   tableWrap: { maxHeight: 360, overflowY: 'auto' },
   table: { width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' },
   th: {
-    padding: '0.4rem 0.6rem', textAlign: 'center', borderBottom: '1px solid var(--border-color)',
-    color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase',
+    padding: '0.4rem 0.6rem',
+    textAlign: 'center',
+    borderBottom: '1px solid var(--border-color)',
+    color: 'var(--text-muted)',
+    fontWeight: 600,
+    fontSize: '0.72rem',
+    textTransform: 'uppercase',
   },
   td: {
-    padding: '0.35rem 0.6rem', textAlign: 'center',
+    padding: '0.35rem 0.6rem',
+    textAlign: 'center',
     borderBottom: '1px solid color-mix(in srgb, var(--border-color) 50%, transparent)',
     color: 'var(--text-secondary)',
   },

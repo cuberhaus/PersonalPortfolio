@@ -19,7 +19,7 @@ export const T = {
   },
   ca: {
     mobileTitle: 'Robot Mòbil',
-    mobileDesc: 'Odometria diferencial — trajectòria des d\'encoders',
+    mobileDesc: "Odometria diferencial — trajectòria des d'encoders",
     wallTitle: 'Seguiment de Parets',
     wallDesc: 'Controlador reactiu amb guanys k1/k2/k3',
     armTitle: 'Cinemàtica Directa',
@@ -27,4 +27,4 @@ export const T = {
   },
 };
 
-export type DemoTranslations = typeof T[Lang];
+export type DemoTranslations = (typeof T)[Lang];

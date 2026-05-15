@@ -13,7 +13,7 @@ export function computeMandelbrot(
   maxIter: number,
   cx: number,
   cy: number,
-  size: number,
+  size: number
 ): Uint32Array {
   const pixels = new Uint32Array(width * height);
   const realMin = cx - size;
@@ -49,7 +49,7 @@ export function computeMandelbrot(
 export function jacobiStep(
   u: Float64Array,
   sizex: number,
-  sizey: number,
+  sizey: number
 ): { unew: Float64Array; residual: number } {
   const unew = new Float64Array(u);
   let sum = 0;

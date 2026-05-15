@@ -14,6 +14,7 @@ const demo = getDemo('tfg-polyps', lang);
   title={demo.metaTitle ?? demo.title}
   description={demo.metaDescription}
   slug="tfg-polyps"
+  ogImage="/og/tfg-polyps-og.png"
 >
   <div class="container">
     <DemoHeader
@@ -31,7 +32,7 @@ const demo = getDemo('tfg-polyps', lang);
 
 <style>
   :global(.demo-hdr-lead a) {
-    color: var(--accent-end);
+    color: var(--accent-text);
     text-decoration: none;
   }
   :global(.demo-hdr-lead a:hover) {

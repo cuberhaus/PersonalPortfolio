@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -44,8 +44,40 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright browsers
+        run: |
+          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" = "true" ]; then
+            npx playwright install-deps chromium
+          else
+            npx playwright install --with-deps chromium chromium-headless-shell
+          fi
+
+      - name: Start preview server
+        run: |
+          npm run preview > preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fs http://localhost:4321/ > /dev/null; then
+              echo "Preview server up after ${i}s"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Capture OG images into dist/
+        env:
+          OG_BASE_URL: http://localhost:4321
+          OG_OUT_DIR: dist
+        run: npm run og:capture
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist/
 
@@ -58,4 +90,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

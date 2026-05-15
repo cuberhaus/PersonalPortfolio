@@ -1,6 +1,6 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import skillsData from '../data/skills.json';
+import { skills as skillsData } from '../data/loaders';
 import { flattenForLocale } from '../i18n/load';
 
 type SkillGroup = { category: string; items: string[] };
@@ -10,47 +10,47 @@ const t = useTranslations(lang);
 const skills = flattenForLocale<SkillGroup>(skillsData as never, lang);
 
 const LOC_DATA: Record<string, { lines: string; pct: number }> = {
-  Python:      { lines: '~55K', pct: 22 },
-  TypeScript:  { lines: '~27K', pct: 11 },
-  JavaScript:  { lines: '~7K', pct: 3 },
-  C:           { lines: '~54K', pct: 22 },
-  'C++':       { lines: '~38K', pct: 15 },
-  Java:        { lines: '~57K', pct: 23 },
-  SQL:         { lines: '~1.9K', pct: 1 },
+  Python: { lines: '~55K', pct: 22 },
+  TypeScript: { lines: '~27K', pct: 11 },
+  JavaScript: { lines: '~7K', pct: 3 },
+  C: { lines: '~54K', pct: 22 },
+  'C++': { lines: '~38K', pct: 15 },
+  Java: { lines: '~57K', pct: 23 },
+  SQL: { lines: '~1.9K', pct: 1 },
 };
 
 const SKILL_CONTEXT: Record<string, string> = {
   // AI & Data Science
-  'Machine Learning':   'TFG · APA_Practica · MD · datathon',
-  'Computer Vision':    'TFG · bitsXlaMarato · VC · Draculin',
-  'PyTorch':            'TFG · bitsXlaMarato · datathon2023',
-  'scikit-learn':       'APA_Practica · MD · MD2 · datathon',
-  'OpenCV':             'TFG · bitsXlaMarato · Draculin · ROB',
-  'LangChain':          'AgenticEraHackathon · informatica-PoC',
-  'Object Detection':   'TFG (FRCNN/RetinaNet/SSD) · bitsXlaMarato',
-  'Generative Models':  'TFG polyp augment (CycleGAN, SPADE)',
-  'MLOps':              'TFG (Optuna+W&B) · collab-server (MLflow)',
-  'Data Mining':        'MD · MD2 · CAIM (TF-IDF, K-Means)',
-  'Statistics':         'APA · APA_Practica · MD · MD2',
+  'Machine Learning': 'TFG · APA_Practica · MD · datathon',
+  'Computer Vision': 'TFG · bitsXlaMarato · VC · Draculin',
+  PyTorch: 'TFG · bitsXlaMarato · datathon2023',
+  'scikit-learn': 'APA_Practica · MD · MD2 · datathon',
+  OpenCV: 'TFG · bitsXlaMarato · Draculin · ROB',
+  LangChain: 'AgenticEraHackathon · informatica-PoC',
+  'Object Detection': 'TFG (FRCNN/RetinaNet/SSD) · bitsXlaMarato',
+  'Generative Models': 'TFG polyp augment (CycleGAN, SPADE)',
+  MLOps: 'TFG (Optuna+W&B) · collab-server (MLflow)',
+  'Data Mining': 'MD · MD2 · CAIM (TF-IDF, K-Means)',
+  Statistics: 'APA · APA_Practica · MD · MD2',
   // Tools & Platforms
-  'AWS':                'collab-server (MinIO S3-compatible)',
-  'Azure':              'informatica-PoC',
-  'GCP':                'AgenticEra · informatica-PoC (Vertex AI)',
-  'Docker':             '15 Dockerfiles · 13 compose files',
-  'GitHub Actions':     '25+ workflow files across repos',
-  'PostgreSQL':         'collab-server · AgenticEraHackathon',
-  'FastAPI':            'TFG · bitsXlaMarato · desastresIA · A2',
-  'Git':                'All projects',
-  'Jupyter':            '10+ repos (APA, MD, CAIM, datathon…)',
+  AWS: 'collab-server (MinIO S3-compatible)',
+  Azure: 'informatica-PoC',
+  GCP: 'AgenticEra · informatica-PoC (Vertex AI)',
+  Docker: '15 Dockerfiles · 13 compose files',
+  'GitHub Actions': '25+ workflow files across repos',
+  PostgreSQL: 'collab-server · AgenticEraHackathon',
+  FastAPI: 'TFG · bitsXlaMarato · desastresIA · A2',
+  Git: 'All projects',
+  Jupyter: '10+ repos (APA, MD, CAIM, datathon…)',
   // CS Fundamentals
-  'Algorithms':         'fib (18 visualizations) · desastresIA · joc_eda · projectA/A2',
+  Algorithms: 'fib (18 visualizations) · desastresIA · joc_eda · projectA/A2',
   'Software Architecture': 'subgrup-prop7.1 · SpringUnitTesting',
-  'Parallel Processing':'PAR (OpenMP → WASM) · joc_eda (multiprocess)',
-  'CI/CD':              '25+ GitHub Actions across repos',
-  'Compiler Design':    'ANTLR4_JSBach (grammar+lexer+parser)',
-  'Cybersecurity':      'waslab01–04 (web security labs)',
-  'WebAssembly':        'PAR (C → WASM via Emscripten)',
-  'Robotics':           'ROB (FK, odometry, EKF, wall-following, Babylon.js 3D)',
+  'Parallel Processing': 'PAR (OpenMP → WASM) · joc_eda (multiprocess)',
+  'CI/CD': '25+ GitHub Actions across repos',
+  'Compiler Design': 'ANTLR4_JSBach (grammar+lexer+parser)',
+  Cybersecurity: 'waslab01–04 (web security labs)',
+  WebAssembly: 'PAR (C → WASM via Emscripten)',
+  Robotics: 'ROB (FK, odometry, EKF, wall-following, Babylon.js 3D)',
 };
 
 const { num } = Astro.props;
@@ -67,25 +67,34 @@ const { num } = Astro.props;
     </div>
 
     <div class="skills-grid reveal-stagger">
-      {skills.map((group) => (
-        <div class="skill-group">
-          <h3 class="skill-category">{group.category}</h3>
-          <div class="skill-pills">
-            {group.items.map((item) => {
-              const loc = LOC_DATA[item];
-              const ctx = SKILL_CONTEXT[item];
-              const tooltip = loc
-                ? `${loc.lines} lines · ${loc.pct}%`
-                : ctx || null;
-              return tooltip ? (
-                <span class="skill-pill has-tooltip" data-tooltip={tooltip} tabindex="0" role="note" aria-label={`${item}: ${tooltip}`}>{item}<span class="skill-bracket-close">]</span></span>
-              ) : (
-                <span class="skill-pill">{item}</span>
-              );
-            })}
+      {
+        skills.map((group) => (
+          <div class="skill-group">
+            <h3 class="skill-category">{group.category}</h3>
+            <div class="skill-pills">
+              {group.items.map((item) => {
+                const loc = LOC_DATA[item];
+                const ctx = SKILL_CONTEXT[item];
+                const tooltip = loc ? `${loc.lines} lines · ${loc.pct}%` : ctx || null;
+                return tooltip ? (
+                  <span
+                    class="skill-pill has-tooltip"
+                    data-tooltip={tooltip}
+                    tabindex="0"
+                    role="note"
+                    aria-label={`${item}: ${tooltip}`}
+                  >
+                    {item}
+                    <span class="skill-bracket-close">]</span>
+                  </span>
+                ) : (
+                  <span class="skill-pill">{item}</span>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </div>
 </section>
@@ -102,7 +111,9 @@ const { num } = Astro.props;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 2rem;
-    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
   .skill-group:hover {
@@ -113,7 +124,7 @@ const { num } = Astro.props;
   .skill-category {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--accent-start);
+    color: var(--accent-text);
     margin-bottom: 1.25rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -133,13 +144,16 @@ const { num } = Astro.props;
     padding: 0.4rem 1rem;
     border-radius: 9999px;
     border: 1px solid var(--border-color);
-    transition: color var(--transition-fast), border-color var(--transition-fast),
-                box-shadow var(--transition-fast), transform var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast),
+      transform var(--transition-fast);
   }
 
   .skill-pill:hover {
     color: var(--text-primary);
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 0 12px var(--glow-color);
     transform: translateY(-1px);
   }
@@ -165,7 +179,9 @@ const { num } = Astro.props;
     padding: 0.3rem 0.65rem;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     z-index: 10;
   }

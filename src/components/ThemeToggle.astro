@@ -6,7 +6,18 @@ const t = useTranslations(lang);
 ---
 
 <button class="theme-toggle-btn" aria-label={t('aria.toggleTheme')} title={t('aria.toggleTheme')}>
-  <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg
+    class="sun-icon"
+    xmlns="http://www.w3.org/2000/svg"
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
     <circle cx="12" cy="12" r="5"></circle>
     <line x1="12" y1="1" x2="12" y2="3"></line>
     <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -17,7 +28,18 @@ const t = useTranslations(lang);
     <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
   </svg>
-  <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg
+    class="moon-icon"
+    xmlns="http://www.w3.org/2000/svg"
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
   </svg>
 </button>
@@ -32,11 +54,14 @@ const t = useTranslations(lang);
     border-radius: var(--radius-md);
     background: transparent;
     color: var(--text-secondary);
-    transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      transform var(--transition-fast);
   }
 
   .theme-toggle-btn:hover {
-    color: var(--accent-start);
+    color: var(--accent-text);
     background-color: var(--bg-secondary);
   }
 
@@ -48,17 +73,17 @@ const t = useTranslations(lang);
     display: none;
   }
 
-  :global([data-theme="light"]) .sun-icon,
-  :global([data-theme="nord-light"]) .sun-icon,
-  :global([data-theme="catppuccin-latte"]) .sun-icon,
-  :global([data-theme="solarized-light"]) .sun-icon {
+  :global([data-theme='light']) .sun-icon,
+  :global([data-theme='nord-light']) .sun-icon,
+  :global([data-theme='catppuccin-latte']) .sun-icon,
+  :global([data-theme='solarized-light']) .sun-icon {
     display: block;
   }
 
-  :global([data-theme="light"]) .moon-icon,
-  :global([data-theme="nord-light"]) .moon-icon,
-  :global([data-theme="catppuccin-latte"]) .moon-icon,
-  :global([data-theme="solarized-light"]) .moon-icon {
+  :global([data-theme='light']) .moon-icon,
+  :global([data-theme='nord-light']) .moon-icon,
+  :global([data-theme='catppuccin-latte']) .moon-icon,
+  :global([data-theme='solarized-light']) .moon-icon {
     display: none;
   }
 
@@ -73,10 +98,17 @@ const t = useTranslations(lang);
 </style>
 
 <script>
-  const LIGHT_SCHEMES = ['light', 'nord-light', 'catppuccin-latte', 'solarized-light', 'sepia', 'paper'];
+  const LIGHT_SCHEMES = [
+    'light',
+    'nord-light',
+    'catppuccin-latte',
+    'solarized-light',
+    'sepia',
+    'paper',
+  ];
 
   const initThemeToggle = () => {
-    document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+    document.querySelectorAll('.theme-toggle-btn').forEach((btn) => {
       if (btn.hasAttribute('data-initialized')) return;
       btn.setAttribute('data-initialized', 'true');
       btn.addEventListener('click', () => {
@@ -86,7 +118,11 @@ const t = useTranslations(lang);
 
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
-        const dbg = (window as unknown as { __debug?: { log: (l: string, ns: string, m: string, ...a: unknown[]) => void } }).__debug;
+        const dbg = (
+          window as unknown as {
+            __debug?: { log: (l: string, ns: string, m: string, ...a: unknown[]) => void };
+          }
+        ).__debug;
         dbg?.log('info', 'theme', 'quick-toggle', { from: current, to: newTheme });
       });
     });

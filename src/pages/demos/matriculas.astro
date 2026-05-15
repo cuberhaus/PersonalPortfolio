@@ -10,7 +10,12 @@ const t = useTranslations(lang);
 const demo = getDemo('matriculas', lang);
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="matriculas">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="matriculas"
+  ogImage="/og/matriculas-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}
@@ -26,7 +31,6 @@ const demo = getDemo('matriculas', lang);
     <div class="demo-info">
       <h3>{demo.aboutTitle}</h3>
       <p>{demo.aboutDescription}</p>
-      
     </div>
   </div>
 </DemoLayout>
@@ -52,5 +56,4 @@ const demo = getDemo('matriculas', lang);
     line-height: 1.7;
     margin-bottom: 1.25rem;
   }
-
-    </style>
+</style>

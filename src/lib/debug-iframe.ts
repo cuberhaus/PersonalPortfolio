@@ -28,7 +28,12 @@ interface DebugLogEnvelope {
   ts?: number;
 }
 
-const VALID_LEVELS: ReadonlySet<DebugLevel> = new Set<DebugLevel>(['trace', 'info', 'warn', 'error']);
+const VALID_LEVELS: ReadonlySet<DebugLevel> = new Set<DebugLevel>([
+  'trace',
+  'info',
+  'warn',
+  'error',
+]);
 
 let installedListener: ((e: MessageEvent) => void) | null = null;
 const allowed = new Set<string>();

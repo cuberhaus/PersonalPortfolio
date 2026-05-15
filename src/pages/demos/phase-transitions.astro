@@ -11,7 +11,12 @@ const t = useTranslations(lang);
 const demo = getDemo('phase-transitions', lang);
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="phase-transitions">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="phase-transitions"
+  ogImage="/og/phase-transitions-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}
@@ -34,7 +39,6 @@ const demo = getDemo('phase-transitions', lang);
     <div class="demo-info">
       <h3>{demo.aboutTitle}</h3>
       <p>{demo.aboutDescription}</p>
-      
     </div>
   </div>
 </DemoLayout>
@@ -60,5 +64,4 @@ const demo = getDemo('phase-transitions', lang);
     line-height: 1.7;
     margin-bottom: 1.25rem;
   }
-
-    </style>
+</style>

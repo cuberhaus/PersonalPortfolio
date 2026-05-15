@@ -27,28 +27,50 @@
 
 <script is:inline>
   (function () {
-    var url = new URL(window.location.href);
-    var param = url.searchParams.get('debug');
+    const url = new URL(window.location.href);
+    const param = url.searchParams.get('debug');
     if (param === '1') {
-      try { localStorage.setItem('debug', '1'); } catch (_) { /* private mode */ }
+      try {
+        localStorage.setItem('debug', '1');
+      } catch (_) {
+        /* private mode */
+      }
       url.searchParams.delete('debug');
       history.replaceState(null, '', url.pathname + url.search + url.hash);
     } else if (param === '0') {
-      try { localStorage.removeItem('debug'); } catch (_) { /* private mode */ }
+      try {
+        localStorage.removeItem('debug');
+      } catch (_) {
+        /* private mode */
+      }
       url.searchParams.delete('debug');
       history.replaceState(null, '', url.pathname + url.search + url.hash);
     }
 
-    var stored = false;
-    try { stored = localStorage.getItem('debug') === '1'; } catch (_) { /* private mode */ }
+    let stored = false;
+    try {
+      stored = localStorage.getItem('debug') === '1';
+    } catch (_) {
+      /* private mode */
+    }
     window.__DEBUG_ENABLED = stored;
 
-    var pending = [];
+    const pending = [];
     window.addEventListener('error', function (e) {
-      pending.push({ level: 'error', ns: 'global', msg: e.message || 'Uncaught error', err: e.error });
+      pending.push({
+        level: 'error',
+        ns: 'global',
+        msg: e.message || 'Uncaught error',
+        err: e.error,
+      });
     });
     window.addEventListener('unhandledrejection', function (e) {
-      pending.push({ level: 'error', ns: 'global', msg: 'Unhandled promise rejection', err: e.reason });
+      pending.push({
+        level: 'error',
+        ns: 'global',
+        msg: 'Unhandled promise rejection',
+        err: e.reason,
+      });
     });
     window.__debugPendingErrors = pending;
 
@@ -61,12 +83,14 @@
     // Uses `e.code` (physical key) rather than `e.key` (layout-dependent
     // glyph) so Linux/intl keyboards still work.
     function toggleDebug() {
-      var nowEnabled = !window.__DEBUG_ENABLED;
+      const nowEnabled = !window.__DEBUG_ENABLED;
       window.__DEBUG_ENABLED = nowEnabled;
       try {
         if (nowEnabled) localStorage.setItem('debug', '1');
         else localStorage.removeItem('debug');
-      } catch (_) { /* private mode */ }
+      } catch (_) {
+        /* private mode */
+      }
       document.dispatchEvent(new CustomEvent('debug:toggle', { detail: { enabled: nowEnabled } }));
       // Mirror through the bus so the entry shows up in the overlay log too.
       // `window.__debug` may not be installed yet on the very first toggle
@@ -76,7 +100,7 @@
       }
     }
     document.addEventListener('keydown', function (e) {
-      var isCombo =
+      const isCombo =
         // Ctrl+Alt+Shift+D — primary, no known OS/browser conflicts
         (e.code === 'KeyD' && e.ctrlKey && e.altKey && e.shiftKey) ||
         // Ctrl+Backtick — reliable single-modifier fallback

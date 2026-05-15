@@ -16,23 +16,23 @@
  *     target is the logo (`<a href="#hero">`) instead.
  */
 export const SECTION_META = [
-  { id: 'hero',           navKey: 'nav.about',          numbered: false, inNav: false },
-  { id: 'about',          navKey: 'nav.about',          numbered: true,  inNav: true },
-  { id: 'experience',     navKey: 'nav.experience',     numbered: true,  inNav: true },
-  { id: 'work',           navKey: 'nav.work',           numbered: true,  inNav: true },
-  { id: 'projects',       navKey: 'nav.projects',       numbered: true,  inNav: true },
-  { id: 'education',      navKey: 'nav.education',      numbered: true,  inNav: true },
-  { id: 'certifications', navKey: 'nav.certifications', numbered: true,  inNav: true },
-  { id: 'skills',         navKey: 'nav.skills',         numbered: true,  inNav: true },
-  { id: 'contact',        navKey: 'nav.contact',        numbered: true,  inNav: true },
+  { id: 'hero', navKey: 'nav.about', numbered: false, inNav: false },
+  { id: 'about', navKey: 'nav.about', numbered: true, inNav: true },
+  { id: 'experience', navKey: 'nav.experience', numbered: true, inNav: true },
+  { id: 'work', navKey: 'nav.work', numbered: true, inNav: true },
+  { id: 'projects', navKey: 'nav.projects', numbered: true, inNav: true },
+  { id: 'education', navKey: 'nav.education', numbered: true, inNav: true },
+  { id: 'certifications', navKey: 'nav.certifications', numbered: true, inNav: true },
+  { id: 'skills', navKey: 'nav.skills', numbered: true, inNav: true },
+  { id: 'contact', navKey: 'nav.contact', numbered: true, inNav: true },
 ] as const;
 
-export type SectionId = typeof SECTION_META[number]['id'];
+export type SectionId = (typeof SECTION_META)[number]['id'];
 
 /** All section IDs in homepage order, including the hero. */
-export const SECTION_IDS_WITH_HERO: readonly SectionId[] = SECTION_META.map(s => s.id);
+export const SECTION_IDS_WITH_HERO: readonly SectionId[] = SECTION_META.map((s) => s.id);
 
 /** Section IDs in navbar/homepage order, excluding the hero. */
-export const SECTION_IDS: readonly SectionId[] = SECTION_META
-  .filter(s => s.id !== 'hero')
-  .map(s => s.id);
+export const SECTION_IDS: readonly SectionId[] = SECTION_META.filter((s) => s.id !== 'hero').map(
+  (s) => s.id
+);

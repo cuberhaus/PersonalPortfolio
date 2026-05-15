@@ -17,18 +17,21 @@ function demoHref(slug: string) {
   return lang === 'en' ? `${base}/demos/${slug}/` : `${base}/${lang}/demos/${slug}/`;
 }
 
-const currentIdx = allDemos.findIndex(d => d.slug === currentSlug);
+const currentIdx = allDemos.findIndex((d) => d.slug === currentSlug);
 const prevDemo = currentIdx > 0 ? allDemos[currentIdx - 1] : null;
 const nextDemo = currentIdx < allDemos.length - 1 ? allDemos[currentIdx + 1] : null;
 
 const excludeSlugs = new Set([currentSlug, prevDemo?.slug, nextDemo?.slug].filter(Boolean));
-const candidates = allDemos.filter(d => !excludeSlugs.has(d.slug));
+const candidates = allDemos.filter((d) => !excludeSlugs.has(d.slug));
 
 // Seeded Fisher-Yates shuffle — stable per page, varies between pages
 let seed = 0;
 for (const ch of currentSlug) seed = ((seed << 5) - seed + ch.charCodeAt(0)) | 0;
-seed = ((seed % 2147483646) + 2147483646) % 2147483646 + 1;
-function nextRand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+seed = (((seed % 2147483646) + 2147483646) % 2147483646) + 1;
+function nextRand() {
+  seed = (seed * 16807) % 2147483647;
+  return (seed - 1) / 2147483646;
+}
 const shuffled = [...candidates];
 for (let i = shuffled.length - 1; i > 0; i--) {
   const j = Math.floor(nextRand() * (i + 1));
@@ -41,62 +44,106 @@ const exploreDemos = shuffled.slice(0, 4);
   <div class="container">
     {/* ── Prev / Next ── */}
     <div class="prevnext-strip">
-      {prevDemo ? (
-        <a href={demoHref(prevDemo.slug)} class="prevnext-card prevnext-prev" data-astro-reload>
-          <span class="prevnext-dir">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
-            {t('demo.previous')}
-          </span>
-          <span class="prevnext-icon" set:html={renderIconSvg(prevDemo.icon, 24)} />
-          <span class="prevnext-title">{prevDemo.title}</span>
-          <span class="prevnext-desc">{prevDemo.description}</span>
-          <ul class="prevnext-tags">
-            {prevDemo.tags.map((tag) => <li>{tag}</li>)}
-          </ul>
-        </a>
-      ) : <div />}
-      {nextDemo ? (
-        <a href={demoHref(nextDemo.slug)} class="prevnext-card prevnext-next" data-astro-reload>
-          <span class="prevnext-dir">
-            {t('demo.next')}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </span>
-          <span class="prevnext-icon" set:html={renderIconSvg(nextDemo.icon, 24)} />
-          <span class="prevnext-title">{nextDemo.title}</span>
-          <span class="prevnext-desc">{nextDemo.description}</span>
-          <ul class="prevnext-tags">
-            {nextDemo.tags.map((tag) => <li>{tag}</li>)}
-          </ul>
-        </a>
-      ) : <div />}
+      {
+        prevDemo ? (
+          <a href={demoHref(prevDemo.slug)} class="prevnext-card prevnext-prev" data-astro-reload>
+            <span class="prevnext-dir">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+              {t('demo.previous')}
+            </span>
+            <span class="prevnext-icon" set:html={renderIconSvg(prevDemo.icon, 24)} />
+            <span class="prevnext-title">{prevDemo.title}</span>
+            <span class="prevnext-desc">{prevDemo.description}</span>
+            <ul class="prevnext-tags">
+              {prevDemo.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </a>
+        ) : (
+          <div />
+        )
+      }
+      {
+        nextDemo ? (
+          <a href={demoHref(nextDemo.slug)} class="prevnext-card prevnext-next" data-astro-reload>
+            <span class="prevnext-dir">
+              {t('demo.next')}
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </span>
+            <span class="prevnext-icon" set:html={renderIconSvg(nextDemo.icon, 24)} />
+            <span class="prevnext-title">{nextDemo.title}</span>
+            <span class="prevnext-desc">{nextDemo.description}</span>
+            <ul class="prevnext-tags">
+              {nextDemo.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </a>
+        ) : (
+          <div />
+        )
+      }
     </div>
 
     {/* ── Explore more ── */}
-    {exploreDemos.length > 0 && (
-      <div class="explore-section">
-        <h2 class="explore-heading">{t('demo.moreProjects')}</h2>
-        <div class="explore-grid">
-          {exploreDemos.map((demo) => (
-            <a href={demoHref(demo.slug)} class="explore-card" data-astro-reload>
-              <span class="explore-icon" set:html={renderIconSvg(demo.icon, 20)} />
-              <div class="explore-info">
-                <span class="explore-title">{demo.title}</span>
-                <ul class="explore-tags">
-                  {demo.tags.map((tag) => <li>{tag}</li>)}
-                </ul>
-              </div>
-              <svg class="explore-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </a>
-          ))}
+    {
+      exploreDemos.length > 0 && (
+        <div class="explore-section">
+          <h2 class="explore-heading">{t('demo.moreProjects')}</h2>
+          <div class="explore-grid">
+            {exploreDemos.map((demo) => (
+              <a href={demoHref(demo.slug)} class="explore-card" data-astro-reload>
+                <span class="explore-icon" set:html={renderIconSvg(demo.icon, 20)} />
+                <div class="explore-info">
+                  <span class="explore-title">{demo.title}</span>
+                  <ul class="explore-tags">
+                    {demo.tags.map((tag) => (
+                      <li>{tag}</li>
+                    ))}
+                  </ul>
+                </div>
+                <svg
+                  class="explore-arrow"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
-    )}
+      )
+    }
   </div>
 </section>
 
@@ -125,12 +172,15 @@ const exploreDemos = shuffled.slice(0, 4);
     border-radius: var(--radius-lg);
     text-decoration: none;
     color: var(--text-primary);
-    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+      transform var(--transition-fast),
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
 
   .prevnext-card:hover {
     transform: translateY(-3px);
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 8px 28px var(--glow-color);
   }
 
@@ -142,11 +192,11 @@ const exploreDemos = shuffled.slice(0, 4);
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--accent-start);
+    color: var(--accent-text);
   }
 
   .prevnext-icon {
-    color: var(--accent-start);
+    color: var(--accent-text);
     display: flex;
     align-items: center;
   }
@@ -160,7 +210,7 @@ const exploreDemos = shuffled.slice(0, 4);
   }
 
   .prevnext-card:hover .prevnext-title {
-    color: var(--accent-start);
+    color: var(--accent-text);
   }
 
   .prevnext-desc {
@@ -226,18 +276,21 @@ const exploreDemos = shuffled.slice(0, 4);
     border-radius: var(--radius-md);
     text-decoration: none;
     color: var(--text-primary);
-    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+      transform var(--transition-fast),
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
 
   .explore-card:hover {
     transform: translateY(-2px);
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 6px 24px var(--glow-color);
   }
 
   .explore-icon {
     flex-shrink: 0;
-    color: var(--accent-start);
+    color: var(--accent-text);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -260,7 +313,7 @@ const exploreDemos = shuffled.slice(0, 4);
   }
 
   .explore-card:hover .explore-title {
-    color: var(--accent-start);
+    color: var(--accent-text);
   }
 
   .explore-tags {
@@ -284,13 +337,16 @@ const exploreDemos = shuffled.slice(0, 4);
     color: var(--text-muted);
     opacity: 0;
     transform: translateX(-4px);
-    transition: opacity var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+    transition:
+      opacity var(--transition-fast),
+      transform var(--transition-fast),
+      color var(--transition-fast);
   }
 
   .explore-card:hover .explore-arrow {
     opacity: 1;
     transform: translateX(0);
-    color: var(--accent-start);
+    color: var(--accent-text);
   }
 
   @media (max-width: 768px) {

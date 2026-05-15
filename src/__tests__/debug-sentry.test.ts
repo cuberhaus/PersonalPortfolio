@@ -49,9 +49,9 @@ describe('debug-sentry perf coalescing', () => {
     expect(__getPerfBucketCountForTesting()).toBe(1);
 
     const stub = makeSentryStub();
-    __flushPerfBucketsForTesting(stub as unknown as Parameters<
-      typeof __flushPerfBucketsForTesting
-    >[0]);
+    __flushPerfBucketsForTesting(
+      stub as unknown as Parameters<typeof __flushPerfBucketsForTesting>[0]
+    );
 
     expect(stub.addBreadcrumb).toHaveBeenCalledTimes(1);
     const call = stub.addBreadcrumb.mock.calls[0][0];
@@ -78,9 +78,9 @@ describe('debug-sentry perf coalescing', () => {
     expect(__getPerfBucketCountForTesting()).toBe(3);
 
     const stub = makeSentryStub();
-    __flushPerfBucketsForTesting(stub as unknown as Parameters<
-      typeof __flushPerfBucketsForTesting
-    >[0]);
+    __flushPerfBucketsForTesting(
+      stub as unknown as Parameters<typeof __flushPerfBucketsForTesting>[0]
+    );
 
     expect(stub.addBreadcrumb).toHaveBeenCalledTimes(3);
     const messages = stub.addBreadcrumb.mock.calls.map((c) => c[0].message);
@@ -89,15 +89,15 @@ describe('debug-sentry perf coalescing', () => {
         expect.stringContaining('fps:render'),
         expect.stringContaining('fps:simulation'),
         expect.stringContaining('memory:js-heap'),
-      ]),
+      ])
     );
   });
 
   it('flushing an empty bucket is a no-op', () => {
     const stub = makeSentryStub();
-    __flushPerfBucketsForTesting(stub as unknown as Parameters<
-      typeof __flushPerfBucketsForTesting
-    >[0]);
+    __flushPerfBucketsForTesting(
+      stub as unknown as Parameters<typeof __flushPerfBucketsForTesting>[0]
+    );
     expect(stub.addBreadcrumb).not.toHaveBeenCalled();
   });
 
@@ -107,9 +107,9 @@ describe('debug-sentry perf coalescing', () => {
     __ingestPerfForTesting({ kind: 'fps', name: 'idle', value: 58, ts: t0 + 800 });
 
     const stub = makeSentryStub();
-    __flushPerfBucketsForTesting(stub as unknown as Parameters<
-      typeof __flushPerfBucketsForTesting
-    >[0]);
+    __flushPerfBucketsForTesting(
+      stub as unknown as Parameters<typeof __flushPerfBucketsForTesting>[0]
+    );
 
     const data = stub.addBreadcrumb.mock.calls[0][0].data;
     expect(data?.windowMs).toBe(800);
