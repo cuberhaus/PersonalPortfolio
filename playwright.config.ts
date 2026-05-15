@@ -44,6 +44,12 @@ export default defineConfig({
       // axe results are deterministic — retrying just spends CI minutes
       // on the same failure. Override the project default of 2 retries.
       retries: 0,
+      // Theme switching + reload makes each test ~5-10s; with axe's own
+      // browser-side work the default 30s isn't always enough on a busy box.
+      timeout: 60_000,
+      // Parallelise but don't swamp the single Astro dev server. 4 keeps
+      // throughput up while leaving the server room to breathe.
+      workers: 4,
     },
     {
       name: 'keyboard',

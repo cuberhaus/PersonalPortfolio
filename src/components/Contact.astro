@@ -407,6 +407,10 @@ const { num } = Astro.props;
       transform var(--transition-fast),
       box-shadow var(--transition-fast);
     margin-top: 1rem;
+    /* Some themes (phosphor green, amber-crt, synthwave cyan) have very
+       light accent gradients; a dark text-shadow keeps white text legible
+       at WCAG AA without changing the gradient itself. */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
   }
 
   .contact-submit:hover {

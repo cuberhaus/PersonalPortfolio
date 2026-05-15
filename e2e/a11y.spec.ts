@@ -80,6 +80,106 @@ const HOVER_TARGETS = [
   '.skill-group',
 ];
 
+// Selectors that often render text over a gradient background. axe-core's
+// color-contrast check returns `incomplete` (not `violation`) when the
+// background is a gradient because it can't sample one definitive color, so
+// real low-contrast text on gradients slips through. We compute the contrast
+// ourselves for these targets and assert >= 4.5:1 (WCAG AA for normal text).
+const GRADIENT_TEXT_SELECTORS = [
+  // SPMatriculas demo — pastel-gradient buttons that historically went
+  // near-white-on-near-white.
+  'button',
+  'a.btn',
+  '.btn-primary',
+];
+
+async function checkGradientTextContrast(page: Page, route: string, theme: string) {
+  await setThemeBeforeLoad(page, theme, route);
+  // `networkidle` never settles under Astro dev because the HMR WebSocket
+  // stays open. `setThemeBeforeLoad` already navigates with
+  // `waitUntil: 'domcontentloaded'`; that's enough — the page is interactive
+  // and CSS is applied. A short settle gives gradients/transitions time to
+  // be reflected in computed styles.
+  await page.waitForTimeout(150);
+
+  const findings = await page.evaluate(
+    ({ selectors }) => {
+      // sRGB → relative luminance per WCAG.
+      const lum = (rgb: [number, number, number]) => {
+        const f = (c: number) => {
+          const v = c / 255;
+          return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+        };
+        return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+      };
+      const ratio = (a: [number, number, number], b: [number, number, number]) => {
+        const la = lum(a),
+          lb = lum(b);
+        return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+      };
+      const parseRgb = (s: string): [number, number, number] | null => {
+        const m = s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        return m ? [+m[1], +m[2], +m[3]] : null;
+      };
+      // Sample 5 colors from a gradient: extract `rgb()` triplets in
+      // declaration order and average them. Cheap heuristic but catches the
+      // pastel-on-pastel case.
+      const sampleGradient = (bg: string): [number, number, number] | null => {
+        const triplets = [...bg.matchAll(/rgba?\((\d+),\s*(\d+),\s*(\d+)/g)].map(
+          (m) => [+m[1], +m[2], +m[3]] as [number, number, number]
+        );
+        if (triplets.length === 0) return null;
+        const avg: [number, number, number] = [0, 0, 0];
+        for (const t of triplets) {
+          avg[0] += t[0];
+          avg[1] += t[1];
+          avg[2] += t[2];
+        }
+        return [avg[0] / triplets.length, avg[1] / triplets.length, avg[2] / triplets.length];
+      };
+
+      const results: Array<{ tag: string; text: string; ratio: number; bg: string; fg: string }> =
+        [];
+
+      for (const sel of selectors) {
+        const els = document.querySelectorAll(sel) as NodeListOf<HTMLElement>;
+        for (const el of els) {
+          const cs = getComputedStyle(el);
+          const bg =
+            cs.backgroundImage && cs.backgroundImage !== 'none'
+              ? cs.backgroundImage
+              : cs.backgroundColor;
+          if (!bg.includes('gradient')) continue;
+          const fg = parseRgb(cs.color);
+          const bgRgb = sampleGradient(bg);
+          if (!fg || !bgRgb) continue;
+          const r = ratio(fg, bgRgb);
+          if (r < 4.5) {
+            results.push({
+              tag: el.tagName,
+              text: (el.textContent ?? '').trim().slice(0, 60),
+              ratio: Math.round(r * 100) / 100,
+              bg,
+              fg: cs.color,
+            });
+          }
+        }
+      }
+      return results;
+    },
+    { selectors: GRADIENT_TEXT_SELECTORS }
+  );
+
+  if (findings.length > 0) {
+    console.info(
+      `[a11y:gradient-contrast] ${theme} ${route} — findings:\n  ${findings
+        .map((f) => `${f.tag} "${f.text}" ratio=${f.ratio} fg=${f.fg}`)
+        .join('\n  ')}`
+    );
+  }
+  return findings;
+}
+
 async function runAxeOnHover(page: Page, theme: string, selector: string) {
   await setThemeBeforeLoad(page, theme, '/');
   const target = page.locator(selector).first();
@@ -134,6 +234,18 @@ for (const theme of ALL_THEME_IDS) {
           test.skip(true, `${selector} not present on /`);
         }
         expect(result.blocking, JSON.stringify(result.blocking, null, 2)).toEqual([]);
+      });
+    }
+  });
+
+  test.describe(`a11y [${theme}] — gradient text contrast`, () => {
+    // Demo routes that use gradient buttons / cards heavily. Add more if more
+    // demos start using gradient backgrounds for interactive controls.
+    const routes = ['/demos/matriculas', '/demos/tfg-polyps', '/'];
+    for (const route of routes) {
+      test(`${route} text-on-gradient meets WCAG AA (4.5:1)`, async ({ page }) => {
+        const findings = await checkGradientTextContrast(page, route, theme);
+        expect(findings, JSON.stringify(findings, null, 2)).toEqual([]);
       });
     }
   });

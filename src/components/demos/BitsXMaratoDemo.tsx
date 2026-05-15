@@ -179,7 +179,12 @@ function SimulatedInference({ t }: { t: typeof TRANSLATIONS.en }) {
               fontSize: '0.82rem',
               cursor: 'pointer',
               background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-              color: 'var(--text-primary)',
+              // White consistently contrasts better with the accent gradient
+              // than `var(--text-primary)`, which is near-white on light
+              // gradients (phosphor / amber-crt). Drop shadow keeps it
+              // legible across all themes (WCAG AA).
+              color: '#fff',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.55)',
             }}
           >
             {t.runDemo}

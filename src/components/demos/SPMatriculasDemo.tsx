@@ -69,27 +69,34 @@ const s = {
     gap: '0.5rem',
     padding: '0.6rem 1.2rem',
     background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
+    // White on theme-accent gradient is consistently legible across themes;
+    // var(--text-primary) was nearly white-on-pastel on the default theme.
+    color: '#fff',
     border: 'none',
     borderRadius: '0.5rem',
     fontSize: '0.85rem',
     fontWeight: 600,
     cursor: 'pointer',
+    textShadow: '0 1px 2px rgba(0, 0, 0, 0.35)',
   } as React.CSSProperties,
   runBtn: {
     padding: '0.6rem 1.5rem',
     background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
+    color: '#fff',
     border: 'none',
     borderRadius: '0.5rem',
     fontSize: '0.9rem',
     fontWeight: 600,
     cursor: 'pointer',
     marginTop: '0.75rem',
+    textShadow: '0 1px 2px rgba(0, 0, 0, 0.35)',
   } as React.CSSProperties,
   disabledBtn: {
-    opacity: 0.5,
+    // Keep enough opacity that the gradient + text stay legible (WCAG AA),
+    // but still clearly looks "off" compared to the active state.
+    opacity: 0.75,
     cursor: 'not-allowed',
+    color: '#fff',
   },
   stageRow: {
     display: 'flex',
