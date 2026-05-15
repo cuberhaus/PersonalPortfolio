@@ -1,7 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIssuerIconSvg } from '../lib/issuer-icons';
-import certsData from '../data/certifications.json';
+import { certifications as certsData } from '../data/loaders';
 import { flattenForLocale } from '../i18n/load';
 
 type CertEntry = {

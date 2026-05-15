@@ -1,6 +1,6 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import skillsData from '../data/skills.json';
+import { skills as skillsData } from '../data/loaders';
 import { flattenForLocale } from '../i18n/load';
 
 type SkillGroup = { category: string; items: string[] };
