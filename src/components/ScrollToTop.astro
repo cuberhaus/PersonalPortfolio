@@ -39,7 +39,9 @@ const t = useTranslations(lang);
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    background: var(--accent-gradient);
+    /* Black overlay darkens any theme's accent gradient enough for the
+       arrow icon (white) to clear WCAG AA. Same trick as Contact.astro. */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--accent-gradient);
     color: white;
     box-shadow: 0 4px 14px var(--glow-color-strong);
     opacity: 0;

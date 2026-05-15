@@ -178,8 +178,11 @@ function SimulatedInference({ t }: { t: typeof TRANSLATIONS.en }) {
               fontWeight: 600,
               fontSize: '0.82rem',
               cursor: 'pointer',
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-              color: 'var(--text-primary)',
+              // Black overlay darkens light-accent gradients (phosphor,
+              // amber-crt, synthwave-cyan) enough for white text to clear
+              // WCAG AA (4.5:1) without changing the visible accent palette.
+              background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, ${accent1}, ${accent2})`,
+              color: '#fff',
             }}
           >
             {t.runDemo}

@@ -68,8 +68,11 @@ const s = {
     justifyContent: 'center',
     gap: '0.5rem',
     padding: '0.6rem 1.2rem',
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
+    // Black overlay darkens any theme's accent gradient enough for white
+    // text to clear WCAG AA (4.5:1) — see Contact.astro for the same trick.
+    background:
+      'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, var(--accent-start), var(--accent-end))',
+    color: '#fff',
     border: 'none',
     borderRadius: '0.5rem',
     fontSize: '0.85rem',
@@ -78,8 +81,9 @@ const s = {
   } as React.CSSProperties,
   runBtn: {
     padding: '0.6rem 1.5rem',
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
+    background:
+      'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, var(--accent-start), var(--accent-end))',
+    color: '#fff',
     border: 'none',
     borderRadius: '0.5rem',
     fontSize: '0.9rem',
@@ -88,8 +92,11 @@ const s = {
     marginTop: '0.75rem',
   } as React.CSSProperties,
   disabledBtn: {
-    opacity: 0.5,
+    // Keep enough opacity that the gradient + text stay legible (WCAG AA),
+    // but still clearly looks "off" compared to the active state.
+    opacity: 0.75,
     cursor: 'not-allowed',
+    color: '#fff',
   },
   stageRow: {
     display: 'flex',
