@@ -83,21 +83,29 @@ The `a11y` Playwright project ([e2e/a11y.spec.ts](e2e/a11y.spec.ts)) runs three 
 
 #### Fixing gradient-text contrast violations
 
-The standard fix is a black overlay layer that darkens the gradient enough for white text:
+The standard fix is a black overlay layer that darkens the gradient enough for white text. For React/inline-style components there's a shared helper at [src/components/demos/\_styles.ts](src/components/demos/_styles.ts):
+
+```tsx
+import { gradientButton } from './_styles';
+
+// Default — uses var(--accent-start) / var(--accent-end):
+<button style={gradientButton()}>Run</button>
+
+// Override single properties (spread first, override after):
+<button style={{ ...gradientButton(), padding: '0.6rem 1.2rem' }}>Run</button>
+
+// Pre-resolved accent colours (for demos that capture them in scope):
+<button style={gradientButton({ accent1, accent2 })}>Run</button>
+```
+
+For Astro/CSS components (no helper available), inline the same recipe:
 
 ```css
 background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--accent-gradient);
 color: #fff;
 ```
 
-This works across every theme (the worst offender is phosphor — pure green; even there a 0.5 overlay clears 4.5:1). See [Contact.astro](src/components/Contact.astro), [ScrollToTop.astro](src/components/ScrollToTop.astro), and the demo button styles for live examples.
-
-For inline-style React components, the equivalent is:
-
-```tsx
-background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, ${accent1}, ${accent2})`,
-color: '#fff',
-```
+This works across every theme (the worst offender is phosphor — pure green; even there a 0.5 overlay clears 4.5:1). See [Contact.astro](src/components/Contact.astro) and [ScrollToTop.astro](src/components/ScrollToTop.astro) for the CSS form, and any demo `*.tsx` for the helper form.
 
 ## Adding a new demo
 

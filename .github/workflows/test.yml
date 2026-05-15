@@ -128,16 +128,21 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-  # a11y is sharded across 4 runners for speed — 368 tests / 4 shards / 4
-  # workers per shard = 16x effective parallelism. retries=0 is set
-  # per-project in playwright.config.ts since axe results don't flake.
+  # a11y is sharded across 12 runners for speed. ~830 tests / 12 shards / 4
+  # workers per shard = 48x effective parallelism. Workers per shard stays
+  # at 4 because GitHub-hosted runners have 4 CPU cores; raising it makes
+  # workers contend for CPU rather than going faster. 12 shards is the
+  # ceiling we want — combined with the rest of the workflow (quality +
+  # 5x playwright matrix + visual + lighthouse) it stays under the free-tier
+  # 20-concurrent-job limit. retries=0 is set per-project in
+  # playwright.config.ts since axe results don't flake.
   playwright-a11y:
     runs-on: ubuntu-latest
     needs: quality
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -166,8 +171,8 @@ jobs:
             npx playwright install --with-deps chromium chromium-headless-shell
           fi
 
-      - name: Run E2E (a11y, shard ${{ matrix.shard }}/4)
-        run: npx playwright test --project=a11y --workers=4 --shard=${{ matrix.shard }}/4
+      - name: Run E2E (a11y, shard ${{ matrix.shard }}/12)
+        run: npx playwright test --project=a11y --workers=4 --shard=${{ matrix.shard }}/12
 
       - name: Upload Playwright report
         if: always()
