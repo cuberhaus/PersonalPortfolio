@@ -11,7 +11,7 @@ html[data-theme='dracula'] {
 
   --text-primary: #f8f8f2;
   --text-secondary: #bfbfbf;
-  --text-muted: #8e99bd;
+  --text-muted: #98a2c3;
 
   --accent-start: #bd93f9;
   --accent-end: #ff79c6;
@@ -38,12 +38,12 @@ html[data-theme='nord'] {
 
   --text-primary: #eceff4;
   --text-secondary: #d8dee9;
-  --text-muted: #9bb4ce;
+  --text-muted: #aac0d6;
 
   --accent-start: #88c0d0;
   --accent-end: #5e81ac;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #88c0d0;
+  --accent-text: #93c6d4;
 
   --glow-color: rgba(136, 192, 208, 0.15);
   --glow-color-strong: rgba(136, 192, 208, 0.35);
@@ -65,7 +65,7 @@ html[data-theme='tokyo-night'] {
 
   --text-primary: #c0caf5;
   --text-secondary: #a9b1d6;
-  --text-muted: #828bb1;
+  --text-muted: #9098ba;
 
   --accent-start: #7aa2f7;
   --accent-end: #bb9af7;
@@ -92,7 +92,7 @@ html[data-theme='catppuccin-mocha'] {
 
   --text-primary: #cdd6f4;
   --text-secondary: #bac2de;
-  --text-muted: #8c90a3;
+  --text-muted: #9094a6;
 
   --accent-start: #cba6f7;
   --accent-end: #f5c2e7;
@@ -119,7 +119,7 @@ html[data-theme='one-dark'] {
 
   --text-primary: #abb2bf;
   --text-secondary: #9da5b4;
-  --text-muted: #969da9;
+  --text-muted: #9ea5b0;
 
   --accent-start: #61afef;
   --accent-end: #c678dd;
@@ -242,7 +242,7 @@ html[data-theme='gruvbox-dark'] {
 
   --text-primary: #ebdbb2;
   --text-secondary: #d5c4a1;
-  --text-muted: #a89984;
+  --text-muted: #b2a491;
 
   --accent-start: #fe8019;
   --accent-end: #fb4934;
@@ -269,12 +269,12 @@ html[data-theme='synthwave'] {
 
   --text-primary: #f9f7ff;
   --text-secondary: #d0bdff;
-  --text-muted: #8f7bcf;
+  --text-muted: #9986d3;
 
   --accent-start: #ff2a6d;
   --accent-end: #0ff0fc;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #ff2a6d;
+  --accent-text: #ff5087;
 
   --glow-color: rgba(255, 42, 109, 0.22);
   --glow-color-strong: rgba(255, 42, 109, 0.5);
@@ -296,7 +296,7 @@ html[data-theme='phosphor'] {
 
   --text-primary: #9fffb4;
   --text-secondary: #6bd688;
-  --text-muted: #449a56;
+  --text-muted: #4baa5f;
 
   --accent-start: #33ff66;
   --accent-end: #00cc44;
@@ -323,7 +323,7 @@ html[data-theme='amber-crt'] {
 
   --text-primary: #ffd390;
   --text-secondary: #e5a64b;
-  --text-muted: #ae7b21;
+  --text-muted: #bb8423;
 
   --accent-start: #ffb000;
   --accent-end: #ff8c00;

@@ -145,7 +145,7 @@ const s = {
   progressOuter: {
     width: '100%',
     height: '8px',
-    background: 'var(--border-color)',
+    background: 'var(--bg-secondary)',
     borderRadius: '4px',
     overflow: 'hidden',
     marginTop: '0.5rem',

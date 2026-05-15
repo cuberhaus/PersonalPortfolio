@@ -54,7 +54,7 @@ const styles = {
     color: 'var(--text-primary)',
   },
   secondaryBtn: {
-    background: 'var(--border-color)',
+    background: 'var(--bg-secondary)',
     color: 'var(--text-secondary)',
   },
   output: {
