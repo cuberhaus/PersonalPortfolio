@@ -12,7 +12,12 @@ const tr = getPropCopy(lang);
 const t = useTranslations(lang);
 ---
 
-<DemoLayout title={demo.metaTitle ?? demo.title} description={demo.metaDescription} slug="prop">
+<DemoLayout
+  title={demo.metaTitle ?? demo.title}
+  description={demo.metaDescription}
+  slug="prop"
+  ogImage="/og/prop-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}

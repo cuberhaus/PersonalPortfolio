@@ -11,7 +11,12 @@ const demo = getDemo('jsbach', lang);
 const hint = demo.hints ?? [];
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="jsbach">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="jsbach"
+  ogImage="/og/jsbach-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}

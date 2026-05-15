@@ -10,7 +10,12 @@ const t = useTranslations(lang);
 const demo = getDemo('pro2', lang);
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="pro2">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="pro2"
+  ogImage="/og/pro2-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}

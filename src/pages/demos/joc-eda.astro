@@ -12,7 +12,12 @@ const tr = getJocEdaCopy(lang);
 const t = useTranslations(lang);
 ---
 
-<DemoLayout title={demo.metaTitle ?? demo.title} description={demo.metaDescription} slug="joc-eda">
+<DemoLayout
+  title={demo.metaTitle ?? demo.title}
+  description={demo.metaDescription}
+  slug="joc-eda"
+  ogImage="/og/joc-eda-og.png"
+>
   <div class="container joc-eda-page">
     <DemoHeader
       badge={demo.badge}

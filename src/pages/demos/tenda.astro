@@ -11,7 +11,12 @@ const demo = getDemo('tenda', lang);
 const t = useTranslations(lang);
 ---
 
-<DemoLayout title={demo.metaTitle ?? demo.title} description={demo.metaDescription} slug="tenda">
+<DemoLayout
+  title={demo.metaTitle ?? demo.title}
+  description={demo.metaDescription}
+  slug="tenda"
+  ogImage="/og/tenda-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}
