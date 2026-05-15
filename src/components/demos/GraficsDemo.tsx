@@ -136,7 +136,7 @@ const panelStyle: React.CSSProperties = {
   border: '1px solid var(--border-color)',
 };
 const titleStyle: React.CSSProperties = {
-  color: 'var(--accent-start)',
+  color: 'var(--accent-text)',
   fontSize: '1rem',
   marginBottom: '0.25rem',
 };

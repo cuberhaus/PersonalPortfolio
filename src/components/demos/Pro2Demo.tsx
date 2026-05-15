@@ -71,7 +71,7 @@ const styles = {
   },
   dangerBtn: {
     background: 'color-mix(in srgb, var(--accent-end) 10%, transparent)',
-    color: 'var(--accent-end)',
+    color: 'var(--accent-text)',
   },
   tag: {
     display: 'inline-block',
@@ -246,15 +246,15 @@ export default function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
           <p style={{ marginBottom: '0.5rem' }}>
             <strong style={{ color: 'var(--text-primary)' }}>{t.step1}</strong>
             {t.step1Desc1}
-            <strong style={{ color: 'var(--accent-end)' }}>{t.step1Desc2}</strong>
+            <strong style={{ color: 'var(--accent-text)' }}>{t.step1Desc2}</strong>
             {t.step1Desc3}
-            <strong style={{ color: 'var(--accent-end)' }}>{t.step1Desc4}</strong>
+            <strong style={{ color: 'var(--accent-text)' }}>{t.step1Desc4}</strong>
             {t.step1Desc5}
           </p>
           <p style={{ marginBottom: '0.5rem' }}>
             <strong style={{ color: 'var(--text-primary)' }}>{t.step2}</strong>
             {t.step2Desc1}
-            <strong style={{ color: 'var(--accent-end)' }}>{t.step2Desc2}</strong>
+            <strong style={{ color: 'var(--accent-text)' }}>{t.step2Desc2}</strong>
             {t.step2Desc3}
             <em>{t.step2Desc4}</em>
             {t.step2Desc5}
@@ -303,7 +303,7 @@ export default function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
               <tbody>
                 {species.map((s) => (
                   <tr key={s.id}>
-                    <td style={{ ...styles.td, fontWeight: 600, color: 'var(--accent-end)' }}>
+                    <td style={{ ...styles.td, fontWeight: 600, color: 'var(--accent-text)' }}>
                       {s.id}
                     </td>
                     <td
@@ -522,9 +522,9 @@ export default function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
                   <strong>
                     {t.stepWord} {i + 1}:
                   </strong>{' '}
-                  {t.merged} <span style={{ color: 'var(--accent-end)' }}>{step.merged.id1}</span> +{' '}
-                  <span style={{ color: 'var(--accent-end)' }}>{step.merged.id2}</span> →{' '}
-                  <span style={{ color: 'var(--accent-start)' }}>{step.merged.newId}</span> (
+                  {t.merged} <span style={{ color: 'var(--accent-text)' }}>{step.merged.id1}</span>{' '}
+                  + <span style={{ color: 'var(--accent-text)' }}>{step.merged.id2}</span> →{' '}
+                  <span style={{ color: 'var(--accent-text)' }}>{step.merged.newId}</span> (
                   {t.distanceWord} {step.merged.distance.toFixed(2)})
                 </div>
               ))}

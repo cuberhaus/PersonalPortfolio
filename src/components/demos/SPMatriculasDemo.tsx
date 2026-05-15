@@ -122,7 +122,7 @@ const s = {
     fontSize: '2rem',
     fontWeight: 700,
     letterSpacing: '0.15em',
-    color: 'var(--accent-start)',
+    color: 'var(--accent-text)',
     textTransform: 'uppercase' as const,
   },
   truthText: {
@@ -411,7 +411,7 @@ export default function SPMatriculasDemo({ lang = 'en' }: { lang?: Lang }) {
             borderRadius: '0.5rem',
             fontSize: '0.85rem',
             background: 'var(--bg-secondary)',
-            color: 'var(--accent-end)',
+            color: 'var(--accent-text)',
           }}
         >
           {t.error} {error}
@@ -446,11 +446,9 @@ export default function SPMatriculasDemo({ lang = 'en' }: { lang?: Lang }) {
                 </div>
                 <div style={s.truthText}>{selectedGT.toUpperCase()}</div>
                 {result.plateText.toLowerCase() === selectedGT.toLowerCase() ? (
-                  <span style={{ color: 'var(--accent-start)', fontSize: '0.8rem' }}>
-                    {t.match}
-                  </span>
+                  <span style={{ color: 'var(--accent-text)', fontSize: '0.8rem' }}>{t.match}</span>
                 ) : (
-                  <span style={{ color: 'var(--accent-end)', fontSize: '0.8rem' }}>
+                  <span style={{ color: 'var(--accent-text)', fontSize: '0.8rem' }}>
                     {t.mismatch}
                   </span>
                 )}
@@ -488,7 +486,7 @@ export default function SPMatriculasDemo({ lang = 'en' }: { lang?: Lang }) {
                         fontFamily: 'monospace',
                         fontSize: '1rem',
                         fontWeight: 700,
-                        color: 'var(--accent-start)',
+                        color: 'var(--accent-text)',
                         marginTop: '0.25rem',
                       }}
                     >

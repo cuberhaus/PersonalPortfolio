@@ -77,7 +77,7 @@ function GraphPanel({ label }: { label: string }) {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h4 style={{ color: 'var(--accent-start)', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
+      <h4 style={{ color: 'var(--accent-text)', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
       <canvas
         ref={ref}
         style={{
@@ -128,7 +128,7 @@ function SortPanel({ label }: { label: string }) {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h4 style={{ color: 'var(--accent-start)', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
+      <h4 style={{ color: 'var(--accent-text)', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
       <canvas
         ref={ref}
         style={{
@@ -198,7 +198,7 @@ function MazePanel({ label }: { label: string }) {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h4 style={{ color: 'var(--accent-start)', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
+      <h4 style={{ color: 'var(--accent-text)', margin: '0 0 8px', fontSize: 14 }}>{label}</h4>
       <canvas
         ref={ref}
         style={{

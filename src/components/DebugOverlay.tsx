@@ -471,8 +471,8 @@ const OVERLAY_STYLES = `
   }
   .debug-overlay-trigger:hover {
     opacity: 1;
-    color: var(--accent-start);
-    border-color: var(--accent-start);
+    color: var(--accent-text);
+    border-color: var(--accent-text);
   }
   .debug-overlay-panel {
     position: fixed;
@@ -518,8 +518,8 @@ const OVERLAY_STYLES = `
     background: var(--bg-card-hover, var(--bg-card));
   }
   .debug-overlay-tab.active {
-    color: var(--accent-start);
-    border-color: var(--accent-start);
+    color: var(--accent-text);
+    border-color: var(--accent-text);
   }
   .debug-overlay-controls {
     display: flex;

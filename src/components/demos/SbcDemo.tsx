@@ -691,7 +691,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                       style={{
                         ...s.tag,
                         background: 'color-mix(in srgb, var(--accent-start) 15%, transparent)',
-                        color: 'var(--accent-start)',
+                        color: 'var(--accent-text)',
                       }}
                     >
                       {t.hotel}
@@ -709,7 +709,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                       style={{
                         ...s.tag,
                         background: 'color-mix(in srgb, var(--accent-end) 15%, transparent)',
-                        color: 'var(--accent-end)',
+                        color: 'var(--accent-text)',
                       }}
                     >
                       {t.activities}
