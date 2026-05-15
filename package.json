@@ -44,7 +44,7 @@
     "@axe-core/playwright": "^4.10.2",
     "@eslint/js": "^9.18.0",
     "@lhci/cli": "^0.15.1",
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "^1.60.0",
     "@types/d3-array": "^3.2.2",
     "@types/d3-geo": "^3.1.0",
     "@types/d3-scale": "^4.0.9",
@@ -63,6 +63,6 @@
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0",
-    "vitest": "4.1.2"
+    "vitest": "4.1.6"
   }
 }
