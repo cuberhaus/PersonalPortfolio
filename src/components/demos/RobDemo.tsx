@@ -8,6 +8,7 @@ import {
 import { T, type DemoTranslations } from '../../i18n/demos/rob-demo';
 import { getThemeColors, lighten, withAlpha } from '../../lib/demo-theme';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -281,7 +282,7 @@ function ArmPanel({ t }: { t: (typeof T)['en'] }) {
 
 // ─── Main component ──────────────────────────────────────────────────────────
 
-export default function RobDemo({ lang = 'en' }: { lang?: Lang }) {
+function RobDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = T[lang] || T.en;
   useDemoLifecycle('demo:rob', { lang });
   return (
@@ -315,3 +316,5 @@ const descStyle: React.CSSProperties = {
   fontSize: '0.8rem',
   marginBottom: '0.75rem',
 };
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(RobDemo, 'rob-robotics');

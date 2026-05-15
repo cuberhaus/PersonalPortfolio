@@ -15,6 +15,7 @@ import {
 
 import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/pro2-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -117,7 +118,7 @@ const styles = {
   },
 } as const;
 
-export default function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
+function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:pro2', { lang });
   const log = useDebug('demo:pro2');
@@ -686,3 +687,5 @@ function Dendrogram({ tree }: { tree: TreeNode }) {
     </svg>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(Pro2Demo, 'pro2');

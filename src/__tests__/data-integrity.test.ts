@@ -9,24 +9,24 @@
 import { describe, it, expect } from 'vitest';
 import { readdirSync } from 'fs';
 import { join } from 'path';
-import demosData from '../data/demos.json';
 import { listDemos } from '../i18n/demo';
 import { LOCALES } from '../config/locales';
 import { ui, languages } from '../i18n/ui';
-import { ICON_PATHS } from '../lib/demo-icons';
-import type { AnyLocalized as LocalizedEntry } from '../i18n/load';
 
 const DEMO_PAGES_DIR = join(__dirname, '..', 'pages', 'demos');
 const demoPageFiles = readdirSync(DEMO_PAGES_DIR)
   .filter((f) => f.endsWith('.astro'))
   .map((f) => f.replace('.astro', ''));
 
-const VALID_ICONS = Object.keys(ICON_PATHS);
-
-const demosCanonical = demosData as LocalizedEntry[];
 const demosEn = listDemos('en');
 
 // ─── Demo data consistency ──────────────────────────────────────
+//
+// Per-entry shape (slug regex, icon enum, tags non-empty, github URLs,
+// default-locale presence) is enforced by the Zod schema in
+// src/i18n/demo-schema.ts at module load — see demo-schema.test.ts for
+// the negative cases. The checks below are cross-cutting properties Zod
+// can't express on a single entry.
 
 describe('Demo data files', () => {
   it('flattens to the same number of demos in every locale', () => {
@@ -38,55 +38,6 @@ describe('Demo data files', () => {
   it('every demo has a unique slug', () => {
     const slugs = demosEn.map((d) => d.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
-  });
-
-  it('every demo has a non-empty title and description in every locale', () => {
-    for (const locale of LOCALES) {
-      for (const demo of listDemos(locale)) {
-        expect(demo.title.trim().length, `${locale}: empty title for ${demo.slug}`).toBeGreaterThan(
-          0
-        );
-        expect(
-          demo.description.trim().length,
-          `${locale}: empty description for ${demo.slug}`
-        ).toBeGreaterThan(0);
-      }
-    }
-  });
-
-  it('every demo has at least one tag', () => {
-    for (const demo of demosEn) {
-      expect(demo.tags.length, `no tags for ${demo.slug}`).toBeGreaterThanOrEqual(1);
-    }
-  });
-
-  it('every demo uses a valid icon', () => {
-    for (const demo of demosEn) {
-      expect(VALID_ICONS, `unknown icon "${demo.icon}" for ${demo.slug}`).toContain(demo.icon);
-    }
-  });
-
-  it('every demo has a github link (string or array)', () => {
-    for (const demo of demosEn) {
-      const gh = demo.github;
-      if (Array.isArray(gh)) {
-        expect(gh.length, `empty github array for ${demo.slug}`).toBeGreaterThan(0);
-        for (const url of gh) {
-          expect(url).toMatch(/^https:\/\/github\.com\//);
-        }
-      } else {
-        expect(gh).toMatch(/^https:\/\/github\.com\//);
-      }
-    }
-  });
-
-  it('icon and slug live in identity (shared across locales by construction)', () => {
-    for (const entry of demosCanonical) {
-      expect(typeof entry.identity.slug, `entry missing identity.slug`).toBe('string');
-      expect(typeof entry.identity.icon, `entry ${entry.identity.slug} missing identity.icon`).toBe(
-        'string'
-      );
-    }
   });
 });
 

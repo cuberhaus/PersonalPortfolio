@@ -4,6 +4,7 @@ import { getThemeColors } from '../../lib/demo-theme';
 
 import { T, type DemoTranslations } from '../../i18n/demos/par-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -346,7 +347,7 @@ interface Props {
   lang?: Lang;
 }
 
-export default function ParDemo({ lang = 'en' }: Props) {
+function ParDemo({ lang = 'en' }: Props) {
   useDemoLifecycle('demo:par', { lang });
   return (
     <div className="par-demo">
@@ -422,3 +423,5 @@ export default function ParDemo({ lang = 'en' }: Props) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(ParDemo, 'par-parallel');

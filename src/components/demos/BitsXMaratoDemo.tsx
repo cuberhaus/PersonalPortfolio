@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef, useId, useMemo } from 'react';
 import LiveAppEmbed from './LiveAppEmbed';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 /* ── frame data ── */
 const FRAME = { w: 472, h: 296, maskPolygon: '2,205 470,185 470,215 2,236' };
@@ -361,7 +362,7 @@ function DiameterExplorer({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  MAIN EXPORT                                                           */
 /* ════════════════════════════════════════════════════════════════════════ */
-export default function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
+function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:bitsx', { lang });
 
@@ -635,3 +636,5 @@ export default function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(BitsXMaratoDemo, 'bitsx-marato');

@@ -3,6 +3,7 @@ import { drawWave, drawPhong, drawCheckerboard, drawExplode } from '../../lib/gr
 
 import { T, type DemoTranslations } from '../../i18n/demos/grafics-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -110,7 +111,7 @@ function ExplodePanel({ t }: { t: (typeof T)['en'] }) {
   );
 }
 
-export default function GraficsDemo({ lang = 'en' }: { lang?: Lang }) {
+function GraficsDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = T[lang] || T.en;
   useDemoLifecycle('demo:grafics', { lang });
   return (
@@ -145,3 +146,5 @@ const descStyle: React.CSSProperties = {
   fontSize: '0.8rem',
   marginBottom: '0.75rem',
 };
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(GraficsDemo, 'grafics');

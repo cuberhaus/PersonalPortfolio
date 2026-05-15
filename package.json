@@ -36,7 +36,8 @@
     "d3-shape": "^3.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "topojson-client": "^3.1.0"
+    "topojson-client": "^3.1.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
