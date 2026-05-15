@@ -82,7 +82,7 @@ html[data-design='editorial'] .about-text p:first-of-type::first-letter {
   line-height: 0.85;
   font-weight: 800;
   padding: 0.1em 0.1em 0 0;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='editorial'] .about-text {
@@ -451,7 +451,7 @@ html[data-design='pixel'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='pixel'] .hero-grid,
@@ -463,7 +463,7 @@ html[data-design='pixel'] .hero-greeting::after {
   content: '_';
   display: inline-block;
   margin-left: 0.25rem;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -557,14 +557,14 @@ html[data-design='terminal'] .hero-name {
 
 html[data-design='terminal'] .hero-greeting::before {
   content: '$ ';
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='terminal'] .hero-greeting::after {
   content: '_';
   display: inline-block;
   margin-left: 0.25rem;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='terminal'] .section-label::before {
@@ -575,7 +575,7 @@ html[data-design='terminal'] .section-label::before {
 
 html[data-design='terminal'] .section-title::before {
   content: '> ';
-  color: var(--accent-start);
+  color: var(--accent-text);
   opacity: 0.8;
 }
 
@@ -584,7 +584,7 @@ html[data-design='terminal'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='terminal'] .card,
@@ -616,7 +616,7 @@ html[data-design='terminal'] .contact-form::before {
   left: 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--accent-start);
+  color: var(--accent-text);
   background: var(--bg-primary);
   padding: 0 0.25rem;
   line-height: 1;
@@ -637,7 +637,7 @@ html[data-design='terminal'] .skill-pill::before,
 html[data-design='terminal'] .demo-tags li::before,
 html[data-design='terminal'] .work-tags li::before {
   content: '[';
-  color: var(--accent-start);
+  color: var(--accent-text);
   margin-right: 0.15rem;
 }
 
@@ -645,14 +645,14 @@ html[data-design='terminal'] .skill-pill:not(.has-tooltip)::after,
 html[data-design='terminal'] .demo-tags li::after,
 html[data-design='terminal'] .work-tags li::after {
   content: ']';
-  color: var(--accent-start);
+  color: var(--accent-text);
   margin-left: 0.15rem;
 }
 
 /* Tooltip pills already use ::after for the tooltip popover,
    so inject the closing bracket via a data-attribute rendered inline. */
 html[data-design='terminal'] .skill-pill.has-tooltip .skill-bracket-close {
-  color: var(--accent-start);
+  color: var(--accent-text);
   margin-left: 0.15rem;
 }
 
@@ -673,7 +673,7 @@ html[data-design='terminal'] .navbar {
 
 html[data-design='terminal'] .nav-logo::before {
   content: '~/';
-  color: var(--accent-start);
+  color: var(--accent-text);
   opacity: 0.7;
 }
 
@@ -691,7 +691,7 @@ html[data-design='terminal'] .nav-link::before {
 html[data-design='terminal'] .hero-cta,
 html[data-design='terminal'] .contact-submit {
   background: transparent;
-  color: var(--accent-start);
+  color: var(--accent-text);
   border: 1px solid var(--accent-start);
   border-radius: 0;
   font-family: var(--font-mono);
@@ -859,7 +859,7 @@ html[data-design='cyber'] .work-tags li {
   letter-spacing: 0.12em;
   font-size: 0.65rem;
   padding: 0.3rem 0.6rem;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='cyber'] .navbar {
@@ -1057,7 +1057,7 @@ html[data-design='notebook'] .section-label {
 
 html[data-design='notebook'] .hero-greeting::before {
   content: 'PS: ';
-  color: var(--accent-start);
+  color: var(--accent-text);
   font-style: italic;
 }
 
@@ -1072,7 +1072,7 @@ html[data-design='notebook'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
   position: relative;
 }
 
@@ -1227,7 +1227,7 @@ html[data-design='notebook'] .form-group textarea {
 html[data-design='notebook'] .form-group input:focus,
 html[data-design='notebook'] .form-group textarea:focus {
   border-bottom-style: solid;
-  border-bottom-color: var(--accent-start);
+  border-bottom-color: var(--accent-text);
   box-shadow: none;
   outline: 0;
 }
@@ -1887,7 +1887,7 @@ html[data-design='academic'] .section-title::before {
   content: counter(acad-section, decimal-leading-zero) '.  ';
   font-family: var(--font-display);
   font-weight: 700;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='academic'] .gradient-text {
@@ -1921,7 +1921,7 @@ html[data-design='academic'] .education-card h3::before,
 html[data-design='academic'] .certification-card h3::before {
   content: '§  ';
   font-family: var(--font-display);
-  color: var(--accent-start);
+  color: var(--accent-text);
   font-weight: 400;
 }
 
@@ -1937,7 +1937,7 @@ html[data-design='academic'] .work-tags li {
   text-transform: none;
   letter-spacing: 0.04em;
   padding: 0.1rem 0;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='academic'] .skill-pill::before,
@@ -1987,7 +1987,7 @@ html[data-design='academic'] .nav-link {
 html[data-design='academic'] .hero-cta,
 html[data-design='academic'] .contact-submit {
   background: transparent;
-  color: var(--accent-start);
+  color: var(--accent-text);
   border: 0;
   border-bottom: 1px solid var(--accent-start);
   border-radius: 0;
@@ -2008,8 +2008,8 @@ html[data-design='academic'] .contact-submit::after {
 
 html[data-design='academic'] .hero-cta:hover,
 html[data-design='academic'] .contact-submit:hover {
-  color: var(--accent-end);
-  border-bottom-color: var(--accent-end);
+  color: var(--accent-text);
+  border-bottom-color: var(--accent-text);
   background: transparent;
   transform: none;
   box-shadow: none;
@@ -2029,7 +2029,7 @@ html[data-design='academic'] .form-group textarea {
 html[data-design='academic'] .form-group input:focus,
 html[data-design='academic'] .form-group textarea:focus {
   outline: 0;
-  border-bottom-color: var(--accent-start);
+  border-bottom-color: var(--accent-text);
   box-shadow: none;
 }
 
@@ -2505,7 +2505,7 @@ html[data-design='risograph'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
   text-shadow:
     -1.5px 1.5px 0 color-mix(in oklab, var(--riso-pink) 70%, transparent),
     1.5px -1.5px 0 color-mix(in oklab, var(--riso-cyan) 70%, transparent);
@@ -3053,7 +3053,7 @@ html[data-design='wabisabi'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
   font-style: italic;
 }
 

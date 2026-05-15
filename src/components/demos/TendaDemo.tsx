@@ -37,7 +37,7 @@ const styles = {
     borderRadius: '0.35rem',
     transition: 'all 0.15s',
   },
-  linkHover: { color: 'var(--accent-start)' },
+  linkHover: { color: 'var(--accent-text)' },
   cartBadge: {
     background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: 'var(--text-primary)',
@@ -78,7 +78,7 @@ const styles = {
   },
   productInfo: { padding: '1rem' },
   productName: { fontWeight: 600, marginBottom: '0.35rem', fontSize: '0.95rem' },
-  productPrice: { color: 'var(--accent-end)', fontWeight: 600, fontSize: '1rem' },
+  productPrice: { color: 'var(--accent-text)', fontWeight: 600, fontSize: '1rem' },
   input: {
     background: 'var(--bg-secondary)',
     border: '1px solid var(--border-color)',
@@ -415,7 +415,7 @@ export default function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
                 </p>
                 <p style={{ marginBottom: '0.5rem' }}>
                   {t.price}{' '}
-                  <strong style={{ color: 'var(--accent-end)' }}>
+                  <strong style={{ color: 'var(--accent-text)' }}>
                     {product.price.toFixed(2)} €
                   </strong>
                 </p>
@@ -512,7 +512,7 @@ export default function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
                             style={{
                               ...styles.button,
                               background: 'color-mix(in srgb, var(--accent-end) 10%, transparent)',
-                              color: 'var(--accent-end)',
+                              color: 'var(--accent-text)',
                               padding: '0.25rem 0.5rem',
                               fontSize: '0.8rem',
                             }}
@@ -531,7 +531,7 @@ export default function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
                     >
                       {t.totalLabel}
                     </td>
-                    <td style={{ ...styles.td, fontWeight: 600, color: 'var(--accent-end)' }}>
+                    <td style={{ ...styles.td, fontWeight: 600, color: 'var(--accent-text)' }}>
                       {cartTotal.toFixed(2)} €
                     </td>
                     <td style={styles.td}></td>
@@ -555,7 +555,7 @@ export default function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
           {orderPlaced ? (
             <div style={{ ...styles.card, textAlign: 'center' as const, padding: '3rem' }}>
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✓</div>
-              <h3 style={{ marginBottom: '0.5rem', color: 'var(--accent-start)' }}>
+              <h3 style={{ marginBottom: '0.5rem', color: 'var(--accent-text)' }}>
                 {t.orderReceived}
               </h3>
               <p style={{ color: 'var(--text-secondary)' }}>{t.simNote}</p>
@@ -699,7 +699,9 @@ export default function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
                 >
                   <p style={{ marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>
                     {t.totalLabel}{' '}
-                    <strong style={{ color: 'var(--accent-end)' }}>{cartTotal.toFixed(2)} €</strong>
+                    <strong style={{ color: 'var(--accent-text)' }}>
+                      {cartTotal.toFixed(2)} €
+                    </strong>
                   </p>
                   <button style={{ ...styles.button, ...styles.primaryBtn }} onClick={placeOrder}>
                     {t.confirmOrder}

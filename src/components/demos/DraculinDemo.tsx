@@ -461,8 +461,8 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
             }}
           >
             {[
-              { label: t.statsLabels.mild, val: 10, color: 'var(--accent-start)' },
-              { label: t.statsLabels.moderate, val: 5, color: 'var(--accent-end)' },
+              { label: t.statsLabels.mild, val: 10, color: 'var(--accent-text)' },
+              { label: t.statsLabels.moderate, val: 5, color: 'var(--accent-text)' },
               { label: t.statsLabels.severe, val: 3, color: 'var(--text-muted)' },
             ].map((d) => (
               <div

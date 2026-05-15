@@ -465,7 +465,7 @@ export default function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
                         padding: '0.1rem 0.35rem',
                         borderRadius: '0.25rem',
                         background: 'var(--glow-color)',
-                        color: 'var(--accent-start)',
+                        color: 'var(--accent-text)',
                         fontWeight: 600,
                       }}
                     >
@@ -694,7 +694,7 @@ export default function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
                   {' → '}
                   <strong style={{ color: 'var(--text-primary)' }}>{runOut.cost.toFixed(2)}</strong>
                   {runOut.cost < runOut.initialCost - 1e-6 && (
-                    <span style={{ color: 'var(--accent-start)', marginLeft: '0.5rem' }}>
+                    <span style={{ color: 'var(--accent-text)', marginLeft: '0.5rem' }}>
                       (−{((1 - runOut.cost / runOut.initialCost) * 100).toFixed(1)}%)
                     </span>
                   )}

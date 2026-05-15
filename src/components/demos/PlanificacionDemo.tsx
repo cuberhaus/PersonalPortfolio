@@ -428,7 +428,7 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
             }}
           >
             {t.constDesc1}
-            <code style={{ color: 'var(--accent-start)' }}>anadir_ciudad</code>
+            <code style={{ color: 'var(--accent-text)' }}>anadir_ciudad</code>
             {t.constDesc2}
           </p>
         </div>
@@ -518,7 +518,7 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
             <a
               href={pDomain}
               download
-              style={{ fontSize: '0.72rem', color: 'var(--accent-start)', textDecoration: 'none' }}
+              style={{ fontSize: '0.72rem', color: 'var(--accent-text)', textDecoration: 'none' }}
             >
               {t.download}
             </a>
@@ -565,7 +565,7 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
             <a
               href={pProblem}
               download
-              style={{ fontSize: '0.72rem', color: 'var(--accent-start)', textDecoration: 'none' }}
+              style={{ fontSize: '0.72rem', color: 'var(--accent-text)', textDecoration: 'none' }}
             >
               {t.download}
             </a>
@@ -616,7 +616,7 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
               background: 'color-mix(in srgb, var(--accent-start) 15%, transparent)',
-              color: 'var(--accent-start)',
+              color: 'var(--accent-text)',
               border: '1px solid color-mix(in srgb, var(--accent-start) 25%, transparent)',
             }}
           >
@@ -698,7 +698,7 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                     fontSize: '0.78rem',
                   }}
                 >
-                  <span style={{ color: 'var(--accent-start)', fontWeight: 700 }}>
+                  <span style={{ color: 'var(--accent-text)', fontWeight: 700 }}>
                     &#10003; {MOCK_PLAN.length} {t.mockSteps}
                   </span>
                   <span style={{ color: 'var(--text-muted)' }}>

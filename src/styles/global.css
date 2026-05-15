@@ -17,6 +17,10 @@
   --accent-start: #6366f1;
   --accent-end: #a855f7;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  /* Text-safe shade of the accent for use as plain text. Guaranteed
+     >=4.5:1 against --bg-secondary (WCAG AA). Use accent-start/-end for
+     gradients, borders, and decorations only. */
+  --accent-text: #818cf8;
 
   --glow-color: rgba(99, 102, 241, 0.15);
   --glow-color-strong: rgba(99, 102, 241, 0.35);
@@ -69,6 +73,7 @@ html[data-theme='light'] {
   --accent-start: #4f46e5;
   --accent-end: #9333ea;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #4f46e5;
 
   --glow-color: rgba(79, 70, 229, 0.15);
   --glow-color-strong: rgba(79, 70, 229, 0.35);

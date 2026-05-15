@@ -368,7 +368,7 @@ export default function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
             borderRadius: 8,
             background: 'color-mix(in srgb, var(--accent-end) 8%, transparent)',
             border: '1px solid color-mix(in srgb, var(--accent-end) 19%, transparent)',
-            color: 'var(--accent-end)',
+            color: 'var(--accent-text)',
             fontSize: '0.85rem',
           }}
         >

@@ -16,6 +16,7 @@ html[data-theme='dracula'] {
   --accent-start: #bd93f9;
   --accent-end: #ff79c6;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #bd93f9;
 
   --glow-color: rgba(189, 147, 249, 0.15);
   --glow-color-strong: rgba(189, 147, 249, 0.35);
@@ -42,6 +43,7 @@ html[data-theme='nord'] {
   --accent-start: #88c0d0;
   --accent-end: #5e81ac;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #88c0d0;
 
   --glow-color: rgba(136, 192, 208, 0.15);
   --glow-color-strong: rgba(136, 192, 208, 0.35);
@@ -68,6 +70,7 @@ html[data-theme='tokyo-night'] {
   --accent-start: #7aa2f7;
   --accent-end: #bb9af7;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #7aa2f7;
 
   --glow-color: rgba(122, 162, 247, 0.15);
   --glow-color-strong: rgba(122, 162, 247, 0.35);
@@ -94,6 +97,7 @@ html[data-theme='catppuccin-mocha'] {
   --accent-start: #cba6f7;
   --accent-end: #f5c2e7;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #cba6f7;
 
   --glow-color: rgba(203, 166, 247, 0.15);
   --glow-color-strong: rgba(203, 166, 247, 0.35);
@@ -120,6 +124,7 @@ html[data-theme='one-dark'] {
   --accent-start: #61afef;
   --accent-end: #c678dd;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #61afef;
 
   --glow-color: rgba(97, 175, 239, 0.15);
   --glow-color-strong: rgba(97, 175, 239, 0.35);
@@ -146,6 +151,7 @@ html[data-theme='nord-light'] {
   --accent-start: #5e81ac;
   --accent-end: #81a1c1;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #49688e;
 
   --glow-color: rgba(94, 129, 172, 0.15);
   --glow-color-strong: rgba(94, 129, 172, 0.35);
@@ -172,6 +178,7 @@ html[data-theme='catppuccin-latte'] {
   --accent-start: #8839ef;
   --accent-end: #ea76cb;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #8230ee;
 
   --glow-color: rgba(136, 57, 239, 0.15);
   --glow-color-strong: rgba(136, 57, 239, 0.35);
@@ -198,6 +205,7 @@ html[data-theme='solarized-light'] {
   --accent-start: #b58900;
   --accent-end: #268bd2;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #826200;
 
   --glow-color: rgba(181, 137, 0, 0.15);
   --glow-color-strong: rgba(181, 137, 0, 0.35);
@@ -224,6 +232,7 @@ html[data-theme='gruvbox-dark'] {
   --accent-start: #fe8019;
   --accent-end: #fb4934;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #fe8019;
 
   --glow-color: rgba(254, 128, 25, 0.18);
   --glow-color-strong: rgba(254, 128, 25, 0.4);
@@ -250,6 +259,7 @@ html[data-theme='synthwave'] {
   --accent-start: #ff2a6d;
   --accent-end: #0ff0fc;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #ff2a6d;
 
   --glow-color: rgba(255, 42, 109, 0.22);
   --glow-color-strong: rgba(255, 42, 109, 0.5);
@@ -276,6 +286,7 @@ html[data-theme='phosphor'] {
   --accent-start: #33ff66;
   --accent-end: #00cc44;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #33ff66;
 
   --glow-color: rgba(51, 255, 102, 0.22);
   --glow-color-strong: rgba(51, 255, 102, 0.5);
@@ -302,6 +313,7 @@ html[data-theme='amber-crt'] {
   --accent-start: #ffb000;
   --accent-end: #ff8c00;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #ffb000;
 
   --glow-color: rgba(255, 176, 0, 0.22);
   --glow-color-strong: rgba(255, 176, 0, 0.5);
@@ -328,6 +340,7 @@ html[data-theme='sepia'] {
   --accent-start: #a85a2e;
   --accent-end: #7a4522;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #904d27;
 
   --glow-color: rgba(168, 90, 46, 0.15);
   --glow-color-strong: rgba(168, 90, 46, 0.35);
@@ -354,6 +367,7 @@ html[data-theme='paper'] {
   --accent-start: #cc4236;
   --accent-end: #2a2a2a;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #be3b30;
 
   --glow-color: rgba(204, 66, 54, 0.12);
   --glow-color-strong: rgba(204, 66, 54, 0.28);
