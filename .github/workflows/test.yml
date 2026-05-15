@@ -106,7 +106,15 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run E2E (${{ matrix.project }})
-        run: npx playwright test --project=${{ matrix.project }}
+        # a11y has 368 deterministic tests — give it 4 workers. Other
+        # projects keep the default workers=1 (set in playwright.config.ts
+        # for CI) since they share fewer assumptions about the dev server.
+        run: |
+          if [ "${{ matrix.project }}" = "a11y" ]; then
+            npx playwright test --project=a11y --workers=4
+          else
+            npx playwright test --project=${{ matrix.project }}
+          fi
 
       - name: Upload Playwright report
         if: always()

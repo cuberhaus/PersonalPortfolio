@@ -41,6 +41,9 @@ export default defineConfig({
       name: 'a11y',
       use: { ...devices['Desktop Chrome'] },
       testMatch: /a11y\.spec\.ts/,
+      // axe results are deterministic — retrying just spends CI minutes
+      // on the same failure. Override the project default of 2 retries.
+      retries: 0,
     },
   ],
   webServer: {
