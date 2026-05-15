@@ -88,11 +88,7 @@ jobs:
           - browser-demos
           - themes
           - debug-overlay
-          # a11y is intentionally excluded from CI for now: the all-themes
-          # axe-core sweep (e2e/a11y.spec.ts) catches a real backlog of
-          # color-contrast and form-label issues that span every demo and
-          # theme. Re-enable once that backlog is cleaned in a dedicated PR.
-          # Run locally with: npx playwright test --project=a11y
+          - a11y
     steps:
       - name: Checkout
         uses: actions/checkout@v4
