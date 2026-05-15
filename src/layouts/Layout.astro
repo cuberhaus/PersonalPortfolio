@@ -54,14 +54,14 @@ const hasCredential = certs.map((cert) => ({
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(base + '/og-image.jpg', Astro.site || Astro.url)} />
+    <meta property="og:image" content={new URL(base + '/og-image.png', Astro.site || Astro.url)} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={Astro.url} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(base + '/og-image.jpg', Astro.site || Astro.url)} />
+    <meta name="twitter:image" content={new URL(base + '/og-image.png', Astro.site || Astro.url)} />
 
     <link rel="canonical" href={Astro.url} />
     {

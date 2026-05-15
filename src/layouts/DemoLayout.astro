@@ -38,7 +38,7 @@ const siteBase = Astro.site || Astro.url;
     <meta property="og:description" content={description} />
     <meta
       property="og:image"
-      content={new URL(ogImage || base + '/og-image.jpg', Astro.site || Astro.url)}
+      content={new URL(ogImage || base + '/og-image.png', Astro.site || Astro.url)}
     />
 
     <!-- Twitter -->
@@ -48,7 +48,7 @@ const siteBase = Astro.site || Astro.url;
     <meta name="twitter:description" content={description} />
     <meta
       name="twitter:image"
-      content={new URL(ogImage || base + '/og-image.jpg', Astro.site || Astro.url)}
+      content={new URL(ogImage || base + '/og-image.png', Astro.site || Astro.url)}
     />
 
     <link rel="canonical" href={Astro.url} />

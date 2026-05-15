@@ -44,6 +44,26 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Start preview server
+        run: |
+          npm run preview > preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fs http://localhost:4321/ > /dev/null; then
+              echo "Preview server up after ${i}s"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Capture OG images into dist/
+        env:
+          OG_BASE_URL: http://localhost:4321
+          OG_OUT_DIR: dist
+        run: npm run og:capture
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
