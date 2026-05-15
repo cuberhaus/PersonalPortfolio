@@ -1295,6 +1295,14 @@ html[data-design='brutalist'] .section-label {
   font-size: 0.85rem;
   background: var(--br-ink);
   color: var(--bg-primary);
+  /* Undo the global .section-label gradient-clipped-to-text trick — the
+     brutalist treatment is a solid block with inverted text, not a
+     transparent-fill gradient. Without these resets the label inherits
+     the global -webkit-text-fill-color: transparent and shows only the
+     dark background pill with invisible text. */
+  -webkit-text-fill-color: currentColor;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
   padding: 0.15rem 0.45rem;
   display: inline-block;
 }
@@ -2485,6 +2493,12 @@ html[data-design='risograph'] .section-label {
   display: inline-block;
   background: var(--text-primary);
   color: var(--bg-primary);
+  /* Undo the global gradient-clipped-to-text trick (see brutalist
+     above). Without these the inverted-block treatment shows the
+     pill but the text is invisible. */
+  -webkit-text-fill-color: currentColor;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
   padding: 0.15rem 0.5rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -3251,6 +3265,12 @@ html[data-design='zine'] .section-label {
   letter-spacing: 0.04em;
   background: var(--zine-ink);
   color: var(--zine-paper);
+  /* Undo the global gradient-clipped-to-text trick (see brutalist
+     above). Without these the inverted-block treatment shows the
+     pill but the text is invisible. */
+  -webkit-text-fill-color: currentColor;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
   padding: 0.2rem 0.5rem;
   text-transform: uppercase;
   display: inline-block;
