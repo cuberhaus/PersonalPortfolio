@@ -298,6 +298,7 @@ function DiameterExplorer({ t }: { t: typeof TRANSLATIONS.en }) {
           value={mm}
           onChange={(e) => setMm(Number(e.target.value))}
           style={{ width: '100%', accentColor: zone.color }}
+          aria-label="Aorta diameter (mm)"
         />
       </div>
 

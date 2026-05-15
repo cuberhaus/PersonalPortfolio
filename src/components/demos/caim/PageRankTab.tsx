@@ -84,10 +84,11 @@ export default function PageRankTab({ lang }: Props) {
       {/* Controls */}
       <div style={styles.controls}>
         <div style={styles.controlGroup}>
-          <label style={styles.label}>
+          <label style={styles.label} htmlFor="caim-pr-damping">
             {t.damping}: <strong>{damping.toFixed(2)}</strong>
           </label>
           <input
+            id="caim-pr-damping"
             type="range"
             min={0.1}
             max={0.99}
@@ -98,8 +99,11 @@ export default function PageRankTab({ lang }: Props) {
           />
         </div>
         <div style={styles.controlGroup}>
-          <label style={styles.label}>{t.initStrategy}</label>
+          <label style={styles.label} htmlFor="caim-pr-init">
+            {t.initStrategy}
+          </label>
           <select
+            id="caim-pr-init"
             value={initStrategy}
             onChange={(e) => setInitStrategy(e.target.value as InitStrategy)}
             style={styles.select}

@@ -388,6 +388,7 @@ export default function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
             <input
               style={{ ...styles.input, width: '80px' }}
               placeholder="e.g. F"
+              aria-label="Species ID"
               value={newId}
               onChange={(e) => setNewId(e.target.value)}
               maxLength={8}
@@ -395,6 +396,7 @@ export default function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
             <input
               style={{ ...styles.input, flex: 1, minWidth: '150px' }}
               placeholder="e.g. AACTGCTTGA"
+              aria-label={t.geneSequence}
               value={newGene}
               onChange={(e) => setNewGene(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && addSpecies()}
@@ -403,10 +405,12 @@ export default function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
               <label
                 style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
                 title={t.kmerTooltip}
+                htmlFor="pro2-k"
               >
                 k=
               </label>
               <input
+                id="pro2-k"
                 type="number"
                 style={{ ...styles.input, width: '55px' }}
                 value={k}

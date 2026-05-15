@@ -371,6 +371,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                   min={0}
                   max={120}
                   value={age}
+                  aria-label={`Traveler ${i + 1} age`}
                   style={{ ...s.input, width: '80px' }}
                   onChange={(e) => {
                     const n = [...ages];
@@ -429,6 +430,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                 min={1}
                 max={30}
                 value={daysMin}
+                aria-label={t.minDays}
                 style={s.input}
                 onChange={(e) => setDaysMin(Math.max(1, Math.min(30, Number(e.target.value))))}
               />
@@ -444,6 +446,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                 min={1}
                 max={60}
                 value={daysMax}
+                aria-label={t.maxDays}
                 style={s.input}
                 onChange={(e) => setDaysMax(Math.max(1, Math.min(60, Number(e.target.value))))}
               />
@@ -464,6 +467,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                 min={1}
                 max={14}
                 value={daysPerCityMin}
+                aria-label={t.minDaysCity}
                 style={s.input}
                 onChange={(e) =>
                   setDaysPerCityMin(Math.max(1, Math.min(14, Number(e.target.value))))
@@ -481,6 +485,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                 min={1}
                 max={14}
                 value={daysPerCityMax}
+                aria-label={t.maxDaysCity}
                 style={s.input}
                 onChange={(e) =>
                   setDaysPerCityMax(Math.max(1, Math.min(14, Number(e.target.value))))
@@ -503,6 +508,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                 min={1}
                 max={10}
                 value={citiesMin}
+                aria-label={t.minCities}
                 style={s.input}
                 onChange={(e) => setCitiesMin(Math.max(1, Math.min(10, Number(e.target.value))))}
               />
@@ -518,6 +524,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                 min={1}
                 max={10}
                 value={citiesMax}
+                aria-label={t.maxCities}
                 style={s.input}
                 onChange={(e) => setCitiesMax(Math.max(1, Math.min(10, Number(e.target.value))))}
               />
@@ -533,6 +540,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
               max={10000}
               step={100}
               value={budget}
+              aria-label={t.budget}
               style={{ width: '100%', accentColor: 'var(--accent-start)' }}
               onChange={(e) => setBudget(Number(e.target.value))}
             />

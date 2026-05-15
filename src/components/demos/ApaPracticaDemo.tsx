@@ -424,6 +424,7 @@ function FeatureSlider({
         min={min}
         max={max}
         step={step}
+        aria-label={`${label} (${unit})`}
         style={{ width: '100%', accentColor: color, height: '6px' }}
       />
     </div>
