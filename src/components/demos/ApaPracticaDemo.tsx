@@ -534,7 +534,7 @@ export default function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
               href="https://github.com/martagranero"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: accent2, textDecoration: 'none' }}
+              style={{ color: 'var(--accent-text)', textDecoration: 'none' }}
             >
               Marta Granero
             </a>
@@ -795,7 +795,7 @@ export default function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
             style={{
               marginLeft: 'auto',
               fontSize: '0.75rem',
-              color: accent2,
+              color: 'var(--accent-text)',
               textDecoration: 'none',
             }}
           >

@@ -299,7 +299,7 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                 margin: '0 0 0.35rem',
                 fontSize: '0.76rem',
                 fontWeight: 600,
-                color: accent1,
+                color: 'var(--accent-text)',
               }}
             >
               {t.fullAppDesc}
@@ -616,7 +616,7 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
               background: 'color-mix(in srgb, var(--accent-start) 15%, transparent)',
-              color: 'var(--accent-text)',
+              color: 'var(--text-primary)',
               border: '1px solid color-mix(in srgb, var(--accent-start) 25%, transparent)',
             }}
           >
