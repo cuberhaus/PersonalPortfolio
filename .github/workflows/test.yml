@@ -88,7 +88,6 @@ jobs:
           - browser-demos
           - themes
           - debug-overlay
-          - a11y
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -113,6 +112,43 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-${{ matrix.project }}
+          path: playwright-report/
+          retention-days: 7
+
+  # a11y is sharded across 4 runners for speed — 368 tests / 4 shards / 4
+  # workers per shard = 16x effective parallelism. retries=0 is set
+  # per-project in playwright.config.ts since axe results don't flake.
+  playwright-a11y:
+    runs-on: ubuntu-latest
+    needs: quality
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E (a11y, shard ${{ matrix.shard }}/4)
+        run: npx playwright test --project=a11y --workers=4 --shard=${{ matrix.shard }}/4
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-a11y-shard-${{ matrix.shard }}
           path: playwright-report/
           retention-days: 7
 
