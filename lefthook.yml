@@ -9,3 +9,12 @@ pre-commit:
       glob: '*.{js,jsx,mjs,cjs,ts,tsx,astro,json,md,yml,yaml,css}'
       run: npx prettier --write {staged_files}
       stage_fixed: true
+
+# Block direct commits to protected branches. Uses commit-msg (not pre-commit)
+# because lefthook skips pre-commit commands without matching staged files,
+# but commit-msg runs on every commit unconditionally. Implemented in Node
+# so the same hook works on Windows, macOS, and Linux without shell quirks.
+commit-msg:
+  commands:
+    no-commit-on-main:
+      run: node scripts/git-hooks/no-commit-on-main.mjs
