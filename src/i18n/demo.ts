@@ -1,4 +1,4 @@
-import demosData from '../data/demos.json';
+import demosData from '../data/demos.json' with { type: 'json' };
 import { flattenForLocale } from './load';
 import type { Locale } from '../config/locales';
 

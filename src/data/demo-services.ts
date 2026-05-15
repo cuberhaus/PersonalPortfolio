@@ -1,4 +1,4 @@
-import registry from './demo-services.json';
+import registry from './demo-services.json' with { type: 'json' };
 
 export type BackendStack =
   | 'fastapi'
