@@ -16,7 +16,11 @@
  *   OG_OUT_DIR    output dir relative to repo root (default "public")
  */
 
-import { chromium } from 'playwright';
+// Use @playwright/test's chromium (matches the version that
+// `npx playwright install` downloads in CI). Importing from the
+// `playwright` package directly pulls in a different pinned version
+// and points at a browser build that was never installed.
+import { chromium } from '@playwright/test';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
