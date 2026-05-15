@@ -19,6 +19,7 @@ default: help
 
 install: ## Install project dependencies
 	npm install
+	npx playwright install chromium
 ifeq ($(OS),Windows_NT)
 	@command -v go >/dev/null 2>&1 || echo "Go not found - install via:  choco install golang   OR   winget install GoLang.Go"
 	@$(CARGO_ENV) command -v cargo >/dev/null 2>&1 || echo "Rust not found - install via:  choco install rustup.install   OR   winget install Rustlang.Rustup"

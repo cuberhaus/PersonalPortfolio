@@ -101,12 +101,12 @@
     }
     document.addEventListener('keydown', function (e) {
       const isCombo =
-      // Ctrl+Alt+Shift+D — primary, no known OS/browser conflicts
-      (e.code === 'KeyD' && e.ctrlKey && e.altKey && e.shiftKey) ||
-      // Ctrl+Backtick — reliable single-modifier fallback
-      (e.code === 'Backquote' && e.ctrlKey && !e.altKey && !e.shiftKey) ||
-      // Alt+Shift+D — kept for convenience where the OS doesn't eat it
-      (e.code === 'KeyD' && e.altKey && e.shiftKey && !e.ctrlKey);
+        // Ctrl+Alt+Shift+D — primary, no known OS/browser conflicts
+        (e.code === 'KeyD' && e.ctrlKey && e.altKey && e.shiftKey) ||
+        // Ctrl+Backtick — reliable single-modifier fallback
+        (e.code === 'Backquote' && e.ctrlKey && !e.altKey && !e.shiftKey) ||
+        // Alt+Shift+D — kept for convenience where the OS doesn't eat it
+        (e.code === 'KeyD' && e.altKey && e.shiftKey && !e.ctrlKey);
       if (isCombo) {
         e.preventDefault();
         toggleDebug();

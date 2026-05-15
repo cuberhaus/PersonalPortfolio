@@ -1,4 +1,4 @@
-import modelWeights from '../data/model_weights.json';
+import modelWeights from '../data/model_weights.json' with { type: 'json' };
 
 export interface Pt {
   x: number;

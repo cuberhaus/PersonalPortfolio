@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import modelData from '../../data/tfg-model-results.json';
+import modelData from '../../data/tfg-model-results.json' with { type: 'json' };
 import LiveAppEmbed from './LiveAppEmbed';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
