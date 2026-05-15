@@ -6,7 +6,7 @@ import ThemeInit from '../components/ThemeInit.astro';
 import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
-import certificationsData from '../data/certifications.json';
+import { certifications as certificationsData } from '../data/loaders';
 import { flattenForLocale } from '../i18n/load';
 import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
 import { SITE_URLS } from '../config/site';
