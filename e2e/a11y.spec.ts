@@ -91,16 +91,10 @@ const HOVER_TARGETS = [
 // styled CTAs that don't use the <button> element.
 const GRADIENT_TEXT_SELECTORS = ['button', 'a.btn', '.btn-primary'];
 
-async function checkGradientTextContrast(page: Page, route: string, theme: string) {
-  await setThemeBeforeLoad(page, theme, route);
-  // `networkidle` never settles under Astro dev because the HMR WebSocket
-  // stays open. `setThemeBeforeLoad` already navigates with
-  // `waitUntil: 'domcontentloaded'`; that's enough — the page is interactive
-  // and CSS is applied. A short settle gives gradients/transitions time to
-  // be reflected in computed styles.
-  await page.waitForTimeout(150);
+type GradientFinding = { tag: string; text: string; ratio: number; bg: string; fg: string };
 
-  const findings = await page.evaluate(
+async function scanGradientButtons(page: Page): Promise<GradientFinding[]> {
+  return await page.evaluate(
     ({ selectors }) => {
       // sRGB → relative luminance per WCAG.
       const lum = (rgb: [number, number, number]) => {
@@ -138,6 +132,10 @@ async function checkGradientTextContrast(page: Page, route: string, theme: strin
 
       const results: Array<{ tag: string; text: string; ratio: number; bg: string; fg: string }> =
         [];
+      // Skip the very tabs we're clicking through to enumerate UI states.
+      // A tab button being the *highlighted* gradient is correct UX, but
+      // we'd flag every other tab in turn.
+      const isTabButton = (el: HTMLElement) => el.hasAttribute('data-tab');
 
       // Skip elements that the user can't actually see. Matches axe-core's
       // behaviour: invisible elements don't have contrast issues because
@@ -156,6 +154,7 @@ async function checkGradientTextContrast(page: Page, route: string, theme: strin
         const els = document.querySelectorAll(sel) as NodeListOf<HTMLElement>;
         for (const el of els) {
           if (!isVisible(el)) continue;
+          if (isTabButton(el)) continue;
           const cs = getComputedStyle(el);
           const bg =
             cs.backgroundImage && cs.backgroundImage !== 'none'
@@ -181,6 +180,44 @@ async function checkGradientTextContrast(page: Page, route: string, theme: strin
     },
     { selectors: GRADIENT_TEXT_SELECTORS }
   );
+}
+
+async function checkGradientTextContrast(page: Page, route: string, theme: string) {
+  await setThemeBeforeLoad(page, theme, route);
+  // `networkidle` never settles under Astro dev because the HMR WebSocket
+  // stays open. `setThemeBeforeLoad` already navigates with
+  // `waitUntil: 'domcontentloaded'`; that's enough — the page is interactive
+  // and CSS is applied. A short settle gives gradients/transitions time to
+  // be reflected in computed styles.
+  await page.waitForTimeout(150);
+
+  // Collect findings from the default state plus each tab state. Tabs are
+  // identified by `data-tab` attribute (our convention). Demos like CAIM
+  // lazy-render tabs, so buttons in non-default tabs only enter the DOM
+  // after we click the tab.
+  const seenKeys = new Set<string>();
+  const findings: GradientFinding[] = [];
+  const collect = (rows: GradientFinding[]) => {
+    for (const r of rows) {
+      const key = `${r.tag}|${r.text}|${r.bg}|${r.fg}`;
+      if (seenKeys.has(key)) continue;
+      seenKeys.add(key);
+      findings.push(r);
+    }
+  };
+
+  collect(await scanGradientButtons(page));
+
+  const tabIds = await page.$$eval('[data-tab]', (els) =>
+    els.map((e) => e.getAttribute('data-tab') ?? '').filter(Boolean)
+  );
+  for (const id of tabIds) {
+    const tabBtn = page.locator(`[data-tab="${id}"]`).first();
+    if ((await tabBtn.count()) === 0) continue;
+    await tabBtn.click({ trial: false }).catch(() => undefined);
+    await page.waitForTimeout(150);
+    collect(await scanGradientButtons(page));
+  }
 
   if (findings.length > 0) {
     console.info(
