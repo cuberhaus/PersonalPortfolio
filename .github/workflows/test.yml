@@ -102,8 +102,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: |
+          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" = "true" ]; then
+            npx playwright install-deps chromium
+          else
+            npx playwright install --with-deps chromium chromium-headless-shell
+          fi
 
       - name: Run E2E (${{ matrix.project }})
         run: npx playwright test --project=${{ matrix.project }}
@@ -139,8 +151,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: |
+          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" = "true" ]; then
+            npx playwright install-deps chromium
+          else
+            npx playwright install --with-deps chromium chromium-headless-shell
+          fi
 
       - name: Run E2E (a11y, shard ${{ matrix.shard }}/4)
         run: npx playwright test --project=a11y --workers=4 --shard=${{ matrix.shard }}/4
@@ -185,9 +209,22 @@ jobs:
         if: steps.baselines.outputs.exists == 'true'
         run: npm ci
 
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        if: steps.baselines.outputs.exists == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install Playwright browsers
         if: steps.baselines.outputs.exists == 'true'
-        run: npx playwright install --with-deps chromium
+        run: |
+          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" = "true" ]; then
+            npx playwright install-deps chromium
+          else
+            npx playwright install --with-deps chromium chromium-headless-shell
+          fi
 
       - name: Run visual-regression
         if: steps.baselines.outputs.exists == 'true'
