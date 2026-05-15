@@ -12,6 +12,7 @@ import { fitZipf, countWords, type ZipfFitResult } from '../../../lib/caim/zipf-
 import { T } from '../../../i18n/demos/caim-zipf';
 import { getThemeColors } from '../../../lib/demo-theme';
 import { debug } from '../../../lib/debug';
+import { gradientButton } from '../_styles';
 
 const demoLog = debug('demo:caim');
 
@@ -380,8 +381,7 @@ const styles: Record<string, React.CSSProperties> = {
     transition: 'all 0.15s',
   },
   corpusBtnActive: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff',
+    ...gradientButton(),
     borderColor: 'transparent',
   },
   textarea: {
@@ -397,14 +397,10 @@ const styles: Record<string, React.CSSProperties> = {
     resize: 'vertical',
   },
   analyzeBtn: {
+    ...gradientButton(),
     padding: '0.35rem 0.7rem',
     borderRadius: '0.35rem',
-    border: 'none',
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff',
-    fontWeight: 600,
     fontSize: '0.72rem',
-    cursor: 'pointer',
     alignSelf: 'flex-end',
   },
   toggleBtn: {
