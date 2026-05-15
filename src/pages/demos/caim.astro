@@ -11,7 +11,12 @@ const t = useTranslations(lang);
 const demo = getDemo('caim', lang);
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="caim">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="caim"
+  ogImage="/og/caim-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}

@@ -11,7 +11,12 @@ const t = useTranslations(lang);
 const demo = getDemo('mpids', lang);
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="mpids">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="mpids"
+  ogImage="/og/mpids-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}

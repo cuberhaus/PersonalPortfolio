@@ -11,7 +11,12 @@ const t = useTranslations(lang);
 const demo = getDemo('sbc-ia', lang);
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="sbc-ia">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="sbc-ia"
+  ogImage="/og/sbc-ia-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}

@@ -11,7 +11,12 @@ const t = useTranslations(lang);
 const demo = getDemo('rob-robotics', lang);
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="rob-robotics">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="rob-robotics"
+  ogImage="/og/rob-robotics-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}

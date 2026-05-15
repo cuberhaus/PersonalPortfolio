@@ -11,7 +11,12 @@ const t = useTranslations(lang);
 const demo = getDemo('phase-transitions', lang);
 ---
 
-<DemoLayout title={demo.title} description={demo.metaDescription} slug="phase-transitions">
+<DemoLayout
+  title={demo.title}
+  description={demo.metaDescription}
+  slug="phase-transitions"
+  ogImage="/og/phase-transitions-og.png"
+>
   <div class="container">
     <DemoHeader
       badge={demo.badge}
