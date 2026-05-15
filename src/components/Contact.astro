@@ -399,7 +399,10 @@ const { num } = Astro.props;
     font-weight: 600;
     font-size: 1rem;
     color: #fff;
-    background: var(--accent-gradient);
+    /* Black overlay darkens any theme's accent gradient enough for white
+       text to clear WCAG AA (4.5:1). Without this, light-accent themes
+       (phosphor, amber-crt, synthwave-cyan, nord, etc.) failed contrast. */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--accent-gradient);
     border: none;
     border-radius: var(--radius-md);
     cursor: pointer;
@@ -407,10 +410,6 @@ const { num } = Astro.props;
       transform var(--transition-fast),
       box-shadow var(--transition-fast);
     margin-top: 1rem;
-    /* Some themes (phosphor green, amber-crt, synthwave cyan) have very
-       light accent gradients; a dark text-shadow keeps white text legible
-       at WCAG AA without changing the gradient itself. */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
   }
 
   .contact-submit:hover {

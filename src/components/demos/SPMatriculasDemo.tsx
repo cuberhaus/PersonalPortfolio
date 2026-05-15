@@ -68,20 +68,21 @@ const s = {
     justifyContent: 'center',
     gap: '0.5rem',
     padding: '0.6rem 1.2rem',
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    // White on theme-accent gradient is consistently legible across themes;
-    // var(--text-primary) was nearly white-on-pastel on the default theme.
+    // Black overlay darkens any theme's accent gradient enough for white
+    // text to clear WCAG AA (4.5:1) — see Contact.astro for the same trick.
+    background:
+      'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: '#fff',
     border: 'none',
     borderRadius: '0.5rem',
     fontSize: '0.85rem',
     fontWeight: 600,
     cursor: 'pointer',
-    textShadow: '0 1px 2px rgba(0, 0, 0, 0.35)',
   } as React.CSSProperties,
   runBtn: {
     padding: '0.6rem 1.5rem',
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
+    background:
+      'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, var(--accent-start), var(--accent-end))',
     color: '#fff',
     border: 'none',
     borderRadius: '0.5rem',
@@ -89,7 +90,6 @@ const s = {
     fontWeight: 600,
     cursor: 'pointer',
     marginTop: '0.75rem',
-    textShadow: '0 1px 2px rgba(0, 0, 0, 0.35)',
   } as React.CSSProperties,
   disabledBtn: {
     // Keep enough opacity that the gradient + text stay legible (WCAG AA),

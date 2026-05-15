@@ -178,13 +178,11 @@ function SimulatedInference({ t }: { t: typeof TRANSLATIONS.en }) {
               fontWeight: 600,
               fontSize: '0.82rem',
               cursor: 'pointer',
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-              // White consistently contrasts better with the accent gradient
-              // than `var(--text-primary)`, which is near-white on light
-              // gradients (phosphor / amber-crt). Drop shadow keeps it
-              // legible across all themes (WCAG AA).
+              // Black overlay darkens light-accent gradients (phosphor,
+              // amber-crt, synthwave-cyan) enough for white text to clear
+              // WCAG AA (4.5:1) without changing the visible accent palette.
+              background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, ${accent1}, ${accent2})`,
               color: '#fff',
-              textShadow: '0 1px 2px rgba(0, 0, 0, 0.55)',
             }}
           >
             {t.runDemo}
