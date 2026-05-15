@@ -3,7 +3,7 @@ import { MOCK_CATEGORIES, MOCK_PRODUCTS, type Category, type Product } from '../
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type View = 'home' | 'category' | 'product' | 'cart' | 'checkout';
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/tenda-demo';
+import { TRANSLATIONS } from '../../i18n/demos/tenda-demo';
 import MockBanner from './MockBanner';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 

@@ -1,7 +1,7 @@
 import { useId, useState } from 'react';
 import LiveAppEmbed from './LiveAppEmbed';
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/planificacion-demo';
+import { TRANSLATIONS } from '../../i18n/demos/planificacion-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 

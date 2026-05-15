@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from 'react';
 
-import { T, type DemoTranslations } from '../../i18n/demos/caim-demo';
+import { T } from '../../i18n/demos/caim-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 

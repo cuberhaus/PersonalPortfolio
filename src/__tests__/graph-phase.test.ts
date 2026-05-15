@@ -4,7 +4,6 @@ import {
   connectedComponents,
   isConnected,
   isComponentComplex,
-  allComponentsComplex,
   analyzeGraph,
   nodePercolation,
   edgePercolation,

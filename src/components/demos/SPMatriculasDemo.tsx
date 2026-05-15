@@ -6,7 +6,7 @@ import {
   type WorkerPipelineResult,
 } from '../../lib/opencv-loader';
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/spmatriculas-demo';
+import { TRANSLATIONS } from '../../i18n/demos/spmatriculas-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 

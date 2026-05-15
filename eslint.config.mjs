@@ -50,7 +50,12 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+        },
       ],
       '@typescript-eslint/no-require-imports': 'warn',
       '@typescript-eslint/ban-ts-comment': 'warn',
@@ -59,7 +64,10 @@ export default [
       'prefer-const': 'warn',
       'prefer-rest-params': 'warn',
       'no-constant-condition': 'warn',
-      'no-empty': 'warn',
+      // Empty `catch {}` blocks are an idiom in this codebase for "best
+      // effort, ignore failure" paths (e.g. localStorage feature detection,
+      // optional analytics) — silencing those as a category, not per-site.
+      'no-empty': ['warn', { allowEmptyCatch: true }],
       'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
       // jsx-a11y demotions for the existing demo components — re-enable as we
       // clean each rule up.
@@ -83,12 +91,31 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.{js,mjs,cjs}', '*.config.{js,mjs,cjs,ts}', 'astro.config.mjs'],
+    // Build / verification / codemod scripts. console.log is the intended
+    // interface here, not a debug residue. Covers the root-level utilities
+    // (verify-site.mjs, check-error.mjs) and everything under scripts/.
+    files: [
+      'scripts/**/*.{js,mjs,cjs}',
+      '*.config.{js,mjs,cjs,ts}',
+      'astro.config.mjs',
+      'verify-site.mjs',
+      'check-error.mjs',
+    ],
     languageOptions: {
       globals: { ...globals.node },
     },
     rules: {
       'no-console': 'off',
+    },
+  },
+  {
+    // OpenCV.js bindings have no usable TypeScript definitions; the `any`
+    // escape is unavoidable and is the documented pattern in the upstream
+    // OpenCV docs. Silence the no-explicit-any noise for this one file so
+    // the lint signal-to-noise stays useful.
+    files: ['src/lib/plate-detection.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
   {

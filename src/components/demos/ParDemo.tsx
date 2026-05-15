@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { computeMandelbrot, jacobiStep, initHeatGrid, computePi } from '../../lib/par-kernels';
 import { getThemeColors } from '../../lib/demo-theme';
 
-import { T, type DemoTranslations } from '../../i18n/demos/par-demo';
+import { T } from '../../i18n/demos/par-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 

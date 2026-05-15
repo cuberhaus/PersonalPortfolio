@@ -12,7 +12,7 @@ import {
   type Transport,
 } from '../../data/sbc-mock';
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/sbc-demo';
+import { TRANSLATIONS } from '../../i18n/demos/sbc-demo';
 import MockBanner from './MockBanner';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';

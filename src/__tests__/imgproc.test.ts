@@ -7,8 +7,6 @@ import {
   bitwiseNot,
   bitwiseOr,
   floodFill,
-  clearBorder,
-  fillHoles,
   labelConnectedComponents,
   extractContours,
   boundingRect,
