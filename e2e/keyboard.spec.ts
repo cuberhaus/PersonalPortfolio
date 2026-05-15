@@ -57,12 +57,30 @@ test.describe('Enter-to-submit handlers', () => {
     await idInput.waitFor({ state: 'visible', timeout: 15_000 });
     await geneInput.waitFor({ state: 'visible', timeout: 15_000 });
 
+    // Pro2Demo is a `client:visible` island, so the inputs render from SSR
+    // markup well before React wires up onChange / onKeyDown. A naïve
+    // fill-then-Enter races hydration: the typed value gets reconciled away
+    // by the first render, and the Enter handler isn't live yet. Poll a
+    // fill until the controlled value sticks — that's a deterministic
+    // signal that React has taken over the input.
+    const fillUntilSticks = async (locator: typeof idInput, value: string) =>
+      expect
+        .poll(
+          async () => {
+            await locator.fill(value);
+            return locator.inputValue();
+          },
+          { timeout: 15_000 }
+        )
+        .toBe(value);
+
+    await fillUntilSticks(idInput, 'Z9');
+    await fillUntilSticks(geneInput, 'AACTGCTTGA');
+    // Last fill leaves focus on geneInput; press Enter directly so we
+    // don't depend on whatever else page.keyboard.press might target.
+    await geneInput.press('Enter');
     // The cleanest stable signal is "the gene input was cleared" — the
     // demo's addSpecies() reset path that the Enter handler triggers.
-    await idInput.fill('Z9');
-    await geneInput.click();
-    await geneInput.fill('AACTGCTTGA');
-    await page.keyboard.press('Enter');
     await expect.poll(() => geneInput.inputValue(), { timeout: 5_000 }).toBe('');
   });
 });
