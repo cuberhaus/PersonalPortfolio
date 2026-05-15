@@ -1,0 +1,41 @@
+name: Visual baselines (manual)
+
+# Manually-triggered job that regenerates the committed visual-regression
+# baselines on a Linux runner (so the snapshots match what `playwright (visual)`
+# will compare against in CI). Output is uploaded as an artifact for the
+# operator to download, unzip into `e2e/visual.spec.ts-snapshots/`, and
+# commit on a feature branch.
+#
+# Run from GitHub UI: Actions → "Visual baselines (manual)" → Run workflow.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Capture baselines (--update-snapshots)
+        run: npx playwright test --project=visual --update-snapshots
+
+      - name: Upload baseline snapshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines
+          path: e2e/visual.spec.ts-snapshots/
+          retention-days: 30
