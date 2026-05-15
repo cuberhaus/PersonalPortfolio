@@ -68,6 +68,45 @@ async function runAxe(page: Page, route: string, theme: string) {
   return blocking;
 }
 
+// Card-ish selectors on the homepage that flip background/colors on hover.
+// Past contrast bugs (yellow-card + faint-text bullets, dark-pills-on-yellow)
+// only manifest in the hover state, so we trigger hover before scanning.
+const HOVER_TARGETS = [
+  '.work-card',
+  '.demo-card',
+  '.timeline-content',
+  '.education-card',
+  '.certification-card',
+  '.skill-group',
+];
+
+async function runAxeOnHover(page: Page, theme: string, selector: string) {
+  await setThemeBeforeLoad(page, theme, '/');
+  const target = page.locator(selector).first();
+  if ((await target.count()) === 0) {
+    return { skipped: true as const, blocking: [] };
+  }
+  await target.scrollIntoViewIfNeeded();
+  await target.hover();
+  // Brief settle for hover transitions; axe reads computed styles, so we want
+  // them to be the post-transition values.
+  await page.waitForTimeout(150);
+
+  // Scope the scan to the hovered element + its descendants so a violation
+  // elsewhere on the page isn't double-counted across selectors.
+  const results = await new AxeBuilder({ page: page as never })
+    .include(selector)
+    .withTags(STANDARD_TAGS)
+    .analyze();
+
+  const blocking = results.violations.filter((v) => BLOCKING_IMPACTS.has(v.impact ?? ''));
+  if (results.violations.length > 0) {
+    const summary = results.violations.map((v) => `${v.impact}: ${v.id} (${v.nodes.length} nodes)`);
+    console.info(`[a11y:hover] ${theme} ${selector} — violations:\n  ${summary.join('\n  ')}`);
+  }
+  return { skipped: false as const, blocking };
+}
+
 for (const theme of ALL_THEME_IDS) {
   test.describe(`a11y [${theme}] — homepage shells`, () => {
     for (const route of HOME_ROUTES) {
@@ -83,6 +122,18 @@ for (const theme of ALL_THEME_IDS) {
       test(`/demos/${slug} has no serious/critical axe violations`, async ({ page }) => {
         const blocking = await runAxe(page, `/demos/${slug}`, theme);
         expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
+      });
+    }
+  });
+
+  test.describe(`a11y [${theme}] — hover states`, () => {
+    for (const selector of HOVER_TARGETS) {
+      test(`hovering ${selector} on / has no serious/critical violations`, async ({ page }) => {
+        const result = await runAxeOnHover(page, theme, selector);
+        if (result.skipped) {
+          test.skip(true, `${selector} not present on /`);
+        }
+        expect(result.blocking, JSON.stringify(result.blocking, null, 2)).toEqual([]);
       });
     }
   });
