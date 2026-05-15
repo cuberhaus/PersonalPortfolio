@@ -11,7 +11,7 @@ import {
 } from '../../lib/desastresSearch';
 import { AssignmentMapFigure, PerHeliBreakdown, QueueStrips } from './DesastresVisual';
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/desastres-ia-demo';
+import { TRANSLATIONS } from '../../i18n/demos/desastres-ia-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 

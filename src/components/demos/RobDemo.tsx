@@ -5,7 +5,7 @@ import {
   forwardKinematicsPositions,
 } from '../../lib/rob-kernels';
 
-import { T, type DemoTranslations } from '../../i18n/demos/rob-demo';
+import { T } from '../../i18n/demos/rob-demo';
 import { getThemeColors, lighten, withAlpha } from '../../lib/demo-theme';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';

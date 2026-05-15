@@ -6,7 +6,7 @@ import {
   type JSBachResult,
 } from '../../lib/jsbach/interpreter';
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/jsbach-demo';
+import { TRANSLATIONS } from '../../i18n/demos/jsbach-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 

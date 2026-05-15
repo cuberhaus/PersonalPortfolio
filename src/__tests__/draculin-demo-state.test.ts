@@ -93,7 +93,7 @@ const QUESTIONS: QuizQuestion[] = [
 
 describe('DraculinDemo — quiz step progression', () => {
   it('starts at question index 0', () => {
-    let idx = 0;
+    const idx = 0;
     expect(idx).toBe(0);
     expect(QUESTIONS[idx].text).toBe('Q1');
   });

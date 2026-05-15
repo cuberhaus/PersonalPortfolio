@@ -7,7 +7,7 @@
  * and the actual Astro page files on disk.
  */
 import { describe, it, expect } from 'vitest';
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { listDemos } from '../i18n/demo';
 import { LOCALES } from '../config/locales';
@@ -67,8 +67,8 @@ describe('Demo pages match demo data', () => {
 describe('Homepage pages consume the sections SSOT', () => {
   const enHomePath = join(__dirname, '..', 'pages', 'index.astro');
   const langHomePath = join(__dirname, '..', 'pages', '[lang]', 'index.astro');
-  const enHome = require('fs').readFileSync(enHomePath, 'utf-8') as string;
-  const langHome = require('fs').readFileSync(langHomePath, 'utf-8') as string;
+  const enHome = readFileSync(enHomePath, 'utf-8') as string;
+  const langHome = readFileSync(langHomePath, 'utf-8') as string;
 
   // Both pages MUST import { sections } from config/sections so the order
   // is centralised in one place. Detailed structural assertions live in
@@ -116,7 +116,7 @@ describe('i18n translations', () => {
 
 describe('Dynamic demo router ([lang]/demos/[demo].astro)', () => {
   const routerPath = join(__dirname, '..', 'pages', '[lang]', 'demos', '[demo].astro');
-  const routerContent = require('fs').readFileSync(routerPath, 'utf-8') as string;
+  const routerContent = readFileSync(routerPath, 'utf-8') as string;
 
   // The router globs every page in src/pages/demos/ at build time, so slug
   // coverage is enforced by the "every slug has a corresponding .astro page"

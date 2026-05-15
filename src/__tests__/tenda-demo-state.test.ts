@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { MOCK_PRODUCTS, MOCK_CATEGORIES } from '../data/tenda-mock';
+import { MOCK_PRODUCTS } from '../data/tenda-mock';
 
 /**
  * Tests for the TendaDemo cart state logic.

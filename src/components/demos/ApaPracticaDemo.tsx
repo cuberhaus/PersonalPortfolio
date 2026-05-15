@@ -13,7 +13,7 @@ const NB = 'https://nbviewer.org/github/cuberhaus/APA_Practica/blob/main';
 const MAIN_NB = 'PracticaAPA-Hipotiroidismo-PolCasacubertaMartaGranero.ipynb';
 const LINEAR_NB = 'PracticaAPA-Hipotiroidismo-ModelsLineals.ipynb';
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/apa-practica-demo';
+import { TRANSLATIONS } from '../../i18n/demos/apa-practica-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
 type Lang = 'en' | 'es' | 'ca';

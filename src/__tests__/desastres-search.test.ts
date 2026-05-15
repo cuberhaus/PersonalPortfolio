@@ -8,7 +8,6 @@ import {
   hillClimbing,
   simulatedAnnealing,
   defaultToyScenario,
-  type Board,
   type Assignment,
 } from '../lib/desastresSearch';
 

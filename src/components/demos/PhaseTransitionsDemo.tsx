@@ -17,7 +17,7 @@ import {
 } from '../../lib/graph-phase';
 import { forceLayout } from '../../lib/mpids';
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/phase-transitions-demo';
+import { TRANSLATIONS } from '../../i18n/demos/phase-transitions-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 

@@ -7,7 +7,7 @@ const FRAME = { w: 472, h: 296, maskPolygon: '2,205 470,185 470,215 2,236' };
 
 const TEAM = ['Pol Casacuberta', 'Tatiana Meyer', 'Pablo Vega', 'Ton Vilà'];
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/bits-xmarato-demo';
+import { TRANSLATIONS } from '../../i18n/demos/bits-xmarato-demo';
 import { useDemoLifecycle } from '../../lib/useDebug';
 
 type Lang = 'en' | 'es' | 'ca';

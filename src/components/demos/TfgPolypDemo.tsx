@@ -15,7 +15,7 @@ const card = {
   padding: '1.5rem',
 } as const;
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/tfg-polyp-demo';
+import { TRANSLATIONS } from '../../i18n/demos/tfg-polyp-demo';
 
 type Lang = 'en' | 'es' | 'ca';
 

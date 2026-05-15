@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/draculin-demo';
+import { TRANSLATIONS } from '../../i18n/demos/draculin-demo';
 import MockBanner from './MockBanner';
 import { debug } from '../../lib/debug';
 import { useDemoLifecycle } from '../../lib/useDebug';

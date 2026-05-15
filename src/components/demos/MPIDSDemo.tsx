@@ -12,7 +12,7 @@ import {
   type MPIDSResult,
 } from '../../lib/mpids';
 
-import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/mpids-demo';
+import { TRANSLATIONS } from '../../i18n/demos/mpids-demo';
 import { debug } from '../../lib/debug';
 import { useDemoLifecycle } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';

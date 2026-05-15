@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { drawWave, drawPhong, drawCheckerboard, drawExplode } from '../../lib/grafics-kernels';
 
-import { T, type DemoTranslations } from '../../i18n/demos/grafics-demo';
+import { T } from '../../i18n/demos/grafics-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
