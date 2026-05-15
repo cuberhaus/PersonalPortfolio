@@ -846,6 +846,8 @@ export default function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
           {t.runLocal}
         </summary>
         <pre
+          tabIndex={0}
+          aria-label="Run locally — shell commands"
           style={{
             margin: '0.75rem 0 0',
             padding: '1rem',

@@ -751,6 +751,8 @@ export default function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
                     {t.compact} {formatAssign(runOut.initial)} → {formatAssign(runOut.final)}
                   </p>
                   <pre
+                    tabIndex={0}
+                    aria-label="Optimization log"
                     style={{
                       margin: 0,
                       maxHeight: 140,
