@@ -69,9 +69,9 @@ const styles = {
     color: 'var(--text-secondary)',
   },
   error: {
-    color: 'var(--accent-text)',
-    background: 'rgba(239, 68, 68, 0.1)',
-    border: '1px solid rgba(239, 68, 68, 0.2)',
+    color: 'var(--text-primary)',
+    background: 'color-mix(in srgb, var(--status-error) 10%, transparent)',
+    border: '1px solid color-mix(in srgb, var(--status-error) 25%, transparent)',
     borderRadius: '0.5rem',
     padding: '0.75rem 1rem',
     fontSize: '0.85rem',

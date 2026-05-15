@@ -465,7 +465,7 @@ export default function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
                         padding: '0.1rem 0.35rem',
                         borderRadius: '0.25rem',
                         background: 'var(--glow-color)',
-                        color: 'var(--accent-text)',
+                        color: 'var(--text-primary)',
                         fontWeight: 600,
                       }}
                     >
