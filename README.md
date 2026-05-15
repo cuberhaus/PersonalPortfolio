@@ -28,6 +28,8 @@ make clean               # Remove dist/, node_modules/, .astro/, .build-stamps/
 make help                # Show all available targets
 ```
 
+For a fresh-contributor walkthrough — what to run, how the test layers stack, what lefthook does on commit — see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ### `make dev-bare`
 
 One command starts everything the demos can use locally (then **Ctrl+C** tears it all down). Use `make stop` to tear down leftover containers, and `make health` to verify all backends are responding.
