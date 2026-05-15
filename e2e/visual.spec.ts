@@ -39,25 +39,47 @@ const ALL_SLUGS = [
   'grafics',
 ];
 
+// CSS injected during the initial document load (before any page script
+// runs) to disable animations / transitions so transient frames can't leak
+// into the screenshot baseline. Done via an init script rather than
+// page.addStyleTag because Astro's ClientRouter can navigate / replace the
+// document mid-load, which destroys the page context and breaks
+// addStyleTag with "Target page, context or browser has been closed".
+const DISABLE_ANIMATIONS_CSS = `
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+`;
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript((css) => {
+    // Inject as early as possible; re-inject on each navigation so
+    // ClientRouter swaps don't drop the override.
+    const inject = () => {
+      if (document.getElementById('__visual-no-anim__')) return;
+      const style = document.createElement('style');
+      style.id = '__visual-no-anim__';
+      style.textContent = css;
+      (document.head || document.documentElement).appendChild(style);
+    };
+    if (document.readyState !== 'loading') inject();
+    else document.addEventListener('DOMContentLoaded', inject, { once: true });
+    document.addEventListener('astro:after-swap', inject);
+  }, DISABLE_ANIMATIONS_CSS);
+});
+
 async function settle(page: Page) {
-  // Wait for hydration / async data to land. networkidle is fine for the
-  // browser-only demos; the live-demo iframes are masked below regardless.
-  await page.waitForLoadState('networkidle').catch(() => undefined);
-  // Disable animations so transient transition states don't leak into the
-  // baseline. Astro/React inline styles aren't affected, but animated
-  // SVG elements and CSS keyframes are.
-  await page.addStyleTag({
-    content: `
-      *, *::before, *::after {
-        animation-duration: 0s !important;
-        animation-delay: 0s !important;
-        transition-duration: 0s !important;
-        transition-delay: 0s !important;
-      }
-    `,
-  });
-  // Settle one more frame for layout to absorb the override.
-  await page.waitForTimeout(150);
+  // Wait for hydration / async data to land. Use 'load' rather than
+  // 'networkidle' — the latter never fires on pages that keep a long-poll
+  // open (e.g. dev-server HMR websocket). 'load' is enough to know the
+  // page's top-level scripts ran, including ClientRouter's view-transition
+  // handlers, so subsequent operations don't race a context destruction.
+  await page.waitForLoadState('load').catch(() => undefined);
+  // Settle one more frame for layout to absorb async hydration.
+  await page.waitForTimeout(300);
 }
 
 test.describe('Homepage visual', () => {
