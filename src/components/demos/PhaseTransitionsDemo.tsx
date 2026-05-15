@@ -19,6 +19,7 @@ import { forceLayout } from '../../lib/mpids';
 
 import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/phase-transitions-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -352,7 +353,7 @@ function SweepChart({ points, t }: { points: SweepPoint[]; t: typeof TRANSLATION
 
 // ─── Main component ───
 
-export default function PhaseTransitionsDemo({ lang = 'en' }: { lang?: Lang }) {
+function PhaseTransitionsDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:phase', { lang });
   const log = useDebug('demo:phase');
@@ -639,3 +640,5 @@ export default function PhaseTransitionsDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(PhaseTransitionsDemo, 'phase-transitions');

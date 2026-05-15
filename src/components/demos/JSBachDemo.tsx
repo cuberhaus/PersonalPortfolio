@@ -8,6 +8,7 @@ import {
 
 import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/jsbach-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -125,7 +126,7 @@ function noteToColor(n: number): string {
   return `hsl(${hue}, 70%, 55%)`;
 }
 
-export default function JSBachDemo({ lang = 'en' }: { lang?: Lang }) {
+function JSBachDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:jsbach', { lang });
   const log = useDebug('demo:jsbach');
@@ -313,3 +314,5 @@ export default function JSBachDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(JSBachDemo, 'jsbach');

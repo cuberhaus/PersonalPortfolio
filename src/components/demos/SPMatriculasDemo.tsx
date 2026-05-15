@@ -8,6 +8,7 @@ import {
 
 import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/spmatriculas-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -256,7 +257,7 @@ function StageVis({ items }: { items: ImageBuffer[] }) {
   );
 }
 
-export default function SPMatriculasDemo({ lang = 'en' }: { lang?: Lang }) {
+function SPMatriculasDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:matriculas', { lang });
   const log = useDebug('demo:matriculas');
@@ -502,3 +503,5 @@ export default function SPMatriculasDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(SPMatriculasDemo, 'matriculas');

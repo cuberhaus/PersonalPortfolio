@@ -4,6 +4,7 @@ import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/draculin-d
 import MockBanner from './MockBanner';
 import { debug } from '../../lib/debug';
 import { useDemoLifecycle } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 type Tab = 'news' | 'chat' | 'quiz' | 'vision' | 'stats';
@@ -549,7 +550,7 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
   );
 }
 
-export default function DraculinDemo({ lang = 'en' }: { lang?: Lang }) {
+function DraculinDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:draculin', { lang });
   const [tab, setTab] = useState<Tab>('news');
@@ -590,3 +591,5 @@ export default function DraculinDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(DraculinDemo, 'draculin');

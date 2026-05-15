@@ -3,6 +3,7 @@ import LiveAppEmbed from './LiveAppEmbed';
 
 import { TRANSLATIONS, type DemoTranslations } from '../../i18n/demos/planificacion-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -210,7 +211,7 @@ function FlightNetwork() {
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  MAIN EXPORT                                                           */
 /* ════════════════════════════════════════════════════════════════════════ */
-export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
+function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
   useDemoLifecycle('demo:planificacion', { lang });
   const log = useDebug('demo:planificacion');
@@ -879,3 +880,5 @@ export default function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
     </div>
   );
 }
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(PlanificacionDemo, 'planificacion');
