@@ -1364,7 +1364,11 @@ html[data-design='brutalist'] .timeline-content:hover {
 
 html[data-design='brutalist'] .card:hover *,
 html[data-design='brutalist'] .work-card:hover *,
-html[data-design='brutalist'] .demo-card:hover * {
+html[data-design='brutalist'] .demo-card:hover *,
+html[data-design='brutalist'] .timeline-content:hover *,
+html[data-design='brutalist'] .education-card:hover *,
+html[data-design='brutalist'] .certification-card:hover *,
+html[data-design='brutalist'] .skill-group:hover * {
   color: #000 !important;
   border-color: #000 !important;
 }
@@ -1380,6 +1384,25 @@ html[data-design='brutalist'] .work-tags li {
   text-transform: uppercase;
   letter-spacing: 0.03em;
   padding: 0.25rem 0.55rem;
+}
+
+/* When a parent card is hovered (yellow background), the `* { color: #000 }`
+   rule above forces pill text to black. Pills themselves need a light
+   background so that black text is readable. */
+html[data-design='brutalist'] .card:hover .skill-pill,
+html[data-design='brutalist'] .work-card:hover .skill-pill,
+html[data-design='brutalist'] .demo-card:hover .skill-pill,
+html[data-design='brutalist'] .timeline-content:hover .skill-pill,
+html[data-design='brutalist'] .education-card:hover .skill-pill,
+html[data-design='brutalist'] .certification-card:hover .skill-pill,
+html[data-design='brutalist'] .skill-group:hover .skill-pill,
+html[data-design='brutalist'] .card:hover .demo-tags li,
+html[data-design='brutalist'] .work-card:hover .demo-tags li,
+html[data-design='brutalist'] .demo-card:hover .demo-tags li,
+html[data-design='brutalist'] .card:hover .work-tags li,
+html[data-design='brutalist'] .work-card:hover .work-tags li,
+html[data-design='brutalist'] .demo-card:hover .work-tags li {
+  background: #fff !important;
 }
 
 html[data-design='brutalist'] .navbar {
