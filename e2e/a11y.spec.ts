@@ -85,13 +85,11 @@ const HOVER_TARGETS = [
 // background is a gradient because it can't sample one definitive color, so
 // real low-contrast text on gradients slips through. We compute the contrast
 // ourselves for these targets and assert >= 4.5:1 (WCAG AA for normal text).
-const GRADIENT_TEXT_SELECTORS = [
-  // SPMatriculas demo — pastel-gradient buttons that historically went
-  // near-white-on-near-white.
-  'button',
-  'a.btn',
-  '.btn-primary',
-];
+//
+// `button` already covers the icon-only FAB (.scroll-to-top), .contact-submit,
+// and every demo's run/upload button. `a.btn` and `.btn-primary` catch link-
+// styled CTAs that don't use the <button> element.
+const GRADIENT_TEXT_SELECTORS = ['button', 'a.btn', '.btn-primary'];
 
 async function checkGradientTextContrast(page: Page, route: string, theme: string) {
   await setThemeBeforeLoad(page, theme, route);
@@ -253,9 +251,11 @@ for (const theme of ALL_THEME_IDS) {
   });
 
   test.describe(`a11y [${theme}] — gradient text contrast`, () => {
-    // Demo routes that use gradient buttons / cards heavily. Add more if more
-    // demos start using gradient backgrounds for interactive controls.
-    const routes = ['/demos/matriculas', '/demos/tfg-polyps', '/'];
+    // Cover every route that the rest of the a11y suite already visits, so
+    // any new demo introducing a gradient button gets caught automatically.
+    // The check is fast (one page.evaluate per route) and naturally skips
+    // routes that have no gradient buttons.
+    const routes = [...HOME_ROUTES, ...DEMO_SLUGS.map((slug) => `/demos/${slug}`)];
     for (const route of routes) {
       test(`${route} text-on-gradient meets WCAG AA (4.5:1)`, async ({ page }) => {
         const findings = await checkGradientTextContrast(page, route, theme);

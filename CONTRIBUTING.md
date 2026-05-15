@@ -64,6 +64,41 @@ Run the same checks CI runs, locally:
 
 `make test` runs _everything_ including the optional Go and Rust backend tests in sibling repos — that's the full CI equivalent.
 
+### A11y test patterns
+
+The `a11y` Playwright project ([e2e/a11y.spec.ts](e2e/a11y.spec.ts)) runs three kinds of audit, each cycling through every theme:
+
+| Block                    | What it catches                                                                                                                                                                                                                                                            |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `homepage shells`        | Standard axe-core scan over `/`, `/es/`, `/ca/` per theme. Catches missing labels, ARIA misuse, color-contrast on solid backgrounds.                                                                                                                                       |
+| `demo routes`            | Same axe scan over each demo route. Catches a11y issues unique to interactive demo UIs.                                                                                                                                                                                    |
+| `hover states`           | Hovers each card-ish selector (`.work-card`, `.timeline-content`, etc.) before scanning. Catches the **yellow-card-with-faint-bullets** class of bug — issues that only manifest on `:hover`.                                                                              |
+| `gradient text contrast` | Custom WCAG luminance check on `button` / `a.btn` / `.btn-primary`. axe-core returns `incomplete` (not `violation`) when the background is a gradient — we sample the gradient ourselves and assert >= 4.5:1. Skips invisible elements (`display:none`, `opacity < 0.05`). |
+
+#### When to add a new selector or route
+
+- **New gradient button:** if it's `button`/`a.btn`/`.btn-primary`, it's already covered when its route is in the test list. Otherwise add the selector to `GRADIENT_TEXT_SELECTORS`.
+- **New card-style component with hover state changes:** add the selector to `HOVER_TARGETS`.
+- **New route with interactive UI worth hover-testing:** the hover block hits `/` only; the gradient-contrast block hits a small `routes` array. Extend `routes` to include the new path.
+
+#### Fixing gradient-text contrast violations
+
+The standard fix is a black overlay layer that darkens the gradient enough for white text:
+
+```css
+background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--accent-gradient);
+color: #fff;
+```
+
+This works across every theme (the worst offender is phosphor — pure green; even there a 0.5 overlay clears 4.5:1). See [Contact.astro](src/components/Contact.astro), [ScrollToTop.astro](src/components/ScrollToTop.astro), and the demo button styles for live examples.
+
+For inline-style React components, the equivalent is:
+
+```tsx
+background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, ${accent1}, ${accent2})`,
+color: '#fff',
+```
+
 ## Adding a new demo
 
 The end-to-end checklist (where to put files, how to wire i18n, how to register routes, what tests to add) lives in [docs/adding-a-demo.md](docs/adding-a-demo.md). The codemods in `scripts/wrap-demos-with-error-boundary.mjs` and `scripts/wire-demos-og-image.mjs` will pick up new demos automatically when re-run.
