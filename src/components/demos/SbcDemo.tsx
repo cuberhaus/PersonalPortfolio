@@ -691,7 +691,7 @@ export default function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                       style={{
                         ...s.tag,
                         background: 'color-mix(in srgb, var(--accent-start) 15%, transparent)',
-                        color: 'var(--accent-text)',
+                        color: 'var(--text-primary)',
                       }}
                     >
                       {t.hotel}

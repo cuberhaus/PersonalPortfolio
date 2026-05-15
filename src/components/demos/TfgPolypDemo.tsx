@@ -561,8 +561,11 @@ function CycleGanVisualizer({ t }: { t: typeof TRANSLATIONS.en }) {
               fontWeight: 600,
               cursor: 'pointer',
               border: direction === d ? `1px solid ${accent1}` : '1px solid var(--border-color)',
-              background: direction === d ? `${accent1}18` : 'var(--bg-card-hover)',
-              color: direction === d ? accent1 : 'var(--text-secondary)',
+              background:
+                direction === d
+                  ? 'color-mix(in srgb, var(--accent-start) 10%, transparent)'
+                  : 'var(--bg-card-hover)',
+              color: direction === d ? 'var(--accent-text)' : 'var(--text-secondary)',
             }}
           >
             {d === 'mask2polyp' ? t.m2p : t.p2m}
@@ -621,7 +624,9 @@ function CycleGanVisualizer({ t }: { t: typeof TRANSLATIONS.en }) {
         </div>
 
         {/* Arrow */}
-        <div style={{ color: accent1, fontSize: '1.5rem', fontWeight: 700 }}>{'\u2192'}</div>
+        <div style={{ color: 'var(--accent-text)', fontSize: '1.5rem', fontWeight: 700 }}>
+          {'\u2192'}
+        </div>
 
         {/* Output */}
         <div
