@@ -141,9 +141,23 @@ async function checkGradientTextContrast(page: Page, route: string, theme: strin
       const results: Array<{ tag: string; text: string; ratio: number; bg: string; fg: string }> =
         [];
 
+      // Skip elements that the user can't actually see. Matches axe-core's
+      // behaviour: invisible elements don't have contrast issues because
+      // there's nothing to read. Reduces false positives for FAB buttons,
+      // closed modals, etc.
+      const isVisible = (el: HTMLElement): boolean => {
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden') return false;
+        if (parseFloat(cs.opacity) < 0.05) return false;
+        const rect = el.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return false;
+        return true;
+      };
+
       for (const sel of selectors) {
         const els = document.querySelectorAll(sel) as NodeListOf<HTMLElement>;
         for (const el of els) {
+          if (!isVisible(el)) continue;
           const cs = getComputedStyle(el);
           const bg =
             cs.backgroundImage && cs.backgroundImage !== 'none'
