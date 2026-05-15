@@ -95,9 +95,12 @@ export default function ZipfTab({ lang }: Props) {
           </div>
         </div>
         <div style={{ ...styles.controlGroup, flex: 1, minWidth: 200 }}>
-          <label style={styles.label}>{t.customText}</label>
+          <label style={styles.label} htmlFor="caim-zipf-custom">
+            {t.customText}
+          </label>
           <div style={{ display: 'flex', gap: '0.4rem' }}>
             <textarea
+              id="caim-zipf-custom"
               value={customText}
               onChange={(e) => setCustomText(e.target.value)}
               placeholder={t.customPlaceholder}

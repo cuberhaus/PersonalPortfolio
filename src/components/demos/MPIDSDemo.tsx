@@ -402,8 +402,11 @@ export default function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
 
         <div style={s.row}>
           <span style={s.label}>{t.random}</span>
-          <label style={s.label}>N=</label>
+          <label style={s.label} htmlFor="mpids-random-n">
+            N=
+          </label>
           <input
+            id="mpids-random-n"
             type="number"
             min={3}
             max={300}
@@ -411,8 +414,11 @@ export default function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
             onChange={(e) => setRandomN(Math.min(300, Math.max(3, +e.target.value)))}
             style={s.input}
           />
-          <label style={s.label}>p=</label>
+          <label style={s.label} htmlFor="mpids-random-p">
+            p=
+          </label>
           <input
+            id="mpids-random-p"
             type="number"
             min={0.01}
             max={1}
@@ -427,8 +433,11 @@ export default function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
         </div>
 
         <div style={s.row}>
-          <span style={s.label}>{t.upload}</span>
+          <label style={s.label} htmlFor="mpids-upload">
+            {t.upload}
+          </label>
           <input
+            id="mpids-upload"
             type="file"
             accept=".txt"
             onChange={handleFileUpload}

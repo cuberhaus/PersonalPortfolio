@@ -505,6 +505,7 @@ export default function PhaseTransitionsDemo({ lang = 'en' }: { lang?: Lang }) {
                 value={gridSide}
                 onChange={(e) => setGridSide(+e.target.value)}
                 style={s.slider}
+                aria-label={t.gridSide}
               />
               <span style={s.value}>
                 {gridSide}×{gridSide} = {t.nodesCount.replace('{0}', String(gridSide * gridSide))}
@@ -521,6 +522,7 @@ export default function PhaseTransitionsDemo({ lang = 'en' }: { lang?: Lang }) {
                 value={nodeCount}
                 onChange={(e) => setNodeCount(+e.target.value)}
                 style={s.slider}
+                aria-label={t.nodes}
               />
               <span style={s.value}>{nodeCount}</span>
               <span style={s.label}>{family === 'binomial' ? 'p:' : 'r:'}</span>
@@ -532,6 +534,7 @@ export default function PhaseTransitionsDemo({ lang = 'en' }: { lang?: Lang }) {
                 value={param}
                 onChange={(e) => setParam(+e.target.value)}
                 style={s.slider}
+                aria-label={family === 'binomial' ? 'p (edge probability)' : 'r (radius)'}
               />
               <span style={s.value}>{param.toFixed(2)}</span>
             </>
@@ -585,6 +588,7 @@ export default function PhaseTransitionsDemo({ lang = 'en' }: { lang?: Lang }) {
             value={percProb}
             onChange={(e) => setPercProb(+e.target.value)}
             style={s.slider}
+            aria-label={t.retention}
           />
           <span style={s.value}>{percProb.toFixed(2)}</span>
         </div>

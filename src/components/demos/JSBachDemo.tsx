@@ -227,6 +227,7 @@ export default function JSBachDemo({ lang = 'en' }: { lang?: Lang }) {
           onChange={(e) => setCode(e.target.value)}
           onKeyDown={handleKeyDown}
           spellCheck={false}
+          aria-label={t.codeEditor}
         />
         <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
           <button style={{ ...styles.button, ...styles.primaryBtn }} onClick={run}>
