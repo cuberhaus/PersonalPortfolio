@@ -17,6 +17,8 @@ endif
 
 default: help
 
+##@ Setup
+
 install: ## Install project dependencies
 	npm install
 ifeq ($(OS),Windows_NT)
@@ -27,6 +29,8 @@ else
 	@$(CARGO_ENV) \
 	command -v cargo >/dev/null 2>&1 || { echo "Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; }
 endif
+
+##@ Dev
 
 dev: ## Start Astro dev server with hot-reload (no demo backends)
 	npm run dev
@@ -110,6 +114,8 @@ health: ## Check if all demo backends are responding
 SENTRY_DIR      = $(PARENT)/sentry-self-hosted
 SENTRY_COMPOSE  = docker compose -f "$(SENTRY_DIR)/docker-compose.yml"
 
+##@ Observability (Sentry)
+
 obs-install: ## Run the one-time Sentry installer (~15-20 min, prompts for admin email/password)
 	@if [ ! -d "$(SENTRY_DIR)" ]; then \
 		echo "Sentry repo not found at: $(SENTRY_DIR)"; \
@@ -154,6 +160,8 @@ obs-wipe: ## DESTRUCTIVE: stop Sentry and delete ALL data (events, users, projec
 # drift). PersonalPortfolio is the orchestrator, not the owner.
 TFG_DIR_MAKE = $(PARENT)/TFG
 
+##@ MLOps overlay
+
 mlops-up: ## Start the TFG MLOps overlay (MLflow :15000, Evidently :15001, prediction-log :15432)
 	@$(MAKE) --no-print-directory -C "$(TFG_DIR_MAKE)" mlops-up
 
@@ -183,6 +191,8 @@ mlops-down: ## Stop the TFG MLOps overlay (volumes preserved)
 # but without the Sentry / MLOps step. Use that for day-to-day demo
 # work and `make all` when you want the full observability surface.
 TFG_MLOPS_ENV = $(PARENT)/TFG/observability/.env.mlops
+
+##@ Full stack
 
 all: ## Spin up EVERYTHING: Sentry + MLOps overlay + all demos + Astro
 	@echo ""
@@ -225,6 +235,8 @@ all-stop: ## Stop everything started by `make all` (demos + MLOps + Sentry)
 		echo "  ⏭  Sentry not installed; nothing to stop."; \
 	fi
 
+##@ Build
+
 build-images: ## Build all demo Docker images (incremental — sub-second when nothing changed)
 	@echo ""
 	@echo "━━━ Building $(words $(DEMO_TARGETS)) demo Docker images ($(NPROC) parallel) ━━━"
@@ -256,6 +268,23 @@ rebuild: ## Force rebuild all Docker images (ignore cache) and Astro site
 
 preview: ## Serve the built static site from dist/ to verify production behavior
 	npm run preview
+
+test-a11y: ## Run the a11y axe sweep locally (4 workers, fast)
+	npx playwright test --project=a11y --workers=4
+
+test-a11y-grep: ## Run a11y subset, e.g. `make test-a11y-grep PATTERN=dark.*tfg`
+	npx playwright test --project=a11y --workers=4 --grep "$(PATTERN)"
+
+##@ Test
+
+test-keyboard: ## Run the keyboard-navigation e2e suite
+	npx playwright test --project=keyboard
+
+test-visual: ## Run the visual-regression suite against committed baselines
+	npx playwright test --project=visual
+
+test-visual-update: ## Regenerate visual-regression baselines locally (must commit them; CI is Linux-only)
+	npx playwright test --project=visual --update-snapshots
 
 test: ## Run ALL test suites (portfolio + every demo backend)
 	npm test
@@ -294,15 +323,28 @@ test: ## Run ALL test suites (portfolio + every demo backend)
 	@echo ""
 	@echo "All test suites passed."
 
+##@ Cleanup
+
 clean: ## Remove build artifacts and node_modules
 	rm -rf dist/ node_modules/ .astro/ .build-stamps/
 
+##@ General
+
 help: ## Show this help message
-	@echo "Available commands:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@awk ' \
+		/^##@/      { printf "\n\033[1m%s\033[0m\n", substr($$0, 5); next } \
+		/^[a-zA-Z_-]+:.*##/ { \
+			split($$0, parts, ":.*## *"); \
+			printf "  \033[36m%-20s\033[0m %s\n", parts[1], parts[2] \
+		} \
+	' $(MAKEFILE_LIST)
 	@echo ""
 	@echo "Demo backends started by dev-bare / all:"
-	@bash scripts/dev-all-demos.sh --list
+	@if command -v jq >/dev/null 2>&1; then \
+		bash scripts/dev-all-demos.sh --list; \
+	else \
+		echo "  (install jq to see the demo backend list: apt install jq / brew install jq)"; \
+	fi
 
 PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
 
