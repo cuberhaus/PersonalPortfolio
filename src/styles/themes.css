@@ -158,6 +158,11 @@ html[data-theme='nord-light'] {
 
   --border-color: #d8dee9;
   --border-color-hover: #c8ced9;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
 }
 
 /* ── Catppuccin Latte ────────────────────────────────────── */
@@ -185,6 +190,11 @@ html[data-theme='catppuccin-latte'] {
 
   --border-color: #ccd0da;
   --border-color-hover: #bcc0cc;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
 }
 
 /* ── Solarized Light ─────────────────────────────────────── */
@@ -212,6 +222,11 @@ html[data-theme='solarized-light'] {
 
   --border-color: #d6ccb3;
   --border-color-hover: #c9bfa5;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
 }
 
 /* ── Gruvbox Dark ────────────────────────────────────────── */
@@ -347,6 +362,11 @@ html[data-theme='sepia'] {
 
   --border-color: #d8c8a8;
   --border-color-hover: #c8b794;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
 }
 
 /* ── Paper ───────────────────────────────────────────────── */
@@ -374,4 +394,9 @@ html[data-theme='paper'] {
 
   --border-color: #e0e0dd;
   --border-color-hover: #c8c8c5;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
 }

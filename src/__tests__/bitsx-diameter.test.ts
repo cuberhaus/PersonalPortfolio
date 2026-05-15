@@ -8,30 +8,30 @@ const labels: DiameterLabels = {
 };
 
 describe('BitsXLaMarato — diameter zone classification', () => {
-  it('< 30mm → typical (green)', () => {
+  it('< 30mm → typical (success)', () => {
     const z = diameterZone(20, labels);
     expect(z.label).toBe('Typical');
-    expect(z.color).toBe('#22c55e');
+    expect(z.color).toBe('var(--status-success)');
   });
 
   it('29.9mm → still typical', () => {
     expect(diameterZone(29.9, labels).label).toBe('Typical');
   });
 
-  it('30mm → follow-up (yellow)', () => {
+  it('30mm → follow-up (warning)', () => {
     const z = diameterZone(30, labels);
     expect(z.label).toBe('Follow-up');
-    expect(z.color).toBe('#eab308');
+    expect(z.color).toBe('var(--status-warning)');
   });
 
   it('44mm → still follow-up', () => {
     expect(diameterZone(44, labels).label).toBe('Follow-up');
   });
 
-  it('45mm → concern (red)', () => {
+  it('45mm → concern (error)', () => {
     const z = diameterZone(45, labels);
     expect(z.label).toBe('Concern');
-    expect(z.color).toBe('#ef4444');
+    expect(z.color).toBe('var(--status-error)');
   });
 
   it('65mm → concern', () => {

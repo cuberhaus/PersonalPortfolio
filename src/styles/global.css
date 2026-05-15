@@ -47,7 +47,15 @@
   --font-display: var(--font-sans);
   --font-pixel: 'Press Start 2P', ui-monospace, monospace;
 
-  --status-online: #22c55e;
+  /* Semantic status colors. Verified >=4.5:1 against bg-primary,
+     bg-secondary, and bg-card across every dark theme. Light themes
+     override these in their own blocks. */
+  --status-success: #4ade80;
+  --status-error: #fca5a5;
+  --status-warning: #fde047;
+  --status-info: #93c5fd;
+  /* Legacy alias kept for backward compatibility — same hue family. */
+  --status-online: var(--status-success);
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.2);
@@ -80,6 +88,12 @@ html[data-theme='light'] {
 
   --border-color: #e4e4e7;
   --border-color-hover: #d4d4d8;
+
+  /* Light-theme status overrides — darker shades for contrast on light bgs. */
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
 }
 
 /* ── Reset ────────────────────────────────────────────────── */
