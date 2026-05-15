@@ -9,11 +9,26 @@
 import { test, expect, type Page } from '@playwright/test';
 
 const ALL_SLUGS = [
-  'tfg-polyps', 'draculin', 'bitsx-marato', 'matriculas',
-  'joc-eda', 'jsbach', 'tenda', 'pro2', 'mpids',
-  'phase-transitions', 'planificacion', 'desastres-ia',
-  'apa-practica', 'prop', 'caim', 'sbc-ia', 'par-parallel',
-  'rob-robotics', 'algorithms', 'grafics',
+  'tfg-polyps',
+  'draculin',
+  'bitsx-marato',
+  'matriculas',
+  'joc-eda',
+  'jsbach',
+  'tenda',
+  'pro2',
+  'mpids',
+  'phase-transitions',
+  'planificacion',
+  'desastres-ia',
+  'apa-practica',
+  'prop',
+  'caim',
+  'sbc-ia',
+  'par-parallel',
+  'rob-robotics',
+  'algorithms',
+  'grafics',
 ];
 
 // ─── Demo pages load without errors ─────────────────────────────
@@ -91,7 +106,9 @@ test.describe('JSBach demo', () => {
     await expect(runBtn).toBeVisible();
     await runBtn.dispatchEvent('click');
     await expect(page.getByText(/output|salida|sortida/i).first()).toBeVisible();
-    await expect(page.getByText(/notes? generated|notas generadas|notes generades/i).first()).toBeVisible();
+    await expect(
+      page.getByText(/notes? generated|notas generadas|notes generades/i).first()
+    ).toBeVisible();
   });
 });
 
@@ -136,7 +153,9 @@ test.describe('Tenda demo', () => {
     const addBtn = page.getByRole('button', { name: /add to cart|añadir|afegir/i }).first();
     await expect(addBtn).toBeVisible();
     await addBtn.dispatchEvent('click');
-    await expect(page.locator('#tenda-mock-fallback nav')).toContainText(/cart\s*1|carrito\s*1|carret\s*1/i);
+    await expect(page.locator('#tenda-mock-fallback nav')).toContainText(
+      /cart\s*1|carrito\s*1|carret\s*1/i
+    );
   });
 });
 
@@ -145,7 +164,9 @@ test.describe('Tenda demo', () => {
 test.describe('Desastres IA demo', () => {
   test('runs the browser solver and renders optimized output', async ({ page }) => {
     await page.goto('/demos/desastres-ia', { waitUntil: 'domcontentloaded' });
-    const runButton = page.getByRole('button', { name: /run search|ejecutar búsqueda|executar cerca/i }).first();
+    const runButton = page
+      .getByRole('button', { name: /run search|ejecutar búsqueda|executar cerca/i })
+      .first();
     await runButton.scrollIntoViewIfNeeded();
     await page.waitForTimeout(2000);
 
@@ -154,8 +175,12 @@ test.describe('Desastres IA demo', () => {
     await expect(runButton).toBeVisible();
 
     await runButton.dispatchEvent('click');
-    await expect(page.locator('text=/H2 cost|Coste H2|Cost H2/i').first()).toBeVisible({ timeout: 5000 });
-    await expect(page.locator('text=/Final queues|Colas finales|Cues finals/i').first()).toBeVisible();
+    await expect(page.locator('text=/H2 cost|Coste H2|Cost H2/i').first()).toBeVisible({
+      timeout: 5000,
+    });
+    await expect(
+      page.locator('text=/Final queues|Colas finales|Cues finals/i').first()
+    ).toBeVisible();
   });
 });
 
@@ -168,15 +193,25 @@ test.describe('Pro2 WPGMA demo', () => {
     await speciesHeading.scrollIntoViewIfNeeded();
     await page.waitForTimeout(3000);
 
-    await expect(page.getByRole('button', { name: /load sample|cargar muestra|carregar mostra/i })).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /load sample|cargar muestra|carregar mostra/i })
+    ).toBeVisible();
     await expect(page.locator('table').first()).toContainText('A');
-    await expect(page.locator('text=/Distance Table|Tabla de Distancias|Taula de Distàncies/i').first()).toBeVisible();
+    await expect(
+      page.locator('text=/Distance Table|Tabla de Distancias|Taula de Distàncies/i').first()
+    ).toBeVisible();
 
-    await page.getByRole('button', { name: /initialize clusters|inicializar clústeres|inicialitzar clústers/i }).dispatchEvent('click');
+    await page
+      .getByRole('button', {
+        name: /initialize clusters|inicializar clústeres|inicialitzar clústers/i,
+      })
+      .dispatchEvent('click');
     const runAll = page.getByRole('button', { name: /run all|ejecutar todo|executar tot/i });
     await expect(runAll).toBeVisible({ timeout: 5000 });
     await runAll.dispatchEvent('click');
-    await expect(page.locator('text=/Phylogenetic Tree|Árbol Filogenético|Arbre Filogenètic/i').first()).toBeVisible({ timeout: 5000 });
+    await expect(
+      page.locator('text=/Phylogenetic Tree|Árbol Filogenético|Arbre Filogenètic/i').first()
+    ).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -268,7 +303,10 @@ test.describe('Draculin demo', () => {
     await page.getByRole('button', { name: /DracuQuiz/ }).click();
     // Answer all 6 questions with Yes
     for (let i = 0; i < 6; i++) {
-      await page.getByRole('button', { name: /^yes$|^sí$/i }).first().click();
+      await page
+        .getByRole('button', { name: /^yes$|^sí$/i })
+        .first()
+        .click();
     }
     // Should show result and restart button
     await expect(page.getByRole('button', { name: /restart|volver/i })).toBeVisible();
@@ -309,9 +347,13 @@ test.describe('TFG Polyp demo', () => {
     const runBtn = page.getByRole('button', { name: /run demo/i });
     await runBtn.click();
     // Should show progress text during inference
-    await expect(page.locator('text=/loading|preprocessing|forward|nms/i').first()).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('text=/loading|preprocessing|forward|nms/i').first()).toBeVisible({
+      timeout: 5000,
+    });
     // Wait for completion
-    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({
+      timeout: 10000,
+    });
   });
 
   test('confidence slider filters detection boxes', async ({ page }) => {
@@ -320,8 +362,12 @@ test.describe('TFG Polyp demo', () => {
     // Run inference first
     await page.getByRole('button', { name: /run demo/i }).click();
     // Verify the click registered by checking for progress text
-    await expect(page.locator('text=/loading|preprocessing|forward|nms/i').first()).toBeVisible({ timeout: 5000 });
-    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('text=/loading|preprocessing|forward|nms/i').first()).toBeVisible({
+      timeout: 5000,
+    });
+    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({
+      timeout: 15000,
+    });
     // The confidence slider should be visible
     const slider = page.locator('input[type="range"]').first();
     await expect(slider).toBeVisible();
@@ -339,7 +385,7 @@ test.describe('Matriculas demo', () => {
     const samples = page.locator('img[src*="plate"], img[alt*="plate"], img[alt*="sample"]');
     // If no alt, look for the grid of clickable images
     const gridImages = page.locator('img[style*="cursor"]');
-    const total = await samples.count() + await gridImages.count();
+    const total = (await samples.count()) + (await gridImages.count());
     expect(total).toBeGreaterThan(0);
   });
 
@@ -423,8 +469,13 @@ test.describe('Phase Transitions demo', () => {
   });
 
   test('generate renders graph SVG', async ({ page }) => {
-    await page.getByRole('button', { name: /generate|generar/i }).first().click();
-    const svg = page.locator('svg[viewBox]:not([width="16"]):not([width="20"]):not([width="24"]):not([width="28"])');
+    await page
+      .getByRole('button', { name: /generate|generar/i })
+      .first()
+      .click();
+    const svg = page.locator(
+      'svg[viewBox]:not([width="16"]):not([width="20"]):not([width="24"]):not([width="28"])'
+    );
     await expect(svg.first()).toBeVisible({ timeout: 10000 });
   });
 
@@ -446,8 +497,13 @@ test.describe('Phase Transitions demo', () => {
   test('switching graph family changes buttons', async ({ page }) => {
     await page.getByRole('button', { name: 'Geometric' }).click();
     // Geometric should be visually active
-    await page.getByRole('button', { name: /generate|generar/i }).first().click();
-    const svg = page.locator('svg[viewBox]:not([width="16"]):not([width="20"]):not([width="24"]):not([width="28"])');
+    await page
+      .getByRole('button', { name: /generate|generar/i })
+      .first()
+      .click();
+    const svg = page.locator(
+      'svg[viewBox]:not([width="16"]):not([width="20"]):not([width="24"]):not([width="28"])'
+    );
     await expect(svg.first()).toBeVisible({ timeout: 10000 });
   });
 });
@@ -466,13 +522,19 @@ test.describe('BitsXlaMarato demo', () => {
   });
 
   test('run demo inference shows progress', async ({ page }) => {
-    const runButton = page.getByRole('button', { name: /run demo inference|ejecutar inferencia|executar inferència/i }).first();
+    const runButton = page
+      .getByRole('button', { name: /run demo inference|ejecutar inferencia|executar inferència/i })
+      .first();
     await runButton.scrollIntoViewIfNeeded();
     await page.waitForTimeout(3000);
     await runButton.dispatchEvent('click');
     await expect(runButton).toBeHidden({ timeout: 5000 });
-    await expect(page.locator('text=/extracting frame|extrayendo frame|extraient frame/i').first()).toBeVisible({ timeout: 5000 });
-    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.locator('text=/extracting frame|extrayendo frame|extraient frame/i').first()
+    ).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('button', { name: /reset|reiniciar/i })).toBeVisible({
+      timeout: 15000,
+    });
     await expect(page.getByText(/opacity|opacidad|opacitat/i).first()).toBeVisible();
   });
 
@@ -498,14 +560,19 @@ test.describe('APA Practica demo', () => {
     const canvas = page.locator('canvas').first();
     await canvas.scrollIntoViewIfNeeded();
     await page.waitForTimeout(3000);
-    await canvas.evaluate((el: HTMLCanvasElement, point: { xRatio: number; yRatio: number }) => {
-      const rect = el.getBoundingClientRect();
-      el.dispatchEvent(new MouseEvent('click', {
-        bubbles: true,
-        clientX: rect.left + rect.width * point.xRatio,
-        clientY: rect.top + rect.height * point.yRatio,
-      }));
-    }, { xRatio, yRatio });
+    await canvas.evaluate(
+      (el: HTMLCanvasElement, point: { xRatio: number; yRatio: number }) => {
+        const rect = el.getBoundingClientRect();
+        el.dispatchEvent(
+          new MouseEvent('click', {
+            bubbles: true,
+            clientX: rect.left + rect.width * point.xRatio,
+            clientY: rect.top + rect.height * point.yRatio,
+          })
+        );
+      },
+      { xRatio, yRatio }
+    );
   };
 
   test('shows k-NN selector buttons', async ({ page }) => {
@@ -522,7 +589,9 @@ test.describe('APA Practica demo', () => {
   test('clicking canvas triggers prediction', async ({ page }) => {
     await clickKnnCanvas(page, 1 / 3, 1 / 3);
     await expect(page.getByText(/Prediction:|Predicción:|Predicció:/i)).toBeVisible();
-    await expect(page.getByText(/nearest neighbors|vecinos más cercanos|veïns més propers/i)).toBeVisible();
+    await expect(
+      page.getByText(/nearest neighbors|vecinos más cercanos|veïns més propers/i)
+    ).toBeVisible();
   });
 
   test('clear button resets selection', async ({ page }) => {
@@ -530,7 +599,9 @@ test.describe('APA Practica demo', () => {
     const clearBtn = page.getByRole('button', { name: /clear|limpiar|netejar/i });
     await expect(clearBtn).toBeVisible({ timeout: 3000 });
     await clearBtn.click();
-    await expect(page.getByText(/Click the plot|Haz clic en el gráfico|Fes clic al gràfic/i)).toBeVisible();
+    await expect(
+      page.getByText(/Click the plot|Haz clic en el gráfico|Fes clic al gràfic/i)
+    ).toBeVisible();
   });
 
   test('changing k value updates display', async ({ page }) => {
@@ -602,7 +673,9 @@ test.describe('CAIM IR Explorer demo', () => {
     await page.getByRole('button', { name: /PageRank/i }).click();
     await page.waitForTimeout(500);
     // Should show run button
-    await expect(page.getByRole('button', { name: /Run PageRank|Ejecutar|Executar/i })).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /Run PageRank|Ejecutar|Executar/i })
+    ).toBeVisible();
   });
 
   test('PageRank tab: run produces rankings table', async ({ page }) => {
@@ -711,12 +784,20 @@ test.describe('PAR Parallel Computing demo', () => {
     });
     await page.waitForTimeout(2000);
     // Click play on heat panel
-    const playBtn = page.locator('.par-panel').nth(1).getByRole('button', { name: /Play|Iniciar|Inicia/i });
+    const playBtn = page
+      .locator('.par-panel')
+      .nth(1)
+      .getByRole('button', { name: /Play|Iniciar|Inicia/i });
     await expect(playBtn).toBeVisible();
     await playBtn.dispatchEvent('click');
     await page.waitForTimeout(500);
     // Should now show Pause
-    await expect(page.locator('.par-panel').nth(1).getByRole('button', { name: /Pause|Pausar|Pausa/i })).toBeVisible();
+    await expect(
+      page
+        .locator('.par-panel')
+        .nth(1)
+        .getByRole('button', { name: /Pause|Pausar|Pausa/i })
+    ).toBeVisible();
   });
 
   test('Spanish PAR page shows translated title', async ({ page }) => {

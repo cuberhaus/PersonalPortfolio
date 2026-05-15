@@ -44,8 +44,8 @@ const LEVEL_COLORS: Record<DebugLevel, string> = {
 };
 
 const SOURCE_BADGE: Record<DebugSource, { label: string; bg: string; fg: string }> = {
-  browser: { label: 'B',  bg: 'rgba(99,102,241,0.18)',  fg: '#818cf8' },
-  iframe:  { label: 'I',  bg: 'rgba(20,184,166,0.18)',  fg: '#2dd4bf' },
+  browser: { label: 'B', bg: 'rgba(99,102,241,0.18)', fg: '#818cf8' },
+  iframe: { label: 'I', bg: 'rgba(20,184,166,0.18)', fg: '#2dd4bf' },
   backend: { label: 'BE', bg: 'rgba(244,114,182,0.18)', fg: '#f472b6' },
 };
 
@@ -62,9 +62,7 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
   const [perf, setPerf] = useState<PerfState>({ fps: 0, memoryMb: null, navigation: null });
   const [filterText, setFilterText] = useState('');
   const [minLevel, setMinLevelState] = useState<DebugLevel>('trace');
-  const [sourceFilter, setSourceFilter] = useState<Set<DebugSource>>(
-    () => new Set(SOURCES_ORDER),
-  );
+  const [sourceFilter, setSourceFilter] = useState<Set<DebugSource>>(() => new Set(SOURCES_ORDER));
   const fpsFrameRef = useRef<number>(0);
 
   useEffect(() => {
@@ -93,7 +91,9 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
       installNetworkTap();
       void installSentryForwarder();
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [enabled]);
 
   useEffect(() => {
@@ -105,7 +105,10 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
     const u2 = subscribe('network', (d) => {
       if (d.type === 'network') setNetwork((prev) => [...prev.slice(-499), d.entry]);
     });
-    return () => { u1(); u2(); };
+    return () => {
+      u1();
+      u2();
+    };
   }, []);
 
   useEffect(() => {
@@ -132,7 +135,9 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
 
   useEffect(() => {
     if (!open || tab !== 'perf') return;
-    const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    const navEntry = performance.getEntriesByType('navigation')[0] as
+      | PerformanceNavigationTiming
+      | undefined;
     if (!navEntry) return;
     setPerf((prev) => ({
       ...prev,
@@ -167,13 +172,17 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
   }, []);
 
   const copyLogs = useCallback(() => {
-    const json = JSON.stringify(filteredLogs.map((l) => ({
-      ts: new Date(l.ts).toISOString(),
-      ns: l.ns,
-      level: l.level,
-      msg: l.msg,
-      err: l.err?.stack,
-    })), null, 2);
+    const json = JSON.stringify(
+      filteredLogs.map((l) => ({
+        ts: new Date(l.ts).toISOString(),
+        ns: l.ns,
+        level: l.level,
+        msg: l.msg,
+        err: l.err?.stack,
+      })),
+      null,
+      2
+    );
     void navigator.clipboard?.writeText(json);
     debug('debug:ui').trace('copy-logs', { count: filteredLogs.length });
   }, [filteredLogs]);
@@ -204,8 +213,20 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
               </button>
             ))}
             <span style={{ flex: 1 }} />
-            <button type="button" className="debug-overlay-tab" onClick={() => { clearBuffer(); setLogs([]); setNetwork([]); }}>clear</button>
-            <button type="button" className="debug-overlay-tab" onClick={() => setOpen(false)}>×</button>
+            <button
+              type="button"
+              className="debug-overlay-tab"
+              onClick={() => {
+                clearBuffer();
+                setLogs([]);
+                setNetwork([]);
+              }}
+            >
+              clear
+            </button>
+            <button type="button" className="debug-overlay-tab" onClick={() => setOpen(false)}>
+              ×
+            </button>
           </div>
           <div className="debug-overlay-body">
             {tab === 'logs' && (
@@ -242,7 +263,16 @@ interface LogsTabProps {
   toggleSource: (s: DebugSource) => void;
 }
 
-function LogsTab({ logs, filterText, setFilterText, minLevel, setMinLevel, copy, sourceFilter, toggleSource }: LogsTabProps) {
+function LogsTab({
+  logs,
+  filterText,
+  setFilterText,
+  minLevel,
+  setMinLevel,
+  copy,
+  sourceFilter,
+  toggleSource,
+}: LogsTabProps) {
   return (
     <>
       <div className="debug-overlay-controls">
@@ -263,7 +293,9 @@ function LogsTab({ logs, filterText, setFilterText, minLevel, setMinLevel, copy,
           <option value="warn">warn+</option>
           <option value="error">error</option>
         </select>
-        <button type="button" onClick={copy} className="debug-overlay-tab">copy</button>
+        <button type="button" onClick={copy} className="debug-overlay-tab">
+          copy
+        </button>
       </div>
       <div className="debug-overlay-source-filter" role="group" aria-label="Source filter">
         {SOURCES_ORDER.map((s) => {
@@ -291,29 +323,36 @@ function LogsTab({ logs, filterText, setFilterText, minLevel, setMinLevel, copy,
       </div>
       <div className="debug-overlay-list">
         {logs.length === 0 && <div className="debug-overlay-empty">no logs</div>}
-        {logs.slice(-200).reverse().map((l, i) => {
-          const src = (l.source ?? 'browser') as DebugSource;
-          const badge = SOURCE_BADGE[src];
-          const isRateLimitMarker = l.ns.endsWith(':backend') && l.msg === 'rate-limited';
-          return (
-            <div
-              key={`${l.ts}-${i}`}
-              className={`debug-overlay-row ${isRateLimitMarker ? 'is-aggregate' : ''}`}
-            >
-              <span className="debug-overlay-time">{new Date(l.ts).toISOString().slice(11, 23)}</span>
-              <span
-                className="debug-overlay-source-badge"
-                style={{ background: badge.bg, color: badge.fg }}
-                title={`${src}${l.origin ? `: ${l.origin}` : ''}`}
+        {logs
+          .slice(-200)
+          .reverse()
+          .map((l, i) => {
+            const src = (l.source ?? 'browser') as DebugSource;
+            const badge = SOURCE_BADGE[src];
+            const isRateLimitMarker = l.ns.endsWith(':backend') && l.msg === 'rate-limited';
+            return (
+              <div
+                key={`${l.ts}-${i}`}
+                className={`debug-overlay-row ${isRateLimitMarker ? 'is-aggregate' : ''}`}
               >
-                {badge.label}
-              </span>
-              <span className="debug-overlay-level" style={{ color: LEVEL_COLORS[l.level] }}>{l.level}</span>
-              <span className="debug-overlay-ns">{l.ns}</span>
-              <span className="debug-overlay-msg">{l.msg}</span>
-            </div>
-          );
-        })}
+                <span className="debug-overlay-time">
+                  {new Date(l.ts).toISOString().slice(11, 23)}
+                </span>
+                <span
+                  className="debug-overlay-source-badge"
+                  style={{ background: badge.bg, color: badge.fg }}
+                  title={`${src}${l.origin ? `: ${l.origin}` : ''}`}
+                >
+                  {badge.label}
+                </span>
+                <span className="debug-overlay-level" style={{ color: LEVEL_COLORS[l.level] }}>
+                  {l.level}
+                </span>
+                <span className="debug-overlay-ns">{l.ns}</span>
+                <span className="debug-overlay-msg">{l.msg}</span>
+              </div>
+            );
+          })}
       </div>
     </>
   );
@@ -372,19 +411,40 @@ function PerfTab({ perf }: { perf: PerfState }) {
 
 function NetworkTab({ requests }: { requests: DebugNetworkEntry[] }) {
   if (requests.length === 0) {
-    return <div className="debug-overlay-empty">no requests recorded yet — fetch tap installs on first activation</div>;
+    return (
+      <div className="debug-overlay-empty">
+        no requests recorded yet — fetch tap installs on first activation
+      </div>
+    );
   }
   return (
     <div className="debug-overlay-list">
-      {requests.slice(-200).reverse().map((r, i) => (
-        <div key={`${r.startedAt}-${i}`} className="debug-overlay-row">
-          <span className="debug-overlay-time">{new Date(r.startedAt).toISOString().slice(11, 19)}</span>
-          <span className="debug-overlay-level" style={{ color: r.ok ? 'var(--accent-start)' : '#ef4444' }}>{r.method}</span>
-          <span className="debug-overlay-level" style={{ color: r.ok ? 'var(--text-secondary)' : '#ef4444' }}>{r.status || 'ERR'}</span>
-          <span className="debug-overlay-ns">{r.durationMs}ms</span>
-          <span className="debug-overlay-msg" title={r.url}>{r.url}</span>
-        </div>
-      ))}
+      {requests
+        .slice(-200)
+        .reverse()
+        .map((r, i) => (
+          <div key={`${r.startedAt}-${i}`} className="debug-overlay-row">
+            <span className="debug-overlay-time">
+              {new Date(r.startedAt).toISOString().slice(11, 19)}
+            </span>
+            <span
+              className="debug-overlay-level"
+              style={{ color: r.ok ? 'var(--accent-start)' : '#ef4444' }}
+            >
+              {r.method}
+            </span>
+            <span
+              className="debug-overlay-level"
+              style={{ color: r.ok ? 'var(--text-secondary)' : '#ef4444' }}
+            >
+              {r.status || 'ERR'}
+            </span>
+            <span className="debug-overlay-ns">{r.durationMs}ms</span>
+            <span className="debug-overlay-msg" title={r.url}>
+              {r.url}
+            </span>
+          </div>
+        ))}
     </div>
   );
 }

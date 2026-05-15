@@ -15,7 +15,7 @@
  */
 export const LOCALES = ['en', 'es', 'ca'] as const;
 
-export type Locale = typeof LOCALES[number];
+export type Locale = (typeof LOCALES)[number];
 
 // Derived from `LOCALES[0]` so its TS type narrows to the actual literal
 // (`'en'`) rather than widening to `Locale`. Downstream helpers can rely on
@@ -24,5 +24,5 @@ export const DEFAULT_LOCALE = LOCALES[0];
 
 /** Locales that get a `/<lang>/...` URL prefix (i.e. all non-default locales). */
 export const PREFIXED_LOCALES: readonly Locale[] = LOCALES.filter(
-  (l): l is Exclude<Locale, typeof DEFAULT_LOCALE> => l !== DEFAULT_LOCALE,
+  (l): l is Exclude<Locale, typeof DEFAULT_LOCALE> => l !== DEFAULT_LOCALE
 );

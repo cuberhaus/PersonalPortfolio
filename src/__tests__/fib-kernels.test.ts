@@ -88,14 +88,20 @@ describe('fib-kernels', () => {
     it('returns empty path when goal is blocked', () => {
       // Wall off the bottom-right corner completely
       const walls: [number, number][] = [
-        [3, 4], [4, 3], [4, 4],
+        [3, 4],
+        [4, 3],
+        [4, 4],
       ];
       const { path } = bfsGridDemo(5, 5, walls);
       expect(path).toHaveLength(0);
     });
 
     it('path cells are adjacent (Manhattan distance 1)', () => {
-      const { path } = bfsGridDemo(9, 11, [[1, 2], [3, 1], [5, 4]]);
+      const { path } = bfsGridDemo(9, 11, [
+        [1, 2],
+        [3, 1],
+        [5, 4],
+      ]);
       for (let i = 1; i < path.length; i++) {
         const dr = Math.abs(path[i][0] - path[i - 1][0]);
         const dc = Math.abs(path[i][1] - path[i - 1][1]);

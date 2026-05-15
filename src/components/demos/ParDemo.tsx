@@ -2,10 +2,10 @@ import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { computeMandelbrot, jacobiStep, initHeatGrid, computePi } from '../../lib/par-kernels';
 import { getThemeColors } from '../../lib/demo-theme';
 
-import { T, type DemoTranslations } from "../../i18n/demos/par-demo";
+import { T, type DemoTranslations } from '../../i18n/demos/par-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
-type Lang = "en" | "es" | "ca";
+type Lang = 'en' | 'es' | 'ca';
 
 /* ─── Color helpers ─── */
 
@@ -63,20 +63,23 @@ function MandelbrotMini({ lang }: { lang: Lang }) {
     render();
   }, [render]);
 
-  const onWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    setSize((s) => {
-      const ns = s * (e.deltaY > 0 ? 1.2 : 1 / 1.2);
-      log.info('mandelbrot-zoom', { size: ns });
-      return ns;
-    });
-  }, [log]);
+  const onWheel = useCallback(
+    (e: React.WheelEvent) => {
+      e.preventDefault();
+      setSize((s) => {
+        const ns = s * (e.deltaY > 0 ? 1.2 : 1 / 1.2);
+        log.info('mandelbrot-zoom', { size: ns });
+        return ns;
+      });
+    },
+    [log]
+  );
 
   const onMouseDown = useCallback(
     (e: React.MouseEvent) => {
       dragRef.current = { sx: e.clientX, sy: e.clientY, cx0: cx, cy0: cy };
     },
-    [cx, cy],
+    [cx, cy]
   );
 
   const onMouseMove = useCallback(
@@ -86,7 +89,7 @@ function MandelbrotMini({ lang }: { lang: Lang }) {
       setCx(dragRef.current.cx0 - (e.clientX - dragRef.current.sx) * scale);
       setCy(dragRef.current.cy0 + (e.clientY - dragRef.current.sy) * scale);
     },
-    [size],
+    [size]
   );
 
   const onMouseUp = useCallback(() => {
@@ -108,7 +111,9 @@ function MandelbrotMini({ lang }: { lang: Lang }) {
             step={32}
             value={maxIter}
             onChange={(e) => setMaxIter(+e.target.value)}
-            onMouseUp={(e) => log.info('mandelbrot-iter', { maxIter: +(e.currentTarget as HTMLInputElement).value })}
+            onMouseUp={(e) =>
+              log.info('mandelbrot-iter', { maxIter: +(e.currentTarget as HTMLInputElement).value })
+            }
           />
         </label>
       </div>
@@ -139,25 +144,22 @@ function HeatMini({ lang }: { lang: Lang }) {
   const animRef = useRef(0);
   const G = 64;
 
-  const renderGrid = useCallback(
-    (u: Float64Array) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d')!;
-      canvas.width = G;
-      canvas.height = G;
-      const img = ctx.createImageData(G, G);
-      for (let i = 0; i < G * G; i++) {
-        const [r, g, b] = heatColor(u[i]);
-        img.data[i * 4] = r;
-        img.data[i * 4 + 1] = g;
-        img.data[i * 4 + 2] = b;
-        img.data[i * 4 + 3] = 255;
-      }
-      ctx.putImageData(img, 0, 0);
-    },
-    [],
-  );
+  const renderGrid = useCallback((u: Float64Array) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d')!;
+    canvas.width = G;
+    canvas.height = G;
+    const img = ctx.createImageData(G, G);
+    for (let i = 0; i < G * G; i++) {
+      const [r, g, b] = heatColor(u[i]);
+      img.data[i * 4] = r;
+      img.data[i * 4 + 1] = g;
+      img.data[i * 4 + 2] = b;
+      img.data[i * 4 + 3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+  }, []);
 
   useEffect(() => {
     renderGrid(grid);
@@ -202,14 +204,32 @@ function HeatMini({ lang }: { lang: Lang }) {
       <h3>{t.heatTitle}</h3>
       <p className="par-desc">{t.heatDesc}</p>
       <div className="par-controls">
-        <button onClick={() => { const next = !playing; setPlaying(next); log.info(next ? 'heat-play' : 'heat-pause'); }}>{playing ? t.pause : t.play}</button>
-        <button onClick={() => { log.info('heat-step-click'); doStep(); }} disabled={playing}>{t.step}</button>
+        <button
+          onClick={() => {
+            const next = !playing;
+            setPlaying(next);
+            log.info(next ? 'heat-play' : 'heat-pause');
+          }}
+        >
+          {playing ? t.pause : t.play}
+        </button>
+        <button
+          onClick={() => {
+            log.info('heat-step-click');
+            doStep();
+          }}
+          disabled={playing}
+        >
+          {t.step}
+        </button>
         <button onClick={handleReset}>{t.reset}</button>
       </div>
       <canvas ref={canvasRef} className="par-canvas" style={{ imageRendering: 'pixelated' }} />
       <div className="par-stats">
         <span>#{iteration}</span>
-        <span>{t.residual}: {residual.toExponential(2)}</span>
+        <span>
+          {t.residual}: {residual.toExponential(2)}
+        </span>
       </div>
     </div>
   );
@@ -224,7 +244,9 @@ function PiMini({ lang }: { lang: Lang }) {
   const [steps, setSteps] = useState(100000);
 
   const data = useMemo(() => {
-    const counts = [100, 1000, 10000, 50000, steps].filter((n, i, a) => a.indexOf(n) === i && n <= steps).sort((a, b) => a - b);
+    const counts = [100, 1000, 10000, 50000, steps]
+      .filter((n, i, a) => a.indexOf(n) === i && n <= steps)
+      .sort((a, b) => a - b);
     return counts.map((n) => {
       const pi = computePi(n);
       return { steps: n, error: Math.abs(pi - Math.PI) };
@@ -303,7 +325,9 @@ function PiMini({ lang }: { lang: Lang }) {
             step={100}
             value={steps}
             onChange={(e) => setSteps(+e.target.value)}
-            onMouseUp={(e) => log.info('pi-steps', { steps: +(e.currentTarget as HTMLInputElement).value })}
+            onMouseUp={(e) =>
+              log.info('pi-steps', { steps: +(e.currentTarget as HTMLInputElement).value })
+            }
           />
         </label>
       </div>

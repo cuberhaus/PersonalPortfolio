@@ -26,7 +26,7 @@ import emailSpellChecker from '@zootools/email-spell-checker';
 // - Domain labels: alphanumeric, optional hyphens in the middle
 // - TLD: 2+ alphabetic characters
 const EMAIL_REGEX =
-  /^[A-Za-z0-9_%+\-]+(?:\.[A-Za-z0-9_%+\-]+)*@[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?)*\.[A-Za-z]{2,}$/;
+  /^[A-Za-z0-9_%+-]+(?:\.[A-Za-z0-9_%+-]+)*@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)*\.[A-Za-z]{2,}$/;
 
 export type EmailValidationResult =
   | { valid: true; normalized: string }

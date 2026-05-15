@@ -53,12 +53,18 @@ describe('gridGraph', () => {
 
 describe('connectedComponents', () => {
   it('connected graph has 1 component', () => {
-    const g = makeSimpleGraph(3, [[0, 1], [1, 2]]);
+    const g = makeSimpleGraph(3, [
+      [0, 1],
+      [1, 2],
+    ]);
     expect(connectedComponents(g)).toHaveLength(1);
   });
 
   it('disconnected graph has multiple components', () => {
-    const g = makeSimpleGraph(4, [[0, 1], [2, 3]]);
+    const g = makeSimpleGraph(4, [
+      [0, 1],
+      [2, 3],
+    ]);
     const comps = connectedComponents(g);
     expect(comps).toHaveLength(2);
   });
@@ -69,7 +75,11 @@ describe('connectedComponents', () => {
   });
 
   it('all nodes appear exactly once across components', () => {
-    const g = makeSimpleGraph(6, [[0, 1], [2, 3], [4, 5]]);
+    const g = makeSimpleGraph(6, [
+      [0, 1],
+      [2, 3],
+      [4, 5],
+    ]);
     const comps = connectedComponents(g);
     const allNodes = comps.flat().sort();
     expect(allNodes).toEqual([0, 1, 2, 3, 4, 5]);
@@ -86,7 +96,15 @@ describe('isConnected', () => {
   });
 
   it('path graph is connected', () => {
-    expect(isConnected(makeSimpleGraph(4, [[0, 1], [1, 2], [2, 3]]))).toBe(true);
+    expect(
+      isConnected(
+        makeSimpleGraph(4, [
+          [0, 1],
+          [1, 2],
+          [2, 3],
+        ])
+      )
+    ).toBe(true);
   });
 
   it('disconnected pair is not connected', () => {
@@ -96,18 +114,33 @@ describe('isConnected', () => {
 
 describe('isComponentComplex', () => {
   it('tree component is not complex (cyclomatic number = 0)', () => {
-    const g = makeSimpleGraph(4, [[0, 1], [1, 2], [1, 3]]);
+    const g = makeSimpleGraph(4, [
+      [0, 1],
+      [1, 2],
+      [1, 3],
+    ]);
     expect(isComponentComplex(g, [0, 1, 2, 3])).toBe(false);
   });
 
   it('single-cycle component is not complex (cyclomatic number = 1)', () => {
-    const g = makeSimpleGraph(3, [[0, 1], [1, 2], [2, 0]]);
+    const g = makeSimpleGraph(3, [
+      [0, 1],
+      [1, 2],
+      [2, 0],
+    ]);
     expect(isComponentComplex(g, [0, 1, 2])).toBe(false);
   });
 
   it('component with 2 independent cycles IS complex', () => {
     // K4 has 4 nodes, 6 edges → cyclomatic number = 6-4+1 = 3
-    const g = makeSimpleGraph(4, [[0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 3]]);
+    const g = makeSimpleGraph(4, [
+      [0, 1],
+      [0, 2],
+      [0, 3],
+      [1, 2],
+      [1, 3],
+      [2, 3],
+    ]);
     expect(isComponentComplex(g, [0, 1, 2, 3])).toBe(true);
   });
 });
@@ -124,7 +157,10 @@ describe('analyzeGraph', () => {
   });
 
   it('disconnected graph reports multiple components', () => {
-    const g = makeSimpleGraph(4, [[0, 1], [2, 3]]);
+    const g = makeSimpleGraph(4, [
+      [0, 1],
+      [2, 3],
+    ]);
     const stats = analyzeGraph(g);
     expect(stats.components).toBe(2);
     expect(stats.connected).toBe(false);

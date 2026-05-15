@@ -21,7 +21,9 @@ const designsCss = readFileSync(resolve('./src/styles/designs.css'), 'utf8');
 
 // Derive the modal key list from the EN bundle so adding a new theme.* key
 // in ui.ts is automatically required to exist in every locale.
-const MODAL_KEYS = Object.keys(ui.en).filter(k => k.startsWith('theme.')) as Array<keyof typeof ui.en>;
+const MODAL_KEYS = Object.keys(ui.en).filter((k) => k.startsWith('theme.')) as Array<
+  keyof typeof ui.en
+>;
 
 describe('DESIGNS registry', () => {
   it('contains at least 17 designs', () => {
@@ -44,28 +46,34 @@ describe('DESIGNS registry', () => {
       expect(d.blurb.trim().length, `design ${d.id} has empty blurb`).toBeGreaterThan(0);
       expect(d.preview.font.trim().length).toBeGreaterThan(0);
       expect(typeof d.preview.radius).toBe('string');
-      expect(
-        [
-          'gradient', 'serif', 'grid', 'pixel',
-          'terminal', 'neon',
-          'paper', 'raw', 'schematic',
-          'tex', 'editor', 'riso',
-          'deco', 'zen',
-          'zine', 'comic', 'news',
-        ],
-      ).toContain(d.preview.style);
+      expect([
+        'gradient',
+        'serif',
+        'grid',
+        'pixel',
+        'terminal',
+        'neon',
+        'paper',
+        'raw',
+        'schematic',
+        'tex',
+        'editor',
+        'riso',
+        'deco',
+        'zen',
+        'zine',
+        'comic',
+        'news',
+      ]).toContain(d.preview.style);
     }
   });
 });
 
 describe('designs.css coverage', () => {
-  it('every design id has a html[data-design=\'…\'] block', () => {
+  it("every design id has a html[data-design='…'] block", () => {
     for (const id of DESIGN_IDS) {
       const pattern = new RegExp(`html\\[data-design=['"]${id}['"]\\]`);
-      expect(
-        pattern.test(designsCss),
-        `designs.css is missing a block for "${id}"`,
-      ).toBe(true);
+      expect(pattern.test(designsCss), `designs.css is missing a block for "${id}"`).toBe(true);
     }
   });
 
@@ -75,21 +83,27 @@ describe('designs.css coverage', () => {
 });
 
 describe('design i18n coverage', () => {
-  it.each(LOCALES)('%s resolves a non-empty name and blurb for every design via designs.ts', (locale) => {
-    for (const id of DESIGN_IDS) {
-      const name = getDesignName(id, locale);
-      const blurb = getDesignBlurb(id, locale);
-      expect(name, `${locale}: missing name for design "${id}"`).toBeTruthy();
-      expect(blurb, `${locale}: missing blurb for design "${id}"`).toBeTruthy();
+  it.each(LOCALES)(
+    '%s resolves a non-empty name and blurb for every design via designs.ts',
+    (locale) => {
+      for (const id of DESIGN_IDS) {
+        const name = getDesignName(id, locale);
+        const blurb = getDesignBlurb(id, locale);
+        expect(name, `${locale}: missing name for design "${id}"`).toBeTruthy();
+        expect(blurb, `${locale}: missing blurb for design "${id}"`).toBeTruthy();
+      }
     }
-  });
+  );
 
-  it.each(Object.keys(languages) as (keyof typeof ui)[])('%s has every Ctrl+K modal label', (lang) => {
-    const bundle = ui[lang] as Record<string, string>;
-    for (const key of MODAL_KEYS) {
-      expect(bundle[key], `${lang}: missing ${key}`).toBeTruthy();
+  it.each(Object.keys(languages) as (keyof typeof ui)[])(
+    '%s has every Ctrl+K modal label',
+    (lang) => {
+      const bundle = ui[lang] as Record<string, string>;
+      for (const key of MODAL_KEYS) {
+        expect(bundle[key], `${lang}: missing ${key}`).toBeTruthy();
+      }
     }
-  });
+  );
 });
 
 describe('recommendedThemes (soft palette hints)', () => {
@@ -97,7 +111,7 @@ describe('recommendedThemes (soft palette hints)', () => {
     for (const d of DESIGNS) {
       expect(
         d.recommendedThemes && d.recommendedThemes.length > 0,
-        `design "${d.id}" has no recommendedThemes`,
+        `design "${d.id}" has no recommendedThemes`
       ).toBe(true);
     }
   });
@@ -105,10 +119,9 @@ describe('recommendedThemes (soft palette hints)', () => {
   it('every recommended palette id resolves to a real theme', () => {
     for (const d of DESIGNS) {
       for (const paletteId of d.recommendedThemes ?? []) {
-        expect(
-          THEME_IDS,
-          `design "${d.id}" recommends unknown palette "${paletteId}"`,
-        ).toContain(paletteId);
+        expect(THEME_IDS, `design "${d.id}" recommends unknown palette "${paletteId}"`).toContain(
+          paletteId
+        );
       }
     }
   });
@@ -116,7 +129,9 @@ describe('recommendedThemes (soft palette hints)', () => {
   it('recommendedThemes contains no duplicates per design', () => {
     for (const d of DESIGNS) {
       const recs = d.recommendedThemes ?? [];
-      expect(new Set(recs).size, `design "${d.id}" has duplicate recommendations`).toBe(recs.length);
+      expect(new Set(recs).size, `design "${d.id}" has duplicate recommendations`).toBe(
+        recs.length
+      );
     }
   });
 });

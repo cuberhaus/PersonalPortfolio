@@ -43,10 +43,9 @@ function send(level: EmbedLogLevel, ns: string, msg: string, args: unknown[]): v
     });
     window.parent.postMessage(
       { type: 'debug:log', level, ns, msg, args: safeArgs, ts: Date.now() },
-      '*',
+      '*'
     );
-  } catch {
-  }
+  } catch {}
 }
 
 export interface InstallEmbedDebugOptions {
@@ -91,7 +90,9 @@ export function installEmbedDebug(opts: InstallEmbedDebugOptions = {}): void {
   }
 
   window.addEventListener('error', (ev) => {
-    send('error', 'window', ev.message, [{ filename: ev.filename, lineno: ev.lineno, colno: ev.colno }]);
+    send('error', 'window', ev.message, [
+      { filename: ev.filename, lineno: ev.lineno, colno: ev.colno },
+    ]);
   });
   window.addEventListener('unhandledrejection', (ev) => {
     send('error', 'window', 'unhandled-rejection', [String(ev.reason)]);

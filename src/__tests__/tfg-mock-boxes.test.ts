@@ -24,7 +24,7 @@ describe('TFG Polyps — mock bounding boxes', () => {
 
   it('all labels are "polyp"', () => {
     for (const b of MOCK_BOXES) {
-      expect(b.label).toBe("polyp");
+      expect(b.label).toBe('polyp');
     }
   });
 });

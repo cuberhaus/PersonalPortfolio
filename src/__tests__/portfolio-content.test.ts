@@ -29,14 +29,13 @@ describe('skills content quality', () => {
         items: string[];
       }>;
       for (const group of flat) {
-        const trimmed = group.items.map(item => item.trim());
+        const trimmed = group.items.map((item) => item.trim());
         for (const item of trimmed) {
           expect(item.length, `${locale}.${group.category} has an empty skill`).toBeGreaterThan(0);
         }
-        expect(
-          new Set(trimmed).size,
-          `${locale}.${group.category} has duplicate skills`,
-        ).toBe(trimmed.length);
+        expect(new Set(trimmed).size, `${locale}.${group.category} has duplicate skills`).toBe(
+          trimmed.length
+        );
       }
     }
   });
@@ -53,7 +52,10 @@ describe('experience content quality', () => {
       }>;
       for (const entry of flat) {
         for (const bullet of entry.bullets) {
-          expect(bullet.trim().length, `${locale}.${entry.company} has an empty bullet`).toBeGreaterThan(0);
+          expect(
+            bullet.trim().length,
+            `${locale}.${entry.company} has an empty bullet`
+          ).toBeGreaterThan(0);
         }
       }
     }
@@ -64,7 +66,7 @@ describe('experience content quality', () => {
 
 describe('education content quality', () => {
   it('has unique links across entries', () => {
-    const links = (education as LocalizedEntry[]).map(e => e.identity.link as string);
+    const links = (education as LocalizedEntry[]).map((e) => e.identity.link as string);
     expect(new Set(links).size, 'education has duplicate links').toBe(links.length);
   });
 });
@@ -81,22 +83,26 @@ describe('work projects content quality', () => {
         tags: string[];
       }>;
       for (const project of flat) {
-        expect(project.role.trim().length, `${locale}.${project.title} has an empty role`).toBeGreaterThan(0);
-        const trimmed = project.tags.map(t => t.trim());
+        expect(
+          project.role.trim().length,
+          `${locale}.${project.title} has an empty role`
+        ).toBeGreaterThan(0);
+        const trimmed = project.tags.map((t) => t.trim());
         for (const tag of trimmed) {
           expect(tag.length, `${locale}.${project.title} has an empty tag`).toBeGreaterThan(0);
         }
-        expect(
-          new Set(trimmed).size,
-          `${locale}.${project.title} has duplicate tags`,
-        ).toBe(trimmed.length);
+        expect(new Set(trimmed).size, `${locale}.${project.title} has duplicate tags`).toBe(
+          trimmed.length
+        );
       }
     }
   });
 
   it('uses valid, unique HTTPS links when projects are linked', () => {
     const data = workProjects as LocalizedEntry[];
-    const links = data.map(e => e.identity.link as string | undefined).filter((l): l is string => Boolean(l));
+    const links = data
+      .map((e) => e.identity.link as string | undefined)
+      .filter((l): l is string => Boolean(l));
     for (const link of links) {
       expect(() => new URL(link), `invalid work project URL ${link}`).not.toThrow();
       expect(link, `work project URL is not HTTPS: ${link}`).toMatch(/^https:\/\//);
@@ -110,9 +116,13 @@ describe('work projects content quality', () => {
     // conditionals. This test asserts every data icon resolves to a real entry.
     const { ICON_PATHS } = await import('../lib/demo-icons');
     const registered = new Set(Object.keys(ICON_PATHS));
-    const dataIcons = new Set((workProjects as LocalizedEntry[]).map(e => e.identity.icon as string));
+    const dataIcons = new Set(
+      (workProjects as LocalizedEntry[]).map((e) => e.identity.icon as string)
+    );
     for (const icon of dataIcons) {
-      expect(registered, `demo-icons.ts has no entry for work-project icon "${icon}"`).toContain(icon);
+      expect(registered, `demo-icons.ts has no entry for work-project icon "${icon}"`).toContain(
+        icon
+      );
     }
   });
 });
@@ -129,10 +139,7 @@ describe('certifications content quality', () => {
       expect(issuer.trim().length, `cert "${name}" missing issuer`).toBeGreaterThan(0);
       for (const locale of LOCALES) {
         const issued = entry.copy[locale]?.issued as string | undefined;
-        expect(
-          typeof issued,
-          `cert "${name}" missing copy.${locale}.issued`,
-        ).toBe('string');
+        expect(typeof issued, `cert "${name}" missing copy.${locale}.issued`).toBe('string');
       }
     }
   });

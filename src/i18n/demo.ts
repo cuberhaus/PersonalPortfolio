@@ -34,7 +34,7 @@ export function listDemos(lang: string): Demo[] {
   if (cached) return cached;
   const flat = flattenForLocale(
     demosData as Parameters<typeof flattenForLocale>[0],
-    locale,
+    locale
   ) as unknown as Demo[];
   cache.set(locale, flat);
   return flat;
@@ -42,8 +42,8 @@ export function listDemos(lang: string): Demo[] {
 
 /** Look up a demo entry by slug for a given locale, falling back to English. */
 export function getDemo(slug: string, lang: string): Demo {
-  const entry = listDemos(lang).find((d) => d.slug === slug)
-    ?? listDemos('en').find((d) => d.slug === slug);
+  const entry =
+    listDemos(lang).find((d) => d.slug === slug) ?? listDemos('en').find((d) => d.slug === slug);
   if (!entry) {
     throw new Error(`getDemo: unknown slug "${slug}"`);
   }

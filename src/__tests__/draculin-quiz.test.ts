@@ -9,12 +9,12 @@ import {
 } from '../lib/draculin-quiz';
 
 const QUESTIONS: QuizQuestion[] = [
-  { text: "Q1", scoreYes: 2, scoreNo: 0 },
-  { text: "Q2", scoreYes: 2, scoreNo: 0 },
-  { text: "Q3", scoreYes: 3, scoreNo: 0 },
-  { text: "Q4", scoreYes: 3, scoreNo: 0 },
-  { text: "Q5", scoreYes: 2, scoreNo: 0 },
-  { text: "Q6", scoreYes: 2, scoreNo: 0 },
+  { text: 'Q1', scoreYes: 2, scoreNo: 0 },
+  { text: 'Q2', scoreYes: 2, scoreNo: 0 },
+  { text: 'Q3', scoreYes: 3, scoreNo: 0 },
+  { text: 'Q4', scoreYes: 3, scoreNo: 0 },
+  { text: 'Q5', scoreYes: 2, scoreNo: 0 },
+  { text: 'Q6', scoreYes: 2, scoreNo: 0 },
 ];
 
 describe('Draculin quiz scoring', () => {

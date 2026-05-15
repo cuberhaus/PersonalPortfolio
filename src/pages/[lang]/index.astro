@@ -7,7 +7,7 @@ import { PREFIXED_LOCALES } from '../../config/locales';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 export function getStaticPaths() {
-  return PREFIXED_LOCALES.map(lang => ({ params: { lang } }));
+  return PREFIXED_LOCALES.map((lang) => ({ params: { lang } }));
 }
 
 const lang = getLangFromUrl(Astro.url);

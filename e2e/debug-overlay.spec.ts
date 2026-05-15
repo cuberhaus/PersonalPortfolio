@@ -31,7 +31,7 @@ async function waitForBus(page: Page) {
   await page.waitForFunction(
     () => Boolean((window as unknown as { __debug?: unknown }).__debug),
     null,
-    { timeout: 5000 },
+    { timeout: 5000 }
   );
 }
 
@@ -54,12 +54,10 @@ test.describe('Debug overlay smoke test', () => {
         const w = window as unknown as {
           __debugBusState?: { logs?: Array<{ ns: string; level: string }> };
         };
-        return (w.__debugBusState?.logs ?? []).some(
-          (e) => e.ns === 'nav' && e.level === 'info',
-        );
+        return (w.__debugBusState?.logs ?? []).some((e) => e.ns === 'nav' && e.level === 'info');
       },
       null,
-      { timeout: 5000 },
+      { timeout: 5000 }
     );
     const buf = await readOverlayBuffer(page);
     const navHits = buf.filter((e) => e.ns === 'nav' && e.level === 'info');
@@ -73,11 +71,11 @@ test.describe('Debug overlay smoke test', () => {
     await page.waitForTimeout(500);
     const buf = await readOverlayBuffer(page);
     const mountHits = buf.filter(
-      (e) => e.ns === 'demo:rob' && e.level === 'info' && e.msg === 'mount',
+      (e) => e.ns === 'demo:rob' && e.level === 'info' && e.msg === 'mount'
     );
     expect(
       mountHits.length,
-      `expected demo:rob mount info, got namespaces: ${[...new Set(buf.map((e) => e.ns))].join(', ')}`,
+      `expected demo:rob mount info, got namespaces: ${[...new Set(buf.map((e) => e.ns))].join(', ')}`
     ).toBeGreaterThan(0);
   });
 
@@ -86,9 +84,11 @@ test.describe('Debug overlay smoke test', () => {
     await waitForBus(page);
     // Force a deterministic emit so rows definitely exist.
     await page.evaluate(() => {
-      (window as unknown as {
-        __debug?: { log: (level: string, ns: string, msg: string) => void };
-      }).__debug?.log('info', 'test', 'smoke-row');
+      (
+        window as unknown as {
+          __debug?: { log: (level: string, ns: string, msg: string) => void };
+        }
+      ).__debug?.log('info', 'test', 'smoke-row');
     });
     await page.locator('button.debug-overlay-trigger').click();
     await expect(page.locator('.debug-overlay-panel')).toBeVisible();

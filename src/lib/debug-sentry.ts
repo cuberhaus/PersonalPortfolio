@@ -112,7 +112,7 @@ export async function installSentryForwarder(): Promise<void> {
   unsubs.push(
     subscribe('log', (detail) => forwardLog(detail, Sentry)),
     subscribe('network', (detail) => forwardNetwork(detail, Sentry)),
-    subscribe('perf', (detail) => forwardPerf(detail, Sentry)),
+    subscribe('perf', (detail) => forwardPerf(detail, Sentry))
   );
 
   ensurePerfFlushTimer(Sentry);

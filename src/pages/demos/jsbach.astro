@@ -22,10 +22,14 @@ const hint = demo.hints ?? [];
       accent={demo.accent}
     >
       <div class="syntax-hints">
-        <code>&lt;:&gt; C4</code> {hint[0]} &nbsp;
-        <code>&lt;!&gt; "text"</code> {hint[1]} &nbsp;
-        <code>x &lt;- 5</code> {hint[2]} &nbsp;
-        <code>|: ... :|</code> {hint[3]}
+        <code>&lt;:&gt; C4</code>
+        {hint[0]} &nbsp;
+        <code>&lt;!&gt; "text"</code>
+        {hint[1]} &nbsp;
+        <code>x &lt;- 5</code>
+        {hint[2]} &nbsp;
+        <code>|: ... :|</code>
+        {hint[3]}
       </div>
     </DemoHeader>
 
@@ -34,7 +38,6 @@ const hint = demo.hints ?? [];
     <div class="demo-info">
       <h3>{demo.aboutTitle}</h3>
       <p>{demo.aboutDescription}</p>
-      
     </div>
   </div>
 </DemoLayout>
@@ -69,12 +72,13 @@ const hint = demo.hints ?? [];
     margin-right: auto;
   }
 
-  .demo-info h3 { margin-bottom: 0.75rem; }
+  .demo-info h3 {
+    margin-bottom: 0.75rem;
+  }
 
   .demo-info p {
     color: var(--text-muted);
     line-height: 1.7;
     margin-bottom: 1.25rem;
   }
-
-    </style>
+</style>

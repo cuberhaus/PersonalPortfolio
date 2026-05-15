@@ -27,7 +27,7 @@ export function useDebug(ns: string) {
  */
 export function useDemoLifecycle(
   ns: string,
-  meta: { lang?: string; extra?: Record<string, unknown> } = {},
+  meta: { lang?: string; extra?: Record<string, unknown> } = {}
 ) {
   const log = useDebug(ns);
   const i18nLog = useDebug('i18n');

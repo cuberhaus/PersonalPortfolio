@@ -1,10 +1,12 @@
 ---
-// To activate Google Analytics, replace 'G-XXXXXXXXXX' with your actual Measurement ID.
-// You can also move this to an environment variable (.env) like import.meta.env.PUBLIC_GA_ID
-const measurementId = 'G-XXXXXXXXXX';
+// Google Analytics (GA4) — set PUBLIC_GA_ID in your environment to activate.
+// In production GitHub Pages deploys, set it as a repo variable / secret and
+// expose it to the build step (Astro inlines PUBLIC_*-prefixed env vars).
+const measurementId = (import.meta.env.PUBLIC_GA_ID ?? '').trim();
+const isValid = /^G-[A-Z0-9]+$/.test(measurementId);
 ---
 
-{measurementId !== 'G-XXXXXXXXXX' && measurementId && (
+{isValid && (
   <>
     <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`} is:inline></script>
     <script define:vars={{ measurementId }} is:inline>

@@ -14,20 +14,26 @@ export interface MPIDSResult {
 }
 
 export function parseGraph(text: string): Graph {
-  const lines = text.trim().split(/\r?\n/).filter((l) => l.trim().length > 0);
+  const lines = text
+    .trim()
+    .split(/\r?\n/)
+    .filter((l) => l.trim().length > 0);
   let idx = 0;
   const first = lines[idx++].trim().split(/\s+/).map(Number);
   let n: number, m: number;
   if (first.length >= 2) {
-    n = first[0]; m = first[1];
+    n = first[0];
+    m = first[1];
   } else {
-    n = first[0]; m = Number(lines[idx++].trim());
+    n = first[0];
+    m = Number(lines[idx++].trim());
   }
   const adj: number[][] = Array.from({ length: n }, () => []);
   const edges: [number, number][] = [];
   for (let i = 0; i < m && idx < lines.length; i++, idx++) {
     const parts = lines[idx].trim().split(/\s+/).map(Number);
-    const u = parts[0] - 1, v = parts[1] - 1;
+    const u = parts[0] - 1,
+      v = parts[1] - 1;
     if (u < 0 || v < 0 || u >= n || v >= n) continue;
     adj[u].push(v);
     adj[v].push(u);
@@ -53,7 +59,10 @@ export function isDominant(graph: Graph, domSet: Set<number>): boolean {
   return true;
 }
 
-export function dominanceInfo(graph: Graph, domSet: Set<number>): { dominated: boolean; count: number; needed: number }[] {
+export function dominanceInfo(
+  graph: Graph,
+  domSet: Set<number>
+): { dominated: boolean; count: number; needed: number }[] {
   return Array.from({ length: graph.n }, (_, i) => {
     const deg = graph.adj[i].length;
     const needed = deg === 0 ? 0 : minDominantNeighbors(deg);
@@ -182,7 +191,7 @@ export function forceLayout(
   width: number,
   height: number,
   iterations = 300,
-  onIter?: (info: { i: number; energy: number }) => void,
+  onIter?: (info: { i: number; energy: number }) => void
 ): { x: number; y: number }[] {
   const n = graph.n;
   if (n === 0) return [];
@@ -233,7 +242,7 @@ export function forceLayout(
           const dx = nodes[i].x - nodes[j].x;
           const dy = nodes[i].y - nodes[j].y;
           const dist = Math.max(Math.sqrt(dx * dx + dy * dy), 0.01);
-          const force = (k * k) / dist * (n / samples);
+          const force = ((k * k) / dist) * (n / samples);
           const fx = (dx / dist) * force;
           const fy = (dy / dist) * force;
           nodes[i].vx += fx;
@@ -325,7 +334,8 @@ const PETERSEN_GRAPH = `10 15
 8 10`;
 
 const GRID_4X4 = (() => {
-  const size = 4, n = size * size;
+  const size = 4,
+    n = size * size;
   const edges: string[] = [];
   for (let r = 0; r < size; r++) {
     for (let c = 0; c < size; c++) {
@@ -334,7 +344,7 @@ const GRID_4X4 = (() => {
       if (r + 1 < size) edges.push(`${id} ${id + size}`);
     }
   }
-  return `${n} ${edges.length}\n${edges.join("\n")}`;
+  return `${n} ${edges.length}\n${edges.join('\n')}`;
 })();
 
 export function generateRandomGraph(n: number, edgeProb: number): string {
@@ -344,11 +354,15 @@ export function generateRandomGraph(n: number, edgeProb: number): string {
       if (Math.random() < edgeProb) edges.push(`${i} ${j}`);
     }
   }
-  return `${n} ${edges.length}\n${edges.join("\n")}`;
+  return `${n} ${edges.length}\n${edges.join('\n')}`;
 }
 
 export const SAMPLE_GRAPHS: { name: string; data: string; description: string }[] = [
-  { name: "Small (10 nodes)", data: SMALL_GRAPH, description: "Simple test graph from the project" },
-  { name: "Petersen graph", data: PETERSEN_GRAPH, description: "Classic 3-regular graph" },
-  { name: "4×4 Grid", data: GRID_4X4, description: "16-node grid graph" },
+  {
+    name: 'Small (10 nodes)',
+    data: SMALL_GRAPH,
+    description: 'Simple test graph from the project',
+  },
+  { name: 'Petersen graph', data: PETERSEN_GRAPH, description: 'Classic 3-regular graph' },
+  { name: '4×4 Grid', data: GRID_4X4, description: '16-node grid graph' },
 ];

@@ -15,7 +15,8 @@ const t = useTranslations(lang);
     <p class="hero-greeting">{t('hero.greeting')}</p>
     <h1 class="hero-name">Pol Casacuberta</h1>
     <p class="hero-tagline">
-      {t('hero.tagline_1')} <span class="gradient-text">{t('hero.tagline_2')}</span>
+      {t('hero.tagline_1')}
+      <span class="gradient-text">{t('hero.tagline_2')}</span>
     </p>
     <p class="hero-description">
       {t('hero.description')}
@@ -23,8 +24,12 @@ const t = useTranslations(lang);
     <a href="#projects" class="hero-cta">
       {t('hero.cta')}
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
+        <path
+          d="M8 3v10M3 8l5 5 5-5"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
       </svg>
     </a>
   </div>
@@ -62,15 +67,24 @@ const t = useTranslations(lang);
   }
 
   @keyframes pulse {
-    0%   { opacity: 0.6; transform: scale(1); }
-    100% { opacity: 1;   transform: scale(1.08); }
+    0% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1.08);
+    }
   }
 
   .hero-grid {
     position: absolute;
     inset: 0;
-    background-image:
-      radial-gradient(circle, color-mix(in srgb, var(--accent-start) 8%, transparent) 1px, transparent 1px);
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--accent-start) 8%, transparent) 1px,
+      transparent 1px
+    );
     background-size: 40px 40px;
     mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent);
     -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black, transparent);
@@ -121,7 +135,9 @@ const t = useTranslations(lang);
     color: #fff;
     background: var(--accent-gradient);
     border-radius: var(--radius-md);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
 
   .hero-cta:hover {
@@ -134,8 +150,13 @@ const t = useTranslations(lang);
   }
 
   @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(3px); }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(3px);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -37,6 +37,11 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       testMatch: /debug-overlay\.spec\.ts/,
     },
+    {
+      name: 'a11y',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /a11y\.spec\.ts/,
+    },
   ],
   webServer: {
     command: 'npm run dev',

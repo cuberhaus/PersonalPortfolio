@@ -6,14 +6,14 @@ Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 
 
 ## Stack
 
-| Layer | Tech |
-|-------|------|
-| Framework | Astro 5.18, TypeScript strict |
-| Interactive UI | React 19 islands (`client:visible` / `client:load`) |
-| Visualisation | D3, Canvas, WebGL2, Babylon.js |
-| CV demos | Web Workers, OpenCV.js, WASM |
-| i18n | 3 locales — file-based routing (`/`, `/es/`, `/ca/`) |
-| Testing | Vitest 4 (30 unit suites, 516 tests) · Playwright (3 e2e specs, 141 tests) |
+| Layer          | Tech                                                                       |
+| -------------- | -------------------------------------------------------------------------- |
+| Framework      | Astro 5.18, TypeScript strict                                              |
+| Interactive UI | React 19 islands (`client:visible` / `client:load`)                        |
+| Visualisation  | D3, Canvas, WebGL2, Babylon.js                                             |
+| CV demos       | Web Workers, OpenCV.js, WASM                                               |
+| i18n           | 3 locales — file-based routing (`/`, `/es/`, `/ca/`)                       |
+| Testing        | Vitest 4 (30 unit suites, 516 tests) · Playwright (3 e2e specs, 141 tests) |
 
 ## Getting started
 
@@ -32,27 +32,27 @@ make help                # Show all available targets
 
 One command starts everything the demos can use locally (then **Ctrl+C** tears it all down). Use `make stop` to tear down leftover containers, and `make health` to verify all backends are responding.
 
-| Service | Port | Demo | Source |
-|---------|------|------|--------|
-| Tenda | 8888 | `/demos/tenda` | `../tenda_online` — Docker |
-| Draculin | 8889 (API) / 8890 (web) | `/demos/draculin` | `../Draculin-Backend` — Docker |
-| TFG | 8082 | `/demos/tfg-polyps` | `../TFG` — Docker |
-| BitsXLaMarató | 8001 | `/demos/bitsx-marato` | `../bitsXlaMarato` — Docker (GPU) |
-| Pro2 | 8000 | `/demos/pro2` | `../pracpro2` — Docker |
-| Planificación | 3000 | `/demos/planificacion` | `../Practica_de_Planificacion` — Docker |
-| Desastres IA | 8083 | `/demos/desastres-ia` | `../desastresIA` — Docker |
-| MPIDS | 8084 | `/demos/mpids` | `../MD` — Docker |
-| Phase Transitions | 8085 | `/demos/phase-transitions` | `../MD2` — Docker |
-| CAIM | 8086 | `/demos/caim` | `../CAIM` — Docker |
-| Joc EDA | 8087 | `/demos/joc-eda` | `../joc_eda` — Docker |
-| SBC IA | 8088 | `/demos/sbc-ia` | `../SBC_IA` — Docker |
-| PAR | 8089 | `/demos/par-parallel` | `../PAR` — Docker |
-| FIB Algorithms | 8090 | `/demos/algorithms` | `../fib` — Docker |
-| ROB Robotics | 8092 | `/demos/rob-robotics` | `../ROB` — Docker |
-| Grafics | 8093 | `/demos/grafics` | — Docker |
-| PROP | 8081 | `/demos/prop` | `../subgrup-prop7.1` — Spring Boot |
-| planner-api | 8765 | `/demos/planificacion` Run planner | `planner-api/` (in this repo) — Python + Java 17+ |
-| **Astro** | 4321 | Site | this repo |
+| Service           | Port                    | Demo                               | Source                                            |
+| ----------------- | ----------------------- | ---------------------------------- | ------------------------------------------------- |
+| Tenda             | 8888                    | `/demos/tenda`                     | `../tenda_online` — Docker                        |
+| Draculin          | 8889 (API) / 8890 (web) | `/demos/draculin`                  | `../Draculin-Backend` — Docker                    |
+| TFG               | 8082                    | `/demos/tfg-polyps`                | `../TFG` — Docker                                 |
+| BitsXLaMarató     | 8001                    | `/demos/bitsx-marato`              | `../bitsXlaMarato` — Docker (GPU)                 |
+| Pro2              | 8000                    | `/demos/pro2`                      | `../pracpro2` — Docker                            |
+| Planificación     | 3000                    | `/demos/planificacion`             | `../Practica_de_Planificacion` — Docker           |
+| Desastres IA      | 8083                    | `/demos/desastres-ia`              | `../desastresIA` — Docker                         |
+| MPIDS             | 8084                    | `/demos/mpids`                     | `../MD` — Docker                                  |
+| Phase Transitions | 8085                    | `/demos/phase-transitions`         | `../MD2` — Docker                                 |
+| CAIM              | 8086                    | `/demos/caim`                      | `../CAIM` — Docker                                |
+| Joc EDA           | 8087                    | `/demos/joc-eda`                   | `../joc_eda` — Docker                             |
+| SBC IA            | 8088                    | `/demos/sbc-ia`                    | `../SBC_IA` — Docker                              |
+| PAR               | 8089                    | `/demos/par-parallel`              | `../PAR` — Docker                                 |
+| FIB Algorithms    | 8090                    | `/demos/algorithms`                | `../fib` — Docker                                 |
+| ROB Robotics      | 8092                    | `/demos/rob-robotics`              | `../ROB` — Docker                                 |
+| Grafics           | 8093                    | `/demos/grafics`                   | — Docker                                          |
+| PROP              | 8081                    | `/demos/prop`                      | `../subgrup-prop7.1` — Spring Boot                |
+| planner-api       | 8765                    | `/demos/planificacion` Run planner | `planner-api/` (in this repo) — Python + Java 17+ |
+| **Astro**         | 4321                    | Site                               | this repo                                         |
 
 Requires **bash**, **Docker**, and **jq** (registry parser). Missing sibling repos are silently skipped. `planner-api/` ships with this project.
 
@@ -73,36 +73,36 @@ Flags: `--skip-docker`, `--skip-planner`.
 
 Optional env (copy from `.env.example`):
 
-| Variable | Purpose |
-|----------|---------|
+| Variable             | Purpose                                                                                                                                         |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `PUBLIC_PLANNER_URL` | Base URL of [planner-api](planner-api/) for `/demos/planificacion` **Run planner** (production builds; dev defaults to `http://127.0.0.1:8765`) |
 
 ## Demo pages
 
 Routes live under `/demos/<slug>/` (and `/es/demos/<slug>/`, `/ca/demos/<slug>/`). Demo cards on the homepage are driven by `src/data/demos.json` (+ `.es.json`, `.ca.json`).
 
-| Slug | Demo | Browser-only | Notes |
-|------|------|:------------:|-------|
-| `tfg-polyps` | Polyp Detection (Bachelor's Thesis) | ✓ | Model comparison table + mock inference; full Faster R-CNN via backend |
-| `draculin` | Draculin | Mock on Pages | Flutter embed in dev; React mock on Pages |
-| `bitsx-marato` | BitsXLaMarató — Aorta | ✓ | Mock overlay + diameter explorer; full Mask R-CNN via backend |
-| `matriculas` | License Plate Detection | ✓ | CV pipeline in a Web Worker (OpenCV.js) |
-| `joc-eda` | Programming Game Viewer | ✓ | Replay upload / viewer (Mithril.js + Canvas) |
-| `jsbach` | JSBach Interpreter | ✓ | Custom ANTLR4 language + Web Audio |
-| `tenda` | Tenda Online | Mock on Pages | Real PHP app in iframe when backend runs |
-| `pro2` | WPGMA Clustering | ✓ | Phylogenetic tree builder (D3) |
-| `mpids` | MPIDS Solver | ✓ | Graph MDS + greedy / local search (D3) |
-| `phase-transitions` | Graph Phase Transitions | ✓ | Percolation / connectivity experiments (Canvas) |
-| `planificacion` | Travel Agency (PDDL) | Partially | Browse PDDL + **Run planner** if API is up |
-| `desastres-ia` | Desastres IA | ✓ | HC + SA on toy instance in browser; full solver via backend |
-| `apa-practica` | ML — Hypothyroid (k-NN) | ✓ | Interactive k-NN on a 2D data slice (Canvas) |
-| `prop` | Recommendation System | ✓ | Mock on Pages; full Spring Boot app via backend |
-| `caim` | CAIM IR Explorer | ✓ | TF-IDF + PageRank + Zipf tabs (D3) |
-| `sbc-ia` | Trip Planner (Expert System) | ✓ | HTMX + Alpine.js; full Litestar app via backend |
-| `par-parallel` | Parallel Computing Labs | ✓ | C/OpenMP kernels compiled to WASM (Preact + Canvas) |
-| `rob-robotics` | Robotics Dashboard | ✓ | Ember.js + Babylon.js; EKF visualisation |
-| `algorithms` | Algorithm Visualizer | ✓ | Qwik + Canvas; sorting & graph algorithms |
-| `grafics` | Computer Graphics Shaders | ✓ | WebGL2 / GLSL shader playground |
+| Slug                | Demo                                | Browser-only  | Notes                                                                  |
+| ------------------- | ----------------------------------- | :-----------: | ---------------------------------------------------------------------- |
+| `tfg-polyps`        | Polyp Detection (Bachelor's Thesis) |       ✓       | Model comparison table + mock inference; full Faster R-CNN via backend |
+| `draculin`          | Draculin                            | Mock on Pages | Flutter embed in dev; React mock on Pages                              |
+| `bitsx-marato`      | BitsXLaMarató — Aorta               |       ✓       | Mock overlay + diameter explorer; full Mask R-CNN via backend          |
+| `matriculas`        | License Plate Detection             |       ✓       | CV pipeline in a Web Worker (OpenCV.js)                                |
+| `joc-eda`           | Programming Game Viewer             |       ✓       | Replay upload / viewer (Mithril.js + Canvas)                           |
+| `jsbach`            | JSBach Interpreter                  |       ✓       | Custom ANTLR4 language + Web Audio                                     |
+| `tenda`             | Tenda Online                        | Mock on Pages | Real PHP app in iframe when backend runs                               |
+| `pro2`              | WPGMA Clustering                    |       ✓       | Phylogenetic tree builder (D3)                                         |
+| `mpids`             | MPIDS Solver                        |       ✓       | Graph MDS + greedy / local search (D3)                                 |
+| `phase-transitions` | Graph Phase Transitions             |       ✓       | Percolation / connectivity experiments (Canvas)                        |
+| `planificacion`     | Travel Agency (PDDL)                |   Partially   | Browse PDDL + **Run planner** if API is up                             |
+| `desastres-ia`      | Desastres IA                        |       ✓       | HC + SA on toy instance in browser; full solver via backend            |
+| `apa-practica`      | ML — Hypothyroid (k-NN)             |       ✓       | Interactive k-NN on a 2D data slice (Canvas)                           |
+| `prop`              | Recommendation System               |       ✓       | Mock on Pages; full Spring Boot app via backend                        |
+| `caim`              | CAIM IR Explorer                    |       ✓       | TF-IDF + PageRank + Zipf tabs (D3)                                     |
+| `sbc-ia`            | Trip Planner (Expert System)        |       ✓       | HTMX + Alpine.js; full Litestar app via backend                        |
+| `par-parallel`      | Parallel Computing Labs             |       ✓       | C/OpenMP kernels compiled to WASM (Preact + Canvas)                    |
+| `rob-robotics`      | Robotics Dashboard                  |       ✓       | Ember.js + Babylon.js; EKF visualisation                               |
+| `algorithms`        | Algorithm Visualizer                |       ✓       | Qwik + Canvas; sorting & graph algorithms                              |
+| `grafics`           | Computer Graphics Shaders           |       ✓       | WebGL2 / GLSL shader playground                                        |
 
 ### Planificación — live planner (ENHSP)
 
@@ -186,4 +186,4 @@ npx astro dev --force
 
 ---
 
-*Most demo backends live in sibling repos and are optional. The PDDL planner lives in **`planner-api/`** inside this project.*
+_Most demo backends live in sibling repos and are optional. The PDDL planner lives in **`planner-api/`** inside this project._

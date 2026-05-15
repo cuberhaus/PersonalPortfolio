@@ -48,7 +48,10 @@ export function fitZipf(frequencies: number[]): ZipfFitResult {
   const logFreq = new Float64Array(n);
   for (let i = 0; i < n; i++) logFreq[i] = Math.log(Math.max(frequencies[i], 1));
 
-  let bestA = 1, bestB = 0, bestC = frequencies[0], bestRSq = -Infinity;
+  let bestA = 1,
+    bestB = 0,
+    bestC = frequencies[0],
+    bestRSq = -Infinity;
 
   // Grid search over b, linear regression for a and log(c)
   const bCandidates = [0, 0.5, 1, 1.5, 2, 3, 5, 10, 20, 50];
@@ -57,7 +60,10 @@ export function fitZipf(frequencies: number[]): ZipfFitResult {
     for (let i = 0; i < n; i++) logRanks[i] = Math.log(ranks[i] + b);
 
     // Linear regression: logFreq = intercept - slope * logRanks
-    let sumX = 0, sumY = 0, sumXX = 0, sumXY = 0;
+    let sumX = 0,
+      sumY = 0,
+      sumXX = 0,
+      sumXY = 0;
     for (let i = 0; i < n; i++) {
       sumX += logRanks[i];
       sumY += logFreq[i];
@@ -76,7 +82,8 @@ export function fitZipf(frequencies: number[]): ZipfFitResult {
 
     // Compute R²
     const fitted = new Float64Array(n);
-    let ssRes = 0, ssTot = 0;
+    let ssRes = 0,
+      ssTot = 0;
     const meanFreq = frequencies.reduce((s, v) => s + v, 0) / n;
     for (let i = 0; i < n; i++) {
       fitted[i] = zipfFunc(ranks[i], a, b, c);
@@ -100,7 +107,10 @@ export function fitZipf(frequencies: number[]): ZipfFitResult {
     const logRanks = new Float64Array(n);
     for (let i = 0; i < n; i++) logRanks[i] = Math.log(ranks[i] + b);
 
-    let sumX = 0, sumY = 0, sumXX = 0, sumXY = 0;
+    let sumX = 0,
+      sumY = 0,
+      sumXX = 0,
+      sumXY = 0;
     for (let i = 0; i < n; i++) {
       sumX += logRanks[i];
       sumY += logFreq[i];
@@ -117,7 +127,8 @@ export function fitZipf(frequencies: number[]): ZipfFitResult {
     const c = Math.exp(intercept);
     if (a < 0.1 || c < 0) continue;
 
-    let ssRes = 0, ssTot = 0;
+    let ssRes = 0,
+      ssTot = 0;
     const meanFreq = frequencies.reduce((s, v) => s + v, 0) / n;
     for (let i = 0; i < n; i++) {
       const f = zipfFunc(ranks[i], a, b, c);

@@ -7,7 +7,6 @@ import { getDemo } from '../../i18n/demo';
 import { getJocEdaCopy } from '../../i18n/demos/joc-eda-page';
 
 const lang = getLangFromUrl(Astro.url);
-const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const demo = getDemo('joc-eda', lang);
 const tr = getJocEdaCopy(lang);
 const t = useTranslations(lang);
@@ -24,20 +23,24 @@ const t = useTranslations(lang);
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="joc-eda"
-      title="ThePurge Viewer"
-      lang={lang}
-      client:load
-    />
+    <LiveAppEmbed slug="joc-eda" title="ThePurge Viewer" lang={lang} client:load />
 
     <div class="cards-row">
       <!-- Sample game card -->
       <div class="game-card">
         <div class="game-card-badge">{tr.preloaded}</div>
         <div class="game-card-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="5 3 19 12 5 21 5 3"/>
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
           </svg>
         </div>
         <h3>{tr.sampleTitle}</h3>
@@ -49,8 +52,18 @@ const t = useTranslations(lang);
         </div>
         <a id="launch-sample" class="launch-btn" href="#" target="_blank" rel="noopener noreferrer">
           {tr.watchReplay}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"
+            ></path>
           </svg>
         </a>
       </div>
@@ -58,27 +71,49 @@ const t = useTranslations(lang);
       <!-- Upload card -->
       <div class="game-card upload-card">
         <div class="game-card-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"></path>
           </svg>
         </div>
         <h3>{tr.ownGame}</h3>
-        <p set:html={tr.uploadDesc}></p>
+        <p set:html={tr.uploadDesc} />
         <div class="upload-instructions">
           <code>make && ./Game &lt; default.cnf &gt; replay.out</code>
         </div>
         <label class="launch-btn upload-btn" for="file-upload">
           {tr.uploadBtn}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"></path>
           </svg>
         </label>
         <input type="file" id="file-upload" accept=".out,.txt" style="display:none" />
-        <div id="upload-status" class="upload-status" 
-             data-msg-reading={tr.readingFile} 
-             data-msg-invalid={tr.invalidFile} 
-             data-msg-loaded={tr.loadedFile} 
-             data-msg-toolarge={tr.fileTooLarge}></div>
+        <div
+          id="upload-status"
+          class="upload-status"
+          data-msg-reading={tr.readingFile}
+          data-msg-invalid={tr.invalidFile}
+          data-msg-loaded={tr.loadedFile}
+          data-msg-toolarge={tr.fileTooLarge}
+        >
+        </div>
       </div>
     </div>
 
@@ -98,27 +133,27 @@ const t = useTranslations(lang);
     <!-- About -->
     <div class="demo-info">
       <h3>{demo.aboutTitle}</h3>
-      <p set:html={demo.aboutDescription}></p>
+      <p set:html={demo.aboutDescription} />
       <h4>{tr.howTo}</h4>
       <ol class="steps-list">
-        <li set:html={tr.step1}></li>
-        <li set:html={tr.step2}></li>
-        <li set:html={tr.step3}></li>
-        <li set:html={tr.step4}></li>
-        <li set:html={tr.step5}></li>
+        <li set:html={tr.step1} />
+        <li set:html={tr.step2} />
+        <li set:html={tr.step3} />
+        <li set:html={tr.step4} />
+        <li set:html={tr.step5} />
       </ol>
-      
     </div>
   </div>
 </DemoLayout>
 
 <script is:inline define:vars={{ pageLang: lang }}>
-  const dbg = (lvl, ns, msg, ...rest) =>
-    window.__debug?.log?.(lvl, ns, msg, ...rest);
+  const dbg = (lvl, ns, msg, ...rest) => window.__debug?.log?.(lvl, ns, msg, ...rest);
   dbg('info', 'demo:joc-eda', 'mount', { lang: pageLang });
   dbg('trace', 'i18n', 'lang', { ns: 'demo:joc-eda', lang: pageLang });
 
-  const base = document.querySelector('link[rel="icon"]')?.getAttribute('href')?.replace('/favicon.svg', '') || '';
+  const base =
+    document.querySelector('link[rel="icon"]')?.getAttribute('href')?.replace('/favicon.svg', '') ||
+    '';
   const viewerBase = `${base}/demos/joc-eda/viewer.html`;
 
   const launchSample = document.getElementById('launch-sample');
@@ -184,7 +219,9 @@ const t = useTranslations(lang);
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
   .joc-eda-page .game-card:hover {
@@ -275,7 +312,9 @@ const t = useTranslations(lang);
     border-radius: var(--radius-md);
     text-decoration: none;
     cursor: pointer;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast);
     border: none;
   }
 
@@ -355,7 +394,9 @@ const t = useTranslations(lang);
     margin-right: auto;
   }
 
-  .joc-eda-page .demo-info h3 { margin-bottom: 0.75rem; }
+  .joc-eda-page .demo-info h3 {
+    margin-bottom: 0.75rem;
+  }
   .joc-eda-page .demo-info h4 {
     font-size: 0.95rem;
     margin-bottom: 0.75rem;
@@ -392,8 +433,12 @@ const t = useTranslations(lang);
     text-underline-offset: 2px;
   }
 
-      @media (max-width: 768px) {
-    .joc-eda-page .cards-row { grid-template-columns: 1fr; }
-    .joc-eda-page .controls-grid { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 768px) {
+    .joc-eda-page .cards-row {
+      grid-template-columns: 1fr;
+    }
+    .joc-eda-page .controls-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 </style>

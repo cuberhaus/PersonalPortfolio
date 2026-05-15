@@ -94,7 +94,11 @@ describe('heuristicSum & perHelicopterTimes', () => {
 
 describe('neighborsSwap', () => {
   it('generates valid neighbors (all groups present)', () => {
-    const assign: Assignment = [[0, 1, 2], [3, 4], [5, 6]];
+    const assign: Assignment = [
+      [0, 1, 2],
+      [3, 4],
+      [5, 6],
+    ];
     let count = 0;
     for (const neighbor of neighborsSwap(assign)) {
       const allGroups = neighbor.flat().sort();

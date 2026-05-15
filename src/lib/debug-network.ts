@@ -42,7 +42,10 @@ function getAllowedOrigins(): ReadonlySet<string> {
 
 function shouldInjectSession(url: string): boolean {
   try {
-    const origin = new URL(url, typeof location !== 'undefined' ? location.href : 'http://localhost').origin;
+    const origin = new URL(
+      url,
+      typeof location !== 'undefined' ? location.href : 'http://localhost'
+    ).origin;
     return getAllowedOrigins().has(origin);
   } catch {
     return false;
@@ -75,7 +78,9 @@ function patchFetch(): void {
 
   window.fetch = async function patchedFetch(input, init) {
     const startedAt = Date.now();
-    const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase();
+    const method = (
+      init?.method ?? (input instanceof Request ? input.method : 'GET')
+    ).toUpperCase();
     const url = input instanceof Request ? input.url : String(input);
 
     // For Request objects we cannot mutate headers without rebuilding the
@@ -123,7 +128,12 @@ function patchXhr(): void {
   const originalOpen = proto.open;
   const originalSend = proto.send;
 
-  proto.open = function patchedOpen(this: XhrWithMeta, method: string, url: string | URL, ...rest: unknown[]) {
+  proto.open = function patchedOpen(
+    this: XhrWithMeta,
+    method: string,
+    url: string | URL,
+    ...rest: unknown[]
+  ) {
     this.__debugMethod = method.toUpperCase();
     this.__debugUrl = String(url);
     return (originalOpen as (...a: unknown[]) => void).call(this, method, url, ...rest);
@@ -131,6 +141,7 @@ function patchXhr(): void {
 
   proto.send = function patchedSend(this: XhrWithMeta, ...args: unknown[]) {
     this.__debugStartedAt = Date.now();
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- closure captures `this` for the addEventListener callbacks below
     const xhr = this;
     if (xhr.__debugUrl && shouldInjectSession(xhr.__debugUrl)) {
       try {

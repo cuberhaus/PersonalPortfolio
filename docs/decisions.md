@@ -15,17 +15,17 @@ the operational manual lives in [`observability.md`](./observability.md).
 
 ## Quick chooser — by foundation × pattern
 
-If you're picking the *implementation* primitives rather than choosing the
+If you're picking the _implementation_ primitives rather than choosing the
 overall need:
 
-| Constraint | Best foundation | Best pattern |
-|---|---|---|
-| Smallest bundle, full control | Custom event-bus | Event bus |
-| Most conventional, lowest novelty | `debug` (visionmedia) | Transport pipeline |
-| Prettiest dev console, modern DX | `consola` | Transport pipeline |
-| Future-proof structured logs | `pino` browser | Transport pipeline |
-| Real production observability | Sentry SDK | Event bus (Sentry as a sink) |
-| One file, one demo, prototype | n/a | Plain facade |
+| Constraint                        | Best foundation       | Best pattern                 |
+| --------------------------------- | --------------------- | ---------------------------- |
+| Smallest bundle, full control     | Custom event-bus      | Event bus                    |
+| Most conventional, lowest novelty | `debug` (visionmedia) | Transport pipeline           |
+| Prettiest dev console, modern DX  | `consola`             | Transport pipeline           |
+| Future-proof structured logs      | `pino` browser        | Transport pipeline           |
+| Real production observability     | Sentry SDK            | Event bus (Sentry as a sink) |
+| One file, one demo, prototype     | n/a                   | Plain facade                 |
 
 ---
 
@@ -37,6 +37,7 @@ A thin module that emits `CustomEvent`s on a global `EventTarget`; consumers
 subscribe.
 
 **Pros**
+
 - Smallest possible footprint, fully tree-shakable.
 - Tailored exactly to overlay / network / state taps.
 - No version churn, no breaking-change risk.
@@ -44,6 +45,7 @@ subscribe.
 - Identical surface in Astro components and React islands.
 
 **Cons**
+
 - ~150 LOC you write and maintain yourself.
 - No prior-art docs to point new contributors at.
 - Re-invents redaction, sampling, throttling if ever needed.
@@ -54,11 +56,13 @@ subscribe.
 The de-facto namespace pattern. `localStorage.debug='demo:*'` enables filtering.
 
 **Pros**
+
 - Industry-standard namespace convention; muscle memory for many devs.
 - ~12 years stable, used by Express, Mongoose, Socket.io.
 - Excellent `*` / `-namespace` filter syntax out of the box.
 
 **Cons**
+
 - Single log level only — no `info` / `warn` / `error` distinction.
 - API is positional (`log('msg %o', obj)`), not structured.
 - No transports — overlay sink layer is still your problem.
@@ -70,12 +74,14 @@ The de-facto namespace pattern. `localStorage.debug='demo:*'` enables filtering.
 Modern UnJS / Nuxt-ecosystem logger.
 
 **Pros**
+
 - Beautiful console output, typed levels, tags.
 - TS-first fluent API: `log.warn(...)`, `log.success(...)`.
 - Already plugin-style via "reporters" (transports).
 - Active maintenance.
 
 **Cons**
+
 - Largest of the "tiny" options.
 - Designed primarily for Node/CLI; browser path is less idiomatic.
 - Pretty-print bytes are pure overhead — overlay re-parses anyway.
@@ -86,12 +92,14 @@ Modern UnJS / Nuxt-ecosystem logger.
 Structured-JSON logger used as the standard in Node observability stacks.
 
 **Pros**
+
 - JSON records from day one; trivially shippable to a backend later.
 - Designed for very high throughput.
 - Standard format — plugs into Datadog, Loki, Elastic, etc.
 - Clean child-logger composition: `logger.child({ demo: 'rob' })`.
 
 **Cons**
+
 - ~15 KB minified.
 - JSON-only output is overkill for a portfolio with ~5 demos.
 - Browser story is a second-class citizen vs Node.
@@ -103,6 +111,7 @@ Structured-JSON logger used as the standard in Node observability stacks.
 Hosted error reporting + breadcrumbs + optional session replay.
 
 **Pros**
+
 - Production-grade error reporting on a free hobby tier.
 - Source-mapped stack traces, releases, breadcrumbs.
 - Performance monitoring, optional session replay, user feedback widget.
@@ -110,6 +119,7 @@ Hosted error reporting + breadcrumbs + optional session replay.
 - `Sentry.captureMessage` / `addBreadcrumb` is itself a logger.
 
 **Cons**
+
 - Heavy by far.
 - External SaaS — privacy / GDPR considerations for visitors.
 - Network calls on every error; CSP needs `*.sentry.io`.
@@ -133,6 +143,7 @@ bus.on('log', consoleMirror);
 ```
 
 **Pros**
+
 - Producers and consumers fully decoupled.
 - Adding a new sink (Sentry, BroadcastChannel, IndexedDB) = one subscriber, no
   changes to call sites.
@@ -140,6 +151,7 @@ bus.on('log', consoleMirror);
 - Easy to mock in tests.
 
 **Cons**
+
 - Indirection: stack traces show the bus, not the call site (mitigable with
   `new Error().stack` capture).
 - Slight ordering subtlety if a sink does sync work that re-emits.
@@ -158,12 +170,14 @@ logger.info(...) // → formatter → both transports
 ```
 
 **Pros**
+
 - Familiar to anyone who's used Node loggers.
 - Explicit and ordered.
 - Each transport can have its own level filter, format, error handling.
 - Structured composition: `logger.add(httpTransport)` is obvious.
 
 **Cons**
+
 - Heavier abstraction (formatter + transport interfaces + level enums).
 - Non-log signals (FPS samples, network requests) feel forced — they're not
   really "log records".
@@ -175,11 +189,13 @@ logger.info(...) // → formatter → both transports
 A single global function with hard-coded sinks.
 
 **Pros**
+
 - Smallest code (~30 LOC).
 - One file, one default export.
 - Zero learning curve.
 
 **Cons**
+
 - Hard-coded sinks: changing destinations = rewriting the facade.
 - Mixes concerns (knows about console, overlay, fetch, FPS, …).
 - Hard to test in isolation.
@@ -191,11 +207,13 @@ Logger injected via React context for `.tsx` demos, exposed as a global for
 Astro and inline scripts.
 
 **Pros**
+
 - Best testability for `.tsx` demos: pass a fake logger via context.
 - Clear DI boundary — components declare they need a logger.
 - Plays well with React DevTools / strict mode / future RSC.
 
 **Cons**
+
 - Two parallel systems (context + global) — duplicated wiring.
 - Provider needed in every Astro island.
 - Astro's island model doesn't share React context across islands without
@@ -282,13 +300,13 @@ Reference table for if/when you want to self-host a dashboard backend
 (Highlight, PostHog, Grafana stack) instead of using Sentry hosted. Costs are
 March 2026 list prices.
 
-| Path | Up-front time | Monthly $ | Maintenance | Best for |
-|---|---|---|---|---|
-| Hetzner Cloud VPS (CPX31, 4 vCPU, 8 GB) + Docker Compose | 1–2 h | ~€13 (~$14) | OS patches, backups | Cheapest viable self-host |
-| DigitalOcean Droplet (4 vCPU, 8 GB) + Docker Compose | 1–2 h | ~$48 | OS patches, backups | If you already use DO |
-| Render / Railway / Fly.io | 2–4 h | $30–80 | Mostly automated | No SSH, no OS patching |
-| Kubernetes (Helm chart) | 30 min if cluster exists | Cluster cost dominates | Cluster ops | If you already run k8s |
-| Highlight Inc. hosted SaaS | 5 min | $0 (hobby tier) | None | When data ownership stops mattering — at which point Sentry is usually a better pick |
+| Path                                                     | Up-front time            | Monthly $              | Maintenance         | Best for                                                                             |
+| -------------------------------------------------------- | ------------------------ | ---------------------- | ------------------- | ------------------------------------------------------------------------------------ |
+| Hetzner Cloud VPS (CPX31, 4 vCPU, 8 GB) + Docker Compose | 1–2 h                    | ~€13 (~$14)            | OS patches, backups | Cheapest viable self-host                                                            |
+| DigitalOcean Droplet (4 vCPU, 8 GB) + Docker Compose     | 1–2 h                    | ~$48                   | OS patches, backups | If you already use DO                                                                |
+| Render / Railway / Fly.io                                | 2–4 h                    | $30–80                 | Mostly automated    | No SSH, no OS patching                                                               |
+| Kubernetes (Helm chart)                                  | 30 min if cluster exists | Cluster cost dominates | Cluster ops         | If you already run k8s                                                               |
+| Highlight Inc. hosted SaaS                               | 5 min                    | $0 (hobby tier)        | None                | When data ownership stops mattering — at which point Sentry is usually a better pick |
 
 ### Concrete steps for Hetzner + Docker Compose (Highlight self-host)
 
@@ -371,7 +389,7 @@ future revisit doesn't need to redo the search.
   `postMessage`. Captures requests from iframes too, but adds SW lifecycle
   complexity and HTTPS / scope constraints.
 - **`console` proxy / monkey-patch** — wrap `console.log` / `warn` / `error`
-  on `window.console` so *every* call site is intercepted automatically. Zero
+  on `window.console` so _every_ call site is intercepted automatically. Zero
   call-site changes, but loses namespacing and can interfere with browser
   DevTools' own line-mapping.
 - **`BroadcastChannel` cross-tab mirror** — same logger emits across tabs;
@@ -399,15 +417,15 @@ future revisit doesn't need to redo the search.
 
 Not every combination is sensible. Useful guide:
 
-| Foundation ↓ / Pattern → | Event bus | Transport pipeline | Plain facade | Context + global |
-|---|---|---|---|---|
-| Custom event-bus | natural | overkill | works | works |
-| `debug` (visionmedia) | works | natural | works | overkill |
-| `consola` | works | natural | overkill | overkill |
-| `pino` browser | works | natural | overkill | overkill |
-| `loglevel` | works | overkill | natural | works |
-| `tslog` | works | natural | works | works |
-| Sentry / Faro / OTel | natural (as sink) | works | locked-in | overkill |
+| Foundation ↓ / Pattern → | Event bus         | Transport pipeline | Plain facade | Context + global |
+| ------------------------ | ----------------- | ------------------ | ------------ | ---------------- |
+| Custom event-bus         | natural           | overkill           | works        | works            |
+| `debug` (visionmedia)    | works             | natural            | works        | overkill         |
+| `consola`                | works             | natural            | overkill     | overkill         |
+| `pino` browser           | works             | natural            | overkill     | overkill         |
+| `loglevel`               | works             | overkill           | natural      | works            |
+| `tslog`                  | works             | natural            | works        | works            |
+| Sentry / Faro / OTel     | natural (as sink) | works              | locked-in    | overkill         |
 
 "natural" = the library/pattern was designed for this combination.
 "works" = sensible but has friction.
@@ -446,19 +464,19 @@ platforms.
 
 ### Migration matrix (assuming the chosen path: Sentry hosted)
 
-| Move from Sentry to… | Code work | Config / build work | Time | What's lost (data side) | What's gained |
-|---|---|---|---|---|---|
-| **Highlight self-hosted** | Replace `debug-sentry.ts` (~30 LOC) | Remove `@sentry/astro` integration; install `@highlight-run/client`; swap source-map upload step; new env vars; provision VPS | 1–2 h code + 1–2 h ops | History, replays, alerts, dashboards | Data ownership, unlimited replay, included replay tier |
-| **Highlight hosted (app.highlight.io)** | Same as above | Same minus VPS provisioning | 1–2 h | History, replays, alerts | Replay-included free tier; no Docker |
-| **PostHog self-hosted** | Replace subscriber to use `posthog-js` API (~40 LOC) | Install `posthog-js`; remove Sentry; new env vars; provision VPS | 1–2 h code + 1–2 h ops | History, replays, alerts | Analytics + feature flags + replay in one stack |
-| **PostHog Cloud (free tier)** | Same as above | Same minus VPS | 1–2 h | History, replays, alerts | Same as above; no Docker |
-| **Grafana Faro + Grafana Cloud** | Replace subscriber with `@grafana/faro-web-sdk` calls (~60 LOC — log/exception/measurement APIs differ) | Install Faro packages; remove Sentry; configure OTLP endpoint; new env vars | 2–4 h | History, replays (Faro has no replay), Sentry's auto-breadcrumbs | OpenTelemetry standard; Loki/Tempo backend; vendor-neutral |
-| **Grafana Faro self-hosted** | Same code work as above | Same plus provision Grafana + Loki + Tempo (Docker stack) | 2–4 h code + 4–6 h ops | Same as above | Full stack ownership |
-| **Custom local WebSocket dashboard** | Replace subscriber with WebSocket transport (~50 LOC); add `scripts/debug-server.mjs` (~150 LOC); add `pages/_debug/index.astro` (~250 LOC) | Add `concurrently` + `ws` to dev deps; add `dev:debug` script | 4–8 h | Everything Sentry had | Zero SaaS, fully local, custom UI |
-| **In-page overlay only (no backend)** | Delete the Sentry subscriber file; remove its registration call (~3 LOC) | Remove `@sentry/astro`; clean up `astro.config.mjs`; delete env vars | 15 min | Everything in Sentry's dashboard | Zero external traffic; smaller bundle |
-| **Add Highlight as a *second* backend (run both in parallel)** | Add `lib/debug-highlight.ts` subscriber alongside the Sentry one (~30 LOC) | Install Highlight; configure both DSN/project IDs | 30–60 min | Nothing | A/B comparison; dual-write during evaluation |
+| Move from Sentry to…                                           | Code work                                                                                                                                   | Config / build work                                                                                                           | Time                   | What's lost (data side)                                          | What's gained                                              |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Highlight self-hosted**                                      | Replace `debug-sentry.ts` (~30 LOC)                                                                                                         | Remove `@sentry/astro` integration; install `@highlight-run/client`; swap source-map upload step; new env vars; provision VPS | 1–2 h code + 1–2 h ops | History, replays, alerts, dashboards                             | Data ownership, unlimited replay, included replay tier     |
+| **Highlight hosted (app.highlight.io)**                        | Same as above                                                                                                                               | Same minus VPS provisioning                                                                                                   | 1–2 h                  | History, replays, alerts                                         | Replay-included free tier; no Docker                       |
+| **PostHog self-hosted**                                        | Replace subscriber to use `posthog-js` API (~40 LOC)                                                                                        | Install `posthog-js`; remove Sentry; new env vars; provision VPS                                                              | 1–2 h code + 1–2 h ops | History, replays, alerts                                         | Analytics + feature flags + replay in one stack            |
+| **PostHog Cloud (free tier)**                                  | Same as above                                                                                                                               | Same minus VPS                                                                                                                | 1–2 h                  | History, replays, alerts                                         | Same as above; no Docker                                   |
+| **Grafana Faro + Grafana Cloud**                               | Replace subscriber with `@grafana/faro-web-sdk` calls (~60 LOC — log/exception/measurement APIs differ)                                     | Install Faro packages; remove Sentry; configure OTLP endpoint; new env vars                                                   | 2–4 h                  | History, replays (Faro has no replay), Sentry's auto-breadcrumbs | OpenTelemetry standard; Loki/Tempo backend; vendor-neutral |
+| **Grafana Faro self-hosted**                                   | Same code work as above                                                                                                                     | Same plus provision Grafana + Loki + Tempo (Docker stack)                                                                     | 2–4 h code + 4–6 h ops | Same as above                                                    | Full stack ownership                                       |
+| **Custom local WebSocket dashboard**                           | Replace subscriber with WebSocket transport (~50 LOC); add `scripts/debug-server.mjs` (~150 LOC); add `pages/_debug/index.astro` (~250 LOC) | Add `concurrently` + `ws` to dev deps; add `dev:debug` script                                                                 | 4–8 h                  | Everything Sentry had                                            | Zero SaaS, fully local, custom UI                          |
+| **In-page overlay only (no backend)**                          | Delete the Sentry subscriber file; remove its registration call (~3 LOC)                                                                    | Remove `@sentry/astro`; clean up `astro.config.mjs`; delete env vars                                                          | 15 min                 | Everything in Sentry's dashboard                                 | Zero external traffic; smaller bundle                      |
+| **Add Highlight as a _second_ backend (run both in parallel)** | Add `lib/debug-highlight.ts` subscriber alongside the Sentry one (~30 LOC)                                                                  | Install Highlight; configure both DSN/project IDs                                                                             | 30–60 min              | Nothing                                                          | A/B comparison; dual-write during evaluation               |
 
-### What's portable across *every* migration
+### What's portable across _every_ migration
 
 These never need editing regardless of backend swap:
 
@@ -475,23 +493,23 @@ These never need editing regardless of backend swap:
 
 When swapping backends, this is what each Sentry concept becomes elsewhere:
 
-| Sentry | Highlight | PostHog | Grafana Faro |
-|---|---|---|---|
-| `Sentry.init({ dsn })` | `H.init(projectId, options)` | `posthog.init(token, { api_host })` | `initializeFaro({ url, app })` |
-| `captureException(err)` | `H.consumeError(err)` | `posthog.captureException(err)` | `faro.api.pushError(err)` |
-| `captureMessage(msg, lvl)` | `H.log(lvl, msg)` | `posthog.capture('log', { msg, lvl })` | `faro.api.pushLog([msg], { level: lvl })` |
-| `addBreadcrumb({...})` | implicit (auto-recorded) | implicit | `faro.api.pushEvent(...)` |
-| `setUser({ id, email })` | `H.identify(email, { id })` | `posthog.identify(id, { email })` | `faro.api.setUser({ id, email })` |
-| `setTag(k, v)` | `H.metadata(k, v)` | `posthog.register({ [k]: v })` | `faro.api.pushMeasurement(...)` (no direct equivalent) |
-| `setContext(name, obj)` | `H.metadata(name, obj)` | `posthog.register({ [name]: obj })` | bound on init or per-log |
-| Source-map upload | `highlight-cli sourcemaps upload` | `posthog-cli sourcemaps inject` | `@grafana/faro-rollup-plugin` |
-| Astro integration | manual JS init | manual JS init | manual JS init |
+| Sentry                     | Highlight                         | PostHog                                | Grafana Faro                                           |
+| -------------------------- | --------------------------------- | -------------------------------------- | ------------------------------------------------------ |
+| `Sentry.init({ dsn })`     | `H.init(projectId, options)`      | `posthog.init(token, { api_host })`    | `initializeFaro({ url, app })`                         |
+| `captureException(err)`    | `H.consumeError(err)`             | `posthog.captureException(err)`        | `faro.api.pushError(err)`                              |
+| `captureMessage(msg, lvl)` | `H.log(lvl, msg)`                 | `posthog.capture('log', { msg, lvl })` | `faro.api.pushLog([msg], { level: lvl })`              |
+| `addBreadcrumb({...})`     | implicit (auto-recorded)          | implicit                               | `faro.api.pushEvent(...)`                              |
+| `setUser({ id, email })`   | `H.identify(email, { id })`       | `posthog.identify(id, { email })`      | `faro.api.setUser({ id, email })`                      |
+| `setTag(k, v)`             | `H.metadata(k, v)`                | `posthog.register({ [k]: v })`         | `faro.api.pushMeasurement(...)` (no direct equivalent) |
+| `setContext(name, obj)`    | `H.metadata(name, obj)`           | `posthog.register({ [name]: obj })`    | bound on init or per-log                               |
+| Source-map upload          | `highlight-cli sourcemaps upload` | `posthog-cli sourcemaps inject`        | `@grafana/faro-rollup-plugin`                          |
+| Astro integration          | manual JS init                    | manual JS init                         | manual JS init                                         |
 
 ### Reverse direction (Highlight → Sentry, Faro → Sentry, etc.)
 
 Symmetric for code work — replace one subscriber file. Data-loss profile is
-a mirror image: you lose whatever was in the *current* dashboard; you gain
-whatever the *new* dashboard offers (e.g. larger free error tier, Astro
+a mirror image: you lose whatever was in the _current_ dashboard; you gain
+whatever the _new_ dashboard offers (e.g. larger free error tier, Astro
 integration, more polished UI).
 
 ### Practical tip: dual-write during evaluation
@@ -519,14 +537,14 @@ The table below assumes the chosen path (custom event-bus). All entries
 preserve the bus + overlay + Sentry subscriber; only the **logger primitive**
 changes.
 
-| Move from custom event-bus to… | Call-site impact | Feature delta | Bundle delta | Total time | Notes |
-|---|---|---|---|---|---|
-| **`debug` (visionmedia)** | Wrap with shim — call sites unchanged | Lose `info`/`warn`/`error` distinction (debug has one level); namespaces preserved | +5 KB | 1–2 h | Adopt `localStorage.debug='ns:*'` filter syntax. Levels collapse into one — recreate them as namespace suffixes (`ns:warn`, `ns:error`). |
-| **`consola`** | Light shim — same `info/warn/error` API | Gain pretty console output, typed levels; lose namespace tree (consola uses flat tags) | +8 KB | 2–3 h | Map `debug('demo:rob:fk')` → `consola.withTag('demo:rob:fk')`. Fluent API like `.success()` is bonus. |
-| **`pino` browser** | Heavy refactor — pino is structured-record first | Gain structured JSON ready for backend shipping; lose ergonomic `info('msg', obj)` (becomes `info({...})`) | +15 KB | 4–6 h | Worth it only if you plan to ship JSON to a log aggregator. Child loggers (`pino.child({ ns })`) replace namespaces cleanly. |
-| **`loglevel`** | Light shim | Lose namespaces entirely (loglevel is global) | +1 KB | 1 h | You'd add a tiny namespace layer on top → effectively recreates 80 % of the custom bus. Rarely worth swapping to. |
-| **`tslog`** | Light shim | Gain pretty stack traces with source maps; hierarchical loggers map well | +10 KB | 2 h | Closest drop-in replacement: `new Logger({ name: 'demo:rob' })` ≈ `debug('demo:rob')`. |
-| **Sentry SDK as the foundation** (no bus) | Total rewrite of every call site to use `Sentry.captureMessage` directly | Tightly couples the codebase to Sentry; reverses the migration matrix above | +30 KB (already shipped) | 6–10 h | **Anti-pattern.** Don't do this — you trade a flexible bus for vendor lock-in, and every backend migration becomes a full-codebase refactor. |
+| Move from custom event-bus to…            | Call-site impact                                                         | Feature delta                                                                                              | Bundle delta             | Total time | Notes                                                                                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------ | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`debug` (visionmedia)**                 | Wrap with shim — call sites unchanged                                    | Lose `info`/`warn`/`error` distinction (debug has one level); namespaces preserved                         | +5 KB                    | 1–2 h      | Adopt `localStorage.debug='ns:*'` filter syntax. Levels collapse into one — recreate them as namespace suffixes (`ns:warn`, `ns:error`).     |
+| **`consola`**                             | Light shim — same `info/warn/error` API                                  | Gain pretty console output, typed levels; lose namespace tree (consola uses flat tags)                     | +8 KB                    | 2–3 h      | Map `debug('demo:rob:fk')` → `consola.withTag('demo:rob:fk')`. Fluent API like `.success()` is bonus.                                        |
+| **`pino` browser**                        | Heavy refactor — pino is structured-record first                         | Gain structured JSON ready for backend shipping; lose ergonomic `info('msg', obj)` (becomes `info({...})`) | +15 KB                   | 4–6 h      | Worth it only if you plan to ship JSON to a log aggregator. Child loggers (`pino.child({ ns })`) replace namespaces cleanly.                 |
+| **`loglevel`**                            | Light shim                                                               | Lose namespaces entirely (loglevel is global)                                                              | +1 KB                    | 1 h        | You'd add a tiny namespace layer on top → effectively recreates 80 % of the custom bus. Rarely worth swapping to.                            |
+| **`tslog`**                               | Light shim                                                               | Gain pretty stack traces with source maps; hierarchical loggers map well                                   | +10 KB                   | 2 h        | Closest drop-in replacement: `new Logger({ name: 'demo:rob' })` ≈ `debug('demo:rob')`.                                                       |
+| **Sentry SDK as the foundation** (no bus) | Total rewrite of every call site to use `Sentry.captureMessage` directly | Tightly couples the codebase to Sentry; reverses the migration matrix above                                | +30 KB (already shipped) | 6–10 h     | **Anti-pattern.** Don't do this — you trade a flexible bus for vendor lock-in, and every backend migration becomes a full-codebase refactor. |
 
 ### What stays put across every foundation swap
 
@@ -568,28 +586,28 @@ sinks).
 
 The table below assumes the chosen path (event bus, ≈4 consumers).
 
-| Move from event bus to… | Call-site impact | Consumer wiring | Test impact | Time | Notes |
-|---|---|---|---|---|---|
-| **Transport pipeline** (Winston-style) | None — call sites still use `debug(ns)` | Each subscriber becomes a `Transport` object with `level`, `format`, `log()`. Logger holds an ordered list. | Rewrite bus tests as transport tests | 4–6 h | Gain explicit ordering + per-transport level filters. Lose ability for *any* code to subscribe at runtime — transports must be added at logger init. |
-| **Plain facade** | None directly, but composability evaporates | All consumers collapse into one function: `function log(...) { console.log(...); overlay.append(...); Sentry.captureMessage(...); }` | Mock `console`, `overlay`, `Sentry` separately | 2–3 h | **Regression.** Adding a new sink later means editing the facade. Only sane for prototypes. |
-| **React context + Astro global** | High — every `.tsx` demo needs `useDebug()` to read from context; every `<X client:idle />` needs a `<LoggerProvider>` wrapper | Logger lives at the React tree root for islands, plus a global for inline scripts | Add provider mocks to every island test | 6–10 h | Gain testability via DI; lose simplicity. Dual-system (context + global) duplication is permanent. Worth it only if you start writing many isolated unit tests of demos. |
-| **RxJS `Subject`-based bus** | Light — `bus.on('log', fn)` becomes `subject$.subscribe(fn)` | Each subscriber becomes an Observable consumer; gain `pipe(filter, debounce, throttle, ...)` | Update tests to use `TestScheduler` | 3–4 h | Gain operators (rate-limit, group, replay). Add ≈10 KB unless you tree-shake aggressively. Worth it only if you already use RxJS in demos. |
-| **OpenTelemetry tracing-first** | Total — every `debug(ns).info(...)` becomes a span event inside an active span context | Spans replace logs as the primary unit; logs become attached events | Rewrite all tests | 10–15 h | Standard for distributed systems, mismatch for a single-page portfolio. Only worth it if you go all-in on OTel and Faro/Honeycomb backends. |
+| Move from event bus to…                | Call-site impact                                                                                                               | Consumer wiring                                                                                                                      | Test impact                                    | Time    | Notes                                                                                                                                                                    |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Transport pipeline** (Winston-style) | None — call sites still use `debug(ns)`                                                                                        | Each subscriber becomes a `Transport` object with `level`, `format`, `log()`. Logger holds an ordered list.                          | Rewrite bus tests as transport tests           | 4–6 h   | Gain explicit ordering + per-transport level filters. Lose ability for _any_ code to subscribe at runtime — transports must be added at logger init.                     |
+| **Plain facade**                       | None directly, but composability evaporates                                                                                    | All consumers collapse into one function: `function log(...) { console.log(...); overlay.append(...); Sentry.captureMessage(...); }` | Mock `console`, `overlay`, `Sentry` separately | 2–3 h   | **Regression.** Adding a new sink later means editing the facade. Only sane for prototypes.                                                                              |
+| **React context + Astro global**       | High — every `.tsx` demo needs `useDebug()` to read from context; every `<X client:idle />` needs a `<LoggerProvider>` wrapper | Logger lives at the React tree root for islands, plus a global for inline scripts                                                    | Add provider mocks to every island test        | 6–10 h  | Gain testability via DI; lose simplicity. Dual-system (context + global) duplication is permanent. Worth it only if you start writing many isolated unit tests of demos. |
+| **RxJS `Subject`-based bus**           | Light — `bus.on('log', fn)` becomes `subject$.subscribe(fn)`                                                                   | Each subscriber becomes an Observable consumer; gain `pipe(filter, debounce, throttle, ...)`                                         | Update tests to use `TestScheduler`            | 3–4 h   | Gain operators (rate-limit, group, replay). Add ≈10 KB unless you tree-shake aggressively. Worth it only if you already use RxJS in demos.                               |
+| **OpenTelemetry tracing-first**        | Total — every `debug(ns).info(...)` becomes a span event inside an active span context                                         | Spans replace logs as the primary unit; logs become attached events                                                                  | Rewrite all tests                              | 10–15 h | Standard for distributed systems, mismatch for a single-page portfolio. Only worth it if you go all-in on OTel and Faro/Honeycomb backends.                              |
 
 ### Reverse direction (and cross-pattern) notes
 
-| Direction | Cost | Notes |
-|---|---|---|
-| Plain facade → event bus | 4–6 h | Have to invent the abstraction layer; every hard-coded sink call gets routed through the bus. Likely the migration you'd actually do once a prototype outgrows its facade. |
-| Plain facade → transport pipeline | 4–6 h | Same shape as above; the inventory of sinks becomes the transport list. |
-| Transport pipeline → event bus | 2–3 h | Easier than the reverse — drop the transport interface, register `(record) => transport.log(record)` as a subscriber. |
-| Context + global → event bus | 1–2 h | Drop the provider tree; convert `useDebug()` to import the bus directly. |
-| RxJS Subject → event bus | 1 h | Replace `subject$.next(...)` with `bus.emit(...)`; subscribers re-attach as plain `addEventListener`. |
-| Anything → OTel tracing-first | 10–15 h | Always heavy; OTel changes the data model, not just the wiring. |
+| Direction                         | Cost    | Notes                                                                                                                                                                      |
+| --------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Plain facade → event bus          | 4–6 h   | Have to invent the abstraction layer; every hard-coded sink call gets routed through the bus. Likely the migration you'd actually do once a prototype outgrows its facade. |
+| Plain facade → transport pipeline | 4–6 h   | Same shape as above; the inventory of sinks becomes the transport list.                                                                                                    |
+| Transport pipeline → event bus    | 2–3 h   | Easier than the reverse — drop the transport interface, register `(record) => transport.log(record)` as a subscriber.                                                      |
+| Context + global → event bus      | 1–2 h   | Drop the provider tree; convert `useDebug()` to import the bus directly.                                                                                                   |
+| RxJS Subject → event bus          | 1 h     | Replace `subject$.next(...)` with `bus.emit(...)`; subscribers re-attach as plain `addEventListener`.                                                                      |
+| Anything → OTel tracing-first     | 10–15 h | Always heavy; OTel changes the data model, not just the wiring.                                                                                                            |
 
 ### What stays put across every pattern swap
 
-- The list of *who* logs (every call site).
+- The list of _who_ logs (every call site).
 - The contents of each log entry (level, namespace, message, args).
 - The overlay UI rendering (input shape preserved by adapter at the boundary).
 - Backend subscribers (their input is whatever the new pattern dispatches).
@@ -597,24 +615,24 @@ The table below assumes the chosen path (event bus, ≈4 consumers).
 
 ### Why pattern migrations are the heaviest
 
-Because they re-shape *every* coupling between producer and consumer. The
+Because they re-shape _every_ coupling between producer and consumer. The
 foundation migration only touches the producer side; the backend migration
 only touches one consumer. The pattern migration touches both sides plus the
 glue.
 
-Implication: if there's any chance you'll change *patterns* later, do it
+Implication: if there's any chance you'll change _patterns_ later, do it
 early — before adding many consumers.
 
 ---
 
 ## Migration cost summary across all three axes
 
-| Axis | What changes | Typical effort | Data loss? |
-|---|---|---|---|
-| **Backend** (Sentry → Highlight, etc.) | One subscriber file + config + env vars | 30 min – 2 h | Yes — historical events / replays |
-| **Foundation** (custom bus → consola, etc.) | One adapter file behind the bus | 1–6 h | None |
-| **Pattern** (event bus → transport pipeline, etc.) | Logger core + every consumer's wiring | 2–15 h | None |
-| **All three at once** | Effectively rewriting the system | 1–2 days | Yes |
+| Axis                                               | What changes                            | Typical effort | Data loss?                        |
+| -------------------------------------------------- | --------------------------------------- | -------------- | --------------------------------- |
+| **Backend** (Sentry → Highlight, etc.)             | One subscriber file + config + env vars | 30 min – 2 h   | Yes — historical events / replays |
+| **Foundation** (custom bus → consola, etc.)        | One adapter file behind the bus         | 1–6 h          | None                              |
+| **Pattern** (event bus → transport pipeline, etc.) | Logger core + every consumer's wiring   | 2–15 h         | None                              |
+| **All three at once**                              | Effectively rewriting the system        | 1–2 days       | Yes                               |
 
 Practical rule: **lock in the pattern first, swap foundations and backends
 freely later.** This is exactly the order the architecture doc records —

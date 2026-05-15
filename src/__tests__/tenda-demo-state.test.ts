@@ -180,14 +180,31 @@ describe('TendaDemo — cartItems mapping', () => {
 
 describe('TendaDemo — checkout form validation logic', () => {
   it('guest checkout requires name, email, address', () => {
-    const form = { name: 'Pol', email: 'pol@test.com', address: '123 St', userType: 'guest' as const, password: '' };
-    const valid = form.name.trim().length > 0 && form.email.includes('@') && form.address.trim().length > 0;
+    const form = {
+      name: 'Pol',
+      email: 'pol@test.com',
+      address: '123 St',
+      userType: 'guest' as const,
+      password: '',
+    };
+    const valid =
+      form.name.trim().length > 0 && form.email.includes('@') && form.address.trim().length > 0;
     expect(valid).toBe(true);
   });
 
   it('registered checkout also requires password', () => {
-    const form = { name: 'Pol', email: 'pol@test.com', address: '123 St', userType: 'registered' as const, password: 'secret' };
-    const valid = form.name.trim().length > 0 && form.email.includes('@') && form.address.trim().length > 0 && form.password.length > 0;
+    const form = {
+      name: 'Pol',
+      email: 'pol@test.com',
+      address: '123 St',
+      userType: 'registered' as const,
+      password: 'secret',
+    };
+    const valid =
+      form.name.trim().length > 0 &&
+      form.email.includes('@') &&
+      form.address.trim().length > 0 &&
+      form.password.length > 0;
     expect(valid).toBe(true);
   });
 

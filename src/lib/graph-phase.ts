@@ -51,8 +51,14 @@ export function gridGraph(side: number): SimpleGraph {
     for (let c = 0; c < side; c++) {
       const id = r * side + c;
       positions.push({ x: c / Math.max(side - 1, 1), y: r / Math.max(side - 1, 1) });
-      if (c + 1 < side) { adj[id].add(id + 1); adj[id + 1].add(id); }
-      if (r + 1 < side) { adj[id].add(id + side); adj[id + side].add(id); }
+      if (c + 1 < side) {
+        adj[id].add(id + 1);
+        adj[id + 1].add(id);
+      }
+      if (r + 1 < side) {
+        adj[id].add(id + side);
+        adj[id + side].add(id);
+      }
     }
   }
   return { n, adj, positions };
@@ -87,7 +93,7 @@ function subgraph(g: SimpleGraph, keep: Set<number>): SimpleGraph {
   for (const v of keep) remap.set(v, idx++);
   const n = remap.size;
   const adj: Set<number>[] = Array.from({ length: n }, () => new Set());
-  const positions = g.positions ? [] as { x: number; y: number }[] : undefined;
+  const positions = g.positions ? ([] as { x: number; y: number }[]) : undefined;
 
   for (const v of keep) {
     const vi = remap.get(v)!;
@@ -187,7 +193,10 @@ export function analyzeGraph(g: SimpleGraph): GraphStats {
   const largest = comps.reduce((max, c) => Math.max(max, c.length), 0);
   let complex = true;
   for (const comp of comps) {
-    if (!isComponentComplex(g, comp)) { complex = false; break; }
+    if (!isComponentComplex(g, comp)) {
+      complex = false;
+      break;
+    }
   }
   return {
     nodes: g.n,
@@ -207,8 +216,8 @@ export interface SweepPoint {
   pComplex: number;
 }
 
-export type GraphFamily = "binomial" | "geometric" | "grid";
-export type PercolationType = "node" | "edge" | "both";
+export type GraphFamily = 'binomial' | 'geometric' | 'grid';
+export type PercolationType = 'node' | 'edge' | 'both';
 
 export function runSweep(
   family: GraphFamily,
@@ -216,7 +225,7 @@ export function runSweep(
   percolation: PercolationType,
   steps: number,
   trials: number,
-  onTrial?: (info: { p: number; runs: number }) => void,
+  onTrial?: (info: { p: number; runs: number }) => void
 ): SweepPoint[] {
   const points: SweepPoint[] = [];
 
@@ -228,18 +237,18 @@ export function runSweep(
 
     for (let t = 0; t < trials; t++) {
       let g: SimpleGraph;
-      if (family === "binomial") {
+      if (family === 'binomial') {
         g = binomialGraph(n, 0.3);
-      } else if (family === "geometric") {
+      } else if (family === 'geometric') {
         g = geometricGraph(n, 0.4);
       } else {
         const side = Math.round(Math.sqrt(n));
         g = gridGraph(side);
       }
 
-      if (percolation === "node") {
+      if (percolation === 'node') {
         g = nodePercolation(g, param);
-      } else if (percolation === "edge") {
+      } else if (percolation === 'edge') {
         g = edgePercolation(g, param);
       } else {
         g = nodePercolation(g, param);

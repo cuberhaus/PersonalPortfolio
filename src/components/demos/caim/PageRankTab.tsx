@@ -5,7 +5,11 @@ import { select } from 'd3-selection';
 import { line } from 'd3-shape';
 import { feature } from 'topojson-client';
 import { getAirports, ROUTES_ADJ, type Airport } from '../../../lib/caim/airports-data';
-import { computePageRank, type PageRankResult, type InitStrategy } from '../../../lib/caim/pagerank';
+import {
+  computePageRank,
+  type PageRankResult,
+  type InitStrategy,
+} from '../../../lib/caim/pagerank';
 import { T } from '../../../i18n/demos/caim-pagerank';
 import { getThemeColors } from '../../../lib/demo-theme';
 import { debug } from '../../../lib/debug';
@@ -40,15 +44,28 @@ export default function PageRankTab({ lang }: Props) {
       for (const [src, destsStr] of Object.entries(ROUTES_ADJ)) {
         adj[src] = destsStr.split(' ');
       }
-      const res = computePageRank({ adj, nodes, damping, initStrategy, maxIterations: 200, tolerance: 1e-10 });
+      const res = computePageRank({
+        adj,
+        nodes,
+        damping,
+        initStrategy,
+        maxIterations: 200,
+        tolerance: 1e-10,
+      });
       setResult(res);
       setComputing(false);
-      demoLog.info('pagerank-done', { iterations: res.convergence?.length, damping, init: initStrategy });
+      demoLog.info('pagerank-done', {
+        iterations: res.convergence?.length,
+        damping,
+        init: initStrategy,
+      });
     });
   }, [damping, initStrategy]);
 
   // Run once on mount
-  useEffect(() => { runPageRank(); }, []);
+  useEffect(() => {
+    runPageRank();
+  }, []);
 
   // Draw map when result changes
   useEffect(() => {
@@ -67,7 +84,9 @@ export default function PageRankTab({ lang }: Props) {
       {/* Controls */}
       <div style={styles.controls}>
         <div style={styles.controlGroup}>
-          <label style={styles.label}>{t.damping}: <strong>{damping.toFixed(2)}</strong></label>
+          <label style={styles.label}>
+            {t.damping}: <strong>{damping.toFixed(2)}</strong>
+          </label>
           <input
             type="range"
             min={0.1}
@@ -101,8 +120,12 @@ export default function PageRankTab({ lang }: Props) {
       {/* Stats row */}
       {result && (
         <div style={styles.statsRow}>
-          <span style={styles.stat}>{t.iterations}: <strong>{result.iterations}</strong></span>
-          <span style={styles.stat}>{t.time}: <strong>{result.timeMs.toFixed(0)}ms</strong></span>
+          <span style={styles.stat}>
+            {t.iterations}: <strong>{result.iterations}</strong>
+          </span>
+          <span style={styles.stat}>
+            {t.time}: <strong>{result.timeMs.toFixed(0)}ms</strong>
+          </span>
         </div>
       )}
 
@@ -132,8 +155,18 @@ export default function PageRankTab({ lang }: Props) {
                   return (
                     <tr key={r.code}>
                       <td style={styles.td}>{r.rank}</td>
-                      <td style={{ ...styles.td, fontFamily: 'var(--font-mono, monospace)', fontWeight: 600 }}>{r.code}</td>
-                      <td style={{ ...styles.td, textAlign: 'left' }}>{airport ? `${airport.name}, ${airport.country}` : r.code}</td>
+                      <td
+                        style={{
+                          ...styles.td,
+                          fontFamily: 'var(--font-mono, monospace)',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {r.code}
+                      </td>
+                      <td style={{ ...styles.td, textAlign: 'left' }}>
+                        {airport ? `${airport.name}, ${airport.country}` : r.code}
+                      </td>
                       <td style={styles.td}>{r.score.toExponential(3)}</td>
                     </tr>
                   );
@@ -156,8 +189,10 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
   const tc = getThemeColors();
 
   container.innerHTML = '';
-  const svg = select(container).append('svg')
-    .attr('width', W).attr('height', H)
+  const svg = select(container)
+    .append('svg')
+    .attr('width', W)
+    .attr('height', H)
     .attr('viewBox', `0 0 ${W} ${H}`)
     .style('border-radius', '0.5rem');
 
@@ -166,7 +201,8 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
 
   svg.append('rect').attr('width', W).attr('height', H).attr('fill', tc.bgSecondary);
 
-  svg.append('path')
+  svg
+    .append('path')
     .datum(geoGraticule()())
     .attr('d', path as any)
     .attr('fill', 'none')
@@ -177,7 +213,8 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
     const resp = await fetch(WORLD_URL);
     const topo = await resp.json();
     const land = feature(topo, topo.objects.land);
-    svg.append('path')
+    svg
+      .append('path')
       .datum(land)
       .attr('d', path as any)
       .attr('fill', tc.borderColor)
@@ -212,7 +249,8 @@ async function drawMap(container: HTMLElement, result: PageRankResult, airports:
     const pt = projection([airport.lon, airport.lat]);
     if (!pt) continue;
     g.append('circle')
-      .attr('cx', pt[0]).attr('cy', pt[1])
+      .attr('cx', pt[0])
+      .attr('cy', pt[1])
       .attr('r', radius(ap.score))
       .attr('fill', color(ap.score))
       .attr('fill-opacity', 0.8)
@@ -240,12 +278,14 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
   if (convergence.length === 0) return;
   const tc = getThemeColors();
 
-  const W = 600, H = 240;
+  const W = 600,
+    H = 240;
   const margin = { top: 10, right: 10, bottom: 25, left: 50 };
   const iw = W - margin.left - margin.right;
   const ih = H - margin.top - margin.bottom;
 
-  const svg = select(container).append('svg')
+  const svg = select(container)
+    .append('svg')
     .attr('viewBox', `0 0 ${W} ${H}`)
     .attr('preserveAspectRatio', 'xMidYMid meet')
     .style('width', '100%')
@@ -253,8 +293,13 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
     .style('display', 'block');
 
   // Clip path so line/points can't overflow the chart area
-  svg.append('defs').append('clipPath').attr('id', 'conv-clip')
-    .append('rect').attr('width', iw).attr('height', ih);
+  svg
+    .append('defs')
+    .append('clipPath')
+    .attr('id', 'conv-clip')
+    .append('rect')
+    .attr('width', iw)
+    .attr('height', ih);
 
   const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
   // Clipped sub-group for the line so it doesn't overflow
@@ -263,16 +308,27 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
   const minVal = Math.max(convergence[convergence.length - 1], 1e-15);
   const maxVal = convergence[0];
 
-  const xScale = scaleLinear().domain([0, convergence.length - 1]).range([0, iw]);
+  const xScale = scaleLinear()
+    .domain([0, convergence.length - 1])
+    .range([0, iw]);
   const yScale = scaleLog().domain([minVal, maxVal]).range([ih, 0]);
 
   // Grid
   const yTicks = yScale.ticks(4);
   for (const t of yTicks) {
-    g.append('line').attr('x1', 0).attr('x2', iw).attr('y1', yScale(t)).attr('y2', yScale(t))
-      .attr('stroke', tc.borderColor).attr('stroke-width', 0.5);
-    g.append('text').attr('x', -6).attr('y', yScale(t) + 4)
-      .attr('fill', tc.textMuted).attr('font-size', '10px').attr('text-anchor', 'end')
+    g.append('line')
+      .attr('x1', 0)
+      .attr('x2', iw)
+      .attr('y1', yScale(t))
+      .attr('y2', yScale(t))
+      .attr('stroke', tc.borderColor)
+      .attr('stroke-width', 0.5);
+    g.append('text')
+      .attr('x', -6)
+      .attr('y', yScale(t) + 4)
+      .attr('fill', tc.textMuted)
+      .attr('font-size', '10px')
+      .attr('text-anchor', 'end')
       .text(t.toExponential(0));
   }
 
@@ -281,7 +337,8 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
     .x((_, i) => xScale(i))
     .y((d) => yScale(Math.max(d, minVal)));
 
-  clipped.append('path')
+  clipped
+    .append('path')
     .datum(convergence)
     .attr('d', pathLine as any)
     .attr('fill', 'none')
@@ -289,11 +346,19 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
     .attr('stroke-width', 1.5);
 
   // Axis labels (outside clip)
-  g.append('text').attr('x', iw / 2).attr('y', ih + 20)
-    .attr('fill', tc.textMuted).attr('font-size', '11px').attr('text-anchor', 'middle')
+  g.append('text')
+    .attr('x', iw / 2)
+    .attr('y', ih + 20)
+    .attr('fill', tc.textMuted)
+    .attr('font-size', '11px')
+    .attr('text-anchor', 'middle')
     .text('Iteration');
-  g.append('text').attr('x', -ih / 2).attr('y', -38)
-    .attr('fill', tc.textMuted).attr('font-size', '11px').attr('text-anchor', 'middle')
+  g.append('text')
+    .attr('x', -ih / 2)
+    .attr('y', -38)
+    .attr('fill', tc.textMuted)
+    .attr('font-size', '11px')
+    .attr('text-anchor', 'middle')
     .attr('transform', 'rotate(-90)')
     .text('Max Δ');
 }
@@ -302,44 +367,74 @@ function drawConvergence(container: HTMLElement, convergence: number[]) {
 
 const styles: Record<string, React.CSSProperties> = {
   controls: {
-    display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', gap: '1rem',
-    padding: '1rem', marginBottom: '1rem',
-    background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '0.75rem',
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'flex-end',
+    gap: '1rem',
+    padding: '1rem',
+    marginBottom: '1rem',
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border-color)',
+    borderRadius: '0.75rem',
   },
   controlGroup: { display: 'flex', flexDirection: 'column', gap: '0.3rem' },
   label: { fontSize: '0.78rem', color: 'var(--text-muted)' },
   slider: { width: '140px', accentColor: 'var(--accent-start)' },
   select: {
-    padding: '0.35rem 0.6rem', borderRadius: '0.35rem', fontSize: '0.78rem',
-    background: 'var(--bg-secondary)', border: '1px solid var(--border-color)',
-    color: 'var(--text-primary)', cursor: 'pointer',
+    padding: '0.35rem 0.6rem',
+    borderRadius: '0.35rem',
+    fontSize: '0.78rem',
+    background: 'var(--bg-secondary)',
+    border: '1px solid var(--border-color)',
+    color: 'var(--text-primary)',
+    cursor: 'pointer',
   },
   runBtn: {
-    padding: '0.45rem 1rem', borderRadius: '0.5rem', border: 'none',
+    padding: '0.45rem 1rem',
+    borderRadius: '0.5rem',
+    border: 'none',
     background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer',
+    color: '#fff',
+    fontWeight: 600,
+    fontSize: '0.82rem',
+    cursor: 'pointer',
   },
   mapContainer: {
-    width: '100%', minHeight: 200, borderRadius: '0.5rem', overflow: 'hidden',
+    width: '100%',
+    minHeight: 200,
+    borderRadius: '0.5rem',
+    overflow: 'hidden',
     background: 'var(--bg-secondary)',
   },
   statsRow: {
-    display: 'flex', gap: '1.5rem', marginTop: '0.75rem', fontSize: '0.78rem', color: 'var(--text-muted)',
+    display: 'flex',
+    gap: '1.5rem',
+    marginTop: '0.75rem',
+    fontSize: '0.78rem',
+    color: 'var(--text-muted)',
   },
   stat: {},
   card: {
-    padding: '1rem', background: 'var(--bg-card)',
-    border: '1px solid var(--border-color)', borderRadius: '0.75rem',
+    padding: '1rem',
+    background: 'var(--bg-card)',
+    border: '1px solid var(--border-color)',
+    borderRadius: '0.75rem',
   },
   cardTitle: { margin: '0 0 0.5rem', fontSize: '0.9rem', color: 'var(--text-primary)' },
   tableWrap: { maxHeight: 360, overflowY: 'auto' },
   table: { width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' },
   th: {
-    padding: '0.4rem 0.6rem', textAlign: 'center', borderBottom: '1px solid var(--border-color)',
-    color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase',
+    padding: '0.4rem 0.6rem',
+    textAlign: 'center',
+    borderBottom: '1px solid var(--border-color)',
+    color: 'var(--text-muted)',
+    fontWeight: 600,
+    fontSize: '0.72rem',
+    textTransform: 'uppercase',
   },
   td: {
-    padding: '0.35rem 0.6rem', textAlign: 'center',
+    padding: '0.35rem 0.6rem',
+    textAlign: 'center',
     borderBottom: '1px solid color-mix(in srgb, var(--border-color) 50%, transparent)',
     color: 'var(--text-secondary)',
   },

@@ -187,19 +187,25 @@ describe('JSBach interpreter — lists', () => {
 
 describe('JSBach interpreter — read (<?>) with inputs', () => {
   it('reads from provided input values', () => {
-    const r = interpret(`Main |:
+    const r = interpret(
+      `Main |:
   <?> x
   <!> x
-:|`, [99]);
+:|`,
+      [99]
+    );
     expect(r.output).toEqual(['99']);
   });
 
   it('defaults to 0 when inputs exhausted', () => {
-    const r = interpret(`Main |:
+    const r = interpret(
+      `Main |:
   <?> x
   <?> y
   <!> y
-:|`, [5]);
+:|`,
+      [5]
+    );
     expect(r.output).toEqual(['0']);
   });
 });

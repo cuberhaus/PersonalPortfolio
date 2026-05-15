@@ -1,10 +1,10 @@
 import { useRef, useEffect } from 'react';
 import { drawWave, drawPhong, drawCheckerboard, drawExplode } from '../../lib/grafics-kernels';
 
-import { T, type DemoTranslations } from "../../i18n/demos/grafics-demo";
+import { T, type DemoTranslations } from '../../i18n/demos/grafics-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 
-type Lang = "en" | "es" | "ca";
+type Lang = 'en' | 'es' | 'ca';
 
 function WavePanel({ t }: { t: (typeof T)['en'] }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -114,7 +114,13 @@ export default function GraficsDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = T[lang] || T.en;
   useDemoLifecycle('demo:grafics', { lang });
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '1rem',
+      }}
+    >
       <WavePanel t={t} />
       <PhongPanel t={t} />
       <CheckerPanel t={t} />

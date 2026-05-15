@@ -23,19 +23,19 @@ custom regardless of the foundation chosen.
 Pick the row that matches your priority. Detailed rationale, trade-offs and
 alternatives live in [`decisions.md`](./decisions.md).
 
-| What you actually need | Best fit | Why |
-|---|---|---|
-| Just debug while coding on a laptop, nothing else | **In-page overlay only** (custom event bus + `DebugOverlay.tsx`, gated by `import.meta.env.DEV`) | Zero third-party, nothing ships to visitors, ~150 LOC. DevTools covers the rest. |
-| Watch a live dashboard on a second monitor while developing | **Local WebSocket-streamed dashboard** (Node server on `localhost:9229` + dashboard page at `/_debug`) | Real-time, no SaaS, persists across reloads, fully local, fun to build. |
-| Polished hosted dashboard, easiest path, don't care about owning data | **Sentry hosted free tier** with `@sentry/astro` | ~5 min to first dashboard view. 5K errors / 50 replays / 10K perf events per month free. Most popular tool by far. |
-| Hosted dashboard, but you want to own the data / open source | **Highlight.io self-hosted on Hetzner VPS** (~€13/mo, 8 GB RAM) | Apache-2.0, includes session replay, ~1–2 h setup, full data ownership. |
-| Custom dashboards, OpenTelemetry standard, no vendor lock-in | **Grafana Faro + Grafana Cloud free tier** (or fully self-hosted Grafana + Loki + Tempo) | Maximum flexibility, you build dashboards. Steepest learning curve. |
-| Record real users including DOM replay | **Sentry hosted** (50 replays/mo free) or **LogRocket** (replay-first, paid) | Replay is the only thing that beats reading logs after the fact. |
-| Errors only, nothing else | **Sentry hosted**, default config | One file, paste DSN, done. Free tier. |
-| Multi-demo portfolio with WebGL / canvas / heavy JS | **Custom event bus + in-page overlay + Sentry hosted** (layered) | Overlay catches FPS/state issues instantly; Sentry catches what escapes your view. |
-| Zero third-party deps, zero hosted services | **In-page overlay only** | Pure local, no SaaS, no cloud. |
-| Deploy a dashboard to your own cloud / VPS | **Highlight.io self-hosted on Hetzner** (cheap) or **Render / Railway** (managed) | See [`decisions.md` § Hosting on cloud](./decisions.md#hosting-on-cloud). |
-| You're a Cursor / Astro developer trying to debug a portfolio | **This project's chosen path:** custom event bus + overlay + `@sentry/astro` (Sentry hosted free) | Matches everything in this row above; see [Recommendation](#recommendation). |
+| What you actually need                                                | Best fit                                                                                               | Why                                                                                                                |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Just debug while coding on a laptop, nothing else                     | **In-page overlay only** (custom event bus + `DebugOverlay.tsx`, gated by `import.meta.env.DEV`)       | Zero third-party, nothing ships to visitors, ~150 LOC. DevTools covers the rest.                                   |
+| Watch a live dashboard on a second monitor while developing           | **Local WebSocket-streamed dashboard** (Node server on `localhost:9229` + dashboard page at `/_debug`) | Real-time, no SaaS, persists across reloads, fully local, fun to build.                                            |
+| Polished hosted dashboard, easiest path, don't care about owning data | **Sentry hosted free tier** with `@sentry/astro`                                                       | ~5 min to first dashboard view. 5K errors / 50 replays / 10K perf events per month free. Most popular tool by far. |
+| Hosted dashboard, but you want to own the data / open source          | **Highlight.io self-hosted on Hetzner VPS** (~€13/mo, 8 GB RAM)                                        | Apache-2.0, includes session replay, ~1–2 h setup, full data ownership.                                            |
+| Custom dashboards, OpenTelemetry standard, no vendor lock-in          | **Grafana Faro + Grafana Cloud free tier** (or fully self-hosted Grafana + Loki + Tempo)               | Maximum flexibility, you build dashboards. Steepest learning curve.                                                |
+| Record real users including DOM replay                                | **Sentry hosted** (50 replays/mo free) or **LogRocket** (replay-first, paid)                           | Replay is the only thing that beats reading logs after the fact.                                                   |
+| Errors only, nothing else                                             | **Sentry hosted**, default config                                                                      | One file, paste DSN, done. Free tier.                                                                              |
+| Multi-demo portfolio with WebGL / canvas / heavy JS                   | **Custom event bus + in-page overlay + Sentry hosted** (layered)                                       | Overlay catches FPS/state issues instantly; Sentry catches what escapes your view.                                 |
+| Zero third-party deps, zero hosted services                           | **In-page overlay only**                                                                               | Pure local, no SaaS, no cloud.                                                                                     |
+| Deploy a dashboard to your own cloud / VPS                            | **Highlight.io self-hosted on Hetzner** (cheap) or **Render / Railway** (managed)                      | See [`decisions.md` § Hosting on cloud](./decisions.md#hosting-on-cloud).                                          |
+| You're a Cursor / Astro developer trying to debug a portfolio         | **This project's chosen path:** custom event bus + overlay + `@sentry/astro` (Sentry hosted free)      | Matches everything in this row above; see [Recommendation](#recommendation).                                       |
 
 ## Recommendation
 
@@ -82,12 +82,12 @@ to cover all of them.
 
 ### Lock-in vocabulary
 
-| Lock-in level | Meaning |
-|---|---|
-| **Hard** | Migrating away requires re-instrumenting every call site (e.g. session replay, error grouping UI). |
-| **Medium** | Migrating away means swapping SDKs and rebuilding dashboards but keeping call sites mostly intact. |
-| **Soft** | Migrating away means changing one URL or DSN. |
-| **None** | Pure stdout / standard formats; portable to anything that can read JSON lines. |
+| Lock-in level | Meaning                                                                                            |
+| ------------- | -------------------------------------------------------------------------------------------------- |
+| **Hard**      | Migrating away requires re-instrumenting every call site (e.g. session replay, error grouping UI). |
+| **Medium**    | Migrating away means swapping SDKs and rebuilding dashboards but keeping call sites mostly intact. |
+| **Soft**      | Migrating away means changing one URL or DSN.                                                      |
+| **None**      | Pure stdout / standard formats; portable to anything that can read JSON lines.                     |
 
 The Sentry SDK's lock-in is "medium" — it's open-source (MIT/BSD), the data
 flow is also OSS (you can self-host Sentry or use GlitchTip with the same
@@ -119,16 +119,16 @@ per month per Sentry org. For a portfolio this is plenty.
 
 **Per-backend changes** (all approximate):
 
-| Stack | Package | Init lines | Example |
-|---|---|---|---|
-| FastAPI | `sentry-sdk[fastapi]` | ~5 | `sentry_sdk.init(dsn=DSN, traces_sample_rate=0.1)` then `app.add_middleware(SentryAsgiMiddleware)` |
-| Django | `sentry-sdk[django]` | ~3 in `settings.py` | `sentry_sdk.init(dsn=DSN, integrations=[DjangoIntegration()], traces_sample_rate=0.1)` |
-| Flask | `sentry-sdk[flask]` | ~5 | Same pattern as FastAPI with `FlaskIntegration()` |
-| Spring Boot | `sentry-spring-boot-starter` | ~3 yaml | `sentry.dsn`, `sentry.traces-sample-rate` in `application.properties` |
-| SvelteKit | `@sentry/sveltekit` | ~5 | `Sentry.init({...})` in `hooks.server.ts` |
-| Rust (axum) | `sentry`, `sentry-tower` | ~10 | `let _guard = sentry::init((DSN, ...))` + `ServiceBuilder::new().layer(NewSentryLayer)` |
-| Go | `sentry-go`, `sentry-go-http` | ~10 | `sentry.Init(sentry.ClientOptions{Dsn: DSN})` + `sentryhttp.New()` middleware |
-| PHP (Tenda) | `sentry/sentry` | ~5 | `\Sentry\init(['dsn' => DSN])` early in `bootstrap.php` |
+| Stack       | Package                       | Init lines          | Example                                                                                            |
+| ----------- | ----------------------------- | ------------------- | -------------------------------------------------------------------------------------------------- |
+| FastAPI     | `sentry-sdk[fastapi]`         | ~5                  | `sentry_sdk.init(dsn=DSN, traces_sample_rate=0.1)` then `app.add_middleware(SentryAsgiMiddleware)` |
+| Django      | `sentry-sdk[django]`          | ~3 in `settings.py` | `sentry_sdk.init(dsn=DSN, integrations=[DjangoIntegration()], traces_sample_rate=0.1)`             |
+| Flask       | `sentry-sdk[flask]`           | ~5                  | Same pattern as FastAPI with `FlaskIntegration()`                                                  |
+| Spring Boot | `sentry-spring-boot-starter`  | ~3 yaml             | `sentry.dsn`, `sentry.traces-sample-rate` in `application.properties`                              |
+| SvelteKit   | `@sentry/sveltekit`           | ~5                  | `Sentry.init({...})` in `hooks.server.ts`                                                          |
+| Rust (axum) | `sentry`, `sentry-tower`      | ~10                 | `let _guard = sentry::init((DSN, ...))` + `ServiceBuilder::new().layer(NewSentryLayer)`            |
+| Go          | `sentry-go`, `sentry-go-http` | ~10                 | `sentry.Init(sentry.ClientOptions{Dsn: DSN})` + `sentryhttp.New()` middleware                      |
+| PHP (Tenda) | `sentry/sentry`               | ~5                  | `\Sentry\init(['dsn' => DSN])` early in `bootstrap.php`                                            |
 
 ### Other options (B, C, D) — discarded
 
@@ -172,16 +172,16 @@ operational manual referred to these by description; this table makes
 them findable. Source of truth for `needsSentry` is
 [`src/data/demo-services.json`](../src/data/demo-services.json).
 
-| Backend | Stack | Init hook |
-|---|---|---|
-| TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api | Python (FastAPI / Flask / Litestar) | [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) — canonical helper, copied verbatim into each backend repo |
-| Draculin | Django | [`Draculin-Backend/Draculin/settings.py`](../../Draculin-Backend/Draculin/settings.py) — calls `init_observability("draculin")` from the same canonical helper |
-| PROP | Spring Boot | [`subgrup-prop7.1/web/src/main/resources/application.properties`](../../subgrup-prop7.1/web/src/main/resources/application.properties) (`sentry.dsn`, `sentry.tags.service=prop`) and [`subgrup-prop7.1/web/pom.xml`](../../subgrup-prop7.1/web/pom.xml) for the `sentry-spring-boot-starter-jakarta` + `sentry-logback` deps |
-| Tenda | PHP | [`tenda_online/includes/observability.php`](../../tenda_online/includes/observability.php) — `\Sentry\init(...)` + `\Sentry\configureScope(...)` to set `service`; emits JSON lines via `tenda_emit_log` |
-| joc-eda | Go | [`joc_eda/web/backend-go/observability.go`](../../joc_eda/web/backend-go/observability.go) — `initSentry`, `withSentryHTTP` middleware, `jsonStdoutWriter` |
-| pro2 | Rust (axum) | [`pracpro2/web/backend/src/main.rs`](../../pracpro2/web/backend/src/main.rs) `_init_sentry()` — held for the lifetime of `main()` |
-| planificacion | SvelteKit | [`Practica_de_Planificacion/web/src/hooks.server.ts`](../../Practica_de_Planificacion/web/src/hooks.server.ts) — `@sentry/sveltekit` init + `sentryHandle()` + `console.*` JSON wrapper |
-| PAR / FIB / Grafics / ROB | static frontend (nginx-served) | n/a — `needsSentry: false` in [`src/data/demo-services.json`](../src/data/demo-services.json); browser errors are caught by the parent page's Sentry SDK via the iframe forwarder |
+| Backend                                                          | Stack                               | Init hook                                                                                                                                                                                                                                                                                                                     |
+| ---------------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api | Python (FastAPI / Flask / Litestar) | [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) — canonical helper, copied verbatim into each backend repo                                                                                                                                                                              |
+| Draculin                                                         | Django                              | [`Draculin-Backend/Draculin/settings.py`](../../Draculin-Backend/Draculin/settings.py) — calls `init_observability("draculin")` from the same canonical helper                                                                                                                                                                |
+| PROP                                                             | Spring Boot                         | [`subgrup-prop7.1/web/src/main/resources/application.properties`](../../subgrup-prop7.1/web/src/main/resources/application.properties) (`sentry.dsn`, `sentry.tags.service=prop`) and [`subgrup-prop7.1/web/pom.xml`](../../subgrup-prop7.1/web/pom.xml) for the `sentry-spring-boot-starter-jakarta` + `sentry-logback` deps |
+| Tenda                                                            | PHP                                 | [`tenda_online/includes/observability.php`](../../tenda_online/includes/observability.php) — `\Sentry\init(...)` + `\Sentry\configureScope(...)` to set `service`; emits JSON lines via `tenda_emit_log`                                                                                                                      |
+| joc-eda                                                          | Go                                  | [`joc_eda/web/backend-go/observability.go`](../../joc_eda/web/backend-go/observability.go) — `initSentry`, `withSentryHTTP` middleware, `jsonStdoutWriter`                                                                                                                                                                    |
+| pro2                                                             | Rust (axum)                         | [`pracpro2/web/backend/src/main.rs`](../../pracpro2/web/backend/src/main.rs) `_init_sentry()` — held for the lifetime of `main()`                                                                                                                                                                                             |
+| planificacion                                                    | SvelteKit                           | [`Practica_de_Planificacion/web/src/hooks.server.ts`](../../Practica_de_Planificacion/web/src/hooks.server.ts) — `@sentry/sveltekit` init + `sentryHandle()` + `console.*` JSON wrapper                                                                                                                                       |
+| PAR / FIB / Grafics / ROB                                        | static frontend (nginx-served)      | n/a — `needsSentry: false` in [`src/data/demo-services.json`](../src/data/demo-services.json); browser errors are caught by the parent page's Sentry SDK via the iframe forwarder                                                                                                                                             |
 
 ### Why the Python helper has a `before_send` hook and the others don't
 
@@ -220,7 +220,7 @@ tag lands by filtering on `service:<slug>` in the Sentry UI (see
 
 These four behaviours apply uniformly across every backend regardless of
 its language stack. They are documented here, in the architectural doc,
-because the *reason* is shared even though the *implementation* differs
+because the _reason_ is shared even though the _implementation_ differs
 per language. The operational manual ([`observability.md`](./observability.md))
 contains the per-backend file references and CLI knobs.
 
@@ -235,7 +235,7 @@ events for the same user across the whole stack.
 
 The header is gated by an allowlist (registry origins + own origin) so
 the id never leaks to third-party APIs, and Sentry's distributed-tracing
-`baggage` is *not* used because we want correlation to survive even when
+`baggage` is _not_ used because we want correlation to survive even when
 traces are sampled out (standalone errors still get joined).
 
 The session id is **not** PII — it's a random UUID that can't be
@@ -375,7 +375,7 @@ import spotlight from '@spotlightjs/astro';
 export default defineConfig({
   integrations: [
     sentry({ dsn: 'https://test@test/0', environment: 'local' }),
-    spotlight(),  // automatically stripped from production builds
+    spotlight(), // automatically stripped from production builds
   ],
 });
 ```
@@ -388,7 +388,7 @@ What you get locally:
 - Same SDK behaviour as production → no "works locally, breaks in prod"
   surprises.
 
-What's *not* covered by Spotlight (vs hosted Sentry):
+What's _not_ covered by Spotlight (vs hosted Sentry):
 
 - Session replay (Spotlight doesn't render replays).
 - Alerts and notifications (no alerting backend locally).
@@ -415,16 +415,16 @@ When the time comes to verify the actual `sentry.io` dashboard:
 
 For the other backends in [`decisions.md` § Migration matrix](./decisions.md#migration-matrix-assuming-the-chosen-path-sentry-hosted):
 
-| Backend | Local-only test path |
-|---|---|
-| **Sentry hosted** | Sentry Spotlight (this section) |
-| **Highlight self-hosted** | `docker compose up` from the Highlight repo — same code as production |
-| **Highlight hosted** | Free hobby project at app.highlight.io |
-| **PostHog self-hosted** | Single-container `posthog/posthog` Docker image |
-| **PostHog Cloud** | Free hobby project at app.posthog.com |
-| **Grafana Faro** | Local Grafana + Loki + Tempo stack via `docker compose`, or Grafana Cloud free tier |
-| **Custom local WS dashboard** | n/a — it *is* the local stack |
-| **In-page overlay only** | `astro dev` — nothing else needed |
+| Backend                       | Local-only test path                                                                |
+| ----------------------------- | ----------------------------------------------------------------------------------- |
+| **Sentry hosted**             | Sentry Spotlight (this section)                                                     |
+| **Highlight self-hosted**     | `docker compose up` from the Highlight repo — same code as production               |
+| **Highlight hosted**          | Free hobby project at app.highlight.io                                              |
+| **PostHog self-hosted**       | Single-container `posthog/posthog` Docker image                                     |
+| **PostHog Cloud**             | Free hobby project at app.posthog.com                                               |
+| **Grafana Faro**              | Local Grafana + Loki + Tempo stack via `docker compose`, or Grafana Cloud free tier |
+| **Custom local WS dashboard** | n/a — it _is_ the local stack                                                       |
+| **In-page overlay only**      | `astro dev` — nothing else needed                                                   |
 
 So every option has a no-account, no-cloud path that exercises the same SDK
 wiring as the production deployment. You're not choosing blind.
