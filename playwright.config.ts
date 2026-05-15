@@ -46,6 +46,13 @@ export default defineConfig({
       retries: 0,
     },
     {
+      name: 'keyboard',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /keyboard\.spec\.ts/,
+      // Tab-order assertions are deterministic — retries waste CI time.
+      retries: 0,
+    },
+    {
       name: 'visual',
       use: {
         ...devices['Desktop Chrome'],
