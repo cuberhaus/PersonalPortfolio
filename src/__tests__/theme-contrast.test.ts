@@ -84,10 +84,11 @@ function contrastRatio(fg: string, bg: string) {
 }
 
 const blocks = parseBlocks(ALL_CSS);
-const root = blocks.find((b) => b.name === 'default-dark');
-if (!root) {
+const rootBlock = blocks.find((b) => b.name === 'default-dark');
+if (!rootBlock) {
   throw new Error('Could not parse :root variables from global.css');
 }
+const root: Block = rootBlock;
 
 /**
  * Resolve a token in a given theme: prefer the theme block's own value,
