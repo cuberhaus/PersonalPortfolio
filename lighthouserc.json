@@ -6,7 +6,12 @@
         "http://localhost/index.html",
         "http://localhost/demos/algorithms/index.html",
         "http://localhost/demos/grafics/index.html",
-        "http://localhost/demos/joc-eda/index.html"
+        "http://localhost/demos/joc-eda/index.html",
+        "http://localhost/demos/tfg-polyps/index.html",
+        "http://localhost/demos/caim/index.html",
+        "http://localhost/demos/bitsx-marato/index.html",
+        "http://localhost/demos/phase-transitions/index.html",
+        "http://localhost/demos/mpids/index.html"
       ],
       "numberOfRuns": 1,
       "settings": {
