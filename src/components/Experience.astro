@@ -18,27 +18,6 @@ type ExpEntry = {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const experience = flattenForLocale<ExpEntry>(experienceData as never, lang);
-
-const durationLabels = {
-  en: { yr: 'yr', yrs: 'yrs', mo: 'mo', mos: 'mos' },
-  es: { yr: 'año', yrs: 'años', mo: 'mes', mos: 'meses' },
-  ca: { yr: 'any', yrs: 'anys', mo: 'mes', mos: 'mesos' },
-} as const;
-
-function formatDuration(startDate: string, endDate?: string): string {
-  const [startY, startM] = startDate.split('-').map(Number);
-  const end = endDate
-    ? endDate.split('-').map(Number)
-    : [new Date().getFullYear(), new Date().getMonth() + 1];
-  const totalMonths = (end[0] - startY) * 12 + (end[1] - startM);
-  const years = Math.floor(totalMonths / 12);
-  const months = totalMonths % 12;
-  const l = durationLabels[lang] ?? durationLabels.en;
-  const parts: string[] = [];
-  if (years > 0) parts.push(`${years} ${years === 1 ? l.yr : l.yrs}`);
-  if (months > 0) parts.push(`${months} ${months === 1 ? l.mo : l.mos}`);
-  return parts.join(' ') || `< 1 ${l.mo}`;
-}
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
 const { num } = Astro.props;
@@ -74,7 +53,13 @@ const { num } = Astro.props;
               )}
               <div class="timeline-period-row">
                 <span class="timeline-period">
-                  {job.period} · {formatDuration(job.startDate, job.endDate)}
+                  {job.period} ·{' '}
+                  <span
+                    class="js-duration"
+                    data-start={job.startDate}
+                    data-end={job.endDate ?? ''}
+                    data-lang={lang}
+                  />
                 </span>
                 {job.logo && (
                   <div class="timeline-logo-badge">
@@ -106,6 +91,31 @@ const { num } = Astro.props;
     </ul>
   </div>
 </section>
+
+<script>
+  const labels: Record<string, { yr: string; yrs: string; mo: string; mos: string }> = {
+    en: { yr: 'yr', yrs: 'yrs', mo: 'mo', mos: 'mos' },
+    es: { yr: 'año', yrs: 'años', mo: 'mes', mos: 'meses' },
+    ca: { yr: 'any', yrs: 'anys', mo: 'mes', mos: 'mesos' },
+  };
+
+  document.querySelectorAll<HTMLSpanElement>('.js-duration').forEach((el) => {
+    const start = el.dataset.start!;
+    const end = el.dataset.end || undefined;
+    const lang = el.dataset.lang || 'en';
+    const [sY, sM] = start.split('-').map(Number);
+    const now = new Date();
+    const [eY, eM] = end ? end.split('-').map(Number) : [now.getFullYear(), now.getMonth() + 1];
+    const total = (eY - sY) * 12 + (eM - sM);
+    const years = Math.floor(total / 12);
+    const months = total % 12;
+    const l = labels[lang] ?? labels.en;
+    const parts: string[] = [];
+    if (years > 0) parts.push(`${years} ${years === 1 ? l.yr : l.yrs}`);
+    if (months > 0) parts.push(`${months} ${months === 1 ? l.mo : l.mos}`);
+    el.textContent = parts.join(' ') || `< 1 ${l.mo}`;
+  });
+</script>
 
 <style>
   .timeline {
