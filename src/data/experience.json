@@ -8,7 +8,7 @@
     },
     "copy": {
       "en": {
-        "role": "AI & Data Consultant",
+        "role": "AI & ML Engineer",
         "period": "Sep 2025 — Present",
         "bullets": [
           "Delivered Deloitte's first Physical AI project: real-time manufacturing anomaly detection on live motor production lines and a warehouse digital twin with camera-based package tracking, built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton)",
@@ -17,7 +17,7 @@
         ]
       },
       "es": {
-        "role": "Consultor de IA y Datos",
+        "role": "Ingeniero de IA y ML",
         "period": "Sep 2025 — Presente",
         "bullets": [
           "Entrega del primer proyecto de IA Física de Deloitte: detección de anomalías de fabricación en tiempo real sobre líneas de producción de motores en vivo y un gemelo digital del almacén con seguimiento de paquetes por cámara, construido sobre NVIDIA Omniverse, Isaac Sim y el stack Metropolis (DeepStream, TAO, Triton)",
@@ -26,7 +26,7 @@
         ]
       },
       "ca": {
-        "role": "Consultor d'IA i Dades",
+        "role": "Enginyer d'IA i ML",
         "period": "Set 2025 — Actualitat",
         "bullets": [
           "Lliurament del primer projecte d'IA Física de Deloitte: detecció d'anomalies de fabricació en temps real en línies de producció de motors en viu i un bessó digital del magatzem amb seguiment de paquets per càmera, construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton)",
