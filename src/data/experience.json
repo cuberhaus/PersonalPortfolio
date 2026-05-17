@@ -9,7 +9,7 @@
     "copy": {
       "en": {
         "role": "AI & ML Engineer",
-        "period": "Sep 2025 — Present",
+        "period": "Sep 2024 — Present",
         "bullets": [
           "Delivered Deloitte's first Physical AI project: real-time manufacturing anomaly detection on live motor production lines and a warehouse digital twin with camera-based package tracking, built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton)",
           "Designed and deployed AI and data infrastructure across AWS, Azure, and GCP — edge inference, streaming pipelines, and cloud-hosted training and model serving",
@@ -18,7 +18,7 @@
       },
       "es": {
         "role": "Ingeniero de IA y ML",
-        "period": "Sep 2025 — Presente",
+        "period": "Sep 2024 — Presente",
         "bullets": [
           "Entrega del primer proyecto de IA Física de Deloitte: detección de anomalías de fabricación en tiempo real sobre líneas de producción de motores en vivo y un gemelo digital del almacén con seguimiento de paquetes por cámara, construido sobre NVIDIA Omniverse, Isaac Sim y el stack Metropolis (DeepStream, TAO, Triton)",
           "Diseño y despliegue de infraestructura de IA y datos en AWS, Azure y GCP — inferencia en el edge, pipelines de streaming y entrenamiento y servicio de modelos en la nube",
@@ -27,7 +27,7 @@
       },
       "ca": {
         "role": "Enginyer d'IA i ML",
-        "period": "Set 2025 — Actualitat",
+        "period": "Set 2024 — Actualitat",
         "bullets": [
           "Lliurament del primer projecte d'IA Física de Deloitte: detecció d'anomalies de fabricació en temps real en línies de producció de motors en viu i un bessó digital del magatzem amb seguiment de paquets per càmera, construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton)",
           "Disseny i desplegament d'infraestructura d'IA i dades a AWS, Azure i GCP — inferència a l'edge, pipelines de streaming i entrenament i servei de models al núvol",
