@@ -49,21 +49,23 @@ const { num } = Astro.props;
                   aria-label={`${job.role} @ ${job.company}`}
                 />
               )}
-              {job.logo && (
-                <div class="timeline-logo-badge">
-                  <img
-                    src={base + job.logo}
-                    alt={`${job.company} logo`}
-                    class="theme-logo"
-                    data-dark={base + job.logo}
-                    data-light={job.logoLight ? base + job.logoLight : base + job.logo}
-                    width="48"
-                    height="24"
-                    loading="lazy"
-                  />
-                </div>
-              )}
-              <span class="timeline-period">{job.period}</span>
+              <div class="timeline-period-row">
+                <span class="timeline-period">{job.period}</span>
+                {job.logo && (
+                  <div class="timeline-logo-badge">
+                    <img
+                      src={base + job.logo}
+                      alt={`${job.company} logo`}
+                      class="theme-logo"
+                      data-dark={base + job.logo}
+                      data-light={job.logoLight ? base + job.logoLight : base + job.logo}
+                      width="48"
+                      height="24"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+              </div>
               <h3 class="timeline-role">
                 {job.role} <span class="timeline-company">@ {job.company}</span>
               </h3>
@@ -172,14 +174,16 @@ const { num } = Astro.props;
     margin-bottom: 1rem;
   }
 
-  .timeline-logo-badge {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.75rem;
+  .timeline-period-row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 2;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-logo-badge {
+    display: flex;
+    align-items: center;
   }
 
   .timeline-logo-badge img {
@@ -193,8 +197,6 @@ const { num } = Astro.props;
     font-family: var(--font-mono);
     font-size: 0.8rem;
     color: var(--accent-text);
-    margin-bottom: 0.5rem;
-    display: block;
   }
 
   .timeline-role {
@@ -252,6 +254,10 @@ const { num } = Astro.props;
 
     .timeline-content {
       padding: 1.25rem;
+    }
+
+    .timeline-logo-badge img {
+      height: 16px;
     }
   }
 </style>
