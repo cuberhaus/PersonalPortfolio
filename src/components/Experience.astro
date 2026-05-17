@@ -8,12 +8,15 @@ type ExpEntry = {
   company: string;
   period: string;
   link?: string;
+  logo?: string;
+  logoLight?: string;
   bullets: string[];
 };
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const experience = flattenForLocale<ExpEntry>(experienceData as never, lang);
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
 const { num } = Astro.props;
 ---
@@ -45,6 +48,20 @@ const { num } = Astro.props;
                   class="timeline-card-link"
                   aria-label={`${job.role} @ ${job.company}`}
                 />
+              )}
+              {job.logo && (
+                <div class="timeline-logo-badge">
+                  <img
+                    src={base + job.logo}
+                    alt={`${job.company} logo`}
+                    class="theme-logo"
+                    data-dark={base + job.logo}
+                    data-light={job.logoLight ? base + job.logoLight : base + job.logo}
+                    width="48"
+                    height="24"
+                    loading="lazy"
+                  />
+                </div>
               )}
               <span class="timeline-period">{job.period}</span>
               <h3 class="timeline-role">
@@ -78,7 +95,7 @@ const { num } = Astro.props;
     left: 0.55rem;
     width: 2px;
     height: 100%;
-    background: var(--border-color);
+    background: linear-gradient(to bottom, var(--border-color) 70%, transparent);
   }
 
   .timeline-item {
@@ -88,6 +105,12 @@ const { num } = Astro.props;
 
   .timeline-item:last-child {
     padding-bottom: 0;
+  }
+
+  .timeline-item:first-child .timeline-dot {
+    width: 0.9rem;
+    height: 0.9rem;
+    box-shadow: 0 0 16px var(--glow-color-strong);
   }
 
   .timeline-marker {
@@ -115,14 +138,55 @@ const { num } = Astro.props;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 1.75rem;
+    overflow: hidden;
     transition:
       border-color var(--transition-base),
       box-shadow var(--transition-base);
   }
 
+  .timeline-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
   .timeline-content:hover {
     border-color: var(--border-color-hover);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .timeline-content:hover::before {
+    opacity: 1;
+  }
+
+  .timeline-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .timeline-logo-badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .timeline-logo-badge img {
+    display: block;
+    height: 20px;
+    width: auto;
+    object-fit: contain;
   }
 
   .timeline-period {
@@ -191,3 +255,30 @@ const { num } = Astro.props;
     }
   }
 </style>
+
+<script>
+  const LIGHT_SCHEMES = [
+    'light',
+    'nord-light',
+    'catppuccin-latte',
+    'solarized-light',
+    'sepia',
+    'paper',
+  ];
+
+  function updateLogos() {
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const isLight = LIGHT_SCHEMES.includes(theme);
+    document.querySelectorAll<HTMLImageElement>('img.theme-logo').forEach((img) => {
+      const src = isLight ? img.dataset.light : img.dataset.dark;
+      if (src && img.src !== src) img.src = src;
+    });
+  }
+
+  updateLogos();
+  new MutationObserver(updateLogos).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+  document.addEventListener('astro:page-load', updateLogos);
+</script>

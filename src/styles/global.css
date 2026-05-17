@@ -97,6 +97,8 @@ html[data-theme='light'] {
   --status-info: #1e40af;
 }
 
+/* ── Logo theme toggle (handled via JS in Experience.astro) ── */
+
 /* ── Reset ────────────────────────────────────────────────── */
 *,
 *::before,
