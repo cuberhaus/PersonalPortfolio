@@ -2,7 +2,9 @@
   {
     "identity": {
       "company": "Deloitte",
-      "link": "https://www.deloitte.com/es/es.html"
+      "link": "https://www.deloitte.com/es/es.html",
+      "logo": "/logos/Deloitte_logo_white.svg",
+      "logoLight": "/logos/Logo_of_Deloitte.svg"
     },
     "copy": {
       "en": {

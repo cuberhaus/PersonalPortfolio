@@ -68,18 +68,36 @@ const { num } = Astro.props;
   }
 
   .education-card {
+    position: relative;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 2rem;
+    overflow: hidden;
     transition:
       border-color var(--transition-base),
       box-shadow var(--transition-base);
   }
 
+  .education-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+  }
+
   .education-card:hover {
     border-color: var(--accent-text);
     box-shadow: 0 12px 40px var(--glow-color);
+  }
+
+  .education-card:hover::before {
+    opacity: 1;
   }
 
   .education-link {
