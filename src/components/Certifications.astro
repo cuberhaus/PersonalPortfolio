@@ -21,14 +21,14 @@ const { num } = Astro.props;
 ---
 
 <section class="section certifications" id="certifications" data-num={num}>
-  <div class="container">
+  <div class={`container${certs.length > 6 ? ' has-desktop-extra' : ''}`}>
     <div class="reveal">
       <span class="section-label">{t('certifications.label')}</span>
       <h2 class="section-title">{t('certifications.title')}</h2>
       <p class="section-subtitle">{t('certifications.subtitle')}</p>
     </div>
 
-    <ul class="certifications-grid reveal-stagger" id="certifications-grid" data-mobile-limit="4">
+    <ul class="certifications-grid reveal-stagger" id="certifications-grid" data-mobile-limit="3">
       {
         certs.map((c, i) => {
           const Inner = (
@@ -49,7 +49,9 @@ const { num } = Astro.props;
             </>
           );
           return (
-            <li class={`certification-card${i >= 4 ? ' certification-card--extra' : ''}`}>
+            <li
+              class={`certification-card${i >= 6 ? ' certification-card--extra' : i >= 3 ? ' certification-card--extra-mobile' : ''}`}
+            >
               {c.link ? (
                 <a
                   href={c.link}
@@ -71,7 +73,7 @@ const { num } = Astro.props;
     </ul>
 
     {
-      certs.length > 4 && (
+      certs.length > 3 && (
         <button
           class="certifications-toggle"
           id="certifications-toggle"
@@ -157,16 +159,26 @@ const { num } = Astro.props;
     color: var(--accent-text);
   }
 
+  /* Desktop: hide items beyond 6 */
+  .certification-card--extra {
+    display: none;
+  }
+
+  .certifications-grid.expanded .certification-card--extra {
+    display: block;
+  }
+
   @media (max-width: 768px) {
     .certifications-grid {
       grid-template-columns: 1fr;
     }
 
-    .certification-card--extra {
+    /* Mobile: also hide items beyond 3 */
+    .certification-card--extra-mobile {
       display: none;
     }
 
-    .certifications-grid.expanded .certification-card--extra {
+    .certifications-grid.expanded .certification-card--extra-mobile {
       display: block;
     }
   }
@@ -192,12 +204,14 @@ const { num } = Astro.props;
     box-shadow: 0 4px 20px var(--glow-color);
   }
 
+  /* Show button on desktop when there are >6 items */
+  .has-desktop-extra .certifications-toggle {
+    display: block;
+  }
+
+  /* Show button on mobile always (rendered only when >3 items) */
   @media (max-width: 768px) {
     .certifications-toggle {
-      display: block;
-    }
-
-    .certifications-toggle.expanded {
       display: block;
     }
   }
