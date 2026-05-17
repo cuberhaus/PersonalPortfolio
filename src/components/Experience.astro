@@ -7,6 +7,8 @@ type ExpEntry = {
   role: string;
   company: string;
   period: string;
+  startDate: string;
+  endDate?: string;
   link?: string;
   logo?: string;
   logoLight?: string;
@@ -16,6 +18,27 @@ type ExpEntry = {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const experience = flattenForLocale<ExpEntry>(experienceData as never, lang);
+
+const durationLabels = {
+  en: { yr: 'yr', yrs: 'yrs', mo: 'mo', mos: 'mos' },
+  es: { yr: 'año', yrs: 'años', mo: 'mes', mos: 'meses' },
+  ca: { yr: 'any', yrs: 'anys', mo: 'mes', mos: 'mesos' },
+} as const;
+
+function formatDuration(startDate: string, endDate?: string): string {
+  const [startY, startM] = startDate.split('-').map(Number);
+  const end = endDate
+    ? endDate.split('-').map(Number)
+    : [new Date().getFullYear(), new Date().getMonth() + 1];
+  const totalMonths = (end[0] - startY) * 12 + (end[1] - startM);
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  const l = durationLabels[lang] ?? durationLabels.en;
+  const parts: string[] = [];
+  if (years > 0) parts.push(`${years} ${years === 1 ? l.yr : l.yrs}`);
+  if (months > 0) parts.push(`${months} ${months === 1 ? l.mo : l.mos}`);
+  return parts.join(' ') || `< 1 ${l.mo}`;
+}
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
 const { num } = Astro.props;
@@ -50,7 +73,9 @@ const { num } = Astro.props;
                 />
               )}
               <div class="timeline-period-row">
-                <span class="timeline-period">{job.period}</span>
+                <span class="timeline-period">
+                  {job.period} · {formatDuration(job.startDate, job.endDate)}
+                </span>
                 {job.logo && (
                   <div class="timeline-logo-badge">
                     <img

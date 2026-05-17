@@ -4,7 +4,8 @@
       "company": "Deloitte",
       "link": "https://www.deloitte.com/es/es.html",
       "logo": "/logos/Deloitte_logo_white.svg",
-      "logoLight": "/logos/Logo_of_Deloitte.svg"
+      "logoLight": "/logos/Logo_of_Deloitte.svg",
+      "startDate": "2024-09"
     },
     "copy": {
       "en": {
@@ -39,7 +40,9 @@
   {
     "identity": {
       "company": "MGS, Seguros y Reaseguros S.A.",
-      "link": "https://www.mgs.es/wps/"
+      "link": "https://www.mgs.es/wps/",
+      "startDate": "2023-09",
+      "endDate": "2024-09"
     },
     "copy": {
       "en": {
