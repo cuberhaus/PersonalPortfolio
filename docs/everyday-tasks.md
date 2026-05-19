@@ -158,9 +158,10 @@ for the full rules.
 
 ## 9. Adding or removing a demo
 
-This is the one task with its own dedicated document — the wiring touches
-the registry, Docker, Sentry, the log relay, and the i18n machinery. Follow
-[docs/adding-a-demo.md](./adding-a-demo.md) end-to-end.
+Has its own dedicated document. The doc has a fast path for browser-only
+demos (steps 1–7) and a clearly-fenced backend & observability second half
+(steps 8+) — start at step 1 of [docs/adding-a-demo.md](./adding-a-demo.md)
+and stop at the marker if `hasBackend: false`.
 
 **Verify:** `make check-registry && npx vitest run && npx playwright test`
 

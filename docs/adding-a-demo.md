@@ -1,92 +1,256 @@
 # Adding a new demo to the portfolio
 
-This is the end-to-end checklist for adding a new project demo so it
-plugs into every system the portfolio already runs:
+End-to-end checklist. Steps **1–7** are the **simple path** — every demo
+needs them, and a browser-only demo finishes here. Steps **8+** are
+**backend & observability** — only follow them if your demo ships a Docker
+service.
 
-- the centralized debug overlay (logs, network, perf, source filter)
-- the dev orchestrator (`make dev-bare` / `make all`)
-- the log relay (Docker `stdout` → in-page overlay)
-- the Sentry forwarder (errors + breadcrumbs)
-- the i18n machinery
-- the tests and the registry consistency check
-
-Every step below is mandatory unless explicitly marked optional.
-
-> **Single source of truth:** `src/data/demo-services.json` drives the
+> **Single source of truth:** [`src/data/demo-services.json`](../src/data/demo-services.json) drives the
 > orchestrator, the iframe forwarder, the log relay, the registry test
-> and this doc. New demo? Add the entry first, then come back here.
+> and this doc. The card on the homepage comes from
+> [`src/data/demos.json`](../src/data/demos.json) (+ `.es.json`, `.ca.json`).
 
-## 1. Skeleton
+---
 
-Create the following files (replace `<slug>` and `<Slug>` with your demo's
-slug, e.g. `tfg-polyps` / `TfgPolyps`):
+## 1. Pick a slug + decide if you need a backend
 
+- **Slug:** lowercase letters, digits, hyphens (regex enforced by
+  [`src/i18n/demo-schema.ts`](../src/i18n/demo-schema.ts)). Example:
+  `my-cool-demo`. The folder name on disk and every cross-reference uses
+  this slug verbatim.
+- **Backend?** Three flavours:
+  - **Browser-only** (no Docker): runs entirely client-side. Examples:
+    `apa-practica`, `matriculas`, `joc-eda`, `jsbach`. **Do steps 1–7.**
+  - **Mock-on-Pages, live locally:** ships a Docker backend used during
+    `make dev-bare`, but on GitHub Pages a mock UI is shown instead.
+    Examples: `tenda`, `draculin`, `prop`. **Do all steps.**
+  - **Live backend everywhere:** rare for a portfolio site; same as above
+    but no mock. **Do all steps.**
+
+If unsure, start browser-only — you can always add a backend later.
+
+---
+
+## 2. Skeleton: page, component, (optional) translations
+
+Create these files (`<slug>` lowercase, `<Slug>` PascalCase — e.g.
+`my-cool-demo` → `MyCoolDemo`):
+
+```text
+src/pages/demos/<slug>.astro            # routed page
+src/components/demos/<Slug>Demo.tsx     # interactive island (omit if iframe-only)
+src/i18n/demos/<slug>-demo.ts           # OPTIONAL — see step 6
 ```
-src/pages/demos/<slug>.astro                # routed page
-src/components/demos/<Slug>Demo.tsx         # interactive island (optional)
-src/i18n/demos/<slug>.ts                    # translations (en/es/ca)
-```
 
-The `.astro` page should use `DemoLayout` and pass `slug` so the
-log-relay subscriber can wire up automatically:
+**Astro page** — copy [`src/pages/demos/mpids.astro`](../src/pages/demos/mpids.astro)
+as a starting point. The shape:
 
 ```astro
-<DemoLayout title={demo.metaTitle} description={demo.metaDescription} slug="<slug>">
+---
+import DemoLayout from '../../layouts/DemoLayout.astro';
+import DemoHeader from '../../components/DemoHeader.astro';
+import MyCoolDemo from '../../components/demos/MyCoolDemo';
+import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getDemo } from '../../i18n/demo';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const demo = getDemo('<slug>', lang);
+---
+
+<DemoLayout title={demo.title} description={demo.metaDescription} slug="<slug>">
   <DemoHeader
     badge={demo.badge}
     title={demo.title}
     lead={demo.lead}
-    githubUrl="https://github.com/..."
-    accentFrom="#..."
-    accentTo="#..."
+    githubUrl={demo.github}
+    githubLabel={t('demo.viewSource')}
+    accent={demo.accent}
   />
-  <LiveAppEmbed slug="<slug>" title="..." dockerCmd="..." lang={lang} client:load />
-  ...
+
+  <!-- For iframe-embedded backends only: -->
+  <LiveAppEmbed slug="<slug>" title="My Cool Demo" lang={lang} client:load />
+
+  <MyCoolDemo lang={lang} client:visible />
 </DemoLayout>
 ```
 
-## 2. Browser logging (Phase 1–6 of the debug architecture)
+Pass `slug="<slug>"` to `DemoLayout` so the log-relay subscriber wires up
+automatically. Read `getDemo(slug, lang)` instead of hard-coding strings —
+all card-level fields (title, lead, badge, accent, github, …) live in
+`demos.json`.
 
-Use the namespaced bus. Always prefix with `demo:<slug>` so the overlay
-filter pills and the registry test stay consistent.
+**React island** — minimal browser-only skeleton. Copy
+[`MPIDSDemo.tsx`](../src/components/demos/MPIDSDemo.tsx) for an interactive
+example, or [`BitsXMaratoDemo.tsx`](../src/components/demos/BitsXMaratoDemo.tsx)
+for a "mock-on-Pages, live in dev" pattern. The bare skeleton:
 
 ```tsx
-import { useDebug, useDemoLifecycle } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
-export default function MyDemo({ lang = 'en' }: { lang?: 'en' | 'es' | 'ca' }) {
-  useDemoLifecycle('demo:<slug>', { lang }); // mount / unmount + i18n trace
-  const log = useDebug('demo:<slug>');
+function MyCoolDemo({ lang = 'en' }: { lang?: 'en' | 'es' | 'ca' }) {
+  return <div>hello, {lang}</div>;
+}
 
-  const onRun = () => {
-    log.info('run', { params }); // user interactions
-    try {
-      doWork();
-      log.info('run-ok', { result });
-    } catch (err) {
-      log.error('run-failed', { err: String(err) }, err as Error);
-    }
-  };
+export default withDemoErrorBoundary(MyCoolDemo, 'my-cool-demo');
+```
 
-  return <button onClick={onRun}>Run</button>;
+> **No backend, but want a "mock UI" banner?** Wrap your component with
+> [`MockBanner`](../src/components/demos/MockBanner.tsx):
+> `<MockBanner>Showing mock data — live backend runs only in dev</MockBanner>`.
+> See `BitsXMaratoDemo.tsx` for the canonical usage.
+
+---
+
+## 3. Add the demo card to `demos.json`
+
+The homepage demo grid is generated from [`src/data/demos.json`](../src/data/demos.json)
+(plus `.es.json` and `.ca.json`). Append the same entry to all **three**
+files — same shape, same field set, same order. Parity is enforced by
+[`content-parity.test.ts`](../src/__tests__/content-parity.test.ts) and the
+schema in [`src/i18n/demo-schema.ts`](../src/i18n/demo-schema.ts).
+
+```jsonc
+{
+  "identity": {
+    "slug": "<slug>",
+    "tags": ["Tag 1", "Tag 2"],
+    "icon": "cpu",                                       // see icon enum below
+    "github": "https://github.com/cuberhaus/<repo>",     // string OR string[]
+    "image": "",
+    "accent": { "from": "#10b981", "to": "#0ea5e9" }     // card gradient
+  },
+  "copy": {
+    "en": { "title": "...", "description": "...", "lead": "...", "badge": "...",
+            "metaTitle": "...", "metaDescription": "..." },
+    "es": { ... },
+    "ca": { ... }
+  }
 }
 ```
 
-Levels:
+**Schema constraints (enforced at module load):**
 
-- `trace` — per-frame / per-step (RAF, BFS step, OCR pipeline progress)
-- `info` — meaningful state change (run, mount, sample picked)
-- `warn` — recoverable (probe-aborted, frame-stall, fallback path)
-- `error` — exception, fatal, lost data
+- `slug` regex: `^[a-z0-9-]+$`.
+- `icon` is an enum — must be one of the keys in
+  [`src/lib/demo-icons.ts`](../src/lib/demo-icons.ts) `ICON_PATHS`.
+- `github` must be a `https://github.com/` URL (single string or array of
+  strings for multi-repo demos like `draculin`).
+- The `en` entry must exist; other locales fall back to `en`.
+- A title must exist either at `identity.title` (shared across locales) or
+  in every present locale's `copy.title`.
 
-Network calls inside the demo use the `net:<slug>` namespace:
+See [docs/i18n.md § Pattern B](./i18n.md#pattern-b--locale-json-triples-structured-content)
+for the parity rule that applies to every JSON-triple file.
 
-```ts
-const net = debug('net:<slug>');
-net.info('fetch', { url });
-net.warn('fetch-fallback', { url, status });
+---
+
+## 4. Register in `demo-services.json`
+
+Append to [`src/data/demo-services.json`](../src/data/demo-services.json):
+
+```json
+{
+  "slug": "<slug>",
+  "page": "src/pages/demos/<slug>.astro",
+  "component": "src/components/demos/<Slug>Demo.tsx",
+  "hasBackend": false
+}
 ```
 
-## 3. Backend logging (Option A — Sentry SDK + structured stdout)
+For a backed demo, replace `"hasBackend": false` with the full block:
+
+```json
+{
+  "slug": "<slug>",
+  "page": "src/pages/demos/<slug>.astro",
+  "component": "src/components/demos/<Slug>Demo.tsx",
+  "hasBackend": true,
+  "backend": {
+    "container": "<slug>",
+    "port": 8094,
+    "iframeUrl": "http://localhost:8094",
+    "composeFile": "../<repo>/docker-compose.yml",
+    "makefile": "../<repo>/Makefile",
+    "stack": "fastapi",
+    "needsSentry": true,
+    "orchestrator": { "displayName": "<DisplayName>", "type": "compose", "extra": "" },
+    "dockerCmd": "cd <repo> && docker compose up -d",
+    "notes": "..."
+  }
+}
+```
+
+The registry test [`demo-registry.test.ts`](../src/__tests__/demo-registry.test.ts)
+asserts:
+
+- every `page` and `component` path exists on disk;
+- every `hasBackend: true` entry has `container`, `port`, `stack`;
+- backend `port`s are unique across the registry;
+- the orchestrator script's service list matches the registry;
+- every `<LiveAppEmbed/>` use passes `slug=`, never a literal URL.
+
+---
+
+## 5. Add the slug to the browser-smoke spec
+
+[`e2e/browser-demos.spec.ts`](../e2e/browser-demos.spec.ts) loads every
+demo route and asserts it renders without console errors. Append your
+slug to the `ALL_SLUGS` array near the top of the file:
+
+```ts
+const ALL_SLUGS = [
+  'tfg-polyps',
+  // …
+  '<slug>',
+];
+```
+
+(Other Playwright projects — `live-demos`, `themes`, `a11y`, `keyboard`,
+`visual` — pick up the new route automatically. Add a custom spec only if
+your demo has unique interactions worth asserting.)
+
+---
+
+## 6. (Optional) Page-specific copy with HTML or placeholders
+
+If your page or React island has copy that contains inline HTML
+(`<strong>`, `<code>`, links) or `{0}`-style placeholders, create a
+per-feature module:
+
+- `src/i18n/demos/<slug>-page.ts` — for page-level UI strings, or
+- `src/i18n/demos/<slug>-demo.ts` — for client-island copy.
+
+Follow the [`joc-eda-page.ts`](../src/i18n/demos/joc-eda-page.ts) pattern:
+locale-keyed object + a `getXxxCopy(lang)` accessor. **Don't** duplicate
+fields that already live in `demos.json` (title, description, lead,
+badge, about) — keep this for page-specific UI only.
+
+Full rules: [docs/i18n.md § Pattern C](./i18n.md#pattern-c--per-feature-ts-modules-in-srci18ndemos).
+
+---
+
+## 7. Verify the simple path
+
+```bash
+make check-registry                                  # registry-only fast check
+npx vitest run                                       # full unit suite (incl. content parity)
+npx playwright test --project=browser-demos          # smoke
+make dev                                             # then open http://localhost:4321/demos/<slug>/
+```
+
+Visit `/demos/<slug>/`, `/es/demos/<slug>/`, and `/ca/demos/<slug>/` to
+confirm all three locales render. **For `hasBackend: false` demos, you're done.**
+
+---
+
+## Backend & observability
+
+Everything below applies only to demos with `hasBackend: true`. If your
+demo is browser-only, you can stop here.
+
+## 8. Backend logging (Sentry SDK + structured stdout)
 
 Demos that ship a backend MUST install the Sentry SDK for their stack
 and emit structured JSON to `stdout` so the log relay can forward
@@ -306,7 +470,7 @@ These demos ship a static bundle behind nginx and have **no backend
 process** to instrument. They get observability through two channels
 instead:
 
-1. **Iframe forwarder** — install `debug-iframe-emitter` (see §4) so the
+1. **Iframe forwarder** — install `debug-iframe-emitter` (see step 9) so the
    embedded app's `console.*`, `window.error`, and unhandled rejections
    reach the parent overlay tagged as `iframe:demo:<slug>`.
 2. **Browser Sentry** — the parent page already runs `@sentry/astro`,
@@ -318,7 +482,7 @@ There's nothing to install or initialize on the static side. Just keep
 the iframe origin pinned in `src/data/demo-services.json` →
 `backend.iframeUrl`.
 
-## 4. Iframe-embedded demos
+## 9. Iframe-embedded demos
 
 If the embedded app is `<LiveAppEmbed slug="<slug>" />`, copy the tiny
 `debug-iframe-emitter` snippet into the embedded app's bootstrap so its
@@ -334,7 +498,7 @@ The parent only accepts envelopes from the registered iframe origin
 (see `src/data/demo-services.json` → `backend.iframeUrl`). Anything else
 is dropped — including buggy third-party iframes.
 
-## 5. Docker plumbing
+## 10. Docker plumbing
 
 - `Dockerfile`: turn off output buffering for whichever runtime you use
   (`ENV PYTHONUNBUFFERED=1`, `node --enable-source-maps`,
@@ -345,10 +509,12 @@ is dropped — including buggy third-party iframes.
 - Pick a unique port not used by another demo. The registry test
   asserts uniqueness on the field `backend.port`.
 
-## 6. Makefile
+## 11. Makefile
 
-Add a `_db-<slug>` target in `PersonalPortfolio/Makefile`, mirroring the
-existing `_db-tfg`, `_db-bitsx`, etc.:
+Two edits to [`PersonalPortfolio/Makefile`](../Makefile):
+
+**(a)** Add a `_db-<slug>` target, mirroring the existing `_db-tfg`,
+`_db-bitsx`, etc. (see lines ~406–453):
 
 ```makefile
 _db-<slug>:
@@ -356,65 +522,67 @@ _db-<slug>:
 		docker compose -f "$(PARENT)/<repo>/docker-compose.yml" build $(DOCKER_BUILD_OPTS))
 ```
 
-Then add it to `DEMO_TARGETS` so `make build` rebuilds it in parallel
-with the rest.
+**(b)** Append the target to `DEMO_TARGETS` (Makefile line ~402) so
+`make build` rebuilds it in parallel with the rest:
 
-## 7. Service registry
-
-Append the entry to `src/data/demo-services.json`:
-
-```json
-{
-  "slug": "<slug>",
-  "page": "<slug>.astro",
-  "component": "<Slug>Demo.tsx",
-  "hasBackend": true,
-  "backend": {
-    "container": "<slug>",
-    "port": 8094,
-    "iframeUrl": "http://localhost:8094",
-    "composeFile": "../<repo>/docker-compose.yml",
-    "makefile": "../<repo>/Makefile",
-    "stack": "fastapi",
-    "needsSentry": true,
-    "notes": "..."
-  }
-}
+```makefile
+DEMO_TARGETS := _db-tfg _db-bitsx ... _db-grafics _db-<slug>
 ```
 
-`hasBackend: false` is allowed for purely-static demos
-(`apa-practica`, `matriculas`); skip the `backend` block entirely.
+The `.PHONY` block at the top of the file (line ~14) also lists every
+`_db-*` target — add yours there too.
 
-## 8. dev-all-demos.sh
-
-No edit. The orchestrator already reads the registry. Confirm with:
+`scripts/dev-all-demos.sh` reads the registry directly, so no edit there.
+Confirm with:
 
 ```bash
 make help          # prints the registry-derived service list
 make dev-bare      # boots everything + log-relay + Astro
 ```
 
-## 9. Tests
+## 12. Browser logging (debug bus + `useDemoLifecycle`)
 
-Add or copy an end-to-end fixture into `e2e/` (look at the closest
-existing demo). Then:
+Now that the demo runs end-to-end, instrument it. Use the namespaced bus
+— always prefix with `demo:<slug>` so the overlay filter pills and the
+registry test stay consistent:
 
-```bash
-npm test           # vitest — includes the registry consistency test
-npx playwright test
-make check-registry  # registry-only fast check (used by pre-commit)
+```tsx
+import { useDebug, useDemoLifecycle } from '../../lib/useDebug';
+
+export default function MyDemo({ lang = 'en' }: { lang?: 'en' | 'es' | 'ca' }) {
+  useDemoLifecycle('demo:<slug>', { lang }); // mount / unmount + i18n trace
+  const log = useDebug('demo:<slug>');
+
+  const onRun = () => {
+    log.info('run', { params }); // user interactions
+    try {
+      doWork();
+      log.info('run-ok', { result });
+    } catch (err) {
+      log.error('run-failed', { err: String(err) }, err as Error);
+    }
+  };
+
+  return <button onClick={onRun}>Run</button>;
+}
 ```
 
-The registry test enforces all of:
+Levels:
 
-- pages and components referenced from the registry exist on disk
-- ports are unique across demos
-- every backend with `hasBackend: true` has `container`, `port`, `stack`
-- the orchestrator script's service list matches the registry
-- every `LiveAppEmbed` use passes `slug`, never a literal URL
-- this very file mentions every backend stack in the registry
+- `trace` — per-frame / per-step (RAF, BFS step, OCR pipeline progress)
+- `info` — meaningful state change (run, mount, sample picked)
+- `warn` — recoverable (probe-aborted, frame-stall, fallback path)
+- `error` — exception, fatal, lost data
 
-## 10. Verify the wiring
+Network calls inside the demo use the `net:<slug>` namespace:
+
+```ts
+const net = debug('net:<slug>');
+net.info('fetch', { url });
+net.warn('fetch-fallback', { url, status });
+```
+
+Verify in the in-page debug overlay:
 
 ```bash
 make dev-bare
@@ -423,7 +591,7 @@ open http://localhost:4321/demos/<slug>/?debug=1
 # press Alt+Shift+D
 ```
 
-Confirm in the overlay you see, in order:
+You should see, in order:
 
 1. `nav.info navigated { path, lang, title }`
 2. `demo:<slug>.info mount`
@@ -434,16 +602,20 @@ Confirm in the overlay you see, in order:
 Switch the level filter to `trace` and you should also see per-step
 traces (`raf`, `algo-step`, etc.).
 
-## 11. Removing a demo
+---
+
+## Removing a demo
 
 To safely retire a demo, delete in order:
 
 1. `src/pages/demos/<slug>.astro`
 2. `src/components/demos/<Slug>Demo.tsx`
-3. `src/i18n/demos/<slug>.ts`
-4. The corresponding entry in `src/data/demo-services.json`
-5. The `_db-<slug>` Makefile target and `DEMO_TARGETS` reference
-6. Any `e2e/<slug>.spec.ts` fixture
-7. Mention in `README.md` if the demo is featured
+3. `src/i18n/demos/<slug>-page.ts` / `<slug>-demo.ts` (if any)
+4. The entry in `src/data/demos.json` (+ `.es.json` + `.ca.json`)
+5. The entry in `src/data/demo-services.json`
+6. The slug in `e2e/browser-demos.spec.ts` `ALL_SLUGS`
+7. The `_db-<slug>` Makefile target, its `DEMO_TARGETS` reference, and its `.PHONY` listing
+8. Any `e2e/<slug>.spec.ts` fixture
+9. Mention in `README.md` if the demo is featured
 
 `make check-registry` will catch leftovers in steps 1–5.
