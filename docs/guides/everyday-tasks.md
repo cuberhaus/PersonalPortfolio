@@ -292,7 +292,12 @@ rejects direct commits to `main`. See
   onboarding checklist
 - [docs/guides/i18n.md](./i18n.md) — translation patterns A / B / C,
   decision flow
+- [docs/guides/testing.md](./testing.md) — test pyramid, Vitest categories,
+  the 8 Playwright projects
+- [docs/architecture/overview.md](../architecture/overview.md) — one-page
+  big-picture map (start here for architecture)
 - [docs/architecture/decisions.md](../architecture/decisions.md),
   [docs/architecture/debugging-architecture.md](../architecture/debugging-architecture.md),
   [docs/architecture/observability.md](../architecture/observability.md) —
   architecture deep dives
+- [docs/troubleshooting.md](../troubleshooting.md) — when something breaks

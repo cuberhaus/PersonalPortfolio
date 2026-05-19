@@ -3,6 +3,7 @@
 Architectural overview of the chosen observability stack: **what is deployed
 and why**.
 
+- New here? Start with [`overview.md`](./overview.md) for the big-picture map.
 - For day-to-day operation (which DSN to set, how to start the dashboards,
   troubleshooting), see [`observability.md`](./observability.md).
 - For the full decision-rationale catalogue (foundations evaluated, patterns

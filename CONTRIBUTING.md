@@ -117,10 +117,16 @@ The end-to-end checklist (where to put files, how to wire i18n, how to register 
 
 ## Architecture decisions and observability
 
+- [docs/architecture/overview.md](docs/architecture/overview.md) — one-page big-picture map (start here)
 - [docs/architecture/decisions.md](docs/architecture/decisions.md) — why the codebase looks the way it does (logging, debug bus, design choices)
 - [docs/architecture/observability.md](docs/architecture/observability.md) — Sentry self-hosted + MLOps overlay setup
-- [docs/guides/i18n.md](docs/guides/i18n.md) — translation file structure and conventions
 - [docs/architecture/debugging-architecture.md](docs/architecture/debugging-architecture.md) — the in-page debug overlay
+- [docs/guides/i18n.md](docs/guides/i18n.md) — translation file structure and conventions
+- [docs/guides/testing.md](docs/guides/testing.md) — test pyramid (Vitest + 8 Playwright projects + backend pytests)
+
+## Stuck on an error?
+
+[docs/troubleshooting.md](docs/troubleshooting.md) is the searchable index of footguns we've hit and the fix for each (Vite cache, visual baselines on the wrong OS, lefthook on Windows, planner-api Java setup).
 
 ## Reporting issues
 

@@ -4,6 +4,8 @@ Research record behind the chosen observability stack: foundations evaluated,
 patterns weighed, alternatives discarded, and the cost of switching between
 them. The chosen design lives in [`debugging-architecture.md`](./debugging-architecture.md);
 the operational manual lives in [`observability.md`](./observability.md).
+For the one-page big-picture map (recommended starting point), see
+[`overview.md`](./overview.md).
 
 > This document was extracted from the architecture doc so that one can
 > stay focused on **what is deployed and why** while this one remains the
