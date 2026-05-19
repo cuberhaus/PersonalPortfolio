@@ -1,8 +1,6 @@
 /**
- * Validated loaders for the localized content JSON files. Each import here
- * parses its file against the Zod schema in src/i18n/content-schemas.ts at
- * module-load time — a malformed entry fails the build (and the dev server)
- * instead of surfacing later as a runtime crash or silent UI miss.
+ * Validated loaders for the localized content JSON files. Data files now
+ * contain identity-only arrays; translations live in locales/{locale}/.
  *
  * Components should import from here rather than directly from
  * `../data/<file>.json`.
@@ -11,24 +9,43 @@ import skillsRaw from './skills.json' with { type: 'json' };
 import workProjectsRaw from './work_projects.json' with { type: 'json' };
 import educationRaw from './education.json' with { type: 'json' };
 import certificationsRaw from './certifications.json' with { type: 'json' };
+import experienceRaw from './experience.json' with { type: 'json' };
 
-import {
-  SkillsFileSchema,
-  WorkProjectsFileSchema,
-  EducationFileSchema,
-  CertificationsFileSchema,
-} from '../i18n/content-schemas';
-import type { AnyLocalized } from '../i18n/load';
+// Locale translation files
+import skillsEn from '../../locales/en/skills.json';
+import skillsEs from '../../locales/es/skills.json';
+import skillsCa from '../../locales/ca/skills.json';
+import workProjectsEn from '../../locales/en/work_projects.json';
+import workProjectsEs from '../../locales/es/work_projects.json';
+import workProjectsCa from '../../locales/ca/work_projects.json';
+import educationEn from '../../locales/en/education.json';
+import educationEs from '../../locales/es/education.json';
+import educationCa from '../../locales/ca/education.json';
+import certificationsEn from '../../locales/en/certifications.json';
+import certificationsEs from '../../locales/es/certifications.json';
+import certificationsCa from '../../locales/ca/certifications.json';
+import experienceEn from '../../locales/en/experience.json';
+import experienceEs from '../../locales/es/experience.json';
+import experienceCa from '../../locales/ca/experience.json';
 
-// Parsing here once at module load; the result is the runtime-validated data
-// that downstream components and tests should consume. The cast back to
-// `AnyLocalized[]` keeps existing callers (`flattenForLocale`, etc.) compiling
-// without a follow-up refactor.
-export const skills: AnyLocalized[] = SkillsFileSchema.parse(skillsRaw) as AnyLocalized[];
-export const workProjects: AnyLocalized[] = WorkProjectsFileSchema.parse(
-  workProjectsRaw
-) as AnyLocalized[];
-export const education: AnyLocalized[] = EducationFileSchema.parse(educationRaw) as AnyLocalized[];
-export const certifications: AnyLocalized[] = CertificationsFileSchema.parse(
-  certificationsRaw
-) as AnyLocalized[];
+import type { Locale } from '../config/locales';
+
+type TranslationMap = Record<string, Record<string, unknown>>;
+
+export const skills = skillsRaw as Record<string, unknown>[];
+export const workProjects = workProjectsRaw as Record<string, unknown>[];
+export const education = educationRaw as Record<string, unknown>[];
+export const certifications = certificationsRaw as Record<string, unknown>[];
+export const experience = experienceRaw as Record<string, unknown>[];
+
+const translationsByFile: Record<string, Record<Locale, TranslationMap>> = {
+  skills: { en: skillsEn, es: skillsEs, ca: skillsCa },
+  workProjects: { en: workProjectsEn, es: workProjectsEs, ca: workProjectsCa },
+  education: { en: educationEn, es: educationEs, ca: educationCa },
+  certifications: { en: certificationsEn, es: certificationsEs, ca: certificationsCa },
+  experience: { en: experienceEn, es: experienceEs, ca: experienceCa },
+};
+
+export function getTranslations(file: string, locale: Locale): TranslationMap {
+  return translationsByFile[file]?.[locale] ?? translationsByFile[file]?.en ?? {};
+}

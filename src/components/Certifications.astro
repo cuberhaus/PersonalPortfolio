@@ -1,7 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIssuerIconSvg } from '../lib/issuer-icons';
-import { certifications as certsData } from '../data/loaders';
+import { certifications as certsData, getTranslations } from '../data/loaders';
 import { flattenForLocale } from '../i18n/load';
 
 type CertEntry = {
@@ -15,7 +15,11 @@ type CertEntry = {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const certs = flattenForLocale<CertEntry>(certsData as never, lang);
+const certs = flattenForLocale<CertEntry>(
+  certsData as never,
+  lang,
+  getTranslations('certifications', lang)
+);
 
 const { num } = Astro.props;
 ---

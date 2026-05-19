@@ -1,8 +1,7 @@
 /**
- * Schema-level guarantees for the four localized content files. The happy
- * path is exercised by the imports in src/data/loaders.ts (which throw at
- * module load on parse failure); this file pins the negative cases so future
- * schema changes don't silently loosen the contract.
+ * Schema-level guarantees for the four identity-only content files.
+ * Data files now contain identity arrays (no copy block); translations
+ * live in locales/{locale}/{file}.json.
  */
 import { describe, it, expect } from 'vitest';
 import skillsData from '../data/skills.json';
@@ -35,63 +34,39 @@ describe('Content file schemas accept the real data', () => {
 });
 
 describe('SkillsFileSchema rejections', () => {
-  it('rejects an entry whose default-locale copy is missing', () => {
-    const e = cloneFirst(skillsData) as { copy: Record<string, unknown> };
-    delete e.copy.en;
-    expect(SkillsFileSchema.safeParse([e]).success).toBe(false);
-  });
-
   it('rejects an empty items array', () => {
-    const e = cloneFirst(skillsData) as { identity: { items: string[] } };
-    e.identity.items = [];
+    const e = cloneFirst(skillsData) as { items: string[] };
+    e.items = [];
     expect(SkillsFileSchema.safeParse([e]).success).toBe(false);
   });
 });
 
 describe('WorkProjectsFileSchema rejections', () => {
   it('rejects an unknown icon', () => {
-    const e = cloneFirst(workProjectsData) as { identity: { icon: string } };
-    e.identity.icon = 'definitely-not-an-icon';
+    const e = cloneFirst(workProjectsData) as { icon: string };
+    e.icon = 'definitely-not-an-icon';
     expect(WorkProjectsFileSchema.safeParse([e]).success).toBe(false);
   });
 
   it('rejects a non-https link', () => {
-    const e = cloneFirst(workProjectsData) as { identity: { link: string } };
-    e.identity.link = 'http://insecure.example.com';
-    expect(WorkProjectsFileSchema.safeParse([e]).success).toBe(false);
-  });
-
-  it('rejects an empty tags array', () => {
-    const e = cloneFirst(workProjectsData) as { copy: Record<string, { tags: string[] }> };
-    e.copy.en.tags = [];
+    const e = cloneFirst(workProjectsData) as { link: string };
+    e.link = 'http://insecure.example.com';
     expect(WorkProjectsFileSchema.safeParse([e]).success).toBe(false);
   });
 });
 
 describe('EducationFileSchema rejections', () => {
   it('rejects an empty institution', () => {
-    const e = cloneFirst(educationData) as { identity: { institution: string } };
-    e.identity.institution = '';
-    expect(EducationFileSchema.safeParse([e]).success).toBe(false);
-  });
-
-  it('rejects a missing degree in copy', () => {
-    const e = cloneFirst(educationData) as { copy: Record<string, { degree?: string }> };
-    delete e.copy.en.degree;
+    const e = cloneFirst(educationData) as { institution: string };
+    e.institution = '';
     expect(EducationFileSchema.safeParse([e]).success).toBe(false);
   });
 });
 
 describe('CertificationsFileSchema rejections', () => {
   it('rejects an unknown issuerIcon', () => {
-    const e = cloneFirst(certificationsData) as { identity: { issuerIcon: string } };
-    e.identity.issuerIcon = 'definitely-not-a-real-issuer';
-    expect(CertificationsFileSchema.safeParse([e]).success).toBe(false);
-  });
-
-  it('rejects a missing issued string in copy', () => {
-    const e = cloneFirst(certificationsData) as { copy: Record<string, { issued?: string }> };
-    delete e.copy.en.issued;
+    const e = cloneFirst(certificationsData) as { issuerIcon: string };
+    e.issuerIcon = 'definitely-not-a-real-issuer';
     expect(CertificationsFileSchema.safeParse([e]).success).toBe(false);
   });
 });

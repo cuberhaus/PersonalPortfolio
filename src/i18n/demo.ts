@@ -1,7 +1,11 @@
 import demosData from '../data/demos.json' with { type: 'json' };
 import { flattenForLocale } from './load';
 import type { Locale } from '../config/locales';
-import { DemosFileSchema } from './demo-schema';
+
+// Locale translation files for demos
+import demosEn from '../../locales/en/demos.json';
+import demosEs from '../../locales/es/demos.json';
+import demosCa from '../../locales/ca/demos.json';
 
 export type DemoLang = Locale;
 
@@ -24,9 +28,11 @@ export interface Demo {
   hints?: string[];
 }
 
-// Validate demos.json against the canonical schema at module-load time. A
-// malformed entry is a build-time error rather than a silent runtime drift.
-const validatedDemos = DemosFileSchema.parse(demosData);
+const demosTranslations: Record<Locale, Record<string, Record<string, unknown>>> = {
+  en: demosEn,
+  es: demosEs,
+  ca: demosCa,
+};
 
 const cache = new Map<DemoLang, Demo[]>();
 
@@ -38,8 +44,9 @@ export function listDemos(lang: string): Demo[] {
   const cached = cache.get(locale);
   if (cached) return cached;
   const flat = flattenForLocale<Demo>(
-    validatedDemos as unknown as Parameters<typeof flattenForLocale>[0],
-    locale
+    demosData as Record<string, unknown>[],
+    locale,
+    demosTranslations[locale]
   );
   cache.set(locale, flat);
   return flat;

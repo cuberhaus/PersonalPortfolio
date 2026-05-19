@@ -1,57 +1,13 @@
 [
   {
-    "identity": {
-      "role": "AI & Data Consultant @ Deloitte",
-      "icon": "cpu",
-      "link": "https://www.deloitte.com/global/en/about/press-room/physical-ai-nvidia-omniverse-industrial-transformation.html",
-      "fallback": "/deloitte-physical-ai-press-release.html"
-    },
-    "copy": {
-      "en": {
-        "title": "Physical AI Anomalies Detection",
-        "company": "Horse",
-        "description": "The world's first Physical AI project delivered at Deloitte. Built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton) to detect manufacturing anomalies on live motor production lines in real time, plus a warehouse digital twin with camera-based package tracking.",
-        "tags": ["Physical AI", "NVIDIA Omniverse", "Isaac Sim", "Metropolis", "Digital Twin", "Real-time"]
-      },
-      "es": {
-        "title": "Detección de Anomalías con IA Física",
-        "company": "Horse",
-        "description": "El primer proyecto de IA Física entregado a nivel mundial en Deloitte. Construido sobre NVIDIA Omniverse, Isaac Sim y el stack Metropolis (DeepStream, TAO, Triton) para detectar anomalías de fabricación en líneas de producción de motores en vivo y en tiempo real, además de un gemelo digital del almacén con seguimiento de paquetes por cámara.",
-        "tags": ["IA Física", "NVIDIA Omniverse", "Isaac Sim", "Metropolis", "Gemelo Digital", "Tiempo Real"]
-      },
-      "ca": {
-        "title": "Detecció d'Anomalies amb IA Física",
-        "company": "Horse",
-        "description": "El primer projecte d'IA Física entregat a nivell mundial a Deloitte. Construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton) per detectar anomalies de fabricació en línies de producció de motors en viu i en temps real, a més d'un bessó digital del magatzem amb seguiment de paquets per càmera.",
-        "tags": ["IA Física", "NVIDIA Omniverse", "Isaac Sim", "Metropolis", "Bessó Digital", "Temps Real"]
-      }
-    }
+    "role": "AI & Data Consultant @ Deloitte",
+    "icon": "cpu",
+    "link": "https://www.deloitte.com/global/en/about/press-room/physical-ai-nvidia-omniverse-industrial-transformation.html",
+    "fallback": "/deloitte-physical-ai-press-release.html"
   },
   {
-    "identity": {
-      "role": "AI & Data Consultant @ Deloitte",
-      "icon": "users",
-      "link": "https://www.aragon.es/"
-    },
-    "copy": {
-      "en": {
-        "title": "E2E AI Talent Matching Platform",
-        "company": "Gobierno de Aragón",
-        "description": "End-to-end software that parses PDF resumes, standardizes them into structured JSON, and indexes them in a RAG database. Allows semantic querying to find the best candidates for a job description and vice versa.",
-        "tags": ["LLMs", "RAG", "Vector Search", "PDF Parsing"]
-      },
-      "es": {
-        "title": "Plataforma E2E de Emparejamiento de Talento IA",
-        "company": "Gobierno de Aragón",
-        "description": "Software integral que analiza currículums en PDF, los estandariza en JSON estructurado y los indexa en una base de datos RAG. Permite realizar búsquedas semánticas para encontrar los mejores candidatos para una oferta de trabajo y viceversa.",
-        "tags": ["LLMs", "RAG", "Búsqueda Vectorial", "Parsing PDF"]
-      },
-      "ca": {
-        "title": "Plataforma E2E d'Emparellament de Talent IA",
-        "company": "Govern d'Aragó",
-        "description": "Programari integral que analitza currículums en PDF, els estandarditza en JSON estructurat i els indexa en una base de dades RAG. Permet fer cerques semàntiques per trobar els millors candidats per a una oferta de feina i viceversa.",
-        "tags": ["LLMs", "RAG", "Cerca Vectorial", "Parsing PDF"]
-      }
-    }
+    "role": "AI & Data Consultant @ Deloitte",
+    "icon": "users",
+    "link": "https://www.aragon.es/"
   }
 ]

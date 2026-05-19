@@ -1,13 +1,17 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import { skills as skillsData } from '../data/loaders';
+import { skills as skillsData, getTranslations } from '../data/loaders';
 import { flattenForLocale } from '../i18n/load';
 
 type SkillGroup = { category: string; items: string[] };
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const skills = flattenForLocale<SkillGroup>(skillsData as never, lang);
+const skills = flattenForLocale<SkillGroup>(
+  skillsData as never,
+  lang,
+  getTranslations('skills', lang)
+);
 
 const LOC_DATA: Record<string, { lines: string; pct: number }> = {
   Python: { lines: '~55K', pct: 22 },

@@ -4,6 +4,9 @@ import { DEFAULT_LOCALE } from '../config/locales';
 /**
  * Canonical shape for a localized content row: identity fields shared across
  * all locales live under `identity`, translatable fields under `copy[<lang>]`.
+ *
+ * @deprecated Data files are now identity-only arrays with translations in
+ * locales/{locale}/{file}.json. Kept for test compatibility.
  */
 export interface Localized<Identity extends object, Copy extends object> {
   identity: Identity;
@@ -19,20 +22,28 @@ export interface Localized<Identity extends object, Copy extends object> {
 export type AnyLocalized = Localized<Record<string, unknown>, Record<string, unknown>>;
 
 /**
- * Flatten a localized list for a target locale into the legacy
- * `{...identity, ...copy}` shape that components expect. Falls back to the
- * default locale's copy entry whenever the requested locale is missing it.
- *
- * The generic parameter `Flat` declares the resulting per-entry shape;
- * callers are responsible for asserting that the entry's identity ∪ copy
- * actually matches `Flat`.
+ * Flatten an identity-only array with a separate locale translation object
+ * into the legacy `{...identity, ...copy}` shape that components expect.
  */
 export function flattenForLocale<Flat>(
-  entries: readonly Localized<Record<string, unknown>, Record<string, unknown>>[],
-  lang: Locale
+  entries: readonly Record<string, unknown>[],
+  lang: Locale,
+  translations?: Record<string, Record<string, unknown>>
 ): Flat[] {
-  return entries.map((entry) => {
-    const copy = entry.copy[lang] ?? entry.copy[DEFAULT_LOCALE];
-    return { ...entry.identity, ...copy } as unknown as Flat;
+  return entries.map((entry, index) => {
+    // New format: identity-only array + separate translations object
+    if (translations) {
+      const copy = translations[String(index)] ?? {};
+      return { ...entry, ...copy } as unknown as Flat;
+    }
+    // Legacy format: {identity, copy} shape (backward compat for tests)
+    const legacy = entry as { identity?: Record<string, unknown>; copy?: Record<string, unknown> };
+    if (legacy.identity && legacy.copy) {
+      const copy =
+        (legacy.copy as Record<string, Record<string, unknown>>)[lang] ??
+        (legacy.copy as Record<string, Record<string, unknown>>)[DEFAULT_LOCALE];
+      return { ...legacy.identity, ...copy } as unknown as Flat;
+    }
+    return entry as unknown as Flat;
   });
 }
