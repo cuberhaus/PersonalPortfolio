@@ -163,6 +163,9 @@ public/               # Static assets (demo images, PDDL files, joc-eda viewer, 
 - **i18n UI strings**: `src/i18n/ui.ts`
 - **Site URL**: `site` in `astro.config.mjs`
 
+For step-by-step recipes on the small frequent edits (adding a job, swapping
+two sections, writing a unit test), see [docs/everyday-tasks.md](docs/everyday-tasks.md).
+
 ## Deployment
 
 Workflow: `.github/workflows/deploy.yml` — push to `main` triggers build (Node 22) and deploy to GitHub Pages.

@@ -2,6 +2,10 @@
 
 Quick reference for getting set up and shipping changes.
 
+> **Looking for "where do I add a new experience / how do I add a unit test"?**
+> See [docs/everyday-tasks.md](docs/everyday-tasks.md) — cookbook of small,
+> frequent edits with file paths and verify commands.
+
 ## First clone
 
 ```bash
