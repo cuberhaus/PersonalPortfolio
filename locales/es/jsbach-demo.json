@@ -1,0 +1,10 @@
+{
+  "examples": "Ejemplos",
+  "codeEditor": "Editor de Código",
+  "run": "Ejecutar",
+  "playing": "Reproduciendo...",
+  "playMusic": "Reproducir Música",
+  "output": "Salida",
+  "notesGenerated": "{0} nota{s} generada{s}",
+  "noOutput": "El programa se ejecutó correctamente sin salida."
+}

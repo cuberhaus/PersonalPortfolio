@@ -1,36 +1,7 @@
-type Lang = 'en' | 'es' | 'ca';
+import en from '../../../locales/en/jsbach-demo.json';
+import es from '../../../locales/es/jsbach-demo.json';
+import ca from '../../../locales/ca/jsbach-demo.json';
 
-export const TRANSLATIONS = {
-  en: {
-    examples: 'Examples',
-    codeEditor: 'Code Editor',
-    run: 'Run',
-    playing: 'Playing...',
-    playMusic: 'Play Music',
-    output: 'Output',
-    notesGenerated: '{0} note{s} generated',
-    noOutput: 'Program ran successfully with no output.',
-  },
-  es: {
-    examples: 'Ejemplos',
-    codeEditor: 'Editor de Código',
-    run: 'Ejecutar',
-    playing: 'Reproduciendo...',
-    playMusic: 'Reproducir Música',
-    output: 'Salida',
-    notesGenerated: '{0} nota{s} generada{s}',
-    noOutput: 'El programa se ejecutó correctamente sin salida.',
-  },
-  ca: {
-    examples: 'Exemples',
-    codeEditor: 'Editor de Codi',
-    run: 'Executar',
-    playing: 'Reproduint...',
-    playMusic: 'Reproduir Música',
-    output: 'Sortida',
-    notesGenerated: '{0} nota{s} generada{s}',
-    noOutput: "El programa s'ha executat correctament sense sortida.",
-  },
-};
+export const TRANSLATIONS = { en, es, ca } as const;
 
-export type DemoTranslations = (typeof TRANSLATIONS)[Lang];
+export type DemoTranslations = typeof en;

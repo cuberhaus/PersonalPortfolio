@@ -1,0 +1,10 @@
+{
+  "waveTitle": "Vertex Wave",
+  "waveDesc": "Sinusoidal rotation-matrix deformation driven by time",
+  "phongTitle": "Phong Lighting",
+  "phongDesc": "Ambient + diffuse + specular per-fragment shading",
+  "checkerTitle": "Checkerboard",
+  "checkerDesc": "Procedural pattern via UV modular arithmetic",
+  "explodeTitle": "Explode",
+  "explodeDesc": "Triangle displacement along face normals"
+}

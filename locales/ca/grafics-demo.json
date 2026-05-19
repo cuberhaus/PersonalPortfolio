@@ -1,0 +1,10 @@
+{
+  "waveTitle": "Ona de Vèrtexs",
+  "waveDesc": "Deformació sinusoïdal amb matriu de rotació",
+  "phongTitle": "Il·luminació Phong",
+  "phongDesc": "Ombrejat ambiental + difús + especular per fragment",
+  "checkerTitle": "Escaquer",
+  "checkerDesc": "Patró procedural mitjançant aritmètica modular UV",
+  "explodeTitle": "Explosió",
+  "explodeDesc": "Desplaçament de triangles al llarg de normals"
+}

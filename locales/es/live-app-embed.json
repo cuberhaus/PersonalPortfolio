@@ -1,0 +1,11 @@
+{
+  "checking": "Comprobando servicio local…",
+  "live": "App en vivo detectada",
+  "runningAt": "Ejecutándose en",
+  "openTab": "Abrir en nueva pestaña",
+  "collapse": "Colapsar",
+  "expand": "Mostrar app en vivo",
+  "offline": "Ejecútalo localmente para ver la app completa",
+  "offlineDesc": "Inicia el backend con Docker o de forma nativa, luego recarga esta página.",
+  "or": "o"
+}

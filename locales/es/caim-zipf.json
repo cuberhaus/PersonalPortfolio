@@ -1,0 +1,14 @@
+{
+  "corpus": "Corpus",
+  "customText": "Texto personalizado",
+  "analyze": "Analizar",
+  "logScale": "Escala log",
+  "linearScale": "Escala lineal",
+  "parameters": "Parámetros ajustados",
+  "words": "Palabras principales",
+  "rank": "Pos.",
+  "word": "Palabra",
+  "frequency": "Frecuencia",
+  "customPlaceholder": "Pega texto aquí para analizar la distribución de frecuencia de palabras…",
+  "notEnoughWords": "Se necesitan al menos 5 palabras distintas."
+}

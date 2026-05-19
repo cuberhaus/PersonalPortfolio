@@ -1,0 +1,8 @@
+{
+  "mobileTitle": "Mobile Robot",
+  "mobileDesc": "Differential-drive odometry — path from encoder data",
+  "wallTitle": "Wall Following",
+  "wallDesc": "Reactive controller with k1/k2/k3 gains",
+  "armTitle": "Robot Arm FK",
+  "armDesc": "3-Link forward kinematics — drag sliders to move joints"
+}

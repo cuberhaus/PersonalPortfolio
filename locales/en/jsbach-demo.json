@@ -1,0 +1,10 @@
+{
+  "examples": "Examples",
+  "codeEditor": "Code Editor",
+  "run": "Run",
+  "playing": "Playing...",
+  "playMusic": "Play Music",
+  "output": "Output",
+  "notesGenerated": "{0} note{s} generated",
+  "noOutput": "Program ran successfully with no output."
+}

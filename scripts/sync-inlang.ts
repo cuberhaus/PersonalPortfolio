@@ -1,19 +1,16 @@
 /**
  * sync-inlang.ts
  *
- * Bridges the project's native i18n format with inlang's flat JSON message
- * files in `messages/{locale}.json`.
+ * Bridges Pattern B (data JSONs) and Pattern C (demo TS modules) with inlang's
+ * flat JSON message files in `messages/{locale}.json`.
+ *
+ * Pattern A (UI strings) is now handled natively by i18next — translation files
+ * live in `locales/{locale}/ui.json` and inlang reads them directly via
+ * `@inlang/plugin-i18next`.
  *
  * Usage:
  *   npx tsx scripts/sync-inlang.ts export   # native → messages/*.json
  *   npx tsx scripts/sync-inlang.ts import   # messages/*.json → native
- *
- * After `export`, translators can use:
- *   - Sherlock (VS Code extension) for inline editing
- *   - Fink (https://fink.inlang.com) for a web-based translation UI
- *
- * After translators finish, run `import` to patch the native source files,
- * then `npx vitest run` to validate parity.
  */
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
@@ -27,21 +24,6 @@ const MESSAGES_DIR = resolve(ROOT, 'messages');
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function extractLocaleBlock(content: string, locale: string): Record<string, string> {
-  const result: Record<string, string> = {};
-  const localePattern = new RegExp(`(?:^|\\n)\\s*${locale}:\\s*\\{([\\s\\S]*?)\\n\\s*\\}`, 'm');
-  const match = content.match(localePattern);
-  if (!match) return result;
-
-  const block = match[1];
-  const kvPattern = /['"]([^'"]+)['"]\s*:\s*(?:'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)")/g;
-  let kvMatch: RegExpExecArray | null;
-  while ((kvMatch = kvPattern.exec(block)) !== null) {
-    result[kvMatch[1]] = kvMatch[2] ?? kvMatch[3] ?? '';
-  }
-  return result;
-}
 
 function isTranslatableDataFile(filename: string): boolean {
   if (!filename.endsWith('.json')) return false;
@@ -72,15 +54,6 @@ function doExport() {
   const messages: Record<Locale, Record<string, string>> = {} as any;
   for (const locale of LOCALES) {
     messages[locale] = {};
-  }
-
-  // Pattern A: ui.ts
-  const uiContent = readFileSync(resolve(SRC, 'i18n/ui.ts'), 'utf-8');
-  for (const locale of LOCALES) {
-    const block = extractLocaleBlock(uiContent, locale);
-    for (const [key, value] of Object.entries(block)) {
-      messages[locale][`ui.${key}`] = value;
-    }
   }
 
   // Pattern B: Data JSON files
@@ -115,23 +88,6 @@ function doExport() {
     }
   }
 
-  // Pattern C: Per-demo TS modules
-  const demosDir = resolve(SRC, 'i18n/demos');
-  const demoFiles = readdirSync(demosDir).filter(
-    (f) => f.endsWith('.ts') && (f.includes('-page') || f.includes('-demo'))
-  );
-  for (const filename of demoFiles) {
-    const content = readFileSync(resolve(demosDir, filename), 'utf-8');
-    const prefix = filename.replace('.ts', '');
-
-    for (const locale of LOCALES) {
-      const block = extractLocaleBlock(content, locale);
-      for (const [key, value] of Object.entries(block)) {
-        messages[locale][`demo.${prefix}.${key}`] = value;
-      }
-    }
-  }
-
   // Write one file per locale
   for (const locale of LOCALES) {
     const sorted = Object.fromEntries(
@@ -162,49 +118,6 @@ function doImport() {
   }
 
   let patchedFiles = 0;
-
-  // --- Pattern A: ui.ts ---
-  const uiPath = resolve(SRC, 'i18n/ui.ts');
-  let uiContent = readFileSync(uiPath, 'utf-8');
-  let uiChanged = false;
-
-  for (const locale of LOCALES.filter((l) => l !== DEFAULT_LOCALE)) {
-    const localeBlockPattern = new RegExp(`(${locale}:\\s*\\{)([\\s\\S]*?)(\\n\\s*\\})`, 'm');
-    const blockMatch = uiContent.match(localeBlockPattern);
-    if (!blockMatch) continue;
-
-    let block = blockMatch[2];
-    const currentBlock = extractLocaleBlock(uiContent, locale);
-
-    for (const [fullKey, newValue] of Object.entries(messages[locale])) {
-      if (!fullKey.startsWith('ui.')) continue;
-      const key = fullKey.slice(3); // strip "ui." prefix
-      const oldValue = currentBlock[key];
-      if (oldValue === undefined || oldValue === newValue) continue;
-
-      const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const kvPattern = new RegExp(
-        `(['"]${escapedKey}['"]\\s*:\\s*)(?:'(?:[^'\\\\]|\\\\.)*'|"(?:[^"\\\\]|\\\\.)*")`
-      );
-      const quote = newValue.includes("'") && !newValue.includes('"') ? '"' : "'";
-      const escaped =
-        quote === "'"
-          ? newValue.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
-          : newValue.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-      block = block.replace(kvPattern, `$1${quote}${escaped}${quote}`);
-      uiChanged = true;
-    }
-
-    if (uiChanged) {
-      uiContent = uiContent.replace(localeBlockPattern, `$1${block}$3`);
-    }
-  }
-
-  if (uiChanged) {
-    writeFileSync(uiPath, uiContent, 'utf-8');
-    patchedFiles++;
-    console.log('  ✓ src/i18n/ui.ts');
-  }
 
   // --- Pattern B: Data JSON files ---
   const dataFiles = readdirSync(resolve(SRC, 'data')).filter(isTranslatableDataFile);
@@ -258,58 +171,6 @@ function doImport() {
       writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n', 'utf-8');
       patchedFiles++;
       console.log(`  ✓ src/data/${filename}`);
-    }
-  }
-
-  // --- Pattern C: Per-demo TS modules ---
-  const demosDir = resolve(SRC, 'i18n/demos');
-  const demoFiles = readdirSync(demosDir).filter(
-    (f) => f.endsWith('.ts') && (f.includes('-page') || f.includes('-demo'))
-  );
-  for (const filename of demoFiles) {
-    const filePath = resolve(demosDir, filename);
-    let content = readFileSync(filePath, 'utf-8');
-    const prefix = filename.replace('.ts', '');
-    let fileChanged = false;
-
-    for (const locale of LOCALES.filter((l) => l !== DEFAULT_LOCALE)) {
-      const localeBlockPattern = new RegExp(`(${locale}:\\s*\\{)([\\s\\S]*?)(\\n\\s*\\})`, 'm');
-      const blockMatch = content.match(localeBlockPattern);
-      if (!blockMatch) continue;
-
-      let block = blockMatch[2];
-      const currentBlock = extractLocaleBlock(content, locale);
-
-      for (const [fullKey, newValue] of Object.entries(messages[locale])) {
-        const keyPrefix = `demo.${prefix}.`;
-        if (!fullKey.startsWith(keyPrefix)) continue;
-
-        const key = fullKey.slice(keyPrefix.length);
-        const oldValue = currentBlock[key];
-        if (oldValue === undefined || oldValue === newValue) continue;
-
-        const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const kvPattern = new RegExp(
-          `(${escapedKey}\\s*:\\s*)(?:'(?:[^'\\\\]|\\\\.)*'|"(?:[^"\\\\]|\\\\.)*")`
-        );
-        const quote = newValue.includes("'") && !newValue.includes('"') ? '"' : "'";
-        const escaped =
-          quote === "'"
-            ? newValue.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
-            : newValue.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-        block = block.replace(kvPattern, `$1${quote}${escaped}${quote}`);
-        fileChanged = true;
-      }
-
-      if (fileChanged) {
-        content = content.replace(localeBlockPattern, `$1${block}$3`);
-      }
-    }
-
-    if (fileChanged) {
-      writeFileSync(filePath, content, 'utf-8');
-      patchedFiles++;
-      console.log(`  ✓ src/i18n/demos/${filename}`);
     }
   }
 

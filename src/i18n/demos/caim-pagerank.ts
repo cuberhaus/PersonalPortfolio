@@ -1,57 +1,7 @@
-type Lang = 'en' | 'es' | 'ca';
+import en from '../../../locales/en/caim-pagerank.json';
+import es from '../../../locales/es/caim-pagerank.json';
+import ca from '../../../locales/ca/caim-pagerank.json';
 
-export const T = {
-  en: {
-    damping: 'Damping factor',
-    initStrategy: 'Init strategy',
-    run: 'Run PageRank',
-    running: 'Computing…',
-    iterations: 'Iterations',
-    time: 'Time',
-    convergence: 'Convergence',
-    rankings: 'Top airports',
-    rank: 'Rank',
-    code: 'Code',
-    name: 'Name',
-    score: 'Score',
-    uniform: 'Uniform (1/n)',
-    one: 'All on first',
-    square: 'Square root',
-  },
-  es: {
-    damping: 'Factor de amortiguación',
-    initStrategy: 'Estrategia inicial',
-    run: 'Ejecutar PageRank',
-    running: 'Calculando…',
-    iterations: 'Iteraciones',
-    time: 'Tiempo',
-    convergence: 'Convergencia',
-    rankings: 'Aeropuertos principales',
-    rank: 'Pos.',
-    code: 'Código',
-    name: 'Nombre',
-    score: 'Puntuación',
-    uniform: 'Uniforme (1/n)',
-    one: 'Todo en primero',
-    square: 'Raíz cuadrada',
-  },
-  ca: {
-    damping: "Factor d'esmorteïment",
-    initStrategy: 'Estratègia inicial',
-    run: 'Executar PageRank',
-    running: 'Calculant…',
-    iterations: 'Iteracions',
-    time: 'Temps',
-    convergence: 'Convergència',
-    rankings: 'Aeroports principals',
-    rank: 'Pos.',
-    code: 'Codi',
-    name: 'Nom',
-    score: 'Puntuació',
-    uniform: 'Uniforme (1/n)',
-    one: 'Tot al primer',
-    square: 'Arrel quadrada',
-  },
-};
+export const T = { en, es, ca } as const;
 
-export type PageRankTranslations = (typeof T)[Lang];
+export type DemoTranslations = typeof en;

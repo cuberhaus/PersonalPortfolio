@@ -1,9 +1,7 @@
-type Lang = 'en' | 'es' | 'ca';
+import en from '../../../locales/en/caim-demo.json';
+import es from '../../../locales/es/caim-demo.json';
+import ca from '../../../locales/ca/caim-demo.json';
 
-export const T = {
-  en: { pagerank: 'PageRank', zipf: "Zipf's Law", loading: 'Loading…' },
-  es: { pagerank: 'PageRank', zipf: 'Ley de Zipf', loading: 'Cargando…' },
-  ca: { pagerank: 'PageRank', zipf: 'Llei de Zipf', loading: 'Carregant…' },
-};
+export const T = { en, es, ca } as const;
 
-export type DemoTranslations = (typeof T)[Lang];
+export type DemoTranslations = typeof en;

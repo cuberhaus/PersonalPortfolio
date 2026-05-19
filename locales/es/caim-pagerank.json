@@ -1,0 +1,17 @@
+{
+  "damping": "Factor de amortiguación",
+  "initStrategy": "Estrategia inicial",
+  "run": "Ejecutar PageRank",
+  "running": "Calculando…",
+  "iterations": "Iteraciones",
+  "time": "Tiempo",
+  "convergence": "Convergencia",
+  "rankings": "Aeropuertos principales",
+  "rank": "Pos.",
+  "code": "Código",
+  "name": "Nombre",
+  "score": "Puntuación",
+  "uniform": "Uniforme (1/n)",
+  "one": "Todo en primero",
+  "square": "Raíz cuadrada"
+}

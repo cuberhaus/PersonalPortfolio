@@ -1,0 +1,23 @@
+{
+  "howItWorks": "Com funciona:",
+  "howDesc1": " Aquest és un port per a navegador d'un detector de matrícules en MATLAB. El pipeline té 3 etapes: ",
+  "howDesc2": "1) ",
+  "howDesc3": "localitzar la regió de la matrícula usant binarització adaptativa i filtrat morfològic, ",
+  "howDesc4": "2) ",
+  "howDesc5": "segmentar caràcters individuals mitjançant anàlisi de components connectades, ",
+  "howDesc6": "3) ",
+  "howDesc7": "reconèixer cada caràcter mitjançant coincidència de plantilles contra una font de referència. El processament s'executa en un Web Worker perquè la pàgina segueixi responent \\u2014 TypeScript pur, sense descàrrega d'OpenCV.",
+  "selectImage": "Selecciona una imatge",
+  "uploadOwn": "Puja la teva",
+  "detecting": "Detectant\\u2026",
+  "detectPlate": "Detectar matrícula",
+  "analyzing": "Analitzant imatge",
+  "detectedPlate": "Matrícula detectada",
+  "groundTruth": "Valor real",
+  "match": "Coincideix",
+  "mismatch": "No coincideix",
+  "stage1": "Detecció de Matrícula",
+  "stage2": "Segmentació de Caràcters",
+  "stage3": "Reconeixement de Caràcters",
+  "error": "Error:"
+}
