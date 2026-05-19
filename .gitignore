@@ -31,3 +31,6 @@ planner-api/**/.pytest_cache/
 
 # Translation export/import working files
 translations/
+
+# inlang runtime cache
+project.inlang/cache/

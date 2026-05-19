@@ -20,7 +20,8 @@
     "test:e2e:smoke": "playwright test --project=portfolio-smoke",
     "test:e2e:a11y": "playwright test --project=a11y",
     "lhci": "lhci autorun",
-    "og:capture": "node scripts/capture-og-images.mjs"
+    "og:capture": "node scripts/capture-og-images.mjs",
+    "i18n:review": "tsx scripts/i18n-review.ts"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.5",
