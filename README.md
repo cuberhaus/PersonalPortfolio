@@ -66,7 +66,7 @@ Flags: `--skip-docker`, `--skip-planner`.
 > `getIframeUrl`), the `Makefile`'s `DEMO_PORTS`, `e2e/live-demos.spec.ts`,
 > `sentry.client.config.ts` (via `listTracedBackendPorts`), the log relay
 > sidecar in `scripts/log-relay/`, the registry test, and
-> [`docs/adding-a-demo.md`](docs/adding-a-demo.md). The in-page debug overlay
+> [`docs/guides/adding-a-demo.md`](docs/guides/adding-a-demo.md). The in-page debug overlay
 > (`src/lib/debug-docker.ts`) reads slug + log-relay paths only and does not
 > consume the registry. Adding or removing a demo
 > means editing this JSON file plus following the onboarding checklist.
@@ -164,7 +164,7 @@ public/               # Static assets (demo images, PDDL files, joc-eda viewer, 
 - **Site URL**: `site` in `astro.config.mjs`
 
 For step-by-step recipes on the small frequent edits (adding a job, swapping
-two sections, writing a unit test), see [docs/everyday-tasks.md](docs/everyday-tasks.md).
+two sections, writing a unit test), see [docs/guides/everyday-tasks.md](docs/guides/everyday-tasks.md).
 
 ## Deployment
 

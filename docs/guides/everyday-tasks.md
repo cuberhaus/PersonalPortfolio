@@ -8,13 +8,13 @@ linked at the bottom of each recipe.
 > **The i18n parity rule.** Most content lives in three sibling JSON files
 > (`foo.json`, `foo.es.json`, `foo.ca.json`). They must stay in lock-step:
 > same length, same field set per entry, same order. The vitest suites
-> [`content-parity.test.ts`](../src/__tests__/content-parity.test.ts) and
-> [`data-integrity.test.ts`](../src/__tests__/data-integrity.test.ts) enforce
+> [`content-parity.test.ts`](../../src/__tests__/content-parity.test.ts) and
+> [`data-integrity.test.ts`](../../src/__tests__/data-integrity.test.ts) enforce
 > this — every content recipe ends with running them.
 
 > **One command before every commit.** `npm run check && npm run lint && npm test`.
 > Lefthook re-runs eslint + prettier on staged files automatically; see
-> [CONTRIBUTING.md](../CONTRIBUTING.md#before-you-commit).
+> [CONTRIBUTING.md](../../CONTRIBUTING.md#before-you-commit).
 
 ---
 
@@ -22,11 +22,11 @@ linked at the bottom of each recipe.
 
 **Edit:**
 
-- [src/data/experience.json](../src/data/experience.json) — append an object
+- [src/data/experience.json](../../src/data/experience.json) — append an object
   with `identity` (company, link, dates, optional `logo` / `logoLight`) and
   `copy.{en,es,ca}` (role, period, bullets[]).
-- [src/data/experience.es.json](../src/data/experience.es.json) and
-  [experience.ca.json](../src/data/experience.ca.json) — append the same
+- [src/data/experience.es.json](../../src/data/experience.es.json) and
+  [experience.ca.json](../../src/data/experience.ca.json) — append the same
   entry, translated. Same array length, same field set.
 
 **Notes:** logos go in `public/logos/`. Use `logo` for the dark-theme SVG and
@@ -39,7 +39,7 @@ file order.
 
 ## 2. Adding a new education entry
 
-**Edit:** [src/data/education.json](../src/data/education.json) +
+**Edit:** [src/data/education.json](../../src/data/education.json) +
 `.es.json` + `.ca.json`. Shape: `identity.institution`, `identity.link`,
 `copy.{en,es,ca}.{degree, location, period}`.
 
@@ -49,7 +49,7 @@ file order.
 
 ## 3. Adding a new certification
 
-**Edit:** [src/data/certifications.json](../src/data/certifications.json) +
+**Edit:** [src/data/certifications.json](../../src/data/certifications.json) +
 `.es.json` + `.ca.json`. Shape: `identity.{name, issuer, issuerIcon, link,
 fallback?}`, `copy.{en,es,ca}.issued`.
 
@@ -63,7 +63,7 @@ HTML snapshot in `public/certifications/` and reference it with `fallback`.
 
 ## 4. Adding a new work project
 
-**Edit:** [src/data/work_projects.json](../src/data/work_projects.json) +
+**Edit:** [src/data/work_projects.json](../../src/data/work_projects.json) +
 `.es.json` + `.ca.json`. Shape: `identity.{role, icon, link, fallback?}`,
 `copy.{en,es,ca}.{title, company, description, tags[]}`.
 
@@ -77,7 +77,7 @@ slugs already used in the file.
 
 ## 5. Editing skills
 
-**Edit:** [src/data/skills.json](../src/data/skills.json) + `.es.json` +
+**Edit:** [src/data/skills.json](../../src/data/skills.json) + `.es.json` +
 `.ca.json`. Shape: `identity.items[]` (the skill names — **shared across
 locales**, not translated) and `copy.{en,es,ca}.category` (the category label,
 which **is** translated).
@@ -93,14 +93,14 @@ category: append to that entry's `identity.items`.
 
 **Edit:**
 
-1. [src/config/section-ids.ts](../src/config/section-ids.ts) — reorder, add,
+1. [src/config/section-ids.ts](../../src/config/section-ids.ts) — reorder, add,
    or delete the entry in `SECTION_META`. The numbered prefixes (`01`, `02`,
    …) are auto-derived from the order of `numbered: true` entries, so
    renumbering is automatic.
-2. [src/config/sections.ts](../src/config/sections.ts) — add or remove the
+2. [src/config/sections.ts](../../src/config/sections.ts) — add or remove the
    matching `import` and `COMPONENTS` entry.
 3. If the section appears in the navbar, ensure the matching `nav.*` key
-   exists in [src/i18n/ui.ts](../src/i18n/ui.ts) for all three locales.
+   exists in [src/i18n/ui.ts](../../src/i18n/ui.ts) for all three locales.
 
 **Notes:** the hero is the only section with `inNav: false` and
 `numbered: false`. To hide a section from the navbar without removing it, flip
@@ -113,7 +113,7 @@ category: append to that entry's `identity.items`.
 
 ## 7. Adding a shared UI string (button, label, ARIA)
 
-**Edit:** [src/i18n/ui.ts](../src/i18n/ui.ts). Add the dotted key under all
+**Edit:** [src/i18n/ui.ts](../../src/i18n/ui.ts). Add the dotted key under all
 three locales (`en`, `es`, `ca`). Use a clear namespace prefix
 (`nav.*`, `aria.*`, `meta.*`, `demo.*`, `contact.*`, …).
 
@@ -140,9 +140,9 @@ type system enforces compile-time coverage.
 ## 8. Adding page-specific copy with HTML or placeholders
 
 **Edit:** create or extend a module under
-[src/i18n/demos/](../src/i18n/demos/) named `<slug>-page.ts` (page UI) or
+[src/i18n/demos/](../../src/i18n/demos/) named `<slug>-page.ts` (page UI) or
 `<slug>-demo.ts` (client island). Follow the
-[joc-eda-page.ts](../src/i18n/demos/joc-eda-page.ts) pattern: an object keyed
+[joc-eda-page.ts](../../src/i18n/demos/joc-eda-page.ts) pattern: an object keyed
 by locale with a default-export `getXxxCopy(lang)` accessor.
 
 Use this **only** for copy that's specific to one page/component and can't
@@ -171,13 +171,13 @@ and stop at the marker if `hasBackend: false`.
 
 **Edit:**
 
-- [src/config/site.ts](../src/config/site.ts) — URL, GitHub user, LinkedIn
+- [src/config/site.ts](../../src/config/site.ts) — URL, GitHub user, LinkedIn
   user, email. Single source of truth; consumed by `Contact.astro`,
   `Layout.astro` (schema.org `sameAs`), and `astro.config.mjs`.
-- [src/components/Hero.astro](../src/components/Hero.astro) — name and
+- [src/components/Hero.astro](../../src/components/Hero.astro) — name and
   taglines (most copy lives in `ui.ts` keys `hero.*`).
-- [src/components/About.astro](../src/components/About.astro) — bio.
-- [src/components/Contact.astro](../src/components/Contact.astro) — contact
+- [src/components/About.astro](../../src/components/About.astro) — bio.
+- [src/components/Contact.astro](../../src/components/Contact.astro) — contact
   block.
 - `astro.config.mjs` `site:` field — only if the deployed URL itself changes.
 
@@ -188,9 +188,9 @@ and stop at the marker if `hasBackend: false`.
 ## 11. Changing the navbar items
 
 The navbar is generated from sections with `inNav: true` in
-[src/config/section-ids.ts](../src/config/section-ids.ts). The link label
+[src/config/section-ids.ts](../../src/config/section-ids.ts). The link label
 comes from the `navKey` (e.g. `nav.experience`) looked up in
-[src/i18n/ui.ts](../src/i18n/ui.ts). To rename a label: edit `ui.ts`. To
+[src/i18n/ui.ts](../../src/i18n/ui.ts). To rename a label: edit `ui.ts`. To
 hide / reorder: edit `section-ids.ts` (see recipe 6).
 
 **Verify:** `npx playwright test --project=portfolio-smoke`
@@ -214,11 +214,11 @@ describe('thingUnderTest', () => {
 
 Pick the closest existing test as a starting point:
 
-- **Content / data shape:** [data-integrity.test.ts](../src/__tests__/data-integrity.test.ts)
-  or [content-parity.test.ts](../src/__tests__/content-parity.test.ts).
-- **Pure logic / algorithms:** [wpgma.test.ts](../src/__tests__/wpgma.test.ts).
-- **React component:** [error-boundary.test.tsx](../src/__tests__/error-boundary.test.tsx).
-- **i18n / utils:** [i18n-utils.test.ts](../src/__tests__/i18n-utils.test.ts).
+- **Content / data shape:** [data-integrity.test.ts](../../src/__tests__/data-integrity.test.ts)
+  or [content-parity.test.ts](../../src/__tests__/content-parity.test.ts).
+- **Pure logic / algorithms:** [wpgma.test.ts](../../src/__tests__/wpgma.test.ts).
+- **React component:** [error-boundary.test.tsx](../../src/__tests__/error-boundary.test.tsx).
+- **i18n / utils:** [i18n-utils.test.ts](../../src/__tests__/i18n-utils.test.ts).
 
 **Verify:** `npx vitest run <name>` (or `npx vitest` for watch mode).
 
@@ -239,16 +239,16 @@ test.describe('<feature>', () => {
 });
 ```
 
-**Notes:** [playwright.config.ts](../playwright.config.ts) defines named
+**Notes:** [playwright.config.ts](../../playwright.config.ts) defines named
 projects (`portfolio-smoke`, `browser-demos`, `live-demos`, `themes`,
 `debug-overlay`, `a11y`, `keyboard`, `visual`). Each project has a
 `testMatch` regex — name your file to match an existing project, or add a
 new project block. Closest fixtures to copy:
 
-- **Page-level smoke:** [portfolio-smoke.spec.ts](../e2e/portfolio-smoke.spec.ts)
-- **Keyboard / a11y:** [keyboard.spec.ts](../e2e/keyboard.spec.ts) or
-  [a11y.spec.ts](../e2e/a11y.spec.ts)
-- **Demo behavior:** [browser-demos.spec.ts](../e2e/browser-demos.spec.ts)
+- **Page-level smoke:** [portfolio-smoke.spec.ts](../../e2e/portfolio-smoke.spec.ts)
+- **Keyboard / a11y:** [keyboard.spec.ts](../../e2e/keyboard.spec.ts) or
+  [a11y.spec.ts](../../e2e/a11y.spec.ts)
+- **Demo behavior:** [browser-demos.spec.ts](../../e2e/browser-demos.spec.ts)
 
 **Verify:** `npx playwright test <name>` (or `make test-keyboard`,
 `make test-a11y`, `make test-visual` for the named groups).
@@ -260,7 +260,7 @@ new project block. Closest fixtures to copy:
 Visual baselines must be regenerated on **Linux** because font hinting is
 OS-specific. The recommended path is the `Refresh visual baselines` GitHub
 Action — see the
-[Visual regression](../README.md#visual-regression) section in the README.
+[Visual regression](../../README.md#visual-regression) section in the README.
 
 ---
 
@@ -278,18 +278,21 @@ Action — see the
 
 Lefthook auto-runs eslint + prettier on staged files; the `commit-msg` hook
 rejects direct commits to `main`. See
-[CONTRIBUTING.md § Before you commit](../CONTRIBUTING.md#before-you-commit).
+[CONTRIBUTING.md § Before you commit](../../CONTRIBUTING.md#before-you-commit).
 
 ---
 
 ## See also
 
-- [README.md](../README.md) — stack overview, `make dev-bare` matrix,
+- [README.md](../../README.md) — stack overview, `make dev-bare` matrix,
   troubleshooting
-- [CONTRIBUTING.md](../CONTRIBUTING.md) — first clone, day-to-day commands,
+- [CONTRIBUTING.md](../../CONTRIBUTING.md) — first clone, day-to-day commands,
   test layer cake
-- [docs/adding-a-demo.md](./adding-a-demo.md) — the full demo onboarding
-  checklist
-- [docs/i18n.md](./i18n.md) — translation patterns A / B / C, decision flow
-- [docs/decisions.md](./decisions.md), [docs/debugging-architecture.md](./debugging-architecture.md),
-  [docs/observability.md](./observability.md) — architecture deep dives
+- [docs/guides/adding-a-demo.md](./adding-a-demo.md) — the full demo
+  onboarding checklist
+- [docs/guides/i18n.md](./i18n.md) — translation patterns A / B / C,
+  decision flow
+- [docs/architecture/decisions.md](../architecture/decisions.md),
+  [docs/architecture/debugging-architecture.md](../architecture/debugging-architecture.md),
+  [docs/architecture/observability.md](../architecture/observability.md) —
+  architecture deep dives

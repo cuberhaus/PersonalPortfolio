@@ -6,7 +6,7 @@
  * on a window-scoped EventTarget; consumers (overlay, console mirror, Sentry
  * forwarder, network tap) subscribe independently.
  *
- * Architecture rationale: see PersonalPortfolio/docs/debugging-architecture.md
+ * Architecture rationale: see PersonalPortfolio/docs/architecture/debugging-architecture.md
  *
  * Design choices:
  *   - Singleton module-level state. Reset via `__resetBusForTesting()`.

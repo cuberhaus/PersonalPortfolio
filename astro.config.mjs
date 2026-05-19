@@ -40,7 +40,7 @@ export default defineConfig({
         //   SENTRY_PROJECT     — the project slug (e.g. "portfolio")
         //
         // Without these, prod stack traces remain minified — see
-        // docs/observability.md for the full setup.
+        // docs/architecture/observability.md for the full setup.
         authToken: process.env.SENTRY_AUTH_TOKEN,
         org: process.env.SENTRY_ORG,
         project: process.env.SENTRY_PROJECT,

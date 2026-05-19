@@ -5,17 +5,17 @@ needs them, and a browser-only demo finishes here. Steps **8+** are
 **backend & observability** — only follow them if your demo ships a Docker
 service.
 
-> **Single source of truth:** [`src/data/demo-services.json`](../src/data/demo-services.json) drives the
+> **Single source of truth:** [`src/data/demo-services.json`](../../src/data/demo-services.json) drives the
 > orchestrator, the iframe forwarder, the log relay, the registry test
 > and this doc. The card on the homepage comes from
-> [`src/data/demos.json`](../src/data/demos.json) (+ `.es.json`, `.ca.json`).
+> [`src/data/demos.json`](../../src/data/demos.json) (+ `.es.json`, `.ca.json`).
 
 ---
 
 ## 1. Pick a slug + decide if you need a backend
 
 - **Slug:** lowercase letters, digits, hyphens (regex enforced by
-  [`src/i18n/demo-schema.ts`](../src/i18n/demo-schema.ts)). Example:
+  [`src/i18n/demo-schema.ts`](../../src/i18n/demo-schema.ts)). Example:
   `my-cool-demo`. The folder name on disk and every cross-reference uses
   this slug verbatim.
 - **Backend?** Three flavours:
@@ -42,7 +42,7 @@ src/components/demos/<Slug>Demo.tsx     # interactive island (omit if iframe-onl
 src/i18n/demos/<slug>-demo.ts           # OPTIONAL — see step 6
 ```
 
-**Astro page** — copy [`src/pages/demos/mpids.astro`](../src/pages/demos/mpids.astro)
+**Astro page** — copy [`src/pages/demos/mpids.astro`](../../src/pages/demos/mpids.astro)
 as a starting point. The shape:
 
 ```astro
@@ -82,8 +82,8 @@ all card-level fields (title, lead, badge, accent, github, …) live in
 `demos.json`.
 
 **React island** — minimal browser-only skeleton. Copy
-[`MPIDSDemo.tsx`](../src/components/demos/MPIDSDemo.tsx) for an interactive
-example, or [`BitsXMaratoDemo.tsx`](../src/components/demos/BitsXMaratoDemo.tsx)
+[`MPIDSDemo.tsx`](../../src/components/demos/MPIDSDemo.tsx) for an interactive
+example, or [`BitsXMaratoDemo.tsx`](../../src/components/demos/BitsXMaratoDemo.tsx)
 for a "mock-on-Pages, live in dev" pattern. The bare skeleton:
 
 ```tsx
@@ -97,7 +97,7 @@ export default withDemoErrorBoundary(MyCoolDemo, 'my-cool-demo');
 ```
 
 > **No backend, but want a "mock UI" banner?** Wrap your component with
-> [`MockBanner`](../src/components/demos/MockBanner.tsx):
+> [`MockBanner`](../../src/components/demos/MockBanner.tsx):
 > `<MockBanner>Showing mock data — live backend runs only in dev</MockBanner>`.
 > See `BitsXMaratoDemo.tsx` for the canonical usage.
 
@@ -105,11 +105,11 @@ export default withDemoErrorBoundary(MyCoolDemo, 'my-cool-demo');
 
 ## 3. Add the demo card to `demos.json`
 
-The homepage demo grid is generated from [`src/data/demos.json`](../src/data/demos.json)
+The homepage demo grid is generated from [`src/data/demos.json`](../../src/data/demos.json)
 (plus `.es.json` and `.ca.json`). Append the same entry to all **three**
 files — same shape, same field set, same order. Parity is enforced by
-[`content-parity.test.ts`](../src/__tests__/content-parity.test.ts) and the
-schema in [`src/i18n/demo-schema.ts`](../src/i18n/demo-schema.ts).
+[`content-parity.test.ts`](../../src/__tests__/content-parity.test.ts) and the
+schema in [`src/i18n/demo-schema.ts`](../../src/i18n/demo-schema.ts).
 
 ```jsonc
 {
@@ -134,7 +134,7 @@ schema in [`src/i18n/demo-schema.ts`](../src/i18n/demo-schema.ts).
 
 - `slug` regex: `^[a-z0-9-]+$`.
 - `icon` is an enum — must be one of the keys in
-  [`src/lib/demo-icons.ts`](../src/lib/demo-icons.ts) `ICON_PATHS`.
+  [`src/lib/demo-icons.ts`](../../src/lib/demo-icons.ts) `ICON_PATHS`.
 - `github` must be a `https://github.com/` URL (single string or array of
   strings for multi-repo demos like `draculin`).
 - The `en` entry must exist; other locales fall back to `en`.
@@ -148,7 +148,7 @@ for the parity rule that applies to every JSON-triple file.
 
 ## 4. Register in `demo-services.json`
 
-Append to [`src/data/demo-services.json`](../src/data/demo-services.json):
+Append to [`src/data/demo-services.json`](../../src/data/demo-services.json):
 
 ```json
 {
@@ -182,7 +182,7 @@ For a backed demo, replace `"hasBackend": false` with the full block:
 }
 ```
 
-The registry test [`demo-registry.test.ts`](../src/__tests__/demo-registry.test.ts)
+The registry test [`demo-registry.test.ts`](../../src/__tests__/demo-registry.test.ts)
 asserts:
 
 - every `page` and `component` path exists on disk;
@@ -195,7 +195,7 @@ asserts:
 
 ## 5. Add the slug to the browser-smoke spec
 
-[`e2e/browser-demos.spec.ts`](../e2e/browser-demos.spec.ts) loads every
+[`e2e/browser-demos.spec.ts`](../../e2e/browser-demos.spec.ts) loads every
 demo route and asserts it renders without console errors. Append your
 slug to the `ALL_SLUGS` array near the top of the file:
 
@@ -222,7 +222,7 @@ per-feature module:
 - `src/i18n/demos/<slug>-page.ts` — for page-level UI strings, or
 - `src/i18n/demos/<slug>-demo.ts` — for client-island copy.
 
-Follow the [`joc-eda-page.ts`](../src/i18n/demos/joc-eda-page.ts) pattern:
+Follow the [`joc-eda-page.ts`](../../src/i18n/demos/joc-eda-page.ts) pattern:
 locale-keyed object + a `getXxxCopy(lang)` accessor. **Don't** duplicate
 fields that already live in `demos.json` (title, description, lead,
 badge, about) — keep this for page-specific UI only.
@@ -511,7 +511,7 @@ is dropped — including buggy third-party iframes.
 
 ## 11. Makefile
 
-Two edits to [`PersonalPortfolio/Makefile`](../Makefile):
+Two edits to [`PersonalPortfolio/Makefile`](../../Makefile):
 
 **(a)** Add a `_db-<slug>` target, mirroring the existing `_db-tfg`,
 `_db-bitsx`, etc. (see lines ~406–453):

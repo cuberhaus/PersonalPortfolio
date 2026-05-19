@@ -4,7 +4,7 @@
  * Listens for `postMessage` events from same-origin-checked iframes embedded
  * via `<LiveAppEmbed />` and republishes them onto the central bus tagged
  * with `source: 'iframe'`. Embedded apps voluntarily emit messages via the
- * tiny `debug-iframe-emitter` snippet (see `docs/adding-a-demo.md`).
+ * tiny `debug-iframe-emitter` snippet (see `docs/guides/adding-a-demo.md`).
  *
  * Envelope shape:
  *   { type: 'debug:log', level, ns, msg, args?, ts? }

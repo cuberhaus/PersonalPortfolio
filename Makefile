@@ -111,7 +111,7 @@ health: ## Check if all demo backends are responding
 # ── Self-hosted Sentry observability stack ─────────────────────────────
 # Cloned at $(PARENT)/sentry-self-hosted (pinned to tag 26.4.1).
 # Web UI: http://localhost:9000  — paste the project DSN into .env.shared
-# Full setup + troubleshooting: docs/observability.md
+# Full setup + troubleshooting: docs/architecture/observability.md
 SENTRY_DIR      = $(PARENT)/sentry-self-hosted
 SENTRY_COMPOSE  = docker compose -f "$(SENTRY_DIR)/docker-compose.yml"
 
