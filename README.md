@@ -6,14 +6,14 @@ Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 
 
 ## Stack
 
-| Layer          | Tech                                                                       |
-| -------------- | -------------------------------------------------------------------------- |
-| Framework      | Astro 5.18, TypeScript strict                                              |
-| Interactive UI | React 19 islands (`client:visible` / `client:load`)                        |
-| Visualisation  | D3, Canvas, WebGL2, Babylon.js                                             |
-| CV demos       | Web Workers, OpenCV.js, WASM                                               |
-| i18n           | 3 locales — file-based routing (`/`, `/es/`, `/ca/`)                       |
-| Testing        | Vitest 4 (30 unit suites, 516 tests) · Playwright (3 e2e specs, 141 tests) |
+| Layer          | Tech                                                                                |
+| -------------- | ----------------------------------------------------------------------------------- |
+| Framework      | Astro 5.18, TypeScript strict                                                       |
+| Interactive UI | React 19 islands (`client:visible` / `client:load`)                                 |
+| Visualisation  | D3, Canvas, WebGL2, Babylon.js                                                      |
+| CV demos       | Web Workers, OpenCV.js, WASM                                                        |
+| i18n           | i18next (build-time) + inlang — 3 locales, file-based routing (`/`, `/es/`, `/ca/`) |
+| Testing        | Vitest 4 (30 unit suites, 516 tests) · Playwright (3 e2e specs, 141 tests)          |
 
 ## Getting started
 
