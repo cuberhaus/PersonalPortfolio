@@ -309,17 +309,17 @@ The header is only injected for requests whose origin is in the demo
 registry's `iframeUrl` set (or the parent page's own origin). Cross-origin
 requests to third-party endpoints stay untouched.
 
-| Where                             | What sets the tag                                                                                                                              |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| Browser                           | `Sentry.init({ initialScope: { tags: { session_id } } })` in [`sentry.client.config.ts`](../../sentry.client.config.ts)                        |
-| FastAPI / Litestar / async-Django | `app.add_middleware(SessionIdMiddleware)` from [`_sentry_obs.py`](../../scripts/sentry-snippets/_sentry_obs.py)                                |
-| Flask                             | `register_flask_session_id(app)` from [`_sentry_obs.py`](../../scripts/sentry-snippets/_sentry_obs.py)                                         |
-| Django (sync)                     | `'Draculin._sentry_obs.django_session_id_middleware'` in `MIDDLEWARE`                                                                          |
-| Spring Boot                       | [`web.config.SessionIdFilter`](../../../subgrup-prop7.1/web/src/main/java/web/config/SessionIdFilter.java)                                     |
-| Go (joc-eda)                      | per-request wrapper inside `withSentryHTTP` in [`observability.go`](../../../joc_eda/web/backend-go/observability.go)                          |
-| Rust (pro2)                       | tower middleware `_session_id_middleware` + `NewSentryLayer` in [`main.rs`](../../../pracpro2/web/backend/src/main.rs)                         |
-| PHP (Tenda)                       | `\Sentry\configureScope(...)` reads `$_SERVER['HTTP_X_SESSION_ID']` in [`observability.php`](../../../tenda_online/includes/observability.php) |
-| SvelteKit                         | `sessionIdHandle` composed into the chain in [`hooks.server.ts`](../../../Practica_de_Planificacion/web/src/hooks.server.ts)                   |
+| Where                             | What sets the tag                                                                                                                                |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Browser                           | `Sentry.init({ initialScope: { tags: { session_id } } })` in [`sentry.client.config.ts`](../../sentry.client.config.ts)                          |
+| FastAPI / Litestar / async-Django | `app.add_middleware(SessionIdMiddleware)` from [`_sentry_obs.py`](../../scripts/sentry-snippets/_sentry_obs.py)                                  |
+| Flask                             | `register_flask_session_id(app)` from [`_sentry_obs.py`](../../scripts/sentry-snippets/_sentry_obs.py)                                           |
+| Django (sync)                     | `'Draculin._sentry_obs.django_session_id_middleware'` in `MIDDLEWARE`                                                                            |
+| Spring Boot                       | [`web.config.SessionIdFilter`](../../../subgrup-prop7.1/web/src/main/java/web/config/SessionIdFilter.java)                                       |
+| Go (joc-eda)                      | per-request wrapper inside `withSentryHTTP` in [`observability.go`](../../../joc_eda/web/backend-go/observability.go)                            |
+| Rust (pro2)                       | tower middleware `_session_id_middleware` + `NewSentryLayer` in [`main.rs`](../../../pracpro2/web/backend/src/main.rs)                           |
+| PHP (Tenda)                       | n/a — [`observability.php`](../../../tenda_online/includes/observability.php) only calls `\Sentry\init(['dsn' => $dsn])`; no session correlation |
+| SvelteKit                         | n/a — [`hooks.server.ts`](../../../Practica_de_Planificacion/web/src/hooks.server.ts) wires `Sentry.sentryHandle()` only; no session correlation |
 
 In the Sentry UI:
 
@@ -591,9 +591,9 @@ in [`src/data/demo-services.json`](../../src/data/demo-services.json).
 | Backend                                                          | Stack                               | Init hook                                                                                                                                                                             |
 | ---------------------------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api | Python (FastAPI / Flask / Litestar) | [`scripts/sentry-snippets/_sentry_obs.py`](../../scripts/sentry-snippets/_sentry_obs.py) — canonical, copied verbatim into each backend repo                                          |
-| Draculin                                                         | Django                              | [`Draculin-Backend/Draculin/settings.py`](../../../Draculin-Backend/Draculin/settings.py) — calls `init_observability("draculin")` from the same canonical helper                     |
+| Draculin                                                         | Django                              | [`Draculin-Backend/Draculin/settings.py`](../../../Draculin-Backend/Draculin/settings.py) — calls `init_observability(service="draculin")` from the same canonical helper             |
 | PROP                                                             | Spring Boot                         | [`subgrup-prop7.1/web/src/main/resources/application.properties`](../../../subgrup-prop7.1/web/src/main/resources/application.properties) — `sentry.dsn` + `sentry.tags.service=prop` |
-| Tenda                                                            | PHP                                 | [`tenda_online/includes/observability.php`](../../../tenda_online/includes/observability.php) — `\Sentry\init(...)` + `\Sentry\configureScope(...)`                                   |
+| Tenda                                                            | PHP                                 | [`tenda_online/includes/observability.php`](../../../tenda_online/includes/observability.php) — `\Sentry\init(['dsn' => $dsn])` only                                                  |
 | joc-eda                                                          | Go                                  | [`joc_eda/web/backend-go/observability.go`](../../../joc_eda/web/backend-go/observability.go) — `initSentry`, `withSentryHTTP`                                                        |
 | pro2                                                             | Rust (axum)                         | [`pracpro2/web/backend/src/main.rs`](../../../pracpro2/web/backend/src/main.rs) — `_init_sentry()`                                                                                    |
 | planificacion                                                    | SvelteKit                           | [`Practica_de_Planificacion/web/src/hooks.server.ts`](../../../Practica_de_Planificacion/web/src/hooks.server.ts) — `@sentry/sveltekit` + `sentryHandle()`                            |
@@ -607,7 +607,7 @@ in [`src/data/demo-services.json`](../../src/data/demo-services.json).
   was chosen and the Option A vs B vs C vs D trade-off matrix.
 - [`decisions.md`](./decisions.md) — full decision-rationale catalogue
   (foundations, patterns, alternatives, migration costs).
-- [`adding-a-demo.md`](./adding-a-demo.md) — how to wire a brand-new demo's
+- [`adding-a-demo.md`](../guides/adding-a-demo.md) — how to wire a brand-new demo's
   backend into this observability pipeline (per-stack SDK init).
 - [`scripts/sentry-snippets/_sentry_obs.py`](../../scripts/sentry-snippets/_sentry_obs.py) —
   canonical Python observability hook copied into every Python backend.
