@@ -1,6 +1,6 @@
 import demosData from '../data/demos.json' with { type: 'json' };
 import { flattenForLocale } from './load';
-import type { Locale } from '../config/locales';
+import { LOCALES, type Locale } from '../config/locales';
 
 // Locale translation files for demos
 import demosEn from '../../locales/en/demos.json';
@@ -38,9 +38,7 @@ const cache = new Map<DemoLang, Demo[]>();
 
 /** Flat, legacy-shape demo array for a given locale (cached). */
 export function listDemos(lang: string): Demo[] {
-  const locale = (['en', 'es', 'ca'] as const).includes(lang as DemoLang)
-    ? (lang as DemoLang)
-    : 'en';
+  const locale = (LOCALES as readonly string[]).includes(lang) ? (lang as DemoLang) : 'en';
   const cached = cache.get(locale);
   if (cached) return cached;
   const flat = flattenForLocale<Demo>(

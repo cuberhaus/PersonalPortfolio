@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { LOCALES } from '../config/locales';
 
 /**
  * Tests for the LiveAppEmbed component's core logic:
@@ -124,7 +125,7 @@ describe('LiveAppEmbed — probe logic', () => {
 
 describe('LiveAppEmbed — translations', () => {
   it('has all three languages', () => {
-    expect(Object.keys(T)).toEqual(['en', 'es', 'ca']);
+    expect(Object.keys(T)).toEqual([...LOCALES]);
   });
 
   it('every language has the required keys', () => {

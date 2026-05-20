@@ -6,6 +6,7 @@ import ThemeInit from '../components/ThemeInit.astro';
 import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
+import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
 
 interface Props {
   title: string;
@@ -52,9 +53,12 @@ const siteBase = Astro.site || Astro.url;
     />
 
     <link rel="canonical" href={Astro.url} />
-    <link rel="alternate" hreflang="en" href={new URL(base + demoPath, siteBase)} />
-    <link rel="alternate" hreflang="es" href={new URL(base + '/es' + demoPath, siteBase)} />
-    <link rel="alternate" hreflang="ca" href={new URL(base + '/ca' + demoPath, siteBase)} />
+    {
+      LOCALES.map((locale) => {
+        const path = locale === DEFAULT_LOCALE ? demoPath : `/${locale}${demoPath}`;
+        return <link rel="alternate" hreflang={locale} href={new URL(base + path, siteBase)} />;
+      })
+    }
     <link rel="alternate" hreflang="x-default" href={new URL(base + demoPath, siteBase)} />
 
     <ThemeInit position="head" />

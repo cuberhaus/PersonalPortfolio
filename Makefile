@@ -11,6 +11,7 @@ endif
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
        clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update help ports \
+       i18n-review \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
        _db-rob _db-par _db-fib _db-grafics
@@ -323,6 +324,11 @@ test: ## Run ALL test suites (portfolio + every demo backend)
 	cd "$(PARENT)/Practica_de_Planificacion/web" && npx vitest run
 	@echo ""
 	@echo "All test suites passed."
+
+##@ i18n
+
+i18n-review: ## Generate a local HTML page showing all translation namespaces side-by-side
+	npx tsx scripts/i18n-review.ts
 
 ##@ Cleanup
 

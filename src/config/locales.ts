@@ -1,17 +1,30 @@
 /**
  * Single source of truth for the supported locales.
  *
- * Consumed by:
+ * Automatically consumed (no edits needed) by:
  *   - astro.config.mjs (locales array)
  *   - src/i18n/utils.ts (lang detection)
  *   - src/pages/[lang]/index.astro and src/pages/[lang]/demos/[demo].astro (getStaticPaths)
- *   - src/layouts/Layout.astro (hreflang alternates)
+ *   - src/layouts/Layout.astro & DemoLayout.astro (hreflang alternates)
+ *   - src/i18n/demo.ts (locale validation)
  *   - src/components/About.astro (CV PDF per locale)
- *   - tests
+ *   - tests (live-app-embed, content-parity, etc.)
  *
- * To add or remove a locale, edit this file. The cv-by-lang map and the deploy
- * workflow's `curl` lines still need a per-locale filename adjustment because
- * the upstream CV repo names them by full English language name.
+ * Adding a new locale (e.g. 'fr'):
+ *   1. Add 'fr' to the LOCALES array below.
+ *   2. Create all locales/fr/*.json files (copy from en/ and translate).
+ *   3. Add static imports in these files (TypeScript can't dynamic-import):
+ *      - src/i18n/ui.ts         → import frUi + languages.fr label
+ *      - src/i18n/i18next.ts    → import frUi + resources.fr entry
+ *      - src/data/loaders.ts    → import 5 fr translation JSONs + map entries
+ *      - src/i18n/demo.ts       → import demosFr + demosTranslations.fr
+ *      - src/i18n/demos/*.ts    → import fr + add to export object (each file)
+ *   4. Add 'fr' to project.inlang/settings.json locales array.
+ *   5. Add cv-by-lang entry + deploy workflow curl line (upstream CV filenames).
+ *
+ * The Record<Locale, ...> type annotations in the above files will produce
+ * TypeScript compile errors until the new locale is added to each map,
+ * providing compile-time SSOT enforcement.
  */
 export const LOCALES = ['en', 'es', 'ca'] as const;
 
