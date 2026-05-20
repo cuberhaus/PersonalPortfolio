@@ -6,5 +6,8 @@
   "desc": "Máscara \\u2192 imágenes de pólipos sintéticas",
   "modelComp": "Comparación de modelos",
   "modelCompSub": "10 configuraciones de Faster R-CNN de Optuna HPO",
+  "ap50": "AP @IoU=0.50",
+  "ap5095": "AP @IoU=[.50:.95]",
+  "ar100": "AR maxDets=100",
   "f1": "Puntuación de F1"
 }
