@@ -28,7 +28,7 @@ export function getLocaleNamespace(locale: Locale, namespace: string): Record<st
   return (allModules[key(locale, namespace)] as Record<string, unknown>) ?? {};
 }
 
-function flattenDottedKeys(
+export function flattenDottedKeys(
   value: Record<string, unknown>,
   prefix = '',
   result: Record<string, unknown> = {}
