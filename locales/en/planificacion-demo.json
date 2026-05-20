@@ -1,4 +1,86 @@
 {
-  "name": "Extension 2",
-  "desc": "Days per city, minimum trip days, per-city interest + minimize metric."
+  "extensions": [
+    {
+      "name": "Básico",
+      "desc": "STRIPS-style: visit a minimum number of cities."
+    },
+    {
+      "name": "Extension 1",
+      "desc": "Same structure, different instance sizes."
+    },
+    {
+      "name": "Extension 2",
+      "desc": "Days per city, minimum trip days, per-city interest + minimize metric.",
+      "active": true
+    },
+    {
+      "name": "Extension 3/4",
+      "desc": "Problem variants and Python test generators."
+    },
+    {
+      "name": "Extra 2",
+      "desc": "Additional benchmark problems."
+    }
+  ],
+  "constraints": [
+    {
+      "icon": "🏙️",
+      "label": "≥ 2 cities visited",
+      "key": "min_ciudades_a_recoger"
+    },
+    {
+      "icon": "📅",
+      "label": "≥ 10 total trip days",
+      "key": "min_dias_recorrido"
+    },
+    {
+      "icon": "🏨",
+      "label": "1–4 days per city",
+      "key": "min/max_dias_por_ciudad"
+    },
+    {
+      "icon": "📉",
+      "label": "Minimize total interest",
+      "key": "metric minimize"
+    }
+  ],
+  "flightNetwork": "Flight network",
+  "flightDesc1": "Hub ",
+  "flightDesc2": " connects to three cities forming a triangle. Each city has a hotel. Stars = interest value (planner minimizes the sum).",
+  "constTitle": "Constraints & objective",
+  "constDesc1": "Single action: ",
+  "constDesc2": " — fly to new city, book hotel, choose stay duration (1–4 days). Requires a numeric PDDL planner (ENHSP, LPG).",
+  "extTitle": "Extensions",
+  "domain": "Domain (Ext 2)",
+  "problem": "Problem (Ext 2)",
+  "download": "Download ↓",
+  "ghRepo": "GitHub repo ↗",
+  "mockTitle": "Planner output preview",
+  "mockDesc": "Pre-computed optimal plan for the Extension 2 problem above.",
+  "mockRun": "Simulate planner",
+  "mockRunning": "Solving…",
+  "mockBadge": "Mock",
+  "mockSteps": "steps",
+  "mockDays": "days",
+  "mockInterest": "interest",
+  "mockRoute": "Route",
+  "mockActions": "Raw plan actions",
+  "fullAppTitle": "This demo vs. the full app",
+  "demoIncludesLabel": "This demo includes:",
+  "demoFeatures": [
+    "Flight network diagram and constraint overview for Extension 2",
+    "Read-only PDDL domain & problem source code",
+    "Downloadable .pddl files",
+    "Extension descriptions at a glance",
+    "Mock planner with pre-computed optimal solution"
+  ],
+  "fullAppDesc": "The full web app (run locally) adds:",
+  "fullAppFeatures": [
+    "File browser for all extensions (Basico through Extension 4)",
+    "Interactive graph visualization of the problem structure",
+    "Built-in planner execution on any domain/problem",
+    "Planned route highlighted on the graph",
+    "Editable PDDL with re-run support"
+  ],
+  "fullAppHint": "Run locally to access the full app:"
 }

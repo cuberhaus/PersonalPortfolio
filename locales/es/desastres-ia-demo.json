@@ -1,7 +1,127 @@
 {
-  "icon": "🔍",
-  "title": "Búsqueda",
-  "desc": "Movimientos más amplios \\u2014 reasignar / reordenar",
-  "name": "GENERAL",
-  "fn": "Function2"
+  "pipeline": [
+    {
+      "icon": "📋",
+      "title": "Estado",
+      "desc": "Cola ordenada de grupos por helicóptero"
+    },
+    {
+      "icon": "🔀",
+      "title": "SWAP",
+      "desc": "Intercambia dos grupos de posición"
+    },
+    {
+      "icon": "📊",
+      "title": "Puntuación",
+      "desc": "H2 = suma del tiempo de todos los helicópteros"
+    },
+    {
+      "icon": "🔍",
+      "title": "Búsqueda",
+      "desc": "HC escala · SA explora con saltos aleatorios"
+    }
+  ],
+  "operators": [
+    {
+      "name": "SWAP",
+      "fn": "Function1",
+      "desc": "Intercambia dos grupos entre colas de helicópteros"
+    },
+    {
+      "name": "GENERAL",
+      "fn": "Function2",
+      "desc": "Movimientos más amplios — reasignar / reordenar"
+    },
+    {
+      "name": "REDUCIDO",
+      "fn": "Function3",
+      "desc": "Vecindario más pequeño, iteraciones más rápidas"
+    },
+    {
+      "name": "SWAP + GENERAL",
+      "fn": "Function4",
+      "desc": "Combina swap con movimientos generales"
+    },
+    {
+      "name": "SWAP + REDUCIDO",
+      "fn": "Function5",
+      "desc": "Swap combinado con vecindario reducido"
+    },
+    {
+      "name": "Estocástico",
+      "fn": "Function6",
+      "desc": "Elige aleatoriamente la rama swap o general"
+    }
+  ],
+  "heuristics": [
+    {
+      "name": "H1",
+      "desc": "Mezcla de makespan (tiempo máx de heli) y tiempo total, ponderado para repartir carga",
+      "active": false
+    },
+    {
+      "name": "H2",
+      "desc": "Minimiza la suma de tiempos de finalización de todos los helicópteros",
+      "active": true
+    },
+    {
+      "name": "H3",
+      "desc": "H1 + penalización por grupos prioritarios rescatados tarde (urgencia)",
+      "active": false
+    }
+  ],
+  "localSearch": "Búsqueda Local",
+  "aima": "AIMA · Java + Python",
+  "problemSchematic": "Esquema del problema",
+  "probDesc": "Helicópteros salen de bases y sirven a centros en un orden optimizado. Los grupos tienen tamaños y prioridades. Capacidad: 15 personas por viaje, 10 min de descanso entre salidas.",
+  "base": "Base",
+  "center": "Centro",
+  "rescueOrder": "orden de rescate →",
+  "heurFunctions": "Funciones heurísticas",
+  "usedInDemo": "usada en la demo",
+  "succOperators": "Operadores sucesores",
+  "succNote1": "6 funciones sucesoras en Java (",
+  "succNote2": "). La demo usa SWAP. Pasa el ratón para más detalles.",
+  "runDemo": "Ejecutar demo",
+  "demoSub": "HC / SA · 7 grupos · 3 helicópteros · se ejecuta en el navegador",
+  "howItWorks": "Cómo funciona:",
+  "howDesc1": " Distribución 2D aleatoria (con semilla) con 2 bases y 7 grupos. Colores = helicóptero asignado. ",
+  "howDesc2": "HC",
+  "howDesc3": " elige el mejor vecino SWAP hasta estancarse; ",
+  "howDesc4": "SA",
+  "howDesc5": " a veces acepta peores movimientos para escapar de mínimos locales.",
+  "algorithm": "Algoritmo",
+  "hc": "Hill climbing",
+  "sa": "Simulated annealing",
+  "hcFull": "Hill climbing (SWAP completo)",
+  "saFull": "Simulated annealing (SWAP aleatorio)",
+  "seed": "Semilla",
+  "runSearch": "Ejecutar búsqueda",
+  "running": "Ejecutando…",
+  "cost": "Coste H2:",
+  "before": "Antes — colas iniciales aleatorias",
+  "after": "Después — asignación optimizada",
+  "finalQueues": "Colas finales",
+  "initialState": "Desglose estado inicial y log crudo",
+  "compact": "Compacto:",
+  "ghRepo": "Repositorio en GitHub ↗",
+  "webAppTitle": "Web App completa",
+  "webAppDesc": "Ejecuta el contenedor Docker para acceder al solucionador interactivo completo con todas las funcionalidades.",
+  "webAppFeatures": [
+    {
+      "icon": "🗺️",
+      "title": "Mapa 2D interactivo",
+      "desc": "Mapa Canvas con rutas de helicópteros, tooltips de grupos y asignaciones por color"
+    },
+    {
+      "icon": "📊",
+      "title": "Panel de experimentos",
+      "desc": "Ejecución por lotes con comparaciones boxplot de todas las configuraciones"
+    },
+    {
+      "icon": "⚙️",
+      "title": "Configuración completa",
+      "desc": "3 heurísticos, 6 funciones sucesoras, 3 estados iniciales y parámetros SA ajustables"
+    }
+  ]
 }

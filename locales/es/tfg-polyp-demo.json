@@ -1,13 +1,107 @@
 {
   "pipelineTitle": "Pipeline de Principio a Fin",
-  "thesis": "Trabajo de Fin de Grado \\u00b7 FIB-UPC",
-  "icon": "\\u{1F3AD}",
-  "title": "CycleGAN / SPADE",
-  "desc": "Máscara \\u2192 imágenes de pólipos sintéticas",
+  "thesis": "Trabajo de Fin de Grado · FIB-UPC",
+  "pipelineSteps": [
+    {
+      "icon": "📋",
+      "title": "LDPolypVideo",
+      "desc": "Frames de colonoscopia + bounding boxes"
+    },
+    {
+      "icon": "🎭",
+      "title": "CycleGAN / SPADE",
+      "desc": "Máscara → imágenes de pólipos sintéticas"
+    },
+    {
+      "icon": "📊",
+      "title": "Dataset aumentado",
+      "desc": "Datos de entrenamiento reales + generados"
+    },
+    {
+      "icon": "🧠",
+      "title": "Faster R-CNN",
+      "desc": "Entrenamiento de detección de objetos"
+    },
+    {
+      "icon": "🔍",
+      "title": "Optuna / Ray Tune",
+      "desc": "Optimización de hiperparámetros"
+    },
+    {
+      "icon": "✅",
+      "title": "Evaluación COCO",
+      "desc": "Métricas AP / AR / F1"
+    }
+  ],
   "modelComp": "Comparación de modelos",
-  "modelCompSub": "10 configuraciones de Faster R-CNN de Optuna HPO",
-  "ap50": "AP @IoU=0.50",
-  "ap5095": "AP @IoU=[.50:.95]",
-  "ar100": "AR maxDets=100",
-  "f1": "Puntuación de F1"
+  "modelCompSub": "10 configuraciones de Faster R-CNN desde Optuna HPO",
+  "metrics": {
+    "ap50": "AP @IoU=0.50",
+    "ap5095": "AP @IoU=[.50:.95]",
+    "ar100": "AR maxDets=100",
+    "f1": "Puntuación F1"
+  },
+  "sort": "Ordenar:",
+  "allModels": "Todos los modelos son Faster R-CNN (ResNet-50 FPN). Métricas de evaluación COCO en el test set LDPolypVideo.",
+  "simInference": "Inferencia simulada",
+  "browserMock": "Mock de navegador · Faster R-CNN",
+  "simDesc1": "Simula inferencia de Faster R-CNN en un frame de colonoscopia.",
+  "simDesc2": "Las bounding boxes son un ",
+  "simDesc3": "mock del navegador",
+  "simDesc4": ", no la salida real del modelo.",
+  "runDemo": "Ejecutar inferencia de demo",
+  "reset": "Reiniciar",
+  "confidence": "Confianza",
+  "detection": "detección",
+  "detections": "detecciones",
+  "loading": "Cargando pesos del modelo…",
+  "preprocessing": "Preprocesando frame…",
+  "forwardPass": "Pase hacia adelante de Faster R-CNN…",
+  "nms": "NMS y post-procesamiento…",
+  "complete": "Detección completa (mock del navegador)",
+  "cgTrans": "Traducción CycleGAN",
+  "unpaired": "Imagen a imagen no emparejada",
+  "cgDesc1": "CycleGAN aprende una traducción no emparejada ",
+  "cgDesc2": "máscara ↔ pólipo",
+  "cgDesc3": ". SPADE usa normalización espacial adaptativa para síntesis máscara → pólipo.",
+  "m2p": "Máscara → Pólipo",
+  "p2m": "Pólipo → Máscara",
+  "binMask": "Máscara binaria",
+  "colFrame": "Frame de colonoscopia",
+  "genPolyp": "Pólipo generado",
+  "predMask": "Máscara predicha",
+  "cgNote": "Las ilustraciones son esquemáticas. Las salidas reales de CycleGAN son imágenes fotorrealistas.",
+  "detArch": "Arquitecturas de detección",
+  "thModel": "Modelo",
+  "thBackbone": "Backbone",
+  "thNotes": "Notas",
+  "detectors": [
+    {
+      "name": "Faster R-CNN",
+      "backbone": "ResNet-50 FPN",
+      "note": "Detector principal, mejores resultados"
+    },
+    {
+      "name": "RetinaNet",
+      "backbone": "ResNet-50 FPN v2",
+      "note": "Basado en anclajes de una etapa"
+    },
+    {
+      "name": "SSD Lite",
+      "backbone": "MobileNet V3",
+      "note": "Ligero / móvil"
+    }
+  ],
+  "links": "Dashboard local",
+  "dashboard1": "El proyecto incluye un completo ",
+  "dashboard2": "dashboard de React y FastAPI",
+  "dashboard3": " para exploración de modelos, HPO y aumento de datos generativo. Clona el repo y ejecuta ",
+  "dashboard4": " en el directorio raíz.",
+  "author": "Autor",
+  "runLocal": "▸ Ejecutar el proyecto localmente",
+  "projDesc1": "El proyecto es ",
+  "projDesc2": "Python + PyTorch",
+  "projDesc3": ". Se recomienda una GPU CUDA para entrenamiento. El dashboard web funciona en CPU.",
+  "datasetNote1": "Coloca el dataset LDPolypVideo bajo ",
+  "datasetNote2": " y "
 }

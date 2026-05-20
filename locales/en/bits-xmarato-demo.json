@@ -1,4 +1,89 @@
 {
-  "src": "https://user-images.githubusercontent.com/44567202/208294460-f8bd49dd-c2c4-4dbf-b316-3fedd989bd9b.jpg",
-  "caption": "3D reconstruction of the abdominal aorta from segmented frames."
+  "screenshots": [
+    {
+      "src": "https://user-images.githubusercontent.com/44567202/208294460-f8bd49dd-c2c4-4dbf-b316-3fedd989bd9b.jpg",
+      "caption": "3D reconstruction of the abdominal aorta from segmented frames."
+    },
+    {
+      "src": "https://user-images.githubusercontent.com/44567202/208294473-3b2da637-5504-4750-8ea9-06e50e139eaa.jpeg",
+      "caption": "Segmentation / visualization pipeline output."
+    },
+    {
+      "src": "https://user-images.githubusercontent.com/44567202/208294474-817252af-eeb3-499b-8ffa-e6333b68efe0.jpeg",
+      "caption": "GUI workflow: load video, run inference, inspect masks and 3D output."
+    }
+  ],
+  "pipeline": [
+    {
+      "icon": "🎬",
+      "title": "Ultrasound video",
+      "desc": "Load study, extract frames"
+    },
+    {
+      "icon": "🧠",
+      "title": "Mask R-CNN",
+      "desc": "Instance segmentation per frame"
+    },
+    {
+      "icon": "🗂️",
+      "title": "Mask stack",
+      "desc": "Binary TIFFs for 3D recon"
+    },
+    {
+      "icon": "🧊",
+      "title": "3D mesh",
+      "desc": "ISO surface with Meshlib / Open3D"
+    },
+    {
+      "icon": "📏",
+      "title": "Diameter",
+      "desc": "Contour analysis + heuristics"
+    }
+  ],
+  "diameterZones": {
+    "typical": {
+      "label": "Typical range",
+      "detail": "Many adult abdominal aortic diameters fall well below 30 mm."
+    },
+    "followup": {
+      "label": "Follow-up zone",
+      "detail": "Dilated — periodic imaging often recommended. Real decisions depend on growth rate and morphology."
+    },
+    "concern": {
+      "label": "High concern",
+      "detail": "Large diameter — may warrant specialist review. This is an educational illustration only."
+    }
+  },
+  "simInference": "Simulated inference",
+  "simSub": "Browser mock · real B-mode frame",
+  "simDesc1": "Mimics the real Mask R-CNN inference on a ",
+  "simDesc2": "B-mode frame",
+  "simDesc3": " from the rat aorta dataset. The red overlay is a ",
+  "simDesc4": "browser mock",
+  "simDesc5": ", not model output.",
+  "extracting": "Extracting frame…",
+  "forwardPass": "Mask R-CNN forward pass…",
+  "fitting": "Fitting contour & diameter…",
+  "ready": "Segmentation ready (browser mock)",
+  "runDemo": "Run demo inference",
+  "reset": "Reset",
+  "opacity": "Opacity",
+  "diameterExplorer": "Diameter explorer",
+  "diamSub": "Educational risk visualization",
+  "diamDesc1": "The app estimates aortic diameter from segmented contours. Drag to see how a measurement maps to ",
+  "diamDesc2": "educational",
+  "diamDesc3": " risk buckets — not for diagnosis.",
+  "maxOuter": "Max outer diameter",
+  "diamNote": "Illustration only. AAA management follows local guidelines and imaging context.",
+  "cvPipeline": "CV Pipeline",
+  "hackathon": "BitsXLaMarató hackathon · TV3 La Marató",
+  "projScreenshots": "Project screenshots",
+  "team": "Team",
+  "runLocal": "▸ Run the original project locally",
+  "localDesc1": "The app is a ",
+  "localDesc2": "Python + Tkinter",
+  "localDesc3": " GUI (",
+  "localDesc4": "). You need a CUDA-capable setup for Mask R-CNN inference (PyTorch 1.13 stack).",
+  "localNote1": "Place trained weights under ",
+  "localNote2": " (e.g. "
 }
