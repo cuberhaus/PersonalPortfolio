@@ -6,14 +6,14 @@ Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 
 
 ## Stack
 
-| Layer          | Tech                                                                       |
-| -------------- | -------------------------------------------------------------------------- |
-| Framework      | Astro 5.18, TypeScript strict                                              |
-| Interactive UI | React 19 islands (`client:visible` / `client:load`)                        |
-| Visualisation  | D3, Canvas, WebGL2, Babylon.js                                             |
-| CV demos       | Web Workers, OpenCV.js, WASM                                               |
-| i18n           | 3 locales — file-based routing (`/`, `/es/`, `/ca/`)                       |
-| Testing        | Vitest 4 (30 unit suites, 516 tests) · Playwright (3 e2e specs, 141 tests) |
+| Layer          | Tech                                                                                |
+| -------------- | ----------------------------------------------------------------------------------- |
+| Framework      | Astro 5.18, TypeScript strict                                                       |
+| Interactive UI | React 19 islands (`client:visible` / `client:load`)                                 |
+| Visualisation  | D3, Canvas, WebGL2, Babylon.js                                                      |
+| CV demos       | Web Workers, OpenCV.js, WASM                                                        |
+| i18n           | i18next (build-time) + inlang — 3 locales, file-based routing (`/`, `/es/`, `/ca/`) |
+| Testing        | Vitest 4 (30 unit suites, 516 tests) · Playwright (3 e2e specs, 141 tests)          |
 
 ## Getting started
 
@@ -66,7 +66,7 @@ Flags: `--skip-docker`, `--skip-planner`.
 > `getIframeUrl`), the `Makefile`'s `DEMO_PORTS`, `e2e/live-demos.spec.ts`,
 > `sentry.client.config.ts` (via `listTracedBackendPorts`), the log relay
 > sidecar in `scripts/log-relay/`, the registry test, and
-> [`docs/adding-a-demo.md`](docs/adding-a-demo.md). The in-page debug overlay
+> [`docs/guides/adding-a-demo.md`](docs/guides/adding-a-demo.md). The in-page debug overlay
 > (`src/lib/debug-docker.ts`) reads slug + log-relay paths only and does not
 > consume the registry. Adding or removing a demo
 > means editing this JSON file plus following the onboarding checklist.
@@ -163,6 +163,16 @@ public/               # Static assets (demo images, PDDL files, joc-eda viewer, 
 - **i18n UI strings**: `src/i18n/ui.ts`
 - **Site URL**: `site` in `astro.config.mjs`
 
+For step-by-step recipes on the small frequent edits (adding a job, swapping
+two sections, writing a unit test), see [docs/guides/everyday-tasks.md](docs/guides/everyday-tasks.md).
+
+## Documentation map
+
+- **Start here:** [docs/architecture/overview.md](docs/architecture/overview.md) — one-page big-picture map of the project.
+- **Guides** (how to do things): [everyday-tasks](docs/guides/everyday-tasks.md), [adding-a-demo](docs/guides/adding-a-demo.md), [i18n](docs/guides/i18n.md), [testing](docs/guides/testing.md).
+- **Architecture** (why the code looks like it does): [decisions](docs/architecture/decisions.md), [debugging-architecture](docs/architecture/debugging-architecture.md), [observability](docs/architecture/observability.md), [ui-experiments](docs/architecture/ui-experiments.md).
+- **Stuck on an error?** [docs/troubleshooting.md](docs/troubleshooting.md) — searchable index of footguns and fixes.
+
 ## Deployment
 
 Workflow: `.github/workflows/deploy.yml` — push to `main` triggers build (Node 22) and deploy to GitHub Pages.
@@ -178,24 +188,7 @@ make rebuild   # force rebuild everything (ignore cache)
 
 ## Troubleshooting
 
-### Stale Vite cache — "jsxDEV is not a function" / "Cannot read properties of null (reading 'useState')"
-
-If e2e (Playwright) tests or the browser console show these errors on demo pages, the Vite dependency optimization cache is stale — React was bundled in **production mode** during a previous `astro build` and the dev server is still serving those cached files.
-
-**Fix:**
-
-```bash
-rm -rf node_modules/.vite   # clear the Vite dep cache
-make dev                     # restart — Vite rebuilds in development mode
-```
-
-Or start the dev server with `--force` to skip the cache:
-
-```bash
-npx astro dev --force
-```
-
-**Why it happens:** Vite pre-bundles dependencies into `node_modules/.vite/deps/`. If `NODE_ENV=production` was set (or `astro build` ran), the cache bakes in `process.env.NODE_ENV === 'production'` → `true`. The next `astro dev` reuses that cache, so `react/jsx-dev-runtime` exports `jsxDEV = void 0` (production strips it) and React hydration breaks.
+See [docs/troubleshooting.md](docs/troubleshooting.md) for the full searchable index — Vite cache footguns, visual baselines on the wrong OS, lefthook on Windows, planner-api Java setup, Sentry DSN gotchas, etc.
 
 ---
 

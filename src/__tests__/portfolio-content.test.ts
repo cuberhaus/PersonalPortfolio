@@ -1,28 +1,36 @@
 import { describe, it, expect } from 'vitest';
 
 import experience from '../data/experience.json';
-import { skills, workProjects, education, certifications } from '../data/loaders';
+import { skills, workProjects, education, certifications, getTranslations } from '../data/loaders';
 
-import { flattenForLocale, type AnyLocalized as LocalizedEntry } from '../i18n/load';
-import { LOCALES } from '../config/locales';
+import { flattenForLocale } from '../i18n/load';
+import { LOCALES, type Locale } from '../config/locales';
+
+// Locale translation files for experience (not exported from loaders for direct use)
+import experienceEn from '../../locales/en/experience.json';
+import experienceEs from '../../locales/es/experience.json';
+import experienceCa from '../../locales/ca/experience.json';
+
+const experienceTranslations: Record<Locale, Record<string, Record<string, unknown>>> = {
+  en: experienceEn,
+  es: experienceEs,
+  ca: experienceCa,
+};
 
 /**
- * After the nested-locale refactor, content lives in ONE file per entity with
- * the `{identity, copy:{en,es,ca}}` shape. Per-entry shape (icon enum,
- * https URLs, tag minimums, default-locale presence) is enforced by Zod via
- * src/i18n/content-schemas.ts — see content-schemas.test.ts for negative
- * cases. The tests below cover cross-cutting properties Zod can't express
- * on a single entry (uniqueness, content quality, parity).
+ * After the i18next migration, identity fields live in src/data/<file>.json
+ * and translations live in locales/{locale}/<file>.json. Per-entry shape
+ * (icon enum, https URLs, tag minimums) is enforced by Zod via
+ * src/i18n/content-schemas.ts. The tests below cover cross-cutting properties
+ * Zod can't express on a single entry (uniqueness, content quality, parity).
  */
 
 // ─── Skills content quality ───────────────────────────────────
 
 describe('skills content quality', () => {
   it('has no duplicate skill labels within a category, in every locale', () => {
-    // Non-emptiness of items is covered by the schema; this asserts the
-    // cross-cutting "unique within group" property the schema can't express.
     for (const locale of LOCALES) {
-      const flat = flattenForLocale(skills as LocalizedEntry[], locale) as Array<{
+      const flat = flattenForLocale(skills, locale, getTranslations('skills', locale)) as Array<{
         category: string;
         items: string[];
       }>;
@@ -40,8 +48,9 @@ describe('skills content quality', () => {
 
 describe('experience content quality', () => {
   it('has no empty bullet text, in every locale', () => {
+    const data = experience as Record<string, unknown>[];
     for (const locale of LOCALES) {
-      const flat = flattenForLocale(experience as LocalizedEntry[], locale) as Array<{
+      const flat = flattenForLocale(data, locale, experienceTranslations[locale]) as Array<{
         company: string;
         bullets: string[];
       }>;
@@ -61,7 +70,7 @@ describe('experience content quality', () => {
 
 describe('education content quality', () => {
   it('has unique links across entries', () => {
-    const links = (education as LocalizedEntry[]).map((e) => e.identity.link as string);
+    const links = education.map((e) => e.link as string);
     expect(new Set(links).size, 'education has duplicate links').toBe(links.length);
   });
 });
@@ -70,12 +79,12 @@ describe('education content quality', () => {
 
 describe('work projects content quality', () => {
   it('has unique tags within each project, in every locale', () => {
-    // Tag non-emptiness, role presence, https-shape, and icon-enum membership
-    // are all enforced by the schema; this test covers the cross-cutting
-    // "unique within entry" property.
-    const data = workProjects as LocalizedEntry[];
     for (const locale of LOCALES) {
-      const flat = flattenForLocale(data, locale) as Array<{
+      const flat = flattenForLocale(
+        workProjects,
+        locale,
+        getTranslations('workProjects', locale)
+      ) as Array<{
         title: string;
         tags: string[];
       }>;
@@ -89,9 +98,8 @@ describe('work projects content quality', () => {
   });
 
   it('has unique link URLs across projects', () => {
-    const data = workProjects as LocalizedEntry[];
-    const links = data
-      .map((e) => e.identity.link as string | undefined)
+    const links = workProjects
+      .map((e) => e.link as string | undefined)
       .filter((l): l is string => Boolean(l) && l !== '');
     expect(new Set(links).size, 'work projects have duplicate links').toBe(links.length);
   });
@@ -101,10 +109,7 @@ describe('work projects content quality', () => {
 
 describe('certifications content quality', () => {
   it('has unique cert names across entries', () => {
-    // Schema enforces non-empty name, issuer, issuerIcon enum, and issued
-    // string presence per locale. This test covers the cross-cutting
-    // uniqueness check the schema can't express.
-    const names = (certifications as LocalizedEntry[]).map((e) => e.identity.name as string);
+    const names = certifications.map((e) => e.name as string);
     expect(new Set(names).size, 'certifications have duplicate names').toBe(names.length);
   });
 });

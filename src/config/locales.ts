@@ -1,17 +1,19 @@
 /**
  * Single source of truth for the supported locales.
  *
- * Consumed by:
- *   - astro.config.mjs (locales array)
- *   - src/i18n/utils.ts (lang detection)
- *   - src/pages/[lang]/index.astro and src/pages/[lang]/demos/[demo].astro (getStaticPaths)
- *   - src/layouts/Layout.astro (hreflang alternates)
- *   - src/components/About.astro (CV PDF per locale)
- *   - tests
+ * All locale-dependent code reads from this array via `src/i18n/locale-glob.ts`
+ * (Vite import.meta.glob). No per-locale static imports exist anywhere — adding
+ * a locale requires NO TypeScript file edits beyond this one.
  *
- * To add or remove a locale, edit this file. The cv-by-lang map and the deploy
- * workflow's `curl` lines still need a per-locale filename adjustment because
- * the upstream CV repo names them by full English language name.
+ * Adding a new locale (e.g. 'fr'):
+ *   1. Add 'fr' to the LOCALES array below.
+ *   2. Create all locales/fr/*.json files (copy from en/ and translate).
+ *   3. Add 'fr: "Français"' to `languages` in src/i18n/ui.ts.
+ *   4. Add 'fr' to project.inlang/settings.json locales array.
+ *   5. (Optional) Add cv-by-lang entry + deploy workflow curl line.
+ *
+ * That's it. Everything else (i18next, loaders, demos) picks up the new
+ * locale automatically via the glob loader.
  */
 export const LOCALES = ['en', 'es', 'ca'] as const;
 

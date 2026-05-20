@@ -1,9 +1,5 @@
-type Lang = 'en' | 'es' | 'ca';
+import { getDemoTranslations } from '../locale-glob';
 
-export const T = {
-  en: { pagerank: 'PageRank', zipf: "Zipf's Law", loading: 'Loading…' },
-  es: { pagerank: 'PageRank', zipf: 'Ley de Zipf', loading: 'Cargando…' },
-  ca: { pagerank: 'PageRank', zipf: 'Llei de Zipf', loading: 'Carregant…' },
-};
+export const T = getDemoTranslations('caim-demo');
 
-export type DemoTranslations = (typeof T)[Lang];
+export type DemoTranslations = Record<string, unknown>;

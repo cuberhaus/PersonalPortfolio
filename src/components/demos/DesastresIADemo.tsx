@@ -266,7 +266,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
         <div
           style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.25rem' }}
         >
-          {t.pipeline.map((step, i) => (
+          {t.pipeline.map((step: any, i: number) => (
             <div
               key={i}
               style={{
@@ -347,7 +347,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
             gap: '0.5rem',
           }}
         >
-          {t.webAppFeatures.map((f, i) => (
+          {t.webAppFeatures.map((f: any, i: number) => (
             <div
               key={i}
               style={{
@@ -430,7 +430,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
             {t.heurFunctions}
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {t.heuristics.map((h) => (
+            {t.heuristics.map((h: any) => (
               <div
                 key={h.name}
                 style={{
@@ -499,7 +499,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
             {t.succOperators}
           </h4>
           <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
-            {t.operators.map((o) => (
+            {t.operators.map((o: any) => (
               <span
                 key={o.fn}
                 title={o.desc}

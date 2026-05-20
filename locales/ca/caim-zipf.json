@@ -1,0 +1,14 @@
+{
+  "corpus": "Corpus",
+  "customText": "Text personalitzat",
+  "analyze": "Analitzar",
+  "logScale": "Escala log",
+  "linearScale": "Escala lineal",
+  "parameters": "Paràmetres ajustats",
+  "words": "Paraules principals",
+  "rank": "Pos.",
+  "word": "Paraula",
+  "frequency": "Freqüència",
+  "customPlaceholder": "Enganxa text aquí per analitzar la distribució de freqüència de paraules…",
+  "notEnoughWords": "Es necessiten almenys 5 paraules diferents."
+}

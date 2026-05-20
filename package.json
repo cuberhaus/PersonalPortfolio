@@ -20,7 +20,8 @@
     "test:e2e:smoke": "playwright test --project=portfolio-smoke",
     "test:e2e:a11y": "playwright test --project=a11y",
     "lhci": "lhci autorun",
-    "og:capture": "node scripts/capture-og-images.mjs"
+    "og:capture": "node scripts/capture-og-images.mjs",
+    "i18n:review": "tsx scripts/i18n-review.ts"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.5",
@@ -34,6 +35,7 @@
     "d3-scale": "^4.0.2",
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.2.0",
+    "i18next": "^26.2.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "topojson-client": "^3.1.0",

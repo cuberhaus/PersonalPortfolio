@@ -1,15 +1,13 @@
 /**
- * Content parity: do the nested-locale content JSON files have the same shape
- * across languages?
+ * Content parity: do the locale translation files for each data category
+ * have the same shape across all languages?
  *
- * After the SSOT refactor every entity lives in ONE file with the
- * `[{identity, copy:{en,es,ca}}]` shape. These tests verify:
- *   - every entry has all three copy locales populated,
- *   - the keys present in each locale's copy block match (no fields silently
- *     missing from one locale),
- *   - identity-typed fields (links, icons, slugs) look valid,
- *   - flattening for each locale yields the legacy shape with the right
- *     fields populated.
+ * After the i18next migration, identity fields live in src/data/<file>.json
+ * (shared across locales) and translations live in locales/{locale}/<file>.json.
+ * These tests verify:
+ *   - every locale file has the same entry indices,
+ *   - the keys present in each entry match across locales,
+ *   - flattening for each locale yields the expected fields populated.
  */
 import { describe, it, expect } from 'vitest';
 
@@ -20,56 +18,86 @@ import workProjects from '../data/work_projects.json';
 import certifications from '../data/certifications.json';
 import demos from '../data/demos.json';
 
+// Locale translation files
+import skillsEn from '../../locales/en/skills.json';
+import skillsEs from '../../locales/es/skills.json';
+import skillsCa from '../../locales/ca/skills.json';
+import experienceEn from '../../locales/en/experience.json';
+import experienceEs from '../../locales/es/experience.json';
+import experienceCa from '../../locales/ca/experience.json';
+import educationEn from '../../locales/en/education.json';
+import educationEs from '../../locales/es/education.json';
+import educationCa from '../../locales/ca/education.json';
+import workProjectsEn from '../../locales/en/work_projects.json';
+import workProjectsEs from '../../locales/es/work_projects.json';
+import workProjectsCa from '../../locales/ca/work_projects.json';
+import certificationsEn from '../../locales/en/certifications.json';
+import certificationsEs from '../../locales/es/certifications.json';
+import certificationsCa from '../../locales/ca/certifications.json';
+import demosEn from '../../locales/en/demos.json';
+import demosEs from '../../locales/es/demos.json';
+import demosCa from '../../locales/ca/demos.json';
+
 import { ISSUER_ICON_PATHS } from '../lib/issuer-icons';
 import { LOCALES } from '../config/locales';
-import { flattenForLocale, type AnyLocalized as LocalizedEntry } from '../i18n/load';
+import { flattenForLocale } from '../i18n/load';
 
-function assertLocaleParity(label: string, entries: LocalizedEntry[]) {
-  for (let i = 0; i < entries.length; i++) {
-    const entry = entries[i];
-    const present = Object.keys(entry.copy);
-    for (const locale of LOCALES) {
-      expect(present, `${label}[${i}] missing copy.${locale}`).toContain(locale);
-    }
-    // All copy locales should expose the same keys. Every locale's bundle is
-    // guaranteed present by the previous loop, so the `!` non-null asserts
-    // are safe here.
-    const refKeys = Object.keys(entry.copy[LOCALES[0]]!).sort();
-    for (const locale of LOCALES) {
-      const localeKeys = Object.keys(entry.copy[locale]!).sort();
-      expect(
-        localeKeys,
-        `${label}[${i}] copy.${locale} keys differ from copy.${LOCALES[0]}`
-      ).toEqual(refKeys);
-    }
+type TranslationMap = Record<string, Record<string, unknown>>;
+
+function assertLocaleParity(
+  label: string,
+  identityData: Record<string, unknown>[],
+  translations: Record<string, TranslationMap>
+) {
+  const locales = Object.keys(translations);
+  const refLocale = locales[0];
+  const refKeys = Object.keys(translations[refLocale]);
+
+  // All locales should have the same indices
+  for (const locale of locales) {
+    const keys = Object.keys(translations[locale]);
+    expect(keys, `${label} locale ${locale} has different indices than ${refLocale}`).toEqual(
+      refKeys
+    );
   }
-}
 
-function assertNonEmptyEntries(label: string, entries: LocalizedEntry[]) {
-  expect(entries.length, `${label} is empty`).toBeGreaterThan(0);
-  for (let i = 0; i < entries.length; i++) {
-    expect(entries[i].identity, `${label}[${i}] missing identity`).toBeDefined();
-    expect(entries[i].copy, `${label}[${i}] missing copy`).toBeDefined();
+  // Entry count should match the identity data array
+  expect(refKeys.length, `${label} translation count doesn't match data array`).toBe(
+    identityData.length
+  );
+
+  // All locales should expose the same keys at each index
+  for (const idx of refKeys) {
+    const refEntryKeys = Object.keys(translations[refLocale][idx]).sort();
+    for (const locale of locales) {
+      const entryKeys = Object.keys(translations[locale][idx]).sort();
+      expect(entryKeys, `${label}[${idx}] locale ${locale} keys differ from ${refLocale}`).toEqual(
+        refEntryKeys
+      );
+    }
   }
 }
 
 // ─── Skills ─────────────────────────────────────────────────────
 
 describe('Skills data', () => {
-  const data = skills as LocalizedEntry[];
+  const data = skills as Record<string, unknown>[];
+  const translations = { en: skillsEn, es: skillsEs, ca: skillsCa };
 
   it('has at least one category', () => {
     expect(data.length).toBeGreaterThan(0);
   });
 
   it('exposes the same keys in every locale', () => {
-    assertNonEmptyEntries('skills', data);
-    assertLocaleParity('skills', data);
+    assertLocaleParity('skills', data, translations);
   });
 
   it('every category has a non-empty category name in every locale and at least one item', () => {
     for (const locale of LOCALES) {
-      const flat = flattenForLocale(data, locale) as Array<{ category: string; items: string[] }>;
+      const flat = flattenForLocale(data, locale, translations[locale]) as Array<{
+        category: string;
+        items: string[];
+      }>;
       for (const group of flat) {
         expect(group.category.trim().length).toBeGreaterThan(0);
         expect(group.items.length).toBeGreaterThanOrEqual(1);
@@ -81,16 +109,16 @@ describe('Skills data', () => {
 // ─── Experience ─────────────────────────────────────────────────
 
 describe('Experience data', () => {
-  const data = experience as LocalizedEntry[];
+  const data = experience as Record<string, unknown>[];
+  const translations = { en: experienceEn, es: experienceEs, ca: experienceCa };
 
   it('locales match', () => {
-    assertNonEmptyEntries('experience', data);
-    assertLocaleParity('experience', data);
+    assertLocaleParity('experience', data, translations);
   });
 
   it('every entry has role, period and at least one bullet per locale', () => {
     for (const locale of LOCALES) {
-      const flat = flattenForLocale(data, locale) as Array<{
+      const flat = flattenForLocale(data, locale, translations[locale]) as Array<{
         role: string;
         company: string;
         period: string;
@@ -108,7 +136,7 @@ describe('Experience data', () => {
 
   it('every link in identity is a valid HTTPS URL', () => {
     for (const entry of data) {
-      const link = entry.identity.link as string | undefined;
+      const link = entry.link as string | undefined;
       if (link) {
         expect(() => new URL(link)).not.toThrow();
         expect(link).toMatch(/^https:\/\//);
@@ -120,16 +148,16 @@ describe('Experience data', () => {
 // ─── Education ──────────────────────────────────────────────────
 
 describe('Education data', () => {
-  const data = education as LocalizedEntry[];
+  const data = education as Record<string, unknown>[];
+  const translations = { en: educationEn, es: educationEs, ca: educationCa };
 
   it('locales match', () => {
-    assertNonEmptyEntries('education', data);
-    assertLocaleParity('education', data);
+    assertLocaleParity('education', data, translations);
   });
 
   it('every entry has degree, institution, period per locale', () => {
     for (const locale of LOCALES) {
-      const flat = flattenForLocale(data, locale) as Array<{
+      const flat = flattenForLocale(data, locale, translations[locale]) as Array<{
         degree: string;
         institution: string;
         period: string;
@@ -146,9 +174,11 @@ describe('Education data', () => {
 
   it('every link is a valid HTTPS URL', () => {
     for (const entry of data) {
-      const link = entry.identity.link as string;
-      expect(() => new URL(link)).not.toThrow();
-      expect(link).toMatch(/^https:\/\//);
+      const link = entry.link as string;
+      if (link) {
+        expect(() => new URL(link)).not.toThrow();
+        expect(link).toMatch(/^https:\/\//);
+      }
     }
   });
 });
@@ -156,16 +186,16 @@ describe('Education data', () => {
 // ─── Work Projects ──────────────────────────────────────────────
 
 describe('Work projects data', () => {
-  const data = workProjects as LocalizedEntry[];
+  const data = workProjects as Record<string, unknown>[];
+  const translations = { en: workProjectsEn, es: workProjectsEs, ca: workProjectsCa };
 
   it('locales match', () => {
-    assertNonEmptyEntries('work_projects', data);
-    assertLocaleParity('work_projects', data);
+    assertLocaleParity('work_projects', data, translations);
   });
 
   it('every project has title, company, description and tags per locale', () => {
     for (const locale of LOCALES) {
-      const flat = flattenForLocale(data, locale) as Array<{
+      const flat = flattenForLocale(data, locale, translations[locale]) as Array<{
         title: string;
         company: string;
         description: string;
@@ -184,7 +214,7 @@ describe('Work projects data', () => {
 
   it('every link in identity is a valid HTTPS URL', () => {
     for (const entry of data) {
-      const link = entry.identity.link as string | undefined;
+      const link = entry.link as string | undefined;
       if (link) {
         expect(() => new URL(link)).not.toThrow();
         expect(link).toMatch(/^https:\/\//);
@@ -196,16 +226,16 @@ describe('Work projects data', () => {
 // ─── Certifications ─────────────────────────────────────────────
 
 describe('Certifications data', () => {
-  const data = certifications as LocalizedEntry[];
+  const data = certifications as Record<string, unknown>[];
+  const translations = { en: certificationsEn, es: certificationsEs, ca: certificationsCa };
 
   it('locales match', () => {
-    assertNonEmptyEntries('certifications', data);
-    assertLocaleParity('certifications', data);
+    assertLocaleParity('certifications', data, translations);
   });
 
   it('every entry has name + issuer + issuerIcon in identity', () => {
     for (const entry of data) {
-      const id = entry.identity as { name?: string; issuer?: string; issuerIcon?: string };
+      const id = entry as { name?: string; issuer?: string; issuerIcon?: string };
       expect((id.name ?? '').trim().length).toBeGreaterThan(0);
       expect((id.issuer ?? '').trim().length).toBeGreaterThan(0);
       expect((id.issuerIcon ?? '').trim().length).toBeGreaterThan(0);
@@ -214,7 +244,7 @@ describe('Certifications data', () => {
 
   it('every non-empty link is a valid HTTPS URL', () => {
     for (const entry of data) {
-      const link = (entry.identity.link as string | undefined) ?? '';
+      const link = (entry.link as string | undefined) ?? '';
       if (link) {
         expect(() => new URL(link)).not.toThrow();
         expect(link).toMatch(/^https:\/\//);
@@ -224,7 +254,7 @@ describe('Certifications data', () => {
 
   it('credential URLs do not carry LinkedIn tracking params', () => {
     for (const entry of data) {
-      const link = (entry.identity.link as string | undefined) ?? '';
+      const link = (entry.link as string | undefined) ?? '';
       if (link) {
         expect(link).not.toMatch(/[?&]trk=/);
       }
@@ -234,7 +264,7 @@ describe('Certifications data', () => {
   it('every issuerIcon slug exists in issuer-icons.ts', () => {
     const registered = new Set(Object.keys(ISSUER_ICON_PATHS));
     for (const entry of data) {
-      const slug = entry.identity.issuerIcon as string;
+      const slug = entry.issuerIcon as string;
       expect(registered, `issuer-icons.ts missing slug "${slug}"`).toContain(slug);
     }
   });
@@ -243,15 +273,15 @@ describe('Certifications data', () => {
 // ─── Demos ──────────────────────────────────────────────────────
 
 describe('Demos data', () => {
-  const data = demos as LocalizedEntry[];
+  const data = demos as Record<string, unknown>[];
+  const translations = { en: demosEn, es: demosEs, ca: demosCa };
 
   it('locales match', () => {
-    assertNonEmptyEntries('demos', data);
-    assertLocaleParity('demos', data);
+    assertLocaleParity('demos', data, translations);
   });
 
   it('every demo has a unique slug in identity', () => {
-    const slugs = data.map((e) => e.identity.slug as string);
+    const slugs = data.map((e) => e.slug as string);
     expect(new Set(slugs).size).toBe(slugs.length);
     for (const slug of slugs) {
       expect(slug.trim().length).toBeGreaterThan(0);
@@ -260,13 +290,16 @@ describe('Demos data', () => {
 
   it('every demo has a non-empty icon in identity', () => {
     for (const entry of data) {
-      expect((entry.identity.icon as string).trim().length).toBeGreaterThan(0);
+      expect((entry.icon as string).trim().length).toBeGreaterThan(0);
     }
   });
 
   it('every demo flattens to at least one tag in every locale', () => {
     for (const locale of LOCALES) {
-      const flat = flattenForLocale(data, locale) as Array<{ slug: string; tags: string[] }>;
+      const flat = flattenForLocale(data, locale, translations[locale]) as Array<{
+        slug: string;
+        tags: string[];
+      }>;
       for (const d of flat) {
         expect(Array.isArray(d.tags), `${locale}.${d.slug} has no tags array`).toBe(true);
         expect(d.tags.length, `${locale}.${d.slug} has zero tags`).toBeGreaterThanOrEqual(1);
@@ -276,7 +309,7 @@ describe('Demos data', () => {
 
   it('every demo flattens to legacy shape with title/description in every locale', () => {
     for (const locale of LOCALES) {
-      const flat = flattenForLocale(data, locale) as Array<{
+      const flat = flattenForLocale(data, locale, translations[locale]) as Array<{
         slug: string;
         title: string;
         description: string;

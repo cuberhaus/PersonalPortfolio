@@ -170,13 +170,15 @@ describe('LiveAppEmbed call sites use slug, not literal URLs', () => {
   });
 });
 
-describe('docs/adding-a-demo.md mentions every backend stack', () => {
+describe('docs/guides/adding-a-demo.md mentions every backend stack', () => {
   it('mentions each unique stack from the registry', () => {
-    const doc = read('docs/adding-a-demo.md').toLowerCase();
+    const doc = read('docs/guides/adding-a-demo.md').toLowerCase();
     const stacks = new Set<BackendStack>();
     for (const s of backed) stacks.add(s.backend!.stack);
     for (const stack of stacks) {
-      expect(doc, `docs/adding-a-demo.md missing stack: ${stack}`).toContain(stack.toLowerCase());
+      expect(doc, `docs/guides/adding-a-demo.md missing stack: ${stack}`).toContain(
+        stack.toLowerCase()
+      );
     }
   });
 });

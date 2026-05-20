@@ -2,7 +2,7 @@
  * Stable per-browser session identifier used to correlate frontend and
  * backend telemetry across the boundary.
  *
- * Architectural intent (see docs/observability.md "Cross-service session
+ * Architectural intent (see docs/architecture/observability.md "Cross-service session
  * correlation"): one UUID is minted on first visit, persisted in
  * localStorage, stamped as a Sentry tag (`session_id`) on every event,
  * and forwarded to backends as the `X-Session-Id` HTTP header by

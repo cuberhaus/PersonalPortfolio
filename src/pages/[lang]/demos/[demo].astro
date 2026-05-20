@@ -25,7 +25,7 @@ export function getStaticPaths() {
   const slugs = Object.keys(localeModules).map((p) => p.match(/\/([^/]+)\.astro$/)![1]);
   // Default locale is served from /demos/<slug>; this dynamic route only
   // exists for the prefixed locales (es, ca, …).
-  const langs = LOCALES.filter((l) => l !== 'en');
+  const langs = LOCALES.filter((l) => l !== LOCALES[0]);
   return langs.flatMap((lang) => slugs.map((demo) => ({ params: { lang, demo } })));
 }
 

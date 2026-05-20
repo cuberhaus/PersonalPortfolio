@@ -3,6 +3,7 @@
 Architectural overview of the chosen observability stack: **what is deployed
 and why**.
 
+- New here? Start with [`overview.md`](./overview.md) for the big-picture map.
 - For day-to-day operation (which DSN to set, how to start the dashboards,
   troubleshooting), see [`observability.md`](./observability.md).
 - For the full decision-rationale catalogue (foundations evaluated, patterns
@@ -48,7 +49,7 @@ bus.**
 
 Three layers solve three different problems:
 
-1. **Custom event bus** ([`src/lib/debug.ts`](../src/lib/debug.ts)) — single
+1. **Custom event bus** ([`src/lib/debug.ts`](../../src/lib/debug.ts)) — single
    producer surface every component logs into. Decouples call sites from
    sinks; trivially mockable in tests.
 2. **In-page overlay** (`DebugOverlay.tsx`) — instant feedback while
@@ -128,7 +129,7 @@ per month per Sentry org. For a portfolio this is plenty.
 | SvelteKit   | `@sentry/sveltekit`           | ~5                  | `Sentry.init({...})` in `hooks.server.ts`                                                          |
 | Rust (axum) | `sentry`, `sentry-tower`      | ~10                 | `let _guard = sentry::init((DSN, ...))` + `ServiceBuilder::new().layer(NewSentryLayer)`            |
 | Go          | `sentry-go`, `sentry-go-http` | ~10                 | `sentry.Init(sentry.ClientOptions{Dsn: DSN})` + `sentryhttp.New()` middleware                      |
-| PHP (Tenda) | `sentry/sentry`               | ~5                  | `\Sentry\init(['dsn' => DSN])` early in `bootstrap.php`                                            |
+| PHP (Tenda) | `sentry/sentry`               | ~3                  | `\Sentry\init(['dsn' => DSN])` in `includes/observability.php`                                     |
 
 ### Other options (B, C, D) — discarded
 
@@ -152,14 +153,14 @@ for context.
 
 ### What does NOT need to change regardless of option
 
-- The bus pattern in [`src/lib/debug.ts`](../src/lib/debug.ts) — it's the
+- The bus pattern in [`src/lib/debug.ts`](../../src/lib/debug.ts) — it's the
   producer surface for browser code; it doesn't care what subscribers do
   with the events.
 - The local relay in `scripts/log-relay/` — it tails Docker stdout for the
   in-page overlay; that's useful in every option.
-- The iframe forwarder in [`src/lib/debug-iframe.ts`](../src/lib/debug-iframe.ts)
+- The iframe forwarder in [`src/lib/debug-iframe.ts`](../../src/lib/debug-iframe.ts)
   — boundary-only postMessage receiver, agnostic to the backend stack chosen.
-- The service registry [`src/data/demo-services.json`](../src/data/demo-services.json) —
+- The service registry [`src/data/demo-services.json`](../../src/data/demo-services.json) —
   its `stack` field becomes more useful in Options A/B/C because the
   onboarding doc snippets diverge per stack, but the file itself is the same.
 
@@ -170,23 +171,23 @@ for context.
 Directory of where each backend's Sentry init actually lives. The
 operational manual referred to these by description; this table makes
 them findable. Source of truth for `needsSentry` is
-[`src/data/demo-services.json`](../src/data/demo-services.json).
+[`src/data/demo-services.json`](../../src/data/demo-services.json).
 
-| Backend                                                          | Stack                               | Init hook                                                                                                                                                                                                                                                                                                                     |
-| ---------------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api | Python (FastAPI / Flask / Litestar) | [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) — canonical helper, copied verbatim into each backend repo                                                                                                                                                                              |
-| Draculin                                                         | Django                              | [`Draculin-Backend/Draculin/settings.py`](../../Draculin-Backend/Draculin/settings.py) — calls `init_observability("draculin")` from the same canonical helper                                                                                                                                                                |
-| PROP                                                             | Spring Boot                         | [`subgrup-prop7.1/web/src/main/resources/application.properties`](../../subgrup-prop7.1/web/src/main/resources/application.properties) (`sentry.dsn`, `sentry.tags.service=prop`) and [`subgrup-prop7.1/web/pom.xml`](../../subgrup-prop7.1/web/pom.xml) for the `sentry-spring-boot-starter-jakarta` + `sentry-logback` deps |
-| Tenda                                                            | PHP                                 | [`tenda_online/includes/observability.php`](../../tenda_online/includes/observability.php) — `\Sentry\init(...)` + `\Sentry\configureScope(...)` to set `service`; emits JSON lines via `tenda_emit_log`                                                                                                                      |
-| joc-eda                                                          | Go                                  | [`joc_eda/web/backend-go/observability.go`](../../joc_eda/web/backend-go/observability.go) — `initSentry`, `withSentryHTTP` middleware, `jsonStdoutWriter`                                                                                                                                                                    |
-| pro2                                                             | Rust (axum)                         | [`pracpro2/web/backend/src/main.rs`](../../pracpro2/web/backend/src/main.rs) `_init_sentry()` — held for the lifetime of `main()`                                                                                                                                                                                             |
-| planificacion                                                    | SvelteKit                           | [`Practica_de_Planificacion/web/src/hooks.server.ts`](../../Practica_de_Planificacion/web/src/hooks.server.ts) — `@sentry/sveltekit` init + `sentryHandle()` + `console.*` JSON wrapper                                                                                                                                       |
-| PAR / FIB / Grafics / ROB                                        | static frontend (nginx-served)      | n/a — `needsSentry: false` in [`src/data/demo-services.json`](../src/data/demo-services.json); browser errors are caught by the parent page's Sentry SDK via the iframe forwarder                                                                                                                                             |
+| Backend                                                          | Stack                               | Init hook                                                                                                                                                                                                                                                                                                                           |
+| ---------------------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api | Python (FastAPI / Flask / Litestar) | [`scripts/sentry-snippets/_sentry_obs.py`](../../scripts/sentry-snippets/_sentry_obs.py) — canonical helper, copied verbatim into each backend repo                                                                                                                                                                                 |
+| Draculin                                                         | Django                              | [`Draculin-Backend/Draculin/settings.py`](../../../Draculin-Backend/Draculin/settings.py) — calls `init_observability(service="draculin")` from the same canonical helper                                                                                                                                                           |
+| PROP                                                             | Spring Boot                         | [`subgrup-prop7.1/web/src/main/resources/application.properties`](../../../subgrup-prop7.1/web/src/main/resources/application.properties) (`sentry.dsn`, `sentry.tags.service=prop`) and [`subgrup-prop7.1/web/pom.xml`](../../../subgrup-prop7.1/web/pom.xml) for the `sentry-spring-boot-starter-jakarta` + `sentry-logback` deps |
+| Tenda                                                            | PHP                                 | [`tenda_online/includes/observability.php`](../../../tenda_online/includes/observability.php) — `\Sentry\init(['dsn' => $dsn])` only; no `service` tag, no JSON-line stdout                                                                                                                                                         |
+| joc-eda                                                          | Go                                  | [`joc_eda/web/backend-go/observability.go`](../../../joc_eda/web/backend-go/observability.go) — `initSentry`, `withSentryHTTP` middleware, `jsonStdoutWriter`                                                                                                                                                                       |
+| pro2                                                             | Rust (axum)                         | [`pracpro2/web/backend/src/main.rs`](../../../pracpro2/web/backend/src/main.rs) `_init_sentry()` — held for the lifetime of `main()`                                                                                                                                                                                                |
+| planificacion                                                    | SvelteKit                           | [`Practica_de_Planificacion/web/src/hooks.server.ts`](../../../Practica_de_Planificacion/web/src/hooks.server.ts) — `@sentry/sveltekit` init + `sentryHandle()` + `console.*` JSON wrapper                                                                                                                                          |
+| PAR / FIB / Grafics / ROB                                        | static frontend (nginx-served)      | n/a — `needsSentry: false` in [`src/data/demo-services.json`](../../src/data/demo-services.json); browser errors are caught by the parent page's Sentry SDK via the iframe forwarder                                                                                                                                                |
 
 ### Why the Python helper has a `before_send` hook and the others don't
 
 The Python helper at
-[`_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) uses a
+[`_sentry_obs.py`](../../scripts/sentry-snippets/_sentry_obs.py) uses a
 `before_send` envelope hook to stamp the `service` tag because
 `sentry-sdk` 2.0–2.20 ASGI/WSGI integrations fork a fresh isolation scope
 per request that doesn't inherit init-time tags — `set_tag` at module
@@ -227,7 +228,7 @@ contains the per-backend file references and CLI knobs.
 ### Cross-service session correlation
 
 A stable random UUID is minted per browser session by
-[`src/lib/debug-session.ts`](../src/lib/debug-session.ts) and injected
+[`src/lib/debug-session.ts`](../../src/lib/debug-session.ts) and injected
 into every outbound request as `X-Session-Id`. Each backend's hook reads
 the header and stamps the matching tag (`session_id`) on its own Sentry
 events, so a single Sentry filter joins frontend, iframe, and backend
@@ -254,7 +255,7 @@ inline conditional logic available; see the operational manual).
 
 The frontend follows the same convention via
 `import.meta.env.PROD ? 0.1 : 1.0` in
-[`sentry.client.config.ts`](../sentry.client.config.ts), so the
+[`sentry.client.config.ts`](../../sentry.client.config.ts), so the
 end-to-end sample rate is consistent across the boundary.
 
 ### Producer-side sampling on the debug bus
@@ -263,7 +264,7 @@ Sentry's per-event breadcrumb ring is bounded at 100 entries. WebGL /
 Canvas demos in this portfolio emit perf samples at up to 60 Hz, which
 overflows the ring within ~1.6 s and evicts the breadcrumbs that would
 have explained any later error. The frontend forwarder
-([`src/lib/debug-sentry.ts`](../src/lib/debug-sentry.ts)) coalesces
+([`src/lib/debug-sentry.ts`](../../src/lib/debug-sentry.ts)) coalesces
 high-frequency `perf` samples into one aggregated breadcrumb per
 `kind:name` per second carrying min/avg/max/count. Web-vital and
 navigation samples bypass the bucket because their natural rate is low
@@ -340,8 +341,8 @@ a sentry.io account. Three layers, each with its own local test surface.
 
 ### Layer 1 — Pure-code units (bus, overlay, network tap, hook)
 
-Vitest is already configured ([`PersonalPortfolio/package.json`](../package.json),
-existing tests in [`PersonalPortfolio/src/__tests__/`](../src/__tests__/)).
+Vitest is already configured ([`PersonalPortfolio/package.json`](../../package.json),
+existing tests in [`PersonalPortfolio/src/__tests__/`](../../src/__tests__/)).
 `debug.test.ts` covers:
 
 - Namespace filtering (`debug('demo:rob:fk').info(...)` matched by
@@ -437,11 +438,11 @@ wiring as the production deployment. You're not choosing blind.
   dashboards, troubleshooting, tag conventions).
 - [`decisions.md`](./decisions.md) — full decision-rationale catalogue
   (foundations, patterns, alternatives, migration costs).
-- [`scripts/sentry-snippets/_sentry_obs.py`](../scripts/sentry-snippets/_sentry_obs.py) —
+- [`scripts/sentry-snippets/_sentry_obs.py`](../../scripts/sentry-snippets/_sentry_obs.py) —
   canonical Python helper.
-- [`src/lib/debug.ts`](../src/lib/debug.ts) — bus.
-- [`src/lib/debug-sentry.ts`](../src/lib/debug-sentry.ts) — Sentry forwarder
+- [`src/lib/debug.ts`](../../src/lib/debug.ts) — bus.
+- [`src/lib/debug-sentry.ts`](../../src/lib/debug-sentry.ts) — Sentry forwarder
   (frontend).
-- [`src/data/demo-services.json`](../src/data/demo-services.json) — service
+- [`src/data/demo-services.json`](../../src/data/demo-services.json) — service
   registry; `needsSentry` is the source of truth for which backends have
   an init hook.

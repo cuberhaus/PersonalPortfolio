@@ -1,0 +1,17 @@
+{
+  "damping": "Damping factor",
+  "initStrategy": "Init strategy",
+  "run": "Run PageRank",
+  "running": "Computing…",
+  "iterations": "Iterations",
+  "time": "Time",
+  "convergence": "Convergence",
+  "rankings": "Top airports",
+  "rank": "Rank",
+  "code": "Code",
+  "name": "Name",
+  "score": "Score",
+  "uniform": "Uniform (1/n)",
+  "one": "All on first",
+  "square": "Square root"
+}

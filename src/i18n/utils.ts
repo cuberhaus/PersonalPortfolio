@@ -1,6 +1,9 @@
-import { ui, defaultLang } from './ui';
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../config/locales';
+import { getFixedT } from './i18next';
 
-export type Lang = keyof typeof ui;
+export type Lang = Locale;
+
+const supportedSet = new Set<string>(LOCALES);
 
 /**
  * Validate an arbitrary string (e.g. `document.documentElement.lang`) and
@@ -9,8 +12,8 @@ export type Lang = keyof typeof ui;
  * scripts that need to relabel UI from the current page locale.
  */
 export function pickLang(raw: string | null | undefined): Lang {
-  if (raw && raw in ui) return raw as Lang;
-  return defaultLang;
+  if (raw && supportedSet.has(raw)) return raw as Lang;
+  return DEFAULT_LOCALE;
 }
 
 export function getLangFromUrl(url: URL): Lang {
@@ -25,9 +28,10 @@ export function getLangFromUrl(url: URL): Lang {
   return pickLang(firstSegment);
 }
 
-export function useTranslations(lang: keyof typeof ui) {
-  return function t(key: keyof (typeof ui)[typeof defaultLang]) {
-    return ui[lang][key] || ui[defaultLang][key];
+export function useTranslations(lang: Lang) {
+  const t = getFixedT(lang);
+  return function (key: string) {
+    return t(key);
   };
 }
 
@@ -41,7 +45,7 @@ export function getRouteFromUrl(url: URL): string {
   if (!cleanPath.startsWith('/')) cleanPath = '/' + cleanPath;
 
   const parts = cleanPath.split('/');
-  if (parts.length > 1 && parts[1] in ui) {
+  if (parts.length > 1 && supportedSet.has(parts[1])) {
     parts.splice(1, 1);
   }
   return parts.join('/') || '/';

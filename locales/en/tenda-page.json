@@ -1,0 +1,10 @@
+{
+  "liveApp": "Live app (runs locally)",
+  "startHint": "Start the PHP app: <code>cd tenda_online && docker compose up -d && ./start.sh</code>",
+  "openNewTab": "Open in new tab",
+  "runLocal": "Run the real app locally",
+  "step1": "<code>cd tenda_online</code>",
+  "step2": "<code>docker compose up -d</code> — starts MySQL and loads the schema",
+  "step3": "<code>./start.sh</code> — starts the PHP server at <a href=\"http://localhost:8888\" target=\"_blank\" rel=\"noopener\">localhost:8888</a>",
+  "runNote": "Requires: PHP, Docker (for MySQL). The iframe above shows the live app when it's running."
+}

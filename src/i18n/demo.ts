@@ -1,7 +1,7 @@
 import demosData from '../data/demos.json' with { type: 'json' };
 import { flattenForLocale } from './load';
-import type { Locale } from '../config/locales';
-import { DemosFileSchema } from './demo-schema';
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../config/locales';
+import { getDataTranslations } from './locale-glob';
 
 export type DemoLang = Locale;
 
@@ -24,22 +24,19 @@ export interface Demo {
   hints?: string[];
 }
 
-// Validate demos.json against the canonical schema at module-load time. A
-// malformed entry is a build-time error rather than a silent runtime drift.
-const validatedDemos = DemosFileSchema.parse(demosData);
-
 const cache = new Map<DemoLang, Demo[]>();
 
 /** Flat, legacy-shape demo array for a given locale (cached). */
 export function listDemos(lang: string): Demo[] {
-  const locale = (['en', 'es', 'ca'] as const).includes(lang as DemoLang)
+  const locale = (LOCALES as readonly string[]).includes(lang)
     ? (lang as DemoLang)
-    : 'en';
+    : DEFAULT_LOCALE;
   const cached = cache.get(locale);
   if (cached) return cached;
   const flat = flattenForLocale<Demo>(
-    validatedDemos as unknown as Parameters<typeof flattenForLocale>[0],
-    locale
+    demosData as Record<string, unknown>[],
+    locale,
+    getDataTranslations('demos', locale)
   );
   cache.set(locale, flat);
   return flat;
@@ -48,7 +45,8 @@ export function listDemos(lang: string): Demo[] {
 /** Look up a demo entry by slug for a given locale, falling back to English. */
 export function getDemo(slug: string, lang: string): Demo {
   const entry =
-    listDemos(lang).find((d) => d.slug === slug) ?? listDemos('en').find((d) => d.slug === slug);
+    listDemos(lang).find((d) => d.slug === slug) ??
+    listDemos(DEFAULT_LOCALE).find((d) => d.slug === slug);
   if (!entry) {
     throw new Error(`getDemo: unknown slug "${slug}"`);
   }

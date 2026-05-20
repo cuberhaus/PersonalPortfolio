@@ -1,0 +1,14 @@
+{
+  "corpus": "Corpus",
+  "customText": "Custom text",
+  "analyze": "Analyze",
+  "logScale": "Log scale",
+  "linearScale": "Linear scale",
+  "parameters": "Fitted parameters",
+  "words": "Top words",
+  "rank": "Rank",
+  "word": "Word",
+  "frequency": "Frequency",
+  "customPlaceholder": "Paste text here to analyze word frequency distribution…",
+  "notEnoughWords": "Need at least 5 distinct words."
+}

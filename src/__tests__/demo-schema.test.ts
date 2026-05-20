@@ -1,14 +1,41 @@
 /**
- * Schema-level guarantees for demos.json. The happy path is exercised by the
- * import in src/i18n/demo.ts (which throws at module load on parse failure);
- * this file pins the negative cases so future schema changes don't silently
- * loosen the contract.
+ * Schema-level guarantees for demos.json (identity-only format).
+ * Validates the identity fields of each demo entry.
  */
 import { describe, it, expect } from 'vitest';
+import { z } from 'zod';
 import demosData from '../data/demos.json';
-import { DemoEntrySchema, DemosFileSchema } from '../i18n/demo-schema';
+import { ICON_PATHS } from '../lib/demo-icons';
 
-const cloneFirstEntry = (): unknown => structuredClone(demosData[0]);
+const iconNames = Object.keys(ICON_PATHS) as [string, ...string[]];
+
+const githubUrl = z.string().regex(/^https:\/\/github\.com\//, {
+  message: 'Must be a https://github.com/ URL',
+});
+
+const DemoIdentitySchema = z.object({
+  slug: z.string().regex(/^[a-z0-9-]+$/, {
+    message: 'slug must be lowercase letters, digits, or hyphens',
+  }),
+  tags: z.array(z.string().min(1)).min(1).optional(),
+  icon: z.enum(iconNames),
+  github: z.union([githubUrl, z.array(githubUrl).min(1)]),
+  image: z.string(),
+  title: z.string().min(1).optional(),
+  badge: z.string().optional(),
+  metaTitle: z.string().optional(),
+  accent: z
+    .object({
+      from: z.string(),
+      to: z.string(),
+    })
+    .optional(),
+});
+
+const DemosFileSchema = z.array(DemoIdentitySchema);
+
+const cloneFirstEntry = (): Record<string, unknown> =>
+  structuredClone(demosData[0]) as Record<string, unknown>;
 
 describe('DemosFileSchema', () => {
   it('parses the real demos.json', () => {
@@ -16,54 +43,25 @@ describe('DemosFileSchema', () => {
   });
 });
 
-describe('DemoEntrySchema rejections', () => {
+describe('Demo identity rejections', () => {
   it('rejects an uppercase slug', () => {
-    const entry = cloneFirstEntry() as { identity: { slug: string } };
-    entry.identity.slug = 'INVALID-Upper';
-    const result = DemoEntrySchema.safeParse(entry);
+    const entry = cloneFirstEntry();
+    entry.slug = 'INVALID-Upper';
+    const result = DemoIdentitySchema.safeParse(entry);
     expect(result.success).toBe(false);
   });
 
   it('rejects a non-github.com link', () => {
-    const entry = cloneFirstEntry() as { identity: { github: string } };
-    entry.identity.github = 'https://gitlab.com/foo/bar';
-    const result = DemoEntrySchema.safeParse(entry);
+    const entry = cloneFirstEntry();
+    entry.github = 'https://gitlab.com/foo/bar';
+    const result = DemoIdentitySchema.safeParse(entry);
     expect(result.success).toBe(false);
   });
 
   it('rejects an unknown icon name', () => {
-    const entry = cloneFirstEntry() as { identity: { icon: string } };
-    entry.identity.icon = 'definitely-not-an-icon';
-    const result = DemoEntrySchema.safeParse(entry);
+    const entry = cloneFirstEntry();
+    entry.icon = 'definitely-not-an-icon';
+    const result = DemoIdentitySchema.safeParse(entry);
     expect(result.success).toBe(false);
-  });
-
-  it('rejects a missing default-locale copy', () => {
-    const entry = cloneFirstEntry() as { copy: Record<string, unknown> };
-    delete entry.copy.en;
-    const result = DemoEntrySchema.safeParse(entry);
-    expect(result.success).toBe(false);
-  });
-
-  it('rejects an empty tags array on identity when no copy fallback provides tags', () => {
-    const entry = cloneFirstEntry() as {
-      identity: { tags?: string[] };
-      copy: Record<string, { tags?: string[] }>;
-    };
-    entry.identity.tags = [];
-    for (const locale of Object.keys(entry.copy)) delete entry.copy[locale].tags;
-    const result = DemoEntrySchema.safeParse(entry);
-    expect(result.success).toBe(false);
-  });
-
-  it('accepts tags defined per-locale instead of identity', () => {
-    const entry = cloneFirstEntry() as {
-      identity: { tags?: string[] };
-      copy: Record<string, { tags?: string[] }>;
-    };
-    delete entry.identity.tags;
-    for (const locale of Object.keys(entry.copy)) entry.copy[locale].tags = ['Per-locale'];
-    const result = DemoEntrySchema.safeParse(entry);
-    expect(result.success).toBe(true);
   });
 });

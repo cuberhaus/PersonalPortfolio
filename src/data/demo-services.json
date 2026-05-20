@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "comment": "Single source of truth for demo pages, components, and the Docker backends they consume. Read by scripts/dev-all-demos.sh, scripts/log-relay/, src/components/demos/LiveAppEmbed.tsx (via getIframeUrl), Makefile DEMO_PORTS, e2e/live-demos.spec.ts, sentry.client.config.ts (via listTracedBackendPorts), src/__tests__/demo-registry.test.ts, and docs/adding-a-demo.md. Schema documented in docs/adding-a-demo.md.",
+  "comment": "Single source of truth for demo pages, components, and the Docker backends they consume. Read by scripts/dev-all-demos.sh, scripts/log-relay/, src/components/demos/LiveAppEmbed.tsx (via getIframeUrl), Makefile DEMO_PORTS, e2e/live-demos.spec.ts, sentry.client.config.ts (via listTracedBackendPorts), src/__tests__/demo-registry.test.ts, and docs/guides/adding-a-demo.md. Schema documented in docs/guides/adding-a-demo.md.",
   "services": [
     {
       "slug": "tenda",

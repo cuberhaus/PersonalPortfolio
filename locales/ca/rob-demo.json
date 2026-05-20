@@ -1,0 +1,8 @@
+{
+  "mobileTitle": "Robot Mòbil",
+  "mobileDesc": "Odometria diferencial — trajectòria des d'encoders",
+  "wallTitle": "Seguiment de Parets",
+  "wallDesc": "Controlador reactiu amb guanys k1/k2/k3",
+  "armTitle": "Cinemàtica Directa",
+  "armDesc": "3-Link FK — arrossega els sliders per moure articulacions"
+}

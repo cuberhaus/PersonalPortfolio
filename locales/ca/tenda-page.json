@@ -1,0 +1,10 @@
+{
+  "liveApp": "App en viu (s'executa localment)",
+  "startHint": "Inicia l'app PHP: <code>cd tenda_online && docker compose up -d && ./start.sh</code>",
+  "openNewTab": "Obrir en nova pestanya",
+  "runLocal": "Executar l'app real localment",
+  "step1": "<code>cd tenda_online</code>",
+  "step2": "<code>docker compose up -d</code> — inicia MySQL i carrega l'esquema",
+  "step3": "<code>./start.sh</code> — inicia el servidor PHP a <a href=\"http://localhost:8888\" target=\"_blank\" rel=\"noopener\">localhost:8888</a>",
+  "runNote": "Requereix: PHP, Docker (per a MySQL). L'iframe de dalt mostra l'app en viu quan s'està executant."
+}

@@ -2,6 +2,10 @@
 
 Quick reference for getting set up and shipping changes.
 
+> **Looking for "where do I add a new experience / how do I add a unit test"?**
+> See [docs/guides/everyday-tasks.md](docs/guides/everyday-tasks.md) — cookbook of small,
+> frequent edits with file paths and verify commands.
+
 ## First clone
 
 ```bash
@@ -109,14 +113,20 @@ This works across every theme (the worst offender is phosphor — pure green; ev
 
 ## Adding a new demo
 
-The end-to-end checklist (where to put files, how to wire i18n, how to register routes, what tests to add) lives in [docs/adding-a-demo.md](docs/adding-a-demo.md). The codemods in `scripts/wrap-demos-with-error-boundary.mjs` and `scripts/wire-demos-og-image.mjs` will pick up new demos automatically when re-run.
+The end-to-end checklist (where to put files, how to wire i18n, how to register routes, what tests to add) lives in [docs/guides/adding-a-demo.md](docs/guides/adding-a-demo.md). The codemods in `scripts/wrap-demos-with-error-boundary.mjs` and `scripts/wire-demos-og-image.mjs` will pick up new demos automatically when re-run.
 
 ## Architecture decisions and observability
 
-- [docs/decisions.md](docs/decisions.md) — why the codebase looks the way it does (logging, debug bus, design choices)
-- [docs/observability.md](docs/observability.md) — Sentry self-hosted + MLOps overlay setup
-- [docs/i18n.md](docs/i18n.md) — translation file structure and conventions
-- [docs/debugging-architecture.md](docs/debugging-architecture.md) — the in-page debug overlay
+- [docs/architecture/overview.md](docs/architecture/overview.md) — one-page big-picture map (start here)
+- [docs/architecture/decisions.md](docs/architecture/decisions.md) — why the codebase looks the way it does (logging, debug bus, design choices)
+- [docs/architecture/observability.md](docs/architecture/observability.md) — Sentry self-hosted + MLOps overlay setup
+- [docs/architecture/debugging-architecture.md](docs/architecture/debugging-architecture.md) — the in-page debug overlay
+- [docs/guides/i18n.md](docs/guides/i18n.md) — translation file structure and conventions
+- [docs/guides/testing.md](docs/guides/testing.md) — test pyramid (Vitest + 8 Playwright projects + backend pytests)
+
+## Stuck on an error?
+
+[docs/troubleshooting.md](docs/troubleshooting.md) is the searchable index of footguns we've hit and the fix for each (Vite cache, visual baselines on the wrong OS, lefthook on Windows, planner-api Java setup).
 
 ## Reporting issues
 

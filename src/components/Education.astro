@@ -1,6 +1,6 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import { education as educationData } from '../data/loaders';
+import { education as educationData, getTranslations } from '../data/loaders';
 import { flattenForLocale } from '../i18n/load';
 
 type EduEntry = {
@@ -13,7 +13,11 @@ type EduEntry = {
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const education = flattenForLocale<EduEntry>(educationData as never, lang);
+const education = flattenForLocale<EduEntry>(
+  educationData as never,
+  lang,
+  getTranslations('education', lang)
+);
 
 const { num } = Astro.props;
 ---

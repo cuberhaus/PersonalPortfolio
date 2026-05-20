@@ -1,0 +1,17 @@
+{
+  "damping": "Factor d'esmorteïment",
+  "initStrategy": "Estratègia inicial",
+  "run": "Executar PageRank",
+  "running": "Calculant…",
+  "iterations": "Iteracions",
+  "time": "Temps",
+  "convergence": "Convergència",
+  "rankings": "Aeroports principals",
+  "rank": "Pos.",
+  "code": "Codi",
+  "name": "Nom",
+  "score": "Puntuació",
+  "uniform": "Uniforme (1/n)",
+  "one": "Tot al primer",
+  "square": "Arrel quadrada"
+}

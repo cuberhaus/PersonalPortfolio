@@ -290,7 +290,7 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                 lineHeight: 1.7,
               }}
             >
-              {t.demoFeatures.map((f, i) => (
+              {t.demoFeatures.map((f: string, i: number) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
@@ -315,7 +315,7 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                 lineHeight: 1.7,
               }}
             >
-              {t.fullAppFeatures.map((f, i) => (
+              {t.fullAppFeatures.map((f: string, i: number) => (
                 <li key={i}>{f}</li>
               ))}
             </ul>
@@ -388,7 +388,7 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
             {t.constTitle}
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-            {t.constraints.map((c) => (
+            {t.constraints.map((c: any) => (
               <div
                 key={c.key}
                 style={{
@@ -449,7 +449,7 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
           {t.extTitle}
         </h4>
         <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-          {t.extensions.map((e) => (
+          {t.extensions.map((e: any) => (
             <span
               key={e.name}
               style={{
@@ -476,7 +476,7 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
             lineHeight: 1.6,
           }}
         >
-          {t.extensions.map((e) => (
+          {t.extensions.map((e: any) => (
             <div key={e.name} style={{ marginBottom: '0.25rem' }}>
               <strong style={{ color: e.active ? 'var(--accent-text)' : 'var(--text-muted)' }}>
                 {e.name}:
