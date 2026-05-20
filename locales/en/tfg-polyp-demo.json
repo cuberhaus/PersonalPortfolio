@@ -2,7 +2,7 @@
   "pipelineTitle": "End-to-End Pipeline",
   "thesis": "Bachelor's Thesis \\u00b7 FIB-UPC",
   "icon": "\\u2705",
-  "title": "COCO evaluation",
+  "title": "CycleGAN / SPADE",
   "desc": "AP / AR / F1 metrics",
   "modelComp": "Model comparison",
   "modelCompSub": "10 Faster R-CNN configurations from Optuna HPO",
