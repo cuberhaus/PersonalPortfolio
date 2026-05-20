@@ -28,6 +28,22 @@ export function getLocaleNamespace(locale: Locale, namespace: string): Record<st
   return (allModules[key(locale, namespace)] as Record<string, unknown>) ?? {};
 }
 
+function flattenDottedKeys(
+  value: Record<string, unknown>,
+  prefix = '',
+  result: Record<string, unknown> = {}
+): Record<string, unknown> {
+  for (const [entryKey, entryValue] of Object.entries(value)) {
+    const dottedKey = prefix ? `${prefix}.${entryKey}` : entryKey;
+    if (entryValue && typeof entryValue === 'object' && !Array.isArray(entryValue)) {
+      flattenDottedKeys(entryValue as Record<string, unknown>, dottedKey, result);
+    } else {
+      result[dottedKey] = entryValue;
+    }
+  }
+  return result;
+}
+
 /** Get a namespace's translations for all locales as a Record<Locale, ...>. */
 export function getAllLocalesForNamespace<T = Record<string, any>>(
   namespace: string
@@ -46,7 +62,7 @@ export function getAllLocalesForNamespace<T = Record<string, any>>(
 export function getI18nextResources(): Record<Locale, { ui: Record<string, unknown> }> {
   const result = {} as Record<Locale, { ui: Record<string, unknown> }>;
   for (const locale of LOCALES) {
-    result[locale] = { ui: getLocaleNamespace(locale, 'ui') };
+    result[locale] = { ui: flattenDottedKeys(getLocaleNamespace(locale, 'ui')) };
   }
   return result;
 }
