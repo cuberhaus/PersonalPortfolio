@@ -2,6 +2,29 @@
   "mlPipeline": "Pipeline ML",
   "course": "FIB-UPC \\u00b7 Aprendizaje Automático",
   "with": "con",
+  "pipelineSteps": [
+    { "icon": "🧹", "title": "Limpiar", "desc": "Imputación, codificación, escalado" },
+    { "icon": "🧠", "title": "Entrenar", "desc": "9 familias de modelos sklearn" },
+    { "icon": "✅", "title": "Evaluación", "desc": "CV, ROC, matrices de confusión" },
+    { "icon": "📈", "title": "Explicar", "desc": "Importancia de variables y análisis de errores" }
+  ],
+  "modelsList": [
+    "Regresión Logística",
+    "SVC lineal",
+    "k-NN",
+    "Árbol de decisión",
+    "Random Forest",
+    "AdaBoost",
+    "MLP",
+    "Naive Bayes",
+    "QDA"
+  ],
+  "featMeta": [
+    { "key": "age", "label": "Edad", "unit": "años", "color": "#60a5fa" },
+    { "key": "tsh", "label": "TSH", "unit": "mIU/L", "color": "#f59e0b" },
+    { "key": "tt4", "label": "TT4", "unit": "nmol/L", "color": "#a78bfa" },
+    { "key": "t3", "label": "T3", "unit": "nmol/L", "color": "#34d399" }
+  ],
   "icon": "✅",
   "title": "Evaluación",
   "desc": "CV, ROC, matrices de confusión",

@@ -1,4 +1,89 @@
 {
-  "src": "https://user-images.githubusercontent.com/44567202/208294460-f8bd49dd-c2c4-4dbf-b316-3fedd989bd9b.jpg",
-  "caption": "Reconstrucció 3D de l'aorta abdominal a partir de frames segmentats."
+  "screenshots": [
+    {
+      "src": "https://user-images.githubusercontent.com/44567202/208294460-f8bd49dd-c2c4-4dbf-b316-3fedd989bd9b.jpg",
+      "caption": "Reconstrucció 3D de l'aorta abdominal a partir de frames segmentats."
+    },
+    {
+      "src": "https://user-images.githubusercontent.com/44567202/208294473-3b2da637-5504-4750-8ea9-06e50e139eaa.jpeg",
+      "caption": "Sortida del pipeline de segmentació / visualització."
+    },
+    {
+      "src": "https://user-images.githubusercontent.com/44567202/208294474-817252af-eeb3-499b-8ffa-e6333b68efe0.jpeg",
+      "caption": "Flux GUI: carregar vídeo, inferència, inspeccionar màscares i sortida 3D."
+    }
+  ],
+  "pipeline": [
+    {
+      "icon": "🎬",
+      "title": "Vídeo ecografia",
+      "desc": "Carregar estudi, extreure frames"
+    },
+    {
+      "icon": "🧠",
+      "title": "Mask R-CNN",
+      "desc": "Segmentació d'instàncies per frame"
+    },
+    {
+      "icon": "🗂️",
+      "title": "Stack màscares",
+      "desc": "TIFFs binaris per recon 3D"
+    },
+    {
+      "icon": "🧊",
+      "title": "Malla 3D",
+      "desc": "Superfície ISO amb Meshlib / Open3D"
+    },
+    {
+      "icon": "📏",
+      "title": "Diàmetre",
+      "desc": "Anàlisi de contorn + heurístiques"
+    }
+  ],
+  "diameterZones": {
+    "typical": {
+      "label": "Rang típic",
+      "detail": "Molts diàmetres aòrtics abdominals d'adults estan molt per sota de 30 mm."
+    },
+    "followup": {
+      "label": "Zona de seguiment",
+      "detail": "Dilatada — sovint es recomana seguiment per imatge. Les decisions reals depenen del ritme de creixement i morfologia."
+    },
+    "concern": {
+      "label": "Alta preocupació",
+      "detail": "Diàmetre gran — pot requerir revisió per un especialista. Això és només una il·lustració educativa."
+    }
+  },
+  "simInference": "Inferència simulada",
+  "simSub": "Mock de navegador · frame B-mode real",
+  "simDesc1": "Imita la inferència real de Mask R-CNN en un ",
+  "simDesc2": "frame B-mode",
+  "simDesc3": " del dataset d'aorta de rata. La superposició vermella és un ",
+  "simDesc4": "mock del navegador",
+  "simDesc5": ", no la sortida del model.",
+  "extracting": "Extraient frame…",
+  "forwardPass": "Pas cap endavant de Mask R-CNN…",
+  "fitting": "Ajustant contorn i diàmetre…",
+  "ready": "Segmentació llesta (mock de navegador)",
+  "runDemo": "Executar inferència de demo",
+  "reset": "Reiniciar",
+  "opacity": "Opacitat",
+  "diameterExplorer": "Explorador de diàmetre",
+  "diamSub": "Visualització educativa de risc",
+  "diamDesc1": "L'app estima el diàmetre aòrtic des de contorns segmentats. Arrossega per veure com una mesura es mapeja a cubs de risc ",
+  "diamDesc2": "educatius",
+  "diamDesc3": " — no apte per diagnòstic.",
+  "maxOuter": "Diàmetre exterior màx",
+  "diamNote": "Només il·lustració. El maneig d'AAA segueix guies locals i context d'imatge.",
+  "cvPipeline": "Pipeline CV",
+  "hackathon": "Hackathon BitsXLaMarató · TV3 La Marató",
+  "projScreenshots": "Captures del projecte",
+  "team": "Equip",
+  "runLocal": "▸ Executar el projecte original localment",
+  "localDesc1": "L'app és una GUI en ",
+  "localDesc2": "Python + Tkinter",
+  "localDesc3": " (",
+  "localDesc4": "). Necessites un entorn compatible amb CUDA per a la inferència de Mask R-CNN (PyTorch 1.13).",
+  "localNote1": "Col·loca els pesos entrenats sota ",
+  "localNote2": " (ex. "
 }

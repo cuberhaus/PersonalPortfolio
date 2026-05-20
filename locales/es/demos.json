@@ -33,12 +33,7 @@
   "4": {
     "title": "Visor de Juego de Programación",
     "description": "Proyecto de Estructuras de Datos: un juego en cuadrícula donde bots en C++ compiten como guerreros y constructores en un torneo de la asignatura.",
-    "tags": {
-      "0": "C++",
-      "1": "Canvas",
-      "2": "AI",
-      "3": "FastAPI"
-    },
+    "tags": ["C++", "Canvas", "AI", "FastAPI"],
     "lead": "Mira <strong>bots de IA en C++</strong> competir en \"The Purge\" — un juego de estrategia en cuadrícula de la asignatura <strong>Estructuras de Datos y Algoritmos</strong> en FIB-UPC.",
     "badge": "Estructuras de Datos · FIB-UPC",
     "metaDescription": "Proyecto de Estructuras de Datos: bots de IA en C++ compitiendo en una cuadrícula. Visor de repeticiones en Canvas con partidas empaquetadas o en vivo.",
@@ -81,12 +76,7 @@
   "8": {
     "title": "Solver MPIDS",
     "description": "Proyecto de algoritmos sobre el problema del Conjunto Dominante de Influencia Positiva Mínima (MPIDS), resuelto con heurísticas voraces y búsqueda local estilo recocido simulado.",
-    "tags": {
-      "0": "Algorithms",
-      "1": "Graph Theory",
-      "2": "TypeScript",
-      "3": "Graph Theory"
-    },
+    "tags": ["Algorithms", "Graph Theory", "TypeScript", "Graph Theory"],
     "lead": "Encuentra el <strong>Minimum Positive Influence Dominating Set</strong> en un grafo — el conjunto más pequeño donde cada vértice tiene al menos la mitad de sus vecinos dentro. Elige una muestra o carga el tuyo, luego ejecuta <strong>greedy</strong> o <strong>búsqueda local</strong>.",
     "badge": "Algoritmia · FIB-UPC",
     "metaDescription": "Proyecto de algoritmos sobre el Minimum Positive Influence Dominating Set, resuelto con heurísticas greedy y de búsqueda local. Editor de grafos force-directed interactivo en D3.",
@@ -96,12 +86,7 @@
   "9": {
     "title": "Transiciones de Fase en Grafos",
     "description": "Proyecto de investigación en algoritmos sobre transiciones de fase de conectividad y complejidad en grafos aleatorios binomiales, geométricos y de cuadrícula.",
-    "tags": {
-      "0": "Algorithms",
-      "1": "Graph Theory",
-      "2": "NetworkX",
-      "3": "NetworkX"
-    },
+    "tags": ["Algorithms", "Graph Theory", "NetworkX", "NetworkX"],
     "lead": "Observa cómo los <strong>grafos aleatorios</strong> transicionan de conectados a desconectados al eliminar nodos o aristas. Genera grafos <strong>binomiales</strong> (Erdős–Rényi), <strong>geométricos</strong> o de <strong>cuadrícula</strong>, aplica percolación y ve la transición de fase en tiempo real.",
     "badge": "Algoritmia · FIB-UPC",
     "metaDescription": "Investigación en algoritmos sobre transiciones de fase de conectividad y complejidad en grafos aleatorios binomiales, geométricos y de cuadrícula. Animaciones de percolación y gráficas Monte Carlo interactivas.",
@@ -118,13 +103,7 @@
   },
   "11": {
     "description": "Proyecto de IA que plantea la asistencia en desastres como búsqueda local, con helicópteros rescatando grupos desde centros mediante escalada de colinas y recocido simulado.",
-    "tags": {
-      "0": "Java",
-      "1": "AIMA",
-      "2": "Local search",
-      "3": "UPC",
-      "4": "UPC"
-    },
+    "tags": ["Java", "AIMA", "Local search", "UPC", "UPC"],
     "lead": "Resuelve la asignación en <strong>ayuda en desastres</strong> como búsqueda local — helicópteros rescatando grupos desde centros sobre un <strong>mapa 2D</strong> interactivo. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> con 3 heurísticos y 6 funciones sucesoras.",
     "badge": "Inteligencia Artificial · Solid.js + FastAPI · FIB-UPC",
     "metaDescription": "Proyecto de IA que plantea la asistencia en desastres como búsqueda local: helicópteros rescatando grupos mediante hill climbing y simulated annealing. Solver interactivo con Solid.js + FastAPI."
@@ -170,13 +149,7 @@
   "17": {
     "title": "Panel de Robótica",
     "description": "Prácticas de Robótica que cubren odometría, seguimiento de paredes, cinemática directa 3D de brazo (Puma560 / 3-Link), planificación de trayectorias, sensores y estimación de estado EKF.",
-    "tags": {
-      "0": "Ember.js",
-      "1": "Babylon.js",
-      "2": "Robótica",
-      "3": "Canvas",
-      "4": "EKF"
-    },
+    "tags": ["Ember.js", "Babylon.js", "Robótica", "Canvas", "EKF"],
     "lead": "Recorre seis visualizaciones interactivas de <strong>robótica</strong> con <strong>Ember.js</strong> y <strong>Babylon.js</strong>: odometría móvil con escáneres láser, seguimiento de paredes, cinemática 3D de brazos robóticos (Puma560/3-Link), planificación de trayectorias, panel de sensores y estimación de estado <strong>EKF</strong>.",
     "badge": "Robótica · Ember.js + Babylon.js + Canvas · FIB-UPC",
     "metaDescription": "Prácticas de Robótica: odometría, seguimiento de paredes, cinemática 3D de brazos, planificación de trayectorias, sensores y EKF. Panel interactivo con Ember.js y Babylon.js."
@@ -184,13 +157,7 @@
   "18": {
     "title": "Visualizador de Algoritmos",
     "description": "Trabajos de Algoritmos y Estructuras de Datos reunidos en un solo visor, con 18 algoritmos clásicos de grafos, ordenación, búsqueda y problemas combinatorios.",
-    "tags": {
-      "0": "Qwik",
-      "1": "Canvas",
-      "2": "Algoritmos",
-      "3": "Grafos",
-      "4": "Ordenación"
-    },
+    "tags": ["Qwik", "Canvas", "Algoritmos", "Grafos", "Ordenación"],
     "lead": "Recorre paso a paso 18 <strong>algoritmos</strong> clásicos — Dijkstra, MST de Prim, BFS/DFS, ordenación, N-Reinas, 2-opt TSP y más — con visualizaciones interactivas en <strong>Qwik</strong> y <strong>Canvas</strong>.",
     "badge": "Algoritmos · Qwik + Canvas · FIB-UPC",
     "metaDescription": "Trabajos de Algoritmos y Estructuras de Datos — 18 algoritmos clásicos de grafos, ordenación, búsqueda y combinatoria. Visualizador interactivo con Qwik y Canvas."

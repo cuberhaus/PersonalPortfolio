@@ -1,7 +1,127 @@
 {
-  "icon": "🔍",
-  "title": "Cerca",
-  "desc": "Moviments més amplis \\u2014 reassignar / reordenar",
-  "name": "GENERAL",
-  "fn": "Function2"
+  "pipeline": [
+    {
+      "icon": "📋",
+      "title": "Estat",
+      "desc": "Cua ordenada de grups per helicòpter"
+    },
+    {
+      "icon": "🔀",
+      "title": "SWAP",
+      "desc": "Intercanvia dos grups de posició"
+    },
+    {
+      "icon": "📊",
+      "title": "Puntuació",
+      "desc": "H2 = suma del temps de tots els helicòpters"
+    },
+    {
+      "icon": "🔍",
+      "title": "Cerca",
+      "desc": "HC escala · SA explora amb salts aleatoris"
+    }
+  ],
+  "operators": [
+    {
+      "name": "SWAP",
+      "fn": "Function1",
+      "desc": "Intercanvia dos grups entre cues d'helicòpters"
+    },
+    {
+      "name": "GENERAL",
+      "fn": "Function2",
+      "desc": "Moviments més amplis — reassignar / reordenar"
+    },
+    {
+      "name": "REDUCIDO",
+      "fn": "Function3",
+      "desc": "Veïnat més petit, iteracions més ràpides"
+    },
+    {
+      "name": "SWAP + GENERAL",
+      "fn": "Function4",
+      "desc": "Combina swap amb moviments generals"
+    },
+    {
+      "name": "SWAP + REDUCIDO",
+      "fn": "Function5",
+      "desc": "Swap combinat amb veïnat reduït"
+    },
+    {
+      "name": "Estocàstic",
+      "fn": "Function6",
+      "desc": "Tria aleatòriament la branca swap o general"
+    }
+  ],
+  "heuristics": [
+    {
+      "name": "H1",
+      "desc": "Barreja de makespan (temps màx d'heli) i temps total, ponderat per repartir càrrega",
+      "active": false
+    },
+    {
+      "name": "H2",
+      "desc": "Minimitza la suma de temps de finalització de tots els helicòpters",
+      "active": true
+    },
+    {
+      "name": "H3",
+      "desc": "H1 + penalització per grups prioritaris rescatats tard (urgència)",
+      "active": false
+    }
+  ],
+  "localSearch": "Cerca Local",
+  "aima": "AIMA · Java + Python",
+  "problemSchematic": "Esquema del problema",
+  "probDesc": "Els helicòpters surten de bases i serveixen als centres en un ordre optimitzat. Els grups tenen mides i prioritats. Capacitat: 15 persones per viatge, 10 min de descans entre sortides.",
+  "base": "Base",
+  "center": "Centre",
+  "rescueOrder": "ordre de rescat →",
+  "heurFunctions": "Funcions heurístiques",
+  "usedInDemo": "usada a la demo",
+  "succOperators": "Operadors successors",
+  "succNote1": "6 funcions successores en Java (",
+  "succNote2": "). La demo utilitza SWAP. Passa el ratolí per veure'n detalls.",
+  "runDemo": "Executar demo",
+  "demoSub": "HC / SA · 7 grups · 3 helicòpters · s'executa al navegador",
+  "howItWorks": "Com funciona:",
+  "howDesc1": " Distribució 2D aleatòria (amb llavor) amb 2 bases i 7 grups. Colors = helicòpter assignat. ",
+  "howDesc2": "HC",
+  "howDesc3": " tria el millor veí SWAP fins estancar-se; ",
+  "howDesc4": "SA",
+  "howDesc5": " de vegades accepta pitjors moviments per escapar de mínims locals.",
+  "algorithm": "Algorisme",
+  "hc": "Hill climbing",
+  "sa": "Simulated annealing",
+  "hcFull": "Hill climbing (SWAP complet)",
+  "saFull": "Simulated annealing (SWAP aleatori)",
+  "seed": "Llavor",
+  "runSearch": "Executar cerca",
+  "running": "Executant…",
+  "cost": "Cost H2:",
+  "before": "Abans — cues inicials aleatòries",
+  "after": "Després — assignació optimitzada",
+  "finalQueues": "Cues finals",
+  "initialState": "Desglossament estat inicial i log cru",
+  "compact": "Compacte:",
+  "ghRepo": "Repositori a GitHub ↗",
+  "webAppTitle": "Web App completa",
+  "webAppDesc": "Executa el contenidor Docker per accedir al solucionador interactiu complet amb totes les funcionalitats.",
+  "webAppFeatures": [
+    {
+      "icon": "🗺️",
+      "title": "Mapa 2D interactiu",
+      "desc": "Mapa Canvas amb rutes d'helicòpters, tooltips de grups i assignacions per color"
+    },
+    {
+      "icon": "📊",
+      "title": "Tauler d'experiments",
+      "desc": "Execució per lots amb comparacions boxplot de totes les configuracions"
+    },
+    {
+      "icon": "⚙️",
+      "title": "Configuració completa",
+      "desc": "3 heurístics, 6 funcions successores, 3 estats inicials i paràmetres SA ajustables"
+    }
+  ]
 }

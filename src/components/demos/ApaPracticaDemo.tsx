@@ -19,6 +19,15 @@ import { gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
+type FeatureMeta = { key: string; label: string; unit: string; color: string };
+
+const FALLBACK_FEATURES: FeatureMeta[] = [
+  { key: 'age', label: 'Age', unit: 'years', color: '#60a5fa' },
+  { key: 'tsh', label: 'TSH', unit: 'mIU/L', color: '#f59e0b' },
+  { key: 'tt4', label: 'TT4', unit: 'nmol/L', color: '#a78bfa' },
+  { key: 't3', label: 'T3', unit: 'nmol/L', color: '#34d399' },
+];
+
 function loadRealPoints(): Pt[] {
   return pcaPointsData.map((p) => ({
     x: 18 + p.x * (CW - 36),
@@ -274,7 +283,7 @@ function KnnCanvas({ t, log }: { t: typeof TRANSLATIONS.en; log: ReturnType<type
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  PREDICTOR                                                             */
 /* ════════════════════════════════════════════════════════════════════════ */
-function Predictor({ t }: { t: typeof TRANSLATIONS.en }) {
+function Predictor({ t, featMeta }: { t: typeof TRANSLATIONS.en; featMeta: FeatureMeta[] }) {
   const [age, setAge] = useState(50);
   const [tsh, setTsh] = useState(2.0);
   const [tt4, setTt4] = useState(109);
@@ -286,44 +295,44 @@ function Predictor({ t }: { t: typeof TRANSLATIONS.en }) {
   return (
     <div>
       <FeatureSlider
-        label={t.featMeta[0].label}
+        label={featMeta[0].label}
         value={age}
         set={setAge}
         min={1}
         max={100}
         step={1}
-        unit={t.featMeta[0].unit}
-        color={t.featMeta[0].color}
+        unit={featMeta[0].unit}
+        color={featMeta[0].color}
       />
       <FeatureSlider
-        label={t.featMeta[1].label}
+        label={featMeta[1].label}
         value={tsh}
         set={setTsh}
         min={0}
         max={200}
         step={0.1}
-        unit={t.featMeta[1].unit}
-        color={t.featMeta[1].color}
+        unit={featMeta[1].unit}
+        color={featMeta[1].color}
       />
       <FeatureSlider
-        label={t.featMeta[2].label}
+        label={featMeta[2].label}
         value={tt4}
         set={setTt4}
         min={0}
         max={300}
         step={1}
-        unit={t.featMeta[2].unit}
-        color={t.featMeta[2].color}
+        unit={featMeta[2].unit}
+        color={featMeta[2].color}
       />
       <FeatureSlider
-        label={t.featMeta[3].label}
+        label={featMeta[3].label}
         value={t3}
         set={setT3}
         min={0}
         max={10}
         step={0.1}
-        unit={t.featMeta[3].unit}
-        color={t.featMeta[3].color}
+        unit={featMeta[3].unit}
+        color={featMeta[3].color}
       />
 
       {/* result */}
@@ -444,10 +453,16 @@ function FeatureSlider({
 /* ════════════════════════════════════════════════════════════════════════ */
 /*  FEATURE IMPORTANCE                                                    */
 /* ════════════════════════════════════════════════════════════════════════ */
-function FeatureImportance({ t }: { t: typeof TRANSLATIONS.en }) {
+function FeatureImportance({
+  t,
+  featMeta,
+}: {
+  t: typeof TRANSLATIONS.en;
+  featMeta: FeatureMeta[];
+}) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-      {t.featMeta.map((f: any, i: number) => (
+      {featMeta.map((f, i: number) => (
         <div key={f.key} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <span
             style={{
@@ -504,6 +519,29 @@ function FeatureImportance({ t }: { t: typeof TRANSLATIONS.en }) {
 /* ════════════════════════════════════════════════════════════════════════ */
 function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const pipelineSteps =
+    Array.isArray((t as Record<string, unknown>).pipelineSteps) &&
+    ((t as Record<string, unknown>).pipelineSteps as unknown[]).length > 0
+      ? ((t as Record<string, unknown>).pipelineSteps as Array<{
+          icon?: string;
+          title?: string;
+          desc?: string;
+        }>)
+      : [
+          {
+            icon: (t as Record<string, string>).icon ?? '✅',
+            title: (t as Record<string, string>).title ?? 'Evaluate',
+            desc: (t as Record<string, string>).desc ?? '',
+          },
+        ];
+  const modelsList = Array.isArray((t as Record<string, unknown>).modelsList)
+    ? ((t as Record<string, unknown>).modelsList as string[])
+    : [];
+  const featMeta =
+    Array.isArray((t as Record<string, unknown>).featMeta) &&
+    ((t as Record<string, unknown>).featMeta as unknown[]).length >= 4
+      ? ((t as Record<string, unknown>).featMeta as FeatureMeta[])
+      : FALLBACK_FEATURES;
   useDemoLifecycle('demo:apa', { lang });
   const log = useDebug('demo:apa');
   const [showNb, setShowNb] = useState(false);
@@ -559,7 +597,7 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
             paddingBottom: '0.25rem',
           }}
         >
-          {t.pipelineSteps.map((step: any, i: number) => (
+          {pipelineSteps.map((step, i: number) => (
             <div
               key={i}
               style={{
@@ -593,7 +631,7 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
             marginTop: '1rem',
           }}
         >
-          {t.modelsList.map((m: string) => (
+          {modelsList.map((m: string) => (
             <span
               key={m}
               style={{
@@ -652,7 +690,7 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
               </p>
             </div>
           </div>
-          <Predictor t={t} />
+          <Predictor t={t} featMeta={featMeta} />
         </div>
 
         {/* k-NN */}
@@ -710,7 +748,7 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
           >
             {t.featImp}
           </h4>
-          <FeatureImportance t={t} />
+          <FeatureImportance t={t} featMeta={featMeta} />
         </div>
         <div style={card}>
           <h4

@@ -1,4 +1,86 @@
 {
-  "name": "Extensión 2",
-  "desc": "Días por ciudad, días mínimos de viaje, interés por ciudad + métrica a minimizar."
+  "extensions": [
+    {
+      "name": "Básico",
+      "desc": "Estilo STRIPS: visitar un número mínimo de ciudades."
+    },
+    {
+      "name": "Extensión 1",
+      "desc": "Misma estructura, diferentes tamaños de instancia."
+    },
+    {
+      "name": "Extensión 2",
+      "desc": "Días por ciudad, días mínimos de viaje, interés por ciudad + métrica a minimizar.",
+      "active": true
+    },
+    {
+      "name": "Extensión 3/4",
+      "desc": "Variantes del problema y generadores de pruebas en Python."
+    },
+    {
+      "name": "Extra 2",
+      "desc": "Problemas de benchmark adicionales."
+    }
+  ],
+  "constraints": [
+    {
+      "icon": "🏙️",
+      "label": "≥ 2 ciudades visitadas",
+      "key": "min_ciudades_a_recoger"
+    },
+    {
+      "icon": "📅",
+      "label": "≥ 10 días de viaje en total",
+      "key": "min_dias_recorrido"
+    },
+    {
+      "icon": "🏨",
+      "label": "1–4 días por ciudad",
+      "key": "min/max_dias_por_ciudad"
+    },
+    {
+      "icon": "📉",
+      "label": "Minimizar interés total",
+      "key": "metric minimize"
+    }
+  ],
+  "flightNetwork": "Red de vuelos",
+  "flightDesc1": "El hub ",
+  "flightDesc2": " conecta con tres ciudades formando un triángulo. Cada ciudad tiene un hotel. Estrellas = valor de interés (el planificador minimiza la suma).",
+  "constTitle": "Restricciones y objetivo",
+  "constDesc1": "Acción única: ",
+  "constDesc2": " — volar a nueva ciudad, reservar hotel, elegir duración de la estancia (1–4 días). Requiere un planificador PDDL numérico (ENHSP, LPG).",
+  "extTitle": "Extensiones",
+  "domain": "Dominio (Ext 2)",
+  "problem": "Problema (Ext 2)",
+  "download": "Descargar ↓",
+  "ghRepo": "Repositorio en GitHub ↗",
+  "mockTitle": "Vista previa del planificador",
+  "mockDesc": "Plan óptimo pre-calculado para el problema de la Extensión 2.",
+  "mockRun": "Simular planificador",
+  "mockRunning": "Resolviendo…",
+  "mockBadge": "Mock",
+  "mockSteps": "pasos",
+  "mockDays": "días",
+  "mockInterest": "interés",
+  "mockRoute": "Ruta",
+  "mockActions": "Acciones crudas del plan",
+  "fullAppTitle": "Esta demo vs. la app completa",
+  "demoIncludesLabel": "Esta demo incluye:",
+  "demoFeatures": [
+    "Diagrama de la red de vuelos y resumen de restricciones para la Extensión 2",
+    "Código fuente PDDL del dominio y problema (solo lectura)",
+    "Archivos .pddl descargables",
+    "Descripción de las extensiones de un vistazo",
+    "Planificador simulado con solución óptima pre-calculada"
+  ],
+  "fullAppDesc": "La app web completa (ejecución local) añade:",
+  "fullAppFeatures": [
+    "Explorador de archivos para todas las extensiones (Básico a Extensión 4)",
+    "Visualización interactiva del grafo de la estructura del problema",
+    "Ejecución del planificador integrado sobre cualquier dominio/problema",
+    "Ruta planificada resaltada sobre el grafo",
+    "PDDL editable con soporte para re-ejecución"
+  ],
+  "fullAppHint": "Ejecútalo localmente para acceder a la app completa:"
 }
