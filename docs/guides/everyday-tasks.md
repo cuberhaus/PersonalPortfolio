@@ -100,7 +100,7 @@ category: append to that entry's `identity.items`.
 2. [src/config/sections.ts](../../src/config/sections.ts) — add or remove the
    matching `import` and `COMPONENTS` entry.
 3. If the section appears in the navbar, ensure the matching `nav.*` key
-   exists in [src/i18n/ui.ts](../../src/i18n/ui.ts) for all three locales.
+   exists in `locales/{en,es,ca}/ui.json` for all three locales.
 
 **Notes:** the hero is the only section with `inNav: false` and
 `numbered: false`. To hide a section from the navbar without removing it, flip
@@ -113,9 +113,9 @@ category: append to that entry's `identity.items`.
 
 ## 7. Adding a shared UI string (button, label, ARIA)
 
-**Edit:** [src/i18n/ui.ts](../../src/i18n/ui.ts). Add the dotted key under all
-three locales (`en`, `es`, `ca`). Use a clear namespace prefix
-(`nav.*`, `aria.*`, `meta.*`, `demo.*`, `contact.*`, …).
+**Edit:** `locales/{en,es,ca}/ui.json`. Add the nested key under all three
+locales. Callers still use dotted keys (`nav.*`, `aria.*`, `meta.*`, `demo.*`,
+`contact.*`, …), but the JSON file itself is grouped by topic.
 
 In any `.astro` file:
 
@@ -129,9 +129,9 @@ const t = useTranslations(lang);
 <button aria-label={t('contact.send')}>{t('contact.send')}</button>
 ```
 
-**Notes:** `t(key)` falls back to `en` if a locale is missing the key, but
-TypeScript will error if the key isn't in the `en` dictionary at all — the
-type system enforces compile-time coverage.
+**Notes:** `t(key)` falls back to `en` if a locale is missing the key. If the
+page renders the raw key, check that `src/i18n/locale-glob.ts` still flattens
+nested `ui.json` via `flattenDottedKeys()`.
 
 **Verify:** `npm run check && npx vitest run`
 
@@ -139,17 +139,17 @@ type system enforces compile-time coverage.
 
 ## 8. Adding page-specific copy with HTML or placeholders
 
-**Edit:** create or extend a module under
-[src/i18n/demos/](../../src/i18n/demos/) named `<slug>-page.ts` (page UI) or
-`<slug>-demo.ts` (client island). Follow the
-[joc-eda-page.ts](../../src/i18n/demos/joc-eda-page.ts) pattern: an object keyed
-by locale with a default-export `getXxxCopy(lang)` accessor.
+**Edit:** create or extend `locales/{en,es,ca}/<slug>-page.json` (page UI) or
+`locales/{en,es,ca}/<slug>-demo.json` (client island). If the page/component
+needs an importable helper, add a tiny accessor under
+[src/i18n/demos/](../../src/i18n/demos/) that calls `getDemoT()` or
+`getDemoTranslations()`.
 
 Use this **only** for copy that's specific to one page/component and can't
-live in `ui.ts` (because it has inline HTML, `{0}` placeholders, or long prose).
-Don't duplicate fields that already live in `demos.json`.
+live in shared `ui.json` (because it has inline HTML, `{0}` placeholders, or
+long prose). Don't duplicate fields that already live in `demos.json`.
 
-See [docs/i18n.md § Pattern C](./i18n.md#pattern-c--per-feature-ts-modules-in-srci18ndemos)
+See [docs/i18n.md § Pattern C](./i18n.md#pattern-c--per-demo-namespace-json)
 for the full rules.
 
 **Verify:** `npx vitest run`
@@ -175,7 +175,7 @@ and stop at the marker if `hasBackend: false`.
   user, email. Single source of truth; consumed by `Contact.astro`,
   `Layout.astro` (schema.org `sameAs`), and `astro.config.mjs`.
 - [src/components/Hero.astro](../../src/components/Hero.astro) — name and
-  taglines (most copy lives in `ui.ts` keys `hero.*`).
+  taglines (most copy lives in `locales/{locale}/ui.json` under `hero.*`).
 - [src/components/About.astro](../../src/components/About.astro) — bio.
 - [src/components/Contact.astro](../../src/components/Contact.astro) — contact
   block.
@@ -190,7 +190,7 @@ and stop at the marker if `hasBackend: false`.
 The navbar is generated from sections with `inNav: true` in
 [src/config/section-ids.ts](../../src/config/section-ids.ts). The link label
 comes from the `navKey` (e.g. `nav.experience`) looked up in
-[src/i18n/ui.ts](../../src/i18n/ui.ts). To rename a label: edit `ui.ts`. To
+the `ui` namespace. To rename a label: edit `locales/{en,es,ca}/ui.json`. To
 hide / reorder: edit `section-ids.ts` (see recipe 6).
 
 **Verify:** `npx playwright test --project=portfolio-smoke`

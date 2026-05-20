@@ -148,7 +148,7 @@ src/
   components/         # Astro layout components (Navbar, Hero, Contact, …)
   components/demos/   # React demo components (one per demo)
   data/               # JSON data files + i18n variants (.es.json, .ca.json)
-  i18n/               # ui.ts, utils.ts, demos/ (per-demo translations)
+  i18n/               # locale loaders, utils, lightweight demo namespace accessors
   layouts/            # Layout.astro, DemoLayout.astro
   lib/                # Shared utilities
   pages/              # index.astro, 404.astro, demos/, [lang]/
@@ -160,7 +160,7 @@ public/               # Static assets (demo images, PDDL files, joc-eda viewer, 
 - **Identity / hero / contact**: `src/components/` (e.g. `Contact.astro`)
 - **Content data**: `src/data/*.json` (skills, experience, education, work projects)
 - **Demo list**: `src/data/demos.json` (+ `.es.json`, `.ca.json`)
-- **i18n UI strings**: `src/i18n/ui.ts`
+- **i18n UI strings**: `locales/{en,es,ca}/ui.json`
 - **Site URL**: `site` in `astro.config.mjs`
 
 For step-by-step recipes on the small frequent edits (adding a job, swapping
