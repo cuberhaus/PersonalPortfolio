@@ -27,7 +27,15 @@ const accent2 = 'var(--accent-end)';
 /* ── diameter zones ── */
 import { diameterZone as _diameterZone } from '../../lib/bitsx-diameter';
 function diameterZone(mm: number, t: typeof TRANSLATIONS.en) {
-  return _diameterZone(mm, t.diameterZones);
+  const labels =
+    (t as any).diameterZones && typeof (t as any).diameterZones === 'object'
+      ? (t as any).diameterZones
+      : {
+          typical: { label: 'Typical diameter', detail: '< 30 mm' },
+          followup: { label: 'Needs follow-up', detail: '30-44 mm' },
+          concern: { label: 'High concern', detail: '>= 45 mm' },
+        };
+  return _diameterZone(mm, labels);
 }
 
 /* ════════════════════════════════════════════════════════════════════════ */
@@ -412,28 +420,32 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
         <div
           style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.25rem' }}
         >
-          {t.pipeline.map((step: any, i: number) => (
-            <div
-              key={i}
-              style={{
-                flex: '1 0 auto',
-                minWidth: 85,
-                padding: '0.6rem 0.7rem',
-                background: 'var(--bg-secondary)',
-                borderRadius: '0.5rem',
-                border: '1px solid var(--border-color)',
-                textAlign: 'center',
-              }}
-            >
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
-              <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                {step.title}
+          {(Array.isArray((t as any).pipeline) ? (t as any).pipeline : []).map(
+            (step: any, i: number) => (
+              <div
+                key={i}
+                style={{
+                  flex: '1 0 auto',
+                  minWidth: 85,
+                  padding: '0.6rem 0.7rem',
+                  background: 'var(--bg-secondary)',
+                  borderRadius: '0.5rem',
+                  border: '1px solid var(--border-color)',
+                  textAlign: 'center',
+                }}
+              >
+                <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  {step.title}
+                </div>
+                <div
+                  style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}
+                >
+                  {step.desc}
+                </div>
               </div>
-              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
-                {step.desc}
-              </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.85rem' }}>
@@ -552,30 +564,32 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
             gap: '0.75rem',
           }}
         >
-          {t.screenshots.map((img: any, i: number) => (
-            <figure key={i} style={{ margin: 0 }}>
-              <img
-                src={img.src}
-                alt={img.caption}
-                style={{
-                  width: '100%',
-                  borderRadius: '0.5rem',
-                  display: 'block',
-                  background: 'var(--bg-secondary)',
-                }}
-              />
-              <figcaption
-                style={{
-                  marginTop: '0.5rem',
-                  fontSize: '0.72rem',
-                  color: 'var(--text-muted)',
-                  lineHeight: 1.4,
-                }}
-              >
-                {img.caption}
-              </figcaption>
-            </figure>
-          ))}
+          {(Array.isArray((t as any).screenshots) ? (t as any).screenshots : []).map(
+            (img: any, i: number) => (
+              <figure key={i} style={{ margin: 0 }}>
+                <img
+                  src={img.src}
+                  alt={img.caption}
+                  style={{
+                    width: '100%',
+                    borderRadius: '0.5rem',
+                    display: 'block',
+                    background: 'var(--bg-secondary)',
+                  }}
+                />
+                <figcaption
+                  style={{
+                    marginTop: '0.5rem',
+                    fontSize: '0.72rem',
+                    color: 'var(--text-muted)',
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {img.caption}
+                </figcaption>
+              </figure>
+            )
+          )}
         </div>
       </div>
 

@@ -2,6 +2,29 @@
   "mlPipeline": "ML Pipeline",
   "course": "FIB-UPC \\u00b7 Machine Learning",
   "with": "with",
+  "pipelineSteps": [
+    { "icon": "🧹", "title": "Clean", "desc": "Imputation, encoding, scaling" },
+    { "icon": "🧠", "title": "Train", "desc": "9 sklearn model families" },
+    { "icon": "✅", "title": "Evaluate", "desc": "CV, ROC, confusion matrices" },
+    { "icon": "📈", "title": "Explain", "desc": "Feature importance and error analysis" }
+  ],
+  "modelsList": [
+    "LogReg",
+    "Linear SVC",
+    "k-NN",
+    "Decision Tree",
+    "Random Forest",
+    "AdaBoost",
+    "MLP",
+    "Naive Bayes",
+    "QDA"
+  ],
+  "featMeta": [
+    { "key": "age", "label": "Age", "unit": "years", "color": "#60a5fa" },
+    { "key": "tsh", "label": "TSH", "unit": "mIU/L", "color": "#f59e0b" },
+    { "key": "tt4", "label": "TT4", "unit": "nmol/L", "color": "#a78bfa" },
+    { "key": "t3", "label": "T3", "unit": "nmol/L", "color": "#34d399" }
+  ],
   "icon": "✅",
   "title": "Evaluate",
   "desc": "CV, ROC, confusion matrices",

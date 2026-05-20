@@ -54,28 +54,30 @@ function PipelineStrip({ t }: { t: typeof TRANSLATIONS.en }) {
         <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{t.thesis}</span>
       </div>
       <div style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.25rem' }}>
-        {t.pipelineSteps.map((step: any, i: number) => (
-          <div
-            key={i}
-            style={{
-              flex: '1 0 auto',
-              minWidth: 100,
-              padding: '0.6rem 0.7rem',
-              background: 'var(--bg-secondary)',
-              borderRadius: '0.5rem',
-              border: '1px solid var(--border-color)',
-              textAlign: 'center',
-            }}
-          >
-            <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
-            <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-              {step.title}
+        {(Array.isArray((t as any).pipelineSteps) ? (t as any).pipelineSteps : []).map(
+          (step: any, i: number) => (
+            <div
+              key={i}
+              style={{
+                flex: '1 0 auto',
+                minWidth: 100,
+                padding: '0.6rem 0.7rem',
+                background: 'var(--bg-secondary)',
+                borderRadius: '0.5rem',
+                border: '1px solid var(--border-color)',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
+              <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                {step.title}
+              </div>
+              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
+                {step.desc}
+              </div>
             </div>
-            <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
-              {step.desc}
-            </div>
-          </div>
-        ))}
+          )
+        )}
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.85rem' }}>
         {[
@@ -115,6 +117,10 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
   const [metric, setMetric] = useState<'ap50' | 'ap5095' | 'ar100' | 'f1'>('f1');
   const [sortBy, setSortBy] = useState<'metric' | 'lr' | 'epochs'>('metric');
   const log = useDebug('demo:tfg-polyps');
+  const metricsLabels =
+    (t as any).metrics && typeof (t as any).metrics === 'object'
+      ? (t as any).metrics
+      : { f1: 'F1', ap50: 'AP50', ap5095: 'AP50-95', ar100: 'AR@100' };
 
   const sorted = useMemo(() => {
     const arr = [...modelData];
@@ -178,7 +184,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
               color: metric === m ? 'var(--text-primary)' : 'var(--text-secondary)',
             }}
           >
-            {t.metrics[m]}
+            {metricsLabels[m]}
           </button>
         ))}
         <span
@@ -704,7 +710,7 @@ function DetectorTable({ t }: { t: typeof TRANSLATIONS.en }) {
           </tr>
         </thead>
         <tbody>
-          {t.detectors.map((d: any) => (
+          {(Array.isArray((t as any).detectors) ? (t as any).detectors : []).map((d: any) => (
             <tr key={d.name} style={{ borderBottom: '1px solid var(--border-color)' }}>
               <td
                 style={{ padding: '0.5rem 0.75rem', fontWeight: 600, color: 'var(--text-primary)' }}

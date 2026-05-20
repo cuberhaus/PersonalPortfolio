@@ -266,28 +266,32 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
         <div
           style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.25rem' }}
         >
-          {t.pipeline.map((step: any, i: number) => (
-            <div
-              key={i}
-              style={{
-                flex: '1 0 auto',
-                minWidth: 90,
-                padding: '0.6rem 0.7rem',
-                background: 'var(--bg-secondary)',
-                borderRadius: '0.5rem',
-                border: '1px solid var(--border-color)',
-                textAlign: 'center',
-              }}
-            >
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
-              <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                {step.title}
+          {(Array.isArray((t as any).pipeline) ? (t as any).pipeline : []).map(
+            (step: any, i: number) => (
+              <div
+                key={i}
+                style={{
+                  flex: '1 0 auto',
+                  minWidth: 90,
+                  padding: '0.6rem 0.7rem',
+                  background: 'var(--bg-secondary)',
+                  borderRadius: '0.5rem',
+                  border: '1px solid var(--border-color)',
+                  textAlign: 'center',
+                }}
+              >
+                <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  {step.title}
+                </div>
+                <div
+                  style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}
+                >
+                  {step.desc}
+                </div>
               </div>
-              <div style={{ fontSize: '0.62rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>
-                {step.desc}
-              </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </div>
 
@@ -347,32 +351,34 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
             gap: '0.5rem',
           }}
         >
-          {t.webAppFeatures.map((f: any, i: number) => (
-            <div
-              key={i}
-              style={{
-                padding: '0.65rem 0.75rem',
-                background: 'var(--bg-secondary)',
-                borderRadius: '0.5rem',
-                border: '1px solid var(--border-color)',
-              }}
-            >
-              <div style={{ fontSize: '1rem', marginBottom: '0.2rem' }}>{f.icon}</div>
+          {(Array.isArray((t as any).webAppFeatures) ? (t as any).webAppFeatures : []).map(
+            (f: any, i: number) => (
               <div
+                key={i}
                 style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  color: 'var(--text-primary)',
-                  marginBottom: '0.15rem',
+                  padding: '0.65rem 0.75rem',
+                  background: 'var(--bg-secondary)',
+                  borderRadius: '0.5rem',
+                  border: '1px solid var(--border-color)',
                 }}
               >
-                {f.title}
+                <div style={{ fontSize: '1rem', marginBottom: '0.2rem' }}>{f.icon}</div>
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    marginBottom: '0.15rem',
+                  }}
+                >
+                  {f.title}
+                </div>
+                <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                  {f.desc}
+                </div>
               </div>
-              <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
-                {f.desc}
-              </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </div>
 
@@ -430,7 +436,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
             {t.heurFunctions}
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {t.heuristics.map((h: any) => (
+            {(Array.isArray((t as any).heuristics) ? (t as any).heuristics : []).map((h: any) => (
               <div
                 key={h.name}
                 style={{
@@ -499,7 +505,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
             {t.succOperators}
           </h4>
           <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
-            {t.operators.map((o: any) => (
+            {(Array.isArray((t as any).operators) ? (t as any).operators : []).map((o: any) => (
               <span
                 key={o.fn}
                 title={o.desc}

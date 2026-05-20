@@ -33,12 +33,7 @@
   "4": {
     "title": "Programming Game Viewer",
     "description": "Data structures course project: a grid-based game where C++ bots compete as warriors and builders in a class-wide tournament.",
-    "tags": {
-      "0": "Mithril.js",
-      "1": "Canvas",
-      "2": "C++",
-      "3": "FastAPI"
-    },
+    "tags": ["Mithril.js", "Canvas", "C++", "FastAPI"],
     "lead": "Watch <strong>C++ AI bots</strong> compete in \"The Purge\" — a grid-based strategy game from the <strong>Data Structures and Algorithms</strong> course at FIB-UPC.",
     "badge": "Data Structures · FIB-UPC",
     "metaDescription": "Data structures course project: C++ AI bots competing on a grid. Interactive Canvas replay viewer with bundled or live matches.",
@@ -81,12 +76,7 @@
   "8": {
     "title": "MPIDS Solver",
     "description": "Algorithms project on the Minimum Positive Influence Dominating Set problem, solved with greedy heuristics and simulated-annealing-style local search.",
-    "tags": {
-      "0": "Elm",
-      "1": "D3.js",
-      "2": "FastAPI",
-      "3": "Graph Theory"
-    },
+    "tags": ["Elm", "D3.js", "FastAPI", "Graph Theory"],
     "lead": "Find the <strong>Minimum Positive Influence Dominating Set</strong> on a graph — the smallest set where every vertex has at least half its neighbors inside. Pick a sample or load your own, then run <strong>greedy</strong> or <strong>local search</strong>.",
     "badge": "Algorithmics · FIB-UPC",
     "metaDescription": "Algorithms project on the Minimum Positive Influence Dominating Set, solved with greedy and local-search heuristics. Interactive D3 force-directed graph editor.",
@@ -96,12 +86,7 @@
   "9": {
     "title": "Graph Phase Transitions",
     "description": "Algorithms research project studying connectivity and complexity phase transitions on binomial, geometric, and grid random graphs.",
-    "tags": {
-      "0": "Lit",
-      "1": "Canvas",
-      "2": "FastAPI",
-      "3": "NetworkX"
-    },
+    "tags": ["Lit", "Canvas", "FastAPI", "NetworkX"],
     "lead": "Watch <strong>random graphs</strong> transition from connected to disconnected as you remove nodes or edges. Generate <strong>binomial</strong> (Erdős–Rényi), <strong>geometric</strong>, or <strong>grid</strong> graphs, apply percolation, and see the phase transition in real time.",
     "badge": "Algorithmics · FIB-UPC",
     "metaDescription": "Algorithms research on connectivity and complexity phase transitions in binomial, geometric, and grid random graphs. Interactive percolation animations and Monte Carlo charts.",
@@ -118,13 +103,7 @@
   },
   "11": {
     "description": "AI course project framing disaster relief as local search, with helicopters rescuing groups from rescue centers via hill climbing and simulated annealing.",
-    "tags": {
-      "0": "Solid.js",
-      "1": "FastAPI",
-      "2": "Local search",
-      "3": "Canvas",
-      "4": "UPC"
-    },
+    "tags": ["Solid.js", "FastAPI", "Local search", "Canvas", "UPC"],
     "lead": "Solve <strong>disaster-relief</strong> assignment as local search — helicopters rescuing groups from centers on an interactive <strong>2D map</strong>. Compare <strong>hill climbing</strong> vs <strong>simulated annealing</strong> with 3 heuristics and 6 successor functions.",
     "badge": "Artificial Intelligence · Solid.js + FastAPI · FIB-UPC",
     "metaDescription": "AI course project framing disaster relief as local search: helicopters rescuing groups via hill climbing and simulated annealing. Solid.js + FastAPI interactive solver."
@@ -170,13 +149,7 @@
   "17": {
     "title": "Robotics Dashboard",
     "description": "Robotics course labs covering odometry, wall-following, 3D arm forward kinematics (Puma560 / 3-Link), trajectory planning, sensors, and EKF state estimation.",
-    "tags": {
-      "0": "Ember.js",
-      "1": "Babylon.js",
-      "2": "Robotics",
-      "3": "Canvas",
-      "4": "EKF"
-    },
+    "tags": ["Ember.js", "Babylon.js", "Robotics", "Canvas", "EKF"],
     "lead": "Step through six interactive <strong>robotics</strong> visualizations built with <strong>Ember.js</strong> and <strong>Babylon.js</strong>: mobile-robot odometry with laser scans, wall-following, 3D arm kinematics (Puma560/3-Link), trajectory planning, sensor dashboards, and <strong>EKF</strong> state estimation.",
     "badge": "Robotics · Ember.js + Babylon.js + Canvas · FIB-UPC",
     "metaDescription": "Robotics course labs: odometry, wall-following, 3D arm kinematics, trajectory planning, sensors, and EKF. Interactive Ember.js + Babylon.js dashboard."
@@ -184,13 +157,7 @@
   "18": {
     "title": "Algorithm Visualizer",
     "description": "Algorithms and data structures coursework covering 18 classical algorithms across graphs, sorting, search, and combinatorial problems.",
-    "tags": {
-      "0": "Qwik",
-      "1": "Canvas",
-      "2": "Algorithms",
-      "3": "Graphs",
-      "4": "Sorting"
-    },
+    "tags": ["Qwik", "Canvas", "Algorithms", "Graphs", "Sorting"],
     "lead": "Step through 18 classic <strong>algorithms</strong> — Dijkstra, Prim's MST, BFS/DFS, sorting, N-Queens, 2-opt TSP, and more — with interactive visualizations built in <strong>Qwik</strong> and <strong>Canvas</strong>.",
     "badge": "Algorithms · Qwik + Canvas · FIB-UPC",
     "metaDescription": "Algorithms and data structures coursework — 18 classical algorithms across graphs, sorting, search, and combinatorics. Interactive Qwik + Canvas visualizer."
