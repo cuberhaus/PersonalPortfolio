@@ -3,12 +3,12 @@
   "sourceLanguageTag": "en",
   "languageTags": ["en", "es", "ca"],
   "modules": [
-    "https://cdn.jsdelivr.net/npm/@inlang/plugin-i18next@4/dist/index.js",
+    "https://cdn.jsdelivr.net/npm/@inlang/plugin-i18next@3/dist/index.js",
     "https://cdn.jsdelivr.net/npm/@inlang/plugin-t-function-matcher@2/dist/index.js",
     "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-missing-translation@1/dist/index.js",
     "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-empty-pattern@1/dist/index.js"
   ],
   "plugin.inlang.i18next": {
-    "pathPattern": "./locales/{locale}/{namespace}.json"
+    "pathPattern": "./locales/{languageTag}/{namespace}.json"
   }
 }
