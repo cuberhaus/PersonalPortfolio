@@ -50,7 +50,7 @@ jobs:
         run: npx playwright test --project=visual --update-snapshots
 
       - name: Open PR with refreshed baselines
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           # Default GITHUB_TOKEN is fine; the auto-PR's checks won't run
           # Pages deploy (which needs id-token), but the test suite + the
