@@ -33,7 +33,11 @@
   "4": {
     "title": "Visor de Joc de Programació",
     "description": "Projecte d'Estructures de Dades: un joc en quadrícula on bots en C++ competeixen com a guerrers i constructors en un torneig de l'assignatura.",
-    "tags": ["C++", "Canvas", "AI"],
+    "tags": {
+      "0": "C++",
+      "1": "Canvas",
+      "2": "AI"
+    },
     "lead": "Mira <strong>bots d'IA en C++</strong> competir a \"The Purge\" — un joc d'estratègia en quadrícula de l'assignatura <strong>Estructures de Dades i Algorismes</strong> a la FIB-UPC.",
     "badge": "Estructures de Dades · FIB-UPC",
     "metaDescription": "Projecte d'Estructures de Dades: bots d'IA en C++ competint en una quadrícula. Visor de repeticions en Canvas amb partides empaquetades o en viu.",
@@ -48,7 +52,12 @@
     "metaDescription": "Projecte de Compiladors: JSBach, un petit llenguatge de programació musical construït amb ANTLR4. Escriu codi i reprodueix-lo en viu amb un intèrpret Web Audio.",
     "aboutTitle": "Sobre aquest projecte",
     "aboutDescription": "Originalment construït amb ANTLR4 i Python per a un curs de compiladors a la FIB-UPC. El llenguatge suporta procediments, recursió, aritmètica, llistes, condicionals, bucles i reproducció de notes musicals. Aquesta versió per a navegador utilitza un parser escrit a mà i la Web Audio API per a la síntesi de so.",
-    "hints": ["toca una nota", "imprimir", "assignar", "bloc"]
+    "hints": {
+      "0": "toca una nota",
+      "1": "imprimir",
+      "2": "assignar",
+      "3": "bloc"
+    }
   },
   "6": {
     "title": "Botiga Online",
@@ -71,7 +80,11 @@
   "8": {
     "title": "Solver MPIDS",
     "description": "Projecte d'algorismes sobre el problema del Conjunt Dominant d'Influència Positiva Mínima (MPIDS), resolt amb heurístiques voraces i cerca local estil recuit simulat.",
-    "tags": ["Algorithms", "Graph Theory", "TypeScript"],
+    "tags": {
+      "0": "Algorithms",
+      "1": "Graph Theory",
+      "2": "TypeScript"
+    },
     "lead": "Troba el <strong>Minimum Positive Influence Dominating Set</strong> en un graf — el conjunt més petit on cada vèrtex té almenys la meitat dels seus veïns a dins. Tria una mostra o carrega el teu, després executa <strong>greedy</strong> o <strong>cerca local</strong>.",
     "badge": "Algorísmia · FIB-UPC",
     "metaDescription": "Projecte d'algorismes sobre el Minimum Positive Influence Dominating Set, resolt amb heurístiques greedy i de cerca local. Editor de grafs force-directed interactiu en D3.",
@@ -81,7 +94,11 @@
   "9": {
     "title": "Transicions de Fase en Grafs",
     "description": "Projecte de recerca en algorismes sobre transicions de fase de connectivitat i complexitat en grafs aleatoris binomials, geomètrics i de quadrícula.",
-    "tags": ["Algorithms", "Graph Theory", "NetworkX"],
+    "tags": {
+      "0": "Algorithms",
+      "1": "Graph Theory",
+      "2": "NetworkX"
+    },
     "lead": "Observa com els <strong>grafs aleatoris</strong> transicionen de connectats a desconnectats en eliminar nodes o arestes. Genera grafs <strong>binomials</strong> (Erdős–Rényi), <strong>geomètrics</strong> o de <strong>quadrícula</strong>, aplica percolació i mira la transició de fase en temps real.",
     "badge": "Algorísmia · FIB-UPC",
     "metaDescription": "Recerca en algorismes sobre transicions de fase de connectivitat i complexitat en grafs aleatoris binomials, geomètrics i de quadrícula. Animacions de percolació i gràfiques Monte Carlo interactives.",
@@ -98,7 +115,12 @@
   },
   "11": {
     "description": "Projecte d'IA que planteja l'assistència en desastres com a cerca local, amb helicòpters rescatant grups des de centres mitjançant escalada de turons i recuit simulat.",
-    "tags": ["Java", "AIMA", "Local search", "UPC"],
+    "tags": {
+      "0": "Java",
+      "1": "AIMA",
+      "2": "Local search",
+      "3": "UPC"
+    },
     "lead": "Resol l'assignació en <strong>ajuda en desastres</strong> com a cerca local — helicòpters rescatant grups des de centres sobre un <strong>mapa 2D</strong> interactiu. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> amb 3 heurístics i 6 funcions successores.",
     "badge": "Intel·ligència Artificial · Solid.js + FastAPI · FIB-UPC",
     "metaDescription": "Projecte d'IA que planteja l'assistència en desastres com a cerca local: helicòpters rescatant grups mitjançant hill climbing i simulated annealing. Solver interactiu amb Solid.js + FastAPI."
@@ -144,7 +166,13 @@
   "17": {
     "title": "Panell de Robòtica",
     "description": "Pràctiques de Robòtica que cobreixen odometria, seguiment de parets, cinemàtica directa 3D de braç (Puma560 / 3-Link), planificació de trajectòries, sensors i estimació d'estat EKF.",
-    "tags": ["Ember.js", "Babylon.js", "Robòtica", "Canvas", "EKF"],
+    "tags": {
+      "0": "Ember.js",
+      "1": "Babylon.js",
+      "2": "Robòtica",
+      "3": "Canvas",
+      "4": "EKF"
+    },
     "lead": "Recorre sis visualitzacions interactives de <strong>robòtica</strong> amb <strong>Ember.js</strong> i <strong>Babylon.js</strong>: odometria mòbil amb escàners làser, seguiment de parets, cinemàtica 3D de braços robòtics (Puma560/3-Link), planificació de trajectòries, tauler de sensors i estimació d'estat <strong>EKF</strong>.",
     "badge": "Robòtica · Ember.js + Babylon.js + Canvas · FIB-UPC",
     "metaDescription": "Pràctiques de Robòtica: odometria, seguiment de parets, cinemàtica 3D de braços, planificació de trajectòries, sensors i EKF. Tauler interactiu amb Ember.js i Babylon.js."
@@ -152,7 +180,13 @@
   "18": {
     "title": "Visualitzador d'Algoritmes",
     "description": "Treballs d'Algorismes i Estructures de Dades reunits en un sol visor, amb 18 algorismes clàssics de grafs, ordenació, cerca i problemes combinatoris.",
-    "tags": ["Qwik", "Canvas", "Algorismes", "Grafs", "Ordenació"],
+    "tags": {
+      "0": "Qwik",
+      "1": "Canvas",
+      "2": "Algorismes",
+      "3": "Grafs",
+      "4": "Ordenació"
+    },
     "lead": "Recorre pas a pas 18 <strong>algorismes</strong> clàssics — Dijkstra, MST de Prim, BFS/DFS, ordenació, N-Reines, 2-opt TSP i més — amb visualitzacions interactives en <strong>Qwik</strong> i <strong>Canvas</strong>.",
     "badge": "Algoritmes · Qwik + Canvas · FIB-UPC",
     "metaDescription": "Treballs d'Algorismes i Estructures de Dades — 18 algorismes clàssics de grafs, ordenació, cerca i combinatòria. Visualitzador interactiu amb Qwik i Canvas."

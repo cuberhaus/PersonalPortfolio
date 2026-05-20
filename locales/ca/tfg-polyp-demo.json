@@ -3,5 +3,8 @@
   "thesis": "Treball de Fi de Grau \\u00b7 FIB-UPC",
   "icon": "\\u{1F3AD}",
   "title": "CycleGAN / SPADE",
-  "desc": "Màscara \\u2192 imatges de pòlips sintètiques"
+  "desc": "Màscara \\u2192 imatges de pòlips sintètiques",
+  "modelComp": "Comparació de models",
+  "modelCompSub": "10 configuracions de Faster R-CNN d'Optuna HPO",
+  "f1": "Puntuació F1"
 }

@@ -3,5 +3,8 @@
   "thesis": "Trabajo de Fin de Grado \\u00b7 FIB-UPC",
   "icon": "\\u{1F3AD}",
   "title": "CycleGAN / SPADE",
-  "desc": "Máscara \\u2192 imágenes de pólipos sintéticas"
+  "desc": "Máscara \\u2192 imágenes de pólipos sintéticas",
+  "modelComp": "Comparación de modelos",
+  "modelCompSub": "10 configuraciones de Faster R-CNN de Optuna HPO",
+  "f1": "Puntuación de F1"
 }
