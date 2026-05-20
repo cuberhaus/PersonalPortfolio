@@ -447,7 +447,7 @@ function FeatureSlider({
 function FeatureImportance({ t }: { t: typeof TRANSLATIONS.en }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-      {t.featMeta.map((f, i) => (
+      {t.featMeta.map((f: any, i: number) => (
         <div key={f.key} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <span
             style={{
@@ -559,7 +559,7 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
             paddingBottom: '0.25rem',
           }}
         >
-          {t.pipelineSteps.map((step, i) => (
+          {t.pipelineSteps.map((step: any, i: number) => (
             <div
               key={i}
               style={{
@@ -593,7 +593,7 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
             marginTop: '1rem',
           }}
         >
-          {t.modelsList.map((m) => (
+          {t.modelsList.map((m: string) => (
             <span
               key={m}
               style={{

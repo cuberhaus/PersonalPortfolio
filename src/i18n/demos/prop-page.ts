@@ -1,11 +1,9 @@
-import en from '../../../locales/en/prop-page.json';
-import es from '../../../locales/es/prop-page.json';
-import ca from '../../../locales/ca/prop-page.json';
+import { getDemoT, getDemoTranslations } from '../locale-glob';
 
-export type PropCopy = typeof en;
+export type PropCopy = Record<string, unknown>;
 
-export const PROP_COPY: Record<string, PropCopy> = { en, es, ca };
+export const PROP_COPY = getDemoTranslations('prop-page');
 
 export function getPropCopy(lang: string): PropCopy {
-  return PROP_COPY[lang in PROP_COPY ? lang : 'en'];
+  return getDemoT('prop-page', lang);
 }

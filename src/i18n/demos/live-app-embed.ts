@@ -1,7 +1,5 @@
-import en from '../../../locales/en/live-app-embed.json';
-import es from '../../../locales/es/live-app-embed.json';
-import ca from '../../../locales/ca/live-app-embed.json';
+import { getDemoTranslations } from '../locale-glob';
 
-export const TRANSLATIONS = { en, es, ca } as const;
+export const TRANSLATIONS = getDemoTranslations('live-app-embed');
 
-export type DemoTranslations = typeof en;
+export type DemoTranslations = Record<string, unknown>;

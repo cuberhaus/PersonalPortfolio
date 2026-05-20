@@ -1,11 +1,9 @@
-import en from '../../../locales/en/joc-eda-page.json';
-import es from '../../../locales/es/joc-eda-page.json';
-import ca from '../../../locales/ca/joc-eda-page.json';
+import { getDemoT, getDemoTranslations } from '../locale-glob';
 
-export type JocEdaCopy = typeof en;
+export type JocEdaCopy = Record<string, unknown>;
 
-export const JOC_EDA_COPY: Record<string, JocEdaCopy> = { en, es, ca };
+export const JOC_EDA_COPY = getDemoTranslations('joc-eda-page');
 
 export function getJocEdaCopy(lang: string): JocEdaCopy {
-  return JOC_EDA_COPY[lang in JOC_EDA_COPY ? lang : 'en'];
+  return getDemoT('joc-eda-page', lang);
 }

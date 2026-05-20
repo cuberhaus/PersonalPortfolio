@@ -500,7 +500,7 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
           {t.calendarTitle}
         </h4>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px' }}>
-          {t.days.map((d) => (
+          {t.days.map((d: string) => (
             <div
               key={d}
               style={{

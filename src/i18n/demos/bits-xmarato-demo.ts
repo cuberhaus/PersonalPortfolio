@@ -1,7 +1,5 @@
-import en from '../../../locales/en/bits-xmarato-demo.json';
-import es from '../../../locales/es/bits-xmarato-demo.json';
-import ca from '../../../locales/ca/bits-xmarato-demo.json';
+import { getDemoTranslations } from '../locale-glob';
 
-export const TRANSLATIONS = { en, es, ca } as const;
+export const TRANSLATIONS = getDemoTranslations('bits-xmarato-demo');
 
-export type DemoTranslations = typeof en;
+export type DemoTranslations = Record<string, unknown>;

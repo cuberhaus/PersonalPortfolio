@@ -1,7 +1,5 @@
-import en from '../../../locales/en/sbc-demo.json';
-import es from '../../../locales/es/sbc-demo.json';
-import ca from '../../../locales/ca/sbc-demo.json';
+import { getDemoTranslations } from '../locale-glob';
 
-export const TRANSLATIONS = { en, es, ca } as const;
+export const TRANSLATIONS = getDemoTranslations('sbc-demo');
 
-export type DemoTranslations = typeof en;
+export type DemoTranslations = Record<string, unknown>;

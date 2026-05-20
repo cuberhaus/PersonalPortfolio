@@ -54,7 +54,7 @@ function PipelineStrip({ t }: { t: typeof TRANSLATIONS.en }) {
         <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{t.thesis}</span>
       </div>
       <div style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.25rem' }}>
-        {t.pipelineSteps.map((step, i) => (
+        {t.pipelineSteps.map((step: any, i: number) => (
           <div
             key={i}
             style={{
@@ -704,7 +704,7 @@ function DetectorTable({ t }: { t: typeof TRANSLATIONS.en }) {
           </tr>
         </thead>
         <tbody>
-          {t.detectors.map((d) => (
+          {t.detectors.map((d: any) => (
             <tr key={d.name} style={{ borderBottom: '1px solid var(--border-color)' }}>
               <td
                 style={{ padding: '0.5rem 0.75rem', fontWeight: 600, color: 'var(--text-primary)' }}

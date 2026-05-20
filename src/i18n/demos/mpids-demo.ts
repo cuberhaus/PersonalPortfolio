@@ -1,7 +1,5 @@
-import en from '../../../locales/en/mpids-demo.json';
-import es from '../../../locales/es/mpids-demo.json';
-import ca from '../../../locales/ca/mpids-demo.json';
+import { getDemoTranslations } from '../locale-glob';
 
-export const TRANSLATIONS = { en, es, ca } as const;
+export const TRANSLATIONS = getDemoTranslations('mpids-demo');
 
-export type DemoTranslations = typeof en;
+export type DemoTranslations = Record<string, unknown>;

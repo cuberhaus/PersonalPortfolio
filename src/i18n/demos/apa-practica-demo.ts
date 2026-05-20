@@ -1,7 +1,5 @@
-import en from '../../../locales/en/apa-practica-demo.json';
-import es from '../../../locales/es/apa-practica-demo.json';
-import ca from '../../../locales/ca/apa-practica-demo.json';
+import { getDemoTranslations } from '../locale-glob';
 
-export const TRANSLATIONS = { en, es, ca } as const;
+export const TRANSLATIONS = getDemoTranslations('apa-practica-demo');
 
-export type DemoTranslations = typeof en;
+export type DemoTranslations = Record<string, unknown>;

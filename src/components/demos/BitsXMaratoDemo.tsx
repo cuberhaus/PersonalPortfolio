@@ -412,7 +412,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
         <div
           style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.25rem' }}
         >
-          {t.pipeline.map((step, i) => (
+          {t.pipeline.map((step: any, i: number) => (
             <div
               key={i}
               style={{
@@ -552,7 +552,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
             gap: '0.75rem',
           }}
         >
-          {t.screenshots.map((img, i) => (
+          {t.screenshots.map((img: any, i: number) => (
             <figure key={i} style={{ margin: 0 }}>
               <img
                 src={img.src}

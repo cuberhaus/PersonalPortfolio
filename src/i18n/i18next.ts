@@ -1,16 +1,9 @@
 import i18next from 'i18next';
 import type { Locale } from '../config/locales';
 import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
+import { getI18nextResources } from './locale-glob';
 
-import enUi from '../../locales/en/ui.json';
-import esUi from '../../locales/es/ui.json';
-import caUi from '../../locales/ca/ui.json';
-
-const resources = {
-  en: { ui: enUi },
-  es: { ui: esUi },
-  ca: { ui: caUi },
-} as const;
+const resources = getI18nextResources();
 
 i18next.init({
   lng: DEFAULT_LOCALE,

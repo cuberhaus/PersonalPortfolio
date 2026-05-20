@@ -1,7 +1,5 @@
-import en from '../../../locales/en/jsbach-demo.json';
-import es from '../../../locales/es/jsbach-demo.json';
-import ca from '../../../locales/ca/jsbach-demo.json';
+import { getDemoTranslations } from '../locale-glob';
 
-export const TRANSLATIONS = { en, es, ca } as const;
+export const TRANSLATIONS = getDemoTranslations('jsbach-demo');
 
-export type DemoTranslations = typeof en;
+export type DemoTranslations = Record<string, unknown>;

@@ -1,7 +1,5 @@
-import en from '../../../locales/en/caim-demo.json';
-import es from '../../../locales/es/caim-demo.json';
-import ca from '../../../locales/ca/caim-demo.json';
+import { getDemoTranslations } from '../locale-glob';
 
-export const T = { en, es, ca } as const;
+export const T = getDemoTranslations('caim-demo');
 
-export type DemoTranslations = typeof en;
+export type DemoTranslations = Record<string, unknown>;

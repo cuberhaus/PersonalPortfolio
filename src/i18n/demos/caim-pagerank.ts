@@ -1,7 +1,5 @@
-import en from '../../../locales/en/caim-pagerank.json';
-import es from '../../../locales/es/caim-pagerank.json';
-import ca from '../../../locales/ca/caim-pagerank.json';
+import { getDemoTranslations } from '../locale-glob';
 
-export const T = { en, es, ca } as const;
+export const T = getDemoTranslations('caim-pagerank');
 
-export type DemoTranslations = typeof en;
+export type DemoTranslations = Record<string, unknown>;

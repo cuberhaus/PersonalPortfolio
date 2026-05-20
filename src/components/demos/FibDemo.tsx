@@ -6,7 +6,7 @@ import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 function FibDemo({ lang = 'en' }: { lang?: string }) {
-  const t = T[lang] || T.en;
+  const t = T[lang as keyof typeof T] || T.en;
   useDemoLifecycle('demo:algorithms', { lang });
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
