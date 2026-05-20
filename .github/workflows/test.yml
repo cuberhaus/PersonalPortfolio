@@ -122,7 +122,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report-${{ matrix.project }}
           path: playwright-report/
@@ -176,7 +176,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report-a11y-shard-${{ matrix.shard }}
           path: playwright-report/
@@ -237,7 +237,7 @@ jobs:
 
       - name: Upload Playwright report (with diffs)
         if: always() && steps.baselines.outputs.exists == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report-visual
           path: |
