@@ -36,7 +36,8 @@
     "tags": {
       "0": "C++",
       "1": "Canvas",
-      "2": "AI"
+      "2": "AI",
+      "3": "FastAPI"
     },
     "lead": "Mira <strong>bots de IA en C++</strong> competir en \"The Purge\" — un juego de estrategia en cuadrícula de la asignatura <strong>Estructuras de Datos y Algoritmos</strong> en FIB-UPC.",
     "badge": "Estructuras de Datos · FIB-UPC",
@@ -83,7 +84,8 @@
     "tags": {
       "0": "Algorithms",
       "1": "Graph Theory",
-      "2": "TypeScript"
+      "2": "TypeScript",
+      "3": "Graph Theory"
     },
     "lead": "Encuentra el <strong>Minimum Positive Influence Dominating Set</strong> en un grafo — el conjunto más pequeño donde cada vértice tiene al menos la mitad de sus vecinos dentro. Elige una muestra o carga el tuyo, luego ejecuta <strong>greedy</strong> o <strong>búsqueda local</strong>.",
     "badge": "Algoritmia · FIB-UPC",
@@ -97,7 +99,8 @@
     "tags": {
       "0": "Algorithms",
       "1": "Graph Theory",
-      "2": "NetworkX"
+      "2": "NetworkX",
+      "3": "NetworkX"
     },
     "lead": "Observa cómo los <strong>grafos aleatorios</strong> transicionan de conectados a desconectados al eliminar nodos o aristas. Genera grafos <strong>binomiales</strong> (Erdős–Rényi), <strong>geométricos</strong> o de <strong>cuadrícula</strong>, aplica percolación y ve la transición de fase en tiempo real.",
     "badge": "Algoritmia · FIB-UPC",
@@ -119,7 +122,8 @@
       "0": "Java",
       "1": "AIMA",
       "2": "Local search",
-      "3": "UPC"
+      "3": "UPC",
+      "4": "UPC"
     },
     "lead": "Resuelve la asignación en <strong>ayuda en desastres</strong> como búsqueda local — helicópteros rescatando grupos desde centros sobre un <strong>mapa 2D</strong> interactivo. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> con 3 heurísticos y 6 funciones sucesoras.",
     "badge": "Inteligencia Artificial · Solid.js + FastAPI · FIB-UPC",

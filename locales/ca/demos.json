@@ -36,7 +36,8 @@
     "tags": {
       "0": "C++",
       "1": "Canvas",
-      "2": "AI"
+      "2": "AI",
+      "3": "FastAPI"
     },
     "lead": "Mira <strong>bots d'IA en C++</strong> competir a \"The Purge\" — un joc d'estratègia en quadrícula de l'assignatura <strong>Estructures de Dades i Algorismes</strong> a la FIB-UPC.",
     "badge": "Estructures de Dades · FIB-UPC",
@@ -83,7 +84,8 @@
     "tags": {
       "0": "Algorithms",
       "1": "Graph Theory",
-      "2": "TypeScript"
+      "2": "TypeScript",
+      "3": "Graph Theory"
     },
     "lead": "Troba el <strong>Minimum Positive Influence Dominating Set</strong> en un graf — el conjunt més petit on cada vèrtex té almenys la meitat dels seus veïns a dins. Tria una mostra o carrega el teu, després executa <strong>greedy</strong> o <strong>cerca local</strong>.",
     "badge": "Algorísmia · FIB-UPC",
@@ -97,7 +99,8 @@
     "tags": {
       "0": "Algorithms",
       "1": "Graph Theory",
-      "2": "NetworkX"
+      "2": "NetworkX",
+      "3": "NetworkX"
     },
     "lead": "Observa com els <strong>grafs aleatoris</strong> transicionen de connectats a desconnectats en eliminar nodes o arestes. Genera grafs <strong>binomials</strong> (Erdős–Rényi), <strong>geomètrics</strong> o de <strong>quadrícula</strong>, aplica percolació i mira la transició de fase en temps real.",
     "badge": "Algorísmia · FIB-UPC",
@@ -119,7 +122,8 @@
       "0": "Java",
       "1": "AIMA",
       "2": "Local search",
-      "3": "UPC"
+      "3": "UPC",
+      "4": "UPC"
     },
     "lead": "Resol l'assignació en <strong>ajuda en desastres</strong> com a cerca local — helicòpters rescatant grups des de centres sobre un <strong>mapa 2D</strong> interactiu. Compara <strong>hill climbing</strong> vs <strong>simulated annealing</strong> amb 3 heurístics i 6 funcions successores.",
     "badge": "Intel·ligència Artificial · Solid.js + FastAPI · FIB-UPC",
