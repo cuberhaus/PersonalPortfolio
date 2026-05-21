@@ -12,6 +12,15 @@
  */
 import { test, expect, type Page } from '@playwright/test';
 
+test.skip(process.platform !== 'linux', 'Visual baselines are Linux-only; run in WSL/Linux or CI.');
+
+const PREVIEW_URL = new URL(
+  process.env.PLAYWRIGHT_BASE_URL ??
+    `http://${process.env.PLAYWRIGHT_HOST ?? '127.0.0.1'}:${process.env.PLAYWRIGHT_PORT ?? '4322'}`
+);
+const PREVIEW_PORT = PREVIEW_URL.port || (PREVIEW_URL.protocol === 'https:' ? '443' : '80');
+const LOOPBACK_HOSTS = new Set(['localhost', '127.0.0.1', '::1']);
+
 // Same source-of-truth slug list as browser-demos.spec.ts. Kept inline
 // (rather than imported) because importing src/data/demos.json from a
 // Playwright spec means crossing the Vite/Node boundary, which prior PRs
@@ -55,6 +64,15 @@ const DISABLE_ANIMATIONS_CSS = `
 `;
 
 test.beforeEach(async ({ page }) => {
+  await page.route(
+    (url) => {
+      const port = url.port || (url.protocol === 'https:' ? '443' : '80');
+      const isPreview = url.hostname === PREVIEW_URL.hostname && port === PREVIEW_PORT;
+      return LOOPBACK_HOSTS.has(url.hostname) && !isPreview;
+    },
+    (route) => route.abort('connectionrefused')
+  );
+
   await page.addInitScript((css) => {
     // Inject as early as possible; re-inject on each navigation so
     // ClientRouter swaps don't drop the override.
