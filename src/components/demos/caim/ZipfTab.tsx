@@ -148,7 +148,12 @@ export default function ZipfTab({ lang }: Props) {
           {/* Word table */}
           <div style={{ ...styles.card, flex: 1, minWidth: 250 }}>
             <h4 style={styles.cardTitle}>{t.words}</h4>
-            <div style={styles.tableWrap}>
+            <div
+              role="region"
+              aria-label={`${t.words} table`}
+              tabIndex={0}
+              style={styles.tableWrap}
+            >
               <table style={styles.table}>
                 <thead>
                   <tr>

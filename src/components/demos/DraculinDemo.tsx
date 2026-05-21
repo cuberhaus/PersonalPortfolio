@@ -14,7 +14,77 @@ const BACKEND_URL = 'http://localhost:8889';
 const netLog = debug('net:draculin');
 const demoLog = debug('demo:draculin');
 
-import { FALLBACK_NEWS, BLOOD_DATA, PERIOD_DAYS, scoreBand } from '../../lib/draculin-quiz';
+import {
+  FALLBACK_NEWS,
+  BLOOD_DATA,
+  PERIOD_DAYS,
+  scoreBand,
+  type QuizQuestion,
+} from '../../lib/draculin-quiz';
+
+const FALLBACK_QUESTIONS: Record<Lang, QuizQuestion[]> = {
+  en: [
+    {
+      text: 'Is your menstrual bleeding more frequent than every 21 days?',
+      scoreYes: 2,
+      scoreNo: 0,
+    },
+    { text: 'Does bleeding last longer than 7 days?', scoreYes: 2, scoreNo: 0 },
+    { text: 'Do you need to change menstrual products every hour?', scoreYes: 3, scoreNo: 0 },
+    { text: 'Do cramps or pelvic pain interrupt daily activities?', scoreYes: 3, scoreNo: 0 },
+    { text: 'Do you notice large clots or sudden heavy bleeding?', scoreYes: 2, scoreNo: 0 },
+    { text: 'Do you feel dizzy, fatigued, or unwell during your period?', scoreYes: 2, scoreNo: 0 },
+  ],
+  es: [
+    { text: '¿Tu sangrado menstrual es más frecuente que cada 21 días?', scoreYes: 2, scoreNo: 0 },
+    { text: '¿El sangrado dura más de 7 días?', scoreYes: 2, scoreNo: 0 },
+    { text: '¿Necesitas cambiar productos menstruales cada hora?', scoreYes: 3, scoreNo: 0 },
+    {
+      text: '¿Los cólicos o el dolor pélvico interrumpen tus actividades?',
+      scoreYes: 3,
+      scoreNo: 0,
+    },
+    { text: '¿Notas coágulos grandes o sangrado abundante repentino?', scoreYes: 2, scoreNo: 0 },
+    { text: '¿Te sientes mareada, fatigada o mal durante la regla?', scoreYes: 2, scoreNo: 0 },
+  ],
+  ca: [
+    { text: 'El teu sagnat menstrual és més freqüent que cada 21 dies?', scoreYes: 2, scoreNo: 0 },
+    { text: 'El sagnat dura més de 7 dies?', scoreYes: 2, scoreNo: 0 },
+    { text: 'Necessites canviar productes menstruals cada hora?', scoreYes: 3, scoreNo: 0 },
+    {
+      text: 'Els còlics o el dolor pèlvic interrompen les teves activitats?',
+      scoreYes: 3,
+      scoreNo: 0,
+    },
+    { text: 'Notes coàguls grans o sagnat abundant sobtat?', scoreYes: 2, scoreNo: 0 },
+    { text: 'Et sents marejada, fatigada o malament durant la regla?', scoreYes: 2, scoreNo: 0 },
+  ],
+};
+
+const FALLBACK_DAYS: Record<Lang, string[]> = {
+  en: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  es: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+  ca: ['Dl', 'Dt', 'Dc', 'Dj', 'Dv', 'Ds', 'Dg'],
+};
+
+function getQuizQuestions(t: typeof TRANSLATIONS.en, lang: Lang): QuizQuestion[] {
+  if (Array.isArray((t as any).questions) && (t as any).questions.length > 0) {
+    return (t as any).questions;
+  }
+  const questions = FALLBACK_QUESTIONS[lang] ?? FALLBACK_QUESTIONS.en;
+  if (typeof (t as any).text === 'string') {
+    return [{ ...questions[0], text: (t as any).text }, ...questions.slice(1)];
+  }
+  return questions;
+}
+
+function getStatsLabels(t: typeof TRANSLATIONS.en) {
+  return {
+    mild: (t as any).statsLabels?.mild ?? (t as any).mild ?? 'Mild',
+    moderate: (t as any).statsLabels?.moderate ?? (t as any).moderate ?? 'Moderate',
+    severe: (t as any).statsLabels?.severe ?? (t as any).severe ?? 'Severe',
+  };
+}
 
 const s = {
   wrapper: {
@@ -272,16 +342,17 @@ function ChatTab({ t }: { t: typeof TRANSLATIONS.en }) {
   );
 }
 
-function QuizTab({ t }: { t: typeof TRANSLATIONS.en }) {
+function QuizTab({ t, lang }: { t: typeof TRANSLATIONS.en; lang: Lang }) {
   const [idx, setIdx] = useState(0);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
+  const questions = getQuizQuestions(t, lang);
 
   const answer = (yes: boolean) => {
-    const q = t.questions[idx];
+    const q = questions[idx];
     const newScore = score + (yes ? q.scoreYes : q.scoreNo);
     setScore(newScore);
-    if (idx < t.questions.length - 1) {
+    if (idx < questions.length - 1) {
       setIdx(idx + 1);
     } else {
       setDone(true);
@@ -331,10 +402,10 @@ function QuizTab({ t }: { t: typeof TRANSLATIONS.en }) {
           <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
             {t.questionNOf
               .replace('{n}', String(idx + 1))
-              .replace('{total}', String(t.questions.length))}
+              .replace('{total}', String(questions.length))}
           </p>
           <p style={{ fontSize: '1rem', marginBottom: '2rem', lineHeight: 1.6 }}>
-            {t.questions[idx].text}
+            {questions[idx].text}
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <button
@@ -396,9 +467,11 @@ function VisionTab({ t }: { t: typeof TRANSLATIONS.en }) {
   );
 }
 
-function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
+function StatsTab({ t, lang }: { t: typeof TRANSLATIONS.en; lang: Lang }) {
   const [periodDays, setPeriodDays] = useState<number[]>([...PERIOD_DAYS]);
   const maxBlood = Math.max(...Object.values(BLOOD_DATA));
+  const statsLabels = getStatsLabels(t);
+  const days = Array.isArray((t as any).days) ? (t as any).days : FALLBACK_DAYS[lang];
 
   const toggleDay = (d: number) => {
     setPeriodDays((prev) => (prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]));
@@ -457,9 +530,9 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
             }}
           >
             {[
-              { label: t.statsLabels.mild, val: 10, color: 'var(--accent-text)' },
-              { label: t.statsLabels.moderate, val: 5, color: 'var(--accent-text)' },
-              { label: t.statsLabels.severe, val: 3, color: 'var(--text-muted)' },
+              { label: statsLabels.mild, val: 10, color: 'var(--accent-text)' },
+              { label: statsLabels.moderate, val: 5, color: 'var(--accent-text)' },
+              { label: statsLabels.severe, val: 3, color: 'var(--text-muted)' },
             ].map((d) => (
               <div
                 key={d.label}
@@ -500,7 +573,7 @@ function StatsTab({ t }: { t: typeof TRANSLATIONS.en }) {
           {t.calendarTitle}
         </h4>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px' }}>
-          {(Array.isArray((t as any).days) ? (t as any).days : []).map((d: string) => (
+          {days.map((d: string) => (
             <div
               key={d}
               style={{
@@ -580,9 +653,9 @@ function DraculinDemo({ lang = 'en' }: { lang?: Lang }) {
 
       {tab === 'news' && <NewsTab t={t} />}
       {tab === 'chat' && <ChatTab t={t} />}
-      {tab === 'quiz' && <QuizTab t={t} />}
+      {tab === 'quiz' && <QuizTab t={t} lang={lang} />}
       {tab === 'vision' && <VisionTab t={t} />}
-      {tab === 'stats' && <StatsTab t={t} />}
+      {tab === 'stats' && <StatsTab t={t} lang={lang} />}
     </div>
   );
 }

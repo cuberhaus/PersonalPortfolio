@@ -53,7 +53,12 @@ function PipelineStrip({ t }: { t: typeof TRANSLATIONS.en }) {
         </div>
         <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{t.thesis}</span>
       </div>
-      <div style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.25rem' }}>
+      <div
+        role="region"
+        aria-label={t.pipelineTitle}
+        tabIndex={0}
+        style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.25rem' }}
+      >
         {(Array.isArray((t as any).pipelineSteps) ? (t as any).pipelineSteps : []).map(
           (step: any, i: number) => (
             <div

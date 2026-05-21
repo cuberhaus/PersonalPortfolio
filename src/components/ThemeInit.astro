@@ -124,8 +124,8 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     if (!VALID_THEMES.includes(id)) {
       const msg = 'Unknown theme "' + id + '". Available themes:\n' +
       VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n');
+      console.error(msg);
       if (window.__debug) window.__debug.log('error', 'theme', msg);
-      else console.error(msg);
       return;
     }
     document.documentElement.setAttribute('data-theme', id);
@@ -137,8 +137,8 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     if (!VALID_DESIGNS.includes(id)) {
       const msg = 'Unknown design "' + id + '". Available designs:\n' +
       VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n');
+      console.error(msg);
       if (window.__debug) window.__debug.log('error', 'theme', msg);
-      else console.error(msg);
       return;
     }
     document.documentElement.setAttribute('data-design', id);
