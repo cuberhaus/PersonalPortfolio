@@ -1,5 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const PLAYWRIGHT_HOST = process.env.PLAYWRIGHT_HOST ?? '127.0.0.1';
+const PLAYWRIGHT_PORT = process.env.PLAYWRIGHT_PORT ?? '4322';
+const PLAYWRIGHT_BASE_URL =
+  process.env.PLAYWRIGHT_BASE_URL ?? `http://${PLAYWRIGHT_HOST}:${PLAYWRIGHT_PORT}`;
+const WEB_SERVER_COMMAND = process.env.CI
+  ? `npm run preview:static -- --host ${PLAYWRIGHT_HOST} --port ${PLAYWRIGHT_PORT}`
+  : `npm run build && npm run preview:static -- --host ${PLAYWRIGHT_HOST} --port ${PLAYWRIGHT_PORT}`;
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -8,7 +16,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:4321',
+    baseURL: PLAYWRIGHT_BASE_URL,
     trace: 'on-first-retry',
   },
   projects: [
@@ -82,9 +90,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:4321',
+    command: WEB_SERVER_COMMAND,
+    url: PLAYWRIGHT_BASE_URL,
     reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
+    timeout: 120_000,
   },
 });

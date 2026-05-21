@@ -111,6 +111,7 @@ html[data-theme='light'] {
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--nav-height);
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

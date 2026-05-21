@@ -22,11 +22,12 @@ default: help
 
 install: ## Install project dependencies
 	npm install
-	npx playwright install chromium
 ifeq ($(OS),Windows_NT)
+	npx playwright install chromium
 	@command -v go >/dev/null 2>&1 || echo "Go not found - install via:  choco install golang   OR   winget install GoLang.Go"
 	@$(CARGO_ENV) command -v cargo >/dev/null 2>&1 || echo "Rust not found - install via:  choco install rustup.install   OR   winget install Rustlang.Rustup"
 else
+	npx playwright install --with-deps chromium chromium-headless-shell
 	@command -v go >/dev/null 2>&1 || { echo "Installing Go..."; sudo apt-get update && sudo apt-get install -y golang-go; }
 	@$(CARGO_ENV) \
 	command -v cargo >/dev/null 2>&1 || { echo "Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; }
@@ -42,6 +43,8 @@ dev: ## Start Astro dev server with hot-reload (no demo backends)
 # source. `jq` is a documented prerequisite (see README); the literal list
 # below is a defensive fallback only.
 DEMO_PORTS := $(shell jq -r '[ .services[].backend | select(.) | (.port, (.extraPorts // [])[]) ] | unique | join(" ")' src/data/demo-services.json 2>/dev/null || echo "8888 8889 8890 8082 8001 8083 8084 8085 8086 8087 8088 8089 8090 8081 8092 8093 8000 3000 8765")
+E2E_HOST ?= 127.0.0.1
+E2E_PORT ?= 4322
 
 free-ports: ## Kill any process occupying demo backend ports
 	@echo "Freeing demo ports..."
@@ -290,7 +293,27 @@ test-visual-update: ## Regenerate visual-regression baselines locally (must comm
 
 test: ## Run ALL test suites (portfolio + every demo backend)
 	npm test
-	npx playwright test
+	npm run build
+	@echo "=== Preparing Astro preview server for Playwright ==="; \
+	BASE_URL="http://$(E2E_HOST):$(E2E_PORT)"; \
+	DEV_PID=""; \
+	cleanup() { [ -n "$$DEV_PID" ] && kill "$$DEV_PID" 2>/dev/null || true; }; \
+	trap cleanup EXIT INT TERM; \
+	if curl -sf --max-time 1 "$$BASE_URL" >/dev/null 2>&1; then \
+		echo "Reusing existing $$BASE_URL"; \
+	else \
+		npm run preview:static -- --host $(E2E_HOST) --port $(E2E_PORT) & DEV_PID=$$!; \
+		echo "Waiting for $$BASE_URL..."; \
+		READY=0; \
+		for i in $$(seq 1 60); do \
+			if curl -sf --max-time 1 "$$BASE_URL" >/dev/null 2>&1; then READY=1; break; fi; \
+			if ! kill -0 "$$DEV_PID" 2>/dev/null; then echo "Astro preview server exited before becoming ready"; exit 1; fi; \
+			sleep 1; \
+		done; \
+		[ "$$READY" -eq 1 ] || { echo "Astro preview server did not become ready on $$BASE_URL"; exit 1; }; \
+	fi; \
+	PLAYWRIGHT_HOST=$(E2E_HOST) PLAYWRIGHT_PORT=$(E2E_PORT) PLAYWRIGHT_HTML_OPEN=never npx playwright test --reporter=line; PW_EXIT=$$?; \
+	exit $$PW_EXIT
 	@echo ""
 	@echo "=== Python backends (pytest) ==="
 	cd "$(PARENT)/projectA/web"   && $(SYS_PYTHON) -m pytest backend/test_app.py -v
