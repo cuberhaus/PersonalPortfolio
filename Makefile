@@ -382,11 +382,11 @@ PARENT := $(abspath $(dir $(MAKEFILE_LIST))..)
 # Ensure pytest commands use the system Python, not an accidentally activated venv
 unexport VIRTUAL_ENV
 ifeq ($(OS),Windows_NT)
-  SYS_PYTHON := $(shell PATH="$$(echo "$$PATH" | tr ':' '\n' | grep -v '\.venv' | tr '\n' ':')" which python 2>/dev/null || echo python)
+	SYS_PYTHON := $(shell PATH="$$(echo "$$PATH" | tr ':' '\n' | grep -v '\.venv' | tr '\n' ':')" command -v python 2>/dev/null || command -v py 2>/dev/null || echo python)
   NPROC      := $(or $(NUMBER_OF_PROCESSORS),4)
   CARGO_ENV  := . "$(HOME)/.cargo/env" 2>/dev/null;
 else
-  SYS_PYTHON := $(shell PATH="$$(echo "$$PATH" | tr ':' '\n' | grep -v '\.venv' | tr '\n' ':')" which python)
+	SYS_PYTHON := $(shell PATH="$$(echo "$$PATH" | tr ':' '\n' | grep -v '\.venv' | tr '\n' ':')" command -v python3 2>/dev/null || command -v python 2>/dev/null || echo python3)
   NPROC      := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
   CARGO_ENV  := . "$(HOME)/.local/share/cargo/env" 2>/dev/null;
 endif

@@ -4,6 +4,7 @@ const PLAYWRIGHT_HOST = process.env.PLAYWRIGHT_HOST ?? '127.0.0.1';
 const PLAYWRIGHT_PORT = process.env.PLAYWRIGHT_PORT ?? '4322';
 const PLAYWRIGHT_BASE_URL =
   process.env.PLAYWRIGHT_BASE_URL ?? `http://${PLAYWRIGHT_HOST}:${PLAYWRIGHT_PORT}`;
+const PLAYWRIGHT_WEB_SERVER_TIMEOUT = Number(process.env.PLAYWRIGHT_WEB_SERVER_TIMEOUT ?? 240_000);
 const WEB_SERVER_COMMAND = process.env.CI
   ? `npm run preview:static -- --host ${PLAYWRIGHT_HOST} --port ${PLAYWRIGHT_PORT}`
   : `npm run build && npm run preview:static -- --host ${PLAYWRIGHT_HOST} --port ${PLAYWRIGHT_PORT}`;
@@ -93,6 +94,6 @@ export default defineConfig({
     command: WEB_SERVER_COMMAND,
     url: PLAYWRIGHT_BASE_URL,
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: PLAYWRIGHT_WEB_SERVER_TIMEOUT,
   },
 });
