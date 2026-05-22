@@ -35,7 +35,7 @@ const DEMO_OUT_DIR = resolve(OUT_ROOT, 'og');
 async function loadSlugs() {
   const raw = await readFile(resolve(ROOT, 'src/data/demos.json'), 'utf8');
   const demos = JSON.parse(raw);
-  return demos.map((d) => d.identity.slug).filter(Boolean);
+  return demos.map((d) => d.slug).filter(Boolean);
 }
 
 async function capture(context, url, outPath) {

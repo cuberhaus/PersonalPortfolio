@@ -144,7 +144,12 @@ export default function PageRankTab({ lang }: Props) {
       {result && (
         <div style={{ ...styles.card, marginTop: '1rem' }}>
           <h4 style={styles.cardTitle}>{t.rankings}</h4>
-          <div style={styles.tableWrap}>
+          <div
+            role="region"
+            aria-label={`${t.rankings} table`}
+            tabIndex={0}
+            style={styles.tableWrap}
+          >
             <table style={styles.table}>
               <thead>
                 <tr>

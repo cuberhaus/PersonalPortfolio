@@ -139,11 +139,15 @@ Deep dive: [debugging-architecture.md](./debugging-architecture.md).
 Three locales — `en` (default), `es`, `ca`. Three patterns coexist, each
 the right tool for one kind of content:
 
-| Pattern | Where                           | When to use                                                       |
-| ------- | ------------------------------- | ----------------------------------------------------------------- |
-| **A**   | `src/i18n/ui.ts`                | Short shared UI strings (button labels, ARIA, nav). Type-checked. |
-| **B**   | `*.json` triples                | Structured content (experience, demos, certifications).           |
-| **C**   | `src/i18n/demos/<slug>-page.ts` | Page copy with inline HTML or `{0}` placeholders.                 |
+| Pattern | Where                                   | When to use                                             |
+| ------- | --------------------------------------- | ------------------------------------------------------- |
+| **A**   | `locales/{locale}/ui.json`              | Short shared UI strings (button labels, ARIA, nav).     |
+| **B**   | `src/data/*.json` + locale JSON triples | Structured content (experience, demos, certifications). |
+| **C**   | `locales/{locale}/<slug>-*.json`        | Page/demo copy with inline HTML or `{0}` placeholders.  |
+
+`src/i18n/demos/*.ts` files are lightweight namespace accessors; the copy lives
+in `locales/`. `ui.json` is nested by topic, then flattened for dotted-key calls
+like `t('nav.about')`.
 
 The "i18n parity rule" applies to Pattern B: sibling JSON files must stay
 lock-step (same length, same field set, same order). Enforced by

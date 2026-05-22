@@ -39,7 +39,8 @@ Create these files (`<slug>` lowercase, `<Slug>` PascalCase — e.g.
 ```text
 src/pages/demos/<slug>.astro            # routed page
 src/components/demos/<Slug>Demo.tsx     # interactive island (omit if iframe-only)
-src/i18n/demos/<slug>-demo.ts           # OPTIONAL — see step 6
+locales/{en,es,ca}/<slug>-demo.json     # OPTIONAL — see step 6
+src/i18n/demos/<slug>-demo.ts           # OPTIONAL namespace accessor
 ```
 
 **Astro page** — copy [`src/pages/demos/mpids.astro`](../../src/pages/demos/mpids.astro)
@@ -216,18 +217,19 @@ your demo has unique interactions worth asserting.)
 ## 6. (Optional) Page-specific copy with HTML or placeholders
 
 If your page or React island has copy that contains inline HTML
-(`<strong>`, `<code>`, links) or `{0}`-style placeholders, create a
-per-feature module:
+(<strong>`, `<code>`, links) or `{0}`-style placeholders, create a per-demo
+locale namespace:
 
-- `src/i18n/demos/<slug>-page.ts` — for page-level UI strings, or
-- `src/i18n/demos/<slug>-demo.ts` — for client-island copy.
+- `locales/{en,es,ca}/<slug>-page.json` — for page-level UI strings, or
+- `locales/{en,es,ca}/<slug>-demo.json` — for client-island copy.
 
-Follow the [`joc-eda-page.ts`](../../src/i18n/demos/joc-eda-page.ts) pattern:
-locale-keyed object + a `getXxxCopy(lang)` accessor. **Don't** duplicate
-fields that already live in `demos.json` (title, description, lead,
-badge, about) — keep this for page-specific UI only.
+If TypeScript/React code needs an import, add a lightweight accessor under
+`src/i18n/demos/` that calls `getDemoT('<slug>-page', lang)` or
+`getDemoTranslations('<slug>-demo')`. **Don't** duplicate fields that already
+live in `demos.json` (title, description, lead, badge, about) — keep this for
+page-specific UI only.
 
-Full rules: [docs/i18n.md § Pattern C](./i18n.md#pattern-c--per-feature-ts-modules-in-srci18ndemos).
+Full rules: [docs/i18n.md § Pattern C](./i18n.md#pattern-c--per-demo-namespace-json).
 
 ---
 
@@ -610,7 +612,8 @@ To safely retire a demo, delete in order:
 
 1. `src/pages/demos/<slug>.astro`
 2. `src/components/demos/<Slug>Demo.tsx`
-3. `src/i18n/demos/<slug>-page.ts` / `<slug>-demo.ts` (if any)
+3. `locales/{en,es,ca}/<slug>-page.json` / `<slug>-demo.json` plus any
+   `src/i18n/demos/<slug>-*.ts` accessor
 4. The entry in `src/data/demos.json` (+ `.es.json` + `.ca.json`)
 5. The entry in `src/data/demo-services.json`
 6. The slug in `e2e/browser-demos.spec.ts` `ALL_SLUGS`

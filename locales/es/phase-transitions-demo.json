@@ -7,7 +7,7 @@
   "panelHeading": "Transiciones de Fase en Grafos Aleatorios",
   "panelDesc": "Genera grafos aleatorios y aplica percolación (eliminación aleatoria de nodos o aristas) para observar transiciones de fase \\u2014 el cambio brusco de conectado a desconectado a medida que la probabilidad de retención disminuye. Cada componente conectada se muestra en un color diferente.",
   "graphFamily": "Familia de grafos:",
-  "binomial": "Binomial (Erd\\u0151s\\u2013R\\u00e9nyi)",
+  "binomial": "Binomial (Erdos-Renyi)",
   "geometric": "Geométrico",
   "grid": "Cuadrícula",
   "gridSide": "Lado cuadrícula:",
