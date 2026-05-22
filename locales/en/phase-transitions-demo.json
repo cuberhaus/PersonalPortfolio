@@ -7,7 +7,7 @@
   "panelHeading": "Phase Transitions in Random Graphs",
   "panelDesc": "Generate random graphs and apply percolation (random removal of nodes or edges) to observe phase transitions \\u2014 the sharp change from connected to disconnected as the retention probability drops. Each connected component is shown in a different color.",
   "graphFamily": "Graph family:",
-  "binomial": "Binomial (Erdos-Renyi)",
+  "binomial": "Binomial (Erd\\u0151s\\u2013R\\u00e9nyi)",
   "geometric": "Geometric",
   "grid": "Grid",
   "gridSide": "Grid side:",
