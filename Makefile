@@ -325,10 +325,16 @@ test: ## Run ALL test suites (portfolio + every demo backend)
 	bash scripts/run-backend-tests.sh "$(SYS_PYTHON)" "$(PARENT)"
 	@echo ""
 	@echo "=== Go (joc_eda) ==="
-	@if command -v go >/dev/null 2>&1; then \
-		cd "$(PARENT)/joc_eda/web/backend-go" && go test -v ./...; \
-	else \
+	@if ! command -v go >/dev/null 2>&1; then \
 		echo "SKIP: go not found"; \
+	else \
+		out=$$(cd "$(PARENT)/joc_eda/web/backend-go" && go test -v ./... 2>&1); ec=$$?; \
+		printf '%s\n' "$$out"; \
+		if [ $$ec -ne 0 ] && printf '%s' "$$out" | grep -qE "not in GOROOT|requires Go [0-9]|build constraints"; then \
+			echo "  SKIP: Go toolchain $$(go version | awk '{print $$3}') is too old for this module"; \
+		elif [ $$ec -ne 0 ]; then \
+			exit $$ec; \
+		fi; \
 	fi
 	@echo ""
 	@echo "=== Rust (pracpro2) ==="
