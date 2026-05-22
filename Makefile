@@ -280,6 +280,13 @@ test-a11y: ## Run the a11y axe sweep locally (4 workers, fast)
 test-a11y-grep: ## Run a11y subset, e.g. `make test-a11y-grep PATTERN=dark.*tfg`
 	npx playwright test --project=a11y --workers=4 --grep "$(PATTERN)"
 
+##@ Lint / Quality
+
+lint: ## Type-check, ESLint, and Prettier format-check
+	npm run check
+	npm run lint
+	npm run format:check
+
 ##@ Test
 
 test-keyboard: ## Run the keyboard-navigation e2e suite

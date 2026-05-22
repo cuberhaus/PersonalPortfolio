@@ -61,6 +61,12 @@ const DISABLE_ANIMATIONS_CSS = `
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
+
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 `;
 
 test.beforeEach(async ({ page }) => {

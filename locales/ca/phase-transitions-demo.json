@@ -7,7 +7,7 @@
   "panelHeading": "Transicions de Fase en Grafs Aleatoris",
   "panelDesc": "Genera grafs aleatoris i aplica percolació (eliminació aleatòria de nodes o arestes) per observar transicions de fase \\u2014 el canvi brusc de connectat a desconnectat a mesura que la probabilitat de retenció disminueix. Cada component connectada es mostra en un color diferent.",
   "graphFamily": "Família de grafs:",
-  "binomial": "Binomial (Erd\\u0151s\\u2013R\\u00e9nyi)",
+  "binomial": "Binomial (Erdos-Renyi)",
   "geometric": "Geomètric",
   "grid": "Quadrícula",
   "gridSide": "Costat quadrícula:",
