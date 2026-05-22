@@ -87,7 +87,7 @@
     "title": "Graph Phase Transitions",
     "description": "Algorithms research project studying connectivity and complexity phase transitions on binomial, geometric, and grid random graphs.",
     "tags": ["Lit", "Canvas", "FastAPI", "NetworkX"],
-    "lead": "Watch <strong>random graphs</strong> transition from connected to disconnected as you remove nodes or edges. Generate <strong>binomial</strong> (Erdos-Renyi), <strong>geometric</strong>, or <strong>grid</strong> graphs, apply percolation, and see the phase transition in real time.",
+    "lead": "Watch <strong>random graphs</strong> transition from connected to disconnected as you remove nodes or edges. Generate <strong>binomial</strong> (Erdős–Rényi), <strong>geometric</strong>, or <strong>grid</strong> graphs, apply percolation, and see the phase transition in real time.",
     "badge": "Algorithmics · FIB-UPC",
     "metaDescription": "Algorithms research on connectivity and complexity phase transitions in binomial, geometric, and grid random graphs. Interactive percolation animations and Monte Carlo charts.",
     "aboutTitle": "About this project",
