@@ -322,18 +322,7 @@ test: ## Run ALL test suites (portfolio + every demo backend)
 	PLAYWRIGHT_HOST=$(E2E_HOST) PLAYWRIGHT_PORT=$(E2E_PORT) PLAYWRIGHT_HTML_OPEN=never npx playwright test --reporter=line; PW_EXIT=$$?; \
 	exit $$PW_EXIT
 	@echo ""
-	@echo "=== Python backends (pytest) ==="
-	cd "$(PARENT)/projectA/web"   && $(SYS_PYTHON) -m pytest backend/test_app.py -v
-	cd "$(PARENT)/desastresIA/web" && $(SYS_PYTHON) -m pytest backend/test_app.py -v
-	cd "$(PARENT)/projectA2/web"  && $(SYS_PYTHON) -m pytest backend/test_app.py -v
-	cd "$(PARENT)/CAIM/web"       && $(SYS_PYTHON) -m pytest backend/test_app.py -v
-	cd "$(PARENT)/bitsXlaMarato/web/backend" && $(SYS_PYTHON) -m pytest test_app.py -v
-	cd "$(PARENT)/SBC_IA/web"     && $(SYS_PYTHON) -m pytest backend/test_app.py -v
-	cd "$(PARENT)/TFG/backend"    && $(SYS_PYTHON) -m pytest test_main.py -v
-	cd "planner-api"              && $(SYS_PYTHON) -m pytest tests/ -v
-	@echo ""
-	@echo "=== Django (Draculin) ==="
-	cd "$(PARENT)/Draculin-Backend" && $(SYS_PYTHON) manage.py test dracu -v2
+	bash scripts/run-backend-tests.sh "$(SYS_PYTHON)" "$(PARENT)"
 	@echo ""
 	@echo "=== Go (joc_eda) ==="
 	@if command -v go >/dev/null 2>&1; then \
