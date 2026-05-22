@@ -87,7 +87,7 @@
     "title": "Transiciones de Fase en Grafos",
     "description": "Proyecto de investigación en algoritmos sobre transiciones de fase de conectividad y complejidad en grafos aleatorios binomiales, geométricos y de cuadrícula.",
     "tags": ["Algorithms", "Graph Theory", "NetworkX", "NetworkX"],
-    "lead": "Observa cómo los <strong>grafos aleatorios</strong> transicionan de conectados a desconectados al eliminar nodos o aristas. Genera grafos <strong>binomiales</strong> (Erdos-Renyi), <strong>geométricos</strong> o de <strong>cuadrícula</strong>, aplica percolación y ve la transición de fase en tiempo real.",
+    "lead": "Observa cómo los <strong>grafos aleatorios</strong> transicionan de conectados a desconectados al eliminar nodos o aristas. Genera grafos <strong>binomiales</strong> (Erdős–Rényi), <strong>geométricos</strong> o de <strong>cuadrícula</strong>, aplica percolación y ve la transición de fase en tiempo real.",
     "badge": "Algoritmia · FIB-UPC",
     "metaDescription": "Investigación en algoritmos sobre transiciones de fase de conectividad y complejidad en grafos aleatorios binomiales, geométricos y de cuadrícula. Animaciones de percolación y gráficas Monte Carlo interactivas.",
     "aboutTitle": "Sobre este proyecto",

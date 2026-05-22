@@ -87,7 +87,7 @@
     "title": "Transicions de Fase en Grafs",
     "description": "Projecte de recerca en algorismes sobre transicions de fase de connectivitat i complexitat en grafs aleatoris binomials, geomètrics i de quadrícula.",
     "tags": ["Algorithms", "Graph Theory", "NetworkX", "NetworkX"],
-    "lead": "Observa com els <strong>grafs aleatoris</strong> transicionen de connectats a desconnectats en eliminar nodes o arestes. Genera grafs <strong>binomials</strong> (Erdos-Renyi), <strong>geomètrics</strong> o de <strong>quadrícula</strong>, aplica percolació i mira la transició de fase en temps real.",
+    "lead": "Observa com els <strong>grafs aleatoris</strong> transicionen de connectats a desconnectats en eliminar nodes o arestes. Genera grafs <strong>binomials</strong> (Erdős–Rényi), <strong>geomètrics</strong> o de <strong>quadrícula</strong>, aplica percolació i mira la transició de fase en temps real.",
     "badge": "Algorísmia · FIB-UPC",
     "metaDescription": "Recerca en algorismes sobre transicions de fase de connectivitat i complexitat en grafs aleatoris binomials, geomètrics i de quadrícula. Animacions de percolació i gràfiques Monte Carlo interactives.",
     "aboutTitle": "Sobre aquest projecte",
