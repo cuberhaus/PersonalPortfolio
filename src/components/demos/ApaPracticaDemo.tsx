@@ -352,7 +352,7 @@ function Predictor({ t }: { t: typeof TRANSLATIONS.en }) {
               background: isHypo ? 'rgba(251,113,133,0.15)' : 'rgba(45,212,191,0.15)',
             }}
           >
-            {isHypo ? '⚠️' : '✅'}
+            {isHypo ? '!' : 'OK'}
           </div>
           <div>
             <div
@@ -572,7 +572,16 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
                 textAlign: 'center',
               }}
             >
-              <div style={{ fontSize: '1.15rem', marginBottom: '0.25rem' }}>{step.icon}</div>
+              <div
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.05em',
+                  marginBottom: '0.25rem',
+                }}
+              >
+                {step.icon}
+              </div>
               <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {step.title}
               </div>
@@ -643,7 +652,7 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
                 background: 'linear-gradient(135deg, rgba(129,140,248,0.15), rgba(45,212,191,0.1))',
               }}
             >
-              🏥
+              LR
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{t.predictorTitle}</h3>
@@ -677,7 +686,7 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
                 background: 'linear-gradient(135deg, rgba(45,212,191,0.15), rgba(129,140,248,0.1))',
               }}
             >
-              📍
+              PCA
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{t.knnTitle}</h3>
