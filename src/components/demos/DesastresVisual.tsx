@@ -1,90 +1,15 @@
 import type { Assignment, Board, ToyLayout } from '../../lib/desastresSearch';
+import { TRANSLATIONS } from '../../i18n/demos/desastres-ia-demo';
 
 type Lang = 'en' | 'es' | 'ca';
 
-const TRANSLATIONS = {
-  en: {
-    squares: 'Squares',
-    squaresDesc: ' bases (C0: H0,H1 \u00b7 C1: H2)',
-    circles: 'Circles',
-    circlesDesc: ' groups (id, people, P=priority)',
-    dashed: 'Dashed lines',
-    dashedDesc: ' planned visit order per helicopter (queue)',
-    noGroups: '(no groups)',
-    pri: ', pri',
-    heuristicH2: 'Heuristic H2',
-    h2Desc:
-      ' \u2014 sum of per-helicopter completion times (batches of \u226415 people, \u22643 groups per sortie, 10 min base cooldown between sorties, travel \u00f71.67, priority doubles per-person pickup time):',
-    simulated: ' min (simulated)',
-    sum: 'Sum =',
-    minimize: ' (what HC / SA try to minimize)',
-    howItWorks: 'How this demo works',
-    map: 'Map',
-    mapDesc:
-      ' \u2014 Random 2D layout (seed-fixed): two bases and seven groups. Colors show which helicopter owns each group after assignment.',
-    queues: 'Queues',
-    queuesDesc:
-      ' \u2014 Each helicopter has an ordered list: rescue G2, then G5, \u2026 Swapping two groups anywhere changes the state.',
-    hc: 'HC',
-    hcDesc: ' picks the best SWAP neighbor until stuck; ',
-    sa: 'SA',
-    saDesc: ' sometimes accepts worse moves to escape local minima.',
-  },
-  es: {
-    squares: 'Cuadrados',
-    squaresDesc: ' bases (C0: H0,H1 \u00b7 C1: H2)',
-    circles: 'Círculos',
-    circlesDesc: ' grupos (id, personas, P=prioridad)',
-    dashed: 'Líneas punteadas',
-    dashedDesc: ' orden de visita planeado por helicóptero (cola)',
-    noGroups: '(sin grupos)',
-    pri: ', pri',
-    heuristicH2: 'Heurística H2',
-    h2Desc:
-      ' \u2014 suma de tiempos de finalización por helicóptero (lotes de \u226415 personas, \u22643 grupos por salida, 10 min de descanso en base, viaje \u00f71.67, prioridad duplica tiempo de recogida por persona):',
-    simulated: ' min (simulado)',
-    sum: 'Suma =',
-    minimize: ' (lo que HC / SA intentan minimizar)',
-    howItWorks: 'Cómo funciona esta demo',
-    map: 'Mapa',
-    mapDesc:
-      ' \u2014 Distribución 2D aleatoria (con semilla): dos bases y siete grupos. Los colores indican qué helicóptero tiene asignado cada grupo.',
-    queues: 'Colas',
-    queuesDesc:
-      ' \u2014 Cada helicóptero tiene una lista ordenada: rescatar G2, luego G5, \u2026 Intercambiar dos grupos cambia el estado.',
-    hc: 'HC',
-    hcDesc: ' elige el mejor vecino SWAP hasta estancarse; ',
-    sa: 'SA',
-    saDesc: ' a veces acepta movimientos peores para escapar de mínimos locales.',
-  },
-  ca: {
-    squares: 'Quadrats',
-    squaresDesc: ' bases (C0: H0,H1 \u00b7 C1: H2)',
-    circles: 'Cercles',
-    circlesDesc: ' grups (id, persones, P=prioritat)',
-    dashed: 'Línies discontínues',
-    dashedDesc: ' ordre de visita planejat per helicòpter (cua)',
-    noGroups: '(sense grups)',
-    pri: ', pri',
-    heuristicH2: 'Heurística H2',
-    h2Desc:
-      ' \u2014 suma de temps de finalització per helicòpter (lots de \u226415 persones, \u22643 grups per sortida, 10 min de descans a base, viatge \u00f71.67, prioritat duplica temps de recollida per persona):',
-    simulated: ' min (simulat)',
-    sum: 'Suma =',
-    minimize: ' (el que HC / SA intenten minimitzar)',
-    howItWorks: 'Com funciona aquesta demo',
-    map: 'Mapa',
-    mapDesc:
-      ' \u2014 Distribució 2D aleatòria (amb llavor): dues bases i set grups. Els colors indiquen quin helicòpter té assignat cada grup.',
-    queues: 'Cues',
-    queuesDesc:
-      " \u2014 Cada helicòpter té una llista ordenada: rescatar G2, després G5, \u2026 Intercanviar dos grups canvia l'estat.",
-    hc: 'HC',
-    hcDesc: ' tria el millor veí SWAP fins estancar-se; ',
-    sa: 'SA',
-    saDesc: ' a vegades accepta moviments pitjors per escapar de mínims locals.',
-  },
-};
+function getVisualTranslations(lang: Lang): Record<string, string> {
+  const locale = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  return (((locale as any).visual ?? (TRANSLATIONS.en as any).visual) || {}) as Record<
+    string,
+    string
+  >;
+}
 
 const HELI_COLORS = ['var(--accent-start)', 'var(--accent-end)', 'var(--text-muted)'];
 
@@ -128,7 +53,7 @@ export function AssignmentMapFigure({
   title: string;
   lang?: Lang;
 }) {
-  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const t = getVisualTranslations(lang);
   const { centerPos, groupPos, heliToCentro } = layout;
   const allX = [...centerPos.map((p) => p.x), ...groupPos.map((p) => p.x)];
   const allY = [...centerPos.map((p) => p.y), ...groupPos.map((p) => p.y)];
@@ -291,7 +216,7 @@ export function QueueStrips({
   board: Board;
   lang?: Lang;
 }) {
-  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const t = getVisualTranslations(lang);
   return (
     <div
       style={{
@@ -363,7 +288,7 @@ export function PerHeliBreakdown({
   total: number;
   lang?: Lang;
 }) {
-  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const t = getVisualTranslations(lang);
   return (
     <div
       style={{
@@ -395,7 +320,7 @@ export function PerHeliBreakdown({
 }
 
 export function RunExplainer({ lang = 'en' }: { lang?: Lang }) {
-  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const t = getVisualTranslations(lang);
   return (
     <div
       style={{

@@ -5,8 +5,6 @@ import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 /* ── frame data ── */
 const FRAME = { w: 472, h: 296, maskPolygon: '2,205 470,185 470,215 2,236' };
 
-const TEAM = ['Pol Casacuberta', 'Tatiana Meyer', 'Pablo Vega', 'Ton Vilà'];
-
 import { TRANSLATIONS } from '../../i18n/demos/bits-xmarato-demo';
 import { useDemoLifecycle } from '../../lib/useDebug';
 import { gradientButton } from './_styles';
@@ -30,11 +28,7 @@ function diameterZone(mm: number, t: typeof TRANSLATIONS.en) {
   const labels =
     (t as any).diameterZones && typeof (t as any).diameterZones === 'object'
       ? (t as any).diameterZones
-      : {
-          typical: { label: 'Typical diameter', detail: '< 30 mm' },
-          followup: { label: 'Needs follow-up', detail: '30-44 mm' },
-          concern: { label: 'High concern', detail: '>= 45 mm' },
-        };
+      : (TRANSLATIONS.en as any).diameterZones;
   return _diameterZone(mm, labels);
 }
 
@@ -125,7 +119,7 @@ function SimulatedInference({ t }: { t: typeof TRANSLATIONS.en }) {
       >
         <img
           src={frameSrc}
-          alt="B-mode ultrasound frame"
+          alt={t.frameAlt}
           width={FRAME.w}
           height={FRAME.h}
           style={{
@@ -304,7 +298,7 @@ function DiameterExplorer({ t }: { t: typeof TRANSLATIONS.en }) {
           value={mm}
           onChange={(e) => setMm(Number(e.target.value))}
           style={{ width: '100%', accentColor: zone.color }}
-          aria-label="Aorta diameter (mm)"
+          aria-label={t.diameterAriaLabel}
         />
       </div>
 
@@ -377,7 +371,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
     >
       <LiveAppEmbed
         slug="bitsx-marato"
-        title="Aorta Viewer — bitsXlaMarato"
+        title={t.liveTitle}
         dockerCmd="cd bitsXlaMarato && docker compose up"
         devCmd="cd bitsXlaMarato && make dev"
         lang={lang}
@@ -449,14 +443,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
         </div>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.85rem' }}>
-          {[
-            'Mask R-CNN (PyTorch)',
-            'OpenCV',
-            'Meshlib / Open3D',
-            'Tkinter GUI',
-            'Custom annotations',
-            'CUDA inference',
-          ].map((tag) => (
+          {(Array.isArray((t as any).techTags) ? (t as any).techTags : []).map((tag: string) => (
             <span
               key={tag}
               style={{
@@ -618,7 +605,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
             {t.team}
           </div>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)' }}>
-            {TEAM.join(' · ')}
+            {(Array.isArray((t as any).teamMembers) ? (t as any).teamMembers : []).join(' · ')}
           </div>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -640,7 +627,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
               textDecoration: 'none',
             }}
           >
-            Devpost ↗
+            {t.devpostLabel}
           </a>
         </div>
       </div>

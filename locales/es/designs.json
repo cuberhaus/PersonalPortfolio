@@ -1,0 +1,70 @@
+{
+  "minimal": {
+    "name": "Minimalista",
+    "blurb": "Portfolio moderno y limpio con acentos degradados"
+  },
+  "editorial": {
+    "name": "Editorial",
+    "blurb": "Titulares serif, capitulares y columnas de revista"
+  },
+  "swiss": {
+    "name": "Suizo",
+    "blurb": "Retícula estricta, números enormes, filetes finos"
+  },
+  "pixel": {
+    "name": "Píxel",
+    "blurb": "Tipografía 8-bit, botones robustos, sombras duras"
+  },
+  "terminal": {
+    "name": "Terminal",
+    "blurb": "Aire CRT, monoespaciado, cursor parpadeante"
+  },
+  "cyber": {
+    "name": "Cyberpunk",
+    "blurb": "Brillo neón, aberración cromática, rejilla synthwave"
+  },
+  "notebook": {
+    "name": "Libreta",
+    "blurb": "Papel cuadriculado, tinta manuscrita, marcas de fluorescente"
+  },
+  "brutalist": {
+    "name": "Brutalista",
+    "blurb": "Energía HTML cruda: Times, cinta amarilla, bordes gruesos"
+  },
+  "blueprint": {
+    "name": "Plano técnico",
+    "blurb": "Cuadrícula cian, líneas finas, marcas de cota y etiquetas"
+  },
+  "academic": {
+    "name": "Académico",
+    "blurb": "Paper LaTeX: Garamond, secciones numeradas, resumen"
+  },
+  "ide": {
+    "name": "IDE",
+    "blurb": "Vibes VSCode: pestañas, gutter, héroe con sintaxis"
+  },
+  "risograph": {
+    "name": "Risograph",
+    "blurb": "Impresión dúo-tono, trama de puntos, grano y desregistro"
+  },
+  "deco": {
+    "name": "Art Déco",
+    "blurb": "Soles radiantes, degradados dorados, bordes escalonados"
+  },
+  "wabisabi": {
+    "name": "Wabi-sabi",
+    "blurb": "Minimalismo japonés sereno, gran espacio en blanco"
+  },
+  "zine": {
+    "name": "Fanzine",
+    "blurb": "Collage fotocopiado estilo recorte, grapas y cinta"
+  },
+  "comic": {
+    "name": "Cómic",
+    "blurb": "Títulos Bangers, puntos Ben-Day, bocadillos"
+  },
+  "newspaper": {
+    "name": "Periódico",
+    "blurb": "Cabecera gótica, columnas, anuncios clasificados"
+  }
+}

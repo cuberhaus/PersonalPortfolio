@@ -1,11 +1,19 @@
-You are working on the `PersonalPortfolio` repository.
+# PersonalPortfolio Agent Rules
 
-# Project Stack
+## Project Stack
+
 - **Framework**: Astro (Static Site Generator / Web Framework)
 - **Language**: TypeScript / JavaScript
 - **Styling**: Scoped CSS within `.astro` components, utilizing global CSS variables (`var(--bg-color)`, etc.) for theming.
 
-# Development Rules & Guidelines
+## Development Rules & Guidelines
+
+0. **Agent Context First**:
+    - Before implementing non-trivial changes, read the README documentation map and the relevant guide under `docs/guides/` for the task at hand.
+    - Use `docs/guides/everyday-tasks.md` for content/data edits, `docs/guides/adding-a-demo.md` for demos, `docs/guides/i18n.md` for translations/Crowdin/locales, and `docs/guides/testing.md` for validation choices.
+    - For architectural or cross-cutting changes, also read `docs/architecture/overview.md` and the relevant architecture note before coding.
+    - Treat the guides as the canonical workflow. If this file appears stale or conflicts with a guide, follow the guide and update the stale instruction.
+
 1. **Astro Components**:
    - Use `.astro` files for UI components and layouts.
    - When adding client-side interactivity, use standard `<script>` tags.
@@ -13,8 +21,10 @@ You are working on the `PersonalPortfolio` repository.
    - If a script requires bypassing Astro's bundler, use the `<script is:inline>` directive.
 
 2. **Internationalization (i18n)**:
-   - The site supports multiple languages (English, Spanish, Catalan).
-   - All static text strings must be added to the dictionaries in `src/i18n/ui.ts` (or equivalent translation files). Do not hardcode raw English text directly into `.astro` templates unless it's strictly structural or a temporary mock.
+    - The site supports multiple languages (English, Spanish, Catalan).
+    - All user-visible text must live in `locales/{locale}/{namespace}.json` so Crowdin can extract it. Do not hardcode raw English text directly into `.astro` / `.tsx` templates unless it is strictly structural and non-translatable.
+    - Use `locales/{locale}/ui.json` for shared UI strings, `locales/{locale}/demos.json` for demo card/header copy, `locales/{locale}/<slug>-demo.json` for React island copy, and `locales/{locale}/designs.json` for design picker names/blurbs.
+    - Avoid inline `TRANSLATIONS` objects, hard-coded fallback labels, alt text, ARIA labels, link labels, or mock-banner text in code. Crowdin only sees the JSON files under `locales/`.
 
 3. **Styling Conventions**:
    - Prefer writing scoped CSS directly inside the `<style>` block of the `.astro` component.
@@ -27,7 +37,7 @@ You are working on the `PersonalPortfolio` repository.
    - To run the full stack locally, developers use `scripts/dev-all-demos.sh`.
 
 5. **Data Files**:
-   - Project metadata (demos, work projects) are stored in `src/data/` as JSON files (e.g., `demos.json`, `work_projects.json`). Update these files instead of hardcoding data blocks into UI components.
+    - Identity/project metadata is stored in `src/data/` as JSON files (e.g., `demos.json`, `work_projects.json`). Translatable copy for that data lives in `locales/{locale}/` namespaces. Update these files instead of hardcoding data blocks into UI components.
 
 6. **Demo Component Theming**:
    - **Never hardcode hex colors** (e.g. `#6366f1`, `#22c55e`) in demo components. The site has 15+ themes and all demos must adapt to the active theme.
@@ -65,7 +75,7 @@ You are working on the `PersonalPortfolio` repository.
 12. **Theme & Design System**:
     - Theme and design picks are persisted to `localStorage` and restored in `ThemeInit.astro` before first paint. Never duplicate this logic elsewhere.
     - URL query parameters (`?theme=dracula&design=pixel`) override localStorage picks. The params are consumed and stripped from the URL by `ThemeInit.astro`.
-    - Themes and designs are independent axes — any theme works with any design. Metadata lives in `src/lib/themes.ts` and `src/lib/designs.ts`.
+    - Themes and designs are independent axes — any theme works with any design. Structural metadata lives in `src/lib/themes.ts` and `src/lib/designs.ts`; user-facing design names/blurbs live in `locales/{locale}/designs.json`.
 
 13. **Form Patterns**:
     - Contact forms must include the honeypot field (`<input type="checkbox" name="botcheck" style="display: none;">`) for spam protection.
@@ -79,7 +89,8 @@ You are working on the `PersonalPortfolio` repository.
 
 15. **Demo Page Template**:
     - Every demo page follows the same structure: `DemoLayout` → `DemoHeader` → React component or `LiveAppEmbed`.
-    - Either define a `TRANSLATIONS` object inline (for `.astro` page-level text) or create a dedicated `src/i18n/demos/<slug>-demo.ts` file (for React component text). Both use `{ en: {...}, es: {...}, ca: {...} }` flat structures.
+    - Demo card/header copy comes from `locales/{locale}/demos.json` through `getDemo(slug, lang)`.
+    - Page- or island-specific copy belongs in `locales/{locale}/<slug>-demo.json` or `locales/{locale}/<slug>-page.json`, with a lightweight accessor in `src/i18n/demos/`. Do not define inline `TRANSLATIONS` objects in `.astro` or `.tsx` files.
     - Pass `slug` to `DemoLayout` to enable prev/next navigation. Pass `lang` explicitly to React islands as a prop.
 
 16. **ViewTransitions & `data-astro-reload`**:
@@ -87,9 +98,9 @@ You are working on the `PersonalPortfolio` repository.
     - Pattern: `<a href={url} data-astro-reload>`.
 
 17. **Localized Data Files**:
-    - Data in `src/data/` has parallel JSON files per language: `demos.json` (EN), `demos.es.json`, `demos.ca.json`. Same structure applies to `work_projects`, `education`, `experience`, and `skills`.
-    - Files must maintain strict parity: identical slugs, same order, same array lengths. This is enforced by unit tests in `src/__tests__/data-integrity.test.ts`.
-    - Components import all three and select at runtime: `lang === 'es' ? demosEs : lang === 'ca' ? demosCa : demosEn`.
+    - Data in `src/data/` is identity-only. Locale-specific fields live in `locales/{locale}/{namespace}.json` and are merged through the existing i18n/data loaders.
+    - Locale namespaces must maintain strict parity: identical keys, same order where arrays are used, and same field sets. This is enforced by unit tests such as `content-parity.test.ts`, `data-integrity.test.ts`, and `designs.test.ts`.
+    - Components should use the existing loaders/helpers instead of importing locale JSON triples directly.
 
 18. **Testing**:
     - **Unit tests**: Vitest (`src/__tests__/*.test.ts`). Primarily validate data integrity (slug uniqueness, i18n parity, valid icons/URLs) and calculation logic.

@@ -1,0 +1,70 @@
+{
+  "minimal": {
+    "name": "Minimalista",
+    "blurb": "Portfoli modern i net amb accents degradats"
+  },
+  "editorial": {
+    "name": "Editorial",
+    "blurb": "Titulars serif, caplletres i columnes de revista"
+  },
+  "swiss": {
+    "name": "Suís",
+    "blurb": "Retícula estricta, números enormes, filets fins"
+  },
+  "pixel": {
+    "name": "Píxel",
+    "blurb": "Tipografia 8-bit, botons robustos, ombres dures"
+  },
+  "terminal": {
+    "name": "Terminal",
+    "blurb": "Aire CRT, monoespaiat arreu, cursor parpellejant"
+  },
+  "cyber": {
+    "name": "Cyberpunk",
+    "blurb": "Brillantor neó, aberració cromàtica, graella synthwave"
+  },
+  "notebook": {
+    "name": "Llibreta",
+    "blurb": "Paper quadriculat, tinta manuscrita, marques de fluorescent"
+  },
+  "brutalist": {
+    "name": "Brutalista",
+    "blurb": "Energia HTML crua: Times, cinta groga, vores gruixudes"
+  },
+  "blueprint": {
+    "name": "Plànol tècnic",
+    "blurb": "Quadrícula cian, línies fines, marques de cota i etiquetes"
+  },
+  "academic": {
+    "name": "Acadèmic",
+    "blurb": "Paper LaTeX: Garamond, seccions numerades, resum"
+  },
+  "ide": {
+    "name": "IDE",
+    "blurb": "Vibes VSCode: pestanyes, gutter, heroi amb sintaxi"
+  },
+  "risograph": {
+    "name": "Risograph",
+    "blurb": "Impressió duotò, trama de punts, gra i desregistre"
+  },
+  "deco": {
+    "name": "Art Déco",
+    "blurb": "Sols radiants, degradats daurats, vores esglaonades"
+  },
+  "wabisabi": {
+    "name": "Wabi-sabi",
+    "blurb": "Minimalisme japonès serè, gran espai en blanc"
+  },
+  "zine": {
+    "name": "Fanzine",
+    "blurb": "Collage fotocopiat estil retall, grapes i cinta"
+  },
+  "comic": {
+    "name": "Còmic",
+    "blurb": "Títols Bangers, punts Ben-Day, bafarades"
+  },
+  "newspaper": {
+    "name": "Diari",
+    "blurb": "Capçalera gòtica, columnes, anuncis classificats"
+  }
+}

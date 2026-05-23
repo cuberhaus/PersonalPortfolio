@@ -138,7 +138,7 @@ Use `make test-visual` for a local diff run against existing baselines.
 
 ## Project layout
 
-```
+```text
 Makefile              # All workflows: dev, build, test, stop, health, clean
 planner-api/          # FastAPI + ENHSP for planificación demo
 scripts/              # dev-all-demos.sh orchestrator
@@ -147,19 +147,21 @@ src/
   __tests__/          # 30 Vitest unit test files
   components/         # Astro layout components (Navbar, Hero, Contact, …)
   components/demos/   # React demo components (one per demo)
-  data/               # JSON data files + i18n variants (.es.json, .ca.json)
+  data/               # Identity JSON data; translatable copy lives in locales/
   i18n/               # locale loaders, utils, lightweight demo namespace accessors
   layouts/            # Layout.astro, DemoLayout.astro
   lib/                # Shared utilities
   pages/              # index.astro, 404.astro, demos/, [lang]/
 public/               # Static assets (demo images, PDDL files, joc-eda viewer, …)
+locales/              # Crowdin-managed JSON namespaces for EN / ES / CA
 ```
 
 ## Customizing
 
 - **Identity / hero / contact**: `src/components/` (e.g. `Contact.astro`)
-- **Content data**: `src/data/*.json` (skills, experience, education, work projects)
-- **Demo list**: `src/data/demos.json` (+ `.es.json`, `.ca.json`)
+- **Content identity data**: `src/data/*.json` (skills, experience, education, demos, work projects)
+- **Translatable content and demo copy**: `locales/{en,es,ca}/*.json`
+- **Demo list identity**: `src/data/demos.json`; card copy lives in `locales/{en,es,ca}/demos.json`
 - **i18n UI strings**: `locales/{en,es,ca}/ui.json`
 - **Site URL**: `site` in `astro.config.mjs`
 
@@ -172,6 +174,12 @@ two sections, writing a unit test), see [docs/guides/everyday-tasks.md](docs/gui
 - **Guides** (how to do things): [everyday-tasks](docs/guides/everyday-tasks.md), [adding-a-demo](docs/guides/adding-a-demo.md), [i18n](docs/guides/i18n.md), [testing](docs/guides/testing.md).
 - **Architecture** (why the code looks like it does): [decisions](docs/architecture/decisions.md), [debugging-architecture](docs/architecture/debugging-architecture.md), [observability](docs/architecture/observability.md), [ui-experiments](docs/architecture/ui-experiments.md).
 - **Stuck on an error?** [docs/troubleshooting.md](docs/troubleshooting.md) — searchable index of footguns and fixes.
+
+Agent note: before coding, read the guide that matches the task. Use
+`everyday-tasks` for content/data edits, `adding-a-demo` for demos, `i18n` for
+translations/Crowdin/locales, and `testing` for validation choices. For
+cross-cutting work, read the architecture overview plus the relevant decision
+note first.
 
 ## Deployment
 
