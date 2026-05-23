@@ -109,7 +109,9 @@ describe('Zipf corpus data', () => {
       it('frequencies are sorted descending', () => {
         const data = getCorpusData(id);
         for (let i = 1; i < data.length; i++) {
-          expect(data[i].frequency, `${id}[${i}] not sorted`).toBeLessThanOrEqual(data[i - 1].frequency);
+          expect(data[i].frequency, `${id}[${i}] not sorted`).toBeLessThanOrEqual(
+            data[i - 1].frequency
+          );
         }
       });
 

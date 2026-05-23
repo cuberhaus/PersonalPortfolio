@@ -1,0 +1,46 @@
+{
+  "$schema": "https://inlang.com/schema/project-settings",
+  "sourceLanguageTag": "en",
+  "languageTags": ["en", "es", "ca"],
+  "modules": [
+    "https://cdn.jsdelivr.net/npm/@inlang/plugin-i18next@4/dist/index.js",
+    "https://cdn.jsdelivr.net/npm/@inlang/plugin-t-function-matcher@2/dist/index.js",
+    "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-missing-translation@1/dist/index.js",
+    "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-empty-pattern@1/dist/index.js"
+  ],
+  "plugin.inlang.i18next": {
+    "pathPattern": {
+      "ui": "./locales/{languageTag}/ui.json",
+      "skills": "./locales/{languageTag}/skills.json",
+      "experience": "./locales/{languageTag}/experience.json",
+      "education": "./locales/{languageTag}/education.json",
+      "certifications": "./locales/{languageTag}/certifications.json",
+      "work_projects": "./locales/{languageTag}/work_projects.json",
+      "demos": "./locales/{languageTag}/demos.json",
+      "live-app-embed": "./locales/{languageTag}/live-app-embed.json",
+      "apa-practica-demo": "./locales/{languageTag}/apa-practica-demo.json",
+      "bits-xmarato-demo": "./locales/{languageTag}/bits-xmarato-demo.json",
+      "caim-demo": "./locales/{languageTag}/caim-demo.json",
+      "caim-pagerank": "./locales/{languageTag}/caim-pagerank.json",
+      "caim-zipf": "./locales/{languageTag}/caim-zipf.json",
+      "desastres-ia-demo": "./locales/{languageTag}/desastres-ia-demo.json",
+      "draculin-demo": "./locales/{languageTag}/draculin-demo.json",
+      "fib-demo": "./locales/{languageTag}/fib-demo.json",
+      "grafics-demo": "./locales/{languageTag}/grafics-demo.json",
+      "joc-eda-page": "./locales/{languageTag}/joc-eda-page.json",
+      "jsbach-demo": "./locales/{languageTag}/jsbach-demo.json",
+      "mpids-demo": "./locales/{languageTag}/mpids-demo.json",
+      "par-demo": "./locales/{languageTag}/par-demo.json",
+      "phase-transitions-demo": "./locales/{languageTag}/phase-transitions-demo.json",
+      "planificacion-demo": "./locales/{languageTag}/planificacion-demo.json",
+      "pro2-demo": "./locales/{languageTag}/pro2-demo.json",
+      "prop-page": "./locales/{languageTag}/prop-page.json",
+      "rob-demo": "./locales/{languageTag}/rob-demo.json",
+      "sbc-demo": "./locales/{languageTag}/sbc-demo.json",
+      "spmatriculas-demo": "./locales/{languageTag}/spmatriculas-demo.json",
+      "tenda-demo": "./locales/{languageTag}/tenda-demo.json",
+      "tenda-page": "./locales/{languageTag}/tenda-page.json",
+      "tfg-polyp-demo": "./locales/{languageTag}/tfg-polyp-demo.json"
+    }
+  }
+}

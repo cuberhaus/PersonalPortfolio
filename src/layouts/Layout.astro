@@ -1,9 +1,15 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import ScrollToTop from '../components/ScrollToTop.astro';
 import ThemeInit from '../components/ThemeInit.astro';
+import DebugInit from '../components/DebugInit.astro';
+import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
+import { certifications as certificationsData } from '../data/loaders';
+import { flattenForLocale } from '../i18n/load';
+import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
+import { SITE_URLS } from '../config/site';
 
 interface Props {
   title?: string;
@@ -18,6 +24,18 @@ const {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+
+// schema.org/Person.hasCredential — locale-aware so search engines see cert
+// names in the same language as the rest of the page.
+type LayoutCert = { name: string; issuer: string; link?: string };
+const certs = flattenForLocale<LayoutCert>(certificationsData as never, lang);
+const hasCredential = certs.map((cert) => ({
+  '@type': 'EducationalOccupationalCredential',
+  name: cert.name,
+  credentialCategory: 'certification',
+  recognizedBy: { '@type': 'Organization', name: cert.issuer },
+  ...(cert.link ? { url: cert.link } : {}),
+}));
 ---
 
 <!doctype html>
@@ -29,27 +47,41 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     <meta name="generator" content={Astro.generator} />
 
     <ThemeInit position="head" />
+    <DebugInit />
 
     <!-- OpenGraph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
+    <meta property="og:image" content={new URL(base + '/og-image.png', Astro.site || Astro.url)} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={Astro.url} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(base + "/og-image.jpg", Astro.site || Astro.url)} />
+    <meta name="twitter:image" content={new URL(base + '/og-image.png', Astro.site || Astro.url)} />
 
     <link rel="canonical" href={Astro.url} />
-    <link rel="alternate" hreflang="en" href={new URL(base + '/', Astro.site || Astro.url)} />
-    <link rel="alternate" hreflang="es" href={new URL(base + '/es/', Astro.site || Astro.url)} />
-    <link rel="alternate" hreflang="ca" href={new URL(base + '/ca/', Astro.site || Astro.url)} />
-    <link rel="alternate" hreflang="x-default" href={new URL(base + '/', Astro.site || Astro.url)} />
-    <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
+    {
+      LOCALES.map((locale) => {
+        const path = locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;
+        return (
+          <link
+            rel="alternate"
+            hreflang={locale}
+            href={new URL(base + path, Astro.site || Astro.url)}
+          />
+        );
+      })
+    }
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(base + '/', Astro.site || Astro.url)}
+    />
+    <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,18 +99,19 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     </noscript>
 
     <title>{title}</title>
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Pol Casacuberta",
-      "url": Astro.site?.toString() || Astro.url.origin,
-      "jobTitle": "AI & Data Consultant",
-      "sameAs": [
-        "https://github.com/cuberhaus",
-        "https://linkedin.com/in/polcasacubertagil"
-      ]
-    })} />
-    <ViewTransitions />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: 'Pol Casacuberta',
+        url: Astro.site?.toString() || Astro.url.origin,
+        jobTitle: 'AI & Data Consultant',
+        sameAs: [SITE_URLS.github, SITE_URLS.linkedin],
+        hasCredential: hasCredential,
+      })}
+    />
+    <ClientRouter />
     <Analytics />
   </head>
   <body>
@@ -86,19 +119,34 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
     <a href="#main-content" class="skip-to-content">{t('aria.skipToContent')}</a>
     <slot />
     <div class="main-bottom-design">
-      <button class="main-design-btn" aria-label={t('theme.customize')} title={t('theme.customize')}>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
-          <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
-          <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
-          <circle cx="6.5" cy="12" r=".5" fill="currentColor"/>
-          <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+      <button
+        class="main-design-btn"
+        aria-label={t('theme.customize')}
+        title={t('theme.customize')}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+          <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+          <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+          <circle cx="6.5" cy="12" r=".5" fill="currentColor"></circle>
+          <path
+            d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"
+          ></path>
         </svg>
         <span>{t('theme.customize')}</span>
       </button>
     </div>
     <ScrollToTop />
+    <DebugMount />
     <style>
       .main-bottom-design {
         display: none;
@@ -122,17 +170,20 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
         font-size: 0.82rem;
         font-weight: 500;
         cursor: pointer;
-        transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+        transition:
+          color var(--transition-fast),
+          background-color var(--transition-fast),
+          border-color var(--transition-fast);
       }
       .main-design-btn:hover {
-        color: var(--accent-start);
+        color: var(--accent-text);
         background: var(--bg-card);
-        border-color: var(--accent-start);
+        border-color: var(--accent-text);
       }
     </style>
     <script>
       function initMainDesignBtn() {
-        document.querySelectorAll('.main-design-btn').forEach(btn => {
+        document.querySelectorAll('.main-design-btn').forEach((btn) => {
           if (btn.hasAttribute('data-init')) return;
           btn.setAttribute('data-init', '');
           btn.addEventListener('click', () => {
@@ -160,6 +211,38 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
         document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => {
           observer.observe(el);
         });
+      });
+    </script>
+
+    <script>
+      // Page-load nav log: emit one info entry per route. Gated on
+      // window.__debug being available so we don't lose events when
+      // astro:page-load fires before lib/debug.ts hydrates.
+      document.addEventListener('astro:page-load', () => {
+        try {
+          const w = window as unknown as {
+            __debug?: { log: (l: string, ns: string, msg: string, ...a: unknown[]) => void };
+          };
+          if (!w.__debug) return;
+          w.__debug.log('info', 'nav', 'navigated', {
+            path: location.pathname,
+            search: location.search,
+            lang: document.documentElement.lang,
+            title: document.title,
+          });
+        } catch {}
+      });
+    </script>
+
+    <script>
+      // Open SSE streams from the dev-only log relay for every visible
+      // [data-demo-slug] element on the page. Production builds never
+      // open these connections (requireEnabled() inside subscribeAllVisible).
+      document.addEventListener('astro:page-load', async () => {
+        try {
+          const mod = await import('../lib/debug-docker');
+          mod.subscribeAllVisible();
+        } catch {}
       });
     </script>
   </body>

@@ -50,7 +50,10 @@ export function grayToRGBA(src: GrayImage): RGBAImage {
   for (let i = 0; i < n; i++) {
     const v = src.data[i];
     const o = i * 4;
-    out[o] = v; out[o + 1] = v; out[o + 2] = v; out[o + 3] = 255;
+    out[o] = v;
+    out[o + 1] = v;
+    out[o + 2] = v;
+    out[o + 3] = 255;
   }
   return { data: out, width: src.width, height: src.height };
 }
@@ -64,16 +67,23 @@ export function otsuThreshold(src: GrayImage): number {
   const total = d.length;
   let sum = 0;
   for (let i = 0; i < 256; i++) sum += i * hist[i];
-  let sumB = 0, wB = 0, maxVar = 0, best = 0;
+  let sumB = 0,
+    wB = 0,
+    maxVar = 0,
+    best = 0;
   for (let t = 0; t < 256; t++) {
     wB += hist[t];
     if (wB === 0) continue;
     const wF = total - wB;
     if (wF === 0) break;
     sumB += t * hist[t];
-    const mB = sumB / wB, mF = (sum - sumB) / wF;
+    const mB = sumB / wB,
+      mF = (sum - sumB) / wF;
     const between = wB * wF * (mB - mF) * (mB - mF);
-    if (between > maxVar) { maxVar = between; best = t; }
+    if (between > maxVar) {
+      maxVar = between;
+      best = t;
+    }
   }
   return best;
 }
@@ -99,7 +109,10 @@ export function adaptiveThresholdMean(src: GrayImage, sensitivity: number): Gray
   for (let y = 0; y < h; y++)
     for (let x = 0; x < w; x++)
       integral[(y + 1) * iw + (x + 1)] =
-        d[y * w + x] + integral[y * iw + (x + 1)] + integral[(y + 1) * iw + x] - integral[y * iw + x];
+        d[y * w + x] +
+        integral[y * iw + (x + 1)] +
+        integral[(y + 1) * iw + x] -
+        integral[y * iw + x];
 
   let bs = Math.max(3, Math.floor(w / 8));
   if (bs % 2 === 0) bs++;
@@ -108,9 +121,11 @@ export function adaptiveThresholdMean(src: GrayImage, sensitivity: number): Gray
 
   const out = new Uint8Array(w * h);
   for (let y = 0; y < h; y++) {
-    const y1 = Math.max(0, y - half), y2 = Math.min(h - 1, y + half);
+    const y1 = Math.max(0, y - half),
+      y2 = Math.min(h - 1, y + half);
     for (let x = 0; x < w; x++) {
-      const x1 = Math.max(0, x - half), x2 = Math.min(w - 1, x + half);
+      const x1 = Math.max(0, x - half),
+        x2 = Math.min(w - 1, x + half);
       const count = (y2 - y1 + 1) * (x2 - x1 + 1);
       const sum =
         integral[(y2 + 1) * iw + (x2 + 1)] -
@@ -187,11 +202,15 @@ export function labelConnectedComponents(bin: GrayImage): { labels: Int32Array; 
   const parent = [0];
 
   function find(x: number): number {
-    while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; }
+    while (parent[x] !== x) {
+      parent[x] = parent[parent[x]];
+      x = parent[x];
+    }
     return x;
   }
   function union(a: number, b: number) {
-    const ra = find(a), rb = find(b);
+    const ra = find(a),
+      rb = find(b);
     if (ra !== rb) parent[Math.max(ra, rb)] = Math.min(ra, rb);
   }
 
@@ -241,7 +260,10 @@ export function extractContours(bin: GrayImage): Contour[] {
         if (labels[y * w + x] !== id) continue;
         // Check if border pixel (has a background neighbor)
         const isBorder =
-          x === 0 || x === w - 1 || y === 0 || y === h - 1 ||
+          x === 0 ||
+          x === w - 1 ||
+          y === 0 ||
+          y === h - 1 ||
           labels[(y - 1) * w + x] !== id ||
           labels[(y + 1) * w + x] !== id ||
           labels[y * w + x - 1] !== id ||
@@ -257,7 +279,10 @@ export function extractContours(bin: GrayImage): Contour[] {
 // ─── Region properties ───
 
 export function boundingRect(contour: Contour): Rect {
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
   for (const p of contour.points) {
     if (p.x < minX) minX = p.x;
     if (p.y < minY) minY = p.y;
@@ -295,13 +320,19 @@ export function convexHullArea(pts: { x: number; y: number }[]): number {
     .sort((a, b) => {
       const aa = Math.atan2(a.y - anchor.y, a.x - anchor.x);
       const bb = Math.atan2(b.y - anchor.y, b.x - anchor.x);
-      return aa - bb || (a.x - anchor.x) ** 2 + (a.y - anchor.y) ** 2 - ((b.x - anchor.x) ** 2 + (b.y - anchor.y) ** 2);
+      return (
+        aa - bb ||
+        (a.x - anchor.x) ** 2 +
+          (a.y - anchor.y) ** 2 -
+          ((b.x - anchor.x) ** 2 + (b.y - anchor.y) ** 2)
+      );
     });
 
   const hull = [anchor];
   for (const p of sorted) {
     while (hull.length >= 2) {
-      const a = hull[hull.length - 2], b = hull[hull.length - 1];
+      const a = hull[hull.length - 2],
+        b = hull[hull.length - 1];
       if ((b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x) > 0) break;
       hull.pop();
     }
@@ -317,30 +348,54 @@ export function convexHullArea(pts: { x: number; y: number }[]): number {
   return Math.abs(area) / 2;
 }
 
-export function computeRegionStats(bin: GrayImage, labels: Int32Array, labelId: number): RegionStats {
+export function computeRegionStats(
+  bin: GrayImage,
+  labels: Int32Array,
+  labelId: number
+): RegionStats {
   const { width: w } = bin;
-  let area = 0, sumX = 0, sumY = 0;
+  let area = 0,
+    sumX = 0,
+    sumY = 0;
   const borderPts: { x: number; y: number }[] = [];
 
   for (let i = 0; i < labels.length; i++) {
     if (labels[i] !== labelId) continue;
     area++;
-    const x = i % w, y = (i / w) | 0;
+    const x = i % w,
+      y = (i / w) | 0;
     sumX += x;
     sumY += y;
   }
 
   if (area === 0)
-    return { bbox: { x: 0, y: 0, w: 0, h: 0 }, area: 0, solidity: 0, extent: 0, eccentricity: 0, orientation: 0, majorAxisLength: 0, minorAxisLength: 0 };
+    return {
+      bbox: { x: 0, y: 0, w: 0, h: 0 },
+      area: 0,
+      solidity: 0,
+      extent: 0,
+      eccentricity: 0,
+      orientation: 0,
+      majorAxisLength: 0,
+      minorAxisLength: 0,
+    };
 
-  const cx = sumX / area, cy = sumY / area;
-  let mu20 = 0, mu02 = 0, mu11 = 0;
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  const cx = sumX / area,
+    cy = sumY / area;
+  let mu20 = 0,
+    mu02 = 0,
+    mu11 = 0;
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
 
   for (let i = 0; i < labels.length; i++) {
     if (labels[i] !== labelId) continue;
-    const x = i % w, y = (i / w) | 0;
-    const dx = x - cx, dy = y - cy;
+    const x = i % w,
+      y = (i / w) | 0;
+    const dx = x - cx,
+      dy = y - cy;
     mu20 += dx * dx;
     mu02 += dy * dy;
     mu11 += dx * dy;
@@ -351,13 +406,20 @@ export function computeRegionStats(bin: GrayImage, labels: Int32Array, labelId: 
 
     const h = bin.height;
     const isBorder =
-      x === 0 || x === w - 1 || y === 0 || y === h - 1 ||
-      labels[i - 1] !== labelId || labels[i + 1] !== labelId ||
-      labels[i - w] !== labelId || labels[i + w] !== labelId;
+      x === 0 ||
+      x === w - 1 ||
+      y === 0 ||
+      y === h - 1 ||
+      labels[i - 1] !== labelId ||
+      labels[i + 1] !== labelId ||
+      labels[i - w] !== labelId ||
+      labels[i + w] !== labelId;
     if (isBorder) borderPts.push({ x, y });
   }
 
-  mu20 /= area; mu02 /= area; mu11 /= area;
+  mu20 /= area;
+  mu02 /= area;
+  mu11 /= area;
 
   const diff = mu20 - mu02;
   const sq = Math.sqrt(diff * diff + 4 * mu11 * mu11);
@@ -389,7 +451,7 @@ export function allRegionStatsEfficient(
   bin: GrayImage,
   labels: Int32Array,
   count: number,
-  mode: "plate" | "char"
+  mode: 'plate' | 'char'
 ): RegionStats[] {
   const w = bin.width;
   const h = bin.height;
@@ -425,11 +487,11 @@ export function allRegionStatsEfficient(
   const candidates = new Set<number>();
   for (let L = 1; L <= count; L++) {
     const a = area[L];
-    if (a < (mode === "plate" ? 250 : 15)) continue;
+    if (a < (mode === 'plate' ? 250 : 15)) continue;
     const bw = maxX[L] - minX[L] + 1;
     const bh = maxY[L] - minY[L] + 1;
     const asp = bw / Math.max(bh, 1);
-    if (mode === "plate") {
+    if (mode === 'plate') {
       if (asp < 1.25 || asp > 16) continue;
       if (a > imArea * 0.42) continue;
     } else {
@@ -556,7 +618,8 @@ export function cropRGBA(src: RGBAImage, r: Rect): RGBAImage {
 
 export function resizeGray(src: GrayImage, tw: number, th: number): GrayImage {
   const out = new Uint8Array(tw * th);
-  const xr = src.width / tw, yr = src.height / th;
+  const xr = src.width / tw,
+    yr = src.height / th;
   for (let y = 0; y < th; y++) {
     const sy = y * yr;
     const y0 = Math.min(Math.floor(sy), src.height - 1);
@@ -569,9 +632,9 @@ export function resizeGray(src: GrayImage, tw: number, th: number): GrayImage {
       const fx = sx - x0;
       out[y * tw + x] = Math.round(
         src.data[y0 * src.width + x0] * (1 - fx) * (1 - fy) +
-        src.data[y0 * src.width + x1] * fx * (1 - fy) +
-        src.data[y1 * src.width + x0] * (1 - fx) * fy +
-        src.data[y1 * src.width + x1] * fx * fy
+          src.data[y0 * src.width + x1] * fx * (1 - fy) +
+          src.data[y1 * src.width + x0] * (1 - fx) * fy +
+          src.data[y1 * src.width + x1] * fx * fy
       );
     }
   }
@@ -606,12 +669,20 @@ export function letterboxGray(src: GrayImage, tw: number, th: number, fill: numb
 export function matchTemplateNCC(src: GrayImage, tmpl: GrayImage): number {
   if (src.width !== tmpl.width || src.height !== tmpl.height) return -1;
   const n = src.data.length;
-  let sumS = 0, sumT = 0;
-  for (let i = 0; i < n; i++) { sumS += src.data[i]; sumT += tmpl.data[i]; }
-  const meanS = sumS / n, meanT = sumT / n;
-  let num = 0, denS = 0, denT = 0;
+  let sumS = 0,
+    sumT = 0;
   for (let i = 0; i < n; i++) {
-    const ds = src.data[i] - meanS, dt = tmpl.data[i] - meanT;
+    sumS += src.data[i];
+    sumT += tmpl.data[i];
+  }
+  const meanS = sumS / n,
+    meanT = sumT / n;
+  let num = 0,
+    denS = 0,
+    denT = 0;
+  for (let i = 0; i < n; i++) {
+    const ds = src.data[i] - meanS,
+      dt = tmpl.data[i] - meanT;
     num += ds * dt;
     denS += ds * ds;
     denT += dt * dt;
@@ -623,7 +694,9 @@ export function matchTemplateNCC(src: GrayImage, tmpl: GrayImage): number {
 /** IoU of “ink” pixels (value > 127), both images same size. */
 export function inkIoU(a: GrayImage, b: GrayImage): number {
   if (a.width !== b.width || a.height !== b.height) return 0;
-  let inter = 0, aInk = 0, bInk = 0;
+  let inter = 0,
+    aInk = 0,
+    bInk = 0;
   const n = a.data.length;
   for (let i = 0; i < n; i++) {
     const fa = a.data[i] > 127;
@@ -645,14 +718,22 @@ export function glyphMatchScore(a: GrayImage, b: GrayImage): number {
 
 // ─── Drawing ───
 
-export function drawRectRGBA(img: RGBAImage, r: Rect, color: [number, number, number], thickness: number): void {
+export function drawRectRGBA(
+  img: RGBAImage,
+  r: Rect,
+  color: [number, number, number],
+  thickness: number
+): void {
   const { data: d, width: w, height: h } = img;
   for (let t = 0; t < thickness; t++) {
     for (let x = r.x - t; x < r.x + r.w + t; x++) {
       for (const y of [r.y - t, r.y + r.h - 1 + t]) {
         if (x >= 0 && x < w && y >= 0 && y < h) {
           const o = (y * w + x) * 4;
-          d[o] = color[0]; d[o + 1] = color[1]; d[o + 2] = color[2]; d[o + 3] = 255;
+          d[o] = color[0];
+          d[o + 1] = color[1];
+          d[o + 2] = color[2];
+          d[o + 3] = 255;
         }
       }
     }
@@ -660,7 +741,10 @@ export function drawRectRGBA(img: RGBAImage, r: Rect, color: [number, number, nu
       for (const x of [r.x - t, r.x + r.w - 1 + t]) {
         if (x >= 0 && x < w && y >= 0 && y < h) {
           const o = (y * w + x) * 4;
-          d[o] = color[0]; d[o + 1] = color[1]; d[o + 2] = color[2]; d[o + 3] = 255;
+          d[o] = color[0];
+          d[o + 1] = color[1];
+          d[o + 2] = color[2];
+          d[o + 3] = 255;
         }
       }
     }

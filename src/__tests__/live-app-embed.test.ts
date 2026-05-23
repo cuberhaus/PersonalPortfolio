@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { LOCALES } from '../config/locales';
 
 /**
  * Tests for the LiveAppEmbed component's core logic:
@@ -19,8 +20,7 @@ const T = {
     collapse: 'Collapse',
     expand: 'Show live app',
     offline: 'Run locally to see the full app',
-    offlineDesc:
-      'Start the backend with Docker or natively, then refresh this page.',
+    offlineDesc: 'Start the backend with Docker or natively, then refresh this page.',
     or: 'or',
   },
   es: {
@@ -55,7 +55,7 @@ type Status = 'checking' | 'online' | 'offline';
  */
 async function probeService(
   url: string,
-  fetchFn: typeof globalThis.fetch = globalThis.fetch,
+  fetchFn: typeof globalThis.fetch = globalThis.fetch
 ): Promise<Status> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 2000);
@@ -95,7 +95,7 @@ describe('LiveAppEmbed — probe logic', () => {
     const fakeFetch = vi.fn((_url: string, init?: RequestInit) => {
       return new Promise((_resolve, reject) => {
         init?.signal?.addEventListener('abort', () =>
-          reject(new DOMException('Aborted', 'AbortError')),
+          reject(new DOMException('Aborted', 'AbortError'))
         );
       });
     });
@@ -111,7 +111,7 @@ describe('LiveAppEmbed — probe logic', () => {
     await probeService('http://localhost:8888', fakeFetch);
     expect(fakeFetch).toHaveBeenCalledWith(
       'http://localhost:8888',
-      expect.objectContaining({ mode: 'no-cors' }),
+      expect.objectContaining({ mode: 'no-cors' })
     );
   });
 
@@ -125,7 +125,7 @@ describe('LiveAppEmbed — probe logic', () => {
 
 describe('LiveAppEmbed — translations', () => {
   it('has all three languages', () => {
-    expect(Object.keys(T)).toEqual(['en', 'es', 'ca']);
+    expect(Object.keys(T)).toEqual([...LOCALES]);
   });
 
   it('every language has the required keys', () => {
@@ -154,13 +154,15 @@ describe('LiveAppEmbed — fallbackSelector logic', () => {
 
   it('shows the element when status is offline', () => {
     const el = { style: { display: 'none' } } as HTMLElement;
-    if (el) el.style.display = 'offline' === 'online' ? 'none' : '';
+    const status = 'offline' as string;
+    if (el) el.style.display = status === 'online' ? 'none' : '';
     expect(el.style.display).toBe('');
   });
 
   it('shows the element when status is checking', () => {
     const el = { style: { display: 'none' } } as HTMLElement;
-    if (el) el.style.display = 'checking' === 'online' ? 'none' : '';
+    const status = 'checking' as string;
+    if (el) el.style.display = status === 'online' ? 'none' : '';
     expect(el.style.display).toBe('');
   });
 });

@@ -1,25 +1,36 @@
 import { useRef, useEffect } from 'react';
 import { drawWave, drawPhong, drawCheckerboard, drawExplode } from '../../lib/grafics-kernels';
 
-import { T, type DemoTranslations } from "../../i18n/demos/grafics-demo";
+import { T } from '../../i18n/demos/grafics-demo';
+import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
-type Lang = "en" | "es" | "ca";
+type Lang = 'en' | 'es' | 'ca';
 
 function WavePanel({ t }: { t: (typeof T)['en'] }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const log = useDebug('demo:grafics');
 
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
     let raf: number;
     const start = performance.now();
+    let prev = start;
+    let frameCount = 0;
     const frame = () => {
-      drawWave(canvas, (performance.now() - start) / 1000);
+      const now = performance.now();
+      const dt = now - prev;
+      prev = now;
+      frameCount++;
+      if (dt > 50) log.warn('frame-stall', { panel: 'wave', dt });
+      else if (frameCount % 60 === 0) log.trace('raf', { panel: 'wave', dt });
+      drawWave(canvas, (now - start) / 1000);
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [log]);
 
   return (
     <div style={panelStyle}>
@@ -68,19 +79,28 @@ function CheckerPanel({ t }: { t: (typeof T)['en'] }) {
 
 function ExplodePanel({ t }: { t: (typeof T)['en'] }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const log = useDebug('demo:grafics');
 
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
     let raf: number;
     const start = performance.now();
+    let prev = start;
+    let frameCount = 0;
     const frame = () => {
-      drawExplode(canvas, (performance.now() - start) / 1000);
+      const now = performance.now();
+      const dt = now - prev;
+      prev = now;
+      frameCount++;
+      if (dt > 50) log.warn('frame-stall', { panel: 'explode', dt });
+      else if (frameCount % 60 === 0) log.trace('raf', { panel: 'explode', dt });
+      drawExplode(canvas, (now - start) / 1000);
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [log]);
 
   return (
     <div style={panelStyle}>
@@ -91,10 +111,17 @@ function ExplodePanel({ t }: { t: (typeof T)['en'] }) {
   );
 }
 
-export default function GraficsDemo({ lang = 'en' }: { lang?: Lang }) {
+function GraficsDemo({ lang = 'en' }: { lang?: Lang }) {
   const t = T[lang] || T.en;
+  useDemoLifecycle('demo:grafics', { lang });
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '1rem',
+      }}
+    >
       <WavePanel t={t} />
       <PhongPanel t={t} />
       <CheckerPanel t={t} />
@@ -110,7 +137,7 @@ const panelStyle: React.CSSProperties = {
   border: '1px solid var(--border-color)',
 };
 const titleStyle: React.CSSProperties = {
-  color: 'var(--accent-start)',
+  color: 'var(--accent-text)',
   fontSize: '1rem',
   marginBottom: '0.25rem',
 };
@@ -119,3 +146,5 @@ const descStyle: React.CSSProperties = {
   fontSize: '0.8rem',
   marginBottom: '0.75rem',
 };
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(GraficsDemo, 'grafics');

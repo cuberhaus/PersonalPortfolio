@@ -1,0 +1,16 @@
+{
+  "mandelbrotTitle": "Mandelbrot Set",
+  "mandelbrotDesc": "Interactive fractal — scroll to zoom, drag to pan",
+  "heatTitle": "Heat Equation",
+  "heatDesc": "Jacobi relaxation on a 2D grid — top boundary fixed at 1.0",
+  "piTitle": "Pi Convergence",
+  "piDesc": "Numerical integration of 4/(1+x²) over [0,1]",
+  "iter": "Iterations",
+  "steps": "Steps",
+  "residual": "Residual",
+  "play": "Play",
+  "pause": "Pause",
+  "step": "Step",
+  "reset": "Reset",
+  "compute": "Compute"
+}

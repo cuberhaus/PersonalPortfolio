@@ -7,82 +7,37 @@
  * and the actual Astro page files on disk.
  */
 import { describe, it, expect } from 'vitest';
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
-import demosEn from '../data/demos.json';
-import demosEs from '../data/demos.es.json';
-import demosCa from '../data/demos.ca.json';
+import { listDemos } from '../i18n/demo';
+import { LOCALES } from '../config/locales';
 import { ui, languages } from '../i18n/ui';
-import { ICON_PATHS } from '../lib/demo-icons';
 
 const DEMO_PAGES_DIR = join(__dirname, '..', 'pages', 'demos');
 const demoPageFiles = readdirSync(DEMO_PAGES_DIR)
-  .filter(f => f.endsWith('.astro'))
-  .map(f => f.replace('.astro', ''));
+  .filter((f) => f.endsWith('.astro'))
+  .map((f) => f.replace('.astro', ''));
 
-const VALID_ICONS = Object.keys(ICON_PATHS);
+const demosEn = listDemos('en');
 
 // ─── Demo data consistency ──────────────────────────────────────
+//
+// Per-entry shape (slug regex, icon enum, tags non-empty, github URLs,
+// default-locale presence) is enforced by the Zod schema in
+// src/i18n/demo-schema.ts at module load — see demo-schema.test.ts for
+// the negative cases. The checks below are cross-cutting properties Zod
+// can't express on a single entry.
 
 describe('Demo data files', () => {
-  it('EN, ES, and CA have the same number of demos', () => {
-    expect(demosEn.length).toBe(demosEs.length);
-    expect(demosEn.length).toBe(demosCa.length);
-  });
-
-  it('EN, ES, and CA have identical slugs in the same order', () => {
-    const slugsEn = demosEn.map(d => d.slug);
-    const slugsEs = demosEs.map(d => d.slug);
-    const slugsCa = demosCa.map(d => d.slug);
-    expect(slugsEn).toEqual(slugsEs);
-    expect(slugsEn).toEqual(slugsCa);
+  it('flattens to the same number of demos in every locale', () => {
+    for (const locale of LOCALES) {
+      expect(listDemos(locale).length).toBe(demosEn.length);
+    }
   });
 
   it('every demo has a unique slug', () => {
-    const slugs = demosEn.map(d => d.slug);
+    const slugs = demosEn.map((d) => d.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
-  });
-
-  it('every demo has a non-empty title and description', () => {
-    for (const demos of [demosEn, demosEs, demosCa]) {
-      for (const demo of demos) {
-        expect(demo.title.trim().length, `empty title for ${demo.slug}`).toBeGreaterThan(0);
-        expect(demo.description.trim().length, `empty description for ${demo.slug}`).toBeGreaterThan(0);
-      }
-    }
-  });
-
-  it('every demo has at least one tag', () => {
-    for (const demo of demosEn) {
-      expect(demo.tags.length, `no tags for ${demo.slug}`).toBeGreaterThanOrEqual(1);
-    }
-  });
-
-  it('every demo uses a valid icon', () => {
-    for (const demo of demosEn) {
-      expect(VALID_ICONS, `unknown icon "${demo.icon}" for ${demo.slug}`).toContain(demo.icon);
-    }
-  });
-
-  it('every demo has a github link (string or array)', () => {
-    for (const demo of demosEn) {
-      const gh = demo.github;
-      if (Array.isArray(gh)) {
-        expect(gh.length, `empty github array for ${demo.slug}`).toBeGreaterThan(0);
-        for (const url of gh) {
-          expect(url).toMatch(/^https:\/\/github\.com\//);
-        }
-      } else {
-        expect(gh).toMatch(/^https:\/\/github\.com\//);
-      }
-    }
-  });
-
-  it('EN, ES, and CA have matching icons per slug', () => {
-    for (let i = 0; i < demosEn.length; i++) {
-      expect(demosEn[i].icon).toBe(demosEs[i].icon);
-      expect(demosEn[i].icon).toBe(demosCa[i].icon);
-    }
   });
 });
 
@@ -100,28 +55,28 @@ describe('Demo pages match demo data', () => {
   });
 
   it('every .astro page has a corresponding slug in demos.json', () => {
-    const slugs = demosEn.map(d => d.slug);
+    const slugs = demosEn.map((d) => d.slug);
     for (const page of demoPageFiles) {
       expect(slugs, `page "${page}.astro" has no matching slug in demos.json`).toContain(page);
     }
   });
 });
 
-// ─── Homepage section parity ─────────────────────────────────────
+// ─── Homepage SSOT consumption ──────────────────────────────────
 
-describe('Homepage sections match across locales', () => {
+describe('Homepage pages consume the sections SSOT', () => {
   const enHomePath = join(__dirname, '..', 'pages', 'index.astro');
   const langHomePath = join(__dirname, '..', 'pages', '[lang]', 'index.astro');
-  const enHome = require('fs').readFileSync(enHomePath, 'utf-8') as string;
-  const langHome = require('fs').readFileSync(langHomePath, 'utf-8') as string;
+  const enHome = readFileSync(enHomePath, 'utf-8') as string;
+  const langHome = readFileSync(langHomePath, 'utf-8') as string;
 
-  const extractComponents = (src: string) =>
-    [...src.matchAll(/<([A-Z]\w+)\s*\/>/g)].map(m => m[1]).sort();
-
-  it('[lang]/index.astro renders the same components as index.astro', () => {
-    const enComponents = extractComponents(enHome);
-    const langComponents = extractComponents(langHome);
-    expect(langComponents).toEqual(enComponents);
+  // Both pages MUST import { sections } from config/sections so the order
+  // is centralised in one place. Detailed structural assertions live in
+  // structural.test.ts; this test is a smoke check at the integrity layer.
+  it('default and localized homepages both import { sections } from the SSOT', () => {
+    const pattern = /import\s*\{\s*sections\s*\}\s*from\s*['"](\.\.\/)+config\/sections['"]/;
+    expect(enHome).toMatch(pattern);
+    expect(langHome).toMatch(pattern);
   });
 });
 
@@ -161,17 +116,18 @@ describe('i18n translations', () => {
 
 describe('Dynamic demo router ([lang]/demos/[demo].astro)', () => {
   const routerPath = join(__dirname, '..', 'pages', '[lang]', 'demos', '[demo].astro');
-  const routerContent = require('fs').readFileSync(routerPath, 'utf-8') as string;
+  const routerContent = readFileSync(routerPath, 'utf-8') as string;
 
-  it('every demo slug appears in the getStaticPaths array', () => {
-    for (const demo of demosEn) {
-      expect(routerContent, `slug "${demo.slug}" missing from router getStaticPaths`).toContain(`'${demo.slug}'`);
-    }
+  // The router globs every page in src/pages/demos/ at build time, so slug
+  // coverage is enforced by the "every slug has a corresponding .astro page"
+  // and "every .astro page has a corresponding slug" assertions above. Here
+  // we just verify the router is using the SSOT-compatible glob pattern.
+
+  it('uses import.meta.glob to discover demo pages', () => {
+    expect(routerContent).toMatch(/import\.meta\.glob\(\s*['"]\.\.\/\.\.\/demos\/\*\.astro['"]/);
   });
 
-  it('every demo slug has a conditional render line', () => {
-    for (const demo of demosEn) {
-      expect(routerContent, `slug "${demo.slug}" missing conditional render`).toContain(`demo === '${demo.slug}'`);
-    }
+  it('imports the locale list from the locales SSOT', () => {
+    expect(routerContent).toMatch(/from\s+['"](\.\.\/){3}config\/locales['"]/);
   });
 });

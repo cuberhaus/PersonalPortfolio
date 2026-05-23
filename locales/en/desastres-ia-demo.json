@@ -1,0 +1,127 @@
+{
+  "pipeline": [
+    {
+      "icon": "📋",
+      "title": "State",
+      "desc": "Ordered queue of groups per helicopter"
+    },
+    {
+      "icon": "🔀",
+      "title": "SWAP",
+      "desc": "Exchange two groups across positions"
+    },
+    {
+      "icon": "📊",
+      "title": "Score",
+      "desc": "H2 = sum of all helicopter finish times"
+    },
+    {
+      "icon": "🔍",
+      "title": "Search",
+      "desc": "HC climbs · SA explores with random jumps"
+    }
+  ],
+  "operators": [
+    {
+      "name": "SWAP",
+      "fn": "Function1",
+      "desc": "Exchange two groups between helicopter queues"
+    },
+    {
+      "name": "GENERAL",
+      "fn": "Function2",
+      "desc": "Broader moves — reassign / reorder operators"
+    },
+    {
+      "name": "REDUCIDO",
+      "fn": "Function3",
+      "desc": "Smaller neighborhood, faster iterations"
+    },
+    {
+      "name": "SWAP + GENERAL",
+      "fn": "Function4",
+      "desc": "Combines swap with general moves"
+    },
+    {
+      "name": "SWAP + REDUCIDO",
+      "fn": "Function5",
+      "desc": "Swap combined with reduced neighborhood"
+    },
+    {
+      "name": "Stochastic",
+      "fn": "Function6",
+      "desc": "Randomly picks swap or general branch"
+    }
+  ],
+  "heuristics": [
+    {
+      "name": "H1",
+      "desc": "Mix of makespan (max heli time) and total time, weighted to spread load",
+      "active": false
+    },
+    {
+      "name": "H2",
+      "desc": "Minimize sum of all helicopter completion times",
+      "active": true
+    },
+    {
+      "name": "H3",
+      "desc": "H1 + penalty for priority groups rescued late (urgency-aware)",
+      "active": false
+    }
+  ],
+  "localSearch": "Local Search",
+  "aima": "AIMA · Java + Python",
+  "problemSchematic": "Problem schematic",
+  "probDesc": "Helicopters leave bases and serve centers in an optimized order. Groups have sizes and priorities. Capacity: 15 people per trip, 10 min cooldown between sorties.",
+  "base": "Base",
+  "center": "Center",
+  "rescueOrder": "rescue order →",
+  "heurFunctions": "Heuristic functions",
+  "usedInDemo": "used in demo",
+  "succOperators": "Successor operators",
+  "succNote1": "6 successor functions in Java (",
+  "succNote2": "). Demo uses SWAP. Hover for details.",
+  "runDemo": "Run the demo",
+  "demoSub": "HC / SA · 7 groups · 3 helicopters · runs in browser",
+  "howItWorks": "How it works:",
+  "howDesc1": " Random 2D layout (seeded) with 2 bases and 7 groups. Colors = owning helicopter. ",
+  "howDesc2": "HC",
+  "howDesc3": " picks the best SWAP neighbor until stuck; ",
+  "howDesc4": "SA",
+  "howDesc5": " sometimes accepts worse moves to escape local minima.",
+  "algorithm": "Algorithm",
+  "hc": "Hill climbing",
+  "sa": "Simulated annealing",
+  "hcFull": "Hill climbing (full SWAP)",
+  "saFull": "Simulated annealing (random SWAP)",
+  "seed": "Seed",
+  "runSearch": "Run search",
+  "running": "Running…",
+  "cost": "H2 cost:",
+  "before": "Before — random initial queues",
+  "after": "After — optimized assignment",
+  "finalQueues": "Final queues",
+  "initialState": "Initial state breakdown & raw log",
+  "compact": "Compact:",
+  "ghRepo": "GitHub repo ↗",
+  "webAppTitle": "Full Web App",
+  "webAppDesc": "Run the Docker container to access the full interactive solver with all features below.",
+  "webAppFeatures": [
+    {
+      "icon": "🗺️",
+      "title": "2D Map Solver",
+      "desc": "Interactive Canvas map with helicopter routes, group tooltips, and color-coded assignments"
+    },
+    {
+      "icon": "📊",
+      "title": "Experiment Dashboard",
+      "desc": "Batch-run across seed ranges with boxplot comparisons of all algorithm configurations"
+    },
+    {
+      "icon": "⚙️",
+      "title": "Full Configuration",
+      "desc": "All 3 heuristics, 6 successor functions, 3 initial states, and tunable SA parameters"
+    }
+  ]
+}

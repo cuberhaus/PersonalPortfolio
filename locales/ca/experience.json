@@ -1,0 +1,20 @@
+{
+  "0": {
+    "role": "Enginyer d'IA i ML",
+    "period": "Set 2024 — Actualitat",
+    "bullets": {
+      "0": "Lliurament del primer projecte d'IA Física de Deloitte: detecció d'anomalies de fabricació en temps real en línies de producció de motors en viu i un bessó digital del magatzem amb seguiment de paquets per càmera, construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton)",
+      "1": "Disseny i desplegament d'infraestructura d'IA i dades a AWS, Azure i GCP — inferència a l'edge, pipelines de streaming i entrenament i servei de models al núvol",
+      "2": "Integració a l'Oficina de Govern de Dades (OGD) de la Generalitat de Catalunya per co-definir l'estratègia de dades a nivell institucional — implementació de catàleg d'actius i llinatge amb Informatica, i assessoria de governança a equips interdepartamentals de l'administració pública"
+    }
+  },
+  "1": {
+    "role": "Enginyer d'IA",
+    "period": "Set 2023 — Set 2024",
+    "bullets": {
+      "0": "Desenvolupament de models de predicció de preus dins d'un equip d'IA i dades de 4 persones donant suport a l'anàlisi de productes asseguradors",
+      "1": "Automatització de fluxos de treball de SQL Server amb PowerShell per agilitzar tasques recurrents de processament de dades i generació d'informes",
+      "2": "Projectes d'anàlisi geoespacial en R / RStudio, utilitzant dades cartogràfiques per aportar informació de negoci basada en la localització"
+    }
+  }
+}

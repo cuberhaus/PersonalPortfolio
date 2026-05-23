@@ -1,0 +1,75 @@
+# Weekly dependency-bump PRs against main. Each PR runs the full CI suite
+# (quality + vitest + planner-api + playwright × 5 + a11y × 4 shards +
+# lighthouse), so a bump that breaks the build never lands.
+#
+# Major-version bumps are intentionally ignored so manual review stays in
+# the loop for breaking changes — the Astro 5 → 6 jump in PR #89 is the
+# template for how those should land (one focused PR with a migration
+# checklist, not a Dependabot drive-by).
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # One PR per ecosystem-group instead of one PR per package — keeps
+      # CI minutes and review load sane.
+      astro:
+        patterns:
+          - 'astro'
+          - '@astrojs/*'
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
+      d3:
+        patterns:
+          - 'd3-*'
+          - '@types/d3-*'
+      testing:
+        patterns:
+          - 'vitest'
+          - 'playwright'
+          - '@playwright/*'
+          - '@axe-core/*'
+          - '@testing-library/*'
+      eslint-prettier:
+        patterns:
+          - 'eslint'
+          - 'eslint-*'
+          - '@eslint/*'
+          - 'typescript-eslint'
+          - 'prettier'
+          - 'prettier-*'
+      sentry:
+        patterns:
+          - '@sentry/*'
+          - '@spotlightjs/*'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-major
+    commit-message:
+      prefix: chore(deps)
+      include: scope
+    labels:
+      - dependencies
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: chore(ci)
+      include: scope
+    labels:
+      - dependencies
+      - ci

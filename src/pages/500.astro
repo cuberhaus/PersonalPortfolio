@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { useTranslations } from '../i18n/utils';
+import { DEFAULT_LOCALE } from '../config/locales';
+
+// 500 ships the default-locale copy at build time; the inline script below
+// upgrades the strings to the visitor's locale (derived from the URL prefix)
+// using the same `ui` dictionary as 404.astro.
+const t = useTranslations(DEFAULT_LOCALE);
+---
+
+<Layout title={`500 — ${t('serverError.title')}`} description={t('serverError.message')}>
+  <main class="error-page" id="main-content">
+    <div class="container text-center">
+      <h1 class="error-code gradient-text">500</h1>
+      <h2 class="error-title" id="error-title">{t('serverError.title')}</h2>
+      <p class="error-message" id="error-message">{t('serverError.message')}</p>
+      <a
+        href={import.meta.env.BASE_URL === '/' ? '/' : import.meta.env.BASE_URL}
+        class="back-btn"
+        id="back-btn"
+      >
+        &larr; <span id="back-label">{t('serverError.back')}</span>
+      </a>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { ui } from '../i18n/ui';
+  import { pickLang } from '../i18n/utils';
+  import { PREFIXED_LOCALES } from '../config/locales';
+
+  const segments = window.location.pathname.replace(/^\/+/, '').split('/');
+  const detected = PREFIXED_LOCALES.find((l) => segments.includes(l));
+  if (detected) {
+    const lang = pickLang(detected);
+    const bundle = ui[lang];
+    const title = document.getElementById('error-title');
+    const msg = document.getElementById('error-message');
+    const back = document.getElementById('back-label');
+    if (title) title.textContent = bundle['serverError.title'];
+    if (msg) msg.textContent = bundle['serverError.message'];
+    if (back) back.textContent = bundle['serverError.back'];
+  }
+</script>
+
+<style>
+  .error-page {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .text-center {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .error-code {
+    font-size: clamp(6rem, 15vw, 10rem);
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 1rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .error-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .error-message {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    padding: 0.85rem 2.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--bg-primary);
+    background: var(--accent-start);
+    border-radius: var(--radius-md);
+    transition:
+      background var(--transition-fast),
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  .back-btn:hover {
+    background: var(--accent-end);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--glow-color);
+  }
+</style>

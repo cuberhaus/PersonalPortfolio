@@ -1,0 +1,11 @@
+{
+  "checking": "Comprovant servei local…",
+  "live": "App en viu detectada",
+  "runningAt": "Executant-se a",
+  "openTab": "Obrir en una nova pestanya",
+  "collapse": "Col·lapsar",
+  "expand": "Mostrar app en viu",
+  "offline": "Executa'l localment per veure l'app completa",
+  "offlineDesc": "Inicia el backend amb Docker o de forma nativa, després recarrega aquesta pàgina.",
+  "or": "o"
+}

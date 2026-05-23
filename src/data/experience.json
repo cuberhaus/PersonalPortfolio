@@ -1,32 +1,15 @@
 [
   {
-    "role": "AI & Data Consultant",
     "company": "Deloitte",
-    "period": "Sep 2025 — Present",
-    "bullets": [
-      "Led a multidisciplinary team to design and deliver AI and data-driven use cases for public sector initiatives",
-      "Worked on the Generalitat de Catalunya project, focusing on Data Governance, client relationship management, and consulting strategy",
-      "Hands-on experience with Informatica, AWS, and Azure in real-world data management solutions"
-    ]
+    "link": "https://www.deloitte.com/es/es.html",
+    "logo": "/logos/Deloitte_logo_white.svg",
+    "logoLight": "/logos/Logo_of_Deloitte.svg",
+    "startDate": "2024-09"
   },
   {
-    "role": "Data Engineer",
     "company": "MGS, Seguros y Reaseguros S.A.",
-    "period": "Sep 2023 — Sep 2024",
-    "bullets": [
-      "Championed predictive analytics, robust data governance, and optimized ETL processes, enhancing data quality and efficiency",
-      "Drove a 20% increase in report accuracy with impactful visualizations using Python, R, SQL Server, and Power BI",
-      "Crafted dynamic dashboards for real-time KPI and business metric monitoring, enabling informed strategic decisions"
-    ]
-  },
-  {
-    "role": "Software Development Engineer",
-    "company": "bitsxlaMarató TV3 Hackathon (Winner)",
-    "period": "Jan 2022",
-    "bullets": [
-      "Developed an aneurysm detector using a convolutional neural network with MaskRCNN for cardiovascular health",
-      "Won the bitsxlaMarató TV3 Hackathon 2022 for this project",
-      "Designed a user-friendly interface for uploading video, detecting the aorta, and visualizing 3D models"
-    ]
+    "link": "https://www.mgs.es/wps/",
+    "startDate": "2023-09",
+    "endDate": "2024-09"
   }
 ]

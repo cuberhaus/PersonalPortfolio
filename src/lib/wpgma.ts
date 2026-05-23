@@ -14,11 +14,7 @@ function generateKmers(gene: string, k: number): Map<string, number> {
   return kmers;
 }
 
-export function speciesDistance(
-  gene1: string,
-  gene2: string,
-  k: number
-): number {
+export function speciesDistance(gene1: string, gene2: string, k: number): number {
   const kmers1 = generateKmers(gene1, k);
   const kmers2 = generateKmers(gene2, k);
 
@@ -47,10 +43,7 @@ export interface DistanceTable {
   distances: Map<string, Map<string, number>>;
 }
 
-export function buildDistanceTable(
-  species: Species[],
-  k: number
-): DistanceTable {
+export function buildDistanceTable(species: Species[], k: number): DistanceTable {
   const ids = species.map((s) => s.id).sort();
   const distances = new Map<string, Map<string, number>>();
 
@@ -90,21 +83,19 @@ export function initClusters(table: DistanceTable): ClusterState {
   return { clusters, distances };
 }
 
-function getDistance(
-  distances: Map<string, Map<string, number>>,
-  a: string,
-  b: string
-): number {
+function getDistance(distances: Map<string, Map<string, number>>, a: string, b: string): number {
   const [lo, hi] = a < b ? [a, b] : [b, a];
   return distances.get(lo)?.get(hi) ?? 0;
 }
 
-function findMinPair(
-  distances: Map<string, Map<string, number>>
-): { dist: number; id1: string; id2: string } {
+function findMinPair(distances: Map<string, Map<string, number>>): {
+  dist: number;
+  id1: string;
+  id2: string;
+} {
   let minDist = Infinity;
-  let id1 = "";
-  let id2 = "";
+  let id1 = '';
+  let id2 = '';
 
   for (const [row, cols] of distances) {
     for (const [col, d] of cols) {
@@ -151,8 +142,7 @@ export function wpgmaStep(state: ClusterState): WpgmaStep | null {
     const d2 = getDistance(state.distances, id2, otherId);
     const avgDist = (d1 + d2) / 2;
 
-    const [lo, hi] =
-      newId < otherId ? [newId, otherId] : [otherId, newId];
+    const [lo, hi] = newId < otherId ? [newId, otherId] : [otherId, newId];
     if (!newDistances.has(lo)) newDistances.set(lo, new Map());
     newDistances.get(lo)!.set(hi, avgDist);
   }
@@ -189,9 +179,10 @@ export function runFullWpgma(table: DistanceTable): TreeNode | null {
   return entries[0] ?? null;
 }
 
-export function distanceTableToArray(
-  distances: Map<string, Map<string, number>>
-): { ids: string[]; matrix: (number | null)[][] } {
+export function distanceTableToArray(distances: Map<string, Map<string, number>>): {
+  ids: string[];
+  matrix: (number | null)[][];
+} {
   const allIds = new Set<string>();
   for (const [row, cols] of distances) {
     allIds.add(row);
@@ -200,9 +191,7 @@ export function distanceTableToArray(
     }
   }
   const ids = [...allIds].sort();
-  const matrix: (number | null)[][] = ids.map(() =>
-    ids.map(() => null)
-  );
+  const matrix: (number | null)[][] = ids.map(() => ids.map(() => null));
 
   for (const [row, cols] of distances) {
     for (const [col, d] of cols) {
@@ -217,11 +206,11 @@ export function distanceTableToArray(
 }
 
 export const SAMPLE_SPECIES: Species[] = [
-  { id: "A", gene: "AACTGCATGC" },
-  { id: "B", gene: "AACTGCTTGC" },
-  { id: "C", gene: "GGTACCATGC" },
-  { id: "D", gene: "CATGCAACTG" },
-  { id: "E", gene: "TTGCAACTGC" },
+  { id: 'A', gene: 'AACTGCATGC' },
+  { id: 'B', gene: 'AACTGCTTGC' },
+  { id: 'C', gene: 'GGTACCATGC' },
+  { id: 'D', gene: 'CATGCAACTG' },
+  { id: 'E', gene: 'TTGCAACTGC' },
 ];
 
 export const DEFAULT_K = 3;

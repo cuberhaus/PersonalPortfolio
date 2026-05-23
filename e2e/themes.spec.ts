@@ -70,12 +70,12 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="minimal"]').click();
     await page.keyboard.press('Escape');
-    const minimalFont = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    const minimalFont = await h1.evaluate((el) => getComputedStyle(el).fontFamily);
 
     await openModal(page);
     await page.locator('[data-design-id="pixel"]').click();
     await page.keyboard.press('Escape');
-    const pixelFont = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    const pixelFont = await h1.evaluate((el) => getComputedStyle(el).fontFamily);
 
     expect(pixelFont).not.toBe(minimalFont);
     expect(pixelFont.toLowerCase()).toContain('press start');
@@ -83,7 +83,7 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="editorial"]').click();
     await page.keyboard.press('Escape');
-    const editorialFont = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    const editorialFont = await h1.evaluate((el) => getComputedStyle(el).fontFamily);
 
     expect(editorialFont).not.toBe(minimalFont);
     expect(editorialFont).not.toBe(pixelFont);
@@ -91,31 +91,48 @@ test.describe('Ctrl+K customize modal', () => {
   });
 
   test('window.setDesign API works and validates ids', async ({ page }) => {
-    await page.evaluate(() => (window as unknown as { setDesign(id: string): void }).setDesign('glass'));
-    await expect(page.locator('html')).toHaveAttribute('data-design', 'glass');
+    await page.evaluate(() =>
+      (window as unknown as { setDesign(id: string): void }).setDesign('swiss')
+    );
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'swiss');
 
     const errors: string[] = [];
-    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.evaluate(() => (window as unknown as { setDesign(id: string): void }).setDesign('not-a-design'));
-    await expect(page.locator('html')).toHaveAttribute('data-design', 'glass');
-    expect(errors.some(e => /not-a-design/.test(e))).toBe(true);
+    page.on('console', (m) => {
+      if (m.type() === 'error') errors.push(m.text());
+    });
+    await page.evaluate(() =>
+      (window as unknown as { setDesign(id: string): void }).setDesign('not-a-design')
+    );
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'swiss');
+    expect(errors.some((e) => /not-a-design/.test(e))).toBe(true);
   });
 
   test('URL ?design=… is honored then stripped', async ({ page }) => {
-    await page.goto('/?design=neumorphic', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('html')).toHaveAttribute('data-design', 'neumorphic');
+    await page.goto('/?design=editorial', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'editorial');
     expect(page.url()).not.toContain('design=');
   });
 
   test('design tiles include every registered design', async ({ page }) => {
     await openModal(page);
     for (const id of [
-      'minimal', 'editorial', 'swiss', 'pixel',
-      'terminal', 'cyber', 'clay',
-      'notebook', 'brutalist', 'blueprint',
-      'academic', 'ide', 'risograph',
-      'deco', 'wabisabi',
-      'zine', 'comic', 'newspaper',
+      'minimal',
+      'editorial',
+      'swiss',
+      'pixel',
+      'terminal',
+      'cyber',
+      'notebook',
+      'brutalist',
+      'blueprint',
+      'academic',
+      'ide',
+      'risograph',
+      'deco',
+      'wabisabi',
+      'zine',
+      'comic',
+      'newspaper',
     ]) {
       await expect(page.locator(`[data-design-id="${id}"]`)).toBeVisible();
     }
@@ -126,7 +143,7 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="notebook"]').click();
     await page.keyboard.press('Escape');
-    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    const font = await h1.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(font.toLowerCase()).toContain('caveat');
   });
 
@@ -134,10 +151,10 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="brutalist"]').click();
     await page.keyboard.press('Escape');
-    const bodyFont = await page.locator('body').evaluate(el => getComputedStyle(el).fontFamily);
+    const bodyFont = await page.locator('body').evaluate((el) => getComputedStyle(el).fontFamily);
     expect(bodyFont.toLowerCase()).toContain('times');
     const cta = page.locator('.hero-cta').first();
-    const shadow = await cta.evaluate(el => getComputedStyle(el).boxShadow);
+    const shadow = await cta.evaluate((el) => getComputedStyle(el).boxShadow);
     expect(shadow).not.toBe('none');
   });
 
@@ -146,7 +163,9 @@ test.describe('Ctrl+K customize modal', () => {
     await page.locator('[data-design-id="blueprint"]').click();
     await page.keyboard.press('Escape');
     const aboutSection = page.locator('section.about');
-    const pseudoContent = await aboutSection.evaluate(el => getComputedStyle(el, '::before').content);
+    const pseudoContent = await aboutSection.evaluate(
+      (el) => getComputedStyle(el, '::before').content
+    );
     expect(pseudoContent).toMatch(/REV-?0?1/i);
   });
 
@@ -155,7 +174,7 @@ test.describe('Ctrl+K customize modal', () => {
     await page.locator('[data-design-id="terminal"]').click();
     await page.keyboard.press('Escape');
     const body = page.locator('body');
-    const font = await body.evaluate(el => getComputedStyle(el).fontFamily);
+    const font = await body.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(font.toLowerCase()).toContain('jetbrains mono');
   });
 
@@ -164,7 +183,7 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="cyber"]').click();
     await page.keyboard.press('Escape');
-    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    const font = await h1.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(font.toLowerCase()).toContain('orbitron');
   });
 
@@ -174,7 +193,9 @@ test.describe('Ctrl+K customize modal', () => {
     await page.keyboard.press('Escape');
 
     const aboutSection = page.locator('section.about');
-    const pseudoContent = await aboutSection.evaluate(el => getComputedStyle(el, '::before').content);
+    const pseudoContent = await aboutSection.evaluate(
+      (el) => getComputedStyle(el, '::before').content
+    );
     expect(pseudoContent).toMatch(/01/);
   });
 
@@ -183,7 +204,7 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="academic"]').click();
     await page.keyboard.press('Escape');
-    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    const font = await h1.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(font.toLowerCase()).toContain('garamond');
   });
 
@@ -192,9 +213,9 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="ide"]').click();
     await page.keyboard.press('Escape');
-    const pseudoContent = await h1.evaluate(el => getComputedStyle(el, '::before').content);
+    const pseudoContent = await h1.evaluate((el) => getComputedStyle(el, '::before').content);
     expect(pseudoContent).toMatch(/"/);
-    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    const font = await h1.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(font.toLowerCase()).toContain('jetbrains mono');
   });
 
@@ -202,8 +223,12 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="risograph"]').click();
     await page.keyboard.press('Escape');
-    const aboutBg = await page.locator('section.about').evaluate(el => getComputedStyle(el).backgroundColor);
-    const demosBg = await page.locator('section.demos').evaluate(el => getComputedStyle(el).backgroundColor);
+    const aboutBg = await page
+      .locator('section.about')
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+    const demosBg = await page
+      .locator('section.demos')
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(aboutBg).not.toBe(demosBg);
   });
 
@@ -212,35 +237,46 @@ test.describe('Ctrl+K customize modal', () => {
     await page.locator('[data-design-id="deco"]').click();
     await page.keyboard.press('Escape');
     const title = page.locator('section.about .section-title').first();
-    const pseudoContent = await title.evaluate(el => getComputedStyle(el, '::before').content);
+    const pseudoContent = await title.evaluate((el) => getComputedStyle(el, '::before').content);
     expect(pseudoContent).toMatch(/upper-roman/);
   });
 
-  test('Wabi-sabi applies Shippori Mincho (or serif fallback) to the hero name', async ({ page }) => {
+  test('Wabi-sabi applies Shippori Mincho (or serif fallback) to the hero name', async ({
+    page,
+  }) => {
     const h1 = page.locator('h1.hero-name').first();
     await openModal(page);
     await page.locator('[data-design-id="wabisabi"]').click();
     await page.keyboard.press('Escape');
-    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    const font = await h1.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(font.toLowerCase()).toMatch(/shippori|mincho|serif|garamond/);
   });
 
-  test('Dashboard design (hidden) still applies via window.setDesign API', async ({ page }) => {
-    await page.evaluate(() => (window as unknown as { setDesign(id: string): void }).setDesign('dashboard'));
-    await expect(page.locator('html')).toHaveAttribute('data-design', 'dashboard');
-    const greeting = page.locator('.hero-greeting').first();
-    const display = await greeting.evaluate(el => getComputedStyle(el).display);
-    expect(display).toMatch(/inline-flex|flex/);
-    const radius = await greeting.evaluate(el => getComputedStyle(el).borderRadius);
-    expect(radius).not.toBe('0px');
+  test('setDesign API validates unknown ids and keeps current design', async ({ page }) => {
+    await page.evaluate(() =>
+      (window as unknown as { setDesign(id: string): void }).setDesign('brutalist')
+    );
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'brutalist');
+    // Try setting a non-existent design — should stay on brutalist
+    const errors: string[] = [];
+    page.on('console', (m) => {
+      if (m.type() === 'error') errors.push(m.text());
+    });
+    await page.evaluate(() =>
+      (window as unknown as { setDesign(id: string): void }).setDesign('dashboard')
+    );
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'brutalist');
+    expect(errors.some((e) => /dashboard/.test(e))).toBe(true);
   });
 
-  test('Zine design applies a heavy box-shadow offset to cards (photocopied feel)', async ({ page }) => {
+  test('Zine design applies a heavy box-shadow offset to cards (photocopied feel)', async ({
+    page,
+  }) => {
     await openModal(page);
     await page.locator('[data-design-id="zine"]').click();
     await page.keyboard.press('Escape');
     const card = page.locator('.work-card, .demo-card, .card').first();
-    const shadow = await card.evaluate(el => getComputedStyle(el).boxShadow);
+    const shadow = await card.evaluate((el) => getComputedStyle(el).boxShadow);
     expect(shadow).not.toBe('none');
     // solid offset shadow without blur → contains "0px 0px" or explicit offsets, not "rgba(0,0,0,0.1)"
     expect(shadow).toMatch(/\d+px\s+\d+px\s+0px/);
@@ -251,16 +287,18 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="comic"]').click();
     await page.keyboard.press('Escape');
-    const font = await h1.evaluate(el => getComputedStyle(el).fontFamily);
+    const font = await h1.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(font.toLowerCase()).toContain('bangers');
   });
 
-  test('Newspaper design applies UnifrakturMaguntia to the nav logo (masthead)', async ({ page }) => {
+  test('Newspaper design applies UnifrakturMaguntia to the nav logo (masthead)', async ({
+    page,
+  }) => {
     await openModal(page);
     await page.locator('[data-design-id="newspaper"]').click();
     await page.keyboard.press('Escape');
     const logo = page.locator('.nav-logo').first();
-    const font = await logo.evaluate(el => getComputedStyle(el).fontFamily);
+    const font = await logo.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(font.toLowerCase()).toMatch(/unifraktur|fraktur|playfair/);
   });
 

@@ -1,0 +1,20 @@
+{
+  "0": {
+    "role": "AI & ML Engineer",
+    "period": "Sep 2024 — Present",
+    "bullets": {
+      "0": "Delivered Deloitte's first Physical AI project: real-time manufacturing anomaly detection on live motor production lines and a warehouse digital twin with camera-based package tracking, built on NVIDIA Omniverse, Isaac Sim, and the Metropolis stack (DeepStream, TAO, Triton)",
+      "1": "Designed and deployed AI and data infrastructure across AWS, Azure, and GCP — edge inference, streaming pipelines, and cloud-hosted training and model serving",
+      "2": "Embedded in the Generalitat de Catalunya's Data Governance Office (OGD) to help define the institution-wide data strategy — established data catalogues, mapped asset lineage with Informatica, and delivered governance advisory to cross-departmental teams across the public administration"
+    }
+  },
+  "1": {
+    "role": "AI Engineer",
+    "period": "Sep 2023 — Sep 2024",
+    "bullets": {
+      "0": "Built pricing prediction models as part of a 4-person AI and data team supporting insurance product analytics",
+      "1": "Automated SQL Server workflows with PowerShell to streamline recurring data processing and reporting tasks",
+      "2": "Developed geospatial analysis projects in R / RStudio, using map data to support location-based business insights"
+    }
+  }
+}

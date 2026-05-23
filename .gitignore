@@ -10,6 +10,15 @@ coverage/
 .env.*
 .DS_Store
 
+# CV PDFs fetched from cuberhaus/cv releases at build time
+public/cv.pdf
+public/cv_es.pdf
+public/cv_ca.pdf
+
+# OG images regenerated on every deploy by scripts/capture-og-images.mjs
+public/og-image.png
+public/og/
+
 # Playwright
 test-results/
 playwright-report/
@@ -19,3 +28,9 @@ blob-report/
 planner-api/.venv/
 planner-api/**/__pycache__/
 planner-api/**/.pytest_cache/
+
+# Translation export/import working files
+translations/
+
+# inlang runtime cache
+project.inlang/cache/

@@ -30,6 +30,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   const VALID_THEMES = THEME_IDS;
   const VALID_DESIGNS = DESIGN_IDS;
 
+  let __themeSource = 'fallback';
   const __theme = (() => {
     const url = new URL(window.location.href);
     const param = url.searchParams.get('theme');
@@ -37,19 +38,27 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       localStorage.setItem('theme', param);
       url.searchParams.delete('theme');
       history.replaceState(null, '', url.pathname + url.search + url.hash);
+      __themeSource = 'url-param';
       return param;
     }
     if (typeof localStorage !== 'undefined') {
       const saved = localStorage.getItem('theme');
-      if (saved && VALID_THEMES.includes(saved)) return saved;
+      if (saved && VALID_THEMES.includes(saved)) {
+        __themeSource = 'localStorage';
+        return saved;
+      }
     }
     if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      __themeSource = 'system-light';
       return 'light';
     }
+    __themeSource = 'system-dark';
     return 'dark';
   })();
   document.documentElement.setAttribute('data-theme', __theme);
+  if (window.__debug) window.__debug.log('info', 'theme', 'resolved', { theme: __theme, source: __themeSource });
 
+  let __designSource = 'fallback';
   const __design = (() => {
     const url = new URL(window.location.href);
     const param = url.searchParams.get('design');
@@ -57,63 +66,85 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       localStorage.setItem('design', param);
       url.searchParams.delete('design');
       history.replaceState(null, '', url.pathname + url.search + url.hash);
+      __designSource = 'url-param';
       return param;
     }
     if (typeof localStorage !== 'undefined') {
       const saved = localStorage.getItem('design');
-      if (saved && VALID_DESIGNS.includes(saved)) return saved;
+      if (saved && VALID_DESIGNS.includes(saved)) {
+        __designSource = 'localStorage';
+        return saved;
+      }
     }
     return DEFAULT_DESIGN;
   })();
   document.documentElement.setAttribute('data-design', __design);
+  if (window.__debug) window.__debug.log('info', 'design', 'resolved', { design: __design, source: __designSource });
 
   // Load design-specific fonts on demand instead of all 14 families upfront.
   // Core fonts (Inter, Inter Tight, JetBrains Mono) are in the main <link>.
-  var __designFonts = {
-    editorial:  'family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400',
-    pixel:      'family=Press+Start+2P',
-    cyber:      'family=Orbitron:wght@500;700;900',
-    notebook:   'family=Caveat:wght@500;600;700',
-    academic:   'family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
-    deco:       'family=Poiret+One&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900',
-    wabisabi:   'family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
-    comic:      'family=Bangers',
-    newspaper:  'family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
-  };
-  var __loadedFonts = {};
+  const __designFonts = {
+  editorial:  'family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400',
+  pixel:      'family=Press+Start+2P',
+  cyber:      'family=Orbitron:wght@500;700;900',
+  notebook:   'family=Caveat:wght@500;600;700',
+  academic:   'family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+  deco:       'family=Poiret+One&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,700;0,800;1,800;1,900',
+  wabisabi:   'family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+  comic:      'family=Bangers',
+  newspaper:  'family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500',
+};
+  const __loadedFonts = {};
   window.__loadDesignFonts = function(id) {
     if (__loadedFonts[id] || !__designFonts[id]) return;
     __loadedFonts[id] = true;
-    var link = document.createElement('link');
+    const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://fonts.googleapis.com/css2?' + __designFonts[id] + '&display=swap';
     document.head.appendChild(link);
+    if (window.__debug) window.__debug.log('info', 'design', 'font-load', { design: id, families: __designFonts[id] });
   };
   window.__loadDesignFonts(__design);
 
+  // Re-render theme when system color scheme flips. Browsers fire this
+  // whenever the OS toggles dark/light, so we get a free `theme.info` for
+  // free even if no UI is touched.
+  try {
+    const __scQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (__scQuery && typeof __scQuery.addEventListener === 'function') {
+      __scQuery.addEventListener('change', function(e) {
+        if (window.__debug) {
+          window.__debug.log('info', 'theme', 'system-changed', { matches: e.matches });
+        }
+      });
+    }
+  } catch (_e) {}
+
   window.setTheme = function(id) {
     if (!VALID_THEMES.includes(id)) {
-      console.error(
-        'Unknown theme "' + id + '". Available themes:\n' +
-        VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n')
-      );
+      const msg = 'Unknown theme "' + id + '". Available themes:\n' +
+      VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n');
+      console.error(msg);
+      if (window.__debug) window.__debug.log('error', 'theme', msg);
       return;
     }
     document.documentElement.setAttribute('data-theme', id);
     localStorage.setItem('theme', id);
+    if (window.__debug) window.__debug.log('info', 'theme', 'set', { id: id });
   };
 
   window.setDesign = function(id) {
     if (!VALID_DESIGNS.includes(id)) {
-      console.error(
-        'Unknown design "' + id + '". Available designs:\n' +
-        VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n')
-      );
+      const msg = 'Unknown design "' + id + '". Available designs:\n' +
+      VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n');
+      console.error(msg);
+      if (window.__debug) window.__debug.log('error', 'theme', msg);
       return;
     }
     document.documentElement.setAttribute('data-design', id);
     localStorage.setItem('design', id);
     window.__loadDesignFonts(id);
+    if (window.__debug) window.__debug.log('info', 'design', 'set', { id: id });
   };
 </script>
 )}
@@ -331,7 +362,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
 
   .theme-modal-rec-legend-star {
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-size: 0.7rem;
     line-height: 1;
   }
@@ -404,7 +435,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
 
   .theme-modal-swatch.active .theme-modal-color {
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 0 0 2px var(--glow-color);
   }
 
@@ -421,7 +452,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     margin-left: auto;
     font-size: 0.7rem;
     line-height: 1;
-    color: var(--accent-start);
+    color: var(--accent-text);
     opacity: 0;
     transform: scale(0.7);
     transition: opacity var(--transition-fast), transform var(--transition-fast);
@@ -433,7 +464,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
 
   .theme-modal-swatch[data-rec='true'] .theme-modal-color {
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--accent-start) 55%, transparent);
   }
 
@@ -462,7 +493,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
 
   .theme-modal-design.active {
-    border-color: var(--accent-start);
+    border-color: var(--accent-text);
     box-shadow: 0 0 0 1px var(--glow-color);
     color: var(--text-primary);
   }
@@ -547,7 +578,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   }
   .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-sample {
     font-size: 0.8rem;
-    color: var(--accent-start);
+    color: var(--accent-text);
   }
   .theme-modal-design[data-preview-style='terminal'] .theme-modal-design-sample::before {
     content: '>';
@@ -662,7 +693,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     left: 3px;
     font-size: 0.5rem;
     letter-spacing: 0;
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-family: 'EB Garamond', 'Crimson Pro', serif;
     font-style: italic;
   }
@@ -814,7 +845,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     box-shadow: 3px 3px 0 #0a0a0a;
   }
   .theme-modal-design[data-preview-style='comic'] .theme-modal-design-sample {
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-family: Bangers, 'Inter Tight', sans-serif;
     font-weight: 400;
     letter-spacing: 0.05em;
@@ -957,20 +988,14 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 </style>
 
 <script>
-  import { ui, defaultLang } from '../i18n/ui';
+  import { pickLang, useTranslations, type Lang } from '../i18n/utils';
+  import { getDesignName, getDesignBlurb } from '../lib/designs';
 
-  type Lang = keyof typeof ui;
-
-  const pickLang = (raw: string | null): Lang => {
-    if (raw && raw in ui) return raw as Lang;
-    return defaultLang as Lang;
-  };
-
-  const tr = (lang: Lang, key: keyof typeof ui[typeof defaultLang]): string => {
-    const bundle = ui[lang] as Record<string, string>;
-    const fallback = ui[defaultLang as Lang] as Record<string, string>;
-    return bundle[key as string] ?? fallback[key as string] ?? '';
-  };
+  // Lightweight wrapper so the modal call sites read `tr(lang, key)` like
+  // they did before the refactor; under the hood we lean on the shared
+  // `useTranslations(lang)` accessor + a string fallback for missing keys.
+  type UiKey = Parameters<ReturnType<typeof useTranslations>>[0];
+  const tr = (lang: Lang, key: UiKey): string => useTranslations(lang)(key) || '';
 
   const initThemeModal = () => {
     const modal = document.getElementById('theme-modal');
@@ -999,12 +1024,12 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 
     modal.querySelectorAll<HTMLElement>('[data-i18n-design-name]').forEach(el => {
       const id = el.getAttribute('data-i18n-design-name') ?? '';
-      const localized = tr(lang, `design.${id}.name` as keyof typeof ui[typeof defaultLang]);
+      const localized = getDesignName(id, lang as Parameters<typeof getDesignName>[1]);
       if (localized) el.textContent = localized;
     });
     modal.querySelectorAll<HTMLElement>('[data-i18n-design-blurb]').forEach(el => {
       const id = el.getAttribute('data-i18n-design-blurb') ?? '';
-      const localized = tr(lang, `design.${id}.blurb` as keyof typeof ui[typeof defaultLang]);
+      const localized = getDesignBlurb(id, lang as Parameters<typeof getDesignBlurb>[1]);
       if (localized) el.textContent = localized;
     });
 
@@ -1042,7 +1067,10 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       });
     };
 
-    const open = () => {
+    type DebugApi = { log: (level: string, ns: string, msg: string, ...args: unknown[]) => void };
+    const __debug = (): DebugApi | undefined => (window as unknown as { __debug?: DebugApi }).__debug;
+
+    const open = (source: string = 'click') => {
       previouslyFocused = document.activeElement;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
@@ -1053,17 +1081,19 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       if (activeEl) activeEl.focus();
       else (modal.querySelector('.theme-modal-design, .theme-modal-swatch') as HTMLElement)?.focus();
       modal.addEventListener('keydown', trapFocus);
+      __debug()?.log('info', 'ui:modal', 'open', { source });
     };
 
-    const close = () => {
+    const close = (source: string = 'click') => {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       modal.removeEventListener('keydown', trapFocus);
       if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
+      __debug()?.log('info', 'ui:modal', 'close', { source });
     };
 
-    modal.querySelector('.theme-modal-backdrop')?.addEventListener('click', close);
-    modal.querySelector('.theme-modal-close')?.addEventListener('click', close);
+    modal.querySelector('.theme-modal-backdrop')?.addEventListener('click', () => close('backdrop'));
+    modal.querySelector('.theme-modal-close')?.addEventListener('click', () => close('close-button'));
 
     modal.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
@@ -1074,6 +1104,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
         document.documentElement.setAttribute('data-design', id);
         try { localStorage.setItem('design', id); } catch (_err) { /* private mode */ }
         refreshActive();
+        __debug()?.log('info', 'design', 'select', { id, source: 'modal' });
         return;
       }
       const swatch = target.closest('.theme-modal-swatch') as HTMLElement | null;
@@ -1083,6 +1114,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
         document.documentElement.setAttribute('data-theme', id);
         try { localStorage.setItem('theme', id); } catch (_err) { /* private mode */ }
         refreshActive();
+        __debug()?.log('info', 'theme', 'select', { id, source: 'modal' });
         return;
       }
     });
@@ -1090,16 +1122,16 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     document.addEventListener('keydown', (e) => {
       if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
-        if (modal.classList.contains('open')) close();
-        else open();
+        if (modal.classList.contains('open')) close('shortcut');
+        else open('shortcut');
       }
       if (e.key === 'Escape' && modal.classList.contains('open')) {
-        close();
+        close('escape');
       }
     });
 
     document.addEventListener('open-theme-modal', () => {
-      if (!modal.classList.contains('open')) open();
+      if (!modal.classList.contains('open')) open('event');
     });
   };
 

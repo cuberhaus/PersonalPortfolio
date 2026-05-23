@@ -1,0 +1,10 @@
+{
+  "waveTitle": "Onda de Vértices",
+  "waveDesc": "Deformación sinusoidal con matriz de rotación",
+  "phongTitle": "Iluminación Phong",
+  "phongDesc": "Sombreado ambiental + difuso + especular por fragmento",
+  "checkerTitle": "Tablero de Ajedrez",
+  "checkerDesc": "Patrón procedural mediante aritmética modular UV",
+  "explodeTitle": "Explosión",
+  "explodeDesc": "Desplazamiento de triángulos a lo largo de normales"
+}

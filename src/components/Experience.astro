@@ -1,15 +1,33 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-import experienceEn from '../data/experience.json';
-import experienceEs from '../data/experience.es.json';
-import experienceCa from '../data/experience.ca.json';
+import { experience as experienceData, getTranslations } from '../data/loaders';
+import { flattenForLocale } from '../i18n/load';
+
+type ExpEntry = {
+  role: string;
+  company: string;
+  period: string;
+  startDate: string;
+  endDate?: string;
+  link?: string;
+  logo?: string;
+  logoLight?: string;
+  bullets: string[];
+};
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa : experienceEn;
+const experience = flattenForLocale<ExpEntry>(
+  experienceData as never,
+  lang,
+  getTranslations('experience', lang)
+);
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+
+const { num } = Astro.props;
 ---
 
-<section class="section experience" id="experience" data-num="04">
+<section class="section experience" id="experience" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('experience.label')}</span>
@@ -20,28 +38,88 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
     </div>
 
     <ul class="timeline">
-      {experience.map((job, index) => (
-        <li class="timeline-item reveal">
-          <div class="timeline-marker" aria-hidden="true">
-            <div class="timeline-dot"></div>
-          </div>
+      {
+        experience.map((job) => (
+          <li class="timeline-item reveal">
+            <div class="timeline-marker" aria-hidden="true">
+              <div class="timeline-dot" />
+            </div>
 
-          <div class="timeline-content">
-            <span class="timeline-period">{job.period}</span>
-            <h3 class="timeline-role">
-              {job.role} <span class="timeline-company">@ {job.company}</span>
-            </h3>
-            <ul class="timeline-bullets">
-              {job.bullets.map((bullet) => (
-                <li>{bullet}</li>
-              ))}
-            </ul>
-          </div>
-        </li>
-      ))}
+            <div class="timeline-content">
+              {job.link && (
+                <a
+                  href={job.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="timeline-card-link"
+                  aria-label={`${job.role} @ ${job.company}`}
+                />
+              )}
+              <div class="timeline-period-row">
+                <span class="timeline-period">
+                  {job.period} ·{' '}
+                  <span
+                    class="js-duration"
+                    data-start={job.startDate}
+                    data-end={job.endDate ?? ''}
+                    data-lang={lang}
+                  />
+                </span>
+                {job.logo && (
+                  <div class="timeline-logo-badge">
+                    <img
+                      src={base + job.logo}
+                      alt={`${job.company} logo`}
+                      class="theme-logo"
+                      data-dark={base + job.logo}
+                      data-light={job.logoLight ? base + job.logoLight : base + job.logo}
+                      width="48"
+                      height="24"
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+              </div>
+              <h3 class="timeline-role">
+                {job.role} <span class="timeline-company">@ {job.company}</span>
+              </h3>
+              <ul class="timeline-bullets">
+                {job.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </section>
+
+<script>
+  const labels: Record<string, { yr: string; yrs: string; mo: string; mos: string }> = {
+    en: { yr: 'yr', yrs: 'yrs', mo: 'mo', mos: 'mos' },
+    es: { yr: 'año', yrs: 'años', mo: 'mes', mos: 'meses' },
+    ca: { yr: 'any', yrs: 'anys', mo: 'mes', mos: 'mesos' },
+  };
+
+  document.querySelectorAll<HTMLSpanElement>('.js-duration').forEach((el) => {
+    const start = el.dataset.start!;
+    const end = el.dataset.end || undefined;
+    const lang = el.dataset.lang || 'en';
+    const [sY, sM] = start.split('-').map(Number);
+    const now = new Date();
+    const [eY, eM] = end ? end.split('-').map(Number) : [now.getFullYear(), now.getMonth() + 1];
+    const total = (eY - sY) * 12 + (eM - sM);
+    const years = Math.floor(total / 12);
+    const months = total % 12;
+    const l = labels[lang] ?? labels.en;
+    const parts: string[] = [];
+    if (years > 0) parts.push(`${years} ${years === 1 ? l.yr : l.yrs}`);
+    if (months > 0) parts.push(`${months} ${months === 1 ? l.mo : l.mos}`);
+    el.textContent = parts.join(' ') || `< 1 ${l.mo}`;
+  });
+</script>
 
 <style>
   .timeline {
@@ -58,7 +136,7 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
     left: 0.55rem;
     width: 2px;
     height: 100%;
-    background: var(--border-color);
+    background: linear-gradient(to bottom, var(--border-color) 70%, transparent);
   }
 
   .timeline-item {
@@ -68,6 +146,12 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
 
   .timeline-item:last-child {
     padding-bottom: 0;
+  }
+
+  .timeline-item:first-child .timeline-dot {
+    width: 0.9rem;
+    height: 0.9rem;
+    box-shadow: 0 0 16px var(--glow-color-strong);
   }
 
   .timeline-marker {
@@ -90,11 +174,27 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
   }
 
   .timeline-content {
+    position: relative;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 1.75rem;
-    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    overflow: hidden;
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
+  }
+
+  .timeline-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity var(--transition-base);
   }
 
   .timeline-content:hover {
@@ -102,12 +202,40 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   }
 
+  .timeline-content:hover::before {
+    opacity: 1;
+  }
+
+  .timeline-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .timeline-period-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-logo-badge {
+    display: flex;
+    align-items: center;
+  }
+
+  .timeline-logo-badge img {
+    display: block;
+    height: 20px;
+    width: auto;
+    object-fit: contain;
+  }
+
   .timeline-period {
     font-family: var(--font-mono);
     font-size: 0.8rem;
-    color: var(--accent-start);
-    margin-bottom: 0.5rem;
-    display: block;
+    color: var(--accent-text);
   }
 
   .timeline-role {
@@ -116,8 +244,21 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
   }
 
   .timeline-company {
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-weight: 600;
+  }
+
+  .timeline-card-link {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-lg);
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  .timeline-card-link:focus-visible {
+    outline: 2px solid var(--accent-start);
+    outline-offset: 2px;
   }
 
   .timeline-bullets {
@@ -138,7 +279,7 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
     content: '▹';
     position: absolute;
     left: 0;
-    color: var(--accent-start);
+    color: var(--accent-text);
   }
 
   @media (max-width: 768px) {
@@ -153,5 +294,36 @@ const experience = lang === 'es' ? experienceEs : lang === 'ca' ? experienceCa :
     .timeline-content {
       padding: 1.25rem;
     }
+
+    .timeline-logo-badge img {
+      height: 16px;
+    }
   }
 </style>
+
+<script>
+  const LIGHT_SCHEMES = [
+    'light',
+    'nord-light',
+    'catppuccin-latte',
+    'solarized-light',
+    'sepia',
+    'paper',
+  ];
+
+  function updateLogos() {
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const isLight = LIGHT_SCHEMES.includes(theme);
+    document.querySelectorAll<HTMLImageElement>('img.theme-logo').forEach((img) => {
+      const src = isLight ? img.dataset.light : img.dataset.dark;
+      if (src && img.src !== src) img.src = src;
+    });
+  }
+
+  updateLogos();
+  new MutationObserver(updateLogos).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+  document.addEventListener('astro:page-load', updateLogos);
+</script>

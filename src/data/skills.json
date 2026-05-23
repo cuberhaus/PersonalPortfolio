@@ -1,18 +1,51 @@
 [
   {
-    "category": "Programming Languages",
-    "items": ["Python", "TypeScript", "JavaScript", "C", "C++", "Java", "SQL"]
+    "items": [
+      "Python",
+      "TypeScript",
+      "JavaScript",
+      "C",
+      "C++",
+      "Java",
+      "SQL"
+    ]
   },
   {
-    "category": "AI & Data Science",
-    "items": ["Machine Learning", "Computer Vision", "PyTorch", "scikit-learn", "OpenCV", "LangChain", "Object Detection", "Generative Models", "MLOps", "Data Mining", "Statistics"]
+    "items": [
+      "Machine Learning",
+      "Computer Vision",
+      "PyTorch",
+      "scikit-learn",
+      "OpenCV",
+      "LangChain",
+      "Object Detection",
+      "Generative Models",
+      "MLOps",
+      "Data Mining",
+      "Statistics"
+    ]
   },
   {
-    "category": "Tools & Platforms",
-    "items": ["AWS", "Azure", "GCP", "Docker", "GitHub Actions", "PostgreSQL", "FastAPI", "Git", "Jupyter"]
+    "items": [
+      "AWS",
+      "Azure",
+      "GCP",
+      "Docker",
+      "GitHub Actions",
+      "PostgreSQL",
+      "FastAPI",
+      "Git",
+      "Jupyter"
+    ]
   },
   {
-    "category": "CS Fundamentals",
-    "items": ["Algorithms", "Software Architecture", "Parallel Processing", "CI/CD", "Compiler Design", "Cybersecurity"]
+    "items": [
+      "Algorithms",
+      "Software Architecture",
+      "Parallel Processing",
+      "CI/CD",
+      "Compiler Design",
+      "Cybersecurity"
+    ]
   }
 ]

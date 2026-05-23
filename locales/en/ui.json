@@ -1,0 +1,123 @@
+{
+  "about": {
+    "cv": "Download CV",
+    "label": "About",
+    "p1": "Hi! I'm Pol — a Computer Science Engineer from Barcelona. I graduated from UPC's Facultat d'Informàtica de Barcelona (FIB) and now work as an AI & Data Consultant at Deloitte, where most of my days are spent at the intersection of AI, data platforms, and the messy reality of making them useful.",
+    "p2": "What I actually enjoy is building stuff — exploring new tools, figuring out how they fit together, and helping my team ship things we're proud of. I care more about solving the problem than about picking the trendiest stack, though I'm happy when both line up.",
+    "p3": "Outside of work you'll usually find me climbing, deep in a videogame, or pretending my Vim keybindings make me faster than I really am. Here's some of the tech I've been using lately:",
+    "title": "A bit about me"
+  },
+  "aria": {
+    "scrollTop": "Scroll to top of page",
+    "skipToContent": "Skip to content",
+    "toggleMenu": "Toggle menu",
+    "toggleTheme": "Toggle theme (Ctrl+K for more themes)",
+    "viewGithub": "View on GitHub"
+  },
+  "certifications": {
+    "label": "Credentials",
+    "showLess": "Show less",
+    "showMore": "Show more",
+    "subtitle": "Professional certifications I have earned along the way.",
+    "title": "Licenses & certifications",
+    "viewCredential": "View credential"
+  },
+  "contact": {
+    "cta": "Send Message",
+    "didYouMean": "Did you mean",
+    "email": "Email",
+    "emailPlaceholder": "your.email@example.com",
+    "error": "Oops! Something went wrong. Please try again.",
+    "invalidEmail": "Please enter a valid email address (e.g., name@gmail.com).",
+    "label": "Contact",
+    "message": "Message",
+    "messagePlaceholder": "Your message...",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "sending": "Sending...",
+    "success": "Thanks! Your message has been sent.",
+    "text": "I'm currently open to new opportunities and collaborations. Whether you have a question, a project idea, or just want to say hi — my inbox is always open.",
+    "title": "Get in touch",
+    "useSuggestion": "Use this"
+  },
+  "demo": {
+    "allDemos": "All Demos",
+    "moreProjects": "More Projects",
+    "next": "Next",
+    "portfolio": "Portfolio",
+    "previous": "Previous",
+    "viewBackend": "Backend Code (GitHub)",
+    "viewFrontend": "Frontend Code (GitHub)",
+    "viewSource": "View Source on GitHub"
+  },
+  "education": {
+    "label": "Education",
+    "title": "Where I studied"
+  },
+  "experience": {
+    "label": "Experience",
+    "subtitle": "A timeline of my professional journey so far.",
+    "title": "Where I've worked"
+  },
+  "hero": {
+    "cta": "View my work",
+    "description": "Computer Science Engineer from Barcelona, currently an AI & Data Consultant at Deloitte. I enjoy exploring new tech, shipping real tools, and helping my team build things that actually work.",
+    "greeting": "Hi, my name is",
+    "tagline_1": "I like building",
+    "tagline_2": "things with AI & data."
+  },
+  "meta": {
+    "description": "Pol Casacuberta — AI & Data Consultant from Barcelona. I build things with AI and data.",
+    "title": "Pol Casacuberta — Portfolio"
+  },
+  "nav": {
+    "about": "About",
+    "certifications": "Certifications",
+    "contact": "Contact",
+    "education": "Education",
+    "experience": "Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "work": "Professional Work"
+  },
+  "notFound": {
+    "back": "Portfolio",
+    "message": "The page you're looking for doesn't exist or has been moved.",
+    "title": "Page Not Found"
+  },
+  "projects": {
+    "badge": "Live Demo",
+    "label": "Interactive",
+    "showLess": "Show less",
+    "showMore": "Show more",
+    "subtitle": "Live, interactive demos you can play with right in your browser.",
+    "title": "Try my projects"
+  },
+  "serverError": {
+    "back": "Portfolio",
+    "demoMessage": "An error happened while running this demo. The rest of the site is unaffected — you can reload to try again.",
+    "demoTitle": "This demo couldn't load",
+    "message": "Something broke on our end. Try reloading, or head back to the portfolio.",
+    "reload": "Reload",
+    "title": "Something went wrong"
+  },
+  "skills": {
+    "label": "Skills",
+    "subtitle": "Technologies and tools I use to bring ideas to life.",
+    "title": "Tech I work with"
+  },
+  "theme": {
+    "closeHint": "Press <kbd>Esc</kbd> to close",
+    "customize": "Customize",
+    "dark": "Dark",
+    "design": "Design",
+    "light": "Light",
+    "palette": "Palette",
+    "recommended": "recommended for this design"
+  },
+  "work": {
+    "label": "Professional Work",
+    "subtitle": "Key milestones and AI initiatives delivered in the real world.",
+    "title": "Featured Projects"
+  }
+}

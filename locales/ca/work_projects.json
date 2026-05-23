@@ -1,0 +1,26 @@
+{
+  "0": {
+    "title": "Detecció d'Anomalies amb IA Física",
+    "company": "Horse",
+    "description": "El primer projecte d'IA Física entregat a nivell mundial a Deloitte. Construït sobre NVIDIA Omniverse, Isaac Sim i l'stack Metropolis (DeepStream, TAO, Triton) per detectar anomalies de fabricació en línies de producció de motors en viu i en temps real, a més d'un bessó digital del magatzem amb seguiment de paquets per càmera.",
+    "tags": {
+      "0": "IA Física",
+      "1": "NVIDIA Omniverse",
+      "2": "Isaac Sim",
+      "3": "Metropolis",
+      "4": "Bessó Digital",
+      "5": "Temps Real"
+    }
+  },
+  "1": {
+    "title": "Plataforma E2E d'Emparellament de Talent IA",
+    "company": "Govern d'Aragó",
+    "description": "Programari integral que analitza currículums en PDF, els estandarditza en JSON estructurat i els indexa en una base de dades RAG. Permet fer cerques semàntiques per trobar els millors candidats per a una oferta de feina i viceversa.",
+    "tags": {
+      "0": "LLMs",
+      "1": "RAG",
+      "2": "Cerca Vectorial",
+      "3": "Parsing PDF"
+    }
+  }
+}

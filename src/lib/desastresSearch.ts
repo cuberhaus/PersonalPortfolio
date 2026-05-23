@@ -30,11 +30,7 @@ function travelTime(dist: number): number {
   return dist / SPEED_KM_PER_MIN;
 }
 
-function helicopterTimeH2(
-  groupIds: number[],
-  centroId: number,
-  board: Board,
-): number {
+function helicopterTimeH2(groupIds: number[], centroId: number, board: Board): number {
   const { groups, distCG, distGG } = board;
   let capacity = 0;
   let time = 0;
@@ -45,15 +41,15 @@ function helicopterTimeH2(
     const gid = groupIds[j];
     const g = groups[gid];
     const timePerPerson = g.prioridad === 1 ? 2 : 1;
-    const canFit = capacity + g.nPersonas <= HELICOPTER_CAPACITY && groupCount < MAX_GROUPS_PER_SORTIE;
+    const canFit =
+      capacity + g.nPersonas <= HELICOPTER_CAPACITY && groupCount < MAX_GROUPS_PER_SORTIE;
 
     if (canFit) {
       // Pick up this group in the current sortie
       capacity += g.nPersonas;
       groupCount++;
-      time += lastGroup === -1
-        ? travelTime(distCG(centroId, gid))
-        : travelTime(distGG(lastGroup, gid));
+      time +=
+        lastGroup === -1 ? travelTime(distCG(centroId, gid)) : travelTime(distGG(lastGroup, gid));
       time += g.nPersonas * timePerPerson;
       lastGroup = gid;
     } else {
@@ -123,7 +119,7 @@ export function* neighborsSwap(assign: Assignment): Generator<Assignment> {
 export function randomInitialAssignment(
   nGroups: number,
   nHelis: number,
-  rng: () => number,
+  rng: () => number
 ): Assignment {
   const assign: Assignment = Array.from({ length: nHelis }, () => []);
   const remaining = Array.from({ length: nGroups }, (_, g) => g);
@@ -164,7 +160,7 @@ export type HillClimbResult = {
 export function hillClimbing(
   board: Board,
   initial: Assignment,
-  maxIterations = 500,
+  maxIterations = 500
 ): HillClimbResult {
   const log: string[] = [];
   let current = cloneAssign(initial);
@@ -209,7 +205,7 @@ export function simulatedAnnealing(
     t0?: number;
     cooling?: number;
     rng: () => number;
-  },
+  }
 ): SAResult {
   const steps = opts.steps ?? 8000;
   let T = opts.t0 ?? 400;
@@ -251,7 +247,10 @@ export function simulatedAnnealing(
       }
     }
     T *= cooling;
-    if (s > 0 && s % 2000 === 0) log.push(`step ${s} current=${cost.toFixed(2)} best=${bestCost.toFixed(2)} T=${T.toFixed(4)}`);
+    if (s > 0 && s % 2000 === 0)
+      log.push(
+        `step ${s} current=${cost.toFixed(2)} best=${bestCost.toFixed(2)} T=${T.toFixed(4)}`
+      );
   }
   log.push(`SA end best=${bestCost.toFixed(2)}`);
   return { assignment: best, cost: bestCost, steps, log };

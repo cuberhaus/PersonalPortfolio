@@ -1,0 +1,86 @@
+{
+  "extensions": [
+    {
+      "name": "Bàsic",
+      "desc": "Estil STRIPS: visitar un nombre mínim de ciutats."
+    },
+    {
+      "name": "Extensió 1",
+      "desc": "Mateixa estructura, diferents mides d'instància."
+    },
+    {
+      "name": "Extensió 2",
+      "desc": "Dies per ciutat, dies mínims de viatge, interès per ciutat + mètrica a minimitzar.",
+      "active": true
+    },
+    {
+      "name": "Extensió 3/4",
+      "desc": "Variants del problema i generadors de proves en Python."
+    },
+    {
+      "name": "Extra 2",
+      "desc": "Problemes de benchmark addicionals."
+    }
+  ],
+  "constraints": [
+    {
+      "icon": "🏙️",
+      "label": "≥ 2 ciutats visitades",
+      "key": "min_ciudades_a_recoger"
+    },
+    {
+      "icon": "📅",
+      "label": "≥ 10 dies de viatge en total",
+      "key": "min_dias_recorrido"
+    },
+    {
+      "icon": "🏨",
+      "label": "1–4 dies per ciutat",
+      "key": "min/max_dias_por_ciudad"
+    },
+    {
+      "icon": "📉",
+      "label": "Minimitzar interès total",
+      "key": "metric minimize"
+    }
+  ],
+  "flightNetwork": "Xarxa de vols",
+  "flightDesc1": "El hub ",
+  "flightDesc2": " connecta amb tres ciutats formant un triangle. Cada ciutat té un hotel. Estrelles = valor d'interès (el planificador minimitza la suma).",
+  "constTitle": "Restriccions i objectiu",
+  "constDesc1": "Acció única: ",
+  "constDesc2": " — volar a nova ciutat, reservar hotel, triar durada de l'estada (1–4 dies). Requereix un planificador PDDL numèric (ENHSP, LPG).",
+  "extTitle": "Extensions",
+  "domain": "Domini (Ext 2)",
+  "problem": "Problema (Ext 2)",
+  "download": "Descarregar ↓",
+  "ghRepo": "Repositori a GitHub ↗",
+  "mockTitle": "Vista prèvia del planificador",
+  "mockDesc": "Pla òptim pre-calculat per al problema de l'Extensió 2.",
+  "mockRun": "Simular planificador",
+  "mockRunning": "Resolent…",
+  "mockBadge": "Mock",
+  "mockSteps": "passos",
+  "mockDays": "dies",
+  "mockInterest": "interès",
+  "mockRoute": "Ruta",
+  "mockActions": "Accions crues del pla",
+  "fullAppTitle": "Aquesta demo vs. l'app completa",
+  "demoIncludesLabel": "Aquesta demo inclou:",
+  "demoFeatures": [
+    "Diagrama de la xarxa de vols i resum de restriccions per a l'Extensió 2",
+    "Codi font PDDL del domini i problema (només lectura)",
+    "Arxius .pddl descarregables",
+    "Descripció de les extensions d'un cop d'ull",
+    "Planificador simulat amb solució òptima pre-calculada"
+  ],
+  "fullAppDesc": "L'app web completa (execució local) afegeix:",
+  "fullAppFeatures": [
+    "Explorador d'arxius per a totes les extensions (Bàsic a Extensió 4)",
+    "Visualització interactiva del graf de l'estructura del problema",
+    "Execució del planificador integrat sobre qualsevol domini/problema",
+    "Ruta planificada ressaltada sobre el graf",
+    "PDDL editable amb suport per a re-execució"
+  ],
+  "fullAppHint": "Executa'l localment per accedir a l'app completa:"
+}

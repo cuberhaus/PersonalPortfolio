@@ -1,17 +1,44 @@
 ---
-import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
-
-// We calculate the path dynamically so it evaluates correctly at build time
-const hasProfileImage = existsSync(resolve('./public/profile.jpg'));
-const hasCV = existsSync(resolve('./public/cv.pdf'));
+import { LOCALES, DEFAULT_LOCALE, type Locale } from '../config/locales';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+// Pick the PDF for the current locale; fall back to English if the localized
+// PDF hasn't been fetched for this build. Names follow the upstream CV repo's
+// `cv_<locale>.pdf` convention, with English as the unsuffixed default.
+const cvByLang: Record<Locale, string> = Object.fromEntries(
+  LOCALES.map((l) => [l, l === DEFAULT_LOCALE ? 'cv.pdf' : `cv_${l}.pdf`])
+) as Record<Locale, string>;
+const cvFile = existsSync(resolve(`./public/${cvByLang[lang]}`))
+  ? cvByLang[lang]
+  : existsSync(resolve('./public/cv.pdf'))
+    ? 'cv.pdf'
+    : null;
+
+// Hash the PDF bytes so the URL changes whenever the file changes,
+// busting both browser and CDN caches without manual purges.
+const cvHash = cvFile
+  ? createHash('sha1')
+      .update(readFileSync(resolve(`./public/${cvFile}`)))
+      .digest('hex')
+      .slice(0, 8)
+  : '';
+
+// We calculate the path dynamically so it evaluates correctly at build time
+const hasProfileImage = existsSync(resolve('./public/profile.jpg'));
+const hasCV = cvFile !== null;
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
+
+const { num } = Astro.props;
 ---
 
-<section class="section about" id="about" data-num="01">
+<section class="section about" id="about" data-num={num}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('about.label')}</span>
@@ -28,38 +55,55 @@ const t = useTranslations(lang);
           <li>SQL & Power BI</li>
           <li>AWS & Azure</li>
           <li>Machine Learning</li>
-          <li>Informatica</li>
+          <li>Generative AI</li>
           <li>Computer Vision</li>
         </ul>
-        
-        {hasCV && (
-          <div class="about-actions">
-            <a href={import.meta.env.BASE_URL === '/' ? '/cv.pdf' : `${import.meta.env.BASE_URL}/cv.pdf`} class="about-cv-btn" target="_blank" rel="noopener noreferrer">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              {t('about.cv')}
-            </a>
-          </div>
-        )}
+
+        {
+          hasCV && (
+            <div class="about-actions">
+              <a href={cvHref} class="about-cv-btn" target="_blank" rel="noopener noreferrer">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                {t('about.cv')}
+              </a>
+            </div>
+          )
+        }
       </div>
 
-      {hasProfileImage && (
-        <div class="about-image-wrapper">
-          <div class="about-image-placeholder">
-            <img
-              src={import.meta.env.BASE_URL === '/' ? '/profile.jpg' : `${import.meta.env.BASE_URL}/profile.jpg`}
-              alt="Pol Casacuberta"
-              width="300"
-              height="300"
-              loading="lazy"
-            />
+      {
+        hasProfileImage && (
+          <div class="about-image-wrapper">
+            <div class="about-image-placeholder">
+              <img
+                src={
+                  import.meta.env.BASE_URL === '/'
+                    ? '/profile.jpg'
+                    : `${import.meta.env.BASE_URL}/profile.jpg`
+                }
+                alt="Pol Casacuberta"
+                width="300"
+                height="300"
+                loading="lazy"
+              />
+            </div>
+            <div class="about-image-border" aria-hidden="true" />
           </div>
-          <div class="about-image-border" aria-hidden="true"></div>
-        </div>
-      )}
+        )
+      }
     </div>
   </div>
 </section>
@@ -97,14 +141,14 @@ const t = useTranslations(lang);
     content: '▹';
     position: absolute;
     left: 0;
-    color: var(--accent-start);
+    color: var(--accent-text);
     font-size: 0.9rem;
   }
 
   .about-actions {
     margin-top: 2rem;
   }
-  
+
   .about-cv-btn {
     display: inline-flex;
     align-items: center;
@@ -121,8 +165,8 @@ const t = useTranslations(lang);
   }
 
   .about-cv-btn:hover {
-    border-color: var(--accent-start);
-    color: var(--accent-start);
+    border-color: var(--accent-text);
+    color: var(--accent-text);
     background: rgba(99, 102, 241, 0.05);
   }
 

@@ -1,8 +1,11 @@
 // Main-thread API for the plate-detection Web Worker.
 // The worker now uses pure JS image processing — no external downloads needed.
+import { debug } from './debug';
+
+const log = debug('demo:matriculas');
 
 export type LoadProgress = {
-  phase: "downloading" | "initializing" | "ready";
+  phase: 'downloading' | 'initializing' | 'ready';
   percent: number;
   loadedMB?: number;
   totalMB?: number;
@@ -30,7 +33,11 @@ let readyPromise: Promise<void> | null = null;
 
 function getWorker(): Worker {
   if (!worker) {
-    worker = new Worker(new URL("./plate-worker.ts", import.meta.url), { type: "module" });
+    log.info('worker-spawn');
+    worker = new Worker(new URL('./plate-worker.ts', import.meta.url), { type: 'module' });
+    worker.addEventListener('error', (ev: ErrorEvent) => {
+      log.error('worker-error', { message: ev.message, filename: ev.filename, lineno: ev.lineno });
+    });
   }
   return worker;
 }
@@ -42,18 +49,20 @@ export function initWorker(onProgress?: ProgressCb): Promise<void> {
   readyPromise = new Promise<void>((resolve, reject) => {
     const handler = (e: MessageEvent) => {
       const msg = e.data;
-      if (msg.type === "progress") {
+      if (msg.type === 'progress') {
         onProgress?.(msg as LoadProgress);
-      } else if (msg.type === "ready") {
-        w.removeEventListener("message", handler);
+      } else if (msg.type === 'ready') {
+        w.removeEventListener('message', handler);
+        log.info('worker-ready');
         resolve();
-      } else if (msg.type === "error") {
-        w.removeEventListener("message", handler);
+      } else if (msg.type === 'error') {
+        w.removeEventListener('message', handler);
+        log.error('worker-error', { message: msg.message });
         reject(new Error(msg.message));
       }
     };
-    w.addEventListener("message", handler);
-    w.postMessage({ type: "init" });
+    w.addEventListener('message', handler);
+    w.postMessage({ type: 'init' });
   });
 
   return readyPromise;
@@ -65,9 +74,12 @@ const MAX_DETECT_DIM = 1400;
 const MAX_OCR_DIM = 4200;
 
 function needsCrossOrigin(src: string): boolean {
-  if (src.startsWith("blob:") || src.startsWith("data:")) return false;
+  if (src.startsWith('blob:') || src.startsWith('data:')) return false;
   try {
-    const u = new URL(src, typeof window !== "undefined" ? window.location.href : "http://localhost/");
+    const u = new URL(
+      src,
+      typeof window !== 'undefined' ? window.location.href : 'http://localhost/'
+    );
     return u.origin !== window.location.origin;
   } catch {
     return false;
@@ -83,10 +95,10 @@ function drawScaled(img: HTMLImageElement, maxDim: number): Raster {
   const s = M > maxDim ? maxDim / M : 1;
   const w = Math.round(nw * s);
   const h = Math.round(nh * s);
-  const c = document.createElement("canvas");
+  const c = document.createElement('canvas');
   c.width = w;
   c.height = h;
-  const ctx = c.getContext("2d")!;
+  const ctx = c.getContext('2d')!;
   ctx.drawImage(img, 0, 0, w, h);
   const id = ctx.getImageData(0, 0, w, h);
   return { data: id.data, width: id.width, height: id.height };
@@ -96,7 +108,7 @@ function drawScaled(img: HTMLImageElement, maxDim: number): Raster {
 function loadDetectAndOcr(src: string): Promise<{ detect: Raster; ocr: Raster }> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    if (needsCrossOrigin(src)) img.crossOrigin = "anonymous";
+    if (needsCrossOrigin(src)) img.crossOrigin = 'anonymous';
     img.onload = () => {
       const detect = drawScaled(img, MAX_DETECT_DIM);
       const ocr = drawScaled(img, MAX_OCR_DIM);
@@ -110,7 +122,7 @@ function loadDetectAndOcr(src: string): Promise<{ detect: Raster; ocr: Raster }>
 function loadFontRaster(src: string): Promise<Raster> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    if (needsCrossOrigin(src)) img.crossOrigin = "anonymous";
+    if (needsCrossOrigin(src)) img.crossOrigin = 'anonymous';
     img.onload = () => resolve(drawScaled(img, 4096));
     img.onerror = () => reject(new Error(`Failed to load: ${src}`));
     img.src = src;
@@ -122,28 +134,35 @@ export async function runWorkerPipeline(
   fontSrc: string
 ): Promise<WorkerPipelineResult> {
   await initWorker();
-  const [{ detect, ocr }, font] = await Promise.all([loadDetectAndOcr(imageSrc), loadFontRaster(fontSrc)]);
+  const [{ detect, ocr }, font] = await Promise.all([
+    loadDetectAndOcr(imageSrc),
+    loadFontRaster(fontSrc),
+  ]);
 
   const w = getWorker();
   const payload = {
-    type: "process" as const,
+    type: 'process' as const,
     detect: { data: detect.data, width: detect.width, height: detect.height },
     ocr: { data: ocr.data, width: ocr.width, height: ocr.height },
     font: { data: font.data, width: font.width, height: font.height },
   };
 
   return new Promise((resolve, reject) => {
+    log.trace('pipeline-progress', { stage: 'submitted', pct: 0 });
     const handler = (e: MessageEvent) => {
       const msg = e.data;
-      if (msg.type === "result") {
-        w.removeEventListener("message", handler);
+      if (msg.type === 'stage' && typeof msg.stage === 'string') {
+        log.trace('pipeline-progress', { stage: msg.stage, pct: msg.pct ?? null });
+      } else if (msg.type === 'result') {
+        w.removeEventListener('message', handler);
+        log.trace('pipeline-progress', { stage: 'result', pct: 100 });
         resolve(msg as WorkerPipelineResult);
-      } else if (msg.type === "error") {
-        w.removeEventListener("message", handler);
+      } else if (msg.type === 'error') {
+        w.removeEventListener('message', handler);
         reject(new Error(msg.message));
       }
     };
-    w.addEventListener("message", handler);
+    w.addEventListener('message', handler);
     try {
       w.postMessage(payload, [detect.data.buffer, ocr.data.buffer, font.data.buffer]);
     } catch {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { getLangFromUrl, getRouteFromUrl, useTranslations } from '../i18n/utils';
 import { ui, defaultLang, languages } from '../i18n/ui';
 
 describe('getLangFromUrl', () => {
@@ -29,6 +29,32 @@ describe('getLangFromUrl', () => {
       const url = new URL(`https://example.com/${lang}/test`);
       expect(getLangFromUrl(url)).toBe(lang);
     }
+  });
+});
+
+describe('getRouteFromUrl', () => {
+  it('returns root for the homepage', () => {
+    expect(getRouteFromUrl(new URL('https://example.com/'))).toBe('/');
+  });
+
+  it('removes supported locale prefixes from homepage routes', () => {
+    expect(getRouteFromUrl(new URL('https://example.com/es/'))).toBe('/');
+    expect(getRouteFromUrl(new URL('https://example.com/ca/'))).toBe('/');
+  });
+
+  it('removes supported locale prefixes from nested routes', () => {
+    expect(getRouteFromUrl(new URL('https://example.com/es/demos/tenda'))).toBe('/demos/tenda');
+    expect(getRouteFromUrl(new URL('https://example.com/ca/demos/tfg-polyps'))).toBe(
+      '/demos/tfg-polyps'
+    );
+  });
+
+  it('keeps non-localized routes unchanged', () => {
+    expect(getRouteFromUrl(new URL('https://example.com/demos/tenda'))).toBe('/demos/tenda');
+  });
+
+  it('treats unsupported language-like prefixes as normal path segments', () => {
+    expect(getRouteFromUrl(new URL('https://example.com/fr/demos/tenda'))).toBe('/fr/demos/tenda');
   });
 });
 

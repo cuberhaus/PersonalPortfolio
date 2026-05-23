@@ -1,0 +1,16 @@
+{
+  "mandelbrotTitle": "Conjunto de Mandelbrot",
+  "mandelbrotDesc": "Fractal interactivo — scroll para zoom, arrastra para mover",
+  "heatTitle": "Ecuación del Calor",
+  "heatDesc": "Relajación Jacobi en una cuadrícula 2D — borde superior fijo a 1.0",
+  "piTitle": "Convergencia de Pi",
+  "piDesc": "Integración numérica de 4/(1+x²) sobre [0,1]",
+  "iter": "Iteraciones",
+  "steps": "Pasos",
+  "residual": "Residuo",
+  "play": "Iniciar",
+  "pause": "Pausar",
+  "step": "Paso",
+  "reset": "Reiniciar",
+  "compute": "Calcular"
+}

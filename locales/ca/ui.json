@@ -1,0 +1,123 @@
+{
+  "about": {
+    "cv": "Descarregar CV",
+    "label": "Sobre mi",
+    "p1": "Hola! Soc el Pol, Enginyer Informàtic de Barcelona. Em vaig graduar a la Facultat d'Informàtica de Barcelona (FIB) de la UPC i ara treballo com a Consultor d'IA i Dades a Deloitte, on passo la major part dels dies a la intersecció de la IA, les plataformes de dades i la realitat una mica caòtica de fer-les útils.",
+    "p2": "El que realment gaudeixo és construir: explorar eines noves, entendre com encaixen entre si i ajudar el meu equip a tirar endavant coses de les quals estiguem orgullosos. M'importa més resoldre el problema que fer servir l'stack més de moda, tot i que m'alegra quan les dues coses coincideixen.",
+    "p3": "Fora de la feina em sol trobar escalant, ficat en un videojoc o fent veure que els meus atalls de Vim em fan més ràpid del que soc. Aquestes són algunes de les tecnologies amb què he treballat últimament:",
+    "title": "Una mica sobre mi"
+  },
+  "aria": {
+    "scrollTop": "Anar a dalt",
+    "skipToContent": "Saltar al contingut",
+    "toggleMenu": "Obrir menú",
+    "toggleTheme": "Canviar tema (Ctrl+K per a més temes)",
+    "viewGithub": "Veure a GitHub"
+  },
+  "certifications": {
+    "label": "Credencials",
+    "showLess": "Veure menys",
+    "showMore": "Veure més",
+    "subtitle": "Certificacions professionals que he obtingut pel camí.",
+    "title": "Llicències i certificacions",
+    "viewCredential": "Veure credencial"
+  },
+  "contact": {
+    "cta": "Enviar Missatge",
+    "didYouMean": "Volies dir",
+    "email": "Correu electrònic",
+    "emailPlaceholder": "el.teu.correu@exemple.com",
+    "error": "Ui! Alguna cosa ha anat malament. Si us plau, torna-ho a provar.",
+    "invalidEmail": "Si us plau, introdueix un correu vàlid (ex. nom@gmail.com).",
+    "label": "Contacte",
+    "message": "Missatge",
+    "messagePlaceholder": "El teu missatge...",
+    "name": "Nom",
+    "namePlaceholder": "El teu nom",
+    "sending": "Enviant...",
+    "success": "Gràcies! El teu missatge ha estat enviat.",
+    "text": "Actualment estic obert a noves oportunitats i col·laboracions. Tant si tens una pregunta, una idea per a un projecte o simplement vols saludar, la meva bústia sempre està oberta.",
+    "title": "Posa't en contacte",
+    "useSuggestion": "Fer servir aquesta"
+  },
+  "demo": {
+    "allDemos": "Totes les Demos",
+    "moreProjects": "Més Projectes",
+    "next": "Següent",
+    "portfolio": "Portafolis",
+    "previous": "Anterior",
+    "viewBackend": "Codi Backend (GitHub)",
+    "viewFrontend": "Codi Frontend (GitHub)",
+    "viewSource": "Veure codi a GitHub"
+  },
+  "education": {
+    "label": "Educació",
+    "title": "On he estudiat"
+  },
+  "experience": {
+    "label": "Experiència",
+    "subtitle": "Una línia de temps de la meva trajectòria professional fins ara.",
+    "title": "On he treballat"
+  },
+  "hero": {
+    "cta": "Veure el meu treball",
+    "description": "Enginyer Informàtic de Barcelona, actualment Consultor d'IA i Dades a Deloitte. Gaudeixo explorant noves tecnologies, tirant endavant eines reals i ajudant el meu equip a construir coses que funcionin de veritat.",
+    "greeting": "Hola, em dic",
+    "tagline_1": "M'agrada construir",
+    "tagline_2": "coses amb IA i dades."
+  },
+  "meta": {
+    "description": "Pol Casacuberta — Consultor d'IA i Dades de Barcelona. Construeixo coses amb IA i dades.",
+    "title": "Pol Casacuberta — Portafolis"
+  },
+  "nav": {
+    "about": "Sobre mi",
+    "certifications": "Certificacions",
+    "contact": "Contacte",
+    "education": "Educació",
+    "experience": "Experiència",
+    "projects": "Projectes",
+    "skills": "Habilitats",
+    "work": "Treball Professional"
+  },
+  "notFound": {
+    "back": "Portafolis",
+    "message": "La pàgina que busques no existeix o ha estat moguda.",
+    "title": "Pàgina no trobada"
+  },
+  "projects": {
+    "badge": "Demo en viu",
+    "label": "Interactiu",
+    "showLess": "Mostra menys",
+    "showMore": "Mostra més",
+    "subtitle": "Demos interactives i en viu que pots provar directament al teu navegador.",
+    "title": "Prova els meus projectes"
+  },
+  "serverError": {
+    "back": "Portafolis",
+    "demoMessage": "Hi ha hagut un error en executar aquesta demo. La resta del lloc no està afectada — pots tornar a carregar per intentar-ho de nou.",
+    "demoTitle": "Aquesta demo no s'ha pogut carregar",
+    "message": "Alguna cosa s'ha trencat per la nostra banda. Prova de tornar a carregar o torna al portafolis.",
+    "reload": "Tornar a carregar",
+    "title": "Alguna cosa ha anat malament"
+  },
+  "skills": {
+    "label": "Habilitats",
+    "subtitle": "Tecnologies i eines que faig servir per fer realitat les idees.",
+    "title": "Tecnologia que utilitzo"
+  },
+  "theme": {
+    "closeHint": "Prem <kbd>Esc</kbd> per tancar",
+    "customize": "Personalitza",
+    "dark": "Fosc",
+    "design": "Disseny",
+    "light": "Clar",
+    "palette": "Paleta",
+    "recommended": "recomanada per a aquest disseny"
+  },
+  "work": {
+    "label": "Treball Professional",
+    "subtitle": "Fites clau i iniciatives d'IA entregades al món real.",
+    "title": "Projectes Destacats"
+  }
+}

@@ -1,39 +1,29 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
-import Hero from '../../components/Hero.astro';
-import About from '../../components/About.astro';
-import Demos from '../../components/Demos.astro';
-import Skills from '../../components/Skills.astro';
-import Experience from '../../components/Experience.astro';
-import WorkProjects from '../../components/WorkProjects.astro';
-import Education from '../../components/Education.astro';
-import Contact from '../../components/Contact.astro';
 import Footer from '../../components/Footer.astro';
+import { sections } from '../../config/sections';
+import { PREFIXED_LOCALES } from '../../config/locales';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 export function getStaticPaths() {
-  return [
-    { params: { lang: 'es' } },
-    { params: { lang: 'ca' } }
-  ];
+  return PREFIXED_LOCALES.map((lang) => ({ params: { lang } }));
 }
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+let numberedIndex = 0;
+const rendered = sections.map((s) => {
+  const num = s.numbered ? String(++numberedIndex).padStart(2, '0') : undefined;
+  return { ...s, num };
+});
 ---
 
 <Layout title={t('meta.title')} description={t('meta.description')}>
   <Navbar />
   <main id="main-content">
-    <Hero />
-    <About />
-    <Demos />
-    <Skills />
-    <Experience />
-    <WorkProjects />
-    <Education />
-    <Contact />
+    {rendered.map(({ component: Section, num }) => <Section num={num} />)}
   </main>
   <Footer />
 </Layout>

@@ -1,0 +1,23 @@
+{
+  "howItWorks": "How it works:",
+  "howDesc1": " This is a browser port of a MATLAB license plate detector. The pipeline has 3 stages: ",
+  "howDesc2": "1) ",
+  "howDesc3": "locate the plate region using adaptive binarization and morphological filtering, ",
+  "howDesc4": "2) ",
+  "howDesc5": "segment individual characters via connected component analysis, ",
+  "howDesc6": "3) ",
+  "howDesc7": "recognize each character by template matching against a reference plate font. Processing runs in a Web Worker so the page stays responsive \\u2014 pure TypeScript, no OpenCV download.",
+  "selectImage": "Select an image",
+  "uploadOwn": "Upload your own",
+  "detecting": "Detecting\\u2026",
+  "detectPlate": "Detect plate",
+  "analyzing": "Analyzing image",
+  "detectedPlate": "Detected plate",
+  "groundTruth": "Ground truth",
+  "match": "Match",
+  "mismatch": "Mismatch",
+  "stage1": "Plate Detection",
+  "stage2": "Character Segmentation",
+  "stage3": "Character Recognition",
+  "error": "Error:"
+}

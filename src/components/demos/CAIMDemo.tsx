@@ -1,8 +1,11 @@
 import { useState, lazy, Suspense } from 'react';
 
-import { T, type DemoTranslations } from "../../i18n/demos/caimdemo";
+import { T } from '../../i18n/demos/caim-demo';
+import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
+import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { gradientButton } from './_styles';
 
-type Lang = "en" | "es" | "ca";
+type Lang = 'en' | 'es' | 'ca';
 
 const PageRankTab = lazy(() => import('./caim/PageRankTab'));
 const ZipfTab = lazy(() => import('./caim/ZipfTab'));
@@ -13,23 +16,29 @@ interface Props {
   lang?: Lang;
 }
 
-export default function CAIMDemo({ lang = 'en' }: Props) {
+function CAIMDemo({ lang = 'en' }: Props) {
   const t = T[lang] || T.en;
+  const log = useDemoLifecycle('demo:caim', { lang });
   const [activeTab, setActiveTab] = useState<Tab>('pagerank');
+
+  const switchTab = (tab: Tab) => {
+    setActiveTab(tab);
+    log.info('tab', { tab });
+  };
 
   return (
     <div className="caim-mock" style={styles.wrapper}>
       {/* Tab navigation */}
       <div style={styles.tabBar}>
         <button
-          onClick={() => setActiveTab('pagerank')}
+          onClick={() => switchTab('pagerank')}
           style={{ ...styles.tab, ...(activeTab === 'pagerank' ? styles.tabActive : {}) }}
           data-tab="pagerank"
         >
           {t.pagerank}
         </button>
         <button
-          onClick={() => setActiveTab('zipf')}
+          onClick={() => switchTab('zipf')}
           style={{ ...styles.tab, ...(activeTab === 'zipf' ? styles.tabActive : {}) }}
           data-tab="zipf"
         >
@@ -52,27 +61,36 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '1.5rem',
   },
   tabBar: {
-    display: 'flex', gap: '0.25rem',
-    padding: '0.35rem', marginBottom: '1rem',
+    display: 'flex',
+    gap: '0.25rem',
+    padding: '0.35rem',
+    marginBottom: '1rem',
     background: 'var(--bg-card)',
     border: '1px solid var(--border-color)',
     borderRadius: '0.75rem',
     width: 'fit-content',
   },
   tab: {
-    padding: '0.5rem 1.25rem', borderRadius: '0.5rem', border: 'none',
-    background: 'transparent', color: 'var(--text-muted)',
-    fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer',
+    padding: '0.5rem 1.25rem',
+    borderRadius: '0.5rem',
+    border: 'none',
+    background: 'transparent',
+    color: 'var(--text-muted)',
+    fontWeight: 600,
+    fontSize: '0.82rem',
+    cursor: 'pointer',
     transition: 'all 0.15s',
   },
-  tabActive: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: '#fff',
-  },
+  tabActive: gradientButton(),
   content: {
     minHeight: 300,
   },
   loading: {
-    textAlign: 'center', padding: '3rem', color: 'var(--text-muted)', fontSize: '0.85rem',
+    textAlign: 'center',
+    padding: '3rem',
+    color: 'var(--text-muted)',
+    fontSize: '0.85rem',
   },
 };
+// __DEMO_ERROR_BOUNDARY_APPLIED__
+export default withDemoErrorBoundary(CAIMDemo, 'caim');

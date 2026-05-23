@@ -3,7 +3,10 @@ import DemoNav from '../components/DemoNav.astro';
 import DemoSidebar from '../components/DemoSidebar.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import ThemeInit from '../components/ThemeInit.astro';
+import DebugInit from '../components/DebugInit.astro';
+import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
+import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
 
 interface Props {
   title: string;
@@ -32,27 +35,36 @@ const siteBase = Astro.site || Astro.url;
     <!-- OpenGraph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
-    <meta property="og:title" content={title + " — Pol Casacuberta"} />
+    <meta property="og:title" content={title + ' — Pol Casacuberta'} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage || (base + "/og-image.jpg"), Astro.site || Astro.url)} />
+    <meta
+      property="og:image"
+      content={new URL(ogImage || base + '/og-image.png', Astro.site || Astro.url)}
+    />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={Astro.url} />
-    <meta name="twitter:title" content={title + " — Pol Casacuberta"} />
+    <meta name="twitter:title" content={title + ' — Pol Casacuberta'} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(ogImage || (base + "/og-image.jpg"), Astro.site || Astro.url)} />
+    <meta
+      name="twitter:image"
+      content={new URL(ogImage || base + '/og-image.png', Astro.site || Astro.url)}
+    />
 
     <link rel="canonical" href={Astro.url} />
-    <link rel="alternate" hreflang="en" href={new URL(base + demoPath, siteBase)} />
-    <link rel="alternate" hreflang="es" href={new URL(base + '/es' + demoPath, siteBase)} />
-    <link rel="alternate" hreflang="ca" href={new URL(base + '/ca' + demoPath, siteBase)} />
+    {
+      LOCALES.map((locale) => {
+        const path = locale === DEFAULT_LOCALE ? demoPath : `/${locale}${demoPath}`;
+        return <link rel="alternate" hreflang={locale} href={new URL(base + path, siteBase)} />;
+      })
+    }
     <link rel="alternate" hreflang="x-default" href={new URL(base + demoPath, siteBase)} />
 
     <ThemeInit position="head" />
+    <DebugInit />
 
-
-    <link rel="icon" type="image/svg+xml" href={base + "/favicon.svg"} />
+    <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -72,28 +84,54 @@ const siteBase = Astro.site || Astro.url;
     <title>{title} — Pol Casacuberta</title>
     <Analytics />
   </head>
-  <body>
+  <body data-demo-slug={slug ?? undefined}>
     <ThemeInit position="body" />
     <a href="#main-content" class="skip-to-content">{t('aria.skipToContent')}</a>
     <DemoSidebar currentSlug={slug} />
     <nav class="demo-nav">
       <div class="demo-nav-inner container">
-        <a href={base + (lang === 'en' ? '/' : `/${lang}`)} class="demo-back" data-astro-reload>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        <a
+          href={base + (lang === 'en' ? '/' : `/${lang}`)}
+          class="demo-back"
+          data-astro-reload
+          aria-label={t('demo.portfolio')}
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7"></path>
           </svg>
-          {t('demo.portfolio')}
+          <span class="demo-back-label">{t('demo.portfolio')}</span>
         </a>
         <span class="demo-nav-title gradient-text">{title}</span>
 
         <div class="demo-controls">
-          <button class="sidebar-toggle" id="sidebar-toggle" aria-label={t('demo.allDemos')} title={t('demo.allDemos')}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <line x1="3" y1="12" x2="21" y2="12"/>
-              <line x1="3" y1="18" x2="21" y2="18"/>
+          <button
+            class="sidebar-toggle"
+            id="sidebar-toggle"
+            aria-label={t('demo.allDemos')}
+            title={t('demo.allDemos')}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
             </svg>
           </button>
         </div>
@@ -104,20 +142,33 @@ const siteBase = Astro.site || Astro.url;
       <slot />
       {slug && <DemoNav currentSlug={slug} />}
       <div class="demo-bottom-design">
-        <button class="demo-design-btn" aria-label={t('theme.customize')} title={t('theme.customize')}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
-            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
-            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
-            <circle cx="6.5" cy="12" r=".5" fill="currentColor"/>
-            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+        <button
+          class="demo-design-btn"
+          aria-label={t('theme.customize')}
+          title={t('theme.customize')}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+            <circle cx="6.5" cy="12" r=".5" fill="currentColor"></circle>
+            <path
+              d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"
+            ></path>
           </svg>
           <span>{t('theme.customize')}</span>
         </button>
       </div>
     </main>
-
 
     <style>
       .demo-bottom-design {
@@ -137,17 +188,20 @@ const siteBase = Astro.site || Astro.url;
         font-size: 0.82rem;
         font-weight: 500;
         cursor: pointer;
-        transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+        transition:
+          color var(--transition-fast),
+          background-color var(--transition-fast),
+          border-color var(--transition-fast);
       }
       .demo-design-btn:hover {
-        color: var(--accent-start);
+        color: var(--accent-text);
         background: var(--bg-card);
-        border-color: var(--accent-start);
+        border-color: var(--accent-text);
       }
     </style>
     <script>
       function initDesignBtn() {
-        document.querySelectorAll('.demo-design-btn').forEach(btn => {
+        document.querySelectorAll('.demo-design-btn').forEach((btn) => {
           if (btn.hasAttribute('data-init')) return;
           btn.setAttribute('data-init', '');
           btn.addEventListener('click', () => {
@@ -158,6 +212,43 @@ const siteBase = Astro.site || Astro.url;
       initDesignBtn();
       document.addEventListener('astro:page-load', initDesignBtn);
     </script>
+
+    <script>
+      // Page-load nav log for demo pages. Mirrors the listener in Layout.astro.
+      // DemoLayout doesn't ship view-transitions, but astro:page-load still
+      // fires on initial paint so the nav entry shows up on every demo route.
+      function logNav() {
+        try {
+          const w = window as unknown as {
+            __debug?: { log: (l: string, ns: string, msg: string, ...a: unknown[]) => void };
+          };
+          if (!w.__debug) return;
+          w.__debug.log('info', 'nav', 'navigated', {
+            path: location.pathname,
+            search: location.search,
+            lang: document.documentElement.lang,
+            title: document.title,
+          });
+        } catch {}
+      }
+      logNav();
+      document.addEventListener('astro:page-load', logNav);
+    </script>
+
+    <script>
+      // Subscribe to backend log SSE streams for every visible
+      // [data-demo-slug] element. Dev-only — `requireEnabled()` inside
+      // subscribeAllVisible() blocks this in production builds.
+      async function subscribeBackends() {
+        try {
+          const mod = await import('../lib/debug-docker');
+          mod.subscribeAllVisible();
+        } catch {}
+      }
+      subscribeBackends();
+      document.addEventListener('astro:page-load', subscribeBackends);
+    </script>
+    <DebugMount />
   </body>
 </html>
 
@@ -187,14 +278,16 @@ const siteBase = Astro.site || Astro.url;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: var(--radius-md);
     color: var(--text-secondary);
     background: none;
     border: none;
     cursor: pointer;
-    transition: color var(--transition-fast), background-color var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
   }
 
   .sidebar-toggle:hover {
@@ -211,6 +304,13 @@ const siteBase = Astro.site || Astro.url;
     color: var(--text-secondary);
     transition: color var(--transition-fast);
     justify-self: start;
+    min-width: 0;
+  }
+
+  .demo-back-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .demo-back:hover {
@@ -221,6 +321,11 @@ const siteBase = Astro.site || Astro.url;
     font-size: 1rem;
     font-weight: 700;
     justify-self: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .demo-controls {
@@ -236,46 +341,34 @@ const siteBase = Astro.site || Astro.url;
     color: var(--text-primary);
   }
 
-  .demo-main p, .demo-main span:not(.demo-nav-title) {
+  .demo-main p,
+  .demo-main span:not(.demo-nav-title) {
     color: var(--text-primary);
   }
 
-  .demo-main .stats-grid p, .demo-main .stats-grid span {
+  .demo-main .stats-grid p,
+  .demo-main .stats-grid span {
     color: var(--text-primary);
   }
 
   @media (max-width: 768px) {
     .demo-nav-inner {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      height: auto;
-      padding: 0.75rem 1rem;
+      grid-template-columns: auto 1fr auto;
       gap: 0.5rem;
+      height: var(--nav-height);
+    }
+
+    /* Hide the "Portfolio" label on mobile, keep just the arrow icon to save space */
+    .demo-back-label {
+      display: none;
     }
 
     .demo-back {
-      order: 1;
-    }
-
-    .demo-controls {
-      order: 2;
-      width: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.25rem;
-      justify-content: flex-end;
-      align-items: center;
+      gap: 0;
     }
 
     .demo-nav-title {
-      order: 3;
-      width: 100%;
-      text-align: center;
-      font-size: 1rem;
-      line-height: 1.3;
-      margin: 0.25rem 0;
+      font-size: 0.95rem;
     }
   }
 </style>

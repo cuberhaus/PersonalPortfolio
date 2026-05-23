@@ -10,7 +10,6 @@
  * `@media (prefers-reduced-motion: no-preference)`.
  * ───────────────────────────────────────────────────────────── */
 
-
 /* ══════════════ MINIMAL (default) ═══════════════════════════
  * Intentionally the same as the base tokens in global.css so the
  * block is explicit for theme-tooling / e2e tests.
@@ -23,7 +22,6 @@ html[data-design='minimal'] {
   --border-width: 1px;
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
-
 
 /* ══════════════ EDITORIAL ═══════════════════════════════════
  * Serif headlines, drop caps, multi-column prose, sharp corners.
@@ -84,7 +82,7 @@ html[data-design='editorial'] .about-text p:first-of-type::first-letter {
   line-height: 0.85;
   font-weight: 800;
   padding: 0.1em 0.1em 0 0;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='editorial'] .about-text {
@@ -104,6 +102,7 @@ html[data-design='editorial'] .skill-group,
 html[data-design='editorial'] .timeline-content,
 html[data-design='editorial'] .work-card,
 html[data-design='editorial'] .education-card,
+html[data-design='editorial'] .certification-card,
 html[data-design='editorial'] .demo-card,
 html[data-design='editorial'] .contact-form {
   background: transparent;
@@ -170,7 +169,6 @@ html[data-design='editorial'] .hero-gradient {
     columns: 1;
   }
 }
-
 
 /* ══════════════ SWISS ═══════════════════════════════════════
  * Strict grid, uppercase nav, giant section numerals, red rules.
@@ -260,6 +258,7 @@ html[data-design='swiss'] .skill-group,
 html[data-design='swiss'] .timeline-content,
 html[data-design='swiss'] .work-card,
 html[data-design='swiss'] .education-card,
+html[data-design='swiss'] .certification-card,
 html[data-design='swiss'] .demo-card,
 html[data-design='swiss'] .contact-form {
   background: transparent;
@@ -301,7 +300,6 @@ html[data-design='swiss'] .hero-gradient {
   display: none;
 }
 
-
 /* ══════════════ PIXEL ═══════════════════════════════════════
  * 8-bit pixel font, hard shadows, blocky borders, no gradients.
  * ──────────────────────────────────────────────────────────── */
@@ -334,9 +332,18 @@ html[data-design='pixel'] button {
   font-size: 0.72rem;
 }
 
-html[data-design='pixel'] h1 { font-size: clamp(1.4rem, 3.5vw, 2rem); line-height: 1.4; }
-html[data-design='pixel'] h2 { font-size: clamp(1.1rem, 2.5vw, 1.4rem); line-height: 1.4; }
-html[data-design='pixel'] h3 { font-size: clamp(0.9rem, 1.5vw, 1.05rem); line-height: 1.4; }
+html[data-design='pixel'] h1 {
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  line-height: 1.4;
+}
+html[data-design='pixel'] h2 {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  line-height: 1.4;
+}
+html[data-design='pixel'] h3 {
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  line-height: 1.4;
+}
 
 html[data-design='pixel'] .hero-name {
   font-size: clamp(1.6rem, 4.5vw, 2.8rem);
@@ -360,6 +367,7 @@ html[data-design='pixel'] .skill-group,
 html[data-design='pixel'] .timeline-content,
 html[data-design='pixel'] .work-card,
 html[data-design='pixel'] .education-card,
+html[data-design='pixel'] .certification-card,
 html[data-design='pixel'] .demo-card,
 html[data-design='pixel'] .contact-form {
   background: var(--bg-card);
@@ -373,6 +381,7 @@ html[data-design='pixel'] .skill-group:hover,
 html[data-design='pixel'] .timeline-content:hover,
 html[data-design='pixel'] .work-card:hover,
 html[data-design='pixel'] .education-card:hover,
+html[data-design='pixel'] .certification-card:hover,
 html[data-design='pixel'] .demo-card:hover {
   transform: translate(-2px, -2px);
   box-shadow: 8px 8px 0 var(--accent-start);
@@ -442,7 +451,7 @@ html[data-design='pixel'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='pixel'] .hero-grid,
@@ -454,7 +463,7 @@ html[data-design='pixel'] .hero-greeting::after {
   content: '_';
   display: inline-block;
   margin-left: 0.25rem;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -462,11 +471,16 @@ html[data-design='pixel'] .hero-greeting::after {
     animation: design-pixel-blink 1s step-end infinite;
   }
   @keyframes design-pixel-blink {
-    0%, 50%  { opacity: 1; }
-    50.01%, 100% { opacity: 0; }
+    0%,
+    50% {
+      opacity: 1;
+    }
+    50.01%,
+    100% {
+      opacity: 0;
+    }
   }
 }
-
 
 /* ══════════════ TERMINAL ════════════════════════════════════
  * Monospace everywhere, CRT scanlines, prompt markers,
@@ -543,14 +557,14 @@ html[data-design='terminal'] .hero-name {
 
 html[data-design='terminal'] .hero-greeting::before {
   content: '$ ';
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='terminal'] .hero-greeting::after {
   content: '_';
   display: inline-block;
   margin-left: 0.25rem;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='terminal'] .section-label::before {
@@ -561,7 +575,7 @@ html[data-design='terminal'] .section-label::before {
 
 html[data-design='terminal'] .section-title::before {
   content: '> ';
-  color: var(--accent-start);
+  color: var(--accent-text);
   opacity: 0.8;
 }
 
@@ -570,7 +584,7 @@ html[data-design='terminal'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='terminal'] .card,
@@ -578,6 +592,7 @@ html[data-design='terminal'] .skill-group,
 html[data-design='terminal'] .timeline-content,
 html[data-design='terminal'] .work-card,
 html[data-design='terminal'] .education-card,
+html[data-design='terminal'] .certification-card,
 html[data-design='terminal'] .demo-card,
 html[data-design='terminal'] .contact-form {
   background: var(--bg-card);
@@ -592,6 +607,7 @@ html[data-design='terminal'] .skill-group::before,
 html[data-design='terminal'] .timeline-content::before,
 html[data-design='terminal'] .work-card::before,
 html[data-design='terminal'] .education-card::before,
+html[data-design='terminal'] .certification-card::before,
 html[data-design='terminal'] .demo-card::before,
 html[data-design='terminal'] .contact-form::before {
   content: '┌─';
@@ -600,7 +616,7 @@ html[data-design='terminal'] .contact-form::before {
   left: 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--accent-start);
+  color: var(--accent-text);
   background: var(--bg-primary);
   padding: 0 0.25rem;
   line-height: 1;
@@ -621,7 +637,7 @@ html[data-design='terminal'] .skill-pill::before,
 html[data-design='terminal'] .demo-tags li::before,
 html[data-design='terminal'] .work-tags li::before {
   content: '[';
-  color: var(--accent-start);
+  color: var(--accent-text);
   margin-right: 0.15rem;
 }
 
@@ -629,14 +645,14 @@ html[data-design='terminal'] .skill-pill:not(.has-tooltip)::after,
 html[data-design='terminal'] .demo-tags li::after,
 html[data-design='terminal'] .work-tags li::after {
   content: ']';
-  color: var(--accent-start);
+  color: var(--accent-text);
   margin-left: 0.15rem;
 }
 
 /* Tooltip pills already use ::after for the tooltip popover,
    so inject the closing bracket via a data-attribute rendered inline. */
 html[data-design='terminal'] .skill-pill.has-tooltip .skill-bracket-close {
-  color: var(--accent-start);
+  color: var(--accent-text);
   margin-left: 0.15rem;
 }
 
@@ -657,7 +673,7 @@ html[data-design='terminal'] .navbar {
 
 html[data-design='terminal'] .nav-logo::before {
   content: '~/';
-  color: var(--accent-start);
+  color: var(--accent-text);
   opacity: 0.7;
 }
 
@@ -675,7 +691,7 @@ html[data-design='terminal'] .nav-link::before {
 html[data-design='terminal'] .hero-cta,
 html[data-design='terminal'] .contact-submit {
   background: transparent;
-  color: var(--accent-start);
+  color: var(--accent-text);
   border: 1px solid var(--accent-start);
   border-radius: 0;
   font-family: var(--font-mono);
@@ -711,11 +727,16 @@ html[data-design='terminal'] .hero-gradient {
     animation: design-terminal-blink 1s step-end infinite;
   }
   @keyframes design-terminal-blink {
-    0%, 50%  { opacity: 1; }
-    50.01%, 100% { opacity: 0; }
+    0%,
+    50% {
+      opacity: 1;
+    }
+    50.01%,
+    100% {
+      opacity: 0;
+    }
   }
 }
-
 
 /* ══════════════ CYBERPUNK ═══════════════════════════════════
  * Neon glows, chromatic aberration headline, synthwave grid,
@@ -736,7 +757,12 @@ html[data-design='cyber'] {
 html[data-design='cyber'] body {
   letter-spacing: 0.01em;
   background:
-    linear-gradient(180deg, transparent 0%, transparent 60%, color-mix(in oklab, var(--accent-start) 10%, transparent) 100%),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 60%,
+      color-mix(in oklab, var(--accent-start) 10%, transparent) 100%
+    ),
     var(--bg-primary);
 }
 
@@ -790,6 +816,7 @@ html[data-design='cyber'] .skill-group,
 html[data-design='cyber'] .timeline-content,
 html[data-design='cyber'] .work-card,
 html[data-design='cyber'] .education-card,
+html[data-design='cyber'] .certification-card,
 html[data-design='cyber'] .demo-card,
 html[data-design='cyber'] .contact-form {
   background: color-mix(in oklab, var(--bg-card) 85%, transparent);
@@ -813,7 +840,8 @@ html[data-design='cyber'] .card:hover,
 html[data-design='cyber'] .skill-group:hover,
 html[data-design='cyber'] .work-card:hover,
 html[data-design='cyber'] .demo-card:hover,
-html[data-design='cyber'] .education-card:hover {
+html[data-design='cyber'] .education-card:hover,
+html[data-design='cyber'] .certification-card:hover {
   box-shadow:
     0 0 0 1px var(--accent-start),
     0 0 40px color-mix(in oklab, var(--accent-start) 35%, transparent),
@@ -831,7 +859,7 @@ html[data-design='cyber'] .work-tags li {
   letter-spacing: 0.12em;
   font-size: 0.65rem;
   padding: 0.3rem 0.6rem;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='cyber'] .navbar {
@@ -907,8 +935,16 @@ html[data-design='cyber'] .hero::before {
   transform: translateX(-50%) perspective(600px) rotateX(65deg);
   transform-origin: 50% 0;
   background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--cyber-cyan) 55%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--cyber-pink) 45%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--cyber-cyan) 55%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--cyber-pink) 45%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 48px 48px;
   mask-image: linear-gradient(to top, black 0%, transparent 85%);
   -webkit-mask-image: linear-gradient(to top, black 0%, transparent 85%);
@@ -932,11 +968,18 @@ html[data-design='cyber'] .hero-gradient {
     animation: design-cyber-grid 18s linear infinite;
   }
   @keyframes design-cyber-grid {
-    from { background-position: 0 0, 0 0; }
-    to   { background-position: 0 48px, 48px 0; }
+    from {
+      background-position:
+        0 0,
+        0 0;
+    }
+    to {
+      background-position:
+        0 48px,
+        48px 0;
+    }
   }
 }
-
 
 /* ══════════════ NOTEBOOK ════════════════════════════════════
  * Graph-paper page with handwritten ink, highlighter marks,
@@ -959,7 +1002,9 @@ html[data-design='notebook'] body {
   background-image:
     linear-gradient(to right, var(--nb-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--nb-line) 1px, transparent 1px);
-  background-size: 28px 28px, 28px 28px;
+  background-size:
+    28px 28px,
+    28px 28px;
   background-attachment: fixed;
   line-height: 1.75;
 }
@@ -1012,7 +1057,7 @@ html[data-design='notebook'] .section-label {
 
 html[data-design='notebook'] .hero-greeting::before {
   content: 'PS: ';
-  color: var(--accent-start);
+  color: var(--accent-text);
   font-style: italic;
 }
 
@@ -1027,7 +1072,7 @@ html[data-design='notebook'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
   position: relative;
 }
 
@@ -1037,6 +1082,7 @@ html[data-design='notebook'] .skill-group,
 html[data-design='notebook'] .timeline-content,
 html[data-design='notebook'] .work-card,
 html[data-design='notebook'] .education-card,
+html[data-design='notebook'] .certification-card,
 html[data-design='notebook'] .demo-card,
 html[data-design='notebook'] .contact-form {
   background: var(--bg-card);
@@ -1053,6 +1099,7 @@ html[data-design='notebook'] .card:nth-of-type(odd),
 html[data-design='notebook'] .timeline-content:nth-of-type(odd),
 html[data-design='notebook'] .work-card:nth-of-type(odd),
 html[data-design='notebook'] .education-card:nth-of-type(odd),
+html[data-design='notebook'] .certification-card:nth-of-type(odd),
 html[data-design='notebook'] .demo-card:nth-of-type(odd) {
   transform: rotate(-0.4deg);
 }
@@ -1061,6 +1108,7 @@ html[data-design='notebook'] .card:nth-of-type(even),
 html[data-design='notebook'] .timeline-content:nth-of-type(even),
 html[data-design='notebook'] .work-card:nth-of-type(even),
 html[data-design='notebook'] .education-card:nth-of-type(even),
+html[data-design='notebook'] .certification-card:nth-of-type(even),
 html[data-design='notebook'] .demo-card:nth-of-type(even) {
   transform: rotate(0.35deg);
 }
@@ -1068,6 +1116,7 @@ html[data-design='notebook'] .demo-card:nth-of-type(even) {
 html[data-design='notebook'] .card:hover,
 html[data-design='notebook'] .work-card:hover,
 html[data-design='notebook'] .education-card:hover,
+html[data-design='notebook'] .certification-card:hover,
 html[data-design='notebook'] .demo-card:hover {
   transform: rotate(0deg) translateY(-2px);
   box-shadow:
@@ -1079,7 +1128,8 @@ html[data-design='notebook'] .demo-card:hover {
 html[data-design='notebook'] .card::before,
 html[data-design='notebook'] .work-card::before,
 html[data-design='notebook'] .demo-card::before,
-html[data-design='notebook'] .education-card::before {
+html[data-design='notebook'] .education-card::before,
+html[data-design='notebook'] .certification-card::before {
   content: '';
   position: absolute;
   top: -10px;
@@ -1177,7 +1227,7 @@ html[data-design='notebook'] .form-group textarea {
 html[data-design='notebook'] .form-group input:focus,
 html[data-design='notebook'] .form-group textarea:focus {
   border-bottom-style: solid;
-  border-bottom-color: var(--accent-start);
+  border-bottom-color: var(--accent-text);
   box-shadow: none;
   outline: 0;
 }
@@ -1186,7 +1236,6 @@ html[data-design='notebook'] .hero-grid,
 html[data-design='notebook'] .hero-gradient {
   display: none;
 }
-
 
 /* ══════════════ BRUTALIST ═══════════════════════════════════
  * Raw web-brutalism: Times, yellow tape, thick black borders,
@@ -1246,6 +1295,14 @@ html[data-design='brutalist'] .section-label {
   font-size: 0.85rem;
   background: var(--br-ink);
   color: var(--bg-primary);
+  /* Undo the global .section-label gradient-clipped-to-text trick — the
+     brutalist treatment is a solid block with inverted text, not a
+     transparent-fill gradient. Without these resets the label inherits
+     the global -webkit-text-fill-color: transparent and shows only the
+     dark background pill with invisible text. */
+  -webkit-text-fill-color: currentColor;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
   padding: 0.15rem 0.45rem;
   display: inline-block;
 }
@@ -1283,6 +1340,7 @@ html[data-design='brutalist'] .skill-group,
 html[data-design='brutalist'] .timeline-content,
 html[data-design='brutalist'] .work-card,
 html[data-design='brutalist'] .education-card,
+html[data-design='brutalist'] .certification-card,
 html[data-design='brutalist'] .demo-card,
 html[data-design='brutalist'] .contact-form {
   background: var(--bg-card);
@@ -1294,6 +1352,7 @@ html[data-design='brutalist'] .contact-form {
 html[data-design='brutalist'] .card:hover,
 html[data-design='brutalist'] .work-card:hover,
 html[data-design='brutalist'] .education-card:hover,
+html[data-design='brutalist'] .certification-card:hover,
 html[data-design='brutalist'] .demo-card:hover,
 html[data-design='brutalist'] .skill-group:hover,
 html[data-design='brutalist'] .timeline-content:hover {
@@ -1305,7 +1364,11 @@ html[data-design='brutalist'] .timeline-content:hover {
 
 html[data-design='brutalist'] .card:hover *,
 html[data-design='brutalist'] .work-card:hover *,
-html[data-design='brutalist'] .demo-card:hover * {
+html[data-design='brutalist'] .demo-card:hover *,
+html[data-design='brutalist'] .timeline-content:hover *,
+html[data-design='brutalist'] .education-card:hover *,
+html[data-design='brutalist'] .certification-card:hover *,
+html[data-design='brutalist'] .skill-group:hover * {
   color: #000 !important;
   border-color: #000 !important;
 }
@@ -1321,6 +1384,25 @@ html[data-design='brutalist'] .work-tags li {
   text-transform: uppercase;
   letter-spacing: 0.03em;
   padding: 0.25rem 0.55rem;
+}
+
+/* When a parent card is hovered (yellow background), the `* { color: #000 }`
+   rule above forces pill text to black. Pills themselves need a light
+   background so that black text is readable. */
+html[data-design='brutalist'] .card:hover .skill-pill,
+html[data-design='brutalist'] .work-card:hover .skill-pill,
+html[data-design='brutalist'] .demo-card:hover .skill-pill,
+html[data-design='brutalist'] .timeline-content:hover .skill-pill,
+html[data-design='brutalist'] .education-card:hover .skill-pill,
+html[data-design='brutalist'] .certification-card:hover .skill-pill,
+html[data-design='brutalist'] .skill-group:hover .skill-pill,
+html[data-design='brutalist'] .card:hover .demo-tags li,
+html[data-design='brutalist'] .work-card:hover .demo-tags li,
+html[data-design='brutalist'] .demo-card:hover .demo-tags li,
+html[data-design='brutalist'] .card:hover .work-tags li,
+html[data-design='brutalist'] .work-card:hover .work-tags li,
+html[data-design='brutalist'] .demo-card:hover .work-tags li {
+  background: #fff !important;
 }
 
 html[data-design='brutalist'] .navbar {
@@ -1406,7 +1488,6 @@ html[data-design='brutalist'] .hero-gradient {
   display: none;
 }
 
-
 /* ══════════════ BLUEPRINT ═══════════════════════════════════
  * Technical-drawing aesthetic: cyan grid, hairline white lines,
  * dimension markers, revision tags. Engineer's schematic.
@@ -1445,7 +1526,11 @@ html[data-design='blueprint'] body {
     linear-gradient(to bottom, var(--bp-grid) 1px, transparent 1px),
     linear-gradient(to right, var(--bp-grid-strong) 1px, transparent 1px),
     linear-gradient(to bottom, var(--bp-grid-strong) 1px, transparent 1px);
-  background-size: 32px 32px, 32px 32px, 128px 128px, 128px 128px;
+  background-size:
+    32px 32px,
+    32px 32px,
+    128px 128px,
+    128px 128px;
   background-attachment: fixed;
   color: var(--bp-ink);
   letter-spacing: 0.005em;
@@ -1566,6 +1651,7 @@ html[data-design='blueprint'] .skill-group,
 html[data-design='blueprint'] .timeline-content,
 html[data-design='blueprint'] .work-card,
 html[data-design='blueprint'] .education-card,
+html[data-design='blueprint'] .certification-card,
 html[data-design='blueprint'] .demo-card,
 html[data-design='blueprint'] .contact-form {
   background: color-mix(in oklab, var(--bg-card) 50%, transparent);
@@ -1582,6 +1668,8 @@ html[data-design='blueprint'] .work-card::before,
 html[data-design='blueprint'] .work-card::after,
 html[data-design='blueprint'] .education-card::before,
 html[data-design='blueprint'] .education-card::after,
+html[data-design='blueprint'] .certification-card::before,
+html[data-design='blueprint'] .certification-card::after,
 html[data-design='blueprint'] .demo-card::before,
 html[data-design='blueprint'] .demo-card::after {
   content: '';
@@ -1595,6 +1683,7 @@ html[data-design='blueprint'] .demo-card::after {
 html[data-design='blueprint'] .card::before,
 html[data-design='blueprint'] .work-card::before,
 html[data-design='blueprint'] .education-card::before,
+html[data-design='blueprint'] .certification-card::before,
 html[data-design='blueprint'] .demo-card::before {
   top: -5px;
   left: -5px;
@@ -1605,6 +1694,7 @@ html[data-design='blueprint'] .demo-card::before {
 html[data-design='blueprint'] .card::after,
 html[data-design='blueprint'] .work-card::after,
 html[data-design='blueprint'] .education-card::after,
+html[data-design='blueprint'] .certification-card::after,
 html[data-design='blueprint'] .demo-card::after {
   bottom: -5px;
   right: -5px;
@@ -1697,7 +1787,6 @@ html[data-design='blueprint'] .hero-grid,
 html[data-design='blueprint'] .hero-gradient {
   display: none;
 }
-
 
 /* ══════════════ ACADEMIC ════════════════════════════════════
  * LaTeX paper aesthetic: Garamond body, justified prose,
@@ -1829,7 +1918,7 @@ html[data-design='academic'] .section-title::before {
   content: counter(acad-section, decimal-leading-zero) '.  ';
   font-family: var(--font-display);
   font-weight: 700;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='academic'] .gradient-text {
@@ -1847,6 +1936,7 @@ html[data-design='academic'] .skill-group,
 html[data-design='academic'] .timeline-content,
 html[data-design='academic'] .work-card,
 html[data-design='academic'] .education-card,
+html[data-design='academic'] .certification-card,
 html[data-design='academic'] .demo-card,
 html[data-design='academic'] .contact-form {
   background: transparent;
@@ -1858,10 +1948,11 @@ html[data-design='academic'] .contact-form {
 
 html[data-design='academic'] .work-card h3::before,
 html[data-design='academic'] .demo-card h3::before,
-html[data-design='academic'] .education-card h3::before {
+html[data-design='academic'] .education-card h3::before,
+html[data-design='academic'] .certification-card h3::before {
   content: '§  ';
   font-family: var(--font-display);
-  color: var(--accent-start);
+  color: var(--accent-text);
   font-weight: 400;
 }
 
@@ -1877,7 +1968,7 @@ html[data-design='academic'] .work-tags li {
   text-transform: none;
   letter-spacing: 0.04em;
   padding: 0.1rem 0;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 html[data-design='academic'] .skill-pill::before,
@@ -1927,7 +2018,7 @@ html[data-design='academic'] .nav-link {
 html[data-design='academic'] .hero-cta,
 html[data-design='academic'] .contact-submit {
   background: transparent;
-  color: var(--accent-start);
+  color: var(--accent-text);
   border: 0;
   border-bottom: 1px solid var(--accent-start);
   border-radius: 0;
@@ -1948,8 +2039,8 @@ html[data-design='academic'] .contact-submit::after {
 
 html[data-design='academic'] .hero-cta:hover,
 html[data-design='academic'] .contact-submit:hover {
-  color: var(--accent-end);
-  border-bottom-color: var(--accent-end);
+  color: var(--accent-text);
+  border-bottom-color: var(--accent-text);
   background: transparent;
   transform: none;
   box-shadow: none;
@@ -1969,7 +2060,7 @@ html[data-design='academic'] .form-group textarea {
 html[data-design='academic'] .form-group input:focus,
 html[data-design='academic'] .form-group textarea:focus {
   outline: 0;
-  border-bottom-color: var(--accent-start);
+  border-bottom-color: var(--accent-text);
   box-shadow: none;
 }
 
@@ -1983,7 +2074,6 @@ html[data-design='academic'] .hero-grid,
 html[data-design='academic'] .hero-gradient {
   display: none;
 }
-
 
 /* ══════════════ IDE ═════════════════════════════════════════
  * VSCode-inspired: JetBrains Mono, tabbed cards, gutter stripe,
@@ -1999,13 +2089,13 @@ html[data-design='ide'] {
   --border-width: 1px;
   --shadow-card: none;
   --ide-keyword: #c678dd;
-  --ide-string:  #98c379;
-  --ide-func:    #61afef;
-  --ide-number:  #d19a66;
+  --ide-string: #98c379;
+  --ide-func: #61afef;
+  --ide-number: #d19a66;
   --ide-comment: color-mix(in oklab, var(--text-muted) 90%, transparent);
-  --ide-gutter:  color-mix(in oklab, var(--bg-secondary) 85%, transparent);
-  --ide-line:    color-mix(in oklab, var(--text-muted) 45%, transparent);
-  --ide-tab-bg:  color-mix(in oklab, var(--bg-secondary) 95%, transparent);
+  --ide-gutter: color-mix(in oklab, var(--bg-secondary) 85%, transparent);
+  --ide-line: color-mix(in oklab, var(--text-muted) 45%, transparent);
+  --ide-tab-bg: color-mix(in oklab, var(--bg-secondary) 95%, transparent);
   --ide-tab-active: var(--bg-card);
 }
 
@@ -2017,9 +2107,9 @@ html[data-design='ide'][data-theme='solarized-light'],
 html[data-design='ide'][data-theme='sepia'],
 html[data-design='ide'][data-theme='paper'] {
   --ide-keyword: #7c3aed;
-  --ide-string:  #166534;
-  --ide-func:    #1d4ed8;
-  --ide-number:  #b45309;
+  --ide-string: #166534;
+  --ide-func: #1d4ed8;
+  --ide-number: #b45309;
 }
 
 html[data-design='ide'] body {
@@ -2146,6 +2236,7 @@ html[data-design='ide'] .skill-group,
 html[data-design='ide'] .timeline-content,
 html[data-design='ide'] .work-card,
 html[data-design='ide'] .education-card,
+html[data-design='ide'] .certification-card,
 html[data-design='ide'] .demo-card,
 html[data-design='ide'] .contact-form {
   background: var(--ide-tab-active);
@@ -2161,6 +2252,7 @@ html[data-design='ide'] .contact-form {
 html[data-design='ide'] .card::before,
 html[data-design='ide'] .work-card::before,
 html[data-design='ide'] .education-card::before,
+html[data-design='ide'] .certification-card::before,
 html[data-design='ide'] .demo-card::before,
 html[data-design='ide'] .contact-form::before {
   content: '● card.tsx  ×';
@@ -2222,6 +2314,7 @@ html[data-design='ide'] .skill-group::after,
 html[data-design='ide'] .timeline-content::after,
 html[data-design='ide'] .work-card::after,
 html[data-design='ide'] .education-card::after,
+html[data-design='ide'] .certification-card::after,
 html[data-design='ide'] .demo-card::after,
 html[data-design='ide'] .contact-form::after {
   content: '';
@@ -2230,12 +2323,13 @@ html[data-design='ide'] .contact-form::after {
   bottom: 0;
   left: 0;
   width: 32px;
-  background:
-    linear-gradient(to right,
-      var(--ide-gutter) 0,
-      var(--ide-gutter) 31px,
-      var(--ide-line) 31px,
-      var(--ide-line) 32px);
+  background: linear-gradient(
+    to right,
+    var(--ide-gutter) 0,
+    var(--ide-gutter) 31px,
+    var(--ide-line) 31px,
+    var(--ide-line) 32px
+  );
   pointer-events: none;
 }
 
@@ -2349,7 +2443,6 @@ html[data-design='ide'] .hero-gradient {
   display: none;
 }
 
-
 /* ══════════════ RISOGRAPH ═══════════════════════════════════
  * Duotone sections, halftone dot cards, SVG grain overlay,
  * soft chromatic misregistration on headings.
@@ -2423,6 +2516,12 @@ html[data-design='risograph'] .section-label {
   display: inline-block;
   background: var(--text-primary);
   color: var(--bg-primary);
+  /* Undo the global gradient-clipped-to-text trick (see brutalist
+     above). Without these the inverted-block treatment shows the
+     pill but the text is invisible. */
+  -webkit-text-fill-color: currentColor;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
   padding: 0.15rem 0.5rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -2443,7 +2542,7 @@ html[data-design='risograph'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
   text-shadow:
     -1.5px 1.5px 0 color-mix(in oklab, var(--riso-pink) 70%, transparent),
     1.5px -1.5px 0 color-mix(in oklab, var(--riso-cyan) 70%, transparent);
@@ -2455,14 +2554,14 @@ html[data-design='risograph'] .skill-group,
 html[data-design='risograph'] .timeline-content,
 html[data-design='risograph'] .work-card,
 html[data-design='risograph'] .education-card,
+html[data-design='risograph'] .certification-card,
 html[data-design='risograph'] .demo-card,
 html[data-design='risograph'] .contact-form {
   background-color: var(--bg-card);
-  background-image:
-    radial-gradient(
-      color-mix(in oklab, var(--accent-start) 28%, transparent) 1.1px,
-      transparent 1.4px
-    );
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--accent-start) 28%, transparent) 1.1px,
+    transparent 1.4px
+  );
   background-size: 8px 8px;
   background-position: 0 0;
   border: 2px solid var(--text-primary);
@@ -2473,20 +2572,21 @@ html[data-design='risograph'] .contact-form {
 html[data-design='risograph'] .section:nth-of-type(even) .card,
 html[data-design='risograph'] .section:nth-of-type(even) .work-card,
 html[data-design='risograph'] .section:nth-of-type(even) .education-card,
+html[data-design='risograph'] .section:nth-of-type(even) .certification-card,
 html[data-design='risograph'] .section:nth-of-type(even) .demo-card,
 html[data-design='risograph'] .section:nth-of-type(even) .skill-group,
 html[data-design='risograph'] .section:nth-of-type(even) .timeline-content {
-  background-image:
-    radial-gradient(
-      color-mix(in oklab, var(--accent-end) 28%, transparent) 1.1px,
-      transparent 1.4px
-    );
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--accent-end) 28%, transparent) 1.1px,
+    transparent 1.4px
+  );
   box-shadow: 4px 4px 0 color-mix(in oklab, var(--accent-end) 75%, var(--text-primary));
 }
 
 html[data-design='risograph'] .card:hover,
 html[data-design='risograph'] .work-card:hover,
 html[data-design='risograph'] .education-card:hover,
+html[data-design='risograph'] .certification-card:hover,
 html[data-design='risograph'] .demo-card:hover {
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 color-mix(in oklab, var(--accent-start) 85%, var(--text-primary));
@@ -2581,7 +2681,6 @@ html[data-design='risograph'] .hero-gradient {
   display: none;
 }
 
-
 /* ══════════════ ART DECO ════════════════════════════════════
  * Poiret One display, gold gradients, sunburst background,
  * stepped-pyramid borders, Roman-numeral sections.
@@ -2613,17 +2712,21 @@ html[data-design='deco'][data-theme='paper'] {
 /* Body sunburst + subtle chevron wash */
 html[data-design='deco'] body {
   background-image:
-    radial-gradient(ellipse 120% 70% at 50% -20%,
+    radial-gradient(
+      ellipse 120% 70% at 50% -20%,
       color-mix(in oklab, var(--deco-gold) 22%, transparent),
-      transparent 60%),
-    conic-gradient(from 90deg at 50% 0%,
+      transparent 60%
+    ),
+    conic-gradient(
+      from 90deg at 50% 0%,
       transparent 0deg,
       color-mix(in oklab, var(--deco-gold) 7%, transparent) 4deg,
       transparent 8deg,
       color-mix(in oklab, var(--deco-gold) 7%, transparent) 12deg,
       transparent 16deg,
       color-mix(in oklab, var(--deco-gold) 7%, transparent) 20deg,
-      transparent 180deg);
+      transparent 180deg
+    );
   background-attachment: fixed;
   background-color: var(--bg-primary);
   letter-spacing: 0.015em;
@@ -2725,6 +2828,7 @@ html[data-design='deco'] .skill-group,
 html[data-design='deco'] .timeline-content,
 html[data-design='deco'] .work-card,
 html[data-design='deco'] .education-card,
+html[data-design='deco'] .certification-card,
 html[data-design='deco'] .demo-card,
 html[data-design='deco'] .contact-form {
   background: color-mix(in oklab, var(--bg-card) 80%, transparent);
@@ -2749,6 +2853,7 @@ html[data-design='deco'] .contact-form {
 html[data-design='deco'] .card h3,
 html[data-design='deco'] .work-card h3,
 html[data-design='deco'] .education-card h3,
+html[data-design='deco'] .certification-card h3,
 html[data-design='deco'] .demo-card h3 {
   text-align: center;
   color: var(--deco-gold);
@@ -2761,6 +2866,7 @@ html[data-design='deco'] .demo-card h3 {
 html[data-design='deco'] .card h3::after,
 html[data-design='deco'] .work-card h3::after,
 html[data-design='deco'] .education-card h3::after,
+html[data-design='deco'] .certification-card h3::after,
 html[data-design='deco'] .demo-card h3::after {
   content: '◆';
   display: block;
@@ -2860,19 +2966,22 @@ html[data-design='deco'] .hero-grid {
 }
 
 html[data-design='deco'] .hero-gradient {
-  background: radial-gradient(circle at 50% 0%,
+  background: radial-gradient(
+    circle at 50% 0%,
     color-mix(in oklab, var(--deco-gold) 35%, transparent),
-    transparent 60%);
+    transparent 60%
+  );
   opacity: 0.8;
 }
-
 
 /* ══════════════ WABI-SABI ═══════════════════════════════════
  * Japanese minimalism: Shippori Mincho, vast negative space,
  * subtle vertical accents, hairline ink dividers.
  * ──────────────────────────────────────────────────────────── */
 html[data-design='wabisabi'] {
-  --font-sans: 'Shippori Mincho', 'Noto Serif JP', 'Cormorant Garamond', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
+  --font-sans:
+    'Shippori Mincho', 'Noto Serif JP', 'Cormorant Garamond', 'Hiragino Mincho ProN', 'Yu Mincho',
+    Georgia, serif;
   --font-display: var(--font-sans);
   --radius-sm: 0;
   --radius-md: 0;
@@ -2981,7 +3090,7 @@ html[data-design='wabisabi'] .gradient-text {
   -webkit-background-clip: initial;
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
-  color: var(--accent-start);
+  color: var(--accent-text);
   font-style: italic;
 }
 
@@ -2990,6 +3099,7 @@ html[data-design='wabisabi'] .skill-group,
 html[data-design='wabisabi'] .timeline-content,
 html[data-design='wabisabi'] .work-card,
 html[data-design='wabisabi'] .education-card,
+html[data-design='wabisabi'] .certification-card,
 html[data-design='wabisabi'] .demo-card,
 html[data-design='wabisabi'] .contact-form {
   background: transparent;
@@ -3072,7 +3182,9 @@ html[data-design='wabisabi'] .contact-submit::after {
   content: ' →';
   margin-left: 1.5rem;
   opacity: 0.6;
-  transition: margin-left var(--transition-medium), opacity var(--transition-medium);
+  transition:
+    margin-left var(--transition-medium),
+    opacity var(--transition-medium);
 }
 
 html[data-design='wabisabi'] .hero-cta:hover,
@@ -3111,7 +3223,6 @@ html[data-design='wabisabi'] .hero-gradient {
   display: none;
 }
 
-
 /* ══════════════ ZINE ════════════════════════════════════════
  * Photocopied punk energy: ransom-note font mixing, tape and
  * staples, heavy black borders, duotone spot-color accent.
@@ -3133,8 +3244,7 @@ html[data-design='zine'] {
 /* Slightly grainy / photocopied paper */
 html[data-design='zine'] body {
   background-color: var(--zine-paper);
-  background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.08 0'/></filter><rect width='220' height='220' filter='url(%23g)'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.08 0'/></filter><rect width='220' height='220' filter='url(%23g)'/></svg>");
   font-family: var(--font-sans);
   letter-spacing: 0;
   color: var(--zine-ink);
@@ -3178,6 +3288,12 @@ html[data-design='zine'] .section-label {
   letter-spacing: 0.04em;
   background: var(--zine-ink);
   color: var(--zine-paper);
+  /* Undo the global gradient-clipped-to-text trick (see brutalist
+     above). Without these the inverted-block treatment shows the
+     pill but the text is invisible. */
+  -webkit-text-fill-color: currentColor;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
   padding: 0.2rem 0.5rem;
   text-transform: uppercase;
   display: inline-block;
@@ -3235,6 +3351,7 @@ html[data-design='zine'] .skill-group,
 html[data-design='zine'] .timeline-content,
 html[data-design='zine'] .work-card,
 html[data-design='zine'] .education-card,
+html[data-design='zine'] .certification-card,
 html[data-design='zine'] .demo-card,
 html[data-design='zine'] .contact-form {
   background: var(--zine-paper);
@@ -3249,13 +3366,15 @@ html[data-design='zine'] .contact-form {
 html[data-design='zine'] .card:nth-of-type(odd),
 html[data-design='zine'] .work-card:nth-of-type(odd),
 html[data-design='zine'] .demo-card:nth-of-type(odd),
-html[data-design='zine'] .education-card:nth-of-type(odd) {
+html[data-design='zine'] .education-card:nth-of-type(odd),
+html[data-design='zine'] .certification-card:nth-of-type(odd) {
   transform: rotate(-0.6deg);
 }
 html[data-design='zine'] .card:nth-of-type(even),
 html[data-design='zine'] .work-card:nth-of-type(even),
 html[data-design='zine'] .demo-card:nth-of-type(even),
-html[data-design='zine'] .education-card:nth-of-type(even) {
+html[data-design='zine'] .education-card:nth-of-type(even),
+html[data-design='zine'] .certification-card:nth-of-type(even) {
   transform: rotate(0.8deg);
 }
 
@@ -3263,7 +3382,8 @@ html[data-design='zine'] .education-card:nth-of-type(even) {
 html[data-design='zine'] .card::before,
 html[data-design='zine'] .work-card::before,
 html[data-design='zine'] .demo-card::before,
-html[data-design='zine'] .education-card::before {
+html[data-design='zine'] .education-card::before,
+html[data-design='zine'] .certification-card::before {
   content: '';
   position: absolute;
   top: -10px;
@@ -3281,7 +3401,8 @@ html[data-design='zine'] .education-card::before {
 html[data-design='zine'] .card::after,
 html[data-design='zine'] .work-card::after,
 html[data-design='zine'] .demo-card::after,
-html[data-design='zine'] .education-card::after {
+html[data-design='zine'] .education-card::after,
+html[data-design='zine'] .certification-card::after {
   content: '';
   position: absolute;
   top: 10px;
@@ -3296,7 +3417,8 @@ html[data-design='zine'] .education-card::after {
 html[data-design='zine'] .card h3,
 html[data-design='zine'] .work-card h3,
 html[data-design='zine'] .demo-card h3,
-html[data-design='zine'] .education-card h3 {
+html[data-design='zine'] .education-card h3,
+html[data-design='zine'] .certification-card h3 {
   font-family: var(--font-display);
   font-weight: 900;
   font-size: 1.2rem;
@@ -3325,12 +3447,12 @@ html[data-design='zine'] .skill-pill:nth-child(3n) {
   color: var(--zine-paper);
   transform: rotate(-3deg);
 }
-html[data-design='zine'] .skill-pill:nth-child(3n+1) {
+html[data-design='zine'] .skill-pill:nth-child(3n + 1) {
   font-family: 'Press Start 2P', ui-monospace, monospace;
   font-size: 0.6rem;
   transform: rotate(2deg);
 }
-html[data-design='zine'] .skill-pill:nth-child(3n+2) {
+html[data-design='zine'] .skill-pill:nth-child(3n + 2) {
   font-family: Caveat, cursive;
   font-size: 1.05rem;
   font-weight: 700;
@@ -3418,7 +3540,6 @@ html[data-design='zine'] .hero-gradient {
   display: none;
 }
 
-
 /* ══════════════ COMIC ═══════════════════════════════════════
  * Bangers display, thick outlined panels, Ben-Day dot halftone,
  * speech-bubble tag pills, POW! burst decoration.
@@ -3441,10 +3562,10 @@ html[data-design='comic'] {
 /* Ben-Day dots all over the page body, subtle */
 html[data-design='comic'] body {
   background-color: var(--comic-paper);
-  background-image:
-    radial-gradient(
-      color-mix(in oklab, var(--comic-pop) 45%, transparent) 1.2px,
-      transparent 1.6px);
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--comic-pop) 45%, transparent) 1.2px,
+    transparent 1.6px
+  );
   background-size: 8px 8px;
   color: var(--comic-ink);
   font-family: var(--font-sans);
@@ -3499,9 +3620,26 @@ html[data-design='comic'] .hero::after {
   background: #ffeb3b;
   padding: 0.5rem 1rem;
   clip-path: polygon(
-    0% 10%, 20% 0%, 35% 15%, 50% 0%, 65% 15%, 80% 0%, 100% 10%,
-    95% 30%, 100% 50%, 90% 65%, 100% 85%, 80% 95%, 65% 85%, 50% 100%,
-    35% 85%, 20% 100%, 0% 85%, 10% 65%, 0% 50%, 10% 30%
+    0% 10%,
+    20% 0%,
+    35% 15%,
+    50% 0%,
+    65% 15%,
+    80% 0%,
+    100% 10%,
+    95% 30%,
+    100% 50%,
+    90% 65%,
+    100% 85%,
+    80% 95%,
+    65% 85%,
+    50% 100%,
+    35% 85%,
+    20% 100%,
+    0% 85%,
+    10% 65%,
+    0% 50%,
+    10% 30%
   );
   transform: rotate(15deg);
   text-shadow:
@@ -3577,6 +3715,7 @@ html[data-design='comic'] .skill-group,
 html[data-design='comic'] .timeline-content,
 html[data-design='comic'] .work-card,
 html[data-design='comic'] .education-card,
+html[data-design='comic'] .certification-card,
 html[data-design='comic'] .demo-card,
 html[data-design='comic'] .contact-form {
   background: var(--comic-panel);
@@ -3590,7 +3729,8 @@ html[data-design='comic'] .contact-form {
 html[data-design='comic'] .card h3,
 html[data-design='comic'] .work-card h3,
 html[data-design='comic'] .demo-card h3,
-html[data-design='comic'] .education-card h3 {
+html[data-design='comic'] .education-card h3,
+html[data-design='comic'] .certification-card h3 {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: 1.6rem;
@@ -3620,7 +3760,7 @@ html[data-design='comic'] .work-tags li {
 html[data-design='comic'] .skill-pill:nth-child(3n) {
   background: #ffeb3b;
 }
-html[data-design='comic'] .skill-pill:nth-child(3n+1) {
+html[data-design='comic'] .skill-pill:nth-child(3n + 1) {
   background: color-mix(in oklab, var(--comic-pop) 25%, var(--comic-panel));
 }
 
@@ -3694,12 +3834,13 @@ html[data-design='comic'] .hero-grid {
 }
 
 html[data-design='comic'] .hero-gradient {
-  background: radial-gradient(circle at 70% 30%,
+  background: radial-gradient(
+    circle at 70% 30%,
     color-mix(in oklab, #ffeb3b 55%, transparent),
-    transparent 60%);
+    transparent 60%
+  );
   opacity: 0.7;
 }
-
 
 /* ══════════════ NEWSPAPER ═══════════════════════════════════
  * Broadsheet front page: blackletter masthead, serif columns,
@@ -3722,8 +3863,7 @@ html[data-design='newspaper'] {
 
 html[data-design='newspaper'] body {
   background: var(--news-paper);
-  background-image:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
   color: var(--news-ink);
   font-family: var(--font-sans);
   font-size: 1.02rem;
@@ -3893,6 +4033,7 @@ html[data-design='newspaper'] .skill-group,
 html[data-design='newspaper'] .timeline-content,
 html[data-design='newspaper'] .work-card,
 html[data-design='newspaper'] .education-card,
+html[data-design='newspaper'] .certification-card,
 html[data-design='newspaper'] .demo-card,
 html[data-design='newspaper'] .contact-form {
   background: var(--news-paper);
@@ -3906,7 +4047,8 @@ html[data-design='newspaper'] .contact-form {
 /* Classified-ad small-caps label strip across top of work / demo / education cards */
 html[data-design='newspaper'] .work-card::before,
 html[data-design='newspaper'] .demo-card::before,
-html[data-design='newspaper'] .education-card::before {
+html[data-design='newspaper'] .education-card::before,
+html[data-design='newspaper'] .certification-card::before {
   content: 'ADVERTISEMENT';
   display: block;
   font-family: 'EB Garamond', Georgia, serif;
@@ -3925,6 +4067,10 @@ html[data-design='newspaper'] .education-card::before {
   content: 'ACADEMIC RECORD';
 }
 
+html[data-design='newspaper'] .certification-card::before {
+  content: 'CREDENTIAL ON FILE';
+}
+
 html[data-design='newspaper'] .work-card::before {
   content: 'EMPLOYMENT NOTICE';
 }
@@ -3936,7 +4082,8 @@ html[data-design='newspaper'] .demo-card::before {
 html[data-design='newspaper'] .card h3,
 html[data-design='newspaper'] .work-card h3,
 html[data-design='newspaper'] .demo-card h3,
-html[data-design='newspaper'] .education-card h3 {
+html[data-design='newspaper'] .education-card h3,
+html[data-design='newspaper'] .certification-card h3 {
   font-family: var(--font-subhead);
   font-weight: 800;
   font-size: 1.3rem;
@@ -4012,7 +4159,9 @@ html[data-design='newspaper'] .contact-submit {
   font-size: 0.95rem;
   letter-spacing: 0.15em;
   padding: 0.65rem 1.25rem;
-  box-shadow: 4px 4px 0 var(--news-ink), 4px 4px 0 1px var(--news-paper) inset;
+  box-shadow:
+    4px 4px 0 var(--news-ink),
+    4px 4px 0 1px var(--news-paper) inset;
   text-transform: lowercase;
 }
 

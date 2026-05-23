@@ -2,17 +2,20 @@
  * Structural: do separate source files that should agree with each other
  * actually agree? (file-level source parsing)
  *
- * These tests read raw .astro/.ts source files and parse them to verify
- * cross-file invariants — e.g. that the icon set used by Demos.astro,
- * DemoNav.astro, and demo-icons.ts all match the slugs in demos.json;
- * that navbar anchors correspond to real section IDs; and that every demo
- * page passes its correct slug to DemoLayout.
+ * These tests verify cross-file invariants — e.g. that the icon set used by
+ * Demos.astro, DemoNav.astro, and demo-icons.ts all match the slugs in
+ * demos.json; that navbar anchors correspond to real section IDs from the
+ * sections SSOT; and that every demo page passes its correct slug to
+ * DemoLayout.
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
-import demosEn from '../data/demos.json';
+import { listDemos } from '../i18n/demo';
 import { ICON_PATHS } from '../lib/demo-icons';
+import { SECTION_META, SECTION_IDS } from '../config/section-ids';
+
+const demosEn = listDemos('en');
 
 const SRC = join(__dirname, '..');
 const read = (rel: string) => readFileSync(join(SRC, rel), 'utf-8');
@@ -21,7 +24,7 @@ const read = (rel: string) => readFileSync(join(SRC, rel), 'utf-8');
 
 describe('Icon parity: demo-icons.ts covers all demos.json icons', () => {
   const sharedIcons = Object.keys(ICON_PATHS).sort();
-  const jsonIcons = [...new Set(demosEn.map(d => d.icon))].sort();
+  const jsonIcons = [...new Set(demosEn.map((d) => d.icon))].sort();
 
   it('demo-icons.ts has an entry for every icon used in demos.json', () => {
     for (const icon of jsonIcons) {
@@ -40,52 +43,69 @@ describe('Icon parity: demo-icons.ts covers all demos.json icons', () => {
   });
 });
 
-// ─── Navbar anchors ↔ homepage section IDs ──────────────────────
+// ─── Navbar / homepage section invariants ───────────────────────
 
-describe('Navbar anchors match homepage section IDs', () => {
-  const navbar = read('components/Navbar.astro');
-  const navAnchors = [...navbar.matchAll(/href:\s*'#(\w+)'/g)].map(m => m[1]).sort();
-
-  const sectionComponents = [
-    'components/Hero.astro',
-    'components/About.astro',
-    'components/Demos.astro',
-    'components/Skills.astro',
-    'components/Experience.astro',
-    'components/WorkProjects.astro',
-    'components/Education.astro',
-    'components/Contact.astro',
-  ];
-
-  const sectionIds = sectionComponents
-    .map(f => read(f))
-    .flatMap(src => [...src.matchAll(/<section[\s][^>]*\bid="([a-z][\w-]*)"/g)].map(m => m[1]))
-    .sort();
-
-  it('every navbar anchor points to a real section ID', () => {
-    for (const anchor of navAnchors) {
-      expect(sectionIds, `navbar links to #${anchor} but no section has that id`).toContain(anchor);
+describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
+  it('every section in the SSOT has a matching component file with the right id', () => {
+    for (const section of SECTION_META) {
+      const path = `components/${componentFileName(section.id)}.astro`;
+      const src = read(path);
+      const id = src.match(/<section[\s][^>]*\bid="([a-z][\w-]*)"/)?.[1];
+      expect(id, `${path} should have <section id="${section.id}">`).toBe(section.id);
     }
   });
 
-  it('hero section ID exists (logo links to #hero)', () => {
-    expect(sectionIds).toContain('hero');
+  it('every numbered section component reads its data-num from the `num` prop', () => {
+    for (const section of SECTION_META) {
+      if (!section.numbered) continue;
+      const path = `components/${componentFileName(section.id)}.astro`;
+      const src = read(path);
+      expect(src, `${path} should write data-num={num}`).toMatch(/<section[^>]*\bdata-num=\{num\}/);
+    }
   });
 
-  const mainSectionIds = sectionIds.filter(id => id !== 'hero');
+  it('Navbar imports the sections SSOT', () => {
+    const navbar = read('components/Navbar.astro');
+    expect(navbar).toMatch(/import\s*\{\s*sections\s*\}\s*from\s*['"]\.\.\/config\/sections['"]/);
+  });
 
-  it('every main section is reachable from the navbar', () => {
-    for (const id of mainSectionIds) {
-      expect(navAnchors, `section #${id} exists but navbar has no link to it`).toContain(id);
-    }
+  it('hero anchor (`#hero`) is referenced by the navbar logo', () => {
+    const navbar = read('components/Navbar.astro');
+    expect(navbar).toMatch(/href="#hero"/);
+  });
+
+  it('default and localized homepages render the same SSOT-driven map', () => {
+    const en = read('pages/index.astro');
+    const localized = read('pages/[lang]/index.astro');
+    const importPattern = /import\s*\{\s*sections\s*\}\s*from\s*['"](\.\.\/)+config\/sections['"]/;
+    expect(en).toMatch(importPattern);
+    expect(localized).toMatch(importPattern);
+    // The unified loop renders every section, hero included; the `Section`
+    // identifier is the destructured component reference per iteration.
+    const renderPattern = /<Section\s+num=/;
+    expect(en).toMatch(renderPattern);
+    expect(localized).toMatch(renderPattern);
+  });
+
+  it('SECTION_IDS export excludes the hero', () => {
+    expect(SECTION_IDS).toEqual(SECTION_META.filter((s) => s.id !== 'hero').map((s) => s.id));
   });
 });
+
+// Map a section id ('work' / 'projects') to its component filename
+// ('WorkProjects' / 'Demos'). Most ids match the filename directly; only the
+// two below diverge from the convention.
+function componentFileName(id: string): string {
+  if (id === 'work') return 'WorkProjects';
+  if (id === 'projects') return 'Demos';
+  return id.charAt(0).toUpperCase() + id.slice(1);
+}
 
 // ─── Every demo page passes slug to DemoLayout ──────────────────
 
 describe('Demo pages pass correct slug to DemoLayout', () => {
   const pagesDir = join(SRC, 'pages', 'demos');
-  const pageFiles = readdirSync(pagesDir).filter(f => f.endsWith('.astro'));
+  const pageFiles = readdirSync(pagesDir).filter((f) => f.endsWith('.astro'));
 
   for (const file of pageFiles) {
     const slug = file.replace('.astro', '');
