@@ -90,7 +90,12 @@
   ],
   "projScreenshots": "Capturas del proyecto",
   "team": "Equipo",
-  "teamMembers": ["Pol Casacuberta", "Tatiana Meyer", "Pablo Vega", "Ton Vilà"],
+  "teamMembers": [
+    "Pol Casacuberta",
+    "Tatiana Meyer",
+    "Pablo Vega",
+    "Ton Vilà"
+  ],
   "devpostLabel": "Devpost ↗",
   "runLocal": "▸ Ejecutar el proyecto original localmente",
   "localDesc1": "La app es una GUI en ",
