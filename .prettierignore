@@ -11,7 +11,7 @@ public/
 planner-api/
 *.min.*
 package-lock.json
-src/data/*.json
+*.json
 .cursor/
 .github/copilot-instructions.md
 
