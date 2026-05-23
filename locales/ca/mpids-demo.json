@@ -1,6 +1,6 @@
 {
   "mpidsTitle": "Minimum Positive Influence Dominating Set",
-  "mpidsDesc1": "Troba el conjunt S més petit de nodes tal que cada vèrtex v tingui almenys \\u2308deg(v)/2\\u2309 veïns a S. Els nodes en el conjunt són ",
+  "mpidsDesc1": "Troba el conjunt S més petit de nodes tal que cada vèrtex v tingui almenys ⌈deg(v)/2⌉ veïns a S. Els nodes en el conjunt són ",
   "mpidsDesc2": "morats",
   "mpidsDesc3": ", els nodes dominats són ",
   "mpidsDesc4": "verds",
@@ -14,7 +14,7 @@
   "greedy": "Voraç (Greedy)",
   "localSearch": "Cerca Local (SA)",
   "solve": "Resoldre MPIDS",
-  "computing": "Calculant\\u2026",
+  "computing": "Calculant…",
   "setSize": "Mida conjunt:",
   "validDom": "Conjunt dominador vàlid",
   "invalidDom": "No és un conjunt dominador vàlid",
@@ -28,6 +28,6 @@
   "degree": "grau:",
   "inDomSet": "En conjunt dominador",
   "neighborsInSet": "veïns en conjunt",
-  "domYes": " \\u2014 dominat \\u2713",
-  "domNo": " \\u2014 NO dominat \\u2717"
+  "domYes": " — dominat ✓",
+  "domNo": " — NO dominat ✗"
 }

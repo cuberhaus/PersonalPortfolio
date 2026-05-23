@@ -2,9 +2,9 @@
   "bannerPre": "Demo interactiva de la app de salud Draculin. Inicia el backend (",
   "bannerCode": "cd Draculin-Backend && docker compose up -d",
   "bannerPost": ") para chat y noticias en vivo.",
-  "fallbackNewsTitle": "Backend no detectado \\u2014 mostrando datos de noticias de respaldo.",
-  "mockChatInit": "\\u00a1Hola! Soy Draculine, tu asesora en temas de menstruación. [Modo mock \\u2014 inicia el backend para chat real]",
-  "mockChatReply": "[Mock] Gracias por tu pregunta: \\u00ab{msg}\\u00bb. Inicia el backend para respuestas reales.",
+  "fallbackNewsTitle": "Backend no detectado — mostrando datos de noticias de respaldo.",
+  "mockChatInit": "¡Hola! Soy Draculine, tu asesora en temas de menstruación. [Modo mock — inicia el backend para chat real]",
+  "mockChatReply": "[Mock] Gracias por tu pregunta: «{msg}». Inicia el backend para respuestas reales.",
   "typing": "Escribiendo...",
   "inputPlaceholder": "Escribe un mensaje...",
   "send": "Enviar",
@@ -17,12 +17,12 @@
   "yes": "Sí",
   "no": "No",
   "visionDesc": "Función de visión por computador para analizar la salud menstrual. Requiere la cámara del dispositivo y el modelo de visión de Roboflow en el backend.",
-  "visionNote": "No disponible en la demo web \\u2014 funciona en la app nativa de Flutter.",
+  "visionNote": "No disponible en la demo web — funciona en la app nativa de Flutter.",
   "statsVolume": "ML por Día",
   "statsImpact": "Impacto del Cuestionario",
   "mild": "Leve",
   "moderate": "Moderado",
   "severe": "Severo",
   "calendarTitle": "Calendario Menstrual (toca para alternar)",
-  "text": "\\u00bfTu sangrado menstrual es más frecuente que cada 21 días?"
+  "text": "¿Tu sangrado menstrual es más frecuente que cada 21 días?"
 }

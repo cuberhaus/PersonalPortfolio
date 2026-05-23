@@ -15,6 +15,7 @@
       "experience": "./locales/{languageTag}/experience.json",
       "education": "./locales/{languageTag}/education.json",
       "certifications": "./locales/{languageTag}/certifications.json",
+      "designs": "./locales/{languageTag}/designs.json",
       "work_projects": "./locales/{languageTag}/work_projects.json",
       "demos": "./locales/{languageTag}/demos.json",
       "live-app-embed": "./locales/{languageTag}/live-app-embed.json",

@@ -31,7 +31,7 @@ If unsure, start browser-only — you can always add a backend later.
 
 ---
 
-## 2. Skeleton: page, component, (optional) translations
+## 2. Skeleton: page, component, translations
 
 Create these files (`<slug>` lowercase, `<Slug>` PascalCase — e.g.
 `my-cool-demo` → `MyCoolDemo`):
@@ -39,8 +39,8 @@ Create these files (`<slug>` lowercase, `<Slug>` PascalCase — e.g.
 ```text
 src/pages/demos/<slug>.astro            # routed page
 src/components/demos/<Slug>Demo.tsx     # interactive island (omit if iframe-only)
-locales/{en,es,ca}/<slug>-demo.json     # OPTIONAL — see step 6
-src/i18n/demos/<slug>-demo.ts           # OPTIONAL namespace accessor
+locales/{en,es,ca}/<slug>-demo.json     # required when the island renders copy
+src/i18n/demos/<slug>-demo.ts           # namespace accessor for island copy
 ```
 
 **Astro page** — copy [`src/pages/demos/mpids.astro`](../../src/pages/demos/mpids.astro)
@@ -71,7 +71,7 @@ const demo = getDemo('<slug>', lang);
   />
 
   <!-- For iframe-embedded backends only: -->
-  <LiveAppEmbed slug="<slug>" title="My Cool Demo" lang={lang} client:load />
+  <LiveAppEmbed slug="<slug>" title={demo.title} lang={lang} client:load />
 
   <MyCoolDemo lang={lang} client:visible />
 </DemoLayout>
@@ -89,9 +89,11 @@ for a "mock-on-Pages, live in dev" pattern. The bare skeleton:
 
 ```tsx
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { TRANSLATIONS } from '../../i18n/demos/my-cool-demo';
 
 function MyCoolDemo({ lang = 'en' }: { lang?: 'en' | 'es' | 'ca' }) {
-  return <div>hello, {lang}</div>;
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  return <div>{t.status}</div>;
 }
 
 export default withDemoErrorBoundary(MyCoolDemo, 'my-cool-demo');
@@ -99,7 +101,7 @@ export default withDemoErrorBoundary(MyCoolDemo, 'my-cool-demo');
 
 > **No backend, but want a "mock UI" banner?** Wrap your component with
 > [`MockBanner`](../../src/components/demos/MockBanner.tsx):
-> `<MockBanner>Showing mock data — live backend runs only in dev</MockBanner>`.
+> `<MockBanner>{t.mockBanner}</MockBanner>`.
 > See `BitsXMaratoDemo.tsx` for the canonical usage.
 
 ---
@@ -214,7 +216,7 @@ your demo has unique interactions worth asserting.)
 
 ---
 
-## 6. (Optional) Page-specific copy with HTML or placeholders
+## 6. Page-specific copy with HTML or placeholders
 
 If your page or React island has copy that contains inline HTML
 (<strong>`, `<code>`, links) or `{0}`-style placeholders, create a per-demo
@@ -228,6 +230,11 @@ If TypeScript/React code needs an import, add a lightweight accessor under
 `getDemoTranslations('<slug>-demo')`. **Don't** duplicate fields that already
 live in `demos.json` (title, description, lead, badge, about) — keep this for
 page-specific UI only.
+
+All user-visible page/island strings must live in these JSON files so Crowdin
+can extract them: labels, buttons, alt text, ARIA labels, mock banners, empty
+states, fallback labels, link text, and repeated section data. Keep only
+non-copy constants (dimensions, route slugs, URLs, numeric thresholds) in code.
 
 Full rules: [docs/i18n.md § Pattern C](./i18n.md#pattern-c--per-demo-namespace-json).
 

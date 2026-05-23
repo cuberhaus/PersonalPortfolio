@@ -55,6 +55,12 @@
     "title": "Dónde estudié"
   },
   "experience": {
+    "duration": {
+      "mo": "mes",
+      "mos": "meses",
+      "yr": "año",
+      "yrs": "años"
+    },
     "label": "Experiencia",
     "subtitle": "Una línea de tiempo de mi trayectoria profesional hasta ahora.",
     "title": "Dónde he trabajado"

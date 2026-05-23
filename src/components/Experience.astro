@@ -62,7 +62,10 @@ const { num } = Astro.props;
                     class="js-duration"
                     data-start={job.startDate}
                     data-end={job.endDate ?? ''}
-                    data-lang={lang}
+                    data-duration-yr={t('experience.duration.yr')}
+                    data-duration-yrs={t('experience.duration.yrs')}
+                    data-duration-mo={t('experience.duration.mo')}
+                    data-duration-mos={t('experience.duration.mos')}
                   />
                 </span>
                 {job.logo && (
@@ -97,27 +100,25 @@ const { num } = Astro.props;
 </section>
 
 <script>
-  const labels: Record<string, { yr: string; yrs: string; mo: string; mos: string }> = {
-    en: { yr: 'yr', yrs: 'yrs', mo: 'mo', mos: 'mos' },
-    es: { yr: 'año', yrs: 'años', mo: 'mes', mos: 'meses' },
-    ca: { yr: 'any', yrs: 'anys', mo: 'mes', mos: 'mesos' },
-  };
-
   document.querySelectorAll<HTMLSpanElement>('.js-duration').forEach((el) => {
     const start = el.dataset.start!;
     const end = el.dataset.end || undefined;
-    const lang = el.dataset.lang || 'en';
+    const labels = {
+      yr: el.dataset.durationYr ?? '',
+      yrs: el.dataset.durationYrs ?? '',
+      mo: el.dataset.durationMo ?? '',
+      mos: el.dataset.durationMos ?? '',
+    };
     const [sY, sM] = start.split('-').map(Number);
     const now = new Date();
     const [eY, eM] = end ? end.split('-').map(Number) : [now.getFullYear(), now.getMonth() + 1];
     const total = (eY - sY) * 12 + (eM - sM);
     const years = Math.floor(total / 12);
     const months = total % 12;
-    const l = labels[lang] ?? labels.en;
     const parts: string[] = [];
-    if (years > 0) parts.push(`${years} ${years === 1 ? l.yr : l.yrs}`);
-    if (months > 0) parts.push(`${months} ${months === 1 ? l.mo : l.mos}`);
-    el.textContent = parts.join(' ') || `< 1 ${l.mo}`;
+    if (years > 0) parts.push(`${years} ${years === 1 ? labels.yr : labels.yrs}`);
+    if (months > 0) parts.push(`${months} ${months === 1 ? labels.mo : labels.mos}`);
+    el.textContent = parts.join(' ') || `< 1 ${labels.mo}`;
   });
 </script>
 

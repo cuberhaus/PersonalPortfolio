@@ -55,6 +55,12 @@
     "title": "On he estudiat"
   },
   "experience": {
+    "duration": {
+      "mo": "mes",
+      "mos": "mesos",
+      "yr": "any",
+      "yrs": "anys"
+    },
     "label": "Experiència",
     "subtitle": "Una línia de temps de la meva trajectòria professional fins ara.",
     "title": "On he treballat"

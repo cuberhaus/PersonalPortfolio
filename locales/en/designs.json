@@ -1,0 +1,70 @@
+{
+  "minimal": {
+    "name": "Minimal",
+    "blurb": "Clean modern portfolio with gradient accents"
+  },
+  "editorial": {
+    "name": "Editorial",
+    "blurb": "Serif headlines, drop caps, magazine columns"
+  },
+  "swiss": {
+    "name": "Swiss",
+    "blurb": "Strict grid, giant numerals, hairline rules"
+  },
+  "pixel": {
+    "name": "Pixel",
+    "blurb": "8-bit pixel font, chunky buttons, hard shadows"
+  },
+  "terminal": {
+    "name": "Terminal",
+    "blurb": "CRT vibes, monospace everywhere, blinking cursor"
+  },
+  "cyber": {
+    "name": "Cyberpunk",
+    "blurb": "Neon glow, chromatic aberration, synthwave grid"
+  },
+  "notebook": {
+    "name": "Notebook",
+    "blurb": "Graph paper, handwritten ink, highlighter marks"
+  },
+  "brutalist": {
+    "name": "Brutalist",
+    "blurb": "Raw HTML energy: Times, yellow tape, thick borders"
+  },
+  "blueprint": {
+    "name": "Blueprint",
+    "blurb": "Cyan grid, hairlines, dimension marks, tech labels"
+  },
+  "academic": {
+    "name": "Academic",
+    "blurb": "LaTeX paper: Garamond, numbered sections, abstracts"
+  },
+  "ide": {
+    "name": "IDE",
+    "blurb": "VSCode vibes: tab cards, gutter, syntax-coloured hero"
+  },
+  "risograph": {
+    "name": "Risograph",
+    "blurb": "Duotone print, halftone dots, grain and misregister"
+  },
+  "deco": {
+    "name": "Art Deco",
+    "blurb": "Sunbursts, gold gradients, stepped pyramid borders"
+  },
+  "wabisabi": {
+    "name": "Wabi-sabi",
+    "blurb": "Serene Japanese minimalism, vast negative space"
+  },
+  "zine": {
+    "name": "Zine",
+    "blurb": "Photocopied ransom-note collage, staples and tape"
+  },
+  "comic": {
+    "name": "Comic",
+    "blurb": "Bangers titles, Ben-Day dots, speech bubbles"
+  },
+  "newspaper": {
+    "name": "Newspaper",
+    "blurb": "Blackletter masthead, columns, classified ads"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "mpidsTitle": "Minimum Positive Influence Dominating Set",
-  "mpidsDesc1": "Find the smallest set S of nodes such that every vertex v has at least \\u2308deg(v)/2\\u2309 neighbors in S. Nodes in the set are ",
+  "mpidsDesc1": "Find the smallest set S of nodes such that every vertex v has at least ⌈deg(v)/2⌉ neighbors in S. Nodes in the set are ",
   "mpidsDesc2": "purple",
   "mpidsDesc3": ", dominated nodes are ",
   "mpidsDesc4": "green",
@@ -14,7 +14,7 @@
   "greedy": "Greedy",
   "localSearch": "Local Search (SA)",
   "solve": "Solve MPIDS",
-  "computing": "Computing\\u2026",
+  "computing": "Computing…",
   "setSize": "Set size:",
   "validDom": "Valid dominating set",
   "invalidDom": "Not a valid dominating set",
@@ -28,6 +28,6 @@
   "degree": "degree:",
   "inDomSet": "In dominating set",
   "neighborsInSet": "neighbors in set",
-  "domYes": " \\u2014 dominated \\u2713",
-  "domNo": " \\u2014 NOT dominated \\u2717"
+  "domYes": " — dominated ✓",
+  "domNo": " — NOT dominated ✗"
 }
