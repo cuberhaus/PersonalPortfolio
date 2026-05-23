@@ -425,7 +425,16 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
                 textAlign: 'center',
               }}
             >
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
+              <div
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.05em',
+                  marginBottom: '0.2rem',
+                }}
+              >
+                {String(i + 1).padStart(2, '0')}
+              </div>
               <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {step.title}
               </div>
@@ -490,7 +499,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
                   'linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), color-mix(in srgb, var(--accent-end) 10%, transparent))',
               }}
             >
-              🔬
+              ML
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{t.simInference}</h3>
@@ -520,7 +529,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
                   'linear-gradient(135deg, color-mix(in srgb, var(--accent-end) 15%, transparent), color-mix(in srgb, var(--accent-start) 10%, transparent))',
               }}
             >
-              📏
+              DIA
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{t.diameterExplorer}</h3>

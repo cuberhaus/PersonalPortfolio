@@ -24,8 +24,15 @@ slug, e.g. `tfg-polyps` / `TfgPolyps`):
 ```
 src/pages/demos/<slug>.astro                # routed page
 src/components/demos/<Slug>Demo.tsx         # interactive island (optional)
-src/i18n/demos/<slug>.ts                    # translations (en/es/ca)
+src/i18n/demos/<slug>-demo.json             # Crowdin-editable island copy (if needed)
+src/i18n/demos/<slug>-demo.ts               # optional typed loader; no literal translations
 ```
+
+Card, header, SEO, lead, and about copy goes in `src/data/demos.json` under the
+entry's `copy.<locale>` block. Extra React-island copy goes in JSON under
+`src/i18n/demos/` so Crowdin can edit it. TypeScript files may import that JSON
+and expose typed helpers, but do not add user-facing translations directly to
+`.ts` modules.
 
 The `.astro` page should use `DemoLayout` and pass `slug` so the
 log-relay subscriber can wire up automatically:
@@ -440,7 +447,7 @@ To safely retire a demo, delete in order:
 
 1. `src/pages/demos/<slug>.astro`
 2. `src/components/demos/<Slug>Demo.tsx`
-3. `src/i18n/demos/<slug>.ts`
+3. `src/i18n/demos/<slug>-demo.json` and any optional typed loader next to it
 4. The corresponding entry in `src/data/demo-services.json`
 5. The `_db-<slug>` Makefile target and `DEMO_TARGETS` reference
 6. Any `e2e/<slug>.spec.ts` fixture

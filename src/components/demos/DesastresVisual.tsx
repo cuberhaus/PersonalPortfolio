@@ -5,7 +5,7 @@ type Lang = 'en' | 'es' | 'ca';
 const TRANSLATIONS = {
   en: {
     squares: 'Squares',
-    squaresDesc: ' bases (C0: H0,H1 \u00b7 C1: H2)',
+    squaresDesc: ' bases (C0: H0,H1 · C1: H2)',
     circles: 'Circles',
     circlesDesc: ' groups (id, people, P=priority)',
     dashed: 'Dashed lines',
@@ -14,17 +14,17 @@ const TRANSLATIONS = {
     pri: ', pri',
     heuristicH2: 'Heuristic H2',
     h2Desc:
-      ' \u2014 sum of per-helicopter completion times (batches of \u226415 people, \u22643 groups per sortie, 10 min base cooldown between sorties, travel \u00f71.67, priority doubles per-person pickup time):',
+      ' — sum of per-helicopter completion times (batches of ≤15 people, ≤3 groups per sortie, 10 min base cooldown between sorties, travel ÷1.67, priority doubles per-person pickup time):',
     simulated: ' min (simulated)',
     sum: 'Sum =',
     minimize: ' (what HC / SA try to minimize)',
     howItWorks: 'How this demo works',
     map: 'Map',
     mapDesc:
-      ' \u2014 Random 2D layout (seed-fixed): two bases and seven groups. Colors show which helicopter owns each group after assignment.',
+      ' — Random 2D layout (seed-fixed): two bases and seven groups. Colors show which helicopter owns each group after assignment.',
     queues: 'Queues',
     queuesDesc:
-      ' \u2014 Each helicopter has an ordered list: rescue G2, then G5, \u2026 Swapping two groups anywhere changes the state.',
+      ' — Each helicopter has an ordered list: rescue G2, then G5, … Swapping two groups anywhere changes the state.',
     hc: 'HC',
     hcDesc: ' picks the best SWAP neighbor until stuck; ',
     sa: 'SA',
@@ -32,7 +32,7 @@ const TRANSLATIONS = {
   },
   es: {
     squares: 'Cuadrados',
-    squaresDesc: ' bases (C0: H0,H1 \u00b7 C1: H2)',
+    squaresDesc: ' bases (C0: H0,H1 · C1: H2)',
     circles: 'Círculos',
     circlesDesc: ' grupos (id, personas, P=prioridad)',
     dashed: 'Líneas punteadas',
@@ -41,17 +41,17 @@ const TRANSLATIONS = {
     pri: ', pri',
     heuristicH2: 'Heurística H2',
     h2Desc:
-      ' \u2014 suma de tiempos de finalización por helicóptero (lotes de \u226415 personas, \u22643 grupos por salida, 10 min de descanso en base, viaje \u00f71.67, prioridad duplica tiempo de recogida por persona):',
+      ' — suma de tiempos de finalización por helicóptero (lotes de ≤15 personas, ≤3 grupos por salida, 10 min de descanso en base, viaje ÷1.67, prioridad duplica tiempo de recogida por persona):',
     simulated: ' min (simulado)',
     sum: 'Suma =',
     minimize: ' (lo que HC / SA intentan minimizar)',
     howItWorks: 'Cómo funciona esta demo',
     map: 'Mapa',
     mapDesc:
-      ' \u2014 Distribución 2D aleatoria (con semilla): dos bases y siete grupos. Los colores indican qué helicóptero tiene asignado cada grupo.',
+      ' — Distribución 2D aleatoria (con semilla): dos bases y siete grupos. Los colores indican qué helicóptero tiene asignado cada grupo.',
     queues: 'Colas',
     queuesDesc:
-      ' \u2014 Cada helicóptero tiene una lista ordenada: rescatar G2, luego G5, \u2026 Intercambiar dos grupos cambia el estado.',
+      ' — Cada helicóptero tiene una lista ordenada: rescatar G2, luego G5, … Intercambiar dos grupos cambia el estado.',
     hc: 'HC',
     hcDesc: ' elige el mejor vecino SWAP hasta estancarse; ',
     sa: 'SA',
@@ -59,7 +59,7 @@ const TRANSLATIONS = {
   },
   ca: {
     squares: 'Quadrats',
-    squaresDesc: ' bases (C0: H0,H1 \u00b7 C1: H2)',
+    squaresDesc: ' bases (C0: H0,H1 · C1: H2)',
     circles: 'Cercles',
     circlesDesc: ' grups (id, persones, P=prioritat)',
     dashed: 'Línies discontínues',
@@ -68,17 +68,17 @@ const TRANSLATIONS = {
     pri: ', pri',
     heuristicH2: 'Heurística H2',
     h2Desc:
-      ' \u2014 suma de temps de finalització per helicòpter (lots de \u226415 persones, \u22643 grups per sortida, 10 min de descans a base, viatge \u00f71.67, prioritat duplica temps de recollida per persona):',
+      ' — suma de temps de finalització per helicòpter (lots de ≤15 persones, ≤3 grups per sortida, 10 min de descans a base, viatge ÷1.67, prioritat duplica temps de recollida per persona):',
     simulated: ' min (simulat)',
     sum: 'Suma =',
     minimize: ' (el que HC / SA intenten minimitzar)',
     howItWorks: 'Com funciona aquesta demo',
     map: 'Mapa',
     mapDesc:
-      ' \u2014 Distribució 2D aleatòria (amb llavor): dues bases i set grups. Els colors indiquen quin helicòpter té assignat cada grup.',
+      ' — Distribució 2D aleatòria (amb llavor): dues bases i set grups. Els colors indiquen quin helicòpter té assignat cada grup.',
     queues: 'Cues',
     queuesDesc:
-      " \u2014 Cada helicòpter té una llista ordenada: rescatar G2, després G5, \u2026 Intercanviar dos grups canvia l'estat.",
+      " — Cada helicòpter té una llista ordenada: rescatar G2, després G5, … Intercanviar dos grups canvia l'estat.",
     hc: 'HC',
     hcDesc: ' tria el millor veí SWAP fins estancar-se; ',
     sa: 'SA',

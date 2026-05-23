@@ -550,12 +550,12 @@ function DraculinDemo({ lang = 'en' }: { lang?: Lang }) {
   useDemoLifecycle('demo:draculin', { lang });
   const [tab, setTab] = useState<Tab>('news');
 
-  const tabs: { id: Tab; label: string; icon: string }[] = [
-    { id: 'news', label: 'DracuNews', icon: '🌐' },
-    { id: 'chat', label: 'DracuChat', icon: '💬' },
-    { id: 'quiz', label: 'DracuQuiz', icon: '🧠' },
-    { id: 'vision', label: 'DracuVision', icon: '📷' },
-    { id: 'stats', label: 'DracuStats', icon: '📊' },
+  const tabs: { id: Tab; label: string }[] = [
+    { id: 'news', label: 'DracuNews' },
+    { id: 'chat', label: 'DracuChat' },
+    { id: 'quiz', label: 'DracuQuiz' },
+    { id: 'vision', label: 'DracuVision' },
+    { id: 'stats', label: 'DracuStats' },
   ];
 
   return (
@@ -573,7 +573,7 @@ function DraculinDemo({ lang = 'en' }: { lang?: Lang }) {
             style={{ ...s.tab, ...(tab === tb.id ? s.tabActive : {}) }}
             onClick={() => setTab(tb.id)}
           >
-            {tb.icon} {tb.label}
+            {tb.label}
           </button>
         ))}
       </div>

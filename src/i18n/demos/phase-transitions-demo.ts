@@ -11,9 +11,9 @@ export const TRANSLATIONS = {
     // demo card heading on the homepage comes from src/data/demos.json.
     panelHeading: 'Phase Transitions in Random Graphs',
     panelDesc:
-      'Generate random graphs and apply percolation (random removal of nodes or edges) to observe phase transitions \u2014 the sharp change from connected to disconnected as the retention probability drops. Each connected component is shown in a different color.',
+      'Generate random graphs and apply percolation (random removal of nodes or edges) to observe phase transitions — the sharp change from connected to disconnected as the retention probability drops. Each connected component is shown in a different color.',
     graphFamily: 'Graph family:',
-    binomial: 'Binomial (Erd\u0151s\u2013R\u00e9nyi)',
+    binomial: 'Binomial (Erdős–Rényi)',
     geometric: 'Geometric',
     grid: 'Grid',
     gridSide: 'Grid side:',
@@ -33,8 +33,8 @@ export const TRANSLATIONS = {
     largest: 'Largest: {0}',
     ptCurve: 'Phase transition curve:',
     ptDesc:
-      'Sweeps retention probability 0\u21921, measuring P(connected) and P(all complex) over multiple trials.',
-    computing: 'Computing\u2026',
+      'Sweeps retention probability 0→1, measuring P(connected) and P(all complex) over multiple trials.',
+    computing: 'Computing…',
     runSweep: 'Run sweep',
   },
   es: {
@@ -45,9 +45,9 @@ export const TRANSLATIONS = {
     pComplex: 'P(todas comp. complejas)',
     panelHeading: 'Transiciones de Fase en Grafos Aleatorios',
     panelDesc:
-      'Genera grafos aleatorios y aplica percolación (eliminación aleatoria de nodos o aristas) para observar transiciones de fase \u2014 el cambio brusco de conectado a desconectado a medida que la probabilidad de retención disminuye. Cada componente conectada se muestra en un color diferente.',
+      'Genera grafos aleatorios y aplica percolación (eliminación aleatoria de nodos o aristas) para observar transiciones de fase — el cambio brusco de conectado a desconectado a medida que la probabilidad de retención disminuye. Cada componente conectada se muestra en un color diferente.',
     graphFamily: 'Familia de grafos:',
-    binomial: 'Binomial (Erd\u0151s\u2013R\u00e9nyi)',
+    binomial: 'Binomial (Erdős–Rényi)',
     geometric: 'Geométrico',
     grid: 'Cuadrícula',
     gridSide: 'Lado cuadrícula:',
@@ -67,8 +67,8 @@ export const TRANSLATIONS = {
     largest: 'Mayor: {0}',
     ptCurve: 'Curva de transición de fase:',
     ptDesc:
-      'Realiza un barrido de la probabilidad de retención de 0\u21921, midiendo P(conectado) y P(todas complejas) en múltiples ensayos.',
-    computing: 'Calculando\u2026',
+      'Realiza un barrido de la probabilidad de retención de 0→1, midiendo P(conectado) y P(todas complejas) en múltiples ensayos.',
+    computing: 'Calculando…',
     runSweep: 'Ejecutar barrido',
   },
   ca: {
@@ -79,9 +79,9 @@ export const TRANSLATIONS = {
     pComplex: 'P(totes comp. complexes)',
     panelHeading: 'Transicions de Fase en Grafs Aleatoris',
     panelDesc:
-      'Genera grafs aleatoris i aplica percolació (eliminació aleatòria de nodes o arestes) per observar transicions de fase \u2014 el canvi brusc de connectat a desconnectat a mesura que la probabilitat de retenció disminueix. Cada component connectada es mostra en un color diferent.',
+      'Genera grafs aleatoris i aplica percolació (eliminació aleatòria de nodes o arestes) per observar transicions de fase — el canvi brusc de connectat a desconnectat a mesura que la probabilitat de retenció disminueix. Cada component connectada es mostra en un color diferent.',
     graphFamily: 'Família de grafs:',
-    binomial: 'Binomial (Erd\u0151s\u2013R\u00e9nyi)',
+    binomial: 'Binomial (Erdős–Rényi)',
     geometric: 'Geomètric',
     grid: 'Quadrícula',
     gridSide: 'Costat quadrícula:',
@@ -101,8 +101,8 @@ export const TRANSLATIONS = {
     largest: 'Major: {0}',
     ptCurve: 'Corba de transició de fase:',
     ptDesc:
-      'Realitza un escombrat de la probabilitat de retenció de 0\u21921, mesurant P(connectat) i P(totes complexes) en múltiples assajos.',
-    computing: 'Calculant\u2026',
+      'Realitza un escombrat de la probabilitat de retenció de 0→1, mesurant P(connectat) i P(totes complexes) en múltiples assajos.',
+    computing: 'Calculant…',
     runSweep: 'Executar escombrat',
   },
 };

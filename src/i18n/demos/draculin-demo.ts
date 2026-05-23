@@ -5,11 +5,11 @@ export const TRANSLATIONS = {
     bannerPre: 'Interactive demo of the Draculin health app. Start the backend (',
     bannerCode: 'cd Draculin-Backend && docker compose up -d',
     bannerPost: ') for live chat and news.',
-    fallbackNewsTitle: 'Backend not detected \u2014 showing fallback news data.',
+    fallbackNewsTitle: 'Backend not detected — showing fallback news data.',
     mockChatInit:
-      'Hello! I am Draculine, your menstruation advisor. [Mock mode \u2014 start the backend for real chat]',
+      'Hello! I am Draculine, your menstruation advisor. [Mock mode — start the backend for real chat]',
     mockChatReply:
-      '[Mock] Thank you for your question: \u00ab{msg}\u00bb. Start the backend for real answers.',
+      '[Mock] Thank you for your question: «{msg}». Start the backend for real answers.',
     typing: 'Typing...',
     inputPlaceholder: 'Type a message...',
     send: 'Send',
@@ -24,7 +24,7 @@ export const TRANSLATIONS = {
     no: 'No',
     visionDesc:
       'Computer vision feature for analyzing menstrual health. This requires the device camera and the Roboflow vision model on the backend.',
-    visionNote: 'Not available in web demo \u2014 works on the native Flutter app.',
+    visionNote: 'Not available in web demo — works on the native Flutter app.',
     statsVolume: 'ML per Day',
     statsImpact: 'Questionnaire Impact',
     statsLabels: { mild: 'Mild', moderate: 'Moderate', severe: 'Severe' },
@@ -63,11 +63,11 @@ export const TRANSLATIONS = {
     bannerPre: 'Demo interactiva de la app de salud Draculin. Inicia el backend (',
     bannerCode: 'cd Draculin-Backend && docker compose up -d',
     bannerPost: ') para chat y noticias en vivo.',
-    fallbackNewsTitle: 'Backend no detectado \u2014 mostrando datos de noticias de respaldo.',
+    fallbackNewsTitle: 'Backend no detectado — mostrando datos de noticias de respaldo.',
     mockChatInit:
-      '\u00a1Hola! Soy Draculine, tu asesora en temas de menstruación. [Modo mock \u2014 inicia el backend para chat real]',
+      '¡Hola! Soy Draculine, tu asesora en temas de menstruación. [Modo mock — inicia el backend para chat real]',
     mockChatReply:
-      '[Mock] Gracias por tu pregunta: \u00ab{msg}\u00bb. Inicia el backend para respuestas reales.',
+      '[Mock] Gracias por tu pregunta: «{msg}». Inicia el backend para respuestas reales.',
     typing: 'Escribiendo...',
     inputPlaceholder: 'Escribe un mensaje...',
     send: 'Enviar',
@@ -82,7 +82,7 @@ export const TRANSLATIONS = {
     no: 'No',
     visionDesc:
       'Función de visión por computador para analizar la salud menstrual. Requiere la cámara del dispositivo y el modelo de visión de Roboflow en el backend.',
-    visionNote: 'No disponible en la demo web \u2014 funciona en la app nativa de Flutter.',
+    visionNote: 'No disponible en la demo web — funciona en la app nativa de Flutter.',
     statsVolume: 'ML por Día',
     statsImpact: 'Impacto del Cuestionario',
     statsLabels: { mild: 'Leve', moderate: 'Moderado', severe: 'Severo' },
@@ -90,28 +90,28 @@ export const TRANSLATIONS = {
     days: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'],
     questions: [
       {
-        text: '\u00bfTu sangrado menstrual es más frecuente que cada 21 días?',
+        text: '¿Tu sangrado menstrual es más frecuente que cada 21 días?',
         scoreYes: 2,
         scoreNo: 0,
       },
-      { text: '\u00bfTu sangrado menstrual dura más de 7 días?', scoreYes: 2, scoreNo: 0 },
+      { text: '¿Tu sangrado menstrual dura más de 7 días?', scoreYes: 2, scoreNo: 0 },
       {
-        text: '\u00bfConsideras que tu sangrado menstrual es excesivamente abundante?',
+        text: '¿Consideras que tu sangrado menstrual es excesivamente abundante?',
         scoreYes: 3,
         scoreNo: 0,
       },
       {
-        text: '\u00bfSufres dolores fuertes durante tu periodo menstrual que interfieren con tus actividades diarias?',
+        text: '¿Sufres dolores fuertes durante tu periodo menstrual que interfieren con tus actividades diarias?',
         scoreYes: 3,
         scoreNo: 0,
       },
       {
-        text: '\u00bfExperimentas síntomas adicionales (como náuseas, dolor de cabeza intenso, mareos) durante tu periodo?',
+        text: '¿Experimentas síntomas adicionales (como náuseas, dolor de cabeza intenso, mareos) durante tu periodo?',
         scoreYes: 2,
         scoreNo: 0,
       },
       {
-        text: '\u00bfTu periodo menstrual tiene un impacto negativo en tu vida social o emocional?',
+        text: '¿Tu periodo menstrual tiene un impacto negativo en tu vida social o emocional?',
         scoreYes: 2,
         scoreNo: 0,
       },
@@ -121,11 +121,11 @@ export const TRANSLATIONS = {
     bannerPre: "Demo interactiva de l'app de salut Draculin. Inicia el backend (",
     bannerCode: 'cd Draculin-Backend && docker compose up -d',
     bannerPost: ') per a xat i notícies en viu.',
-    fallbackNewsTitle: 'Backend no detectat \u2014 mostrant dades de notícies de suport.',
+    fallbackNewsTitle: 'Backend no detectat — mostrant dades de notícies de suport.',
     mockChatInit:
-      'Hola! Sóc la Draculine, la teva assessora en temes de menstruació. [Mode mock \u2014 inicia el backend per a xat real]',
+      'Hola! Sóc la Draculine, la teva assessora en temes de menstruació. [Mode mock — inicia el backend per a xat real]',
     mockChatReply:
-      '[Mock] Gràcies per la teva pregunta: \u00ab{msg}\u00bb. Inicia el backend per respostes reals.',
+      '[Mock] Gràcies per la teva pregunta: «{msg}». Inicia el backend per respostes reals.',
     typing: 'Escrivint...',
     inputPlaceholder: 'Escriu un missatge...',
     send: 'Enviar',
@@ -140,7 +140,7 @@ export const TRANSLATIONS = {
     no: 'No',
     visionDesc:
       'Funció de visió per computador per analitzar la salut menstrual. Requereix la càmera del dispositiu i el model de visió de Roboflow al backend.',
-    visionNote: "No disponible a la demo web \u2014 funciona a l'app nativa de Flutter.",
+    visionNote: "No disponible a la demo web — funciona a l'app nativa de Flutter.",
     statsVolume: 'ML per Dia',
     statsImpact: 'Impacte del Qüestionari',
     statsLabels: { mild: 'Lleu', moderate: 'Moderat', severe: 'Sever' },

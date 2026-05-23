@@ -112,19 +112,19 @@
     "copy": {
       "en": {
         "description": "BitsXLaMarató 2022 winner: a tool to segment the aorta in ultrasound videos with Mask R-CNN and reconstruct it in 3D to help detect aneurysms.",
-        "lead": "🏆 <strong>Winning project</strong> of the <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a> 2022 hackathon. Run the aorta pipeline live: abdominal ultrasound → <strong>Mask R-CNN</strong> segmentation → <strong>3D mesh</strong> reconstruction → aortic <strong>diameter</strong> estimation.",
+        "lead": "<strong>Winning project</strong> of the <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a> 2022 hackathon. Run the aorta pipeline live: abdominal ultrasound → <strong>Mask R-CNN</strong> segmentation → <strong>3D mesh</strong> reconstruction → aortic <strong>diameter</strong> estimation.",
         "badge": "Computer Vision · Hackathon",
         "metaDescription": "BitsXLaMarató 2022 winner: Mask R-CNN aorta segmentation and 3D reconstruction for aneurysm detection. Interactive PyTorch + OpenCV inference demo."
       },
       "es": {
         "description": "Ganador de BitsXLaMarató 2022: una herramienta para segmentar la aorta en vídeos de ecografía con Mask R-CNN y reconstruirla en 3D para ayudar a detectar aneurismas.",
-        "lead": "🏆 <strong>Proyecto ganador</strong> de la hackathon <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a> 2022. Ejecuta el pipeline de la aorta en vivo: ecografía abdominal → segmentación <strong>Mask R-CNN</strong> → reconstrucción de <strong>malla 3D</strong> → estimación del <strong>diámetro</strong> aórtico.",
+        "lead": "<strong>Proyecto ganador</strong> de la hackathon <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a> 2022. Ejecuta el pipeline de la aorta en vivo: ecografía abdominal → segmentación <strong>Mask R-CNN</strong> → reconstrucción de <strong>malla 3D</strong> → estimación del <strong>diámetro</strong> aórtico.",
         "badge": "Visión por Computador · Hackathon",
         "metaDescription": "Ganador de BitsXLaMarató 2022: segmentación de aorta con Mask R-CNN y reconstrucción 3D para detección de aneurismas. Demo interactiva de inferencia con PyTorch + OpenCV."
       },
       "ca": {
         "description": "Guanyador de BitsXLaMarató 2022: una eina per segmentar l'aorta en vídeos d'ecografia amb Mask R-CNN i reconstruir-la en 3D per ajudar a detectar aneurismes.",
-        "lead": "🏆 <strong>Projecte guanyador</strong> de la hackató <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a> 2022. Executa el pipeline de l'aorta en viu: ecografia abdominal → segmentació <strong>Mask R-CNN</strong> → reconstrucció de <strong>malla 3D</strong> → estimació del <strong>diàmetre</strong> aòrtic.",
+        "lead": "<strong>Projecte guanyador</strong> de la hackató <a href=\"https://www.ccma.cat/tv3/marato/\" target=\"_blank\" rel=\"noopener noreferrer\">BitsXLaMarató</a> 2022. Executa el pipeline de l'aorta en viu: ecografia abdominal → segmentació <strong>Mask R-CNN</strong> → reconstrucció de <strong>malla 3D</strong> → estimació del <strong>diàmetre</strong> aòrtic.",
         "badge": "Visió per Computador · Hackató",
         "metaDescription": "Guanyador de BitsXLaMarató 2022: segmentació d'aorta amb Mask R-CNN i reconstrucció 3D per a detecció d'aneurismes. Demo interactiva d'inferència amb PyTorch + OpenCV."
       }

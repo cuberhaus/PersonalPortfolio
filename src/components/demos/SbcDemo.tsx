@@ -410,7 +410,7 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                 style={{ ...s.optionBtn, ...(tripType === tt.id ? s.optionActive : {}) }}
                 onClick={() => setTripType(tt.id)}
               >
-                {tt.emoji} {tt[lang] || tt.en}
+                {tt[lang] || tt.en}
               </button>
             ))}
           </div>
@@ -557,9 +557,9 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
         );
       case 7: {
         const modes = [
-          { id: 'Avion', label: `✈️ ${t.plane}` },
-          { id: 'Tren', label: `🚂 ${t.train}` },
-          { id: 'Barco', label: `🚢 ${t.boat}` },
+          { id: 'Avion', label: t.plane },
+          { id: 'Tren', label: t.train },
+          { id: 'Barco', label: t.boat },
         ];
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -569,7 +569,7 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                 style={{ ...s.optionBtn, ...(avoidTransport.includes(m.id) ? s.optionActive : {}) }}
                 onClick={() => toggleAvoid(m.id)}
               >
-                {avoidTransport.includes(m.id) ? '❌ ' : ''}
+                {avoidTransport.includes(m.id) ? 'Avoid: ' : ''}
                 {m.label}
               </button>
             ))}
@@ -595,7 +595,7 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                 }}
                 onClick={() => setMinStars(n)}
               >
-                {'⭐'.repeat(n)}
+                {n}+
               </button>
             ))}
           </div>
@@ -607,13 +607,13 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
               style={{ ...s.optionBtn, ...(preferUnknown ? s.optionActive : {}) }}
               onClick={() => setPreferUnknown(true)}
             >
-              🗺️ {t.preferUnknown}
+              {t.preferUnknown}
             </button>
             <button
               style={{ ...s.optionBtn, ...(!preferUnknown ? s.optionActive : {}) }}
               onClick={() => setPreferUnknown(false)}
             >
-              🏙️ {t.preferPopular}
+              {t.preferPopular}
             </button>
           </div>
         );
@@ -665,7 +665,7 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
           <div
             style={{ ...s.card, borderColor: 'orange', marginBottom: '1rem', fontSize: '0.85rem' }}
           >
-            <strong>⚠️ {t.errors}:</strong>
+            <strong>{t.errors}:</strong>
             <ul style={{ margin: '0.5rem 0 0 1rem', padding: 0 }}>
               {result.errors.map((e, i) => (
                 <li key={i}>{e}</li>
@@ -678,7 +678,7 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
           {result.cityPlans.map((cp, idx) => (
             <div key={idx}>
               <div style={s.cityCard}>
-                <div style={s.cityName}>📍 {cp.city.name}</div>
+                <div style={s.cityName}>{cp.city.name}</div>
                 <div
                   style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}
                 >
@@ -695,7 +695,7 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                     >
                       {t.hotel}
                     </span>
-                    {cp.hotel.name} {'⭐'.repeat(cp.hotel.stars)} — €{cp.hotel.pricePerNight}/night
+                    {cp.hotel.name} {cp.hotel.stars}-star — €{cp.hotel.pricePerNight}/night
                   </div>
                 ) : (
                   <div style={{ fontSize: '0.8rem', color: 'orange', marginBottom: '0.5rem' }}>
@@ -726,12 +726,7 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                     color: 'var(--text-muted)',
                   }}
                 >
-                  {cp.transportToNext.mode === 'Avion'
-                    ? '✈️'
-                    : cp.transportToNext.mode === 'Tren'
-                      ? '🚂'
-                      : '🚢'}{' '}
-                  {cp.transportToNext.name} — €{cp.transportToNext.price}
+                  {cp.transportToNext.mode} {cp.transportToNext.name} — €{cp.transportToNext.price}
                 </div>
               )}
               {idx < result.cityPlans.length - 1 && !cp.transportToNext && (
@@ -743,7 +738,7 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                     color: 'orange',
                   }}
                 >
-                  ⚠️ {t.noTransport}
+                  {t.noTransport}
                 </div>
               )}
             </div>

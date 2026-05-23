@@ -197,7 +197,7 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
         className="debug-overlay-trigger"
         aria-label={open ? 'Close debug overlay' : 'Open debug overlay'}
       >
-        🐛{open ? ' ×' : ''}
+        DBG{open ? ' ×' : ''}
       </button>
       {open && (
         <div className="debug-overlay-panel" role="dialog" aria-label="Debug overlay">

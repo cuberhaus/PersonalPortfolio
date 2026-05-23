@@ -388,7 +388,7 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
             {t.constTitle}
           </h4>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-            {t.constraints.map((c) => (
+            {t.constraints.map((c, i) => (
               <div
                 key={c.key}
                 style={{
@@ -401,7 +401,17 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                   border: '1px solid var(--border-color)',
                 }}
               >
-                <span style={{ fontSize: '1.1rem' }}>{c.icon}</span>
+                <span
+                  style={{
+                    minWidth: 24,
+                    fontSize: '0.68rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.05em',
+                    color: 'var(--accent-text)',
+                  }}
+                >
+                  C{String(i + 1)}
+                </span>
                 <div>
                   <div
                     style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}
@@ -711,7 +721,7 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                       <span key={c}>
                         <span style={{ color: cityColor(c), fontWeight: 600 }}>{c}</span>
                         {i < arr.length - 1 && (
-                          <span style={{ margin: '0 0.2rem', opacity: 0.5 }}>{'\u2192'}</span>
+                          <span style={{ margin: '0 0.2rem', opacity: 0.5 }}>{'→'}</span>
                         )}
                       </span>
                     ))}
@@ -770,7 +780,7 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                           <span style={{ color: cityColor(step.from), fontWeight: 600 }}>
                             {step.from}
                           </span>
-                          <span style={{ color: 'var(--text-muted)' }}>{'\u2192'}</span>
+                          <span style={{ color: 'var(--text-muted)' }}>{'→'}</span>
                           <span style={{ color: cityColor(step.to), fontWeight: 600 }}>
                             {step.to}
                           </span>
@@ -781,8 +791,7 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                               marginLeft: '0.3rem',
                             }}
                           >
-                            {'\u2708\uFE0F'} {step.flight} · {'\uD83C\uDFE8'} {step.hotel} ·{' '}
-                            {'\uD83D\uDCC5'} {step.days}d ({cumDays}d)
+                            flight {step.flight} · hotel {step.hotel} · {step.days}d ({cumDays}d)
                           </span>
                         </div>
                       </div>

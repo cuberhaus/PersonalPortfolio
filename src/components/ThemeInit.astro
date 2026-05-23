@@ -123,7 +123,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   window.setTheme = function(id) {
     if (!VALID_THEMES.includes(id)) {
       const msg = 'Unknown theme "' + id + '". Available themes:\n' +
-      VALID_THEMES.map(function(t) { return '  \u2022 ' + t; }).join('\n');
+      VALID_THEMES.map(function(t) { return '  - ' + t; }).join('\n');
       if (window.__debug) window.__debug.log('error', 'theme', msg);
       else console.error(msg);
       return;
@@ -136,7 +136,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
   window.setDesign = function(id) {
     if (!VALID_DESIGNS.includes(id)) {
       const msg = 'Unknown design "' + id + '". Available designs:\n' +
-      VALID_DESIGNS.map(function(d) { return '  \u2022 ' + d; }).join('\n');
+      VALID_DESIGNS.map(function(d) { return '  - ' + d; }).join('\n');
       if (window.__debug) window.__debug.log('error', 'theme', msg);
       else console.error(msg);
       return;

@@ -279,7 +279,16 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
                 textAlign: 'center',
               }}
             >
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
+              <div
+                style={{
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.05em',
+                  marginBottom: '0.2rem',
+                }}
+              >
+                {String(i + 1).padStart(2, '0')}
+              </div>
               <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {step.title}
               </div>
@@ -304,7 +313,16 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
         <div
           style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}
         >
-          <span style={{ fontSize: '1.1rem' }}>🚁</span>
+          <span
+            style={{
+              fontSize: '0.68rem',
+              fontWeight: 800,
+              letterSpacing: '0.06em',
+              color: 'var(--accent-text)',
+            }}
+          >
+            APP
+          </span>
           <h4
             style={{
               margin: 0,
@@ -357,7 +375,17 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
                 border: '1px solid var(--border-color)',
               }}
             >
-              <div style={{ fontSize: '1rem', marginBottom: '0.2rem' }}>{f.icon}</div>
+              <div
+                style={{
+                  fontSize: '0.68rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.05em',
+                  marginBottom: '0.2rem',
+                  color: 'var(--accent-text)',
+                }}
+              >
+                F{String(i + 1)}
+              </div>
               <div
                 style={{
                   fontSize: '0.75rem',
@@ -560,7 +588,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
               background: `linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), rgba(34,197,94,0.1))`,
             }}
           >
-            ⚡
+            RUN
           </div>
           <div>
             <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>{t.runDemo}</h3>

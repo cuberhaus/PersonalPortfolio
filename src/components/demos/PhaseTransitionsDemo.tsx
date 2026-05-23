@@ -451,7 +451,17 @@ function PhaseTransitionsDemo({ lang = 'en' }: { lang?: Lang }) {
       {/* Info */}
       <div style={s.infoCard}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-          <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>📊</span>
+          <span
+            style={{
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              letterSpacing: '0.06em',
+              lineHeight: 1,
+              color: 'var(--accent-text)',
+            }}
+          >
+            SIM
+          </span>
           <div>
             <strong style={{ color: 'var(--text-primary)' }}>{t.panelHeading}</strong>
             <p

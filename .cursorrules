@@ -79,7 +79,8 @@ You are working on the `PersonalPortfolio` repository.
 
 15. **Demo Page Template**:
     - Every demo page follows the same structure: `DemoLayout` → `DemoHeader` → React component or `LiveAppEmbed`.
-    - Either define a `TRANSLATIONS` object inline (for `.astro` page-level text) or create a dedicated `src/i18n/demos/<slug>-demo.ts` file (for React component text). Both use `{ en: {...}, es: {...}, ca: {...} }` flat structures.
+    - Put card/header/SEO/about copy in `src/data/demos.json` under the entry's `copy.<locale>` block. Put extra demo or React-island copy in JSON under `src/i18n/demos/` so it remains Crowdin-editable.
+    - TypeScript files in `src/i18n/demos/` may import JSON and expose typed helpers or fallbacks, but must not be the source of new user-facing translations. Legacy `TRANSLATIONS` objects should be migrated to JSON when touched.
     - Pass `slug` to `DemoLayout` to enable prev/next navigation. Pass `lang` explicitly to React islands as a prop.
 
 16. **ViewTransitions & `data-astro-reload`**:
@@ -87,9 +88,10 @@ You are working on the `PersonalPortfolio` repository.
     - Pattern: `<a href={url} data-astro-reload>`.
 
 17. **Localized Data Files**:
-    - Data in `src/data/` has parallel JSON files per language: `demos.json` (EN), `demos.es.json`, `demos.ca.json`. Same structure applies to `work_projects`, `education`, `experience`, and `skills`.
-    - Files must maintain strict parity: identical slugs, same order, same array lengths. This is enforced by unit tests in `src/__tests__/data-integrity.test.ts`.
-    - Components import all three and select at runtime: `lang === 'es' ? demosEs : lang === 'ca' ? demosCa : demosEn`.
+    - Data in `src/data/` uses localized JSON entries with `{ identity, copy }`: stable IDs, slugs, URLs, icon keys, and backend config live in `identity`; translated strings live in `copy.en`, `copy.es`, and `copy.ca`.
+    - Crowdin-editable text belongs in JSON `copy` blocks, not in TypeScript dictionaries or identity fields. The default locale (`en`) is required; other locales may fall back while in progress.
+    - Files must maintain strict identity parity: identical slugs, same order, same array lengths. This is enforced by unit tests in `src/__tests__/data-integrity.test.ts` and related content parity tests.
+    - Components should use the existing i18n loaders (for example `flattenForLocale` / `getDemo`) instead of duplicating locale selection logic.
 
 18. **Testing**:
     - **Unit tests**: Vitest (`src/__tests__/*.test.ts`). Primarily validate data integrity (slug uniqueness, i18n parity, valid icons/URLs) and calculation logic.
