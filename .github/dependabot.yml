@@ -1,6 +1,8 @@
-# Weekly dependency-bump PRs against main. Each PR runs the full CI suite
-# (quality + vitest + planner-api + playwright × 5 + a11y × 4 shards +
-# lighthouse), so a bump that breaks the build never lands.
+# Weekly dependency-bump PRs against main. Dependabot uses one multi-ecosystem
+# group so npm and GitHub Actions version updates arrive in a single PR instead
+# of one PR per package family. The PR still runs the full CI suite (quality +
+# vitest + planner-api + playwright x 5 + a11y x 4 shards + lighthouse), so a
+# bump that breaks the build never lands.
 #
 # Major-version bumps are intentionally ignored so manual review stays in
 # the loop for breaking changes — the Astro 5 → 6 jump in PR #89 is the
@@ -8,49 +10,21 @@
 # checklist, not a Dependabot drive-by).
 
 version: 2
-updates:
-  - package-ecosystem: npm
-    directory: /
+
+multi-ecosystem-groups:
+  weekly-dependency-refresh:
     schedule:
       interval: weekly
       day: monday
-    open-pull-requests-limit: 5
-    groups:
-      # One PR per ecosystem-group instead of one PR per package — keeps
-      # CI minutes and review load sane.
-      astro:
-        patterns:
-          - 'astro'
-          - '@astrojs/*'
-      react:
-        patterns:
-          - 'react'
-          - 'react-dom'
-          - '@types/react'
-          - '@types/react-dom'
-      d3:
-        patterns:
-          - 'd3-*'
-          - '@types/d3-*'
-      testing:
-        patterns:
-          - 'vitest'
-          - 'playwright'
-          - '@playwright/*'
-          - '@axe-core/*'
-          - '@testing-library/*'
-      eslint-prettier:
-        patterns:
-          - 'eslint'
-          - 'eslint-*'
-          - '@eslint/*'
-          - 'typescript-eslint'
-          - 'prettier'
-          - 'prettier-*'
-      sentry:
-        patterns:
-          - '@sentry/*'
-          - '@spotlightjs/*'
+    labels:
+      - dependencies
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    patterns:
+      - '*'
+    multi-ecosystem-group: weekly-dependency-refresh
     ignore:
       - dependency-name: '*'
         update-types:
@@ -63,10 +37,9 @@ updates:
 
   - package-ecosystem: github-actions
     directory: /
-    schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 3
+    patterns:
+      - '*'
+    multi-ecosystem-group: weekly-dependency-refresh
     commit-message:
       prefix: chore(ci)
       include: scope
