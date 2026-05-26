@@ -30,7 +30,7 @@
     "@sentry/astro": "^10.53.1",
     "@spotlightjs/astro": "^3.2.6",
     "@zootools/email-spell-checker": "^1.12.0",
-    "astro": "^6.3.3",
+    "astro": "^6.3.7",
     "d3-array": "^3.2.4",
     "d3-geo": "^3.1.1",
     "d3-scale": "^4.0.2",
