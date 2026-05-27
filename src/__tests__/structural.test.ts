@@ -15,7 +15,7 @@ import { listDemos } from '../i18n/demo';
 import { ICON_PATHS } from '../lib/demo-icons';
 import { SECTION_META, SECTION_IDS } from '../config/section-ids';
 
-const demosEn = listDemos('en');
+const demosEn = listDemos('en', { includeHidden: true });
 
 const SRC = join(__dirname, '..');
 const read = (rel: string) => readFileSync(join(SRC, rel), 'utf-8');
@@ -87,8 +87,10 @@ describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
     expect(localized).toMatch(renderPattern);
   });
 
-  it('SECTION_IDS export excludes the hero', () => {
-    expect(SECTION_IDS).toEqual(SECTION_META.filter((s) => s.id !== 'hero').map((s) => s.id));
+  it('SECTION_IDS export excludes the hero and hidden sections', () => {
+    expect(SECTION_IDS).toEqual(
+      SECTION_META.filter((s) => s.id !== 'hero' && s.hidden !== true).map((s) => s.id)
+    );
   });
 });
 

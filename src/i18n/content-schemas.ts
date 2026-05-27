@@ -11,12 +11,32 @@ const httpsUrl = z
   .string()
   .refine((s) => s === '' || /^https:\/\//.test(s), { message: 'Must be an https:// URL' });
 
+const credentialUrl = z
+  .string()
+  .refine(
+    (s) => s === '' || /^https:\/\//.test(s) || /^\/certifications\/[^?#]+\.(?:html|pdf)$/i.test(s),
+    { message: 'Must be an https:// URL or a /certifications/*.html|pdf path' }
+  );
+
+const visibility = {
+  hidden: z.boolean().optional(),
+};
+
+const SkillItemSchema = z.union([
+  z.string().min(1),
+  z.object({
+    name: z.string().min(1),
+    ...visibility,
+  }),
+]);
+
 // ─── skills.json (identity-only) ────────────────────────────────
 // Each entry: { items: string[] }
 
 export const SkillsFileSchema = z.array(
   z.object({
-    items: z.array(z.string().min(1)).min(1),
+    items: z.array(SkillItemSchema).min(1),
+    ...visibility,
   })
 );
 
@@ -29,6 +49,7 @@ export const WorkProjectsFileSchema = z.array(
     icon: z.enum(iconNames),
     link: httpsUrl.optional(),
     fallback: z.string().optional(),
+    ...visibility,
   })
 );
 
@@ -39,6 +60,7 @@ export const EducationFileSchema = z.array(
   z.object({
     institution: z.string().min(1),
     link: httpsUrl.optional(),
+    ...visibility,
   })
 );
 
@@ -50,7 +72,8 @@ export const CertificationsFileSchema = z.array(
     name: z.string().min(1),
     issuer: z.string().min(1),
     issuerIcon: z.enum(issuerIconNames),
-    link: httpsUrl.optional(),
+    link: credentialUrl.optional(),
     fallback: z.string().optional(),
+    ...visibility,
   })
 );

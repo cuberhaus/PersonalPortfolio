@@ -47,6 +47,28 @@ file order.
 
 ---
 
+## Hiding content without deleting it
+
+For structured homepage content, add `"hidden": true` to the identity row in
+`src/data/*.json`. Hidden rows stay in the source files and locale parity still
+expects their matching `locales/{locale}/*.json` entries, but they do not render
+on the homepage.
+
+Supported rows: `experience.json`, `work_projects.json`, `education.json`,
+`certifications.json`, `demos.json`, and top-level groups in `skills.json`.
+Individual skill pills can also be hidden by changing a string item into an
+object:
+
+```json
+{ "name": "Docker", "hidden": true }
+```
+
+For a whole homepage section, add `hidden: true` to its row in
+[`src/config/section-ids.ts`](../../src/config/section-ids.ts). The section
+stays registered, but disappears from the homepage and navbar.
+
+---
+
 ## 3. Adding a new certification
 
 **Edit:** [src/data/certifications.json](../../src/data/certifications.json) +
@@ -55,7 +77,9 @@ fallback?}`, `copy.{en,es,ca}.issued`.
 
 **Notes:** `issuerIcon` is a known slug (`microsoft`, `nvidia`, `oracle`, …)
 matched by the icon component. If the credential URL might rot, drop a static
-HTML snapshot in `public/certifications/` and reference it with `fallback`.
+HTML snapshot in `public/certifications/` and reference it with `fallback`. For
+local certificate PDFs, copy the file to `public/certifications/` and use a
+`link` like `/certifications/<file>.pdf`.
 
 **Verify:** `npx vitest run content-parity data-integrity`
 

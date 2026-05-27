@@ -7,7 +7,7 @@ import Education from '../components/Education.astro';
 import Certifications from '../components/Certifications.astro';
 import Skills from '../components/Skills.astro';
 import Contact from '../components/Contact.astro';
-import { SECTION_META } from './section-ids';
+import { VISIBLE_SECTION_META } from './section-ids';
 
 /**
  * Single source of truth for the homepage sections.
@@ -36,7 +36,7 @@ const COMPONENTS = {
   contact: Contact,
 } as const;
 
-export const sections = SECTION_META.map(({ id, navKey, numbered, inNav }) => ({
+export const sections = VISIBLE_SECTION_META.map(({ id, navKey, numbered, inNav }) => ({
   id,
   navKey,
   numbered,
@@ -44,5 +44,10 @@ export const sections = SECTION_META.map(({ id, navKey, numbered, inNav }) => ({
   component: COMPONENTS[id],
 }));
 
-export { SECTION_META, SECTION_IDS, SECTION_IDS_WITH_HERO } from './section-ids';
+export {
+  SECTION_META,
+  VISIBLE_SECTION_META,
+  SECTION_IDS,
+  SECTION_IDS_WITH_HERO,
+} from './section-ids';
 export type { SectionId } from './section-ids';

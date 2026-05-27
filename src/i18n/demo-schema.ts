@@ -27,6 +27,7 @@ const IdentitySchema = z.object({
   slug: z.string().regex(/^[a-z0-9-]+$/, {
     message: 'slug must be lowercase letters, digits, or hyphens',
   }),
+  hidden: z.boolean().optional(),
   // Tags may live here (shared across locales) or in `copy[locale].tags`.
   // Cross-field check enforced by the entry-level refinement below.
   tags: z.array(z.string().min(1)).min(1).optional(),

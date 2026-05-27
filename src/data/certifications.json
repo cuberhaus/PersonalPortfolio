@@ -57,5 +57,12 @@
     "issuerIcon": "stratio",
     "link": "https://certificate.stratio.com/user/certificate/a4f162421762d5cd35d9f4e66552e4ad",
     "fallback": "/certifications/stratio-data-fabric-basics.pdf"
+  },
+  {
+    "name": "NCA-AIIO Bootcamp - AI Infra & Ops Associate",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "link": "https://deloittedevelopment.udemy.com/certificate/UC-22115968-5167-4d32-981c-eef77dec000c/",
+    "fallback": "/certifications/nvidia-ai-infra-ops-associate.pdf"
   }
 ]

@@ -1,17 +1,18 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { skills as skillsData, getTranslations } from '../data/loaders';
+import { visibleEntries, visibleSkillItems, type SkillItem } from '../data/visibility';
 import { flattenForLocale } from '../i18n/load';
 
-type SkillGroup = { category: string; items: string[] };
+type SkillGroup = { category: string; items: SkillItem[]; hidden?: boolean };
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const skills = flattenForLocale<SkillGroup>(
-  skillsData as never,
-  lang,
-  getTranslations('skills', lang)
-);
+const skills = visibleEntries(
+  flattenForLocale<SkillGroup>(skillsData as never, lang, getTranslations('skills', lang))
+)
+  .map((group) => ({ ...group, items: visibleSkillItems(group.items) }))
+  .filter((group) => group.items.length > 0);
 
 const LOC_DATA: Record<string, { lines: string; pct: number }> = {
   Python: { lines: '~55K', pct: 22 },

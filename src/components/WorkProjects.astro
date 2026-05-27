@@ -1,6 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { workProjects as projectsData, getTranslations } from '../data/loaders';
+import { visibleEntries } from '../data/visibility';
 import { flattenForLocale } from '../i18n/load';
 import { renderIconSvg } from '../lib/demo-icons';
 
@@ -13,14 +14,13 @@ type WorkEntry = {
   icon: string;
   link?: string;
   fallback?: string;
+  hidden?: boolean;
 };
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const projects = flattenForLocale<WorkEntry>(
-  projectsData as never,
-  lang,
-  getTranslations('workProjects', lang)
+const projects = visibleEntries(
+  flattenForLocale<WorkEntry>(projectsData as never, lang, getTranslations('workProjects', lang))
 );
 
 const { num } = Astro.props;

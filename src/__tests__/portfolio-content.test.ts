@@ -4,6 +4,7 @@ import experience from '../data/experience.json';
 import { skills, workProjects, education, certifications, getTranslations } from '../data/loaders';
 
 import { flattenForLocale } from '../i18n/load';
+import { visibleSkillItems, type SkillItem } from '../data/visibility';
 import { LOCALES, type Locale } from '../config/locales';
 
 // Locale translation files for experience (not exported from loaders for direct use)
@@ -32,10 +33,10 @@ describe('skills content quality', () => {
     for (const locale of LOCALES) {
       const flat = flattenForLocale(skills, locale, getTranslations('skills', locale)) as Array<{
         category: string;
-        items: string[];
+        items: SkillItem[];
       }>;
       for (const group of flat) {
-        const trimmed = group.items.map((item) => item.trim());
+        const trimmed = visibleSkillItems(group.items).map((item) => item.trim());
         expect(new Set(trimmed).size, `${locale}.${group.category} has duplicate skills`).toBe(
           trimmed.length
         );
