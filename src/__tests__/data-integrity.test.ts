@@ -18,7 +18,7 @@ const demoPageFiles = readdirSync(DEMO_PAGES_DIR)
   .filter((f) => f.endsWith('.astro'))
   .map((f) => f.replace('.astro', ''));
 
-const demosEn = listDemos('en');
+const demosEn = listDemos('en', { includeHidden: true });
 
 // ─── Demo data consistency ──────────────────────────────────────
 //
@@ -31,7 +31,14 @@ const demosEn = listDemos('en');
 describe('Demo data files', () => {
   it('flattens to the same number of demos in every locale', () => {
     for (const locale of LOCALES) {
-      expect(listDemos(locale).length).toBe(demosEn.length);
+      expect(listDemos(locale, { includeHidden: true }).length).toBe(demosEn.length);
+    }
+  });
+
+  it('flattens to the same number of visible demos in every locale', () => {
+    const visibleEn = listDemos('en').length;
+    for (const locale of LOCALES) {
+      expect(listDemos(locale).length).toBe(visibleEn);
     }
   });
 

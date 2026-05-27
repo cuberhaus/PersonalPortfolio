@@ -1,6 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { experience as experienceData, getTranslations } from '../data/loaders';
+import { visibleEntries } from '../data/visibility';
 import { flattenForLocale } from '../i18n/load';
 
 type ExpEntry = {
@@ -13,14 +14,13 @@ type ExpEntry = {
   logo?: string;
   logoLight?: string;
   bullets: string[];
+  hidden?: boolean;
 };
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const experience = flattenForLocale<ExpEntry>(
-  experienceData as never,
-  lang,
-  getTranslations('experience', lang)
+const experience = visibleEntries(
+  flattenForLocale<ExpEntry>(experienceData as never, lang, getTranslations('experience', lang))
 );
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 

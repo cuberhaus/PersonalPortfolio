@@ -40,6 +40,7 @@ import demosCa from '../../locales/ca/demos.json';
 
 import { ISSUER_ICON_PATHS } from '../lib/issuer-icons';
 import { LOCALES } from '../config/locales';
+import { visibleSkillItems, type SkillItem } from '../data/visibility';
 import { flattenForLocale } from '../i18n/load';
 
 type TranslationMap = Record<string, Record<string, unknown>>;
@@ -96,11 +97,11 @@ describe('Skills data', () => {
     for (const locale of LOCALES) {
       const flat = flattenForLocale(data, locale, translations[locale]) as Array<{
         category: string;
-        items: string[];
+        items: SkillItem[];
       }>;
       for (const group of flat) {
         expect(group.category.trim().length).toBeGreaterThan(0);
-        expect(group.items.length).toBeGreaterThanOrEqual(1);
+        expect(visibleSkillItems(group.items).length).toBeGreaterThanOrEqual(1);
       }
     }
   });
@@ -242,12 +243,16 @@ describe('Certifications data', () => {
     }
   });
 
-  it('every non-empty link is a valid HTTPS URL', () => {
+  it('every non-empty link is a valid HTTPS URL or local credential path', () => {
     for (const entry of data) {
       const link = (entry.link as string | undefined) ?? '';
       if (link) {
-        expect(() => new URL(link)).not.toThrow();
-        expect(link).toMatch(/^https:\/\//);
+        if (link.startsWith('/')) {
+          expect(link).toMatch(/^\/certifications\/[^?#]+\.(?:html|pdf)$/i);
+        } else {
+          expect(() => new URL(link)).not.toThrow();
+          expect(link).toMatch(/^https:\/\//);
+        }
       }
     }
   });

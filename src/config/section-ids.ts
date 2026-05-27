@@ -14,25 +14,53 @@
  *   - `inNav`: true if the section appears as a primary anchor in the navbar.
  *     The hero is the only section currently marked `false`; its scroll
  *     target is the logo (`<a href="#hero">`) instead.
+ *   - `hidden`: true if the section should stay registered but not render in
+ *     the homepage or navbar.
  */
 export const SECTION_META = [
-  { id: 'hero', navKey: 'nav.about', numbered: false, inNav: false },
-  { id: 'about', navKey: 'nav.about', numbered: true, inNav: true },
-  { id: 'experience', navKey: 'nav.experience', numbered: true, inNav: true },
-  { id: 'work', navKey: 'nav.work', numbered: true, inNav: true },
-  { id: 'projects', navKey: 'nav.projects', numbered: true, inNav: true },
-  { id: 'education', navKey: 'nav.education', numbered: true, inNav: true },
-  { id: 'certifications', navKey: 'nav.certifications', numbered: true, inNav: true },
-  { id: 'skills', navKey: 'nav.skills', numbered: true, inNav: true },
-  { id: 'contact', navKey: 'nav.contact', numbered: true, inNav: true },
+  { id: 'hero', navKey: 'nav.about', numbered: false, inNav: false, hidden: false as boolean },
+  { id: 'about', navKey: 'nav.about', numbered: true, inNav: true, hidden: false as boolean },
+  {
+    id: 'experience',
+    navKey: 'nav.experience',
+    numbered: true,
+    inNav: true,
+    hidden: false as boolean,
+  },
+  { id: 'work', navKey: 'nav.work', numbered: true, inNav: true, hidden: false as boolean },
+  {
+    id: 'projects',
+    navKey: 'nav.projects',
+    numbered: true,
+    inNav: true,
+    hidden: false as boolean,
+  },
+  {
+    id: 'education',
+    navKey: 'nav.education',
+    numbered: true,
+    inNav: true,
+    hidden: false as boolean,
+  },
+  {
+    id: 'certifications',
+    navKey: 'nav.certifications',
+    numbered: true,
+    inNav: true,
+    hidden: false as boolean,
+  },
+  { id: 'skills', navKey: 'nav.skills', numbered: true, inNav: true, hidden: false as boolean },
+  { id: 'contact', navKey: 'nav.contact', numbered: true, inNav: true, hidden: false as boolean },
 ] as const;
 
 export type SectionId = (typeof SECTION_META)[number]['id'];
 
-/** All section IDs in homepage order, including the hero. */
-export const SECTION_IDS_WITH_HERO: readonly SectionId[] = SECTION_META.map((s) => s.id);
+export const VISIBLE_SECTION_META = SECTION_META.filter((s) => s.hidden !== true);
 
-/** Section IDs in navbar/homepage order, excluding the hero. */
-export const SECTION_IDS: readonly SectionId[] = SECTION_META.filter((s) => s.id !== 'hero').map(
-  (s) => s.id
-);
+/** Visible section IDs in homepage order, including the hero. */
+export const SECTION_IDS_WITH_HERO: readonly SectionId[] = VISIBLE_SECTION_META.map((s) => s.id);
+
+/** Visible section IDs in navbar/homepage order, excluding the hero. */
+export const SECTION_IDS: readonly SectionId[] = VISIBLE_SECTION_META.filter(
+  (s) => s.id !== 'hero'
+).map((s) => s.id);

@@ -17,6 +17,7 @@ const DemoIdentitySchema = z.object({
   slug: z.string().regex(/^[a-z0-9-]+$/, {
     message: 'slug must be lowercase letters, digits, or hyphens',
   }),
+  hidden: z.boolean().optional(),
   tags: z.array(z.string().min(1)).min(1).optional(),
   icon: z.enum(iconNames),
   github: z.union([githubUrl, z.array(githubUrl).min(1)]),
