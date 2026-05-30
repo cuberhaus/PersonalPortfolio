@@ -3,13 +3,13 @@
     "issued": "Maig 2025"
   },
   "1": {
-    "issued": "Set 2024"
+    "issued": "Maig 2026"
   },
   "2": {
-    "issued": "Abr 2024"
+    "issued": "Set 2024"
   },
   "3": {
-    "issued": ""
+    "issued": "Abr 2024"
   },
   "4": {
     "issued": ""
@@ -18,15 +18,21 @@
     "issued": ""
   },
   "6": {
-    "issued": "Març 2025"
+    "issued": ""
   },
   "7": {
     "issued": "Març 2025"
   },
   "8": {
-    "issued": "Gen 2025"
+    "issued": "Març 2025"
   },
   "9": {
+    "issued": "Gen 2025"
+  },
+  "10": {
+    "issued": "Maig 2026"
+  },
+  "11": {
     "issued": "Maig 2026"
   }
 }
