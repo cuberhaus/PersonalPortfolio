@@ -13,6 +13,12 @@
     "link": "https://www.credly.com/earner/earned/badge/cd5fe259-304f-42b6-9bd2-9c95657386df"
   },
   {
+    "name": "Generative AI Leader Certification",
+    "issuer": "Google Cloud",
+    "issuerIcon": "google-cloud",
+    "link": "https://www.credly.com/earner/earned/badge/7837d2e7-da88-442d-b66b-f8a68caf3779"
+  },
+  {
     "name": "Getting Started with Deep Learning",
     "issuer": "NVIDIA",
     "issuerIcon": "nvidia",
@@ -77,11 +83,5 @@
     "issuerIcon": "nvidia",
     "link": "https://deloittedevelopment.udemy.com/certificate/UC-873eab0c-b5db-47eb-bf6d-dc3e5ebbb51c/",
     "fallback": "/certifications/nvidia-genai-llms-associate.pdf"
-  },
-  {
-    "name": "Generative AI Leader Certification",
-    "issuer": "Google Cloud",
-    "issuerIcon": "google-cloud",
-    "link": "https://www.credly.com/earner/earned/badge/7837d2e7-da88-442d-b66b-f8a68caf3779"
   }
 ]
