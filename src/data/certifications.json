@@ -7,6 +7,12 @@
     "fallback": "/certifications/azure-fundamentals-az900.html"
   },
   {
+    "name": "NVIDIA-Certified Associate: Generative AI LLMs",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "link": "https://www.credly.com/earner/earned/badge/cd5fe259-304f-42b6-9bd2-9c95657386df"
+  },
+  {
     "name": "Getting Started with Deep Learning",
     "issuer": "NVIDIA",
     "issuerIcon": "nvidia",
