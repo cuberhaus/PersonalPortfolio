@@ -28,6 +28,8 @@ export const ISSUER_ICON_PATHS: Record<string, string> = {
     '<path d="M3 6h12M5 12h14M7 18h12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>',
   'universal-robots':
     '<path d="M9 4h6a2 2 0 0 1 2 2v2H7V6a2 2 0 0 1 2-2zM7 8h10v6H7zM5 16h14M5 16v4M19 16v4M12 14v2"/><circle cx="12" cy="11" r="1.5" fill="currentColor" stroke="none"/>',
+  'google-cloud':
+    '<path d="M12.19 2.38a9.344 9.344 0 0 0-9.234 6.893c-3.875 2.551-3.922 8.11-.247 10.941a6.717 6.717 0 0 0 4.077 1.356h5.173l.03.03h5.192c6.687.053 9.376-8.605 3.835-12.35a9.365 9.365 0 0 0-2.821-4.552A9.344 9.344 0 0 0 12.19 2.38zm-.358 4.146c1.244-.04 2.518.368 3.486 1.15a5.186 5.186 0 0 1 1.862 4.078v.518c3.53-.07 3.53 5.262 0 5.193h-5.193v-.04H6.785a2.597 2.597 0 1 1 3.437-3.437l3.013-3.012A6.747 6.747 0 0 0 8.11 8.24a5.186 5.186 0 0 1 3.724-1.714z" fill="currentColor" stroke="none"/>',
   medal: '<circle cx="12" cy="9" r="6"/><path d="M8 14l-2 7 6-3 6 3-2-7"/>',
 };
 
