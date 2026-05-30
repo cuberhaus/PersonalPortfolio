@@ -64,5 +64,12 @@
     "issuerIcon": "nvidia",
     "link": "https://deloittedevelopment.udemy.com/certificate/UC-22115968-5167-4d32-981c-eef77dec000c/",
     "fallback": "/certifications/nvidia-ai-infra-ops-associate.pdf"
+  },
+  {
+    "name": "NCA-GENL - Bootcamp - GenAI & LLMs Associate",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "link": "https://deloittedevelopment.udemy.com/certificate/UC-873eab0c-b5db-47eb-bf6d-dc3e5ebbb51c/",
+    "fallback": "/certifications/nvidia-genai-llms-associate.pdf"
   }
 ]
