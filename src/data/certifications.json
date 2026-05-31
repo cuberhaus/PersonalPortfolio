@@ -13,6 +13,12 @@
     "link": "https://www.credly.com/badges/cd5fe259-304f-42b6-9bd2-9c95657386df"
   },
   {
+    "name": "NVIDIA-Certified Associate: AI Infrastructure and Operations",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "link": "https://www.credly.com/badges/c63fa8d7-de8e-4518-a27a-eab82f577bba"
+  },
+  {
     "name": "Generative AI Leader Certification",
     "issuer": "Google Cloud",
     "issuerIcon": "google-cloud",
