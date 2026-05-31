@@ -2,7 +2,7 @@
 # On Windows, use Git Bash's sh.exe so POSIX utilities (find, rm,
 # grep, awk, curl …) are available in recipe lines.
 ifeq ($(OS),Windows_NT)
-  SHELL := sh.exe
+  SHELL := C:/Program Files/Git/bin/sh.exe
   .SHELLFLAGS := -c
 endif
 
@@ -369,7 +369,7 @@ help: ## Show this help message
 			split($$0, parts, ":.*## *"); \
 			printf "  \033[36m%-20s\033[0m %s\n", parts[1], parts[2] \
 		} \
-	' $(MAKEFILE_LIST)
+	' $(MAKEFILE_LIST) || true
 
 ports: ## List demo backend ports (started by dev-bare / all)
 	@if command -v jq >/dev/null 2>&1; then \

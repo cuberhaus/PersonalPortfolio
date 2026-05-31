@@ -4,38 +4,48 @@
     "issuer": "Microsoft",
     "issuerIcon": "microsoft",
     "link": "https://learn.microsoft.com/api/credentials/share/en-us/CasacubertaGilPol-4021/D3813A9ED6F473",
-    "fallback": "/certifications/azure-fundamentals-az900.html"
+    "fallback": "/certifications/azure-fundamentals-az900.html",
+    "badgeImage": "https://images.credly.com/size/340x340/images/be8fcaeb-c769-4858-b567-ffaaa73ce8cf/image.png",
+    "badgeImageFallback": "/certifications/badge-azure-fundamentals.png"
   },
   {
     "name": "NVIDIA-Certified Associate: Generative AI LLMs",
     "issuer": "NVIDIA",
     "issuerIcon": "nvidia",
-    "link": "https://www.credly.com/badges/cd5fe259-304f-42b6-9bd2-9c95657386df"
+    "link": "https://www.credly.com/badges/cd5fe259-304f-42b6-9bd2-9c95657386df",
+    "badgeImage": "https://images.credly.com/size/340x340/images/01c81db8-c1f5-41f6-b0f8-ac22442f8fa1/image.png",
+    "badgeImageFallback": "/certifications/badge-nvidia-genai-llms.png"
   },
   {
     "name": "NVIDIA-Certified Associate: AI Infrastructure and Operations",
     "issuer": "NVIDIA",
     "issuerIcon": "nvidia",
-    "link": "https://www.credly.com/badges/c63fa8d7-de8e-4518-a27a-eab82f577bba"
+    "link": "https://www.credly.com/badges/c63fa8d7-de8e-4518-a27a-eab82f577bba",
+    "badgeImage": "https://images.credly.com/size/340x340/images/3d924691-436a-4fb6-b19b-1005ccbb6135/blob",
+    "badgeImageFallback": "/certifications/badge-nvidia-aiio.png"
   },
   {
     "name": "Generative AI Leader Certification",
     "issuer": "Google Cloud",
     "issuerIcon": "google-cloud",
-    "link": "https://www.credly.com/badges/7837d2e7-da88-442d-b66b-f8a68caf3779"
-  },
-  {
-    "name": "Getting Started with Deep Learning",
-    "issuer": "NVIDIA",
-    "issuerIcon": "nvidia",
-    "link": "https://learn.nvidia.com/certificates"
+    "link": "https://www.credly.com/badges/7837d2e7-da88-442d-b66b-f8a68caf3779",
+    "badgeImage": "https://images.credly.com/size/340x340/images/ec23e41a-0f32-4a98-9c00-28925621b281/blob",
+    "badgeImageFallback": "/certifications/badge-google-cloud-genai.png"
   },
   {
     "name": "Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate (1Z0-1122-25)",
     "issuer": "Oracle",
     "issuerIcon": "oracle",
     "link": "https://catalog-education.oracle.com/ords/certview/sharebadge?id=DD0D5772371BBE33ABF90101B3D050A1F32460C1883B805FA16656015CF5AB00",
-    "fallback": "/certifications/oracle-oci-ai-foundations.html"
+    "fallback": "/certifications/oracle-oci-ai-foundations.html",
+    "badgeImage": "https://brm-workforce.oracle.com/pdf/certview/images/OCI25AICFAV1.png",
+    "badgeImageFallback": "/certifications/badge-oracle-oci-ai.png"
+  },
+  {
+    "name": "Getting Started with Deep Learning",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "link": "https://learn.nvidia.com/certificates"
   },
   {
     "name": "e-Series Application Track",
@@ -60,34 +70,41 @@
     "issuer": "Stratio",
     "issuerIcon": "stratio",
     "link": "https://certificate.stratio.com/user/certificate/3aa56e2ee5536c425ceca705be635041",
-    "fallback": "/certifications/stratio-data-fabric-operations.pdf"
+    "fallback": "/certifications/stratio-data-fabric-operations.pdf",
+    "badgeImage": "/certifications/stratio-data-fabric-operations.png"
   },
   {
     "name": "Stratio Generative AI Data Processing 14.1",
     "issuer": "Stratio",
     "issuerIcon": "stratio",
     "link": "https://certificate.stratio.com/user/certificate/f0ea41ec4fbdfa7518290851a10382fe",
-    "fallback": "/certifications/stratio-data-processing.pdf"
+    "fallback": "/certifications/stratio-data-processing.pdf",
+    "badgeImage": "/certifications/stratio-data-processing.png"
   },
   {
     "name": "Stratio Generative AI Data Fabric Basics 14.1",
     "issuer": "Stratio",
     "issuerIcon": "stratio",
     "link": "https://certificate.stratio.com/user/certificate/a4f162421762d5cd35d9f4e66552e4ad",
-    "fallback": "/certifications/stratio-data-fabric-basics.pdf"
+    "fallback": "/certifications/stratio-data-fabric-basics.pdf",
+    "badgeImage": "/certifications/stratio-data-fabric-basics.png"
   },
   {
     "name": "NCA-AIIO Bootcamp - AI Infra & Ops Associate",
     "issuer": "NVIDIA",
     "issuerIcon": "nvidia",
     "link": "https://deloittedevelopment.udemy.com/certificate/UC-22115968-5167-4d32-981c-eef77dec000c/",
-    "fallback": "/certifications/nvidia-ai-infra-ops-associate.pdf"
+    "fallback": "/certifications/nvidia-ai-infra-ops-associate.pdf",
+    "badgeImage": "https://udemy-certificate.s3.amazonaws.com/image/UC-22115968-5167-4d32-981c-eef77dec000c.jpg",
+    "badgeImageFallback": "/certifications/badge-nvidia-bootcamp-aiio.jpg"
   },
   {
     "name": "NCA-GENL - Bootcamp - GenAI & LLMs Associate",
     "issuer": "NVIDIA",
     "issuerIcon": "nvidia",
     "link": "https://deloittedevelopment.udemy.com/certificate/UC-873eab0c-b5db-47eb-bf6d-dc3e5ebbb51c/",
-    "fallback": "/certifications/nvidia-genai-llms-associate.pdf"
+    "fallback": "/certifications/nvidia-genai-llms-associate.pdf",
+    "badgeImage": "https://udemy-certificate.s3.amazonaws.com/image/UC-873eab0c-b5db-47eb-bf6d-dc3e5ebbb51c.jpg",
+    "badgeImageFallback": "/certifications/badge-nvidia-bootcamp-genl.jpg"
   }
 ]

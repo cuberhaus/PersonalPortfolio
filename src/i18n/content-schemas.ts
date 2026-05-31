@@ -11,6 +11,13 @@ const httpsUrl = z
   .string()
   .refine((s) => s === '' || /^https:\/\//.test(s), { message: 'Must be an https:// URL' });
 
+const imageUrl = z
+  .string()
+  .refine(
+    (s) => /^https:\/\//.test(s) || /^\/certifications\/[^?#]+\.(png|jpg|jpeg|webp)$/i.test(s),
+    { message: 'Must be an https:// URL or a /certifications/*.{png,jpg,jpeg,webp} path' }
+  );
+
 const credentialUrl = z
   .string()
   .refine(
@@ -65,7 +72,7 @@ export const EducationFileSchema = z.array(
 );
 
 // ─── certifications.json (identity-only) ────────────────────────
-// Each entry: { name, issuer, issuerIcon, link?, fallback? }
+// Each entry: { name, issuer, issuerIcon, link?, fallback?, badgeImage?, badgeImageFallback? }
 
 export const CertificationsFileSchema = z.array(
   z.object({
@@ -74,6 +81,8 @@ export const CertificationsFileSchema = z.array(
     issuerIcon: z.enum(issuerIconNames),
     link: credentialUrl.optional(),
     fallback: z.string().optional(),
+    badgeImage: imageUrl.optional(),
+    badgeImageFallback: imageUrl.optional(),
     ...visibility,
   })
 );
