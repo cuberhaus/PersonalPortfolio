@@ -13,6 +13,7 @@ type CertEntry = {
   link?: string;
   fallback?: string;
   badgeImage?: string;
+  badgeImageFallback?: string;
   hidden?: boolean;
 };
 
@@ -53,7 +54,15 @@ const { num } = Astro.props;
               )}
               {c.badgeImage && (
                 <div class="certification-badge-popover" aria-hidden="true">
-                  <img src={c.badgeImage} alt="" width="160" height="160" loading="lazy" />
+                  <img
+                    src={c.badgeImage}
+                    alt=""
+                    width="160"
+                    height="160"
+                    loading="lazy"
+                    data-fallback={c.badgeImageFallback}
+                    onerror="const fb=this.dataset.fallback;if(fb&&this.src!==fb){this.src=fb}else{this.parentElement.style.display='none'}"
+                  />
                 </div>
               )}
             </>
