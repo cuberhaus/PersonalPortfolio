@@ -12,6 +12,7 @@ type CertEntry = {
   issued: string;
   link?: string;
   fallback?: string;
+  badgeImage?: string;
   hidden?: boolean;
 };
 
@@ -49,6 +50,11 @@ const { num } = Astro.props;
                 <p class="certification-credential">
                   {t('certifications.viewCredential')} <span aria-hidden="true">↗</span>
                 </p>
+              )}
+              {c.badgeImage && (
+                <div class="certification-badge-popover" aria-hidden="true">
+                  <img src={c.badgeImage} alt="" width="160" height="160" loading="lazy" />
+                </div>
               )}
             </>
           );
@@ -179,6 +185,43 @@ const { num } = Astro.props;
   .certification-link:hover .certification-credential,
   .certification-link:focus-visible .certification-credential {
     color: var(--accent-text);
+  }
+
+  /* Badge image popover on hover */
+  .certification-badge-popover {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    max-width: 120px;
+    max-height: 80px;
+    opacity: 0;
+    transform: scale(0.8) translateY(4px);
+    pointer-events: none;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+    z-index: 2;
+  }
+
+  .certification-badge-popover img {
+    max-width: 100%;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+  }
+
+  .certification-card:hover .certification-badge-popover {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .certification-badge-popover {
+      display: none;
+    }
   }
 
   /* Desktop: hide items beyond 6 */

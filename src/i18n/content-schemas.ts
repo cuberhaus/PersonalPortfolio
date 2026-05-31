@@ -65,7 +65,7 @@ export const EducationFileSchema = z.array(
 );
 
 // ─── certifications.json (identity-only) ────────────────────────
-// Each entry: { name, issuer, issuerIcon, link?, fallback? }
+// Each entry: { name, issuer, issuerIcon, link?, fallback?, badgeImage? }
 
 export const CertificationsFileSchema = z.array(
   z.object({
@@ -74,6 +74,7 @@ export const CertificationsFileSchema = z.array(
     issuerIcon: z.enum(issuerIconNames),
     link: credentialUrl.optional(),
     fallback: z.string().optional(),
+    badgeImage: httpsUrl.optional(),
     ...visibility,
   })
 );
