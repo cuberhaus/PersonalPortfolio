@@ -162,6 +162,17 @@ const { num } = Astro.props;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    min-width: 24px;
+    min-height: 24px;
+  }
+
+  .certification-icon :global(svg) {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 
   .certification-period {
@@ -219,7 +230,6 @@ const { num } = Astro.props;
     height: auto;
     object-fit: contain;
     border-radius: var(--radius-lg);
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
   }
 
   .certification-card:hover .certification-badge-popover {
@@ -229,7 +239,14 @@ const { num } = Astro.props;
 
   @media (max-width: 768px) {
     .certification-badge-popover {
-      display: none;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      max-width: 60px;
+      max-height: 60px;
+    }
+
+    .certification-badge-popover img {
+      max-height: 60px;
     }
   }
 
