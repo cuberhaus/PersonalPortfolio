@@ -27,7 +27,7 @@
   "dependencies": {
     "@astrojs/react": "^5.0.5",
     "@astrojs/sitemap": "^3.7.2",
-    "@sentry/astro": "^10.53.1",
+    "@sentry/astro": "^10.55.0",
     "@spotlightjs/astro": "^3.2.6",
     "@zootools/email-spell-checker": "^1.12.0",
     "astro": "^6.3.7",
