@@ -25,12 +25,12 @@
     "i18n:review": "tsx scripts/i18n-review.ts"
   },
   "dependencies": {
-    "@astrojs/react": "^5.0.5",
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/react": "^5.0.7",
+    "@astrojs/sitemap": "^3.7.3",
     "@sentry/astro": "^10.55.0",
     "@spotlightjs/astro": "^3.2.6",
     "@zootools/email-spell-checker": "^1.12.0",
-    "astro": "^6.3.7",
+    "astro": "^6.4.4",
     "d3-array": "^3.2.4",
     "d3-geo": "^3.1.1",
     "d3-scale": "^4.0.2",
