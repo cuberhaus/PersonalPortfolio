@@ -8,6 +8,13 @@
 # the loop for breaking changes — the Astro 5 → 6 jump in PR #89 is the
 # template for how those should land (one focused PR with a migration
 # checklist, not a Dependabot drive-by).
+#
+# Schema note: when an `updates:` entry references a `multi-ecosystem-group`,
+# the schedule is inherited from the group; the entry must NOT specify its
+# own `schedule:` and the `patterns:` key does not belong at entry level
+# (that's a `groups:` block field, which is mutually exclusive with
+# `multi-ecosystem-group` here). See:
+# https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 
 version: 2
 
@@ -22,9 +29,8 @@ multi-ecosystem-groups:
 updates:
   - package-ecosystem: npm
     directory: /
-    patterns:
-      - '*'
     multi-ecosystem-group: weekly-dependency-refresh
+    open-pull-requests-limit: 5
     ignore:
       - dependency-name: '*'
         update-types:
@@ -32,17 +38,13 @@ updates:
     commit-message:
       prefix: chore(deps)
       include: scope
-    labels:
-      - dependencies
 
   - package-ecosystem: github-actions
     directory: /
-    patterns:
-      - '*'
     multi-ecosystem-group: weekly-dependency-refresh
+    open-pull-requests-limit: 3
     commit-message:
       prefix: chore(ci)
       include: scope
     labels:
-      - dependencies
       - ci
