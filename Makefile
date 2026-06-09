@@ -11,7 +11,7 @@ endif
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
        clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update help ports \
-       i18n-review \
+       i18n-review skills-list skills-update skills-restore \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
        _db-rob _db-par _db-fib _db-grafics
@@ -354,6 +354,20 @@ test: ## Run ALL test suites (portfolio + every demo backend)
 
 i18n-review: ## Generate a local HTML page showing all translation namespaces side-by-side
 	npx tsx scripts/i18n-review.ts
+
+##@ Skills
+
+skills-list: ## List project skills installed via skills-lock.json
+	@npx skills list -p
+
+skills-update: ## Update project skills and show what changed
+	@npx skills update -p -y
+	@echo ""
+	@echo "Changed skill files:"
+	@git diff --name-only -- .agents/skills skills-lock.json || true
+
+skills-restore: ## Restore pinned skills from skills-lock.json
+	@npx skills experimental_install
 
 ##@ Cleanup
 
