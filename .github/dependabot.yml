@@ -9,14 +9,15 @@
 # template for how those should land (one focused PR with a migration
 # checklist, not a Dependabot drive-by).
 #
-# Schema note (multi-ecosystem-groups, currently public preview): when an
-# `updates:` entry references a `multi-ecosystem-group`, Dependabot REQUIRES
-# `patterns:` at the entry level (NOT inside a `groups:` block). The schema
-# validator rejects the config otherwise:
-#   "The property '#/updates/0/patterns' is required when
-#    'multi-ecosystem-group' is set."
-# Schedule is inherited from the group definition; do NOT add `schedule:`
-# at the entry level. See:
+# Schema notes (multi-ecosystem-groups, currently public preview):
+# When an `updates:` entry references a `multi-ecosystem-group`:
+#   - `patterns:` is REQUIRED at the entry level (NOT inside a `groups:` block).
+#   - `commit-message:` and `open-pull-requests-limit:` must live on the GROUP
+#     definition, not on the entry.
+#   - `schedule:` is inherited from the group; do not set it on the entry.
+#   - `ignore:`, `labels:` are still allowed at entry level.
+# The validator surfaces the exact rules in PR check output; consult those if
+# editing this file. Reference:
 # https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 
 version: 2
@@ -28,6 +29,10 @@ multi-ecosystem-groups:
       day: monday
     labels:
       - dependencies
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(deps)
+      include: scope
 
 updates:
   - package-ecosystem: npm
@@ -35,23 +40,15 @@ updates:
     multi-ecosystem-group: weekly-dependency-refresh
     patterns:
       - '*'
-    open-pull-requests-limit: 5
     ignore:
       - dependency-name: '*'
         update-types:
           - version-update:semver-major
-    commit-message:
-      prefix: chore(deps)
-      include: scope
 
   - package-ecosystem: github-actions
     directory: /
     multi-ecosystem-group: weekly-dependency-refresh
     patterns:
       - '*'
-    open-pull-requests-limit: 3
-    commit-message:
-      prefix: chore(ci)
-      include: scope
     labels:
       - ci
