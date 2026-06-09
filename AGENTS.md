@@ -29,6 +29,18 @@ If a guide conflicts with this file, follow the guide and update the stale rule 
 - **Asset paths** — always BASE_URL-aware: `const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;` then `base + '/asset.png'`. Use `existsSync()` for optional assets (profile image, CV).
 - **Accessibility & motion** — semantic landmarks, `aria-expanded`/`aria-controls`/`aria-current`, `role="status" aria-live="polite"` for dynamic feedback, `aria-hidden="true"` for decorative SVGs. Wrap animations in `@media (prefers-reduced-motion: reduce)` and use `--transition-fast/base/slow` instead of literal ms.
 
+## Agent skills
+
+Installable skills live under `.agents/skills/` (gitignored; restore with `make skills-restore`). Pinned versions are in [skills-lock.json](skills-lock.json).
+
+- **astro** — consult when modifying `.astro` pages, layouts, or islands hydration directives.
+- **vercel-react-best-practices** — consult when editing React 19 islands under `src/components/`.
+- **vitest** — consult when adding or modifying Vitest unit tests (`*.test.ts`).
+- **playwright-best-practices** — consult when adding/modifying Playwright tests (`browser-demos`, `live-demos`, `themes` projects).
+- **accessibility** — consult before merging UI changes; pair with the a11y Playwright project.
+- **performance** — consult when optimizing bundle size, LCP, or Core Web Vitals.
+- **sentry-workflow** — consult when touching Sentry configuration / observability.
+
 ## Pitfalls
 
 - **Astro ViewTransitions** — `DOMContentLoaded` does not fire on client-side navigation. Bind init logic to **both** `DOMContentLoaded` and `astro:page-load`, or use `<script is:inline>` when you need to bypass the bundler.
