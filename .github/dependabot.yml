@@ -8,6 +8,17 @@
 # the loop for breaking changes — the Astro 5 → 6 jump in PR #89 is the
 # template for how those should land (one focused PR with a migration
 # checklist, not a Dependabot drive-by).
+#
+# Schema notes (multi-ecosystem-groups, currently public preview):
+# When an `updates:` entry references a `multi-ecosystem-group`:
+#   - `patterns:` is REQUIRED at the entry level (NOT inside a `groups:` block).
+#   - `commit-message:` and `open-pull-requests-limit:` must live on the GROUP
+#     definition, not on the entry.
+#   - `schedule:` is inherited from the group; do not set it on the entry.
+#   - `ignore:`, `labels:` are still allowed at entry level.
+# The validator surfaces the exact rules in PR check output; consult those if
+# editing this file. Reference:
+# https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 
 version: 2
 
@@ -18,31 +29,26 @@ multi-ecosystem-groups:
       day: monday
     labels:
       - dependencies
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore(deps)
+      include: scope
 
 updates:
   - package-ecosystem: npm
     directory: /
+    multi-ecosystem-group: weekly-dependency-refresh
     patterns:
       - '*'
-    multi-ecosystem-group: weekly-dependency-refresh
     ignore:
       - dependency-name: '*'
         update-types:
           - version-update:semver-major
-    commit-message:
-      prefix: chore(deps)
-      include: scope
-    labels:
-      - dependencies
 
   - package-ecosystem: github-actions
     directory: /
+    multi-ecosystem-group: weekly-dependency-refresh
     patterns:
       - '*'
-    multi-ecosystem-group: weekly-dependency-refresh
-    commit-message:
-      prefix: chore(ci)
-      include: scope
     labels:
-      - dependencies
       - ci
