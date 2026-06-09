@@ -6,7 +6,7 @@ ifeq ($(OS),Windows_NT)
   .SHELLFLAGS := -c
 endif
 
-.PHONY: install dev dev-bare all all-stop log-relay build build-images preview stop restart health \
+.PHONY: install hooks dev dev-bare all all-stop log-relay build build-images preview stop restart health \
        rebuild free-ports check-registry \
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
@@ -32,6 +32,10 @@ else
 	@$(CARGO_ENV) \
 	command -v cargo >/dev/null 2>&1 || { echo "Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; }
 endif
+
+hooks: ## Enable tracked git hooks (pre-push guard against direct main/master pushes)
+	git config core.hooksPath .githooks
+	@echo "Git hooks enabled from .githooks/ (pre-push blocks direct main/master pushes)."
 
 ##@ Dev
 
