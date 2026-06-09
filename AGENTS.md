@@ -36,14 +36,4 @@ If a guide conflicts with this file, follow the guide and update the stale rule 
 - **Live demo specs** — guard with `test.skip(!response.ok(), 'Backend unreachable')` so missing Docker backends don't fail CI.
 - **`.cursorrules` stays** — Cursor reads it. Do not delete or rename; mirror substantive changes here.
 
-## Git hooks
-
-`main` is protected on GitHub. A tracked `pre-push` hook in `.githooks/` blocks accidental direct pushes to `main`/`master`. Activate it once per clone:
-
-```powershell
-make hooks
-```
-
-Override in an emergency with `git push --no-verify`.
-
 See [README.md](README.md) for full setup and usage.
