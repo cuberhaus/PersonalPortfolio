@@ -36,3 +36,5 @@ translations/
 project.inlang/cache/
 
 NUL
+# Agent skills installed content (lockfile-tracked, content reproducible via `make skills-restore`)
+.agents/skills/
