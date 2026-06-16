@@ -2,8 +2,7 @@
   "about": {
     "cv": "Descarregar CV",
     "cvDownload": "Descarregar",
-    "cvSectionsTitle": "Personalitza les seccions",
-    "cvSectionsHint": "Tria quines seccions incloure. Resum, formació i experiència sempre s'inclouen.",
+    "cvSectionsTitle": "Seccions opcionals",
     "cvSectionSkills": "Habilitats",
     "cvSectionProjects": "Projectes destacats",
     "cvSectionExtracurricular": "Activitats extracurriculars",

@@ -2,8 +2,7 @@
   "about": {
     "cv": "Download CV",
     "cvDownload": "Download",
-    "cvSectionsTitle": "Customise sections",
-    "cvSectionsHint": "Pick which sections to include. Summary, education and experience are always included.",
+    "cvSectionsTitle": "Optional sections",
     "cvSectionSkills": "Skills",
     "cvSectionProjects": "Selected projects",
     "cvSectionExtracurricular": "Extracurricular activity",

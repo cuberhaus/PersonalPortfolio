@@ -19,8 +19,8 @@ type Lang = 'en' | 'es' | 'ca';
 interface Props {
   lang: Lang;
   labels: {
+    title: string;
     sectionsTitle: string;
-    sectionsHint: string;
     skills: string;
     projects: string;
     extracurricular: string;
@@ -66,36 +66,15 @@ export default function CvDownloader({ lang, labels }: Props) {
   const formId = useId();
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.75rem',
-        padding: '1rem',
-        border: '1px solid var(--border, rgba(127,127,127,0.3))',
-        borderRadius: '0.5rem',
-        background: 'var(--surface, transparent)',
-        maxWidth: '28rem',
-      }}
-    >
-      <div>
-        <strong style={{ display: 'block', marginBottom: '0.25rem' }}>
-          {labels.sectionsTitle}
-        </strong>
-        <small style={{ opacity: 0.75 }}>{labels.sectionsHint}</small>
-      </div>
+    <div className="cv-dl">
+      <style>{CV_DL_STYLES}</style>
+      <h3 className="cv-dl-title">
+        <DownloadIcon />
+        <span>{labels.title}</span>
+      </h3>
 
-      <fieldset
-        style={{
-          border: 'none',
-          padding: 0,
-          margin: 0,
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-          gap: '0.4rem 1rem',
-        }}
-      >
-        <legend className="sr-only">{labels.sectionsTitle}</legend>
+      <fieldset className="cv-dl-options">
+        <legend className="cv-dl-legend">{labels.sectionsTitle}</legend>
         <Toggle
           id={`${formId}-skills`}
           label={labels.skills}
@@ -123,27 +102,14 @@ export default function CvDownloader({ lang, labels }: Props) {
       </fieldset>
 
       <a
+        className="cv-dl-btn"
         href={href}
         download={`cv_${cvLang}_${toggles}.pdf`}
         target="_blank"
         rel="noopener noreferrer"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          padding: '0.6rem 1rem',
-          background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), linear-gradient(135deg, var(--accent-start), var(--accent-end))`,
-          color: '#fff',
-          border: 'none',
-          borderRadius: '0.375rem',
-          fontWeight: 600,
-          textDecoration: 'none',
-          cursor: 'pointer',
-          alignSelf: 'flex-start',
-        }}
       >
         <DownloadIcon />
-        {labels.download}
+        <span>{labels.download}</span>
       </a>
     </div>
   );
@@ -158,24 +124,16 @@ interface ToggleProps {
 
 function Toggle({ id, label, checked, onChange }: ToggleProps) {
   return (
-    <label
-      htmlFor={id}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-        cursor: 'pointer',
-        userSelect: 'none',
-      }}
-    >
+    <label htmlFor={id} className="cv-dl-opt">
       <input
         id={id}
         type="checkbox"
+        className="cv-dl-input"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        style={{ cursor: 'pointer' }}
       />
-      <span>{label}</span>
+      <span className="cv-dl-box" aria-hidden="true" />
+      <span className="cv-dl-label">{label}</span>
     </label>
   );
 }
@@ -183,8 +141,8 @@ function Toggle({ id, label, checked, onChange }: ToggleProps) {
 function DownloadIcon() {
   return (
     <svg
-      width="18"
-      height="18"
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -199,3 +157,157 @@ function DownloadIcon() {
     </svg>
   );
 }
+
+const CV_DL_STYLES = `
+  .cv-dl {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    max-width: 28rem;
+    transition: border-color var(--transition-base);
+  }
+  .cv-dl:focus-within {
+    border-color: var(--border-color-hover);
+  }
+
+  .cv-dl-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+  .cv-dl-title svg {
+    color: var(--accent-text);
+    flex: 0 0 auto;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .cv-dl-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem 1.25rem;
+    border: none;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+  .cv-dl-legend {
+    grid-column: 1 / -1;
+    padding: 0;
+    margin: 0 0 0.15rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  @media (max-width: 480px) {
+    .cv-dl-options { grid-template-columns: 1fr; }
+  }
+
+  .cv-dl-opt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    user-select: none;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    transition: color var(--transition-fast);
+  }
+  .cv-dl-opt:hover { color: var(--text-primary); }
+
+  .cv-dl-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .cv-dl-box {
+    flex: 0 0 auto;
+    width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 4px;
+    border: 1.5px solid var(--border-color-hover);
+    background: transparent;
+    position: relative;
+    transition:
+      background var(--transition-fast),
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+  .cv-dl-opt:hover .cv-dl-box {
+    border-color: var(--accent-text);
+  }
+  .cv-dl-input:focus-visible + .cv-dl-box {
+    outline: 2px solid var(--accent-start);
+    outline-offset: 2px;
+  }
+  .cv-dl-input:checked + .cv-dl-box {
+    background: var(--accent-gradient);
+    border-color: transparent;
+  }
+  .cv-dl-box::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: 0.32rem;
+    height: 0.6rem;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    transition: transform var(--transition-fast);
+  }
+  .cv-dl-input:checked + .cv-dl-box::after {
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  }
+  .cv-dl-input:checked ~ .cv-dl-label {
+    color: var(--text-primary);
+  }
+
+  .cv-dl-label { line-height: 1.3; }
+
+  .cv-dl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    align-self: flex-start;
+    cursor: pointer;
+    transition:
+      color var(--transition-base),
+      border-color var(--transition-base),
+      background var(--transition-base),
+      transform var(--transition-fast);
+  }
+  .cv-dl-btn:hover {
+    color: var(--accent-text);
+    border-color: var(--accent-text);
+    background: rgba(129, 140, 248, 0.08);
+  }
+  .cv-dl-btn:active { transform: translateY(1px); }
+`;
