@@ -21,7 +21,6 @@ interface Props {
   labels: {
     title: string;
     sectionsTitle: string;
-    sectionsHint: string;
     skills: string;
     projects: string;
     extracurricular: string;
@@ -69,15 +68,13 @@ export default function CvDownloader({ lang, labels }: Props) {
   return (
     <div className="cv-dl">
       <style>{CV_DL_STYLES}</style>
-      <div className="cv-dl-head">
-        <h3 className="cv-dl-title">
-          <DownloadIcon />
-          <span>{labels.title}</span>
-        </h3>
-        <p className="cv-dl-hint">{labels.sectionsHint}</p>
-      </div>
+      <h3 className="cv-dl-title">
+        <DownloadIcon />
+        <span>{labels.title}</span>
+      </h3>
 
-      <fieldset className="cv-dl-options" aria-label={labels.sectionsTitle}>
+      <fieldset className="cv-dl-options">
+        <legend className="cv-dl-legend">{labels.sectionsTitle}</legend>
         <Toggle
           id={`${formId}-skills`}
           label={labels.skills}
@@ -178,11 +175,6 @@ const CV_DL_STYLES = `
     border-color: var(--border-color-hover);
   }
 
-  .cv-dl-head {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
   .cv-dl-title {
     display: inline-flex;
     align-items: center;
@@ -199,12 +191,6 @@ const CV_DL_STYLES = `
     width: 1.1rem;
     height: 1.1rem;
   }
-  .cv-dl-hint {
-    margin: 0;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: var(--text-secondary);
-  }
 
   .cv-dl-options {
     display: grid;
@@ -214,6 +200,17 @@ const CV_DL_STYLES = `
     padding: 0;
     margin: 0;
     min-width: 0;
+  }
+  .cv-dl-legend {
+    grid-column: 1 / -1;
+    padding: 0;
+    margin: 0 0 0.15rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
   }
   @media (max-width: 480px) {
     .cv-dl-options { grid-template-columns: 1fr; }

@@ -2,8 +2,7 @@
   "about": {
     "cv": "Download CV",
     "cvDownload": "Download",
-    "cvSectionsTitle": "Customise sections",
-    "cvSectionsHint": "Pick which sections to include.",
+    "cvSectionsTitle": "Optional sections",
     "cvSectionSkills": "Skills",
     "cvSectionProjects": "Selected projects",
     "cvSectionExtracurricular": "Extracurricular activity",

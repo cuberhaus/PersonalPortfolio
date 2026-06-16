@@ -2,8 +2,7 @@
   "about": {
     "cv": "Descarregar CV",
     "cvDownload": "Descarregar",
-    "cvSectionsTitle": "Personalitza les seccions",
-    "cvSectionsHint": "Tria quines seccions incloure.",
+    "cvSectionsTitle": "Seccions opcionals",
     "cvSectionSkills": "Habilitats",
     "cvSectionProjects": "Projectes destacats",
     "cvSectionExtracurricular": "Activitats extracurriculars",
