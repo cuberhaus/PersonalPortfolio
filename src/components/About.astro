@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { LOCALES, DEFAULT_LOCALE, type Locale } from '../config/locales';
+import CvDownloader from './CvDownloader';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -32,8 +33,23 @@ const cvHash = cvFile
 // We calculate the path dynamically so it evaluates correctly at build time
 const hasProfileImage = existsSync(resolve('./public/profile.jpg'));
 const hasCV = cvFile !== null;
+// True when the 48 toggle variants are present (fetched in deploy.yml's
+// build-time step). Sentinel check on the canonical 0111 English variant
+// keeps the cost to one fs lookup. When false (e.g. local dev without a
+// prefetched public/cv/ folder), fall back to the single legacy button.
+const hasCvVariants = existsSync(resolve(`./public/cv/cv_english_0111.pdf`));
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
+
+const cvLabels = {
+  sectionsTitle: t('about.cvSectionsTitle'),
+  sectionsHint: t('about.cvSectionsHint'),
+  skills: t('about.cvSectionSkills'),
+  projects: t('about.cvSectionProjects'),
+  extracurricular: t('about.cvSectionExtracurricular'),
+  certifications: t('about.cvSectionCertifications'),
+  download: t('about.cvDownload'),
+};
 
 const { num } = Astro.props;
 ---
@@ -60,7 +76,11 @@ const { num } = Astro.props;
         </ul>
 
         {
-          hasCV && (
+          hasCvVariants ? (
+            <div class="about-actions">
+              <CvDownloader lang={lang} labels={cvLabels} client:visible />
+            </div>
+          ) : hasCV ? (
             <div class="about-actions">
               <a href={cvHref} class="about-cv-btn" target="_blank" rel="noopener noreferrer">
                 <svg
@@ -80,7 +100,7 @@ const { num } = Astro.props;
                 {t('about.cv')}
               </a>
             </div>
-          )
+          ) : null
         }
       </div>
 

@@ -14,6 +14,7 @@ coverage/
 public/cv.pdf
 public/cv_es.pdf
 public/cv_ca.pdf
+public/cv/
 
 # OG images regenerated on every deploy by scripts/capture-og-images.mjs
 public/og-image.png

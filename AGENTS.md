@@ -47,5 +47,7 @@ Installable skills live under `.agents/skills/` (gitignored; restore with `make 
 - **`data-astro-reload`** — required on links that change language, switch demos, or return from a demo to the portfolio; otherwise transitions break layout/lang context.
 - **Live demo specs** — guard with `test.skip(!response.ok(), 'Backend unreachable')` so missing Docker backends don't fail CI.
 - **`.cursorrules` stays** — Cursor reads it. Do not delete or rename; mirror substantive changes here.
+- **CV download has two modes** — `About.astro` uses [`CvDownloader.tsx`](src/components/CvDownloader.tsx) (4 section checkboxes) when `public/cv/cv_english_0111.pdf` exists (i.e. `deploy.yml` has fetched the 48 variants from cuberhaus/cv). Falls back to a single legacy download button when only `public/cv.pdf` / `cv_es.pdf` / `cv_ca.pdf` are present (local dev). To exercise the variant UI locally, create a stub `public/cv/cv_english_0111.pdf` and run `npm run dev`.
+- **CV variant filename contract** — `cv_<lang>_<cepsbits>.pdf` where each bit toggles certifications / extracurricular / projects / skills (left to right). The cuberhaus/cv repo owns this naming; any change to the toggle set must be coordinated in lockstep across both repos (cv's `.tex` files + matrix + this repo's `CvDownloader.tsx` + i18n keys + `deploy.yml` fetch loop).
 
 See [README.md](README.md) for full setup and usage.

@@ -1,6 +1,13 @@
 {
   "about": {
     "cv": "Descarregar CV",
+    "cvDownload": "Descarregar",
+    "cvSectionsTitle": "Personalitza les seccions",
+    "cvSectionsHint": "Tria quines seccions incloure. Resum, formació i experiència sempre s'inclouen.",
+    "cvSectionSkills": "Habilitats",
+    "cvSectionProjects": "Projectes destacats",
+    "cvSectionExtracurricular": "Activitats extracurriculars",
+    "cvSectionCertifications": "Certificacions",
     "label": "Sobre mi",
     "p1": "Hola! Soc el Pol, Enginyer Informàtic de Barcelona. Em vaig graduar a la Facultat d'Informàtica de Barcelona (FIB) de la UPC i ara treballo com a Consultor d'IA i Dades a Deloitte, on passo la major part dels dies a la intersecció de la IA, les plataformes de dades i la realitat una mica caòtica de fer-les útils.",
     "p2": "El que realment gaudeixo és construir: explorar eines noves, entendre com encaixen entre si i ajudar el meu equip a tirar endavant coses de les quals estiguem orgullosos. M'importa més resoldre el problema que fer servir l'stack més de moda, tot i que m'alegra quan les dues coses coincideixen.",

@@ -1,6 +1,13 @@
 {
   "about": {
     "cv": "Download CV",
+    "cvDownload": "Download",
+    "cvSectionsTitle": "Customise sections",
+    "cvSectionsHint": "Pick which sections to include. Summary, education and experience are always included.",
+    "cvSectionSkills": "Skills",
+    "cvSectionProjects": "Selected projects",
+    "cvSectionExtracurricular": "Extracurricular activity",
+    "cvSectionCertifications": "Certifications",
     "label": "About",
     "p1": "Hi! I'm Pol — a Computer Science Engineer from Barcelona. I graduated from UPC's Facultat d'Informàtica de Barcelona (FIB) and now work as an AI & Data Consultant at Deloitte, where most of my days are spent at the intersection of AI, data platforms, and the messy reality of making them useful.",
     "p2": "What I actually enjoy is building stuff — exploring new tools, figuring out how they fit together, and helping my team ship things we're proud of. I care more about solving the problem than about picking the trendiest stack, though I'm happy when both line up.",
