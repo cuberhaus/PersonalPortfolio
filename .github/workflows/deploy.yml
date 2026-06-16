@@ -37,11 +37,27 @@ jobs:
       - name: Fetch latest CV PDFs from cuberhaus/cv
         run: |
           set -e
-          mkdir -p public
+          mkdir -p public public/cv
           BASE="https://github.com/cuberhaus/cv/releases/latest/download"
+
+          # Back-compat aliases consumed by About.astro's server-side fallback
+          # (existsSync(public/cv*.pdf)). The cv repo publishes cv_<lang>.pdf
+          # as an alias for cv_<lang>_0111.pdf (canonical CV, no certifications).
           curl -fL -o public/cv.pdf    "$BASE/cv_english.pdf"
           curl -fL -o public/cv_es.pdf "$BASE/cv_spanish.pdf"
           curl -fL -o public/cv_ca.pdf "$BASE/cv_catalan.pdf"
+
+          # 48 variant PDFs for the CvDownloader checkbox UI. Filename
+          # convention: cv_<lang>_<cepsbits>.pdf where each bit toggles
+          # certifications / extracurricular / projects / skills (left to
+          # right). summary / education / experience are always included.
+          for lang in english spanish catalan; do
+            for c in 0 1; do for e in 0 1; do for p in 0 1; do for s in 0 1; do
+              toggles="${c}${e}${p}${s}"
+              curl -fL -o "public/cv/cv_${lang}_${toggles}.pdf" \
+                "$BASE/cv_${lang}_${toggles}.pdf"
+            done; done; done; done
+          done
 
       - name: Build site
         run: npm run build
