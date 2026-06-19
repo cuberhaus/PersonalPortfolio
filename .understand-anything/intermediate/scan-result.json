@@ -1,0 +1,2755 @@
+{
+  "name": "personal-portfolio",
+  "description": "Dark-themed personal portfolio built with Astro 5 and React 19 islands showcasing 20 interactive demos, with three-locale (EN/ES/CA) i18next i18n, Sentry observability, sharded accessibility CI, and a FastAPI planner backend. Note: this project has over 100 source files; consider scoping analysis to a subdirectory for faster results.",
+  "languages": [
+    "astro",
+    "css",
+    "dockerfile",
+    "html",
+    "javascript",
+    "json",
+    "makefile",
+    "markdown",
+    "pddl",
+    "python",
+    "shell",
+    "txt",
+    "typescript",
+    "yaml"
+  ],
+  "frameworks": [
+    "Astro",
+    "React",
+    "Vite",
+    "Vitest",
+    "Playwright",
+    "FastAPI",
+    "Sentry",
+    "i18next",
+    "D3",
+    "Docker",
+    "GitHub Actions"
+  ],
+  "files": [
+    {
+      "path": ".gitattributes",
+      "language": "unknown",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".githooks/pre-push",
+      "language": "unknown",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "language": "yaml",
+      "sizeLines": 54,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "language": "yaml",
+      "sizeLines": 4,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "language": "markdown",
+      "sizeLines": 22,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "language": "yaml",
+      "sizeLines": 111,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/skills-update.yml",
+      "language": "yaml",
+      "sizeLines": 43,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/test.yml",
+      "language": "yaml",
+      "sizeLines": 278,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/visual-baselines.yml",
+      "language": "yaml",
+      "sizeLines": 85,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".prettierignore",
+      "language": "unknown",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".prettierrc.json",
+      "language": "json",
+      "sizeLines": 20,
+      "fileCategory": "config"
+    },
+    {
+      "path": "AGENTS.md",
+      "language": "markdown",
+      "sizeLines": 53,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "astro.config.mjs",
+      "language": "javascript",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "check-error.mjs",
+      "language": "javascript",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "language": "markdown",
+      "sizeLines": 133,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "crowdin.yml",
+      "language": "yaml",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "docs/architecture/debugging-architecture.md",
+      "language": "markdown",
+      "sizeLines": 448,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/architecture/decisions.md",
+      "language": "markdown",
+      "sizeLines": 642,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/architecture/observability.md",
+      "language": "markdown",
+      "sizeLines": 615,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/architecture/overview.md",
+      "language": "markdown",
+      "sizeLines": 195,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/architecture/ui-experiments.md",
+      "language": "markdown",
+      "sizeLines": 88,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guides/adding-a-demo.md",
+      "language": "markdown",
+      "sizeLines": 631,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guides/everyday-tasks.md",
+      "language": "markdown",
+      "sizeLines": 327,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guides/i18n.md",
+      "language": "markdown",
+      "sizeLines": 376,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/guides/testing.md",
+      "language": "markdown",
+      "sizeLines": 210,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/troubleshooting.md",
+      "language": "markdown",
+      "sizeLines": 341,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "e2e/a11y.spec.ts",
+      "language": "typescript",
+      "sizeLines": 303,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/browser-demos.spec.ts",
+      "language": "typescript",
+      "sizeLines": 900,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/debug-overlay.spec.ts",
+      "language": "typescript",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/keyboard.spec.ts",
+      "language": "typescript",
+      "sizeLines": 184,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/live-demos.spec.ts",
+      "language": "typescript",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/portfolio-smoke.spec.ts",
+      "language": "typescript",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/themes.spec.ts",
+      "language": "typescript",
+      "sizeLines": 333,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/visual.spec.ts",
+      "language": "typescript",
+      "sizeLines": 132,
+      "fileCategory": "code"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "language": "javascript",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lefthook.yml",
+      "language": "yaml",
+      "sizeLines": 20,
+      "fileCategory": "config"
+    },
+    {
+      "path": "lighthouserc.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/apa-practica-demo.json",
+      "language": "json",
+      "sizeLines": 64,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/bits-xmarato-demo.json",
+      "language": "json",
+      "sizeLines": 102,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/caim-demo.json",
+      "language": "json",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/caim-pagerank.json",
+      "language": "json",
+      "sizeLines": 17,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/caim-zipf.json",
+      "language": "json",
+      "sizeLines": 14,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/certifications.json",
+      "language": "json",
+      "sizeLines": 47,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/demos.json",
+      "language": "json",
+      "sizeLines": 172,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/desastres-ia-demo.json",
+      "language": "json",
+      "sizeLines": 151,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/designs.json",
+      "language": "json",
+      "sizeLines": 69,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/draculin-demo.json",
+      "language": "json",
+      "sizeLines": 28,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/education.json",
+      "language": "json",
+      "sizeLines": 12,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/experience.json",
+      "language": "json",
+      "sizeLines": 20,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/fib-demo.json",
+      "language": "json",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/grafics-demo.json",
+      "language": "json",
+      "sizeLines": 10,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/joc-eda-page.json",
+      "language": "json",
+      "sizeLines": 29,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/jsbach-demo.json",
+      "language": "json",
+      "sizeLines": 10,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/live-app-embed.json",
+      "language": "json",
+      "sizeLines": 11,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/mpids-demo.json",
+      "language": "json",
+      "sizeLines": 33,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/par-demo.json",
+      "language": "json",
+      "sizeLines": 16,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/phase-transitions-demo.json",
+      "language": "json",
+      "sizeLines": 32,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/planificacion-demo.json",
+      "language": "json",
+      "sizeLines": 86,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/pro2-demo.json",
+      "language": "json",
+      "sizeLines": 44,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/prop-page.json",
+      "language": "json",
+      "sizeLines": 27,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/rob-demo.json",
+      "language": "json",
+      "sizeLines": 8,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/sbc-demo.json",
+      "language": "json",
+      "sizeLines": 62,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/skills.json",
+      "language": "json",
+      "sizeLines": 14,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/spmatriculas-demo.json",
+      "language": "json",
+      "sizeLines": 23,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/tenda-demo.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/tenda-page.json",
+      "language": "json",
+      "sizeLines": 10,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/tfg-polyp-demo.json",
+      "language": "json",
+      "sizeLines": 107,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/ui.json",
+      "language": "json",
+      "sizeLines": 135,
+      "fileCategory": "config"
+    },
+    {
+      "path": "locales/en/work_projects.json",
+      "language": "json",
+      "sizeLines": 26,
+      "fileCategory": "config"
+    },
+    {
+      "path": "Makefile",
+      "language": "makefile",
+      "sizeLines": 502,
+      "fileCategory": "infra"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "sizeLines": 75,
+      "fileCategory": "config"
+    },
+    {
+      "path": "planner-api/.dockerignore",
+      "language": "unknown",
+      "sizeLines": 4,
+      "fileCategory": "infra"
+    },
+    {
+      "path": "planner-api/app/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "planner-api/app/_sentry_obs.py",
+      "language": "python",
+      "sizeLines": 540,
+      "fileCategory": "code"
+    },
+    {
+      "path": "planner-api/app/main.py",
+      "language": "python",
+      "sizeLines": 262,
+      "fileCategory": "code"
+    },
+    {
+      "path": "planner-api/app/normalize.py",
+      "language": "python",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "planner-api/Dockerfile",
+      "language": "dockerfile",
+      "sizeLines": 17,
+      "fileCategory": "infra"
+    },
+    {
+      "path": "planner-api/README.md",
+      "language": "markdown",
+      "sizeLines": 48,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "planner-api/requirements.txt",
+      "language": "txt",
+      "sizeLines": 6,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "planner-api/tests/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "planner-api/tests/test_api.py",
+      "language": "python",
+      "sizeLines": 216,
+      "fileCategory": "code"
+    },
+    {
+      "path": "planner-api/tests/test_normalize.py",
+      "language": "python",
+      "sizeLines": 149,
+      "fileCategory": "code"
+    },
+    {
+      "path": "playwright.config.ts",
+      "language": "typescript",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "project.inlang/project_id",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "project.inlang/settings.json",
+      "language": "json",
+      "sizeLines": 47,
+      "fileCategory": "config"
+    },
+    {
+      "path": "public/.nojekyll",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "public/certifications/azure-fundamentals-az900.html",
+      "language": "html",
+      "sizeLines": 527,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "public/certifications/oracle-oci-ai-foundations.html",
+      "language": "html",
+      "sizeLines": 187,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "public/deloitte-physical-ai-press-release.html",
+      "language": "html",
+      "sizeLines": 7008,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "public/demos/joc-eda/css/ui-lightness/jquery-ui-1.8.18.custom.css",
+      "language": "css",
+      "sizeLines": 309,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "public/demos/joc-eda/help.html",
+      "language": "html",
+      "sizeLines": 17,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "public/demos/joc-eda/sample.out",
+      "language": "out",
+      "sizeLines": 20183,
+      "fileCategory": "code"
+    },
+    {
+      "path": "public/demos/joc-eda/viewer.html",
+      "language": "html",
+      "sizeLines": 100,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "public/demos/joc-eda/viewer.js",
+      "language": "javascript",
+      "sizeLines": 981,
+      "fileCategory": "code"
+    },
+    {
+      "path": "public/demos/mpids/football.txt",
+      "language": "txt",
+      "sizeLines": 615,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "public/demos/mpids/jazz.txt",
+      "language": "txt",
+      "sizeLines": 2744,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "public/demos/planificacion/agencia_de_viajes_domain_ext2.pddl",
+      "language": "pddl",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "public/demos/planificacion/agencia_de_viajes_problem_ext2.pddl",
+      "language": "pddl",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 203,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "scripts/_release_id.sh",
+      "language": "shell",
+      "sizeLines": 30,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/capture-og-images.mjs",
+      "language": "javascript",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/count-loc.sh",
+      "language": "shell",
+      "sizeLines": 139,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/dev-all-demos.sh",
+      "language": "shell",
+      "sizeLines": 541,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/git-hooks/no-commit-on-main.mjs",
+      "language": "javascript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/i18n-review.ts",
+      "language": "typescript",
+      "sizeLines": 267,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/log-relay/index.mjs",
+      "language": "javascript",
+      "sizeLines": 208,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/log-relay/package.json",
+      "language": "json",
+      "sizeLines": 14,
+      "fileCategory": "config"
+    },
+    {
+      "path": "scripts/log-relay/README.md",
+      "language": "markdown",
+      "sizeLines": 36,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "scripts/run-backend-tests.sh",
+      "language": "shell",
+      "sizeLines": 63,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/sentry-snippets/_sentry_obs.py",
+      "language": "python",
+      "sizeLines": 540,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/sentry-snippets/test__sentry_obs.py",
+      "language": "python",
+      "sizeLines": 244,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/static-preview.mjs",
+      "language": "javascript",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/wire-demos-og-image.mjs",
+      "language": "javascript",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/wrap-demos-with-error-boundary.mjs",
+      "language": "javascript",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "SECURITY.md",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sentry.client.config.ts",
+      "language": "typescript",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sentry.server.config.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "skills-lock.json",
+      "language": "json",
+      "sizeLines": 59,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/__tests__/apa-predictor.test.ts",
+      "language": "typescript",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/bitsx-diameter.test.ts",
+      "language": "typescript",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/caim-data.test.ts",
+      "language": "typescript",
+      "sizeLines": 126,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/caim-pagerank.test.ts",
+      "language": "typescript",
+      "sizeLines": 241,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/caim-zipf.test.ts",
+      "language": "typescript",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/content-parity.test.ts",
+      "language": "typescript",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/content-schemas.test.ts",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/data-integrity.test.ts",
+      "language": "typescript",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/debug-sentry.test.ts",
+      "language": "typescript",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/debug-session.test.ts",
+      "language": "typescript",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/debug.test.ts",
+      "language": "typescript",
+      "sizeLines": 277,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/demo-datasets.test.ts",
+      "language": "typescript",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/demo-registry.test.ts",
+      "language": "typescript",
+      "sizeLines": 248,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/demo-schema.test.ts",
+      "language": "typescript",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/demo-services.test.ts",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/desastres-search.test.ts",
+      "language": "typescript",
+      "sizeLines": 160,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/designs.test.ts",
+      "language": "typescript",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/draculin-demo-state.test.ts",
+      "language": "typescript",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/draculin-quiz.test.ts",
+      "language": "typescript",
+      "sizeLines": 100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/email-validator.test.ts",
+      "language": "typescript",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/error-boundary.test.tsx",
+      "language": "typescript",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/fib-kernels.test.ts",
+      "language": "typescript",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/graph-phase.test.ts",
+      "language": "typescript",
+      "sizeLines": 186,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/i18n-utils.test.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/imgproc.test.ts",
+      "language": "typescript",
+      "sizeLines": 315,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/jsbach-interpreter.test.ts",
+      "language": "typescript",
+      "sizeLines": 242,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/live-app-embed.test.ts",
+      "language": "typescript",
+      "sizeLines": 218,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/matriculas-pipeline.test.ts",
+      "language": "typescript",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/mpids.test.ts",
+      "language": "typescript",
+      "sizeLines": 111,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/par-kernels.test.ts",
+      "language": "typescript",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/planificacion-demo.test.ts",
+      "language": "typescript",
+      "sizeLines": 164,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/planificacion.test.ts",
+      "language": "typescript",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/portfolio-content.test.ts",
+      "language": "typescript",
+      "sizeLines": 116,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/rob-kernels.test.ts",
+      "language": "typescript",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/structural.test.ts",
+      "language": "typescript",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/tenda-demo-state.test.ts",
+      "language": "typescript",
+      "sizeLines": 220,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/tenda-mock.test.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/tfg-mock-boxes.test.ts",
+      "language": "typescript",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/theme-contrast.test.ts",
+      "language": "typescript",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/themes.test.ts",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__tests__/wpgma.test.ts",
+      "language": "typescript",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/About.astro",
+      "language": "astro",
+      "sizeLines": 250,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Analytics.astro",
+      "language": "astro",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Certifications.astro",
+      "language": "astro",
+      "sizeLines": 341,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Contact.astro",
+      "language": "astro",
+      "sizeLines": 505,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/CvDownloader.tsx",
+      "language": "typescript",
+      "sizeLines": 313,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/DebugInit.astro",
+      "language": "astro",
+      "sizeLines": 118,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/DebugMount.astro",
+      "language": "astro",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/DebugOverlay.tsx",
+      "language": "typescript",
+      "sizeLines": 635,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/DemoErrorBoundary.tsx",
+      "language": "typescript",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/DemoHeader.astro",
+      "language": "astro",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/DemoNav.astro",
+      "language": "astro",
+      "sizeLines": 370,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Demos.astro",
+      "language": "astro",
+      "sizeLines": 442,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/_styles.ts",
+      "language": "typescript",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/ApaPracticaDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 921,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/BitsXMaratoDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 638,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/caim/PageRankTab.tsx",
+      "language": "typescript",
+      "sizeLines": 447,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/caim/ZipfTab.tsx",
+      "language": "typescript",
+      "sizeLines": 485,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/CAIMDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/DesastresIADemo.tsx",
+      "language": "typescript",
+      "sizeLines": 784,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/DesastresVisual.tsx",
+      "language": "typescript",
+      "sizeLines": 356,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/DraculinDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 663,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/FibDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 216,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/GraficsDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 150,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/JSBachDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 316,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/LiveAppEmbed.tsx",
+      "language": "typescript",
+      "sizeLines": 278,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/MockBanner.tsx",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/MPIDSDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 624,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/ParDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 427,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/PhaseTransitionsDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 651,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/PlanificacionDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 885,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/Pro2Demo.tsx",
+      "language": "typescript",
+      "sizeLines": 689,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/RobDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 320,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/SbcDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 802,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/SPMatriculasDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 503,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/TendaDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 720,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/demos/TfgPolypDemo.tsx",
+      "language": "typescript",
+      "sizeLines": 921,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/DemoSidebar.astro",
+      "language": "astro",
+      "sizeLines": 275,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Education.astro",
+      "language": "astro",
+      "sizeLines": 147,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Experience.astro",
+      "language": "astro",
+      "sizeLines": 330,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Footer.astro",
+      "language": "astro",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Hero.astro",
+      "language": "astro",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/LanguagePicker.astro",
+      "language": "astro",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Navbar.astro",
+      "language": "astro",
+      "sizeLines": 397,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ScrollToTop.astro",
+      "language": "astro",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/Skills.astro",
+      "language": "astro",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ThemeInit.astro",
+      "language": "astro",
+      "sizeLines": 1140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ThemeToggle.astro",
+      "language": "astro",
+      "sizeLines": 133,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/WorkProjects.astro",
+      "language": "astro",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/config/locales.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/config/section-ids.ts",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/config/sections.ts",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/config/site.ts",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/certifications.json",
+      "language": "json",
+      "sizeLines": 118,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/demo-services.json",
+      "language": "json",
+      "sizeLines": 419,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/demo-services.ts",
+      "language": "typescript",
+      "sizeLines": 157,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/demos.json",
+      "language": "json",
+      "sizeLines": 288,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/education.json",
+      "language": "json",
+      "sizeLines": 10,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/experience.json",
+      "language": "json",
+      "sizeLines": 15,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/loaders.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/model_weights.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/pca_points.json",
+      "language": "json",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/sbc-mock.ts",
+      "language": "typescript",
+      "sizeLines": 528,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/skills.json",
+      "language": "json",
+      "sizeLines": 51,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/tenda-mock.ts",
+      "language": "typescript",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/tfg-model-results.json",
+      "language": "json",
+      "sizeLines": 142,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/visibility.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/work_projects.json",
+      "language": "json",
+      "sizeLines": 13,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/content-schemas.ts",
+      "language": "typescript",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demo-schema.ts",
+      "language": "typescript",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demo.ts",
+      "language": "typescript",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/apa-practica-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/bits-xmarato-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/caim-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/caim-pagerank.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/caim-zipf.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/desastres-ia-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/draculin-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/fib-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/grafics-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/joc-eda-page.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/jsbach-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/live-app-embed.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/mpids-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/par-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/phase-transitions-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/planificacion-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/pro2-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/prop-page.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/rob-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/sbc-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/spmatriculas-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/tenda-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/tenda-page.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/demos/tfg-polyp-demo.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/i18next.ts",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/load.ts",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/locale-glob.ts",
+      "language": "typescript",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/localized-schema.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/ui.ts",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/utils.ts",
+      "language": "typescript",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/layouts/DemoLayout.astro",
+      "language": "astro",
+      "sizeLines": 374,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/layouts/Layout.astro",
+      "language": "astro",
+      "sizeLines": 255,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/apa-predictor.ts",
+      "language": "typescript",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/bitsx-diameter.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/caim/airports-data.ts",
+      "language": "typescript",
+      "sizeLines": 1045,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/caim/pagerank-worker.ts",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/caim/pagerank.ts",
+      "language": "typescript",
+      "sizeLines": 148,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/caim/zipf-data.ts",
+      "language": "typescript",
+      "sizeLines": 633,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/caim/zipf-fit.ts",
+      "language": "typescript",
+      "sizeLines": 177,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/debug-docker.ts",
+      "language": "typescript",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/debug-iframe-emitter.ts",
+      "language": "typescript",
+      "sizeLines": 100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/debug-iframe.ts",
+      "language": "typescript",
+      "sizeLines": 94,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/debug-network.ts",
+      "language": "typescript",
+      "sizeLines": 171,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/debug-sentry.ts",
+      "language": "typescript",
+      "sizeLines": 232,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/debug-session.ts",
+      "language": "typescript",
+      "sizeLines": 94,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/debug.ts",
+      "language": "typescript",
+      "sizeLines": 322,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/demo-icons.ts",
+      "language": "typescript",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/demo-theme.ts",
+      "language": "typescript",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/desastresSearch.ts",
+      "language": "typescript",
+      "sizeLines": 309,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/designs.ts",
+      "language": "typescript",
+      "sizeLines": 181,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/draculin-quiz.ts",
+      "language": "typescript",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/email-validator.ts",
+      "language": "typescript",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/fib-kernels.ts",
+      "language": "typescript",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/grafics-kernels.ts",
+      "language": "typescript",
+      "sizeLines": 397,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/graph-phase.ts",
+      "language": "typescript",
+      "sizeLines": 272,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/imgproc.ts",
+      "language": "typescript",
+      "sizeLines": 752,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/issuer-icons.ts",
+      "language": "typescript",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/jsbach/interpreter.ts",
+      "language": "typescript",
+      "sizeLines": 885,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/mpids.ts",
+      "language": "typescript",
+      "sizeLines": 368,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/opencv-loader.ts",
+      "language": "typescript",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/par-kernels.ts",
+      "language": "typescript",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/planificacion.ts",
+      "language": "typescript",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/plate-detection.ts",
+      "language": "typescript",
+      "sizeLines": 527,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/plate-worker.ts",
+      "language": "typescript",
+      "sizeLines": 898,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/rob-kernels.ts",
+      "language": "typescript",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/tfg-mock-boxes.ts",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/themes.ts",
+      "language": "typescript",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/useDebug.ts",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/lib/wpgma.ts",
+      "language": "typescript",
+      "sizeLines": 216,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/[lang]/demos/[demo].astro",
+      "language": "astro",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/[lang]/index.astro",
+      "language": "astro",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/404.astro",
+      "language": "astro",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/500.astro",
+      "language": "astro",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/algorithms.astro",
+      "language": "astro",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/apa-practica.astro",
+      "language": "astro",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/bitsx-marato.astro",
+      "language": "astro",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/caim.astro",
+      "language": "astro",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/desastres-ia.astro",
+      "language": "astro",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/draculin.astro",
+      "language": "astro",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/grafics.astro",
+      "language": "astro",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/joc-eda.astro",
+      "language": "astro",
+      "sizeLines": 449,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/jsbach.astro",
+      "language": "astro",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/matriculas.astro",
+      "language": "astro",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/mpids.astro",
+      "language": "astro",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/par-parallel.astro",
+      "language": "astro",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/phase-transitions.astro",
+      "language": "astro",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/planificacion.astro",
+      "language": "astro",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/pro2.astro",
+      "language": "astro",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/prop.astro",
+      "language": "astro",
+      "sizeLines": 610,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/rob-robotics.astro",
+      "language": "astro",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/sbc-ia.astro",
+      "language": "astro",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/tenda.astro",
+      "language": "astro",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/demos/tfg-polyps.astro",
+      "language": "astro",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "language": "astro",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/pages/robots.txt.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/styles/designs.css",
+      "language": "css",
+      "sizeLines": 4207,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/styles/global.css",
+      "language": "css",
+      "sizeLines": 381,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "src/styles/themes.css",
+      "language": "css",
+      "sizeLines": 402,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "TODO.md",
+      "language": "markdown",
+      "sizeLines": 3,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "sizeLines": 7,
+      "fileCategory": "config"
+    },
+    {
+      "path": "verify-site.mjs",
+      "language": "javascript",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "vitest.config.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 331,
+  "filteredByIgnore": 131,
+  "estimatedComplexity": "large",
+  "importMap": {
+    ".gitattributes": [],
+    ".githooks/pre-push": [],
+    ".github/dependabot.yml": [],
+    ".github/FUNDING.yml": [],
+    ".github/pull_request_template.md": [],
+    ".github/workflows/deploy.yml": [],
+    ".github/workflows/skills-update.yml": [],
+    ".github/workflows/test.yml": [],
+    ".github/workflows/visual-baselines.yml": [],
+    ".prettierignore": [],
+    ".prettierrc.json": [],
+    "AGENTS.md": [],
+    "astro.config.mjs": [
+      "src/config/locales.ts",
+      "src/config/site.ts"
+    ],
+    "check-error.mjs": [],
+    "CONTRIBUTING.md": [],
+    "crowdin.yml": [],
+    "docs/architecture/debugging-architecture.md": [],
+    "docs/architecture/decisions.md": [],
+    "docs/architecture/observability.md": [],
+    "docs/architecture/overview.md": [],
+    "docs/architecture/ui-experiments.md": [],
+    "docs/guides/adding-a-demo.md": [],
+    "docs/guides/everyday-tasks.md": [],
+    "docs/guides/i18n.md": [],
+    "docs/guides/testing.md": [],
+    "docs/troubleshooting.md": [],
+    "e2e/a11y.spec.ts": [
+      "src/lib/themes.ts"
+    ],
+    "e2e/browser-demos.spec.ts": [],
+    "e2e/debug-overlay.spec.ts": [],
+    "e2e/keyboard.spec.ts": [],
+    "e2e/live-demos.spec.ts": [
+      "src/data/demo-services.ts"
+    ],
+    "e2e/portfolio-smoke.spec.ts": [
+      "src/config/section-ids.ts"
+    ],
+    "e2e/themes.spec.ts": [],
+    "e2e/visual.spec.ts": [],
+    "eslint.config.mjs": [],
+    "lefthook.yml": [],
+    "lighthouserc.json": [],
+    "locales/en/apa-practica-demo.json": [],
+    "locales/en/bits-xmarato-demo.json": [],
+    "locales/en/caim-demo.json": [],
+    "locales/en/caim-pagerank.json": [],
+    "locales/en/caim-zipf.json": [],
+    "locales/en/certifications.json": [],
+    "locales/en/demos.json": [],
+    "locales/en/desastres-ia-demo.json": [],
+    "locales/en/designs.json": [],
+    "locales/en/draculin-demo.json": [],
+    "locales/en/education.json": [],
+    "locales/en/experience.json": [],
+    "locales/en/fib-demo.json": [],
+    "locales/en/grafics-demo.json": [],
+    "locales/en/joc-eda-page.json": [],
+    "locales/en/jsbach-demo.json": [],
+    "locales/en/live-app-embed.json": [],
+    "locales/en/mpids-demo.json": [],
+    "locales/en/par-demo.json": [],
+    "locales/en/phase-transitions-demo.json": [],
+    "locales/en/planificacion-demo.json": [],
+    "locales/en/pro2-demo.json": [],
+    "locales/en/prop-page.json": [],
+    "locales/en/rob-demo.json": [],
+    "locales/en/sbc-demo.json": [],
+    "locales/en/skills.json": [],
+    "locales/en/spmatriculas-demo.json": [],
+    "locales/en/tenda-demo.json": [],
+    "locales/en/tenda-page.json": [],
+    "locales/en/tfg-polyp-demo.json": [],
+    "locales/en/ui.json": [],
+    "locales/en/work_projects.json": [],
+    "Makefile": [],
+    "package.json": [],
+    "planner-api/.dockerignore": [],
+    "planner-api/app/__init__.py": [],
+    "planner-api/app/_sentry_obs.py": [],
+    "planner-api/app/main.py": [
+      "planner-api/app/normalize.py"
+    ],
+    "planner-api/app/normalize.py": [],
+    "planner-api/Dockerfile": [],
+    "planner-api/README.md": [],
+    "planner-api/requirements.txt": [],
+    "planner-api/tests/__init__.py": [],
+    "planner-api/tests/test_api.py": [],
+    "planner-api/tests/test_normalize.py": [
+      "planner-api/app/normalize.py"
+    ],
+    "playwright.config.ts": [],
+    "project.inlang/project_id": [],
+    "project.inlang/settings.json": [],
+    "public/.nojekyll": [],
+    "public/certifications/azure-fundamentals-az900.html": [],
+    "public/certifications/oracle-oci-ai-foundations.html": [],
+    "public/deloitte-physical-ai-press-release.html": [],
+    "public/demos/joc-eda/css/ui-lightness/jquery-ui-1.8.18.custom.css": [],
+    "public/demos/joc-eda/help.html": [],
+    "public/demos/joc-eda/sample.out": [],
+    "public/demos/joc-eda/viewer.html": [],
+    "public/demos/joc-eda/viewer.js": [],
+    "public/demos/mpids/football.txt": [],
+    "public/demos/mpids/jazz.txt": [],
+    "public/demos/planificacion/agencia_de_viajes_domain_ext2.pddl": [],
+    "public/demos/planificacion/agencia_de_viajes_problem_ext2.pddl": [],
+    "README.md": [],
+    "scripts/_release_id.sh": [],
+    "scripts/capture-og-images.mjs": [],
+    "scripts/count-loc.sh": [],
+    "scripts/dev-all-demos.sh": [],
+    "scripts/git-hooks/no-commit-on-main.mjs": [],
+    "scripts/i18n-review.ts": [],
+    "scripts/log-relay/index.mjs": [],
+    "scripts/log-relay/package.json": [],
+    "scripts/log-relay/README.md": [],
+    "scripts/run-backend-tests.sh": [],
+    "scripts/sentry-snippets/_sentry_obs.py": [],
+    "scripts/sentry-snippets/test__sentry_obs.py": [
+      "scripts/sentry-snippets/_sentry_obs.py"
+    ],
+    "scripts/static-preview.mjs": [],
+    "scripts/wire-demos-og-image.mjs": [],
+    "scripts/wrap-demos-with-error-boundary.mjs": [],
+    "SECURITY.md": [],
+    "sentry.client.config.ts": [
+      "src/data/demo-services.ts",
+      "src/lib/debug-session.ts"
+    ],
+    "sentry.server.config.ts": [],
+    "skills-lock.json": [],
+    "src/__tests__/apa-predictor.test.ts": [
+      "src/lib/apa-predictor.ts"
+    ],
+    "src/__tests__/bitsx-diameter.test.ts": [
+      "src/lib/bitsx-diameter.ts"
+    ],
+    "src/__tests__/caim-data.test.ts": [
+      "src/lib/caim/airports-data.ts",
+      "src/lib/caim/zipf-data.ts"
+    ],
+    "src/__tests__/caim-pagerank.test.ts": [
+      "src/lib/caim/pagerank.ts"
+    ],
+    "src/__tests__/caim-zipf.test.ts": [
+      "src/lib/caim/zipf-data.ts",
+      "src/lib/caim/zipf-fit.ts"
+    ],
+    "src/__tests__/content-parity.test.ts": [
+      "locales/en/certifications.json",
+      "locales/en/demos.json",
+      "locales/en/education.json",
+      "locales/en/experience.json",
+      "locales/en/skills.json",
+      "locales/en/work_projects.json",
+      "src/config/locales.ts",
+      "src/data/certifications.json",
+      "src/data/demos.json",
+      "src/data/education.json",
+      "src/data/experience.json",
+      "src/data/skills.json",
+      "src/data/visibility.ts",
+      "src/data/work_projects.json",
+      "src/i18n/load.ts",
+      "src/lib/issuer-icons.ts"
+    ],
+    "src/__tests__/content-schemas.test.ts": [
+      "src/data/certifications.json",
+      "src/data/education.json",
+      "src/data/skills.json",
+      "src/data/work_projects.json",
+      "src/i18n/content-schemas.ts"
+    ],
+    "src/__tests__/data-integrity.test.ts": [
+      "src/config/locales.ts",
+      "src/i18n/demo.ts",
+      "src/i18n/ui.ts"
+    ],
+    "src/__tests__/debug-sentry.test.ts": [
+      "src/lib/debug-sentry.ts"
+    ],
+    "src/__tests__/debug-session.test.ts": [
+      "src/lib/debug-session.ts"
+    ],
+    "src/__tests__/debug.test.ts": [
+      "src/lib/debug.ts"
+    ],
+    "src/__tests__/demo-datasets.test.ts": [
+      "src/data/model_weights.json",
+      "src/data/pca_points.json",
+      "src/data/tfg-model-results.json"
+    ],
+    "src/__tests__/demo-registry.test.ts": [
+      "src/data/demo-services.ts"
+    ],
+    "src/__tests__/demo-schema.test.ts": [
+      "src/data/demos.json",
+      "src/lib/demo-icons.ts"
+    ],
+    "src/__tests__/demo-services.test.ts": [
+      "src/data/demo-services.ts"
+    ],
+    "src/__tests__/desastres-search.test.ts": [
+      "src/lib/desastresSearch.ts"
+    ],
+    "src/__tests__/designs.test.ts": [
+      "src/config/locales.ts",
+      "src/i18n/ui.ts",
+      "src/lib/designs.ts",
+      "src/lib/themes.ts"
+    ],
+    "src/__tests__/draculin-demo-state.test.ts": [
+      "src/lib/draculin-quiz.ts"
+    ],
+    "src/__tests__/draculin-quiz.test.ts": [
+      "src/lib/draculin-quiz.ts"
+    ],
+    "src/__tests__/email-validator.test.ts": [
+      "src/lib/email-validator.ts"
+    ],
+    "src/__tests__/error-boundary.test.tsx": [
+      "src/components/DemoErrorBoundary.tsx"
+    ],
+    "src/__tests__/fib-kernels.test.ts": [
+      "src/lib/fib-kernels.ts"
+    ],
+    "src/__tests__/graph-phase.test.ts": [
+      "src/lib/graph-phase.ts"
+    ],
+    "src/__tests__/i18n-utils.test.ts": [
+      "src/i18n/ui.ts",
+      "src/i18n/utils.ts"
+    ],
+    "src/__tests__/imgproc.test.ts": [
+      "src/lib/imgproc.ts"
+    ],
+    "src/__tests__/jsbach-interpreter.test.ts": [
+      "src/lib/jsbach/interpreter.ts"
+    ],
+    "src/__tests__/live-app-embed.test.ts": [
+      "src/config/locales.ts"
+    ],
+    "src/__tests__/matriculas-pipeline.test.ts": [],
+    "src/__tests__/mpids.test.ts": [
+      "src/lib/mpids.ts"
+    ],
+    "src/__tests__/par-kernels.test.ts": [
+      "src/lib/par-kernels.ts"
+    ],
+    "src/__tests__/planificacion-demo.test.ts": [
+      "src/lib/planificacion.ts"
+    ],
+    "src/__tests__/planificacion.test.ts": [
+      "src/lib/planificacion.ts"
+    ],
+    "src/__tests__/portfolio-content.test.ts": [
+      "locales/en/experience.json",
+      "src/config/locales.ts",
+      "src/data/experience.json",
+      "src/data/loaders.ts",
+      "src/data/visibility.ts",
+      "src/i18n/load.ts"
+    ],
+    "src/__tests__/rob-kernels.test.ts": [
+      "src/lib/rob-kernels.ts"
+    ],
+    "src/__tests__/structural.test.ts": [
+      "src/config/section-ids.ts",
+      "src/i18n/demo.ts",
+      "src/lib/demo-icons.ts"
+    ],
+    "src/__tests__/tenda-demo-state.test.ts": [
+      "src/data/tenda-mock.ts"
+    ],
+    "src/__tests__/tenda-mock.test.ts": [
+      "src/data/tenda-mock.ts"
+    ],
+    "src/__tests__/tfg-mock-boxes.test.ts": [
+      "src/lib/tfg-mock-boxes.ts"
+    ],
+    "src/__tests__/theme-contrast.test.ts": [],
+    "src/__tests__/themes.test.ts": [
+      "src/lib/themes.ts"
+    ],
+    "src/__tests__/wpgma.test.ts": [
+      "src/lib/wpgma.ts"
+    ],
+    "src/components/About.astro": [],
+    "src/components/Analytics.astro": [],
+    "src/components/Certifications.astro": [],
+    "src/components/Contact.astro": [],
+    "src/components/CvDownloader.tsx": [],
+    "src/components/DebugInit.astro": [],
+    "src/components/DebugMount.astro": [],
+    "src/components/DebugOverlay.tsx": [
+      "src/lib/debug.ts"
+    ],
+    "src/components/DemoErrorBoundary.tsx": [],
+    "src/components/DemoHeader.astro": [],
+    "src/components/DemoNav.astro": [],
+    "src/components/Demos.astro": [],
+    "src/components/demos/_styles.ts": [],
+    "src/components/demos/ApaPracticaDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/data/pca_points.json",
+      "src/i18n/demos/apa-practica-demo.ts",
+      "src/lib/apa-predictor.ts",
+      "src/lib/demo-theme.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/BitsXMaratoDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/components/demos/LiveAppEmbed.tsx",
+      "src/i18n/demos/bits-xmarato-demo.ts",
+      "src/lib/bitsx-diameter.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/caim/PageRankTab.tsx": [
+      "src/components/demos/_styles.ts",
+      "src/i18n/demos/caim-pagerank.ts",
+      "src/lib/caim/airports-data.ts",
+      "src/lib/caim/pagerank.ts",
+      "src/lib/debug.ts",
+      "src/lib/demo-theme.ts"
+    ],
+    "src/components/demos/caim/ZipfTab.tsx": [
+      "src/components/demos/_styles.ts",
+      "src/i18n/demos/caim-zipf.ts",
+      "src/lib/caim/zipf-data.ts",
+      "src/lib/caim/zipf-fit.ts",
+      "src/lib/debug.ts",
+      "src/lib/demo-theme.ts"
+    ],
+    "src/components/demos/CAIMDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/i18n/demos/caim-demo.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/DesastresIADemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/components/demos/DesastresVisual.tsx",
+      "src/i18n/demos/desastres-ia-demo.ts",
+      "src/lib/desastresSearch.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/DesastresVisual.tsx": [
+      "src/i18n/demos/desastres-ia-demo.ts",
+      "src/lib/desastresSearch.ts"
+    ],
+    "src/components/demos/DraculinDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/components/demos/MockBanner.tsx",
+      "src/i18n/demos/draculin-demo.ts",
+      "src/lib/debug.ts",
+      "src/lib/draculin-quiz.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/FibDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/i18n/demos/fib-demo.ts",
+      "src/lib/demo-theme.ts",
+      "src/lib/fib-kernels.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/GraficsDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/i18n/demos/grafics-demo.ts",
+      "src/lib/grafics-kernels.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/JSBachDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/i18n/demos/jsbach-demo.ts",
+      "src/lib/jsbach/interpreter.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/LiveAppEmbed.tsx": [
+      "src/data/demo-services.ts",
+      "src/i18n/demos/live-app-embed.ts",
+      "src/lib/debug-iframe.ts",
+      "src/lib/debug.ts"
+    ],
+    "src/components/demos/MockBanner.tsx": [],
+    "src/components/demos/MPIDSDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/i18n/demos/mpids-demo.ts",
+      "src/lib/debug.ts",
+      "src/lib/mpids.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/ParDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/i18n/demos/par-demo.ts",
+      "src/lib/demo-theme.ts",
+      "src/lib/par-kernels.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/PhaseTransitionsDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/i18n/demos/phase-transitions-demo.ts",
+      "src/lib/graph-phase.ts",
+      "src/lib/mpids.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/PlanificacionDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/components/demos/LiveAppEmbed.tsx",
+      "src/i18n/demos/planificacion-demo.ts",
+      "src/lib/planificacion.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/Pro2Demo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/components/demos/LiveAppEmbed.tsx",
+      "src/i18n/demos/pro2-demo.ts",
+      "src/lib/useDebug.ts",
+      "src/lib/wpgma.ts"
+    ],
+    "src/components/demos/RobDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/i18n/demos/rob-demo.ts",
+      "src/lib/demo-theme.ts",
+      "src/lib/rob-kernels.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/SbcDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/components/demos/MockBanner.tsx",
+      "src/data/sbc-mock.ts",
+      "src/i18n/demos/sbc-demo.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/SPMatriculasDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/i18n/demos/spmatriculas-demo.ts",
+      "src/lib/opencv-loader.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/TendaDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/MockBanner.tsx",
+      "src/data/tenda-mock.ts",
+      "src/i18n/demos/tenda-demo.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/demos/TfgPolypDemo.tsx": [
+      "src/components/DemoErrorBoundary.tsx",
+      "src/components/demos/_styles.ts",
+      "src/components/demos/LiveAppEmbed.tsx",
+      "src/data/tfg-model-results.json",
+      "src/i18n/demos/tfg-polyp-demo.ts",
+      "src/lib/tfg-mock-boxes.ts",
+      "src/lib/useDebug.ts"
+    ],
+    "src/components/DemoSidebar.astro": [],
+    "src/components/Education.astro": [],
+    "src/components/Experience.astro": [],
+    "src/components/Footer.astro": [],
+    "src/components/Hero.astro": [],
+    "src/components/LanguagePicker.astro": [],
+    "src/components/Navbar.astro": [],
+    "src/components/ScrollToTop.astro": [],
+    "src/components/Skills.astro": [],
+    "src/components/ThemeInit.astro": [],
+    "src/components/ThemeToggle.astro": [],
+    "src/components/WorkProjects.astro": [],
+    "src/config/locales.ts": [],
+    "src/config/section-ids.ts": [],
+    "src/config/sections.ts": [
+      "src/components/About.astro",
+      "src/components/Certifications.astro",
+      "src/components/Contact.astro",
+      "src/components/Demos.astro",
+      "src/components/Education.astro",
+      "src/components/Experience.astro",
+      "src/components/Hero.astro",
+      "src/components/Skills.astro",
+      "src/components/WorkProjects.astro",
+      "src/config/section-ids.ts"
+    ],
+    "src/config/site.ts": [],
+    "src/data/certifications.json": [],
+    "src/data/demo-services.json": [],
+    "src/data/demo-services.ts": [
+      "src/data/demo-services.json"
+    ],
+    "src/data/demos.json": [],
+    "src/data/education.json": [],
+    "src/data/experience.json": [],
+    "src/data/loaders.ts": [
+      "src/config/locales.ts",
+      "src/data/certifications.json",
+      "src/data/education.json",
+      "src/data/experience.json",
+      "src/data/skills.json",
+      "src/data/work_projects.json",
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/data/model_weights.json": [],
+    "src/data/pca_points.json": [],
+    "src/data/sbc-mock.ts": [],
+    "src/data/skills.json": [],
+    "src/data/tenda-mock.ts": [],
+    "src/data/tfg-model-results.json": [],
+    "src/data/visibility.ts": [],
+    "src/data/work_projects.json": [],
+    "src/i18n/content-schemas.ts": [
+      "src/lib/demo-icons.ts",
+      "src/lib/issuer-icons.ts"
+    ],
+    "src/i18n/demo-schema.ts": [
+      "src/config/locales.ts",
+      "src/lib/demo-icons.ts"
+    ],
+    "src/i18n/demo.ts": [
+      "src/config/locales.ts",
+      "src/data/demos.json",
+      "src/data/visibility.ts",
+      "src/i18n/load.ts",
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/apa-practica-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/bits-xmarato-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/caim-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/caim-pagerank.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/caim-zipf.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/desastres-ia-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/draculin-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/fib-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/grafics-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/joc-eda-page.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/jsbach-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/live-app-embed.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/mpids-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/par-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/phase-transitions-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/planificacion-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/pro2-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/prop-page.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/rob-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/sbc-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/spmatriculas-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/tenda-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/tenda-page.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/demos/tfg-polyp-demo.ts": [
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/i18next.ts": [
+      "src/config/locales.ts",
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/load.ts": [
+      "src/config/locales.ts"
+    ],
+    "src/i18n/locale-glob.ts": [
+      "src/config/locales.ts"
+    ],
+    "src/i18n/localized-schema.ts": [
+      "src/config/locales.ts"
+    ],
+    "src/i18n/ui.ts": [
+      "src/config/locales.ts",
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/i18n/utils.ts": [
+      "src/config/locales.ts",
+      "src/i18n/i18next.ts"
+    ],
+    "src/layouts/DemoLayout.astro": [],
+    "src/layouts/Layout.astro": [],
+    "src/lib/apa-predictor.ts": [
+      "src/data/model_weights.json"
+    ],
+    "src/lib/bitsx-diameter.ts": [],
+    "src/lib/caim/airports-data.ts": [],
+    "src/lib/caim/pagerank-worker.ts": [
+      "src/lib/caim/pagerank.ts"
+    ],
+    "src/lib/caim/pagerank.ts": [],
+    "src/lib/caim/zipf-data.ts": [],
+    "src/lib/caim/zipf-fit.ts": [],
+    "src/lib/debug-docker.ts": [
+      "src/lib/debug.ts"
+    ],
+    "src/lib/debug-iframe-emitter.ts": [],
+    "src/lib/debug-iframe.ts": [
+      "src/data/demo-services.ts",
+      "src/lib/debug.ts"
+    ],
+    "src/lib/debug-network.ts": [
+      "src/data/demo-services.ts",
+      "src/lib/debug-session.ts",
+      "src/lib/debug.ts"
+    ],
+    "src/lib/debug-sentry.ts": [
+      "src/lib/debug.ts"
+    ],
+    "src/lib/debug-session.ts": [],
+    "src/lib/debug.ts": [],
+    "src/lib/demo-icons.ts": [],
+    "src/lib/demo-theme.ts": [],
+    "src/lib/desastresSearch.ts": [],
+    "src/lib/designs.ts": [
+      "src/config/locales.ts",
+      "src/i18n/locale-glob.ts"
+    ],
+    "src/lib/draculin-quiz.ts": [],
+    "src/lib/email-validator.ts": [],
+    "src/lib/fib-kernels.ts": [],
+    "src/lib/grafics-kernels.ts": [
+      "src/lib/debug.ts"
+    ],
+    "src/lib/graph-phase.ts": [],
+    "src/lib/imgproc.ts": [],
+    "src/lib/issuer-icons.ts": [],
+    "src/lib/jsbach/interpreter.ts": [],
+    "src/lib/mpids.ts": [],
+    "src/lib/opencv-loader.ts": [
+      "src/lib/debug.ts"
+    ],
+    "src/lib/par-kernels.ts": [],
+    "src/lib/planificacion.ts": [],
+    "src/lib/plate-detection.ts": [],
+    "src/lib/plate-worker.ts": [
+      "src/lib/imgproc.ts"
+    ],
+    "src/lib/rob-kernels.ts": [],
+    "src/lib/tfg-mock-boxes.ts": [],
+    "src/lib/themes.ts": [],
+    "src/lib/useDebug.ts": [
+      "src/lib/debug.ts"
+    ],
+    "src/lib/wpgma.ts": [],
+    "src/pages/[lang]/demos/[demo].astro": [],
+    "src/pages/[lang]/index.astro": [],
+    "src/pages/404.astro": [],
+    "src/pages/500.astro": [],
+    "src/pages/demos/algorithms.astro": [],
+    "src/pages/demos/apa-practica.astro": [],
+    "src/pages/demos/bitsx-marato.astro": [],
+    "src/pages/demos/caim.astro": [],
+    "src/pages/demos/desastres-ia.astro": [],
+    "src/pages/demos/draculin.astro": [],
+    "src/pages/demos/grafics.astro": [],
+    "src/pages/demos/joc-eda.astro": [],
+    "src/pages/demos/jsbach.astro": [],
+    "src/pages/demos/matriculas.astro": [],
+    "src/pages/demos/mpids.astro": [],
+    "src/pages/demos/par-parallel.astro": [],
+    "src/pages/demos/phase-transitions.astro": [],
+    "src/pages/demos/planificacion.astro": [],
+    "src/pages/demos/pro2.astro": [],
+    "src/pages/demos/prop.astro": [],
+    "src/pages/demos/rob-robotics.astro": [],
+    "src/pages/demos/sbc-ia.astro": [],
+    "src/pages/demos/tenda.astro": [],
+    "src/pages/demos/tfg-polyps.astro": [],
+    "src/pages/index.astro": [],
+    "src/pages/robots.txt.ts": [],
+    "src/styles/designs.css": [],
+    "src/styles/global.css": [],
+    "src/styles/themes.css": [],
+    "TODO.md": [],
+    "tsconfig.json": [],
+    "verify-site.mjs": [],
+    "vitest.config.ts": []
+  }
+}
