@@ -1,0 +1,48 @@
+# .understandignore — patterns for files/dirs to exclude from analysis
+# Syntax: same as .gitignore (globs, # comments, ! negation, trailing / for dirs)
+# Lines below are suggestions — uncomment to activate.
+# Use ! prefix to force-include something excluded by defaults.
+#
+# Built-in defaults (always excluded unless negated):
+#   node_modules/, .git/, dist/, build/, obj/, *.lock, *.min.js, etc.
+#
+
+# --- Scope: "whole project, trim noise" ---
+
+# Redundant translation locales (keep locales/en/ as the reference set)
+locales/es/
+locales/ca/
+translations/
+
+# Test / report artifacts and snapshots
+test-results/
+playwright-report/
+blob-report/
+e2e/**/*-snapshots/
+*.snap
+
+# Build / tool output and caches
+.astro/
+.build-stamps/
+graphify-out/
+verification-screenshots/
+project.inlang/cache/
+.cursor/
+.understand-anything/**
+
+# Python backend virtualenv / caches
+planner-api/.venv/
+planner-api/**/__pycache__/
+planner-api/**/.pytest_cache/
+
+# Generated / binary assets (gitignored)
+public/cv.pdf
+public/cv_es.pdf
+public/cv_ca.pdf
+public/cv/
+public/og-image.png
+public/og/
+.env
+.env.*
+.DS_Store
+NUL

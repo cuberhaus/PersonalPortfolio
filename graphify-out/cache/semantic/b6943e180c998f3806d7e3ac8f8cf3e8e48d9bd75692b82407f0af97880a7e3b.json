@@ -1,0 +1,1 @@
+{"nodes": [], "edges": [{"source": "i18n_load_flattenforlocale", "target": "concept_i18n", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "src/i18n/load.ts", "source_location": null, "weight": 1.0}], "hyperedges": []}
