@@ -39,3 +39,10 @@ project.inlang/cache/
 NUL
 # Agent skills installed content (lockfile-tracked, content reproducible via `make skills-restore`)
 .agents/skills/
+
+# graphify — track graph.json / GRAPH_REPORT.md / graph.html; ignore machine-specific & regenerable bits
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/manifest.json
+graphify-out/cost.json
+graphify-out/cache/
