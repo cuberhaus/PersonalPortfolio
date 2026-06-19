@@ -46,6 +46,9 @@ jobs:
             npx playwright install --with-deps chromium chromium-headless-shell
           fi
 
+      - name: Build site
+        run: npm run build
+
       - name: Capture baselines (--update-snapshots)
         run: npx playwright test --project=visual --update-snapshots
 
