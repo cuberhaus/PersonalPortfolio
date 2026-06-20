@@ -1,0 +1,1388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NCP-OUSD Practice Test</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --border: #ddd;
+    --hover: rgba(0, 0, 0, 0.04);
+    --card: #fafafa;
+    --accent: #2563eb;
+    --correct-bg: #16a34a;
+    --correct-fg: #ffffff;
+    --correct-border: #15803d;
+    --wrong-bg: #dc2626;
+    --wrong-fg: #ffffff;
+    --wrong-border: #b91c1c;
+    --reveal: #16a34a;
+    --multi-bg: #2563eb;
+  }
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0f1115;
+    --fg: #e7e9ee;
+    --muted: #9aa3b2;
+    --border: #2a2f3a;
+    --hover: rgba(255, 255, 255, 0.05);
+    --card: #161a21;
+    --accent: #60a5fa;
+    --correct-bg: #166534;
+    --correct-fg: #ecfdf5;
+    --correct-border: #22c55e;
+    --wrong-bg: #7f1d1d;
+    --wrong-fg: #fee2e2;
+    --wrong-border: #ef4444;
+    --reveal: #22c55e;
+    --multi-bg: #3b82f6;
+  }
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme]) {
+      color-scheme: dark;
+      --bg: #0f1115;
+      --fg: #e7e9ee;
+      --muted: #9aa3b2;
+      --border: #2a2f3a;
+      --hover: rgba(255, 255, 255, 0.05);
+      --card: #161a21;
+      --accent: #60a5fa;
+      --correct-bg: #166534;
+      --correct-fg: #ecfdf5;
+      --correct-border: #22c55e;
+      --wrong-bg: #7f1d1d;
+      --wrong-fg: #fee2e2;
+      --wrong-border: #ef4444;
+      --reveal: #22c55e;
+      --multi-bg: #3b82f6;
+    }
+  }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    max-width: 880px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    line-height: 1.5;
+    background: var(--bg);
+    color: var(--fg);
+  }
+  h1 { font-size: 1.4rem; margin: 0 0 .25rem; }
+  .subtitle { color: var(--muted); margin: 0 0 1rem; }
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .q {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    background: var(--card);
+  }
+  .q h2 { font-size: 1rem; margin: 0 0 .75rem; }
+  .opts { list-style: none; padding: 0; margin: 0; }
+  .opts li { margin: .35rem 0; }
+  .opts label {
+    display: block;
+    padding: .5rem .75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    color: var(--fg);
+  }
+  .opts label:hover { background: var(--hover); }
+  .opts input { margin-right: .5rem; }
+  .opts label.correct {
+    background: var(--correct-bg);
+    color: var(--correct-fg);
+    border-color: var(--correct-border);
+  }
+  .opts label.wrong {
+    background: var(--wrong-bg);
+    color: var(--wrong-fg);
+    border-color: var(--wrong-border);
+  }
+  .opts label.reveal-correct { outline: 2px dashed var(--reveal); }
+  .actions {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-top: .75rem;
+  }
+  button {
+    padding: .4rem .8rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--fg);
+    cursor: pointer;
+    font: inherit;
+  }
+  button:hover { background: var(--hover); }
+  button.primary {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  button.primary:hover { filter: brightness(1.1); }
+  .note { font-size: .85rem; color: var(--muted); }
+  #score {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    padding: .5rem 0;
+    border-bottom: 1px solid var(--border);
+    font-weight: bold;
+    z-index: 10;
+  }
+  .multi-tag {
+    font-size: .75rem;
+    background: var(--multi-bg);
+    color: white;
+    padding: .1rem .4rem;
+    border-radius: 3px;
+    margin-left: .5rem;
+    vertical-align: middle;
+  }
+  .set-tag {
+    font-size: .7rem;
+    color: var(--muted);
+    margin-left: .5rem;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+  }
+  .tabs {
+    display: flex;
+    gap: .25rem;
+    flex-wrap: wrap;
+    margin: 0 0 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: .5rem;
+  }
+  .tab {
+    padding: .35rem .7rem;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: .9rem;
+  }
+  .tab:hover { background: var(--hover); color: var(--fg); }
+  .tab.active {
+    background: var(--card);
+    border-color: var(--border);
+    border-bottom-color: var(--card);
+    color: var(--fg);
+    font-weight: 600;
+  }
+  .q.hidden { display: none; }
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+  }
+  .explanation {
+    margin-top: .85rem;
+    padding: .7rem .95rem;
+    border-left: 3px solid var(--accent);
+    background: var(--hover);
+    border-radius: 6px;
+    font-size: .9rem;
+    color: var(--fg);
+    white-space: pre-wrap;
+  }
+  .explanation[hidden] { display: none; }
+  .explanation .exp-label {
+    display: block;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: .3rem;
+    text-transform: uppercase;
+    font-size: .7rem;
+    letter-spacing: .05em;
+  }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div>
+    <h1>NCP-OUSD Practice Test</h1>
+    <p class="subtitle">NVIDIA OpenUSD Development Exam - 71 questions with explanations</p>
+  </div>
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+    <span id="themeIcon">🌙</span>
+    <span id="themeLabel">Dark</span>
+  </button>
+</div>
+<p class="note">Select an answer per question (or multiple where tagged <span class="multi-tag">multi</span>). Use <em>Check</em> to reveal the correct option, or <em>Check all</em> at the bottom.</p>
+
+<div id="score">Score: 0 / 0 answered</div>
+<div id="quiz"></div>
+<div class="actions" style="margin: 2rem 0;">
+  <button id="checkAll" class="primary">Check all</button>
+  <button id="resetAll">Reset</button>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    "q": "Which of the following statements best describes the purpose of OpenUSD file format plugins?",
+    "a": [
+      "They extend OpenUSD's functionality by allowing it to read and write from various file formats.",
+      "They are only used for visualizing OpenUSD data and geometry in 3D applications.",
+      "They convert OpenUSD files to other formats without any loss of data or information.",
+      "They are designed to compress OpenUSD asset files for faster loading times."
+    ],
+    "c": [
+      0
+    ],
+    "e": "OpenUSD file format plugins belong under the Data Exchange topic because they expand how USD participates in interchange workflows. Their purpose is to allow OpenUSD to read, interpret, and in some cases write data using formats beyond the native USD file types such as .usd, .usda, .usdc, and .usdz. Through these plugins, external file formats can be exposed to USD as layers and can participate in composition arcs such as references, payloads, and sublayers. This allows pipelines to integrate heterogeneous asset sources while still using USD’s scene description model, composition engine, and layer-based workflows. Option A is correct because it directly identifies the function of file format plugins: extending OpenUSD functionality for reading and writing various file formats. Option B is incorrect because visualization is only one possible downstream use of exchanged data, not the purpose of the plugin system. Option C is incorrect because translation between formats does not inherently guarantee lossless preservation of every schema, opinion, or semantic construct. Option D is incorrect because compression is not the primary role of file format plugins. This aligns with the NVIDIA OpenUSD Development Study Guide topic Data Exchange, especially file formats, connectors, and plugin-based interoperability."
+  },
+  {
+    "q": "You are a developer creating an OpenUSD exporter for an application that also supports import of USD assets. To enable collaborative workflows, you're adding an \"export as overrides\" option. Which approach correctly describes which structure your exporter should generate?",
+    "a": [
+      "Overs of the prims and properties that have been modified or added, omitting unchanged data.",
+      "Export each prim separately into multiple layers, and reference them individually to maintain sparsity.",
+      "Include explicit definitions of all prims, properties, and relationships exactly matching the imported asset to ensure consistency."
+    ],
+    "c": [
+      0
+    ],
+    "e": "The correct exporter behavior is to generate sparse overrides that represent only the authored contribution of the current workstream. In OpenUSD data exchange workflows, an exporter should not blindly rewrite the full imported asset when the intent is to preserve collaborative, non- destructive editing. Instead, the exporter should author only the changes required to express the current application’s contribution: modified prims, newly added prims, changed attributes, relationships, metadata, or other authored opinions. Option A is correct because an over is specifically used to contribute opinions to an existing prim without redefining the entire prim structure. This allows the exported layer to sit above the source asset in a layer stack and override only the relevant data. Option B incorrectly equates sparsity with splitting each prim into separate referenced layers; USD sparsity is achieved by authoring minimal opinions, not by unnecessary layer fragmentation. Option C is incorrect because exporting full definitions for every prim and property would duplicate unchanged data, reduce clarity, and undermine USD’s composition-based collaboration model. This maps to the NVIDIA OpenUSD Development Study Guide topics Data Exchange, especially exporter design, data transformation, sparse authoring, and collaborative layer-based workflows."
+  },
+  {
+    "q": "In what way do variant sets in OpenUSD enhance flexibility in scene descriptions?",
+    "a": [
+      "By allowing runtime selection among alternative representations of a prim.",
+      "By permanently embedding multiple scene configurations within a single prim.",
+      "By enabling automatic resolution of conflicting opinions across layers.",
+      "By statically merging all possible variants into one combined representation."
+    ],
+    "c": [
+      0
+    ],
+    "e": "Variant sets enhance flexibility by allowing a prim to expose named alternatives, where one variant selection contributes its authored opinions to the composed result. NVIDIA’s Learn OpenUSD material describes variant sets as a way to define “alternative representations for a prim and switch between them without duplicating data.” It also explains that a prim may have one or more named variant sets, each containing variant choices, and that the selected variant composes the opinions authored for that choice. Option A is correct because variant sets support selectable alternatives such as different model shapes, material looks, levels of detail, configurations, or composition arcs. This gives downstream tools or stronger layers the ability to choose a representation non-destructively without rewriting the asset. Option B is inaccurate because variants are not permanently merged into the prim; only the selected variant participates in the composed scene. Option C is incorrect because conflict resolution is handled by USD’s composition and value-resolution rules, not automatically by variant sets themselves. Option D is also incorrect because USD does not statically combine every variant into a single representation. This aligns with the NVIDIA OpenUSD Development Study Guide topics Composition → Variant Sets, Composition Arcs, and LIVERPS strength ordering."
+  },
+  {
+    "q": "In OpenUSD, which USDA snippet correctly uses a payload to reference an external asset while allowing deferred loading?",
+    "a": [
+      "def \"Character\" (prepend payload = @character .usda@){ }",
+      "def \"Character\" { prepend payloads = @character .usd@}",
+      "def Xform \"Character\" (reference = @character .usda@){ }",
+      "def Xform \"Character\" (payload = @character .usd@){ }"
+    ],
+    "c": [
+      0
+    ],
+    "e": "Option A is the correct USDA pattern because a payload is authored as prim metadata using the singular payload keyword with a list-editing operation such as prepend. NVIDIA’s Learn OpenUSD payload exercise shows the canonical USDA form: prepend payload = @./red_cube.usd@, authored on the prim declaration. It further explains that payloads are similar to references in USDA, with the important distinction that the keyword is payload rather than references. The key technical purpose of a payload is deferred loading. NVIDIA explains that payloads can compose scene description when loaded, or unload the targeted scene description beneath the payloaded prim. It also contrasts this with references, which are always composed and present on the stage, while payloads can be opened unloaded and selectively loaded later . Option B is incorrect because payloads is not the USDA keyword and it is not authored as a property inside the prim body. Option C uses a reference, not a payload, so it does not provide payload load/unload behavior .Option D is not the canonical list-op form expected here. This aligns with Composition → Reference and Payloads → Working With Payloads."
+  },
+  {
+    "q": "Which of these are valid types for custom attributes in OpenUSD? (Choose two.)",
+    "a": [
+      "structs",
+      "assset paths",
+      "string arrays",
+      "dictionaries"
+    ],
+    "c": [
+      1,
+      2
+    ],
+    "multi": true,
+    "e": "Custom attributes in OpenUSD are user-defined properties authored on prims to store additional typed data beyond predefined schema attributes. NVIDIA’s Learn OpenUSD material states that custom attributes can hold “numeric values, strings, or arrays,” and that custom attributes are created with UsdPrim::CreateAttribute(), where Sdf.ValueTypeNamesrepresents the attribute type. NVIDIA’s OpenUSD data type reference lists Asset with the USDA value type token asset, and StringArray with the USDA token string[], making asset paths and string arrays valid attribute value types. Option B is correct because asset path values are represented through the asset value type and are commonly used for resource references such as textures or external asset identifiers. Option C is correct because string[] is a valid array value type. Option A is incorrect because USD does not have a native struct attribute type; NVIDIA recommends namespace-prefixed attributes for mapping grouped or compound fields. Option D is incorrect in this context because dictionaries are associated with metadata/customData patterns, not ordinary typed custom attributes. This aligns with Customizing USD → Custom Properties, Sdf.ValueTypeNames, Namespaced Attributes."
+  },
+  {
+    "q": "What is the primary purpose of asset structure in OpenUSD?",
+    "a": [
+      "To simplify version control through standardized asset management and tracking",
+      "To maximize rendering performance through optimized data organization and caching",
+      "To empower the scalability of an organization and ecosystem and promote collaboration",
+      "To reduce storage requirements through efficient resource sharing and deduplication"
+    ],
+    "c": [
+      2
+    ],
+    "e": "The primary purpose of asset structure in OpenUSD is to make content scalable, collaborative, reusable, and understandable across teams and ecosystems. NVIDIA’s Learn OpenUSD guide defines an asset as a “named, versioned, and structured container” that may include composable OpenUSD layers, textures, volumetric data, and other resources. It further states that asset structure facilitates reuse of persistent data and plays an important role in scaling pipelines and ecosystems. The guide emphasizes content flow, seamless collaboration, consistent conventions, parallel and modular workflows, and balancing openness with resilience to change. Option C is correct because it captures the broad organizational goal of asset structure: enabling scalability and collaboration across multiple contributors, workstreams, and downstream consumers. Option A is too narrow; versioning and tracking may be supported by asset metadata or asset management systems, but they are not the central purpose of asset structure. Option B is also too narrow because performance is one principle of scalable structure, not the whole purpose. Option D describes a possible benefit of modularity and reuse, but storage reduction is secondary. This aligns with Content Aggregation → Asset Structure Principles → Why Asset Structure Is Necessary → Legibility, Modularity, Performance, Navigability."
+  },
+  {
+    "q": "When prioritizing ease of interchange and reducing dependencies between different applications in a pipeline, why might codeless schemas, schemas defined purely in .usda files, be preferred over codeful schemas, schemas with generated classes using usdGenSchema?",
+    "a": [
+      "Codeless schemas enable interchange by loading .usda definitions directly, avoiding the need to compile or link against custom schema code libraries.",
+      "Codeless schemas provide more convenient, strongly-typed C++ and Python APIs for property access compared to code generated via usdGenSchema.",
+      "Generated schemas cannot define fallback attribute values within their .usda definition, making interchange less consistent across applications.",
+      "Only codeless schemas are added to the schema registry, allowing them to participate in property value resolution correctly."
+    ],
+    "c": [
+      0
+    ],
+    "e": "Codeless schemas are preferred when the pipeline goal is portability, easy distribution, and reduced application coupling. NVIDIA’s Learn OpenUSD schema guidance states that schemas define data models and optional APIs for encoding and interchanging 3D and non-3D concepts, and notes a trend toward codeless schemas for easier distribution, with schemas becoming more focused on data modeling rather than behavior implementation. Option A is correct because a codeless schema can be distributed as schema data and plugin metadata without requiring every consuming application to compile, link, or ship custom generated C++/Python schema classes. OpenUSD’s schema-generation documentation identifies codeless schemas as schemas produced without corresponding C++ classes, where only generatedSchema.usda and plugInfo.json are essential for runtime registration. Option B is incorrect because strongly typed convenience APIs are the advantage of codeful generated schemas. Option C is incorrect because fallback values are authored in schema definitions. Option D is incorrect because codeful and codeless schemas can both participate in schema registration and value interpretation. This aligns with Customizing USD → Schemas, API Schemas, Codeless Schemas, Schema Registry, Data Modeling for Interchange."
+  },
+  {
+    "q": "You and your colleague open the same USD layer but one of you observes missing geometry. What could be the reason why?",
+    "a": [
+      "USD automatically adjusts composition based on available system memory.",
+      "Instance prototypes are composing to different identifiers.",
+      "Differently configured asset resolvers are resolving to different versions of the asset."
+    ],
+    "c": [
+      2
+    ],
+    "e": "The most plausible cause is that the two environments are resolving asset identifiers differently. NVIDIA’s Learn OpenUSD glossary defines asset resolution as the process of translating an asset path into the actual location of a consumable resource, and identifies ArResolver as the plugin point that can be customized to resolve assets through site logic, databases, or version-control systems. Option C is correct because the same authored USD layer can contain references, payloads, textures, or other asset-valued paths that are resolved at runtime. If one user’s resolver context maps @character .usd@to version 12 while another maps it to version 15, or if one environment cannot resolve a dependency at all, the composed stage can differ .This can manifest as missing geometry, stale geometry, missing materials, or unresolved payloads. Reference and payloads are composition arcs that bring external scene description into the stage, so resolution differences directly affect what data is available for composition. Option A is incorrect because USD does not change composition semantics based on available memory. Option B is not the primary explanation here; instance prototypes are derived from composed instance data, but the root problem described is inconsistent asset resolution. This aligns with Debugging and Troubleshooting → Asset Resolution, Reference, Payloads, Resolver Contexts, Missing Dependencies."
+  },
+  {
+    "q": "Which of these is a viable approach for mapping or grouping compound types from other data sources to OpenUSD?",
+    "a": [
+      "arrays",
+      "namespace-prefixed attributes",
+      "structs"
+    ],
+    "c": [
+      1
+    ],
+    "e": "Namespace-prefixed attributes are the correct approach for representing grouped or compound source data in OpenUSD. NVIDIA’s Learn OpenUSD data extraction guidance states that when source formats contain compound or grouped data types, such as structs, records, or grouped fields, namespace-prefixed attributes provide the convention for grouping related properties together in USD. It also states that USD does not have a native struct type, so namespace-prefixed attributes serve as the standard approach for representing this kind of grouped data. Option B is correct because attributes such as acme:sensor:temperature, acme:sensor:humidity, and acme:sensor:pressure can express ownership and logical grouping while remaining ordinary USD attributes with valid scalar or array value types. NVIDIA’s custom properties lesson reinforces this pattern, explaining that namespace prefixes logically group related properties on a single prim and are especially useful when mapping structured data types from other formats into USD. Option A is incomplete because arrays represent repeated values, not named compound fields. Option C is incorrect because USD does not provide a native struct attribute type. This aligns with Data Exchange → Data Extraction, Conceptual Data Mapping, Custom Properties, Namespace- Prefixed Attributes."
+  },
+  {
+    "q": "What is the only reliable way in OpenUSD of encoding the motion of primitives whose topology is varying over time?",
+    "a": [
+      "positions",
+      "velocities",
+      "orientations"
+    ],
+    "c": [
+      1
+    ],
+    "e": "The reliable encoding mechanism is velocities. OpenUSD attributes may vary over time through time samples, but position interpolation assumes correspondence between sampled array elements. When topology changes over time, adjacent samples may not contain the same number of points, and even matching indices may no longer identify the same physical point. NVIDIA’s Learn OpenUSD glossary defines variability as whether a property can change over time, with varying attributes supporting time samples and interpolation behavior .(docs.nvidia.com) The OpenUSD geometry specification is explicit: “Using velocities is the only reliable way of encoding the motion of primitives whose topology is varying over time,” because neighboring sample indices may be unrelated or may not have the same element count. (openusd.org) Option B is therefore correct. Positions alone are insufficient when topology changes, because linear interpolation between position arrays depends on stable point correspondence. Orientations describe rotational state, commonly relevant to transforms or instancing, but they do not solve topology-varying point motion. This maps to Data Modeling → Time Samples, Attribute Variability, UsdGeom Point-Based Motion, Velocities, and Animated Geometry."
+  },
+  {
+    "q": "Which of the following statements about OpenUSD plugin development are true? Choose two.",
+    "a": [
+      "File format plugins are responsible for translating foreign file formats into OpenUSD-compatible data.",
+      "Custom plugins can extend OpenUSD by adding new data types and behaviors.",
+      "OpenUSD plugins can be developed as Python-only plugins for faster, iterative development.",
+      "All plugins require recompiling USD so that they can be used and recognized by USD."
+    ],
+    "c": [
+      0,
+      1
+    ],
+    "multi": true,
+    "e": "OpenUSD’s plugin architecture is a major customization mechanism. Option A is correct because NVIDIA’s Learn OpenUSD Data Exchange material states that file format plugins allow OpenUSD to compose with additional file formats and non-file-based sources, translating the source format on the fly as a USD layer .It also notes that file format plugins may be bidirectional, supporting both reading and writing. (docs.nvidia.com) Option B is also correct because custom plugins can extend OpenUSD beyond built-in behavior . NVIDIA’s OpenUSD plugin samples include schemas, both codeful and codeless, file format plugins, dynamic payloads, and Hydra scene indices, demonstrating plugin-based extension of data models and runtime behavior .(github.com) Option C is not the best general statement for OpenUSD development certification in this context. Some tooling-level plugin systems can use Python, but core extensibility such as schema libraries and file format plugins commonly depends on plugin metadata and compiled libraries or generated schema artifacts. Option D is false because plugins are discovered through plugin registration metadata, such as plugInfo.json, and do not require recompiling USD itself. This aligns with Customizing USD → Plugins, Schemas, File Format Plugins, plugInfo.json, and Extensibility."
+  },
+  {
+    "q": "Which of the following values are valid for imageable purpose? Choose three.",
+    "a": [
+      "guide, for prims that should be included for guides or reference",
+      "light, for prims that should be included for lighting and shadows",
+      "render, for prims that should be included for \"final\" quality renders",
+      "material, for prims that should be included for shading geometry",
+      "proxy, for prims that should be included for proxy representation"
+    ],
+    "c": [
+      0,
+      2,
+      4
+    ],
+    "multi": true,
+    "e": "The valid imageable purpose values among the options are guide, render, and proxy. NVIDIA’s Learn OpenUSD glossary describes purpose as a UsdGeomImageable attribute used to classify geometry into visibility categories that can gate traversals such as rendering or bounding-box computation. It lists purpose values including default, render, proxy, and guide. (docs.nvidia.com) Option A is correct because guide is used for guide or helper geometry that should generally appear only when an interactive application has been asked to display guides. Option C is correct because render identifies final-quality render geometry. Option E is correct because proxy identifies lightweight preview or proxy representation. OpenUSD’s UsdGeomImageable documentation confirms the allowed values as default, render, proxy, and guide. (openusd.org) Option B is incorrect because lights are represented through lighting schemas, not as an imageable purpose token. Option D is incorrect because materials and shading assignments are represented through UsdShade schemas and relationships, not through imageable purpose. This maps to Visualization → Imageable Purpose, Render/Proxy/Guide Geometry, Hydra Traversal, and Display Filtering."
+  },
+  {
+    "q": "How does the concept of an edit target (Usd.EditTarget) interact with the stage in OpenUSD?",
+    "a": [
+      "It merges edits across all layers automatically for simplified editing of a stage.",
+      "It overrides all layers, forcing every change to be written to the root layer .",
+      "It specifies the destination layer for authoring changes in a composed stage.",
+      "It temporarily disables all sublayer compositions during editing."
+    ],
+    "c": [
+      2
+    ],
+    "e": "An edit target determines where authored opinions are written while working through the composed view of a stage. NVIDIA’s Learn OpenUSD stage material emphasizes that a stage is not simply a file; it is a unified scenegraph populated from multiple data sources called layers. (docs.nvidia.com) In that layered environment, a developer often edits a composed prim while needing the resulting opinion to land in a specific contributing layer, variant, or composition context. OpenUSD defines this role through UsdEditTarget: edit targets allow work on the composed stage and its UsdPrim objects while specifying which contributing site in the composition network should receive the authored opinions. (openusd.org) Option C is correct because the edit target is the authoring destination, not a composition override mechanism. Option A is incorrect because USD does not automatically merge edits into all layers. Option B is incorrect because edits are not forced to the root layer; developers can target other valid layers or edit contexts. Option D is incorrect because setting an edit target does not disable sublayers or composition arcs. This aligns with Pipeline Development → Layer Authoring, Edit Targets, Non- Destructive Editing, Stage Workflows, and Collaborative Layer Stacks."
+  },
+  {
+    "q": "Which statement correctly describes how UsdGeomSubsets can be used to organize geometry for specific material assignments or rendering attributes in OpenUSD?",
+    "a": [
+      "They partition a single UsdGeomMesh into distinct groups that can have materials independently bound to them.",
+      "They can provide finer-grained control of UsdGeomImageable properties, e.g. visibility or purpose, on subsets of faces.",
+      "They force a mesh to be tessellated at the boundary of each subset for improved visual quality.",
+      "They must be defined at the root OpenUSD stage level for them to apply to any mesh."
+    ],
+    "c": [
+      0
+    ],
+    "e": "UsdGeomSubset is used to identify subsets of a geometric primitive, most commonly groups of mesh faces, so that those groups can receive independent material bindings or other subset-level organization. The OpenUSD API states that materials are bound to GeomSubsets using the same UsdShade material-binding mechanisms used for regular geometry. It also states that a GeomSubset must be a direct child of the geometric prim it applies to, making discovery efficient and clearly scoped to that geometry. Option A is correct because a single mesh can be partitioned into face groups, and each subset can be assigned a different material. Option B is incorrect because UsdGeomSubset is not a UsdGeomImageable; therefore, imageable properties such as visibility or purpose cannot be authored on it. Option C is incorrect because subsets classify elements; they do not force tessellation or modify mesh topology. Option D is incorrect because subsets are authored below the relevant geometric primitive, not at the root stage level. This aligns with Data Modeling → Geometry Organization, Mesh Face Subsets, UsdGeomSubset, and UsdShade Material Binding."
+  },
+  {
+    "q": "You are a developer creating an OpenUSD exporter for an application that also supports import of USD assets. To enable collaborative workflows, you're adding an “export as overrides” option. Which approach correctly describes which structure your exporter should generate?",
+    "a": [
+      "Overs of the prims and properties that have been modified or added, omitting unchanged data.",
+      "Export each prim separately into multiple layers, and reference them individually to maintain sparsity.",
+      "Include explicit definitions of all prims, properties, and relationships exactly matching the imported asset to ensure consistency."
+    ],
+    "c": [
+      0
+    ],
+    "e": "For an “export as overrides” workflow, the exporter should generate sparse authored opinions that represent only the modified or added contributions of the current workstream. NVIDIA’s Learn OpenUSD Data Transformation guidance explicitly describes this pattern: third-party developers can use the stage from raw extraction to export data as sparse overrides for multi-workstream workflows. It also explains that if an export represents one workstream within a larger asset structure, it may define new prims, apply overrides on existing prims, or both, and should distill the data down to the workstream’s unique contributions. Option A is correct because over specs and sparse property opinions preserve USD’s non-destructive composition model. They allow a stronger layer to modify the composed result without duplicating unchanged source data. Option B is incorrect because splitting each prim into separate layers is not required for sparsity and would add unnecessary composition complexity. Option C is incorrect because re-exporting the entire imported asset as full definitions would duplicate unchanged data and obscure the actual edits. This aligns with Data Exchange → Data Transformation, Export Options, Sparse Overrides, Round-Trip Exchange, and Multi-Workstream Workflows."
+  },
+  {
+    "q": "If you have a Usd.Prim object named my_prim and you want to specifically retrieve an attribute named \"size\", which method would you typically use?",
+    "a": [
+      "my_prim.GetAttribute(\"size\")",
+      "my_prim.GetRelationship(\"size\")",
+      "my_prim.GetProperty(\"size\")",
+      "my_prim.GetPrimvar(\"size\")"
+    ],
+    "c": [
+      0
+    ],
+    "e": "The correct method is my_prim.GetAttribute(\"size\") because the question asks for a specific attribute, not a relationship or generic property. NVIDIA’s Learn OpenUSD material defines properties as the data-bearing namespace objects on prims and distinguishes two property categories: attributes and relationships. Attributes hold typed values, while relationships point to other objects in the scene description. NVIDIA’s Omniverse developer reference also states that Usd.Prim.GetAttribute() returns a Usd.Attribute, after which Usd.Attribute.Get() is used to resolve the actual authored or composed value. Option A is therefore the precise API call. Option B is incorrect because GetRelationship() retrieves relationship properties, not value-bearing attributes. Option C is less specific: GetProperty(\"size\") can retrieve either an attribute or relationship as a generic UsdProperty, requiring additional type handling. Option D is incorrect because primvars are accessed through schema-specific APIs such as UsdGeom.PrimvarsAPI, not directly as a general Usd.Prim method. This aligns with Pipeline Development → USD Python API, Property Access, Attributes, Relationships, and Scenegraph Authoring."
+  },
+  {
+    "q": "When USD computes the position of a PointInstancer instance, what additional position-related information is used beyond the position information for a given instance?",
+    "a": [
+      "USD also uses the transform of the PointInstancer prim, if present, but ignores any transforms set on the prototype root.",
+      "USD also uses the transform of the root of the prototype and the transform of the PointInstancer prim itself, if present.",
+      "USD uses position information for the instance, and ignores any position information in the prototype root, or the PointInstancer prim itself."
+    ],
+    "c": [
+      1
+    ],
+    "e": "A PointInstancer instance position is not computed from the per-instance positions array alone. NVIDIA’s Learn OpenUSD point-instancing lesson explains that authored positions are in the local coordinate space of the PointInstancer .For the final world-space transform, USD combines multiple transforms: first the prototype root transform, then the instance-specific transform components such as scales[i], orientations[i], and positions[i], and finally the transform authored on the PointInstancer prim itself. Option B is correct because it includes both additional transform sources that affect the resulting placement: the prototype root’s transform and the PointInstancer prim’s transform. This matters in production asset aggregation because prototypes may carry their own local placement or orientation, while the instancer prim may be moved, rotated, or scaled as a whole. Option A is incomplete because it incorrectly discards the prototype root transform. Option C is incorrect because it treats instance positions as isolated data and ignores the composed transform stack. This aligns with Content Aggregation → Asset Modularity and Instancing → PointInstancer, Prototype Roots, Instance Transforms, and Transform Composition."
+  },
+  {
+    "q": "What is the correct prim type in UsdShade for sharing reusable portions of shading networks, allowing for parameterization?",
+    "a": [
+      "SubNetwork",
+      "Custom Schema",
+      "NodeGraph"
+    ],
+    "c": [
+      2
+    ],
+    "e": "The correct UsdShade prim type is NodeGraph. NVIDIA’s Learn OpenUSD material introduces UsdShade as the schema family used for creating and binding materials, where materials store renderer-facing shading definitions. The OpenUSD UsdShade specification defines UsdShadeNodeGraph as the mechanism for packaging shading networks into reusable units. A node graph can contain shader nodes and nested node graphs, expose public inputs as an interface, provide outputs, and be referenced into larger networks as a reusable building block. Option C is correct because NodeGraph is explicitly designed for reusable and parameterized shading-network structure. It allows a pipeline to encapsulate repeated shading logic while exposing only selected parameters to consuming materials or larger graphs. Option A is incorrect because SubNetwork is not the correct UsdShade prim type in OpenUSD. Option B is incorrect because a custom schema could theoretically define new data models, but it is not the standard UsdShade construct for reusable shader-network packaging. This aligns with Visualization → UsdShade, Materials, Shading Networks, NodeGraph Interfaces, Parameterization, and Reusable Material Components."
+  },
+  {
+    "q": "What key capability distinguishes an IsA schema from an API schema?",
+    "a": [
+      "An IsA schema can impart a typeName to a prim, whereas an API schema cannot.",
+      "API schemas can have relationships, while IsA schemas cannot.",
+      "IsA schemas are always concrete, while API schemas are always non-concrete."
+    ],
+    "c": [
+      0
+    ],
+    "e": "The key distinction is that an IsA schema, also called a typed schema, defines the fundamental type of a prim through its typeName metadata. NVIDIA’s Learn OpenUSD glossary states that IsA schemas define a prim’s fundamental type through typeName, and that each prim has only one IsA schema determining its core nature, such as Mesh, Camera, or Light. NVIDIA’s schemas lesson also states that, unlike IsA schemas, API schemas do not assign a typeName; instead, they are list-edited in the apiSchemas metadata and queried using HasAPI. (NVIDIA Docs) Option A is correct because it directly identifies the defining capability of an IsA schema: imparting a prim type. API schemas instead augment already-typed prims with additional properties or behavior . Option B is incorrect because both IsA and API schemas may define attributes and relationships. Option C is incorrect because IsA schemas are not always concrete; for example, OpenUSD includes abstract typed schemas such as imageable base classes, while concrete typed schemas are instantiable prim types. This aligns with Customizing USD → Schemas, IsA Schemas, API Schemas, Schema Registry, typeName, and apiSchemas Metadata."
+  },
+  {
+    "q": "Consider the following prim hierarchies. Each prim hierarchy is represented by nested unordered lists and each list item represents a prim with the following format: PRIM_NAME (KIND). No text within the parentheses means that the kind is unset for that prim. Only evaluate model kind hierarchy correctness and the structural choices. Which prim hierarchies represent valid model kind hierarchies? Choose three.",
+    "a": [
+      "CarA (component) Interior () SteeringWheel () Chasis () Wheels () Wheel_FR () Wheel_RL ()",
+      "CarA (assembly) Interior (group) SteeringWheel (component) Chasis () Wheels (group) Wheel_FR (component) Wheel_RL (component)",
+      "CarA (component) Interior () SteeringWheel (component) Chasis () Wheels () Wheel_FR (component) Wheel_RL (component)",
+      "CarA (component) Interior () SteeringWheel (subcomponent) Chasis () Wheels (group) Wheel_FR (subcomponent) Wheel_RL (subcomponent)",
+      "CarA (component) Interior () SteeringWheel (subcomponent) Chasis () Wheels () Wheel_FR (subcomponent) Wheel_RL (subcomponent)"
+    ],
+    "c": [
+      0,
+      1,
+      4
+    ],
+    "multi": true,
+    "e": "The valid model kind hierarchies are A, B, and E. NVIDIA’s Learn OpenUSD material defines group, assembly, and component as model kinds, while subcomponent is explicitly outside the model hierarchy. The hierarchy rule is that all ancestors of a component must be group or a subkind of group, such as assembly, and a component acts as a leaf or pruning point in the model hierarchy; therefore, it cannot contain descendant model kinds such as another component, group, or assembly. (NVIDIA Docs) A is valid because CarA is a component and every descendant has unset kind, so no nested model violates the component boundary. B is valid because CarA is an assembly, organizational containers use group, and the leaf model assets are component prims. E is valid because CarA is a component, and internal important parts are marked as subcomponent, which is permitted inside a component and does not count as a model kind. C is invalid because a component contains descendant component prims. D is invalid because Wheels (group) appears under a component, placing a model kind below a component boundary. This aligns with Content Aggregation → Asset Structure → Model Hierarchy → Model Kinds."
+  },
+  {
+    "q": "Why would you not see a sphere when opening this scene? #usda 1.0 ( defaultPrim = \"wall_a_inst\" upAxis = \"Z\" ) def Xform \"wall_a_inst\" ( instanceable = true variants = { string Emissive = \"Default\" } prepend variantSets = \"Emissive\" ) { def Sphere \"Sphere\" { } variantSet \"Emissive\" = { \"Daytime\" { } \"Default\" { } } }",
+    "a": [
+      "Sphere are guide geometry that are invisible by default.",
+      "The \"Emissive\" variant set is missing the material bindings for both \"Daytime\" and \"Default\".",
+      "Because \"wall_a_inst\" has instanceable=true and a composition arc, variants, the sphere that is inside of \"wall_a_inst\" but outside of its variantset is not part of the instanced scenegraph."
+    ],
+    "c": [
+      2
+    ],
+    "e": "The sphere is not visible because the prim wall_a_inst is marked instanceable = true and also has a variant set, which is a composition arc. NVIDIA’s Learn OpenUSD instancing module states that “Instancing is driven by your composition arcs,” and explains that instanceable prims generate implicit prototypes from composed scenegraph content provided through those arcs. It also states that variant sets participate in composition and that variant selections are evaluated when OpenUSD determines which implicit prototypes to create. In this layer, the Sphere is authored as a local child of the instanceable prim, but it is outside the selected \"Emissive\" variant. Since the selected variants \"Default\" and \"Daytime\" contain no sphere definition, the composed prototype for the instance contains no visible sphere. This is an instancing/composition issue, not a visibility-purpose issue and not a material-binding issue. Option A is incorrect because the USDA does not mark the sphere as guide geometry. Option B is incorrect because missing materials would not remove the sphere from the scenegraph. Option C correctly identifies that local child opinions outside the relevant composition arc are not contributing to the instanced scenegraph. This aligns with Content Aggregation → Asset Modularity and Instancing → Scenegraph Instancing, Variant Set Refinement, and Composition Arcs."
+  },
+  {
+    "q": "Why is extract, transform, load (ETL) a useful design pattern for USD data exchange? Choose two.",
+    "a": [
+      "It guarantees that all data converted to OpenUSD is lossless and identical to the original format.",
+      "It separates concerns, making it easier to maintain and adapt data exchange pipelines for different needs.",
+      "It ensures that all OpenUSD workflows use a standardized data structure, regardless of the original format.",
+      "It helps preserve the integrity of the original data format while allowing tailoring for different use cases."
+    ],
+    "c": [
+      1,
+      3
+    ],
+    "multi": true,
+    "e": "ETL is useful for USD data exchange because it separates the problem into disciplined phases instead of forcing extraction, interpretation, optimization, and client-specific restructuring into one converter step. NVIDIA’s Learn OpenUSD data exchange guidance describes a two-phase approach, extract and transform, inspired by ETL. The extract phase should translate source data to OpenUSD as directly as possible, mapping source concepts to USD concepts to preserve the integrity and structure of the original data. The transform phase then applies optional changes such as user export options, content-structure changes, and optimizations for workflow or client performance. Option B is correct because this separation of concerns makes converters easier to maintain, test, and adapt. Option D is correct because the pattern preserves source fidelity first, then permits controlled tailoring for specific downstream needs. Option A is incorrect because NVIDIA explicitly notes that data exchange is typically lossy and not every data model maps directly. Option C is incorrect because the guide states there is no single content structure suitable for every organization or workflow. This aligns with Data Exchange → Two-Phase Data Exchange, Data Extraction, Data Transformation, Export Options, and Pipeline Adaptability."
+  },
+  {
+    "q": "In what way do variant sets in OpenUSD enhance flexibility in scene descriptions?",
+    "a": [
+      "By allowing runtime selection among alternative representations of a prim.",
+      "By permanently embedding multiple scene configurations within a single prim.",
+      "By enabling automatic resolution of conflicting opinions across layers.",
+      "By statically merging all possible variants into one combined representation."
+    ],
+    "c": [
+      0
+    ],
+    "e": "Variant sets enhance flexibility by allowing a prim to expose named alternatives, where a selected variant contributes its authored opinions into the composed scene. NVIDIA’s Learn OpenUSD guide states that variant sets define alternative representations for a prim and allow switching between them without duplicating data. Typical uses include model shapes, looks, materials, and levels of detail. It further explains that a prim can have one or more named variant sets, each containing variant choices, and that the selected variant composes the opinions authored for that variant at the prim where the variant set is defined. Option A is correct because applications, stronger layers, or session layers can select among alternatives non-destructively. Option B is misleading because variants are not permanently embedded as a single active configuration; only the selected variant participates in composition. Option C is incorrect because conflict resolution is governed by USD composition and value- resolution rules, not by variant sets alone. Option D is incorrect because USD does not merge every possible variant into one representation. This aligns with Composition → Variant Sets, Variant Selections, Composition Arcs, and LIVERPS Strength Ordering."
+  },
+  {
+    "q": "Which of the following methods allows you to edit the color of an instanceProxy mesh in OpenUSD while keeping the prim instanced?",
+    "a": [
+      "Directly modifying the instance's geometry properties.",
+      "Using primvars to change the color of the mesh or assigned material.",
+      "Creating a relationship targeting the mesh's color attribute.",
+      "Replacing the entire instance with a new mesh that has the desired color ."
+    ],
+    "c": [
+      1
+    ],
+    "e": "The correct method is to use primvars to drive shading variation while preserving instancing. NVIDIA’s Learn OpenUSD scenegraph instance refinement guidance states that prototypes are runtime data and are not editable, instance proxies are not editable, and local opinions on instance proxies are discarded. It then identifies hierarchical refinement as the appropriate strategy for non- destructive instance variation, including inherited primvars. Primvars can drive material properties such as color, inherit down the prim hierarchy, and be authored on the instanceable prim or an ancestor so materials inside the instance subgraph can read the inherited value. Option B is correct because it changes the effective appearance without directly editing the instance proxy mesh and without disabling instancing. Option A is incorrect because directly modifying an instance proxy’s geometry properties is not allowed. Option C is incorrect because a relationship targeting a color attribute is not the standard mechanism for material color variation. Option D is incorrect because replacing the mesh defeats the purpose of preserving the instanced asset structure. This aligns with Content Aggregation → Asset Modularity and Instancing → Refining Scenegraph Instances, Hierarchical Refinement, Primvars, and Instance Editability."
+  },
+  {
+    "q": "When constructing an OpenUSD scene, in which scenario is it most appropriate to use a payload instead of a reference?",
+    "a": [
+      "When an asset requires frequent updates, but the asset should default to the latest version.",
+      "When deferring the loading of heavy assets until they are needed, thereby improving initial load performance.",
+      "When the asset is small and inexpensive to load to ensure efficient transfer over web protocols.",
+      "When it's important to ensure that all referenced data is immediately available on stage load."
+    ],
+    "c": [
+      1
+    ],
+    "e": "A payload is most appropriate when the scene contains heavy assets that should not be fully composed and loaded until needed. NVIDIA’s Learn OpenUSD payload lesson describes payloads as similar to references, but with the added ability to load and unload them on demand. It gives the example of opening a large city scene with all payloads unloaded so the stage loads quickly, then selectively loading only the city block or asset of interest. When loaded, the payloaded layers and their composed dependencies are brought into the scene. Option B is correct because payloads are designed for deferred loading, scalable working sets, reduced initial load time, and lower memory cost. Option A describes versioning or asset-resolution policy, not the primary distinction between payloads and references. Option C does not justify a payload; small inexpensive assets are often fine as references. Option D describes the opposite of payload behavior, because references are composed immediately, while payload traversal can be deferred. This aligns with Composition → Reference and Payloads, Load/Unload Behavior, Composition Arcs, Scalability, and LIVERPS Strength Ordering."
+  },
+  {
+    "q": "What geometric attribute should be kept in sync when updating point position values on an object?",
+    "a": [
+      "purpose",
+      "xformOps",
+      "extent",
+      "faceVertexIndices"
+    ],
+    "c": [
+      2
+    ],
+    "e": "The geometric attribute that should be kept in sync is extent. In OpenUSD, point position values describe the authored point locations for point-based geometry, while extent represents the local- space geometric range or bounding box of a boundable primitive. The OpenUSD UsdGeomBoundable specification describes extent as a three-dimensional range measuring the authored gprim in its own local space, and states that if extent is authored, it should be authored at every time sample where geometry-affecting properties are authored to ensure correct evaluation. Option C is correct because changing point positions can change the object’s local bounds. If the authored extent is not updated, downstream systems may compute incorrect framing, culling, selection bounds, or bounding-box display. Option A is incorrect because purpose classifies geometry for render, proxy, guide, or default visibility categories. Option B is incorrect because xformOps describe transform operations on the prim, not the local geometric bounds derived from point positions. Option D is incorrect because faceVertexIndices describes mesh topology, not the bounding range. This aligns with Data Modeling → Geometry Attributes, Point-Based Geometry, Boundable Prims, Extent, and Time-Sampled Geometry."
+  },
+  {
+    "q": "What fundamental data type in USD is most suitable for representing texture files?",
+    "a": [
+      "tokens",
+      "strings",
+      "asset paths"
+    ],
+    "c": [
+      2
+    ],
+    "e": "The most suitable USD data type for representing texture files is an asset path. NVIDIA’s Learn OpenUSD glossary defines an asset as a named reusable resource and explicitly includes textures among asset examples. It also explains that USD provides a specialized string type called asset so that attributes and metadata referring to external resources can be identified robustly. In USDA syntax, asset-valued strings are delimited with @, such as @textures/albedo.png@. Option C is correct because texture files are external resources that should participate in USD’s asset- resolution system. Using an asset path allows the resolver to map the authored identifier to an actual file location, versioned asset, package member, or site-specific storage location. Option A is incorrect because tokens are compact identifiers best suited to enumerated values such as purpose, interpolation, or role-like names. Option B is less appropriate because ordinary strings do not communicate that the value is an external asset dependency requiring resolution. This distinction is essential for interchange, packaging, relocation, and pipeline portability. This aligns with Data Exchange → Asset Paths, Asset Resolution, Texture Dependencies, Sdf Value Types, and External Resource Reference."
+  },
+  {
+    "q": "What is the fundamental data type in USD that enables API schemas to be non-destructively removed in stronger layers?",
+    "a": [
+      "list ops",
+      "arrays",
+      "booleans"
+    ],
+    "c": [
+      0
+    ],
+    "e": "The correct answer is list ops. API schemas are not encoded as a simple boolean flag on a prim. Instead, applied API schemas are stored in the apiSchemas metadata as token-valued listOp data. OpenUSD’s UsdPrim::ApplyAPI() documentation states that applying an API schema stores the schema name by adding it to the token-valued listOp metadata apiSchemas. Its RemoveAPI() documentation states that removing an API schema authors an explicit deletion of that schema name from the same listOp metadata. This is what enables non-destructive removal in stronger layers. A weaker layer may apply an API schema, while a stronger layer can delete that schema token from the composed list without modifying the weaker source layer .NVIDIA’s OpenUSD glossary describes list editing as sparse ordered-list composition using operations such as prepend, append, delete, and explicit replacement, allowing stronger layers to modify lists contributed by weaker layers. Option B is incorrect because arrays store values but do not provide list-edit composition semantics. Option C is incorrect because booleans cannot represent ordered additive and subtractive composition. This aligns with Customizing USD → API Schemas, apiSchemas Metadata, List Editing, and Non-Destructive Layering."
+  },
+  {
+    "q": "Which is the most appropriate combination of OpenUSD features to consider when trying to solve problems related to artists interaction with LODs, Material variations and Asset Versions?",
+    "a": [
+      "VariantSets, Purposes and AssetResolvers",
+      "PrimAdapters, SceneIndex plugins and Reference",
+      "Inherits, Specializes and MaterialX"
+    ],
+    "c": [
+      0
+    ],
+    "e": "The most appropriate combination is VariantSets, Purposes, and AssetResolvers because each feature addresses one of the stated production problems at the correct abstraction level. Variant sets provide artist-facing switches for alternative representations of the same asset, including material variations, geometric variations, and LOD-style alternatives. NVIDIA’s Learn OpenUSD guide states that variant sets define alternative representations that can be switched at runtime, and that variants may override properties, define descendant prims, or author composition arcs. Purposes help separate representation classes such as proxy, render, and guide. NVIDIA’s glossary describes purpose as a UsdGeomImageable attribute used to classify geometry into selective visibility categories, allowing clients to include or exclude categories during rendering, bounding, or interactive traversal. Asset resolvers address asset versioning and storage indirection. NVIDIA’s asset-structure guidance specifically recommends keeping instances within a specific version and leveraging storage and asset-resolver capabilities to keep assets atomic. Option B is more renderer/Hydra-infrastructure focused and does not directly solve artist-facing variation and versioning. Option C contains useful composition and shading tools, but it is not the best combined solution for LODs, material options, and asset versions. This aligns with Pipeline Development → Artist Workflows, Variant Sets, Purpose, Asset Resolution, and Asset Versioning."
+  },
+  {
+    "q": "As part of a data exchange workflow, you have exported the following file from your DCC tool, and notice that the displayed extents box of the sphere is too large: #usda 1.0 ( defaultPrim = \"Model1\" ) def Sphere \"MySphere\" { double radius = 0.5 float3[] extent = [(-3.0, -3.0, -3.0), (3.0, 3.0, 3.0)] } Your tool, and also the final consumer of the scene data, would like best-fit correct extents. Which of the following could the export process do to address this problem for any exported boundable prim?",
+    "a": [
+      "Remove any authored \"extent\" values - USD will automatically calculate the correct extents for you.",
+      "Check and, if necessary, fix any authored extent values on all boundable prims.",
+      "Add an \"extentsHint\" attribute to all boundable prims with the correct bounds.",
+      "Create a Scope prim for each boundable prim and make it a parent of the boundable prim."
+    ],
+    "c": [
+      1
+    ],
+    "e": "The exporter should validate and correct authored extent values on every exported UsdGeomBoundable prim. The extent attribute is the local-space bounding range of the authored geometric primitive, and if it is authored incorrectly, clients that trust the authored extent can display oversized or inaccurate bounds. NVIDIA’s asset-requirements documentation states that “Boundable geometry primitives should have valid extent values,” and its compliance guidance says to author extent for boundable geometry and compute it at time samples where geometry-affecting attributes change. (docs.omniverse.nvidia.com) Option B is correct because it preserves the intended best-fit bounds and works consistently for any exported boundable prim. Option A is unreliable as an export strategy: OpenUSD may compute extent through registered compute functions when no extent is authored, but this can be expensive and is not a substitute for correct exported data. The OpenUSD UsdGeomBoundable documentation strongly encourages proper authoring of extent. (openusd.org) Option C is incorrect because extentsHint is not the replacement for per-primitive boundable extent. Option D is unrelated to geometric bounds. This aligns with Data Exchange → Validation, Geometry Export, Boundable Extents, and Data Quality."
+  },
+  {
+    "q": "In OpenUSD, a composed stage aggregates opinions from multiple sublayers. Why might an opinion in one layer not take effect in the final composed stage?",
+    "a": [
+      "Opinions in a layer only affect the composed stage if the layer is explicitly referenced in every other layer .",
+      "The opinion is authored using the weaker keyword, which explicitly lowers its priority.",
+      "OpenUSD prevents opinions from taking effect unless they originate from the root layer .",
+      "The layer containing the opinion has a weaker strength in the stage’s layer stack than other layers that override it."
+    ],
+    "c": [
+      3
+    ],
+    "e": "An opinion may not appear in the final composed stage because USD resolves competing opinions according to composition strength. NVIDIA’s Learn OpenUSD material explains that a layer stack is the ordered set of a layer and its recursively gathered sublayers, with the root layer considered strongest, followed by sublayers according to their composed order .It also states that strength ordering determines which opinion is composed into the final stage when multiple layer stacks or layers contribute data for the same prim or property. (docs.nvidia.com) Option D is correct because a weaker layer can author a valid opinion, but that opinion can be hidden by a stronger authored opinion on the same target. Option A is incorrect because sublayers do not need to be referenced by every other layer to affect a stage. Option B is incorrect because there is no general “weaker keyword” that lowers priority. Option C is incorrect because opinions from sublayers, references, payloads, variants, inherits, and specializes can all contribute to composition. This aligns with Composition → Sublayers, Layer Stacks, Opinion Strength, and LIVERPS Strength Ordering."
+  },
+  {
+    "q": "What is the primary purpose of a conceptual data mapping document?",
+    "a": [
+      "To define the requirements for an end-to-end 3D workflow.",
+      "To document the content structure of a 3D scene.",
+      "To specify the data storage requirements for USD data.",
+      "To document data translation between OpenUSD and other formats."
+    ],
+    "c": [
+      3
+    ],
+    "e": "A conceptual data mapping document primarily records how concepts and data from a source format map into OpenUSD concepts, schemas, prims, properties, and authored scene description. NVIDIA’s Learn OpenUSD Data Extraction lesson states that producing such a document is valuable because it serves as a data specification for extraction implementation, helps stakeholders set requirements and expectations, and helps developers understand which features are supported between two formats and what to expect from the extraction phase. (docs.nvidia.com) Option D is correct because the document is specifically about translation between OpenUSD and another data representation, such as a DCC format, interchange format, or custom application model. Option A is broader than the purpose of the document; an end-to-end workflow specification may include tools, review, publishing, validation, and delivery, while conceptual mapping focuses on data correspondence. Option B is also too narrow because content structure is only one possible mapped concept. Option C is incorrect because storage requirements are not the core concern. This aligns with Data Exchange → Data Extraction, Conceptual Data Mapping, Format Translation, and Converter Design."
+  },
+  {
+    "q": "Which of these is the most essential composition arc to put onto the components of a model hierarchy?",
+    "a": [
+      "payloads",
+      "inherits",
+      "variant sets",
+      "specializes"
+    ],
+    "c": [
+      0
+    ],
+    "e": "The most essential composition arc for components in a model hierarchy is the payload. NVIDIA’s Learn OpenUSD glossary describes payloads as composition arcs similar to references, but with deferred loading for scalability, and specifically notes that payloads are typically added to component asset root prims for efficient scalable composition. (docs.nvidia.com) Option A is correct because component models act as the leaf or pruning boundary of the model hierarchy. NVIDIA’s model-kind guidance explains that the model hierarchy is designed to prune traversal at the component boundary, and that component models cannot contain other component models as descendants. (docs.nvidia.com) Payloads reinforce that design by allowing large component contents to remain unloaded until needed, improving stage-opening performance and enabling scalable aggregation of large scenes. Option B is incorrect because inherits are mainly for reusable class-style opinions. Option C is useful for alternatives such as LODs or looks, but it is not the essential component-loading mechanism. Option D is a weaker composition mechanism used for specialization and fallback-style refinement. This aligns with Content Aggregation → Asset Structure, Model Hierarchy, Components, Payloads, and Scalable Scene Assembly."
+  },
+  {
+    "q": "What sort of plugin implements logic to locate resources such as @mycompany://path/to/my/resource@?",
+    "a": [
+      "Custom schema plugin",
+      "Hydra plugin",
+      "Asset resolver plugin",
+      "Custom metadata plugin"
+    ],
+    "c": [
+      2
+    ],
+    "e": "The correct plugin type is an asset resolver plugin. In OpenUSD, asset paths such as @mycompany://path/to/my/resource@ are not interpreted as ordinary strings; they are asset identifiers that must be resolved into concrete resources that USD can consume. NVIDIA’s Learn OpenUSD glossary defines asset resolution as the process of translating an asset path into the actual location of a usable resource and states that USD provides the ArResolver plugin point for custom resolution logic, including external databases, custom storage systems, version-control systems, or studio-specific URI schemes. Option C is correct because a custom asset resolver is precisely where pipeline-specific resource lookup logic belongs. Option A is incorrect because a custom schema plugin defines prim types, API schemas, and properties, not asset-location behavior .Option B is incorrect because Hydra plugins are concerned with imaging, rendering, and scene-index/render-delegate behavior .Option D is incorrect because custom metadata may store extra data, but it does not implement resolution of asset identifiers. This aligns with Pipeline Development → Asset Resolution, ArResolver, Resource Location, Versioned Assets, and Pipeline Integration."
+  },
+  {
+    "q": "Which of the following sentences are correct when converting between .usda, .usdc, .usd and .usdz files? Choose two.",
+    "a": [
+      "A .usda file can be converted to a .usdz file using usdcat.",
+      "A .usda file can be converted to a .usdc file using usdcat.",
+      "A .usda file can be converted to a .usd file by simply renaming it.",
+      "A .usda file can be converted to a .usdc file by simply renaming it."
+    ],
+    "c": [
+      1,
+      2
+    ],
+    "multi": true,
+    "e": "Options B and C are correct. The official OpenUSD layer-format conversion tutorial states that usdcat can convert between layer formats using the -o option and an output filename with the desired extension. For example, converting text .usda to binary .usdc is performed with a command such as usdcat -o NewSphere.usdc Sphere.usda. Option C is also correct because .usd is an extension that can hold either text or binary USD data. The same OpenUSD tutorial explains that a .usda or .usdc file can be converted to .usd without changing the underlying format by simply renaming the file; USD detects the actual format when opening it. Option A is not correct in this context because .usdz is a package/archive format, and the OpenUSD toolset identifies usdzip, not usdcat, as the utility for creating .usdz packages containing USD assets. Option D is incorrect because renaming a text .usda file to .usdc does not convert it into USD’s binary crate representation. This aligns with Data Exchange → USD File Formats, usdcat, usdzip, USDA, USDC, USD, and USDZ Packaging."
+  },
+  {
+    "q": "Why is a well-designed model kind hierarchy important for an efficient pipeline?",
+    "a": [
+      "Tools can rely on the model kind hierarchy for efficient stage traversal.",
+      "The composition engine can optimize based on the model kind hierarchy.",
+      "The model kind hierarchy helps avoid duplication of pipeline data."
+    ],
+    "c": [
+      0
+    ],
+    "e": "A well-designed model kind hierarchy is important because it gives tools a reliable, high-level “table of contents” for a complex stage. NVIDIA’s Learn OpenUSD guide explains that model hierarchy is designed to prune traversal at a relatively shallow point in the scenegraph. Without model hierarchy, traversal may need to pass through all prims in a scene, which can be costly. The key pruning point is the component model boundary: ancestors of components participate in the model hierarchy, while descendants are outside the model hierarchy. Option A is correct because pipeline tools can use kind metadata to find meaningful asset boundaries, traverse assemblies and groups efficiently, and avoid descending into every geometric or implementation-level prim. Option B is inaccurate because kind metadata is not primarily a composition-engine optimization mechanism; USD composition resolves scene description based on composition arcs and strength ordering. Option C is also not the primary purpose. Avoiding duplication is addressed more directly by references, payloads, instancing, inherits, specializes, and asset-structure reuse. This aligns with Content Aggregation → Asset Structure → Model Hierarchy → Model Kinds, Components, Assemblies, Groups, and Efficient Traversal."
+  },
+  {
+    "q": "Consider a task where a Mesh prim needs to have its points property subdivided to achieve a higher quality of deformation. Which of the following is correct?",
+    "a": [
+      "It is impossible to override the points property of the Mesh, since subdivision can only happen at rendertime through the subdivisionScheme attribute of the Mesh schema.",
+      "Non-constant primvars like displayColor and UVs from the Mesh need to be updated as well, since it is responsibility of the process overriding the points to also provide valid values for other primvars.",
+      "Non-constant primvars like displayColor and UVs from the Mesh can be left unchanged, since USD handles the resize of the array values to match the points property automatically during composition."
+    ],
+    "c": [
+      1
+    ],
+    "e": "When a process changes the topology or point count of a mesh, it must also update dependent geometric data whose interpolation depends on the mesh’s element counts. OpenUSD primvars are not arbitrary side data; their array sizes and ordering are tied to interpolation mode. For mesh vertex interpolation, the primvar array provides one element for each point, in the same order as the mesh points array. For faceVarying interpolation, the primvar array follows the flattened faceVertexIndices order . Option B is correct because subdividing or replacing points changes the data contract for non- constant primvars such as display color, UVs, normals, or other interpolated values. The process authoring the stronger points opinion must ensure that related primvars remain valid for the resulting geometry. Option A is incorrect because points is an attribute and can be overridden by stronger opinions; render-time subdivision through subdivisionScheme is a separate mechanism. Option C is incorrect because USD composition does not automatically resize or reinterpret primvar arrays to match newly authored points. This aligns with Data Modeling → Meshes, Points, Primvars, Interpolation, Topology, and Geometry Validity."
+  },
+  {
+    "q": "Which of these operations are likely to be slower when switching variants? Choose two.",
+    "a": [
+      "Changing reference paths",
+      "Changing visibility",
+      "Changing activation opinions",
+      "Changing attribute values"
+    ],
+    "c": [
+      0,
+      2
+    ],
+    "multi": true,
+    "e": "The slower operations are those that change the composed structure of the stage rather than merely changing resolved property values. NVIDIA’s Learn OpenUSD variant-set guidance separates lightweight and heavyweight variant switches. Lightweight switches include changing attribute values and visibility because they affect value resolution or rendering state without requiring USD to rebuild the composed scene structure. In contrast, heavyweight switches include changing reference paths and changing activation opinions because these alter what content is composed onto the stage. Option A is correct because changing a reference path swaps which external layer or asset contributes scene description, requiring recomputation of affected composition indexes. Option C is correct because activation controls whether prims are composed at all; changing active state can add or remove composed scenegraph structure. Option B is incorrect because visibility is a rendering/imageability opinion and does not remove prims from composition. Option D is incorrect because ordinary attribute-value changes are typically lightweight value-resolution changes. This aligns with Composition → Variant Sets → Variant Design Considerations, Lightweight Variant Switches, Heavyweight Variant Switches, Reference, Activation, Visibility, and Attribute Opinions."
+  },
+  {
+    "q": "Which of the following are valid reasons for choosing to use or develop a standalone converter instead of an importer/exporter for a digital content creation (DCC) application? Choose two.",
+    "a": [
+      "Standalone converters are the only way to convert proprietary formats.",
+      "A converter always produces higher-fidelity results compared to an importer/exporter .",
+      "You don't have access to an SDK to develop a native exporter for the DCC.",
+      "Your workflow requires batch conversion that is not suitable within the DCC."
+    ],
+    "c": [
+      2,
+      3
+    ],
+    "multi": true,
+    "e": "A standalone converter is appropriate when the conversion workflow should operate outside the DCC application. NVIDIA’s Learn OpenUSD Data Exchange lesson defines a standalone converter as a script, executable, or microservice dedicated to translating to and from another file format. It contrasts this with importers and exporters, which are implemented as part of a DCC application’s runtime or plugin system. (docs.nvidia.com) Option C is correct because if a developer cannot access the DCC’s SDK, plugin API, or runtime integration path, a native importer/exporter may not be feasible. A separate converter can still be built around accessible file-level data, command-line tools, services, or external APIs. Option D is also correct because standalone converters are well suited for automation, headless processing, farm execution, and batch conversion pipelines that do not belong inside an artist-facing DCC session. NVIDIA’s OpenUSD guidance also notes that data exchange implementations must account for different client needs, workflow performance, and content structures rather than assuming one implementation pattern fits all. (docs.nvidia.com) Option A is false because proprietary formats can also be supported by native plugins or file format plugins when appropriate access exists. Option B is false because fidelity depends on data mapping and implementation quality, not on whether the tool is standalone. This aligns with Data Exchange → Importers, Exporters, Standalone Converters, File Format Plugins, and Workflow Requirements."
+  },
+  {
+    "q": "When a user is trying to change the drawMode of an element to bounds, and it doesn't work, what should you look into?",
+    "a": [
+      "Kinds and GeomModelAPI schema are properly applied.",
+      "UsdPhysicsCollisionAPI schema is applied and extents are correct.",
+      "UsdVolVolume schema is applied and extents are correct.",
+      "UsdShadeMaterialBindingAPI schema is applied and a material is bound."
+    ],
+    "c": [
+      0
+    ],
+    "e": "The correct troubleshooting path is to verify the prim’s kind and whether UsdGeomModelAPI behavior is properly applied. OpenUSD’s UsdGeomModelAPI documentation states that draw modes provide alternate imaging behavior for USD subtrees with kind model. The attributes model:drawMode and model:applyDrawMode are resolved to decide whether traversal should stop at a model boundary and replace the subtree with proxy geometry. For bounds, the replacement is the model-space bounding box of the replaced prim. (openusd.org) Option A is correct because drawMode = \"bounds\" is not a generic visibility toggle for arbitrary prims. It is a model-level imaging mechanism. The prim must participate correctly in the model hierarchy, and the relevant UsdGeomModelAPI attributes must be authored or inherited in a way that causes draw mode application. The documentation also notes that component models are automatically treated as if model:applyDrawMode were true unless explicitly disabled. (openusd.org) Options B, C, and D are unrelated to model draw-mode activation. Physics collision APIs, volume schemas, and material binding APIs can affect simulation, volume representation, or shading, but they do not control whether model draw modes are applied. This aligns with Visualization → Model Draw Modes, UsdGeomModelAPI, Kinds, Bounds, and Imaging Substitution."
+  },
+  {
+    "q": "Consider the following HelloWorld.usda OpenUSD layer: #usda 1.0 ( defaultPrim = \"hello\" ) def Xform \"hello\" { double3 xformOp:translate = (4, 5, 6) uniform token[] xformOpOrder = [\"xformOp:translate\"] def Sphere \"world\" { float3[] extent = [(-2, -2, -2), (2, 2, 2)] color3f[] primvars:displayColor = [(0, 0, 1)] double radius = 2 } } What would be the output of the following Python snippet? from pxr import Usd refStage = Usd.Stage.CreateInMemory() refSphere = refStage.OverridePrim(\"/refSphere\") refSphere.GetReference().AddReference(\"./HelloWorld.usda\") print(refStage.GetRootLayer().ExportToString())",
+    "a": [
+      "#usda 1.0 over \"hello\" { over \"refSphere\" ( prepend references = @./HelloWorld.usda@ ) { } }",
+      "#usda 1.0 over \"refSphere\" { }",
+      "#usda 1.0 over \"refSphere\" ( prepend references = @./HelloWorld.usda@ ) { }"
+    ],
+    "c": [
+      2
+    ],
+    "e": "The Python snippet authors a reference opinion directly on the prim /refSphere in a new anonymous root layer .Usd.Stage.CreateInMemory() creates an empty stage, and OverridePrim(\"/refSphere\") authors an over prim spec because no concrete type is being defined. The call refSphere.GetReference().AddReference(\"./HelloWorld.usda\") adds a reference composition arc to that same prim, so the root layer serializes the opinion as prepend references = @./HelloWorld.usda@. Option C is correct because ExportToString() prints the authored contents of the root layer, not the fully expanded composed result of the referenced asset. The referenced HelloWorld.usda layer has defaultPrim = \"hello\", so omitting a prim path in AddReference() targets the referenced layer’s default prim. NVIDIA’s reference documentation explains that a reference may omit the prim path when the referenced layer has a default prim, and the target prim will be resolved from that metadat a. (docs.nvidia.com) Option A is incorrect because the reference is not authored under /hello; /hello exists only inside the referenced file. Option B is incomplete because it omits the reference metadata. This aligns with Composition → Reference, Default Prim, Layer Authoring, and Exported Layer Opinions."
+  },
+  {
+    "q": "Another department at your company has provided layer1.usda that has a Sphere Gprim with animated timeValues that translate the sphere along the Y-axis: #usda 1.0 ( endTimeCode = 60 startTimeCode = 1 ) def Xform \"Asset\" { def Sphere \"Sphere\" { double3 xformOp:translate.timeSamples = { 1: (0, 5.0, 0) 30: (0, -5.0, 0) 60: (0, 5.0, 0) } uniform token[] xformOpOrder = [\"xformOp:translate\"] } } You’ve been given rootLayer .usdathat references Sphere from layer1.usda as follows: #usda 1.0 ( endTimeCode = 60 startTimeCode = 1 ) def Xform \"World\" { def Sphere \"Sphere\" ( prepend references = @./layer1.usda@</Asset/Sphere> ) { } } For testing purposes, you want to check what Sphere would look like if it was at (0, -5.0, 0) at timeCode = 45. Which of the following changes in rootLayer .usdawould place Sphere at -5.0 in the Y- axis at timeCode 45? Note that it is okay if the position of Sphere at other timeCodes is changed. Choose two.",
+    "a": [
+      "Add a (0, -5, 0) translate xformOp timeValue to \"World\" at timeCode 45: def Xform \"World\" { double3 xformOp:translate.timeSamples = { 45: (0, -5.0, 0), } uniform token[] xformOpOrder = [\"xformOp:translate\"] }",
+      "Change the layer metadata endTimeCode from 60 to 45: #usda 1.0 ( endTimeCode = 45 startTimeCode = 1 )",
+      "Add a 15 timeCode frame layer offset to the Sphere reference: def Sphere \"Sphere\" ( prepend references = @./layer1.usda@</Asset/Sphere> (offset = 15) ) { }",
+      "Add the following xformOp overrides to \"Sphere\": double3 xformOp:translate.timeSamples = { 1: (0, 5.0, 0), 30: (0, -2.5, 0), 60: (0, -5.0, 0) } uniform token[] xformOpOrder = [\"xformOp:translate\"]"
+    ],
+    "c": [
+      0,
+      2
+    ],
+    "multi": true,
+    "e": "At timeCode 45, the referenced animation from layer1.usda interpolates between the samples at 30 and 60. Since the Y values are -5.0 at frame 30 and 5.0 at frame 60, the interpolated local translate at frame 45 is 0.0. Option A works because adding a parent transform on /World at frame 45 contributes an additional Y translation of -5.0; combined with the sphere’s interpolated local value of 0.0, the resulting placement is Y = -5.0. Option C also works because a layer offset retimes animation across a reference. NVIDIA defines a layer offset as an adjustment to time values when composing layers through references, payloads, or sublayers, using offset and scale to retime animated data non-destructively. With offset = 15, the source sample at frame 30 is composed at frame 45, so the referenced sphere evaluates to Y = -5.0 at root time 45. Value resolution accounts for layer offsets and interpolation of time samples. Option B only changes timeline metadata and does not retime or override the animation. Option D interpolates between -2.5 at frame 30 and -5.0 at frame 60, producing -3.75 at frame 45, not -5.0. This aligns with Composition → Reference, Layer Offsets, Time Samples, and Value Resolution."
+  },
+  {
+    "q": "Which of the following best defines the primary function of a specialize composition arc in OpenUSD?",
+    "a": [
+      "It provides a strong overriding mechanism since opinions expressed by the specialize arc always win.",
+      "To broadcast specs from a source prim to destination prims as fallback values if no other opinion exists.",
+      "When used additively, these arcs make a prim more functionally and descriptively specialized.",
+      "To uniformly broadcast stronger specs from a source prim to destination prims."
+    ],
+    "c": [
+      1
+    ],
+    "e": "A specialize composition arc broadcasts fallback opinions from a source prim to one or more specializing destination prims. NVIDIA’s Learn OpenUSD glossary defines specializes as a composition arc that broadcasts fallback values from a source prim and applies only when the specializing prim does not already have its own authored opinion. It further explains that specializes is similar to inherits in its broadcast behavior, but differs because specializes contributes fallback values rather than stronger reusable opinions. (docs.nvidia.com) Option B is correct because it captures the essential behavior: source specs are supplied as fallback data. Option A is incorrect because specializes is the weakest composition arc in LIVERPS ordering; it does not always win. NVIDIA’s strength-ordering guide states that specializes acts as a new fallback value, winning only when stronger composition choices provide no value. (docs.nvidia.com) Option C describes the conceptual naming idea of specialization but not the primary functional mechanism. Option D is incorrect because “stronger specs” describes a different strength behavior .This aligns with Composition → Inherits and Specializes, Fallback Opinions, LIVERPS Strength Ordering."
+  },
+  {
+    "q": "Consider a USD that has a root Xform, that has a child Sphere, that in turn has a child Cube. Xform - Sphere -- Cube When you open the USD, you see the sphere and the cube. But when you author the Sphere to be invisible, the sphere disappears, but the Cube is still visible. What could be causing this behavior?",
+    "a": [
+      "Visibility is explicit in OpenUSD, so the Cube must be explicitly authored as invisible.",
+      "Nested gprims are illegal in OpenUSD, and their imaging behavior is undefined.",
+      "Visibility is hierarchical in OpenUSD, so the root Xform must be made invisible in order for all of its descendants to be invisible."
+    ],
+    "c": [
+      1
+    ],
+    "e": "The issue is caused by an invalid scenegraph structure: a Cube gprim is nested below a Sphere gprim. OpenUSD considers nesting gprims under other gprims invalid, and usdchecker warns on this construct because important USD features such as activation and visibility are hierarchical and pruning. The OpenUSD glossary states that when an ancestor gprim is deactivated or made invisible, there should be no way for a descendant gprim to remain active or visible. (openusd.org) Option B is correct because the authored hierarchy violates the expected gprim organization. The correct structure is to place geometry prims under transform or organizational prims, such as Xform or Scope, rather than directly under other gprims. Option A is incorrect because USD visibility is not purely explicit per prim. NVIDIA’s Omniverse visibility guide states that setting a prim’s visibility to invisible makes the prim and all children invisible. (docs.omniverse.nvidia.com) Option C is also incorrect because setting the Sphere invisible should hierarchically affect descendants in a valid hierarchy. This aligns with Visualization → Visibility, Imageable Prims, Gprim Structure, and Valid Scenegraph Organization."
+  },
+  {
+    "q": "Which of the following are valid principles of asset structure? Choose three.",
+    "a": [
+      "Legibility",
+      "Redundancy",
+      "Navigability",
+      "Modularity",
+      "Compressability"
+    ],
+    "c": [
+      0,
+      2,
+      3
+    ],
+    "multi": true,
+    "e": "The valid asset-structure principles are Legibility, Navigability, and Modularity. NVIDIA’s Learn OpenUSD asset-structure guide identifies four principles of scalable asset structure: Legibility, Modularity, Performance, and Navigability. It defines legibility as making an asset structure easy to understand and interpret, modularity as enabling flexibility and reuse, and navigability as making it easy for users to find and access the features and properties they need. (docs.nvidia.com) Option A is correct because clear names, organization, and intent make assets easier to troubleshoot, exchange, and maintain. Option C is correct because downstream users and tools must be able to locate meaningful prims, properties, variants, payloads, and interfaces efficiently. Option D is correct because reusable modular components support parallel workstreams and scalable aggregation. Option B is incorrect because redundancy is generally discouraged; NVIDIA’s modularity guidance emphasizes reuse and avoiding duplicated data. Option E is incorrect because “compressability” is not one of the stated principles. This aligns with Content Aggregation → Asset Structure Principles → Legibility, Modularity, Performance, Navigability."
+  },
+  {
+    "q": "What is a key difference between referencing and sublayering?",
+    "a": [
+      "Reference cannot be reordered like sublayers.",
+      "Reference have a stronger strength ordering than sublayers.",
+      "A prim can have many sublayers, but only one reference.",
+      "Referencing brings in a hierarchy rooted at a single prim, while sublayering brings in all of a layer's content."
+    ],
+    "c": [
+      3
+    ],
+    "e": "The key distinction is the scope of what each composition arc contributes. Sublayering composes the contents of one layer into another layer stack, bringing in the layer’s scene description as a whole. It is commonly used to combine broad workstream layers such as modeling, layout, animation, lighting, or shot overrides. Referencing, by contrast, is authored on a prim and brings scene description from an external layer, typically rooted at a selected prim or the referenced layer’s default prim. This makes references ideal for asset composition, where a model, prop, environment element, or component is introduced at a specific namespace location. Option D is correct because it precisely captures this namespace behavior: references target and compose a prim hierarchy, while sublayers contribute all layer contents into the layer stack. Option A is incorrect because reference list operations can also be ordered and edited. Option B is misleading because composition strength is governed by USD’s LIVERPS ordering and layer-stack strength, not a simple statement that references are always stronger .Option C is incorrect because a prim can have multiple references through list editing. This aligns with Composition → Sublayers, Reference, Layer Stacks, Namespace Composition, and LIVERPS Strength Ordering."
+  },
+  {
+    "q": "To make only the sphere visible given the following scene, which prims need their visibility opinions updated? Choose three. #usda 1.0 def Xform \"World\" { token visibility = \"invisible\" def Xform \"Xform\" { def Scope \"Scope\" { token visibility = \"invisible\" def Sphere \"Sphere\" { } def Cube \"Cube\" { } } } }",
+    "a": [
+      "Scope",
+      "Xform",
+      "World",
+      "Sphere",
+      "Cube"
+    ],
+    "c": [
+      0,
+      2,
+      4
+    ],
+    "multi": true,
+    "e": "The visibility opinions that must be updated are on World, Scope, and Cube. In OpenUSD, visibility is hierarchical and pruning. UsdGeomImageable defines the visibility attribute with allowed values inherited and invisible; effective visibility is computed from the most ancestral authored invisible opinion. The OpenUSD API further states that MakeVisible() may need to override ancestor visibility and hide sibling branches to preserve the intended result. (openusd.org) In the given scene, /World is explicitly invisible, so the entire subtree is invisible regardless of descendants. /World must therefore be changed to visible behavior, typically visibility = \"inherited\". /World/Xform/Scope is also explicitly invisible, so Scope must also be changed to inherited to allow its children to be evaluated as visible. Once those ancestor invisibility opinions are removed, both Sphere and Cube would become visible by inheritance. To make only the sphere visible, the Cube must receive an explicit visibility = \"invisible\" opinion. The sphere does not require an authored visibility opinion because it becomes visible through inheritance. This aligns with Visualization → UsdGeomImageable, Visibility, Hierarchical Pruning, and Effective Visibility Computation."
+  },
+  {
+    "q": "You are debugging a complex scene composed of multiple layers. You notice that a property on a prim has an unexpected value. To understand where this value is coming from, you need to inspect the composition arcs affecting this prim. Which API would be most helpful in visualizing and analyzing the composition arcs for a specific prim?",
+    "a": [
+      "Usd.Stage.Traverse()",
+      "UsdUtils.ComputeUsdStageStats()",
+      "Usd.Property.GetPropertyStack()",
+      "Usd.Stage.Export()"
+    ],
+    "c": [
+      2
+    ],
+    "e": "Usd.Property.GetPropertyStack() is the most appropriate choice because the debugging goal is to determine where a composed property value is coming from. In USD, a final property value can be affected by multiple authored opinions across sublayers, references, payloads, variants, inherits, specializes, and local overrides. NVIDIA’s Learn OpenUSD glossary defines a property stack as the ordered list of property specs that contribute values or metadata for a composed property, and notes that UsdProperty::GetPropertyStack() is specifically useful for debugging, not as the primary value- resolution mechanism. It also explains that USD resolves values by traversing composition information in strength order . Option C is therefore correct because it exposes the contributing property specs and their layer origins, helping identify why a stronger opinion produced an unexpected result. Option A only traverses prims on the composed stage and does not explain value provenance. Option B reports aggregate stage statistics, not composition-source details. Option D exports the stage or layer contents but does not provide targeted diagnostic ordering for a property. This aligns with Debugging and Troubleshooting → Value Resolution, Property Stack, Composition Debugging, and Layer Opinion Inspection."
+  },
+  {
+    "q": "Why is usdchecker an important part of data exchange?",
+    "a": [
+      "It provides the best assurance that an asset will be consumable downstream.",
+      "It verifies that all USD files are in binary format for max efficiency.",
+      "It optimizes USD files for faster loading and rendering.",
+      "It verifies asset URIs are correctly formed for portability."
+    ],
+    "c": [
+      0
+    ],
+    "e": "usdchecker is important in data exchange because it validates whether exported USD or USDZ assets comply with rules that make them more likely to be interchangeable, renderable, and usable by downstream consumers. NVIDIA’s Learn OpenUSD Asset Validation lesson states that usdchecker validates a USD stage or USDZ package using defined rules to provide the best assurance that an asset will be properly interchangeable and renderable by Hydra. It is presented as part of the data exchange workflow for testing converter output and improving exporter quality. Option A is correct because asset validation directly supports downstream consumption, which is the core goal of data exchange. A converter may write syntactically valid USD but still omit important metadata, invalid extents, default prims, unresolved dependencies, or other requirements that reduce interoperability. Option B is incorrect because usdchecker does not require binary .usdc output. Option C is incorrect because validation is not optimization. Option D is too narrow; URI and asset-path checks may be part of validation, but they are not the primary purpose. This aligns with Data Exchange → Asset Validation, usdchecker, Converter Testing, USDZ Compliance, and Downstream Interoperability."
+  },
+  {
+    "q": "Considering the following scene description: def \"ParkingLot\" { def \"Car_1\" ( instanceable = true references = @Car .usd@ ) { } def \"Car_2\" ( instanceable = true references = @Car .usd@ ) { } } Disabling the instanceable metadata on the prim at path /ParkingLot/Car_2 by setting it to false has the following effects: Choose two.",
+    "a": [
+      "Other prims using the same prototype, such as /ParkingLot/Car_2, will also get their instanceable metadata disabled.",
+      "Existing opinions in a local layer from the root LayerStack targeting a child of /ParkingLot/Car_1 will take effect.",
+      "Existing opinions in a local layer from the root LayerStack targeting a child of /ParkingLot/Car_1 will be ignored.",
+      "Recomposition will be triggered from the hierarchy starting at /ParkingLot/Car_1."
+    ],
+    "c": [
+      1,
+      3
+    ],
+    "multi": true,
+    "e": "Setting instanceable = false on an instance root is a deinstancing operation. NVIDIA’s Learn OpenUSD instancing material explains that instanceable prims share composed data through implicit prototypes, and that scenegraph instances restrict sparse descendant overrides because instance proxies are not directly editable. In NVIDIA’s instance-refinement guidance, the three practical rules are: prototypes are not editable, instance proxies are not editable and local opinions are discarded, while the instanceable prim itself remains editable. (docs.nvidia.com) Therefore, when the targeted instance root is deinstanced, local opinions authored under that prim’s descendant paths can become effective because the subtree is no longer represented only through the shared prototype. USD must also recompose that hierarchy because changing instanceable changes whether the prim contributes to prototype sharing or composes its own local subtree. Option A is incorrect because disabling instanceable on one prim does not mutate metadata on other prims that previously shared the prototype. Option C describes the still-instanced behavior, not the deinstanced result. In the screenshot, the stem names /ParkingLot/Car_2 while options B and D name /ParkingLot/Car_1; the correct effects apply to the prim whose instanceable metadata is disabled. This aligns with Content Aggregation → Scenegraph Instancing, Instance Refinement, Deinstancing, and Recomposition."
+  },
+  {
+    "q": "Considering the two files cars.usda and parkingLot.usda in the exhibit. When opening a stage with parkingLot.usda as the root layer, you observed this prim hierarchy: ParkingLot car01 You expected this: ParkingLot car01 chassis parkingLot.usda: #usda 1.0 ( upAxis = \"Y\" ) def Xform \"ParkingLot\" (kind = \"group\") { def \"car01\" (references = @cars.usda@) {} } cars.usda: #usda 1.0 ( upAxis = \"Y\" ) def Xform \"redCar\" (kind = \"component\") { def Mesh \"chassis\" {} } def Xform \"blueCar\" (kind = \"component\") { def Mesh \"chassis\" {} } What are ways to fix this issue?",
+    "a": [
+      "Set the defaultPrim in cars.usda",
+      "Explicitly set the prim type for car01 in parkingLot.usda",
+      "Add a target prim to the reference in parkingLot.usda",
+      "Make the ParkingLot prim in parkingLot.usda an assembly kind"
+    ],
+    "c": [
+      0,
+      2
+    ],
+    "multi": true,
+    "e": "The missing chassis is caused by an unresolved reference target. In parkingLot.usda, the reference is authored as @cars.usda@ without a target prim path. When a reference omits the target prim path, USD uses the referenced layer’s defaultPrim as the entry point. NVIDIA’s Learn OpenUSD guide states that if no defaultPrim is set, bringing that layer in as a reference or payload resolves as an empty layer and emits a warning. It also identifies defaultPrim as layer metadata and a best practice for stages intended to be referenced or payloaded. Option A fixes the issue by setting, for example, defaultPrim = \"redCar\" in cars.usda, allowing @cars.usda@ to resolve to /redCar and bring in its chassis. Option C also fixes it by making the reference explicit, for example references = @cars.usda@</redCar>. NVIDIA’s data-transformation guidance similarly notes that without defaultPrim, a stage cannot be referenced without specifying a target prim. Option B does not solve reference resolution; assigning a type to car01 would not identify which car to compose. Option D changes model-kind semantics only and does not affect the reference target. This aligns with Composition → Reference, Default Prim, Target Prim Paths, and Asset Entry Points."
+  },
+  {
+    "q": "When developing a custom USD schema, what statements are true regarding API schemas versus typed schemas? Choose two.",
+    "a": [
+      "API schemas can be applied to multiple prim types while typed schemas define a specific prim type.",
+      "Multiple API schemas can be applied to a single prim, but a prim can only have one typed schema.",
+      "API schemas are more strict than typed and cannot define their own attributes or relationships.",
+      "API schemas require Python bindings while typed schemas can be implemented to only support C++."
+    ],
+    "c": [
+      0,
+      1
+    ],
+    "multi": true,
+    "e": "API schemas and typed schemas serve different modeling roles in OpenUSD. NVIDIA’s Learn OpenUSD schema guidance states that IsA, or typed, schemas define what a prim fundamentally is by assigning a typeName, while API schemas define what capabilities a prim has by adding optional properties or behaviors to an already-typed prim. API schemas do not assign a typeName; instead, they are list-edited through the apiSchemas metadata and queried with HasAPI. (docs.nvidia.com) Option A is correct because API schemas can be applied across different prim types, while a typed schema defines a specific prim type such as Mesh, Camera, or Xform. Option B is also correct because one prim has a single typed schema identity, but multiple API schemas can be applied to enrich that prim with additional behaviors. NVIDIA further notes that API schemas may be single- apply or multiple-apply, where multiple-apply schemas can be applied more than once to the same prim using different instance names. (docs.nvidia.com) Option C is incorrect because API schemas can define attributes and relationships. Option D is incorrect because Python binding policy is not the distinguishing factor between API and typed schemas. This aligns with Customizing USD → Schemas, IsA Schemas, API Schemas, typeName, apiSchemas Metadata."
+  },
+  {
+    "q": "What is a way to utilize both USDA and USDC as part of a scene?",
+    "a": [
+      "Use USDC for prims related to shading and USDA for all other prim types.",
+      "Use USDA for non-geometric prims and USDC for geometric and animation data.",
+      "Use USDA entirely as USDC is most helpful for when debugging issues with scenes."
+    ],
+    "c": [
+      1
+    ],
+    "e": "A practical mixed-format strategy is to use human-readable USDA for lighter, structural, or non- geometric layers, while using binary USDC for heavier geometry and animation data. NVIDIA’s Learn OpenUSD layer guidance identifies .usd, .usda, and .usdc as USD layer formats, where each layer is a modular source of scene description that can participate in composition. (docs.nvidia.com) This means a scene can compose different layers with different encodings through sublayers, references, payloads, and other arcs. Option B is correct because it reflects the common pipeline division: USDA is convenient for inspection, debugging, review, and hand-authored structural opinions, while USDC is better suited for dense numeric data such as meshes, point caches, and time-sampled animation because it is compact and efficient for machine consumption. The official OpenUSD toolset also supports conversion between formats using tools such as usdcat, allowing pipelines to choose the representation that best fits each layer’s purpose. (openusd.org) Option A is too rigid; shading data does not require USDC. Option C reverses the usual debugging distinction because USDA is the readable format commonly preferred when inspecting scene text. This aligns with Data Exchange → USD File Formats, Layer Composition, USDA, USDC, and Pipeline File Strategy."
+  },
+  {
+    "q": "You are debugging a stage where a prim is expected to have opinions from a referenced asset, but those opinions are not appearing in the composed scene. Which of the following are logical things to check to troubleshoot this issue?",
+    "a": [
+      "Whether a payload has opinions that may be overriding the opinions from the referenced asset.",
+      "Whether the referenced asset has the valid model kind set to maintain a proper model kind hierarchy.",
+      "Whether the prim has any variant selections active that might be hiding or overriding the referenced content.",
+      "Whether the reference path is correct and the referenced asset exists at that location."
+    ],
+    "c": [
+      2,
+      3
+    ],
+    "multi": true,
+    "e": "The first logical checks are the reference target and any variant selections affecting the prim. Option D is correct because if the referenced asset path is wrong, the asset cannot be resolved, or the referenced layer lacks the expected target prim or defaultPrim, the referenced opinions will not appear .NVIDIA’s default-prim guidance explains that a reference without a prim path relies on the referenced layer’s defaultPrim; without it, the reference can compose as empty. (docs.nvidia.com) Option C is also correct because variant selections can alter what scene description is composed. NVIDIA’s variant-set material explains that variants may change attributes, visibility, activation, or even reference paths; when variants change references or activation, USD recomputes the composed structure. (docs.nvidia.com) Option A is generally not the right diagnosis because payload arcs are weaker than reference arcs in standard LIVERPS ordering, so they are not the first candidate for overriding a reference at the same site. Option B is unrelated to whether a reference composes; model kind affects organization and traversal, not basic reference resolution. This aligns with Debugging and Troubleshooting → Reference, Asset Resolution, defaultPrim, Variant Selections, and Composition Diagnostics."
+  },
+  {
+    "q": "Review the following code for creating 1000 sphere instances. When this code is executed, why will the authored prims not yield any instancing efficiencies? for i in range(1000): xform = UsdGeom.Xform.Define(stage, f\"/test_{i}\") sphere_path = xform.GetPath().AppendPath(\"sphere\") UsdGeom.Sphere.Define(stage, sphere_path) xform.GetPrim().SetInstanceable(True) xform.AddTranslateOp().Set((i * 2, 0, 0))",
+    "a": [
+      "There are no composition arcs so the instanceable metadata is ignored.",
+      "Every sphere has a different position so the instanceable metadata is ignored.",
+      "You must also call Usd.Prim.SetInstanceable(True) for each sphere prim that is created."
+    ],
+    "c": [
+      0
+    ],
+    "e": "The authored prims do not produce scenegraph-instancing efficiencies because the code authors local prim hierarchies directly under each /test_i prim rather than composing shared content through references, payloads, inherits, specializes, or variant arcs. NVIDIA’s Learn OpenUSD scenegraph instancing guidance states that “Instancing is driven by your composition arcs” and explains that if there are no composition arcs on the instanceable prims, there is nothing from which OpenUSD can generate shared prototypes. (docs.nvidia.com) Option A is correct because instanceable = true alone is not sufficient. OpenUSD scenegraph instancing works by sharing composed subgraphs brought in through composition arcs; in this code, every sphere is authored as a unique local child in the same layer stack. NVIDIA’s Omniverse instancing guide states that if no composition arcs are directly authored on an instanceable prim, the prim behaves as if instanceable were false. (docs.omniverse.nvidia.com) Option B is incorrect because instance roots may vary by transform, primvars, and other root-level data while still sharing prototypes. Option C is incorrect because the child sphere is not the instance root; marking it instanceable would still not create shared prototypes without composition arcs. This aligns with Content Aggregation → Asset Modularity and Instancing → Scenegraph Instancing, Composition Arcs, Instance Roots, and Implicit Prototypes."
+  },
+  {
+    "q": "In a complex scene with multiple composition arcs, which of the following could cause unexpected property values? Choose two.",
+    "a": [
+      "Using too many attribute connections",
+      "Using incorrect layer offsets",
+      "Using different file formats for layers, e.g. .usda and .usdc",
+      "Multiple opinions on the same property in different layers"
+    ],
+    "c": [
+      1,
+      3
+    ],
+    "multi": true,
+    "e": "Unexpected property values usually come from value resolution, time remapping, or competing authored opinions. NVIDIA’s Learn OpenUSD value-resolution guidance explains that OpenUSD determines the final value of a property by looking through the ordered sources that contribute information, from strongest to weakest, and resolving the relevant authored data according to property type. (docs.nvidia.com) Option B is correct because layer offsets retime animated data across composition arcs such as references, payloads, and sublayers. If an offset or scale is wrong, a time-sampled property can evaluate at an unexpected source time, producing an apparently incorrect value. Option D is correct because multiple layers can author opinions on the same property, and the stronger opinion wins according to composition and value-resolution rules. NVIDIA’s strength-ordering guidance emphasizes that LIVERPS and layer-stack ordering determine which opinions are considered strongest. (docs.nvidia.com) Option A is not a primary cause by itself; connections may affect shader or node-network behavior, but “too many” connections does not inherently change USD property resolution. Option C is incorrect because .usda, .usdc, and .usd are storage encodings for layers, not different composition semantics. This aligns with Debugging and Troubleshooting → Value Resolution, Layer Offsets, Composition Strength, and Property Stacks."
+  },
+  {
+    "q": "Which option best describes the primary function of an inherit composition arc in OpenUSD?",
+    "a": [
+      "Inherit arcs are a replacement for reference arcs when you have an opinion that needs to be stronger than opinions from a variant set.",
+      "Modifications to the inherited prim in stronger layer stacks allow for those overrides to be uniformly broadcast to all inheriting prims.",
+      "It provides a mechanism for implementing object-oriented programming (OOP) design patterns in your scene description design."
+    ],
+    "c": [
+      1
+    ],
+    "e": "An inherit arc lets prims receive scene description from a source prim, commonly a class prim, and enables modifications to that inherited source to broadcast to all inheriting prims in the relevant composition context. NVIDIA’s Learn OpenUSD inherits lesson states that after an inherit arc is established, the source prim and its descendants can be modified in a stronger layer, including across references, and those modifications are broadcast and applied to all prims that inherit it. (docs.nvidia.com) Option B is correct because it captures the defining production use: central refinement of many related prims without editing every instance individually and without modifying the original referenced asset globally. NVIDIA’s strength-ordering lesson also describes inherits as the arc that allows opinions on one source prim to affect all prims that author an inherit arc to that source. (docs.nvidia.com) Option A is incorrect because inherits are not simply a replacement for references; they solve broadcast refinement and reusable opinion-sharing problems. Option C is conceptually adjacent but imprecise: inherits may resemble inheritance patterns, but USD inherit arcs are composition mechanisms, not an object-oriented programming system. This aligns with Composition → Inherits, Class Prims, Broadcast Refinement, Encapsulation, and LIVERPS Strength Ordering."
+  },
+  {
+    "q": "Referring to dining_room.usda, which of the following best describes the role of the references composition arc on the /Root/Chair prim? #usda 1.0 def Xform \"Root\" { def Xform \"Chair\" ( references = @chair .usda@ ) { float3 xformOp:scale = (1.5, 1.5, 1.5) } }",
+    "a": [
+      "It creates a bidirectional link between the local /Root/chair prim and chair .usdaso that any changes in one are automatically reflected in the other .",
+      "It is used to import variant sets from chair .usdainto the local /Root/chair prim.",
+      "It completely replaces the local /Root/chair prim with the contents of chair .usda,ignoring any local attribute definitions such as scale.",
+      "It composes the definition from chair .usdawith the local /Root/Chair .The local xformOp:scale overrides corresponding referenced opinions."
+    ],
+    "c": [
+      3
+    ],
+    "e": "A reference composition arc brings scene description from another asset into the prim where the reference is authored, then combines that referenced data with local opinions on the destination prim. NVIDIA’s Learn OpenUSD references guide states that when a prim is composed through a reference arc, USD first composes the layer stack of the referenced prim, adds the resulting prim spec to the destination prim, and then applies overrides or additional composition arcs from the destination prim. Option D is correct because /Root/Chair receives the composed contents of chair .usda,while the locally authored xformOp:scale = (1.5, 1.5, 1.5) remains part of the destination prim’s stronger local opinions. If the referenced chair asset also authored a corresponding scale opinion on the same property, the local opinion would win by standard USD strength ordering, where stronger opinions override weaker ones non-destructively. Option A is incorrect because references are not bidirectional synchronization links; editing the referencing layer does not automatically modify chair .usda.Option B is too narrow because references compose all targeted scene description, not only variant sets. Option C is incorrect because a reference does not discard local opinions. This aligns with Composition → Reference, Local Opinions, Layer Strength, and Non-Destructive Overrides."
+  },
+  {
+    "q": "Which of these data is lost when flattening a stage?",
+    "a": [
+      "prim metadata",
+      "scenegraph instancing",
+      "variant sets",
+      "class prims"
+    ],
+    "c": [
+      2
+    ],
+    "e": "Flattening a stage resolves the composed result into a single merged layer, baking the effects of composition into authored scene description. The critical loss here is variant-set structure. OpenUSD’s UsdStage::Flatten() documentation states that flattening removes most composition metadata and that “all VariantSets are removed and only the currently selected variants will be present in the resulting layer .”This means the flattened output preserves the currently selected representation, but the ability to switch among alternate variants is lost. Option C is therefore correct. Option A is not the best answer because flattening authors resolved values and can preserve relevant composed metadata, although composition metadata is removed. Option B is incorrect because modern OpenUSD flattening preserves native scenegraph instancing by flattening prototypes and adding internal references from instances to their corresponding prototypes. Option D is incorrect because class prims still exist after flattening, although inherit arcs are removed and inherited data is copied onto consuming prims. This aligns with Composition → Flattening, Variant Sets, Composition Metadata, Inherits, and Scenegraph Instancing."
+  },
+  {
+    "q": "When designing a scalable asset structure, which two aspects should be primarily considered? Choose two.",
+    "a": [
+      "Innovation and future-proofing",
+      "File formats and compression methods",
+      "Clients and collaborators",
+      "Modularity and performance"
+    ],
+    "c": [
+      2,
+      3
+    ],
+    "multi": true,
+    "e": "A scalable asset structure should be designed around the needs of clients and collaborators and around structural principles such as modularity and performance. NVIDIA’s Learn OpenUSD asset- structure guidance states that a well-designed scalable asset structure should always be tailored to the needs of clients and collaborators. It also emphasizes that collaboration is core to OpenUSD and that scalable structures should support parallel workstreams across multiple dimensions. Option C is correct because asset structure is not created in isolation; it must serve the downstream consumers, artists, tools, departments, and delivery requirements that will interact with the asset. Option D is correct because NVIDIA identifies the four principles of scalable asset structure as Legibility, Modularity, Performance, and Navigability. Modularity enables reuse and flexible composition, while performance ensures efficient reads, writes, loading, and interaction at production scale. Option A is too vague and not one of the named primary design aspects. Option B can matter tactically, but file formats and compression are implementation choices, not the primary asset- structure design drivers. This aligns with Content Aggregation → Asset Structure Principles → Clients, Collaborators, Modularity, Performance, and Scalability."
+  },
+  {
+    "q": "Which of the following statements about debugging complex LIVRPS scenarios are correct?",
+    "a": [
+      "Local opinions should be checked first when debugging composition issues.",
+      "Specialize arcs cannot be overridden, so they can be ignored during debugging.",
+      "Payload arcs should be checked before Reference arcs for more efficient debugging."
+    ],
+    "c": [
+      0
+    ],
+    "e": "Option A is correct because local opinions are the strongest opinions in USD composition strength ordering. NVIDIA’s Learn OpenUSD strength-ordering guide describes LIVRPS, now also written as LIVERPS with relocates included, as the ordered set of composition operations used to determine which opinions win. The order is strongest to weakest: local, inherits, variant sets, relocates, references, payloads, and specializes. When debugging an unexpected value, local opinions should be inspected first because a directly authored opinion in the local layer stack can override opinions arriving through other composition arcs. NVIDIA’s tracing guidance also highlights how complex composition debugging becomes when many prims, properties, layers, and arcs contribute competing opinions. Option B is false because specializes arcs are not unoverrideable; they are the weakest fallback-style opinions in the composition order .Option C is false because references are stronger than payloads in LIVRPS/LIVERPS ordering, so checking payloads before references reverses the standard diagnostic priority. This aligns with Debugging and Troubleshooting → LIVERPS Strength Ordering, Local Opinions, Reference, Payloads, Specializes, and Composition Diagnostics."
+  },
+  {
+    "q": "Which of the following are immutable once a USD Stage has been opened? Choose two.",
+    "a": [
+      "Rules for loading payloads from prims in the stage.",
+      "Layers that are muted or unmuted in the stage.",
+      "The path resolver context that is bound to the stage.",
+      "Variant fallbacks for prims without variant selection in the stage."
+    ],
+    "c": [
+      2,
+      3
+    ],
+    "multi": true,
+    "e": "The immutable stage-opening concerns are the path resolver context and the variant fallback configuration used for unselected variants. The resolver context is bound when the stage is created or opened and is used for future asset-path resolution on that stage, regardless of what other resolver context may be bound elsewhere. The OpenUSD UsdStage API documentation describes this binding behavior during stage creation, making option C correct. Option D is also correct because global variant fallback preferences are defined as preferences “used in new UsdStages.” Once a stage has been composed with its fallback preferences, changing global fallback settings affects newly opened stages, not the already-opened stage’s established fallback behavior . Option A is incorrect because payload loading is mutable: Load(), Unload(), LoadAndUnload(), and SetLoadRules() modify the stage’s payload working set after opening. Option B is incorrect because layers can be muted and unmuted on an existing stage through MuteLayer(), UnmuteLayer(), and MuteAndUnmuteLayers(). This aligns with Pipeline Development → Stage Opening, Asset Resolution, Variant Fallbacks, Load Rules, and Layer Muting."
+  },
+  {
+    "q": "A key responsibility of the pipeline is to assemble content that may have divergent stage metadata across layer stacks. Which of these metadata is automatically handled by composition when they diverge across layer stacks?",
+    "a": [
+      "timeCodesPerSecond",
+      "upAxis",
+      "kilogramsPerUnit",
+      "metersPerUnit"
+    ],
+    "c": [
+      0
+    ],
+    "e": "The metadata automatically handled by composition is timeCodesPerSecond. NVIDIA’s Learn OpenUSD units guidance states the distinction directly: timeCodesPerSecond is automatically reconciled during composition, while metersPerUnit, kilogramsPerUnit, and upAxis are not. Pipelines must therefore explicitly handle geometric orientation, spatial scale, and physics mass-unit mismatches when assembling assets from different sources. Option A is correct because OpenUSD can automatically scale time-sampled values across sublayer, reference, and payload arcs when source and target layer stacks use different timeCodesPerSecond values. OpenUSD’s time-value documentation explains that when a targeted layer specifies timeCodesPerSecond, TimeCode coordinates and animated value coordinates are automatically scaled into the time frame defined by the source layer’s timeCodesPerSecond. Options B, C, and D are incorrect because USD does not automatically rotate geometry for different upAxis, scale geometry for different metersPerUnit, or convert physics mass semantics for different kilogramsPerUnit. Those require pipeline conventions, validation, or corrective transforms. This aligns with Pipeline Development → Stage Metadata, Units, TimeCode Scaling, Asset Assembly, and Pipeline Validation."
+  },
+  {
+    "q": "Suppose you had the following layer: #usda 1.0 ( defaultPrim = \"ParentXform\" ) def Xform \"ParentXform\" { def Mesh \"ChildMesh\" { } } If you wanted to add a property to \"ParentXform\" such that it would automatically propagate to \"ChildMesh\" without having to add the same property to \"ChildMesh\", which of the following changes to \"ParentXform\" would make this work?",
+    "a": [
+      "Add the property as a custom attribute: custom string myProperty = \"TestValue\"",
+      "Add the property as a relationship to </ParentXform/ChildMesh>: rel myProperty = </ParentXform/ChildMesh>",
+      "Add the property as a primvar, with \"constant\" interpolation: string primvars:myProperty = \"TestValue\"( interpolation = \"constant\" )"
+    ],
+    "c": [
+      2
+    ],
+    "e": "The correct mechanism is a constant-interpolation primvar .NVIDIA’s Learn OpenUSD glossary defines primvars as primitive variables authored using the primvars: namespace and interpolation metadata such as constant, uniform, vertex, and faceVarying. Primvars are designed to carry geometric or shading-related data in a way that consumers can discover through UsdGeomPrimvarsAPI and UsdGeomPrimvar .(docs.nvidia.com) Option C is correct because constant primvars can inherit down the namespace hierarchy. The OpenUSD UsdGeomPrimvar documentation states that constant interpolation primvar values can be inherited by child prims unless those children author their own opinion for the same primvar . (openusd.org) This allows primvars:myProperty authored on /ParentXform to be discovered on /ParentXform/ChildMesh without duplicating the property on the mesh. Option A is incorrect because ordinary custom attributes do not automatically propagate to descendant prims. Option B is incorrect because a relationship targets another object; it does not create inherited property data on that target. This aligns with Data Modeling → Primvars, Constant Interpolation, Namespace Inheritance, and Geometric Property Authoring."
+  },
+  {
+    "q": "You are setting up an outdoor scene with realistic lighting and want to simulate the effect of the sun. Which UsdLux light type is most appropriate for this purpose, providing a directional light source with parallel rays?",
+    "a": [
+      "RectLight",
+      "DomeLight",
+      "DistantLight",
+      "SphereLight"
+    ],
+    "c": [
+      2
+    ],
+    "e": "The correct UsdLux light type is DistantLight. NVIDIA’s Learn OpenUSD lighting guide identifies UsdLux.DistantLight as a schema where light is emitted from a distant source along the negative Z axis, commonly known as a directional light. This makes it the most appropriate light type for representing sunlight in an outdoor scene. Option C is correct because sunlight is effectively modeled as coming from an extremely distant source, so its rays are treated as broadly parallel across the scene. The OpenUSD DistantLight schema documentation explicitly describes it as typically used for distant, broad light sources like sunlight, where rays affect the entire scene and are roughly parallel. It also notes that the inputs:angle attribute controls angular diameter; the fallback value approximates the Sun’s apparent angular size from Earth. Option A, RectLight, is better suited for rectangular area emitters such as panels or windows. Option B, DomeLight, is commonly used for environment or HDRI lighting. Option D, SphereLight, represents local emission from a spherical source, such as a bulb. This aligns with Visualization → UsdLux, Lighting Schemas, DistantLight, Directional Lighting, and Outdoor Illumination."
+  },
+  {
+    "q": "What will be the composed value of /World/Tree/Canopy.primvars:displayColor when you open stage.usda? #usda 1.0 ( defaultPrim = \"World\" metersPerUnit = 1.0 upAxis = \"Z\" ) def Xform \"World\" { def Xform \"Tree\" ( variantSets = [\"foliage_color\"] variants = { string foliage_color = \"default\" } ) { def Cone \"Canopy\" ( references = [</_base_foliage_color>] ) { double3 xformOp:translate = (0, 0, 1.3) token[] xformOpOrder = [\"xformOp:translate\"] } def Cylinder \"Trunk\" { color3f[] primvars:displayColor = [(0.2, 0.1, 0.05)] double3 xformOp:scale = (0.4, 0.4, 0.4) token[] xformOpOrder = [\"xformOp:scale\"] } variantSet \"foliage_color\" = { \"default\" { } \"evergreen\" { over \"Canopy\" { color3f[] primvars:displayColor = [(0.05, 0.15, 0.05)] } } \"orange\" { over \"Canopy\" { color3f[] primvars:displayColor = [(0.5, 0.3, 0.05)] } } } } } class \"_base_foliage_color\" { color3f[] primvars:displayColor = [(0.2, 0.75, 0.1)] }",
+    "a": [
+      "[(0.5, 0.3, 0.05)]",
+      "[(0.2, 0.75, 0.1)]",
+      "unset",
+      "[(0.05, 0.15, 0.05)]"
+    ],
+    "c": [
+      1
+    ],
+    "e": "The composed value is [(0.2, 0.75, 0.1)]. The active variant selection on /World/Tree is foliage_color = \"default\", and the \"default\" variant contains no authored opinion for Canopy.primvars:displayColor . Therefore, the \"evergreen\" and \"orange\" variant opinions are not active and cannot contribute their color values. NVIDIA’s Learn OpenUSD variant-set guidance explains that a variant set provides alternative authored representations, but only the selected variant contributes to the composed result. The remaining contributing opinion is the reference on def Cone \"Canopy\": references = [</_base_foliage_color>]. Reference are composition arcs that bring scene description from a targeted prim into the destination prim without copying it. The referenced class prim /_base_foliage_color authors color3f[] primvars:displayColor = [(0.2, 0.75, 0.1)], so that value composes onto /World/Tree/Canopy. No stronger local or selected-variant opinion overrides it. This follows USD strength ordering, where opinions are resolved through composition arcs and the strongest applicable opinion wins. This aligns with Composition → Reference, Variant Sets, Selected Variants, and LIVERPS Strength Ordering."
+  },
+  {
+    "q": "Which of the following are true for SdfChangeBlocks? Choose two.",
+    "a": [
+      "Notifications are muted for changes done within the block, even after the block exits",
+      "Existing metadata and properties can be changed using USD APIs within the same block",
+      "It is unsafe to query Prims that are mutating within the same block",
+      "It is unsafe to delete or create new PrimSpec hierarchies using Sdf APIs"
+    ],
+    "c": [
+      2
+    ],
+    "e": "Strictly evaluated against the OpenUSD API contract, C is the only fully correct statement as written. SdfChangeBlock groups multiple low-level Sdf edits so that change processing can be delayed and handled efficiently as one batch. The official API documentation states that opening a change block causes Sdf to delay notifications until the outermost block exits; notifications are queued, not permanently muted. Therefore, A is incorrect. The same documentation gives a strong warning that it is not safe to use Usd or other downstream APIs while a change block is open, because those representations may be stale or may hold expired handles to Sdf objects. Therefore, querying mutating prims during the block is unsafe, making C correct. Option B is incorrect because it explicitly says to use USD APIs inside the block, which the official guidance warns against. Option D is also incorrect because the intended safe authoring pattern is to gather required edits first, then apply them directly through the Sdf API inside the change block. This aligns with Pipeline Development → Efficient Authoring, Sdf Layers, SdfChangeBlock, Change Notification, and Bulk Scene Description Mutation."
+  },
+  {
+    "q": "Which statement accurately describes a key difference between native instancing and point instancing?",
+    "a": [
+      "Point instancing generates prototypes dynamically, while native instancing uses statically defined prims.",
+      "Native instancing can only use a single prototype per scene, while point instancing can use multiple prototypes.",
+      "Native instancing requires prototypes to be defined in separate files, while point instancing requires them in the same layer .",
+      "Native instances are individually addressable prims in the scene hierarchy after composition, while point instances are not."
+    ],
+    "c": [
+      3
+    ],
+    "e": "The key distinction is addressability and representation. Native, or scenegraph, instancing preserves each instance as a prim in the composed scene hierarchy. Each instance root can have its own path, transform, metadata, and root-level refinements while sharing an implicit prototype generated from matching instanceable composition. OpenUSD’s scenegraph instancing documentation explains that prims bringing in common scene description through composition arcs can share those composed subgraphs rather than duplicating them per prim. Point instancing, by contrast, is a vectorized representation. NVIDIA’s instancing guide states that point instancing represents repeated instances through array attributes such as positions, orientations, scales, prototype indices, and prototype relationships. It is more compact because it does not require a prim for each instance, but this comes with reduced flexibility and addressability. Option D is correct because native instances remain individually addressable scenegraph prims, while point instances are addressed through array elements and IDs rather than unique prim paths. A reverses prototype behavior: native instancing uses implicit prototypes, while point instancing uses explicit prototype relationships. B and C impose restrictions that do not exist. This aligns with Content Aggregation → Scenegraph Instancing, PointInstancer, Prototypes, Addressability, and Scalable Repetition."
+  },
+  {
+    "q": "In the context of UsdGeomMesh, which statement is true about mesh normals?",
+    "a": [
+      "The number of authored normals must be equal to the number of points in a polygonal mesh.",
+      "vertex normals are used for subdivision meshes and faceVarying normals are used only for polygonal meshes.",
+      "faceVarying normals are specified per face corner, while vertex normals specify a single normal per point."
+    ],
+    "c": [
+      2
+    ],
+    "e": "Option C correctly describes the relationship between interpolation and element counts for mesh normals and normal-like primvars. In UsdGeomMesh, vertex interpolation provides one value per mesh point, while faceVarying interpolation provides one value for each face-vertex, meaning each corner of each face can carry its own value. This distinction is essential for representing smooth normals, hard edges, UV seams, and other discontinuities across faces. OpenUSD’s UsdGeomMesh documentation defines vertex interpolation as one element per point and faceVarying interpolation as one element for each face-vertex that defines the mesh topology. Option A is incorrect because authored normals do not always have to match the number of points; the required count depends on the normals interpolation. Face-varying normals, for example, require one value per face corner rather than one per point. Option B is incorrect because normals should generally not be authored on subdivision meshes; subdivision algorithms define their own normals. OpenUSD notes that authored normals should only be used for polygonal meshes where subdivisionScheme = \"none\". This aligns with Data Modeling → UsdGeomMesh, Normals, Primvar Interpolation, Vertex Data, Face-Varying Data, and Polygonal Mesh Representation."
+  },
+  {
+    "q": "In OpenUSD, when composing a stage, why might opinions from one layer not take effect in the final composed stage?",
+    "a": [
+      "The opinions are in a non-editable layer that does not allow modifications during composition.",
+      "The layer containing the opinion does not use the correct schema for the data.",
+      "The layer is not referenced properly, so its opinions are ignored.",
+      "The layer containing the opinion has a lower strength than other layers, and its changes are overridden."
+    ],
+    "c": [
+      3
+    ],
+    "e": "An authored opinion may be valid and still not appear in the final composed stage because USD resolves competing opinions by strength ordering. NVIDIA’s Learn OpenUSD strength-ordering guide explains that, for each prim and property, the composition engine evaluates opinions from contributing layers and composition arcs using LIVRPS, giving precedence to stronger opinions when conflicts occur .It also states that stronger layers can override or add to data defined in weaker layers, enabling non-destructive edits and overrides. Option D is correct because a weaker layer’s opinion can be hidden by a stronger opinion authored elsewhere in the layer stack or through a stronger composition context. This is a normal result of USD composition, not an error .Option A is incorrect because editability controls whether a layer can be modified, not whether its authored opinions can contribute during composition. Option B may indicate invalid or poorly modeled data, but schema choice alone is not the general reason an opinion loses. Option C can be a troubleshooting case for missing referenced content, but the question asks why opinions from a composed layer may not take effect. This aligns with Composition → Layer Stacks, Opinion Strength, LIVRPS, Value Resolution, and Non-Destructive Overrides."
+  },
+  {
+    "q": "You have the following layers: cone1.usda: #usda 1.0 ( upAxis = \"Y\" defaultPrim = \"Cone\" ) def Cone \"Cone\" { uniform token axis = \"Z\" double radius = 2 double height = 3 } cone2.usda: #usda 1.0 ( upAxis = \"Z\" defaultPrim = \"Cone\" ) def Cone \"Cone\" { uniform token axis = \"Z\" double radius = 2 double height = 3 } The following root layer references these two layers and is opened by a DCC tool that does not apply any sort of corrective transformations to any layer data: coneScene.usda: #usda 1.0 ( upAxis = \"Z\" ) def Cone \"Cone1\" ( prepend references = @./cone1.usda@</Cone> ) { double3 xformOp:translate = (-5, 0, 0) uniform token[] xformOpOrder = [\"xformOp:translate\", \"xformOp:rotateXYZ\", \"xformOp:scale\"] } def Cone \"Cone2\" ( prepend references = @./cone2.usda@</Cone> ) { double3 xformOp:translate = (5, 0, 0) uniform token[] xformOpOrder = [\"xformOp:translate\", \"xformOp:rotateXYZ\", \"xformOp:scale\"] } When viewing the scene in the DCC tool, in a view/camera orientation that matches the scene upAxis, what should the orientations of the two cones be?",
+    "a": [
+      "Both Cone1 and Cone2 are pointed along the Z-axis.",
+      "Cone1 pointed along the Y-axis, Cone2 pointed along the Z-axis.",
+      "Both Cone1 and Cone2 are pointed along the Y-axis.",
+      "Cone1 pointed along the Z-axis, Cone2 pointed along the Y-axis."
+    ],
+    "c": [
+      0
+    ],
+    "e": "Both cones should point along the Z-axis. The decisive authored property on each Cone prim is uniform token axis = \"Z\", which defines the cone’s local geometric axis. The differing upAxis metadata in cone1.usda and cone2.usda does not automatically rotate referenced geometry when those assets are composed into coneScene.usda. NVIDIA’s Learn OpenUSD units guidance states that upAxis, metersPerUnit, and kilogramsPerUnit are manually handled metadata during composition, while only timeCodesPerSecond is automatically reconciled. It specifically explains that USD does not automatically reconcile geometric unit metadata across composed layer stacks. Option A is correct because the root stage is Z-up, the DCC applies no corrective transform, and both referenced cone prims explicitly author their primitive axis as Z. Option B incorrectly assumes that the source layer’s upAxis = \"Y\" causes automatic conversion into the root stage’s coordinate system. Option C and D likewise invent orientation changes that are not authored. In production, pipelines must validate or explicitly correct up-axis mismatches through transforms or import/export policy. This aligns with Pipeline Development → Stage Metadata, upAxis, Asset Assembly, Reference, and Manual Unit Reconciliation. Thank you for your visit. To try more exams, please visit below link"
+  }
+];
+const SETS = [];
+
+const quiz = document.getElementById('quiz');
+const scoreEl = document.getElementById('score');
+let activeSet = 'all';  // 'all' or a set name like 'set1'
+
+function letter(i) { return String.fromCharCode(65 + i); }
+
+function renderQuestion(q, qi) {
+  const isMulti = !!q.multi;
+  const type = isMulti ? 'checkbox' : 'radio';
+  const opts = q.a.map((text, oi) => `
+    <li>
+      <label data-qi="${qi}" data-oi="${oi}">
+        <input type="${type}" name="q${qi}" value="${oi}">
+        <strong>${letter(oi)}.</strong> ${escapeHtml(text)}
+      </label>
+    </li>`).join('');
+  const setTag = q.set ? `<span class="set-tag">${escapeHtml(q.set)}</span>` : '';
+  const multiTag = isMulti ? ' <span class="multi-tag">multi</span>' : '';
+  const setAttr = q.set ? `data-set="${escapeHtml(q.set)}"` : '';
+  const expHtml = q.e
+    ? `<div class="explanation" id="exp${qi}" hidden><span class="exp-label">Explanation</span>${escapeHtml(q.e)}</div>`
+    : '';
+  const expBtn = q.e ? `<button data-explain="${qi}">Explanation</button>` : '';
+  return `
+    <div class="q" id="q${qi}" data-qi="${qi}" ${setAttr}>
+      <h2>${qi + 1}. ${escapeHtml(q.q)}${multiTag}${setTag}</h2>
+      <ul class="opts">${opts}</ul>
+      <div class="actions">
+        <button data-check="${qi}">Check</button>
+        <button data-reset="${qi}">Reset</button>
+        ${expBtn}
+      </div>
+      ${expHtml}
+    </div>`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+}
+
+function checkQuestion(qi) {
+  const q = QUESTIONS[qi];
+  const correct = new Set(q.c);
+  document.querySelectorAll(`#q${qi} .opts label`).forEach(label => {
+    const oi = +label.dataset.oi;
+    const input = label.querySelector('input');
+    label.classList.remove('correct', 'wrong', 'reveal-correct');
+    if (input.checked) {
+      if (correct.has(oi)) label.classList.add('correct');
+      else label.classList.add('wrong');
+    } else if (correct.has(oi)) {
+      label.classList.add('reveal-correct');
+    }
+  });
+  const exp = document.getElementById(`exp${qi}`);
+  if (exp) exp.hidden = false;
+  updateScore();
+}
+
+function resetQuestion(qi) {
+  document.querySelectorAll(`#q${qi} .opts label`).forEach(label => {
+    label.classList.remove('correct', 'wrong', 'reveal-correct');
+    label.querySelector('input').checked = false;
+  });
+  const exp = document.getElementById(`exp${qi}`);
+  if (exp) exp.hidden = true;
+  updateScore();
+}
+
+function inActiveSet(q) {
+  return activeSet === 'all' || q.set === activeSet;
+}
+
+function updateScore() {
+  let answered = 0, correct = 0, total = 0;
+  QUESTIONS.forEach((q, qi) => {
+    if (!inActiveSet(q)) return;
+    total++;
+    const inputs = document.querySelectorAll(`#q${qi} input`);
+    const picked = [...inputs].filter(i => i.checked).map(i => +i.value);
+    if (picked.length === 0) return;
+    answered++;
+    const expected = new Set(q.c);
+    const isExactMatch =
+      picked.length === expected.size &&
+      picked.every(p => expected.has(p));
+    if (isExactMatch) correct++;
+  });
+  const label = activeSet === 'all' ? 'overall' : activeSet;
+  scoreEl.textContent = `Score: ${correct} / ${answered} answered (of ${total}, ${label})`;
+}
+
+function applyFilter() {
+  QUESTIONS.forEach((q, qi) => {
+    const el = document.getElementById(`q${qi}`);
+    if (!el) return;
+    el.classList.toggle('hidden', !inActiveSet(q));
+  });
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.set === activeSet);
+  });
+  updateScore();
+}
+
+// ── Cache: persist answers + checked state across reloads ────────────────────
+const CACHE_KEY = 'quiz-cache-ncp-ousd-practice-test';
+
+function saveCache() {
+  const answers = {};   // qi -> [oi, ...]
+  const checked = {};   // qi -> true
+  QUESTIONS.forEach((q, qi) => {
+    const picked = [...document.querySelectorAll(`#q${qi} input:checked`)]
+      .map(i => +i.value);
+    if (picked.length) answers[qi] = picked;
+    // A question is "checked" if any label has a result class.
+    const el = document.getElementById(`q${qi}`);
+    if (el && el.querySelector('.correct, .wrong, .reveal-correct')) checked[qi] = true;
+  });
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ answers, checked })); } catch(_) {}
+}
+
+function loadCache() {
+  let cache;
+  try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); } catch(_) {}
+  if (!cache) return;
+  const { answers = {}, checked = {} } = cache;
+  // Restore selections first.
+  Object.entries(answers).forEach(([qi, ois]) => {
+    ois.forEach(oi => {
+      const input = document.querySelector(`#q${qi} input[value="${oi}"]`);
+      if (input) input.checked = true;
+    });
+  });
+  // Restore checked visual state.
+  Object.keys(checked).forEach(qi => checkQuestion(+qi));
+}
+
+quiz.innerHTML = QUESTIONS.map(renderQuestion).join('');
+
+// Restore cache after DOM is built.
+loadCache();
+
+quiz.addEventListener('click', e => {
+  const t = e.target;
+  if (t.matches('[data-check]')) { checkQuestion(+t.dataset.check); saveCache(); }
+  else if (t.matches('[data-reset]')) { resetQuestion(+t.dataset.reset); saveCache(); }
+  else if (t.matches('[data-explain]')) {
+    const ex = document.getElementById(`exp${t.dataset.explain}`);
+    if (ex) ex.hidden = !ex.hidden;
+  }
+});
+quiz.addEventListener('change', () => { updateScore(); saveCache(); });
+
+document.getElementById('checkAll').addEventListener('click', () => {
+  QUESTIONS.forEach((q, qi) => { if (inActiveSet(q)) checkQuestion(qi); });
+  saveCache();
+});
+document.getElementById('resetAll').addEventListener('click', () => {
+  QUESTIONS.forEach((q, qi) => { if (inActiveSet(q)) resetQuestion(qi); });
+  saveCache();
+});
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    activeSet = tab.dataset.set;
+    applyFilter();
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  });
+});
+
+if (SETS.length > 1) applyFilter();
+else updateScore();
+
+// Dark-mode toggle. Persists across reloads in localStorage but falls back
+// to prefers-color-scheme when no preference is stored.
+const THEME_KEY = 'quiz-theme';
+function applyTheme(theme) {
+  const html = document.documentElement;
+  if (theme === 'dark' || theme === 'light') {
+    html.setAttribute('data-theme', theme);
+  } else {
+    html.removeAttribute('data-theme');
+  }
+  const isDark = theme === 'dark'
+    || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.getElementById('themeIcon').textContent = isDark ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = isDark ? 'Light' : 'Dark';
+}
+applyTheme(localStorage.getItem(THEME_KEY));
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  const isCurrentlyDark = current === 'dark'
+    || (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const next = isCurrentlyDark ? 'light' : 'dark';
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+});
+</script>
+</body>
+</html>
