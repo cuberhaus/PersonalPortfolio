@@ -142,7 +142,25 @@
     border-bottom: 1px solid var(--border);
     font-weight: bold;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    flex-wrap: wrap;
   }
+  #scoreText .ok { color: var(--reveal); }
+  #scoreText .ko { color: var(--wrong-border); }
+  #reviewWrong {
+    font-size: .85rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  #reviewWrong.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  #reviewWrong:disabled { opacity: .5; cursor: default; }
   .multi-tag {
     font-size: .75rem;
     background: var(--multi-bg);
@@ -227,7 +245,10 @@
 </div>
 <p class="note">Select an answer per question (or multiple where tagged <span class="multi-tag">multi</span>). Use <em>Check</em> to reveal the correct option, or <em>Check all</em> at the bottom.</p>
 
-<div id="score">Score: 0 / 0 answered</div>
+<div id="score">
+  <span id="scoreText">Score: 0 / 0 answered</span>
+  <button id="reviewWrong" type="button" disabled>Review wrong (0)</button>
+</div>
 <div id="quiz"></div>
 <div class="actions" style="margin: 2rem 0;">
   <button id="checkAll" class="primary">Check all</button>
@@ -1856,8 +1877,9 @@ const QUESTIONS = [
 const SETS = [];
 
 const quiz = document.getElementById('quiz');
-const scoreEl = document.getElementById('score');
+const scoreEl = document.getElementById('scoreText');
 let activeSet = 'all';  // 'all' or a set name like 'set1'
+let reviewWrong = false;  // when true, show only answered-incorrectly questions
 
 function letter(i) { return String.fromCharCode(65 + i); }
 
@@ -1930,30 +1952,52 @@ function inActiveSet(q) {
   return activeSet === 'all' || q.set === activeSet;
 }
 
+function pickedFor(qi) {
+  return [...document.querySelectorAll(`#q${qi} input`)]
+    .filter(i => i.checked).map(i => +i.value);
+}
+
+function isExact(qi, picked) {
+  const expected = new Set(QUESTIONS[qi].c);
+  return picked.length === expected.size && picked.every(p => expected.has(p));
+}
+
+// A question counts as "wrong" once it has a selection that is not an exact match.
+function isWrongAnswered(qi) {
+  const picked = pickedFor(qi);
+  return picked.length > 0 && !isExact(qi, picked);
+}
+
 function updateScore() {
   let answered = 0, correct = 0, total = 0;
   QUESTIONS.forEach((q, qi) => {
     if (!inActiveSet(q)) return;
     total++;
-    const inputs = document.querySelectorAll(`#q${qi} input`);
-    const picked = [...inputs].filter(i => i.checked).map(i => +i.value);
+    const picked = pickedFor(qi);
     if (picked.length === 0) return;
     answered++;
-    const expected = new Set(q.c);
-    const isExactMatch =
-      picked.length === expected.size &&
-      picked.every(p => expected.has(p));
-    if (isExactMatch) correct++;
+    if (isExact(qi, picked)) correct++;
   });
+  const wrong = answered - correct;
   const label = activeSet === 'all' ? 'overall' : activeSet;
-  scoreEl.textContent = `Score: ${correct} / ${answered} answered (of ${total}, ${label})`;
+  scoreEl.innerHTML =
+    `<span class="ok">${correct} correct</span> · ` +
+    `<span class="ko">${wrong} wrong</span> · ` +
+    `${answered}/${total} answered (${label})`;
+  const reviewBtn = document.getElementById('reviewWrong');
+  if (reviewBtn) {
+    reviewBtn.textContent = reviewWrong ? `Show all (${wrong} wrong)` : `Review wrong (${wrong})`;
+    reviewBtn.classList.toggle('active', reviewWrong);
+    reviewBtn.disabled = wrong === 0 && !reviewWrong;
+  }
 }
 
 function applyFilter() {
   QUESTIONS.forEach((q, qi) => {
     const el = document.getElementById(`q${qi}`);
     if (!el) return;
-    el.classList.toggle('hidden', !inActiveSet(q));
+    const visible = inActiveSet(q) && (!reviewWrong || isWrongAnswered(qi));
+    el.classList.toggle('hidden', !visible);
   });
   document.querySelectorAll('.tab').forEach(t => {
     t.classList.toggle('active', t.dataset.set === activeSet);
@@ -2016,7 +2060,20 @@ document.getElementById('checkAll').addEventListener('click', () => {
 });
 document.getElementById('resetAll').addEventListener('click', () => {
   QUESTIONS.forEach((q, qi) => { if (inActiveSet(q)) resetQuestion(qi); });
+  reviewWrong = false;
+  applyFilter();
   saveCache();
+});
+
+document.getElementById('reviewWrong').addEventListener('click', () => {
+  reviewWrong = !reviewWrong;
+  if (reviewWrong) {
+    // Reveal correct answers on the wrong questions so they can be reviewed.
+    QUESTIONS.forEach((q, qi) => { if (inActiveSet(q) && isWrongAnswered(qi)) checkQuestion(qi); });
+    saveCache();
+  }
+  applyFilter();
+  window.scrollTo({ top: 0, behavior: 'instant' });
 });
 
 document.querySelectorAll('.tab').forEach(tab => {

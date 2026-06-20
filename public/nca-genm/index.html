@@ -142,7 +142,25 @@
     border-bottom: 1px solid var(--border);
     font-weight: bold;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    flex-wrap: wrap;
   }
+  #scoreText .ok { color: var(--reveal); }
+  #scoreText .ko { color: var(--wrong-border); }
+  #reviewWrong {
+    font-size: .85rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  #reviewWrong.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  #reviewWrong:disabled { opacity: .5; cursor: default; }
   .multi-tag {
     font-size: .75rem;
     background: var(--multi-bg);
@@ -192,6 +210,26 @@
     align-items: center;
     gap: .35rem;
   }
+  .explanation {
+    margin-top: .85rem;
+    padding: .7rem .95rem;
+    border-left: 3px solid var(--accent);
+    background: var(--hover);
+    border-radius: 6px;
+    font-size: .9rem;
+    color: var(--fg);
+    white-space: pre-wrap;
+  }
+  .explanation[hidden] { display: none; }
+  .explanation .exp-label {
+    display: block;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: .3rem;
+    text-transform: uppercase;
+    font-size: .7rem;
+    letter-spacing: .05em;
+  }
 </style>
 </head>
 <body>
@@ -216,7 +254,10 @@
 <button class="tab" data-set="Set 6">Set 6</button>
 <button class="tab" data-set="Set 7">Set 7</button>
 </div>
-<div id="score">Score: 0 / 0 answered</div>
+<div id="score">
+  <span id="scoreText">Score: 0 / 0 answered</span>
+  <button id="reviewWrong" type="button" disabled>Review wrong (0)</button>
+</div>
 <div id="quiz"></div>
 <div class="actions" style="margin: 2rem 0;">
   <button id="checkAll" class="primary">Check all</button>
@@ -5810,8 +5851,9 @@ const QUESTIONS = [
 const SETS = ["Set 1", "Set 2", "Set 3", "Set 4", "Set 5", "Set 6", "Set 7"];
 
 const quiz = document.getElementById('quiz');
-const scoreEl = document.getElementById('score');
+const scoreEl = document.getElementById('scoreText');
 let activeSet = 'all';  // 'all' or a set name like 'set1'
+let reviewWrong = false;  // when true, show only answered-incorrectly questions
 
 function letter(i) { return String.fromCharCode(65 + i); }
 
@@ -5828,6 +5870,10 @@ function renderQuestion(q, qi) {
   const setTag = q.set ? `<span class="set-tag">${escapeHtml(q.set)}</span>` : '';
   const multiTag = isMulti ? ' <span class="multi-tag">multi</span>' : '';
   const setAttr = q.set ? `data-set="${escapeHtml(q.set)}"` : '';
+  const expHtml = q.e
+    ? `<div class="explanation" id="exp${qi}" hidden><span class="exp-label">Explanation</span>${escapeHtml(q.e)}</div>`
+    : '';
+  const expBtn = q.e ? `<button data-explain="${qi}">Explanation</button>` : '';
   return `
     <div class="q" id="q${qi}" data-qi="${qi}" ${setAttr}>
       <h2>${qi + 1}. ${escapeHtml(q.q)}${multiTag}${setTag}</h2>
@@ -5835,7 +5881,9 @@ function renderQuestion(q, qi) {
       <div class="actions">
         <button data-check="${qi}">Check</button>
         <button data-reset="${qi}">Reset</button>
+        ${expBtn}
       </div>
+      ${expHtml}
     </div>`;
 }
 
@@ -5859,6 +5907,8 @@ function checkQuestion(qi) {
       label.classList.add('reveal-correct');
     }
   });
+  const exp = document.getElementById(`exp${qi}`);
+  if (exp) exp.hidden = false;
   updateScore();
 }
 
@@ -5867,6 +5917,8 @@ function resetQuestion(qi) {
     label.classList.remove('correct', 'wrong', 'reveal-correct');
     label.querySelector('input').checked = false;
   });
+  const exp = document.getElementById(`exp${qi}`);
+  if (exp) exp.hidden = true;
   updateScore();
 }
 
@@ -5874,30 +5926,52 @@ function inActiveSet(q) {
   return activeSet === 'all' || q.set === activeSet;
 }
 
+function pickedFor(qi) {
+  return [...document.querySelectorAll(`#q${qi} input`)]
+    .filter(i => i.checked).map(i => +i.value);
+}
+
+function isExact(qi, picked) {
+  const expected = new Set(QUESTIONS[qi].c);
+  return picked.length === expected.size && picked.every(p => expected.has(p));
+}
+
+// A question counts as "wrong" once it has a selection that is not an exact match.
+function isWrongAnswered(qi) {
+  const picked = pickedFor(qi);
+  return picked.length > 0 && !isExact(qi, picked);
+}
+
 function updateScore() {
   let answered = 0, correct = 0, total = 0;
   QUESTIONS.forEach((q, qi) => {
     if (!inActiveSet(q)) return;
     total++;
-    const inputs = document.querySelectorAll(`#q${qi} input`);
-    const picked = [...inputs].filter(i => i.checked).map(i => +i.value);
+    const picked = pickedFor(qi);
     if (picked.length === 0) return;
     answered++;
-    const expected = new Set(q.c);
-    const isExactMatch =
-      picked.length === expected.size &&
-      picked.every(p => expected.has(p));
-    if (isExactMatch) correct++;
+    if (isExact(qi, picked)) correct++;
   });
+  const wrong = answered - correct;
   const label = activeSet === 'all' ? 'overall' : activeSet;
-  scoreEl.textContent = `Score: ${correct} / ${answered} answered (of ${total}, ${label})`;
+  scoreEl.innerHTML =
+    `<span class="ok">${correct} correct</span> · ` +
+    `<span class="ko">${wrong} wrong</span> · ` +
+    `${answered}/${total} answered (${label})`;
+  const reviewBtn = document.getElementById('reviewWrong');
+  if (reviewBtn) {
+    reviewBtn.textContent = reviewWrong ? `Show all (${wrong} wrong)` : `Review wrong (${wrong})`;
+    reviewBtn.classList.toggle('active', reviewWrong);
+    reviewBtn.disabled = wrong === 0 && !reviewWrong;
+  }
 }
 
 function applyFilter() {
   QUESTIONS.forEach((q, qi) => {
     const el = document.getElementById(`q${qi}`);
     if (!el) return;
-    el.classList.toggle('hidden', !inActiveSet(q));
+    const visible = inActiveSet(q) && (!reviewWrong || isWrongAnswered(qi));
+    el.classList.toggle('hidden', !visible);
   });
   document.querySelectorAll('.tab').forEach(t => {
     t.classList.toggle('active', t.dataset.set === activeSet);
@@ -5947,6 +6021,10 @@ quiz.addEventListener('click', e => {
   const t = e.target;
   if (t.matches('[data-check]')) { checkQuestion(+t.dataset.check); saveCache(); }
   else if (t.matches('[data-reset]')) { resetQuestion(+t.dataset.reset); saveCache(); }
+  else if (t.matches('[data-explain]')) {
+    const ex = document.getElementById(`exp${t.dataset.explain}`);
+    if (ex) ex.hidden = !ex.hidden;
+  }
 });
 quiz.addEventListener('change', () => { updateScore(); saveCache(); });
 
@@ -5956,7 +6034,20 @@ document.getElementById('checkAll').addEventListener('click', () => {
 });
 document.getElementById('resetAll').addEventListener('click', () => {
   QUESTIONS.forEach((q, qi) => { if (inActiveSet(q)) resetQuestion(qi); });
+  reviewWrong = false;
+  applyFilter();
   saveCache();
+});
+
+document.getElementById('reviewWrong').addEventListener('click', () => {
+  reviewWrong = !reviewWrong;
+  if (reviewWrong) {
+    // Reveal correct answers on the wrong questions so they can be reviewed.
+    QUESTIONS.forEach((q, qi) => { if (inActiveSet(q) && isWrongAnswered(qi)) checkQuestion(qi); });
+    saveCache();
+  }
+  applyFilter();
+  window.scrollTo({ top: 0, behavior: 'instant' });
 });
 
 document.querySelectorAll('.tab').forEach(tab => {
