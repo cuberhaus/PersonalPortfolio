@@ -51,6 +51,7 @@ const { num } = Astro.props;
                 <div class="work-icon" set:html={renderIconSvg(project.icon, 28)} />
 
                 <div class="work-badge">
+                  <span class="work-badge-label">{t('work.client')}:</span>
                   <span>{project.company}</span>
                 </div>
 
@@ -69,6 +70,7 @@ const { num } = Astro.props;
                 <div class="work-icon" set:html={renderIconSvg(project.icon, 28)} />
 
                 <div class="work-badge">
+                  <span class="work-badge-label">{t('work.client')}:</span>
                   <span>{project.company}</span>
                 </div>
 
@@ -167,6 +169,11 @@ const { num } = Astro.props;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-color);
     opacity: 0.8;
+  }
+
+  .work-badge-label {
+    color: var(--text-muted);
+    font-weight: 500;
   }
 
   .work-title {

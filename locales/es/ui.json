@@ -48,6 +48,14 @@
   },
   "demo": {
     "allDemos": "Todos los Demos",
+    "categories": {
+      "academic": "Académico",
+      "ai-ml": "IA / ML",
+      "algorithms": "Algoritmos",
+      "graphics": "Gráficos",
+      "robotics": "Robótica",
+      "web": "Web"
+    },
     "moreProjects": "Más Proyectos",
     "next": "Siguiente",
     "portfolio": "Portafolio",
@@ -90,7 +98,7 @@
     "experience": "Experiencia",
     "projects": "Proyectos",
     "skills": "Habilidades",
-    "work": "Trabajo Profesional"
+    "work": "Trabajo"
   },
   "notFound": {
     "back": "Portafolio",
@@ -128,6 +136,7 @@
     "recommended": "recomendada para este diseño"
   },
   "work": {
+    "client": "Cliente",
     "label": "Trabajo Profesional",
     "subtitle": "Hitos clave e iniciativas de IA entregadas en el mundo real.",
     "title": "Proyectos Destacados"

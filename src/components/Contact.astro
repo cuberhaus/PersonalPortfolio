@@ -434,11 +434,11 @@ const { num } = Astro.props;
   }
 
   .form-result.success {
-    color: #10b981;
+    color: var(--color-success, #10b981);
   }
 
   .form-result.error {
-    color: #ef4444;
+    color: var(--color-error, #ef4444);
   }
 
   .email-hint {
@@ -449,7 +449,7 @@ const { num } = Astro.props;
   }
 
   .email-hint.error {
-    color: #ef4444;
+    color: var(--color-error, #ef4444);
   }
 
   .email-hint.suggestion {
