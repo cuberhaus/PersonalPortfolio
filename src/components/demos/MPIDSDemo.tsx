@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { Network } from 'lucide-react';
+import { Network, CheckCircle, X } from 'lucide-react';
 import {
   parseGraph,
   greedySolver,
@@ -588,6 +588,25 @@ function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
                         {domInfo[tooltip.node].count}/{domInfo[tooltip.node].needed}{' '}
                         {t.neighborsInSet}
                         {domInfo[tooltip.node].dominated ? t.domYes : t.domNo}
+                        {domInfo[tooltip.node].dominated ? (
+                          <CheckCircle
+                            size={12}
+                            style={{
+                              display: 'inline',
+                              marginLeft: '0.2rem',
+                              verticalAlign: 'middle',
+                            }}
+                          />
+                        ) : (
+                          <X
+                            size={12}
+                            style={{
+                              display: 'inline',
+                              marginLeft: '0.2rem',
+                              verticalAlign: 'middle',
+                            }}
+                          />
+                        )}
                       </div>
                     )}
                   </>

@@ -46,26 +46,21 @@ const links = sections
 <style>
   .navbar {
     position: fixed;
-    top: 1rem;
-    left: 1rem;
-    right: 1rem;
-    width: auto;
-    border-radius: var(--radius-lg);
+    top: 0;
+    width: 100%;
     z-index: 1000;
     background: var(--bg-nav);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid transparent;
+    border-bottom: 1px solid transparent;
     transition:
       border-color var(--transition-base),
-      background var(--transition-base),
-      box-shadow var(--transition-base);
+      background var(--transition-base);
   }
 
   .navbar.scrolled {
-    border-color: var(--border-color);
+    border-bottom-color: var(--border-color);
     background: var(--bg-nav-scrolled);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 
   .nav-inner {
@@ -84,7 +79,7 @@ const links = sections
 
   .nav-links {
     display: flex;
-    gap: 1.5rem;
+    gap: clamp(0.75rem, 1.5vw, 1.5rem);
     align-items: center;
     list-style: none;
     margin: 0;
@@ -99,7 +94,7 @@ const links = sections
   .nav-links-util {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: clamp(0.5rem, 1vw, 1.5rem);
   }
 
   .nav-link {
@@ -187,13 +182,7 @@ const links = sections
     transform: rotate(-45deg);
   }
 
-  @media (max-width: 768px) {
-    .navbar {
-      top: 0.5rem;
-      left: 0.5rem;
-      right: 0.5rem;
-    }
-
+  @media (max-width: 1024px) {
     .nav-inner {
       position: relative;
       z-index: 2;

@@ -28,6 +28,6 @@
   "degree": "grau:",
   "inDomSet": "En conjunt dominador",
   "neighborsInSet": "veïns en conjunt",
-  "domYes": " — dominat ✓",
-  "domNo": " — NO dominat ✗"
+  "domYes": " — dominat",
+  "domNo": " — NO dominat"
 }
