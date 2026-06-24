@@ -8,6 +8,7 @@ export type DemoLang = Locale;
 
 export interface Demo {
   slug: string;
+  category: string;
   hidden?: boolean;
   title: string;
   description: string;
