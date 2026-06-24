@@ -1,4 +1,5 @@
 import { useId, useState } from 'react';
+import { Calendar, Hotel, TrendingDown, Building2 } from 'lucide-react';
 import LiveAppEmbed from './LiveAppEmbed';
 
 import { TRANSLATIONS } from '../../i18n/demos/planificacion-demo';
@@ -405,7 +406,19 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                   border: '1px solid var(--border-color)',
                 }}
               >
-                <span style={{ fontSize: '1.1rem' }}>{c.icon}</span>
+                <span style={{ fontSize: '1.1rem', display: 'flex', color: 'var(--text-primary)' }}>
+                  {c.icon === '🏙️' ? (
+                    <Building2 size={20} />
+                  ) : c.icon === '📅' ? (
+                    <Calendar size={20} />
+                  ) : c.icon === '🏨' ? (
+                    <Hotel size={20} />
+                  ) : c.icon === '📉' ? (
+                    <TrendingDown size={20} />
+                  ) : (
+                    c.icon
+                  )}
+                </span>
                 <div>
                   <div
                     style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}

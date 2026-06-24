@@ -1,4 +1,14 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import {
+  ClipboardList,
+  VenetianMask,
+  Database,
+  Brain,
+  Search,
+  CheckCircle,
+  Microscope,
+  BarChart2,
+} from 'lucide-react';
 import modelData from '../../data/tfg-model-results.json' with { type: 'json' };
 import LiveAppEmbed from './LiveAppEmbed';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
@@ -73,7 +83,25 @@ function PipelineStrip({ t }: { t: typeof TRANSLATIONS.en }) {
                 textAlign: 'center',
               }}
             >
-              <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
+              <div
+                style={{ fontSize: '1.1rem', marginBottom: '0.4rem', color: 'var(--text-primary)' }}
+              >
+                {step.icon === '📋' ? (
+                  <ClipboardList size={24} style={{ margin: '0 auto' }} />
+                ) : step.icon === '🎭' ? (
+                  <VenetianMask size={24} style={{ margin: '0 auto' }} />
+                ) : step.icon === '📊' ? (
+                  <Database size={24} style={{ margin: '0 auto' }} />
+                ) : step.icon === '🧠' ? (
+                  <Brain size={24} style={{ margin: '0 auto' }} />
+                ) : step.icon === '🔍' ? (
+                  <Search size={24} style={{ margin: '0 auto' }} />
+                ) : step.icon === '✅' ? (
+                  <CheckCircle size={24} style={{ margin: '0 auto' }} />
+                ) : (
+                  step.icon
+                )}
+              </div>
               <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                 {step.title}
               </div>
@@ -155,7 +183,7 @@ function ModelComparison({ t }: { t: typeof TRANSLATIONS.en }) {
             background: `linear-gradient(135deg, rgba(16,185,129,0.15), rgba(14,165,233,0.1))`,
           }}
         >
-          {'\u{1F4CA}'}
+          <BarChart2 size={16} color="var(--text-primary)" />
         </div>
         <div>
           <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{t.modelComp}</h3>
@@ -790,7 +818,7 @@ function TfgPolypDemo({ lang = 'en' }: { lang?: Lang }) {
                   'linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), color-mix(in srgb, var(--accent-end) 10%, transparent))',
               }}
             >
-              {'\u{1F52C}'}
+              <Microscope size={16} color="var(--text-primary)" />
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{t.simInference}</h3>
@@ -820,7 +848,7 @@ function TfgPolypDemo({ lang = 'en' }: { lang?: Lang }) {
                   'linear-gradient(135deg, color-mix(in srgb, var(--accent-end) 15%, transparent), color-mix(in srgb, var(--accent-start) 10%, transparent))',
               }}
             >
-              {'\u{1F3AD}'}
+              <VenetianMask size={16} color="var(--text-primary)" />
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{t.cgTrans}</h3>

@@ -37,6 +37,7 @@
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.2.0",
     "i18next": "^26.3.1",
+    "lucide-react": "^1.21.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "topojson-client": "^3.1.0",

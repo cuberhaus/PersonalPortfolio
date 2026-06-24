@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { CheckCircle } from 'lucide-react';
 import { MOCK_CATEGORIES, MOCK_PRODUCTS, type Category, type Product } from '../../data/tenda-mock';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
@@ -555,7 +556,9 @@ function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
         <div>
           {orderPlaced ? (
             <div style={{ ...styles.card, textAlign: 'center' as const, padding: '3rem' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✓</div>
+              <div style={{ marginBottom: '1rem', color: 'var(--status-success)' }}>
+                <CheckCircle size={48} />
+              </div>
               <h3 style={{ marginBottom: '0.5rem', color: 'var(--accent-text)' }}>
                 {t.orderReceived}
               </h3>
