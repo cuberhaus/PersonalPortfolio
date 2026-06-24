@@ -28,6 +28,6 @@
   "degree": "degree:",
   "inDomSet": "In dominating set",
   "neighborsInSet": "neighbors in set",
-  "domYes": " — dominated ✓",
-  "domNo": " — NOT dominated ✗"
+  "domYes": " — dominated",
+  "domNo": " — NOT dominated"
 }
