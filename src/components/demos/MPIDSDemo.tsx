@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { Network } from 'lucide-react';
 import {
   parseGraph,
   greedySolver,
@@ -345,7 +346,7 @@ function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
       {/* Info card */}
       <div style={s.infoCard}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-          <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>🔵</span>
+          <Network size={24} />
           <div>
             <strong style={{ color: 'var(--text-primary)' }}>{t.mpidsTitle}</strong>
             <p

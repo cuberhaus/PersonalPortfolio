@@ -7,6 +7,8 @@ import { useDemoLifecycle } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 import { gradientButton } from './_styles';
 
+import { Globe, MessageCircle, Brain, Camera, BarChart2 } from 'lucide-react';
+
 type Lang = 'en' | 'es' | 'ca';
 type Tab = 'news' | 'chat' | 'quiz' | 'vision' | 'stats';
 
@@ -623,12 +625,12 @@ function DraculinDemo({ lang = 'en' }: { lang?: Lang }) {
   useDemoLifecycle('demo:draculin', { lang });
   const [tab, setTab] = useState<Tab>('news');
 
-  const tabs: { id: Tab; label: string; icon: string }[] = [
-    { id: 'news', label: 'DracuNews', icon: '🌐' },
-    { id: 'chat', label: 'DracuChat', icon: '💬' },
-    { id: 'quiz', label: 'DracuQuiz', icon: '🧠' },
-    { id: 'vision', label: 'DracuVision', icon: '📷' },
-    { id: 'stats', label: 'DracuStats', icon: '📊' },
+  const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
+    { id: 'news', label: 'DracuNews', icon: <Globe size={16} /> },
+    { id: 'chat', label: 'DracuChat', icon: <MessageCircle size={16} /> },
+    { id: 'quiz', label: 'DracuQuiz', icon: <Brain size={16} /> },
+    { id: 'vision', label: 'DracuVision', icon: <Camera size={16} /> },
+    { id: 'stats', label: 'DracuStats', icon: <BarChart2 size={16} /> },
   ];
 
   return (
@@ -643,7 +645,13 @@ function DraculinDemo({ lang = 'en' }: { lang?: Lang }) {
         {tabs.map((tb) => (
           <button
             key={tb.id}
-            style={{ ...s.tab, ...(tab === tb.id ? s.tabActive : {}) }}
+            style={{
+              ...s.tab,
+              ...(tab === tb.id ? s.tabActive : {}),
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+            }}
             onClick={() => setTab(tb.id)}
           >
             {tb.icon} {tb.label}

@@ -1,5 +1,15 @@
 import { useCallback, useState } from 'react';
 import {
+  Zap,
+  Navigation,
+  ClipboardList,
+  Shuffle,
+  BarChart2,
+  Search,
+  Map,
+  Settings,
+} from 'lucide-react';
+import {
   defaultToyScenario,
   heuristicSum,
   hillClimbing,
@@ -280,7 +290,25 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
                   textAlign: 'center',
                 }}
               >
-                <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
+                <div
+                  style={{
+                    fontSize: '1.1rem',
+                    marginBottom: '0.4rem',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  {step.icon === '📋' ? (
+                    <ClipboardList size={24} style={{ margin: '0 auto' }} />
+                  ) : step.icon === '🔀' ? (
+                    <Shuffle size={24} style={{ margin: '0 auto' }} />
+                  ) : step.icon === '📊' ? (
+                    <BarChart2 size={24} style={{ margin: '0 auto' }} />
+                  ) : step.icon === '🔍' ? (
+                    <Search size={24} style={{ margin: '0 auto' }} />
+                  ) : (
+                    step.icon
+                  )}
+                </div>
                 <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                   {step.title}
                 </div>
@@ -308,7 +336,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
         <div
           style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}
         >
-          <span style={{ fontSize: '1.1rem' }}>🚁</span>
+          <Navigation size={20} />
           <h4
             style={{
               margin: 0,
@@ -362,7 +390,19 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
                   border: '1px solid var(--border-color)',
                 }}
               >
-                <div style={{ fontSize: '1rem', marginBottom: '0.2rem' }}>{f.icon}</div>
+                <div
+                  style={{ fontSize: '1rem', marginBottom: '0.4rem', color: 'var(--text-primary)' }}
+                >
+                  {f.icon === '🗺️' ? (
+                    <Map size={20} />
+                  ) : f.icon === '📊' ? (
+                    <BarChart2 size={20} />
+                  ) : f.icon === '⚙️' ? (
+                    <Settings size={20} />
+                  ) : (
+                    f.icon
+                  )}
+                </div>
                 <div
                   style={{
                     fontSize: '0.75rem',
@@ -566,7 +606,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
               background: `linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), rgba(34,197,94,0.1))`,
             }}
           >
-            ⚡
+            <Zap size={18} />
           </div>
           <div>
             <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>{t.runDemo}</h3>

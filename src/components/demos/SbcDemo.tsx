@@ -1,5 +1,22 @@
 import { useState, useMemo } from 'react';
 import {
+  Plane,
+  Train,
+  Ship,
+  X,
+  Map,
+  Building2,
+  AlertTriangle,
+  MapPin,
+  Landmark,
+  Heart,
+  Palmtree,
+  PartyPopper,
+  Briefcase,
+  Mountain,
+  Star,
+} from 'lucide-react';
+import {
   CITIES,
   ACCOMMODATIONS,
   ACTIVITIES,
@@ -404,15 +421,35 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
       case 2:
         return (
           <div style={{ ...s.grid2 }}>
-            {TRIP_TYPES.map((tt) => (
-              <button
-                key={tt.id}
-                style={{ ...s.optionBtn, ...(tripType === tt.id ? s.optionActive : {}) }}
-                onClick={() => setTripType(tt.id)}
-              >
-                {tt.emoji} {tt[lang] || tt.en}
-              </button>
-            ))}
+            {TRIP_TYPES.map((tt) => {
+              const Icon =
+                tt.id === 'cultural'
+                  ? Landmark
+                  : tt.id === 'romantico'
+                    ? Heart
+                    : tt.id === 'descanso'
+                      ? Palmtree
+                      : tt.id === 'diversion'
+                        ? PartyPopper
+                        : tt.id === 'trabajo'
+                          ? Briefcase
+                          : Mountain;
+              return (
+                <button
+                  key={tt.id}
+                  style={{
+                    ...s.optionBtn,
+                    ...(tripType === tt.id ? s.optionActive : {}),
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                  }}
+                  onClick={() => setTripType(tt.id)}
+                >
+                  <Icon size={16} /> {tt[lang] || tt.en}
+                </button>
+              );
+            })}
           </div>
         );
       case 3:
@@ -557,22 +594,32 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
         );
       case 7: {
         const modes = [
-          { id: 'Avion', label: `✈️ ${t.plane}` },
-          { id: 'Tren', label: `🚂 ${t.train}` },
-          { id: 'Barco', label: `🚢 ${t.boat}` },
+          { id: 'Avion', label: t.plane, icon: Plane },
+          { id: 'Tren', label: t.train, icon: Train },
+          { id: 'Barco', label: t.boat, icon: Ship },
         ];
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {modes.map((m) => (
-              <button
-                key={m.id}
-                style={{ ...s.optionBtn, ...(avoidTransport.includes(m.id) ? s.optionActive : {}) }}
-                onClick={() => toggleAvoid(m.id)}
-              >
-                {avoidTransport.includes(m.id) ? '❌ ' : ''}
-                {m.label}
-              </button>
-            ))}
+            {modes.map((m) => {
+              const Icon = m.icon;
+              return (
+                <button
+                  key={m.id}
+                  style={{
+                    ...s.optionBtn,
+                    ...(avoidTransport.includes(m.id) ? s.optionActive : {}),
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                  }}
+                  onClick={() => toggleAvoid(m.id)}
+                >
+                  {avoidTransport.includes(m.id) && <X size={16} color="var(--status-error)" />}
+                  <Icon size={16} />
+                  {m.label}
+                </button>
+              );
+            })}
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
               {avoidTransport.length === 0
                 ? t.avoidNone
@@ -592,10 +639,16 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                   textAlign: 'center',
                   minWidth: '3.5rem',
                   ...(minStars === n ? s.optionActive : {}),
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '0.1rem',
                 }}
                 onClick={() => setMinStars(n)}
               >
-                {'⭐'.repeat(n)}
+                {Array.from({ length: n }).map((_, i) => (
+                  <Star key={i} size={14} fill="currentColor" />
+                ))}
               </button>
             ))}
           </div>
@@ -604,16 +657,28 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <button
-              style={{ ...s.optionBtn, ...(preferUnknown ? s.optionActive : {}) }}
+              style={{
+                ...s.optionBtn,
+                ...(preferUnknown ? s.optionActive : {}),
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
               onClick={() => setPreferUnknown(true)}
             >
-              🗺️ {t.preferUnknown}
+              <Map size={16} /> {t.preferUnknown}
             </button>
             <button
-              style={{ ...s.optionBtn, ...(!preferUnknown ? s.optionActive : {}) }}
+              style={{
+                ...s.optionBtn,
+                ...(!preferUnknown ? s.optionActive : {}),
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
               onClick={() => setPreferUnknown(false)}
             >
-              🏙️ {t.preferPopular}
+              <Building2 size={16} /> {t.preferPopular}
             </button>
           </div>
         );
@@ -665,7 +730,9 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
           <div
             style={{ ...s.card, borderColor: 'orange', marginBottom: '1rem', fontSize: '0.85rem' }}
           >
-            <strong>⚠️ {t.errors}:</strong>
+            <strong style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <AlertTriangle size={16} /> {t.errors}:
+            </strong>
             <ul style={{ margin: '0.5rem 0 0 1rem', padding: 0 }}>
               {result.errors.map((e, i) => (
                 <li key={i}>{e}</li>
@@ -678,7 +745,11 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
           {result.cityPlans.map((cp, idx) => (
             <div key={idx}>
               <div style={s.cityCard}>
-                <div style={s.cityName}>📍 {cp.city.name}</div>
+                <div
+                  style={{ ...s.cityName, display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                >
+                  <MapPin size={18} /> {cp.city.name}
+                </div>
                 <div
                   style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}
                 >
@@ -695,7 +766,13 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                     >
                       {t.hotel}
                     </span>
-                    {cp.hotel.name} {'⭐'.repeat(cp.hotel.stars)} — €{cp.hotel.pricePerNight}/night
+                    {cp.hotel.name}{' '}
+                    <span style={{ display: 'inline-flex', verticalAlign: 'middle' }}>
+                      {Array.from({ length: cp.hotel.stars }).map((_, i) => (
+                        <Star key={i} size={12} fill="currentColor" />
+                      ))}
+                    </span>{' '}
+                    — €{cp.hotel.pricePerNight}/night
                   </div>
                 ) : (
                   <div style={{ fontSize: '0.8rem', color: 'orange', marginBottom: '0.5rem' }}>
@@ -724,13 +801,19 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                     padding: '0.5rem 0',
                     fontSize: '0.85rem',
                     color: 'var(--text-muted)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.25rem',
                   }}
                 >
-                  {cp.transportToNext.mode === 'Avion'
-                    ? '✈️'
-                    : cp.transportToNext.mode === 'Tren'
-                      ? '🚂'
-                      : '🚢'}{' '}
+                  {cp.transportToNext.mode === 'Avion' ? (
+                    <Plane size={16} />
+                  ) : cp.transportToNext.mode === 'Tren' ? (
+                    <Train size={16} />
+                  ) : (
+                    <Ship size={16} />
+                  )}{' '}
                   {cp.transportToNext.name} — €{cp.transportToNext.price}
                 </div>
               )}
@@ -741,9 +824,13 @@ function SbcDemo({ lang = 'en' }: { lang?: Lang }) {
                     padding: '0.5rem 0',
                     fontSize: '0.8rem',
                     color: 'orange',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.25rem',
                   }}
                 >
-                  ⚠️ {t.noTransport}
+                  <AlertTriangle size={16} /> {t.noTransport}
                 </div>
               )}
             </div>

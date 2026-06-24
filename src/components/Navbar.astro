@@ -46,22 +46,26 @@ const links = sections
 <style>
   .navbar {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    border-radius: var(--radius-lg);
     z-index: 1000;
     background: var(--bg-nav);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid transparent;
+    border: 1px solid transparent;
     transition:
       border-color var(--transition-base),
-      background var(--transition-base);
+      background var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
   .navbar.scrolled {
-    border-bottom-color: var(--border-color);
+    border-color: var(--border-color);
     background: var(--bg-nav-scrolled);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 
   .nav-inner {
@@ -184,6 +188,12 @@ const links = sections
   }
 
   @media (max-width: 768px) {
+    .navbar {
+      top: 0.5rem;
+      left: 0.5rem;
+      right: 0.5rem;
+    }
+
     .nav-inner {
       position: relative;
       z-index: 2;
@@ -275,7 +285,6 @@ const links = sections
     .nav-link:hover,
     .nav-link.active {
       color: var(--text-primary);
-      transform: scale(1.05);
     }
 
     /* Bottom utilities */

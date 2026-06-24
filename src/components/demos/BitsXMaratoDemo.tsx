@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef, useId, useMemo } from 'react';
+import { Microscope, Ruler, Clapperboard, Brain, Cuboid, Layers } from 'lucide-react';
 import LiveAppEmbed from './LiveAppEmbed';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
@@ -428,7 +429,27 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
                   textAlign: 'center',
                 }}
               >
-                <div style={{ fontSize: '1.1rem', marginBottom: '0.2rem' }}>{step.icon}</div>
+                <div
+                  style={{
+                    fontSize: '1.1rem',
+                    marginBottom: '0.4rem',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  {step.icon === '🎬' ? (
+                    <Clapperboard size={24} style={{ margin: '0 auto' }} />
+                  ) : step.icon === '🧠' ? (
+                    <Brain size={24} style={{ margin: '0 auto' }} />
+                  ) : step.icon === '🗂️' ? (
+                    <Layers size={24} style={{ margin: '0 auto' }} />
+                  ) : step.icon === '🧊' ? (
+                    <Cuboid size={24} style={{ margin: '0 auto' }} />
+                  ) : step.icon === '📏' ? (
+                    <Ruler size={24} style={{ margin: '0 auto' }} />
+                  ) : (
+                    step.icon
+                  )}
+                </div>
                 <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-primary)' }}>
                   {step.title}
                 </div>
@@ -489,7 +510,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
                   'linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 15%, transparent), color-mix(in srgb, var(--accent-end) 10%, transparent))',
               }}
             >
-              🔬
+              <Microscope size={16} />
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{t.simInference}</h3>
@@ -519,7 +540,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
                   'linear-gradient(135deg, color-mix(in srgb, var(--accent-end) 15%, transparent), color-mix(in srgb, var(--accent-start) 10%, transparent))',
               }}
             >
-              📏
+              <Ruler size={16} />
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>{t.diameterExplorer}</h3>

@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { BarChart2 } from 'lucide-react';
 import {
   binomialGraph,
   geometricGraph,
@@ -451,7 +452,7 @@ function PhaseTransitionsDemo({ lang = 'en' }: { lang?: Lang }) {
       {/* Info */}
       <div style={s.infoCard}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-          <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>📊</span>
+          <BarChart2 size={24} />
           <div>
             <strong style={{ color: 'var(--text-primary)' }}>{t.panelHeading}</strong>
             <p

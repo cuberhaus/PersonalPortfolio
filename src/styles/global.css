@@ -7,8 +7,8 @@
   --bg-secondary: #12121a;
   --bg-card: #16161f;
   --bg-card-hover: #1c1c28;
-  --bg-nav: rgba(10, 10, 15, 0.6);
-  --bg-nav-scrolled: rgba(10, 10, 15, 0.85);
+  --bg-nav: rgba(10, 10, 15, 0.8);
+  --bg-nav-scrolled: rgba(10, 10, 15, 0.95);
 
   --text-primary: #e4e4e7;
   --text-secondary: #a1a1aa;
@@ -71,8 +71,8 @@ html[data-theme='light'] {
   --bg-secondary: #f1f5f9;
   --bg-card: #ffffff;
   --bg-card-hover: #f1f5f9;
-  --bg-nav: rgba(248, 250, 252, 0.6);
-  --bg-nav-scrolled: rgba(248, 250, 252, 0.95);
+  --bg-nav: rgba(248, 250, 252, 0.85);
+  --bg-nav-scrolled: rgba(248, 250, 252, 0.98);
 
   --text-primary: #18181b;
   --text-secondary: #3f3f46;
@@ -331,6 +331,18 @@ p {
 .skip-to-content:focus {
   top: 1rem;
   opacity: 1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 /* ── Scrollbar ────────────────────────────────────────────── */
