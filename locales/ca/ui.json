@@ -21,6 +21,7 @@
     "viewGithub": "Veure a GitHub"
   },
   "certifications": {
+    "all": "Tots",
     "label": "Credencials",
     "showLess": "Veure menys",
     "showMore": "Veure més",
