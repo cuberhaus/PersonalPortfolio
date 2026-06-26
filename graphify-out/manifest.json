@@ -1,0 +1,1467 @@
+{
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.githooks\\pre-push": {
+    "mtime": 1781034313.5705338,
+    "ast_hash": "7064c2b311abf84f3fba7ee5af25e777",
+    "semantic_hash": "7064c2b311abf84f3fba7ee5af25e777"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.prettierrc.json": {
+    "mtime": 1778887746.4681797,
+    "ast_hash": "03fb54745e8dad51f6db3ebf114a7c02",
+    "semantic_hash": "03fb54745e8dad51f6db3ebf114a7c02"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.vscode\\settings.json": {
+    "mtime": 1779260718.1600578,
+    "ast_hash": "e6aa30a076b92b0e083bfaddf7269677",
+    "semantic_hash": "e6aa30a076b92b0e083bfaddf7269677"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\astro.config.mjs": {
+    "mtime": 1779287163.2644725,
+    "ast_hash": "cfc6481824de11c6258f407810f4f8b7",
+    "semantic_hash": "cfc6481824de11c6258f407810f4f8b7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\check-error.mjs": {
+    "mtime": 1778887746.4851832,
+    "ast_hash": "c0348c43a2690d175e35c8f4317903e6",
+    "semantic_hash": "c0348c43a2690d175e35c8f4317903e6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\e2e\\a11y.spec.ts": {
+    "mtime": 1778887746.5176928,
+    "ast_hash": "00229583eb6a5b3fc4db16009a0302c0",
+    "semantic_hash": "00229583eb6a5b3fc4db16009a0302c0"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\e2e\\browser-demos.spec.ts": {
+    "mtime": 1778887746.5216937,
+    "ast_hash": "c84ab37a9ad85727e73c0af62d502684",
+    "semantic_hash": "c84ab37a9ad85727e73c0af62d502684"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\e2e\\debug-overlay.spec.ts": {
+    "mtime": 1778887746.5256927,
+    "ast_hash": "634e11b8200c5b7ab676a6ef860118d0",
+    "semantic_hash": "634e11b8200c5b7ab676a6ef860118d0"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\e2e\\keyboard.spec.ts": {
+    "mtime": 1778887746.5276928,
+    "ast_hash": "199a138c64ad07651692894502ef1d45",
+    "semantic_hash": "199a138c64ad07651692894502ef1d45"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\e2e\\live-demos.spec.ts": {
+    "mtime": 1778887746.531693,
+    "ast_hash": "1b753db6f5ab97db518caf7bb1089b36",
+    "semantic_hash": "1b753db6f5ab97db518caf7bb1089b36"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\e2e\\portfolio-smoke.spec.ts": {
+    "mtime": 1778887746.5356953,
+    "ast_hash": "aa4d319bc2332f0e0739ba91149b21fa",
+    "semantic_hash": "aa4d319bc2332f0e0739ba91149b21fa"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\e2e\\themes.spec.ts": {
+    "mtime": 1778887746.5396922,
+    "ast_hash": "c09acc6d91752c2fd1054c9ba73c708c",
+    "semantic_hash": "c09acc6d91752c2fd1054c9ba73c708c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\e2e\\visual.spec.ts": {
+    "mtime": 1779446910.3958986,
+    "ast_hash": "33ad8cb7873685e05f763b7b1a454cdb",
+    "semantic_hash": "33ad8cb7873685e05f763b7b1a454cdb"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\eslint.config.mjs": {
+    "mtime": 1778887746.6812103,
+    "ast_hash": "da38d1b8e4861bbe835d51b33774aa22",
+    "semantic_hash": "da38d1b8e4861bbe835d51b33774aa22"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\lighthouserc.json": {
+    "mtime": 1778887746.6842103,
+    "ast_hash": "3c18e7079f072ddba23bfb558623a014",
+    "semantic_hash": "3c18e7079f072ddba23bfb558623a014"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\package.json": {
+    "mtime": 1781853640.9055698,
+    "ast_hash": "d85bf5dea65d622cf0b6cceae0d6b1b8",
+    "semantic_hash": "d85bf5dea65d622cf0b6cceae0d6b1b8"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\planner-api\\app\\__init__.py": {
+    "mtime": 1778767574.9600313,
+    "ast_hash": "f15fb408b8ce1785dfacfe6dbbe70c99",
+    "semantic_hash": "f15fb408b8ce1785dfacfe6dbbe70c99"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\planner-api\\app\\_sentry_obs.py": {
+    "mtime": 1781853640.9061034,
+    "ast_hash": "28fee441c04df8386ca1c98db5e5eb21",
+    "semantic_hash": "28fee441c04df8386ca1c98db5e5eb21"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\planner-api\\app\\main.py": {
+    "mtime": 1778767574.961031,
+    "ast_hash": "c45c87c0f369df3cd21d8262e165f6e5",
+    "semantic_hash": "c45c87c0f369df3cd21d8262e165f6e5"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\planner-api\\app\\normalize.py": {
+    "mtime": 1778767574.961031,
+    "ast_hash": "5f59b74f6997c144e9d0dad0c40175cb",
+    "semantic_hash": "5f59b74f6997c144e9d0dad0c40175cb"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\planner-api\\tests\\__init__.py": {
+    "mtime": 1778767574.9620323,
+    "ast_hash": "68b329da9893e34099c7d8ad5cb9c940",
+    "semantic_hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\planner-api\\tests\\test_api.py": {
+    "mtime": 1778767574.9630344,
+    "ast_hash": "847c77e3b24abc128e823f2e0f9b2492",
+    "semantic_hash": "847c77e3b24abc128e823f2e0f9b2492"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\planner-api\\tests\\test_normalize.py": {
+    "mtime": 1778767574.9630344,
+    "ast_hash": "eda1be60080261c299e5e9c8ec522854",
+    "semantic_hash": "eda1be60080261c299e5e9c8ec522854"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\playwright.config.ts": {
+    "mtime": 1779446910.4095707,
+    "ast_hash": "6eb30f47bd3011703213aae25d031eef",
+    "semantic_hash": "6eb30f47bd3011703213aae25d031eef"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\project.inlang\\settings.json": {
+    "mtime": 1779812285.0225458,
+    "ast_hash": "62c6727a2873b8163e42d6b5473a0d9d",
+    "semantic_hash": "62c6727a2873b8163e42d6b5473a0d9d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\demos\\joc-eda\\js\\jquery-1.7.1.min.js": {
+    "mtime": 1778767575.046521,
+    "ast_hash": "ddb84c1587287b2df08966081ef063bf",
+    "semantic_hash": "ddb84c1587287b2df08966081ef063bf"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\demos\\joc-eda\\js\\jquery-ui-1.8.18.custom.min.js": {
+    "mtime": 1778767575.046521,
+    "ast_hash": "1de26fc059eb64dbac19da6bacd59b93",
+    "semantic_hash": "1de26fc059eb64dbac19da6bacd59b93"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\demos\\joc-eda\\viewer.js": {
+    "mtime": 1778767575.0485215,
+    "ast_hash": "0303b0adc8ecd859811ec016b9a08361",
+    "semantic_hash": "0303b0adc8ecd859811ec016b9a08361"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\_release_id.sh": {
+    "mtime": 1778767575.0655286,
+    "ast_hash": "5f843712e9bb625c4974fdaf2963e4e2",
+    "semantic_hash": "5f843712e9bb625c4974fdaf2963e4e2"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\capture-og-images.mjs": {
+    "mtime": 1779446910.4105701,
+    "ast_hash": "1180ca58c1de9ec46aa40aa80e88086e",
+    "semantic_hash": "1180ca58c1de9ec46aa40aa80e88086e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\count-loc.sh": {
+    "mtime": 1778767575.0665212,
+    "ast_hash": "fde3eef2fdca789d93eda67932b8382e",
+    "semantic_hash": "fde3eef2fdca789d93eda67932b8382e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\dev-all-demos.sh": {
+    "mtime": 1778767575.0665212,
+    "ast_hash": "af9e16d62e3b1b8b755d5918427f39ee",
+    "semantic_hash": "af9e16d62e3b1b8b755d5918427f39ee"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\git-hooks\\no-commit-on-main.mjs": {
+    "mtime": 1778887746.704317,
+    "ast_hash": "93c4ef4416761c753c7d2d17a18e309f",
+    "semantic_hash": "93c4ef4416761c753c7d2d17a18e309f"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\i18n-review.ts": {
+    "mtime": 1779287163.2978866,
+    "ast_hash": "cd597a1ea73171997e22b30de51d6f09",
+    "semantic_hash": "cd597a1ea73171997e22b30de51d6f09"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\log-relay\\index.mjs": {
+    "mtime": 1778887746.711318,
+    "ast_hash": "c76179eef7fc8f1949edd5dcabc29b84",
+    "semantic_hash": "c76179eef7fc8f1949edd5dcabc29b84"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\log-relay\\package.json": {
+    "mtime": 1778767575.0685205,
+    "ast_hash": "2411e6ca1808ab8b839a932eb280868f",
+    "semantic_hash": "2411e6ca1808ab8b839a932eb280868f"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\run-backend-tests.sh": {
+    "mtime": 1779446910.4105701,
+    "ast_hash": "9d15b415efe5dbde56f142f241d99f8f",
+    "semantic_hash": "9d15b415efe5dbde56f142f241d99f8f"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\sentry-snippets\\_sentry_obs.py": {
+    "mtime": 1781853640.9066226,
+    "ast_hash": "28fee441c04df8386ca1c98db5e5eb21",
+    "semantic_hash": "28fee441c04df8386ca1c98db5e5eb21"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\sentry-snippets\\test__sentry_obs.py": {
+    "mtime": 1778767575.0705214,
+    "ast_hash": "ae7a5372dbff7dd38ba2598f3817e774",
+    "semantic_hash": "ae7a5372dbff7dd38ba2598f3817e774"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\static-preview.mjs": {
+    "mtime": 1779446910.4105701,
+    "ast_hash": "653421c10a54ac29dcc89f241f619913",
+    "semantic_hash": "653421c10a54ac29dcc89f241f619913"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\wire-demos-og-image.mjs": {
+    "mtime": 1778887746.7133174,
+    "ast_hash": "a894ba27d1d48eba51350b2df63c94db",
+    "semantic_hash": "a894ba27d1d48eba51350b2df63c94db"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\wrap-demos-with-error-boundary.mjs": {
+    "mtime": 1778887746.714317,
+    "ast_hash": "e70b182c252c7b04ec0e6220bb1b4c21",
+    "semantic_hash": "e70b182c252c7b04ec0e6220bb1b4c21"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\sentry.client.config.ts": {
+    "mtime": 1778887746.716317,
+    "ast_hash": "03d9889f059886b004ef61bd8ba7e361",
+    "semantic_hash": "03d9889f059886b004ef61bd8ba7e361"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\sentry.server.config.ts": {
+    "mtime": 1778767575.0715203,
+    "ast_hash": "c73b58cf1ce641a09d8f4bebc4298145",
+    "semantic_hash": "c73b58cf1ce641a09d8f4bebc4298145"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\skills-lock.json": {
+    "mtime": 1781034313.5958705,
+    "ast_hash": "307c405015bcc67f74e9a2ec91242031",
+    "semantic_hash": "307c405015bcc67f74e9a2ec91242031"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\apa-predictor.test.ts": {
+    "mtime": 1778767575.0725214,
+    "ast_hash": "c2e15426596118a5a791719f086b9e92",
+    "semantic_hash": "c2e15426596118a5a791719f086b9e92"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\bitsx-diameter.test.ts": {
+    "mtime": 1778887746.7233188,
+    "ast_hash": "d379f30146bf84c58bce6974317cde51",
+    "semantic_hash": "d379f30146bf84c58bce6974317cde51"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\caim-data.test.ts": {
+    "mtime": 1778887746.7263174,
+    "ast_hash": "22047d0937d950693f34bdd1fb04b18d",
+    "semantic_hash": "22047d0937d950693f34bdd1fb04b18d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\caim-pagerank.test.ts": {
+    "mtime": 1778887746.7293174,
+    "ast_hash": "8826fac396bee935e3ee49ef3d7b59f1",
+    "semantic_hash": "8826fac396bee935e3ee49ef3d7b59f1"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\caim-zipf.test.ts": {
+    "mtime": 1778767575.0735202,
+    "ast_hash": "6c29ddda3d534870f8758752a25003aa",
+    "semantic_hash": "6c29ddda3d534870f8758752a25003aa"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\content-parity.test.ts": {
+    "mtime": 1781034313.5968769,
+    "ast_hash": "e18474e8fb403796a954f3123e832c8d",
+    "semantic_hash": "e18474e8fb403796a954f3123e832c8d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\content-schemas.test.ts": {
+    "mtime": 1779287163.300298,
+    "ast_hash": "483e2c6bd0727949b6546685f91a96a7",
+    "semantic_hash": "483e2c6bd0727949b6546685f91a96a7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\data-integrity.test.ts": {
+    "mtime": 1781034313.5975158,
+    "ast_hash": "6bcd00e0ed19aa19aed94dc8335eb79b",
+    "semantic_hash": "6bcd00e0ed19aa19aed94dc8335eb79b"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\debug-sentry.test.ts": {
+    "mtime": 1778887746.7413187,
+    "ast_hash": "6afcc900aaac3796b528e26449b74715",
+    "semantic_hash": "6afcc900aaac3796b528e26449b74715"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\debug-session.test.ts": {
+    "mtime": 1778767575.0745215,
+    "ast_hash": "aa707bb3b80757e1dab0e98d9c34aad1",
+    "semantic_hash": "aa707bb3b80757e1dab0e98d9c34aad1"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\debug.test.ts": {
+    "mtime": 1778887746.744318,
+    "ast_hash": "2e787c6388741aca798fd085a5f9ab67",
+    "semantic_hash": "2e787c6388741aca798fd085a5f9ab67"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\demo-datasets.test.ts": {
+    "mtime": 1778767575.0755365,
+    "ast_hash": "8ea03cbf9ea847fb155be3e693b59a51",
+    "semantic_hash": "8ea03cbf9ea847fb155be3e693b59a51"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\demo-registry.test.ts": {
+    "mtime": 1779287163.300298,
+    "ast_hash": "1526b395e99040a23a13d8cdcc809723",
+    "semantic_hash": "1526b395e99040a23a13d8cdcc809723"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\demo-schema.test.ts": {
+    "mtime": 1781034313.5980468,
+    "ast_hash": "70a632f1fd23ab38a0f0c4172543c84e",
+    "semantic_hash": "70a632f1fd23ab38a0f0c4172543c84e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\demo-services.test.ts": {
+    "mtime": 1778887746.7553177,
+    "ast_hash": "1ed8f3e40d62c97ca43705d80c35fdf1",
+    "semantic_hash": "1ed8f3e40d62c97ca43705d80c35fdf1"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\desastres-search.test.ts": {
+    "mtime": 1778887746.7583177,
+    "ast_hash": "3f2eb79c295167c1ac2c00e26da1e601",
+    "semantic_hash": "3f2eb79c295167c1ac2c00e26da1e601"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\designs.test.ts": {
+    "mtime": 1778887746.761349,
+    "ast_hash": "aacdf0d3e6b5fbb2d55b04ae3ed84629",
+    "semantic_hash": "aacdf0d3e6b5fbb2d55b04ae3ed84629"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\draculin-demo-state.test.ts": {
+    "mtime": 1778887746.764349,
+    "ast_hash": "bdfc19284fd32d7fc2ebfcdece3c94ce",
+    "semantic_hash": "bdfc19284fd32d7fc2ebfcdece3c94ce"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\draculin-quiz.test.ts": {
+    "mtime": 1778887746.7673485,
+    "ast_hash": "a594a97581fd74ac4223091cbd729334",
+    "semantic_hash": "a594a97581fd74ac4223091cbd729334"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\email-validator.test.ts": {
+    "mtime": 1778767575.077529,
+    "ast_hash": "8b77329cb76f80cf7e9eaf3ff6e50ef4",
+    "semantic_hash": "8b77329cb76f80cf7e9eaf3ff6e50ef4"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\error-boundary.test.tsx": {
+    "mtime": 1778887746.7703488,
+    "ast_hash": "ea9a31edb5378bf9eb637fd9555d9e88",
+    "semantic_hash": "ea9a31edb5378bf9eb637fd9555d9e88"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\fib-kernels.test.ts": {
+    "mtime": 1778887746.7733505,
+    "ast_hash": "4bf8b005a0a0b88a3281032e767fc0b4",
+    "semantic_hash": "4bf8b005a0a0b88a3281032e767fc0b4"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\graph-phase.test.ts": {
+    "mtime": 1778887746.7763488,
+    "ast_hash": "621fee2ab8dd4032589c80193ed39d5d",
+    "semantic_hash": "621fee2ab8dd4032589c80193ed39d5d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\i18n-utils.test.ts": {
+    "mtime": 1778887746.7793486,
+    "ast_hash": "5227a8633473f5ca7ba04fb2d82fa0f5",
+    "semantic_hash": "5227a8633473f5ca7ba04fb2d82fa0f5"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\imgproc.test.ts": {
+    "mtime": 1778887746.7843516,
+    "ast_hash": "0ec9aa60d4b20818a8a4eb58dfb08382",
+    "semantic_hash": "0ec9aa60d4b20818a8a4eb58dfb08382"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\jsbach-interpreter.test.ts": {
+    "mtime": 1778887746.7883518,
+    "ast_hash": "4254c4e3d2f668ae0dd646dd182b6873",
+    "semantic_hash": "4254c4e3d2f668ae0dd646dd182b6873"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\live-app-embed.test.ts": {
+    "mtime": 1779287163.300298,
+    "ast_hash": "96e2d51228dde371a90877e749cbba0c",
+    "semantic_hash": "96e2d51228dde371a90877e749cbba0c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\matriculas-pipeline.test.ts": {
+    "mtime": 1778887746.7943523,
+    "ast_hash": "a03c44e2ac46c48d767cb670dc1d7b1a",
+    "semantic_hash": "a03c44e2ac46c48d767cb670dc1d7b1a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\mpids.test.ts": {
+    "mtime": 1778767575.0805252,
+    "ast_hash": "024c6e08cf3a2960970ee63c1698646c",
+    "semantic_hash": "024c6e08cf3a2960970ee63c1698646c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\par-kernels.test.ts": {
+    "mtime": 1778767575.0815299,
+    "ast_hash": "222ea370abb3142076410fed98fd27fc",
+    "semantic_hash": "222ea370abb3142076410fed98fd27fc"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\planificacion-demo.test.ts": {
+    "mtime": 1778767575.0815299,
+    "ast_hash": "ab744a1457a90c330bc51821655a6989",
+    "semantic_hash": "ab744a1457a90c330bc51821655a6989"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\planificacion.test.ts": {
+    "mtime": 1778767575.0815299,
+    "ast_hash": "828880900c2f289bc5b3724af96abfc9",
+    "semantic_hash": "828880900c2f289bc5b3724af96abfc9"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\portfolio-content.test.ts": {
+    "mtime": 1781034313.5989406,
+    "ast_hash": "6639a829269338b175ddcc3584d832c3",
+    "semantic_hash": "6639a829269338b175ddcc3584d832c3"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\rob-kernels.test.ts": {
+    "mtime": 1778767575.0825245,
+    "ast_hash": "3bf7cd999dc78b7cb1842531a4b076df",
+    "semantic_hash": "3bf7cd999dc78b7cb1842531a4b076df"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\structural.test.ts": {
+    "mtime": 1781034313.599404,
+    "ast_hash": "34b102349148acd3a53271353c4ba26c",
+    "semantic_hash": "34b102349148acd3a53271353c4ba26c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\tenda-demo-state.test.ts": {
+    "mtime": 1778887746.8034072,
+    "ast_hash": "c7e9dd7b00dd3918d3e7dec7441c1e9e",
+    "semantic_hash": "c7e9dd7b00dd3918d3e7dec7441c1e9e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\tenda-mock.test.ts": {
+    "mtime": 1778887746.8064075,
+    "ast_hash": "cce0501fce125f7e7c3e975c7787c68c",
+    "semantic_hash": "cce0501fce125f7e7c3e975c7787c68c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\tfg-mock-boxes.test.ts": {
+    "mtime": 1778887746.8094084,
+    "ast_hash": "655b195ef9962abac3003e4e65b6d481",
+    "semantic_hash": "655b195ef9962abac3003e4e65b6d481"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\theme-contrast.test.ts": {
+    "mtime": 1778887746.8134077,
+    "ast_hash": "4481e594ab2286eb631f0393ff25e5c9",
+    "semantic_hash": "4481e594ab2286eb631f0393ff25e5c9"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\themes.test.ts": {
+    "mtime": 1778887746.8169813,
+    "ast_hash": "c6c70751a72c5debd733fb5a970da64b",
+    "semantic_hash": "c6c70751a72c5debd733fb5a970da64b"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\__tests__\\wpgma.test.ts": {
+    "mtime": 1778887746.8199856,
+    "ast_hash": "fd39a4394edac517a7d2d57a12f1be36",
+    "semantic_hash": "fd39a4394edac517a7d2d57a12f1be36"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\About.astro": {
+    "mtime": 1781794895.4033756,
+    "ast_hash": "69168ad8a7a6d906e4fd5acaa189941c",
+    "semantic_hash": "69168ad8a7a6d906e4fd5acaa189941c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Analytics.astro": {
+    "mtime": 1778887746.8262014,
+    "ast_hash": "81c0e1c9ba9f8afa3b1058192a636109",
+    "semantic_hash": "81c0e1c9ba9f8afa3b1058192a636109"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Certifications.astro": {
+    "mtime": 1781034313.6004715,
+    "ast_hash": "cc0ed5199271c8a67b3576cbd2d90b1a",
+    "semantic_hash": "cc0ed5199271c8a67b3576cbd2d90b1a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Contact.astro": {
+    "mtime": 1778887746.8362002,
+    "ast_hash": "d4f84a788e3411b2fcc6b4bdec517d97",
+    "semantic_hash": "d4f84a788e3411b2fcc6b4bdec517d97"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\CvDownloader.tsx": {
+    "mtime": 1781794895.4043758,
+    "ast_hash": "49d3a9a0cae7b64152ee9446259e94d7",
+    "semantic_hash": "49d3a9a0cae7b64152ee9446259e94d7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\DebugInit.astro": {
+    "mtime": 1778887746.8391995,
+    "ast_hash": "81fefd2a2c3e00497c95c7fd5e39a89f",
+    "semantic_hash": "81fefd2a2c3e00497c95c7fd5e39a89f"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\DebugMount.astro": {
+    "mtime": 1778767575.0875297,
+    "ast_hash": "252409c4a6b049eb32370a9ae9afe0f9",
+    "semantic_hash": "252409c4a6b049eb32370a9ae9afe0f9"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\DebugOverlay.tsx": {
+    "mtime": 1778887746.8441994,
+    "ast_hash": "27ccf184d4e7d19507fef05d88e14f67",
+    "semantic_hash": "27ccf184d4e7d19507fef05d88e14f67"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\DemoErrorBoundary.tsx": {
+    "mtime": 1778887746.8480284,
+    "ast_hash": "f650c93aced66e4708bd8e7fdf59e775",
+    "semantic_hash": "f650c93aced66e4708bd8e7fdf59e775"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\DemoHeader.astro": {
+    "mtime": 1778887746.8510273,
+    "ast_hash": "eec31354c196d7d2b369a535dd25bc95",
+    "semantic_hash": "eec31354c196d7d2b369a535dd25bc95"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\DemoNav.astro": {
+    "mtime": 1778887746.854028,
+    "ast_hash": "97fa94e1ede11a24d05643b1b888c197",
+    "semantic_hash": "97fa94e1ede11a24d05643b1b888c197"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\DemoSidebar.astro": {
+    "mtime": 1778887746.8570273,
+    "ast_hash": "a147892755c0119dfbd2d49d2ea22104",
+    "semantic_hash": "a147892755c0119dfbd2d49d2ea22104"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Demos.astro": {
+    "mtime": 1781195253.26896,
+    "ast_hash": "ddf30ecbe461701a117d333022e5000a",
+    "semantic_hash": "ddf30ecbe461701a117d333022e5000a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Education.astro": {
+    "mtime": 1781034313.6011877,
+    "ast_hash": "98ccf76498bbc759429e5ef9495e187a",
+    "semantic_hash": "98ccf76498bbc759429e5ef9495e187a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Experience.astro": {
+    "mtime": 1781034313.6017032,
+    "ast_hash": "0f7adc86663ffc5476285ea7122e89a7",
+    "semantic_hash": "0f7adc86663ffc5476285ea7122e89a7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Footer.astro": {
+    "mtime": 1778887746.8690286,
+    "ast_hash": "f91f25f805c8316231e2ce5748e5f11c",
+    "semantic_hash": "f91f25f805c8316231e2ce5748e5f11c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Hero.astro": {
+    "mtime": 1779446910.4115703,
+    "ast_hash": "104cf1a75afb144711b0fb0effce22f6",
+    "semantic_hash": "104cf1a75afb144711b0fb0effce22f6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\LanguagePicker.astro": {
+    "mtime": 1778887746.8820345,
+    "ast_hash": "fa789ad9a44b78b09968a600e53e1259",
+    "semantic_hash": "fa789ad9a44b78b09968a600e53e1259"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Navbar.astro": {
+    "mtime": 1778887746.8850334,
+    "ast_hash": "b0225bf9c90a7d6a32f2d3bcad9394bc",
+    "semantic_hash": "b0225bf9c90a7d6a32f2d3bcad9394bc"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\ScrollToTop.astro": {
+    "mtime": 1778887746.887033,
+    "ast_hash": "af8d8e20ea8f6b7df7969f109e05724f",
+    "semantic_hash": "af8d8e20ea8f6b7df7969f109e05724f"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\Skills.astro": {
+    "mtime": 1781034313.602762,
+    "ast_hash": "fe8787964b6b1491eb5a20b0a2ca7221",
+    "semantic_hash": "fe8787964b6b1491eb5a20b0a2ca7221"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\ThemeInit.astro": {
+    "mtime": 1779446910.4115703,
+    "ast_hash": "26b575c9060205b252dc04fe34f3bcb4",
+    "semantic_hash": "26b575c9060205b252dc04fe34f3bcb4"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\ThemeToggle.astro": {
+    "mtime": 1778887746.897601,
+    "ast_hash": "359a48d3a89c4c26fbc8ed9bf8ee5603",
+    "semantic_hash": "359a48d3a89c4c26fbc8ed9bf8ee5603"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\WorkProjects.astro": {
+    "mtime": 1781034313.6031783,
+    "ast_hash": "7cd3b1fdf5437d05439b65d3f8d0a1ad",
+    "semantic_hash": "7cd3b1fdf5437d05439b65d3f8d0a1ad"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\ApaPracticaDemo.tsx": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "158ef4da7006f90c7157a1dc00b2e56f",
+    "semantic_hash": "158ef4da7006f90c7157a1dc00b2e56f"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\BitsXMaratoDemo.tsx": {
+    "mtime": 1779812285.0225458,
+    "ast_hash": "0bb4c2e318680c523c0be9e44bd0145d",
+    "semantic_hash": "0bb4c2e318680c523c0be9e44bd0145d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\CAIMDemo.tsx": {
+    "mtime": 1778887746.9196,
+    "ast_hash": "ceec78646f9ee6d7b60265e443c6f31e",
+    "semantic_hash": "ceec78646f9ee6d7b60265e443c6f31e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\DesastresIADemo.tsx": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "62c7b9a7a0d6564bfc86154665ef5ed9",
+    "semantic_hash": "62c7b9a7a0d6564bfc86154665ef5ed9"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\DesastresVisual.tsx": {
+    "mtime": 1779812285.0225458,
+    "ast_hash": "bda6242cd852ed6be1ff69cdd8421a90",
+    "semantic_hash": "bda6242cd852ed6be1ff69cdd8421a90"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\DraculinDemo.tsx": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "182cd3045437dec712e8c6ebf00930e6",
+    "semantic_hash": "182cd3045437dec712e8c6ebf00930e6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\FibDemo.tsx": {
+    "mtime": 1779287163.3055837,
+    "ast_hash": "5a194c76712030299721a6fcc16cde84",
+    "semantic_hash": "5a194c76712030299721a6fcc16cde84"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\GraficsDemo.tsx": {
+    "mtime": 1778887746.9386013,
+    "ast_hash": "03c2b5eddb9d152a8fe66b15feb6206e",
+    "semantic_hash": "03c2b5eddb9d152a8fe66b15feb6206e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\JSBachDemo.tsx": {
+    "mtime": 1778887746.9433146,
+    "ast_hash": "4adadb20400a2d80cb97f6d12fda4e95",
+    "semantic_hash": "4adadb20400a2d80cb97f6d12fda4e95"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\LiveAppEmbed.tsx": {
+    "mtime": 1778887746.9463148,
+    "ast_hash": "fd8f29d1d2afc4d33017e4fa868de851",
+    "semantic_hash": "fd8f29d1d2afc4d33017e4fa868de851"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\MPIDSDemo.tsx": {
+    "mtime": 1778887746.9493148,
+    "ast_hash": "c2db8e85877a8ccaca1f9747677f6299",
+    "semantic_hash": "c2db8e85877a8ccaca1f9747677f6299"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\MockBanner.tsx": {
+    "mtime": 1778887746.952825,
+    "ast_hash": "7cee35cd2fa7b0b812ae716f6d21d5da",
+    "semantic_hash": "7cee35cd2fa7b0b812ae716f6d21d5da"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\ParDemo.tsx": {
+    "mtime": 1778887746.957823,
+    "ast_hash": "d0a898029b38983b0fe1dce943cc8494",
+    "semantic_hash": "d0a898029b38983b0fe1dce943cc8494"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\PhaseTransitionsDemo.tsx": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "e93a14851ecbf62c91c8ba9f75cc8b45",
+    "semantic_hash": "e93a14851ecbf62c91c8ba9f75cc8b45"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\PlanificacionDemo.tsx": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "52aa3421866c8bd137e3a3a9941f5bb1",
+    "semantic_hash": "52aa3421866c8bd137e3a3a9941f5bb1"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\Pro2Demo.tsx": {
+    "mtime": 1778887746.9688249,
+    "ast_hash": "79a2f37ec20aff61c4d1c5e24cdcb9e6",
+    "semantic_hash": "79a2f37ec20aff61c4d1c5e24cdcb9e6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\RobDemo.tsx": {
+    "mtime": 1778887746.972823,
+    "ast_hash": "74777a509aa9de98f16e36a3b2ba2902",
+    "semantic_hash": "74777a509aa9de98f16e36a3b2ba2902"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\SPMatriculasDemo.tsx": {
+    "mtime": 1778887746.9758236,
+    "ast_hash": "7ea3ab29c9498c865ab9b5084c7c78c7",
+    "semantic_hash": "7ea3ab29c9498c865ab9b5084c7c78c7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\SbcDemo.tsx": {
+    "mtime": 1778887746.9798234,
+    "ast_hash": "8bc06639cbcad3fbe5b6811655be49f0",
+    "semantic_hash": "8bc06639cbcad3fbe5b6811655be49f0"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\TendaDemo.tsx": {
+    "mtime": 1778887746.9828289,
+    "ast_hash": "0a75ff11d2fd7720effafbbfdba8fd64",
+    "semantic_hash": "0a75ff11d2fd7720effafbbfdba8fd64"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\TfgPolypDemo.tsx": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "41fdd932f7e2cf93522ab283cffbc35e",
+    "semantic_hash": "41fdd932f7e2cf93522ab283cffbc35e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\_styles.ts": {
+    "mtime": 1778887746.9898274,
+    "ast_hash": "37681c05fb693b7c9fb33ef2baea29fa",
+    "semantic_hash": "37681c05fb693b7c9fb33ef2baea29fa"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\caim\\PageRankTab.tsx": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "c5228e372bd54474081736c4957811ef",
+    "semantic_hash": "c5228e372bd54474081736c4957811ef"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\components\\demos\\caim\\ZipfTab.tsx": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "0c1e7485f364b905d2adf37883a5338f",
+    "semantic_hash": "0c1e7485f364b905d2adf37883a5338f"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\config\\locales.ts": {
+    "mtime": 1779287163.3059943,
+    "ast_hash": "9037025aac37c2edb6be8030a45428eb",
+    "semantic_hash": "9037025aac37c2edb6be8030a45428eb"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\config\\section-ids.ts": {
+    "mtime": 1781034313.6038194,
+    "ast_hash": "cf1ffe5d2ae4305c9fd582b271e8dc41",
+    "semantic_hash": "cf1ffe5d2ae4305c9fd582b271e8dc41"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\config\\sections.ts": {
+    "mtime": 1781034313.6043751,
+    "ast_hash": "d27e101f848c97a5afa19ea18ac41562",
+    "semantic_hash": "d27e101f848c97a5afa19ea18ac41562"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\config\\site.ts": {
+    "mtime": 1778767575.104521,
+    "ast_hash": "26a3a1af822ce8afa86fbcfc5b28ab7d",
+    "semantic_hash": "26a3a1af822ce8afa86fbcfc5b28ab7d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\certifications.json": {
+    "mtime": 1781034313.6056054,
+    "ast_hash": "164d44d63e29dcc437d364f25852cb7e",
+    "semantic_hash": "164d44d63e29dcc437d364f25852cb7e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\demo-services.json": {
+    "mtime": 1779287163.3059943,
+    "ast_hash": "6791110de04992bb2b3eb98faefb82a8",
+    "semantic_hash": "6791110de04992bb2b3eb98faefb82a8"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\demo-services.ts": {
+    "mtime": 1778887747.0223355,
+    "ast_hash": "3916f5f19e7c38024aeb30e23d3a1bdc",
+    "semantic_hash": "3916f5f19e7c38024aeb30e23d3a1bdc"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\demos.json": {
+    "mtime": 1779287163.3059943,
+    "ast_hash": "bcf5fe2acc5d71447d364981b28919da",
+    "semantic_hash": "bcf5fe2acc5d71447d364981b28919da"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\education.json": {
+    "mtime": 1779287163.3059943,
+    "ast_hash": "2d46f663cfeaa9f34614af1961f3ecbe",
+    "semantic_hash": "2d46f663cfeaa9f34614af1961f3ecbe"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\experience.json": {
+    "mtime": 1779287163.3059943,
+    "ast_hash": "ac9e0e7c7618bcc1e8197e95390b1aff",
+    "semantic_hash": "ac9e0e7c7618bcc1e8197e95390b1aff"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\loaders.ts": {
+    "mtime": 1779287163.3096888,
+    "ast_hash": "34bc9c098306697097f05d57ae3becf6",
+    "semantic_hash": "34bc9c098306697097f05d57ae3becf6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\model_weights.json": {
+    "mtime": 1778767575.107521,
+    "ast_hash": "fdbf0ac641ce02d0cd508905ab239ea8",
+    "semantic_hash": "fdbf0ac641ce02d0cd508905ab239ea8"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\pca_points.json": {
+    "mtime": 1778767575.107521,
+    "ast_hash": "cba3b4208338971d279e915b5ad12a0d",
+    "semantic_hash": "cba3b4208338971d279e915b5ad12a0d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\sbc-mock.ts": {
+    "mtime": 1778887747.0283358,
+    "ast_hash": "736610ffc0d2d986229523f86bea0ef7",
+    "semantic_hash": "736610ffc0d2d986229523f86bea0ef7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\skills.json": {
+    "mtime": 1779287163.3096888,
+    "ast_hash": "93e556e568167657c857e5b498c74c9d",
+    "semantic_hash": "93e556e568167657c857e5b498c74c9d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\tenda-mock.ts": {
+    "mtime": 1778887747.0333388,
+    "ast_hash": "7f90e6a3bcc1a33e3af42ff08395df2b",
+    "semantic_hash": "7f90e6a3bcc1a33e3af42ff08395df2b"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\tfg-model-results.json": {
+    "mtime": 1778767575.1085207,
+    "ast_hash": "0345444fe68e0909458980ea0a205c7d",
+    "semantic_hash": "0345444fe68e0909458980ea0a205c7d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\visibility.ts": {
+    "mtime": 1781034313.6061337,
+    "ast_hash": "b2c7ae76456bdeb9a17b9bb22d1bf7c6",
+    "semantic_hash": "b2c7ae76456bdeb9a17b9bb22d1bf7c6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\data\\work_projects.json": {
+    "mtime": 1779287163.3096888,
+    "ast_hash": "8e763481bb7693218b38b100d1134be0",
+    "semantic_hash": "8e763481bb7693218b38b100d1134be0"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\content-schemas.ts": {
+    "mtime": 1781034313.606654,
+    "ast_hash": "bc2605a74de194c1c9a3f9b0e6e613e0",
+    "semantic_hash": "bc2605a74de194c1c9a3f9b0e6e613e0"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demo-schema.ts": {
+    "mtime": 1781034313.6069984,
+    "ast_hash": "dffe048f018715f46190e1532ac52dac",
+    "semantic_hash": "dffe048f018715f46190e1532ac52dac"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demo.ts": {
+    "mtime": 1781034313.6077826,
+    "ast_hash": "65eab82546c38f086bcc7c7479fa2916",
+    "semantic_hash": "65eab82546c38f086bcc7c7479fa2916"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\apa-practica-demo.ts": {
+    "mtime": 1779287163.3096888,
+    "ast_hash": "1b46d9b5b4a616c78b9999dbabf40d52",
+    "semantic_hash": "1b46d9b5b4a616c78b9999dbabf40d52"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\bits-xmarato-demo.ts": {
+    "mtime": 1779287163.3096888,
+    "ast_hash": "cdd95ffb746e15d0afca4e40630cde62",
+    "semantic_hash": "cdd95ffb746e15d0afca4e40630cde62"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\caim-demo.ts": {
+    "mtime": 1779287163.3096888,
+    "ast_hash": "66145e2a0e38e956d9b763078e6e24e9",
+    "semantic_hash": "66145e2a0e38e956d9b763078e6e24e9"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\caim-pagerank.ts": {
+    "mtime": 1779287163.3096888,
+    "ast_hash": "58249a61ab95254ddf983ff6693f117f",
+    "semantic_hash": "58249a61ab95254ddf983ff6693f117f"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\caim-zipf.ts": {
+    "mtime": 1779287163.3096888,
+    "ast_hash": "ab35a9a9254e889eb3e26d719b9e62c0",
+    "semantic_hash": "ab35a9a9254e889eb3e26d719b9e62c0"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\desastres-ia-demo.ts": {
+    "mtime": 1779287163.3096888,
+    "ast_hash": "a6fb54dbaaef56870f76679e1ca4cc14",
+    "semantic_hash": "a6fb54dbaaef56870f76679e1ca4cc14"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\draculin-demo.ts": {
+    "mtime": 1779287163.3138516,
+    "ast_hash": "7767ba7d18e94f0f25bd357e6090cd6a",
+    "semantic_hash": "7767ba7d18e94f0f25bd357e6090cd6a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\fib-demo.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "e77ac46c4cdd409dc16b645dae321a0e",
+    "semantic_hash": "e77ac46c4cdd409dc16b645dae321a0e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\grafics-demo.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "c654b57fdf8a77cb14c61cbb2e61fa0c",
+    "semantic_hash": "c654b57fdf8a77cb14c61cbb2e61fa0c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\joc-eda-page.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "9c24e9d3717d7bfbdb139a37267f091a",
+    "semantic_hash": "9c24e9d3717d7bfbdb139a37267f091a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\jsbach-demo.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "76b71320476d3831d92d402c893e8b55",
+    "semantic_hash": "76b71320476d3831d92d402c893e8b55"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\live-app-embed.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "6a4a84b9d01440b9daebedb788c5e95c",
+    "semantic_hash": "6a4a84b9d01440b9daebedb788c5e95c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\mpids-demo.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "273a05ce74c5a5c46f5cf34320776263",
+    "semantic_hash": "273a05ce74c5a5c46f5cf34320776263"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\par-demo.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "f6a6ddc6d3f14f3b4b6acedc84243083",
+    "semantic_hash": "f6a6ddc6d3f14f3b4b6acedc84243083"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\phase-transitions-demo.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "cf6bff16077e853f4dca8fb5b1b41dd2",
+    "semantic_hash": "cf6bff16077e853f4dca8fb5b1b41dd2"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\planificacion-demo.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "251972fd7d495b9e06d509fe83e00622",
+    "semantic_hash": "251972fd7d495b9e06d509fe83e00622"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\pro2-demo.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "d21d482652125bd1db14f4ffa355c601",
+    "semantic_hash": "d21d482652125bd1db14f4ffa355c601"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\prop-page.ts": {
+    "mtime": 1779287163.3141603,
+    "ast_hash": "01c09612b1dd907faa807e13f83b5359",
+    "semantic_hash": "01c09612b1dd907faa807e13f83b5359"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\rob-demo.ts": {
+    "mtime": 1779287163.3180954,
+    "ast_hash": "b9803c9d51cd9cb84001cd127c9dfb5b",
+    "semantic_hash": "b9803c9d51cd9cb84001cd127c9dfb5b"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\sbc-demo.ts": {
+    "mtime": 1779287163.3180954,
+    "ast_hash": "9d2903f4e911dcf72b2f50d611ce19de",
+    "semantic_hash": "9d2903f4e911dcf72b2f50d611ce19de"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\spmatriculas-demo.ts": {
+    "mtime": 1779287163.3192043,
+    "ast_hash": "0a97c838cd05b16758fa88f5c4d3f75e",
+    "semantic_hash": "0a97c838cd05b16758fa88f5c4d3f75e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\tenda-demo.ts": {
+    "mtime": 1779287163.3192043,
+    "ast_hash": "714823847e10e5b4e594187aa559532d",
+    "semantic_hash": "714823847e10e5b4e594187aa559532d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\tenda-page.ts": {
+    "mtime": 1779287163.3192043,
+    "ast_hash": "dd34d951e2b97a4913136c149ce3a9a4",
+    "semantic_hash": "dd34d951e2b97a4913136c149ce3a9a4"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\demos\\tfg-polyp-demo.ts": {
+    "mtime": 1779287163.3202038,
+    "ast_hash": "1c54560e345815b371a2a77db1456d99",
+    "semantic_hash": "1c54560e345815b371a2a77db1456d99"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\i18next.ts": {
+    "mtime": 1779287163.3202038,
+    "ast_hash": "d2dc5283c5b5178d09db1ac56da4e319",
+    "semantic_hash": "d2dc5283c5b5178d09db1ac56da4e319"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\load.ts": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "20bcc347c03e456b08d2e87256f60f49",
+    "semantic_hash": "20bcc347c03e456b08d2e87256f60f49"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\locale-glob.ts": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "dd7353cb87ad3c5cb89f0fba14702d8b",
+    "semantic_hash": "dd7353cb87ad3c5cb89f0fba14702d8b"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\localized-schema.ts": {
+    "mtime": 1778887747.1428888,
+    "ast_hash": "2754f8d5b9b2d9be0e13303df33595d4",
+    "semantic_hash": "2754f8d5b9b2d9be0e13303df33595d4"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\ui.ts": {
+    "mtime": 1779446910.4123328,
+    "ast_hash": "5b77d68b7563c528fe31a672b8636cc1",
+    "semantic_hash": "5b77d68b7563c528fe31a672b8636cc1"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\i18n\\utils.ts": {
+    "mtime": 1779287163.321204,
+    "ast_hash": "4d88aac38ce58ba970bb307fc8da4e8e",
+    "semantic_hash": "4d88aac38ce58ba970bb307fc8da4e8e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\layouts\\DemoLayout.astro": {
+    "mtime": 1779287163.321204,
+    "ast_hash": "7c57c4a3b223f7d4231485792cf717df",
+    "semantic_hash": "7c57c4a3b223f7d4231485792cf717df"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\layouts\\Layout.astro": {
+    "mtime": 1779012700.4640527,
+    "ast_hash": "b288e8ad994081aa33a79fb9e2eb569e",
+    "semantic_hash": "b288e8ad994081aa33a79fb9e2eb569e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\apa-predictor.ts": {
+    "mtime": 1778887747.1618886,
+    "ast_hash": "108d91de7b5dc3b39675d3985dd66214",
+    "semantic_hash": "108d91de7b5dc3b39675d3985dd66214"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\bitsx-diameter.ts": {
+    "mtime": 1778887747.16489,
+    "ast_hash": "ed0702f6164ea0b1d76ec72ba48957a8",
+    "semantic_hash": "ed0702f6164ea0b1d76ec72ba48957a8"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\caim\\airports-data.ts": {
+    "mtime": 1778887747.16989,
+    "ast_hash": "893da32bc0d089a856f9f3c944e6cdbf",
+    "semantic_hash": "893da32bc0d089a856f9f3c944e6cdbf"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\caim\\pagerank-worker.ts": {
+    "mtime": 1778767575.123525,
+    "ast_hash": "e9cf3a78c8196c0f0fb9a22e9c517c25",
+    "semantic_hash": "e9cf3a78c8196c0f0fb9a22e9c517c25"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\caim\\pagerank.ts": {
+    "mtime": 1778887747.1738884,
+    "ast_hash": "5671798d9b238453c7cb8a9be08cb7f4",
+    "semantic_hash": "5671798d9b238453c7cb8a9be08cb7f4"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\caim\\zipf-data.ts": {
+    "mtime": 1778887747.1768885,
+    "ast_hash": "48f5f309a0ff49db92bf10aa89b40cb1",
+    "semantic_hash": "48f5f309a0ff49db92bf10aa89b40cb1"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\caim\\zipf-fit.ts": {
+    "mtime": 1778887747.1818943,
+    "ast_hash": "f407cd2c2c94caf60c84f9140437fbf1",
+    "semantic_hash": "f407cd2c2c94caf60c84f9140437fbf1"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\debug-docker.ts": {
+    "mtime": 1778887747.1858969,
+    "ast_hash": "6d17ccbd93da7442f12bbc2cf58b6eed",
+    "semantic_hash": "6d17ccbd93da7442f12bbc2cf58b6eed"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\debug-iframe-emitter.ts": {
+    "mtime": 1778887747.189895,
+    "ast_hash": "0787d15726f16a9f465e35244570d5d4",
+    "semantic_hash": "0787d15726f16a9f465e35244570d5d4"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\debug-iframe.ts": {
+    "mtime": 1779287163.321204,
+    "ast_hash": "5db5f37032c5d71b894ec8c1ecfd285a",
+    "semantic_hash": "5db5f37032c5d71b894ec8c1ecfd285a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\debug-network.ts": {
+    "mtime": 1778887747.196936,
+    "ast_hash": "1d87892e2fbe68d13aedeb8abcd0fd3c",
+    "semantic_hash": "1d87892e2fbe68d13aedeb8abcd0fd3c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\debug-sentry.ts": {
+    "mtime": 1779287163.321204,
+    "ast_hash": "42fefabd7925587b57e3324cefab3351",
+    "semantic_hash": "42fefabd7925587b57e3324cefab3351"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\debug-session.ts": {
+    "mtime": 1779287163.321204,
+    "ast_hash": "e745180249e22ba13355eae8c2424d96",
+    "semantic_hash": "e745180249e22ba13355eae8c2424d96"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\debug.ts": {
+    "mtime": 1779287163.321204,
+    "ast_hash": "67f2ee250d09cc6d41ba6478691f7a6c",
+    "semantic_hash": "67f2ee250d09cc6d41ba6478691f7a6c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\demo-icons.ts": {
+    "mtime": 1778887747.208937,
+    "ast_hash": "cf0a76106e3f238c9fea0614c190b937",
+    "semantic_hash": "cf0a76106e3f238c9fea0614c190b937"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\demo-theme.ts": {
+    "mtime": 1778887747.2149365,
+    "ast_hash": "2297c37fb8f8d6f53750f00f56229820",
+    "semantic_hash": "2297c37fb8f8d6f53750f00f56229820"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\desastresSearch.ts": {
+    "mtime": 1778887747.2189374,
+    "ast_hash": "5d2d9a1afba33d8d65b4dc0fb8b4e4ad",
+    "semantic_hash": "5d2d9a1afba33d8d65b4dc0fb8b4e4ad"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\designs.ts": {
+    "mtime": 1779812285.0225458,
+    "ast_hash": "f4f218c6d98aac78097f4df46dabb5c6",
+    "semantic_hash": "f4f218c6d98aac78097f4df46dabb5c6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\draculin-quiz.ts": {
+    "mtime": 1778887747.2259367,
+    "ast_hash": "9af461cecca369f3b24381555b76517b",
+    "semantic_hash": "9af461cecca369f3b24381555b76517b"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\email-validator.ts": {
+    "mtime": 1778887747.2299361,
+    "ast_hash": "2c3b41892b873404bc625c41a2cc50f1",
+    "semantic_hash": "2c3b41892b873404bc625c41a2cc50f1"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\fib-kernels.ts": {
+    "mtime": 1778887747.2339368,
+    "ast_hash": "5c18bc9e9a9c59371d170963f299d2c7",
+    "semantic_hash": "5c18bc9e9a9c59371d170963f299d2c7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\grafics-kernels.ts": {
+    "mtime": 1778887747.2369373,
+    "ast_hash": "6a26a5634a82f304cd7012990e87d739",
+    "semantic_hash": "6a26a5634a82f304cd7012990e87d739"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\graph-phase.ts": {
+    "mtime": 1778887747.2409363,
+    "ast_hash": "7df24fc0b0f3e34fb057d6549de47835",
+    "semantic_hash": "7df24fc0b0f3e34fb057d6549de47835"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\imgproc.ts": {
+    "mtime": 1778887747.243936,
+    "ast_hash": "d23c81def4681b0adc3675cf25340b5c",
+    "semantic_hash": "d23c81def4681b0adc3675cf25340b5c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\issuer-icons.ts": {
+    "mtime": 1781034313.6088753,
+    "ast_hash": "5c0be231ba84dd50c66fe6a9377e87e8",
+    "semantic_hash": "5c0be231ba84dd50c66fe6a9377e87e8"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\jsbach\\interpreter.ts": {
+    "mtime": 1778887747.2539358,
+    "ast_hash": "a44c4e587861c6290e8dafcf31ed4e91",
+    "semantic_hash": "a44c4e587861c6290e8dafcf31ed4e91"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\mpids.ts": {
+    "mtime": 1778887747.2579372,
+    "ast_hash": "0de574579250116ede137922fac3f050",
+    "semantic_hash": "0de574579250116ede137922fac3f050"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\opencv-loader.ts": {
+    "mtime": 1778887747.2609358,
+    "ast_hash": "d5566a8311fe6186e34f14210c0e7ccb",
+    "semantic_hash": "d5566a8311fe6186e34f14210c0e7ccb"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\par-kernels.ts": {
+    "mtime": 1778887747.2659357,
+    "ast_hash": "ee38fa15ea35f39995d54084d9cf9699",
+    "semantic_hash": "ee38fa15ea35f39995d54084d9cf9699"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\planificacion.ts": {
+    "mtime": 1778887747.2699351,
+    "ast_hash": "986cbe0c982fa36164ece44ade6ee8b0",
+    "semantic_hash": "986cbe0c982fa36164ece44ade6ee8b0"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\plate-detection.ts": {
+    "mtime": 1778887747.2739375,
+    "ast_hash": "5ecb4878b1bd58fb5f8d3ad848f6d5a3",
+    "semantic_hash": "5ecb4878b1bd58fb5f8d3ad848f6d5a3"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\plate-worker.ts": {
+    "mtime": 1778887747.277937,
+    "ast_hash": "b09184c7dd809464fc78dd7f26752e46",
+    "semantic_hash": "b09184c7dd809464fc78dd7f26752e46"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\rob-kernels.ts": {
+    "mtime": 1778887747.2849407,
+    "ast_hash": "653b0afddeb1cb6b618fddfec10de667",
+    "semantic_hash": "653b0afddeb1cb6b618fddfec10de667"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\tfg-mock-boxes.ts": {
+    "mtime": 1778887747.2919402,
+    "ast_hash": "bd68ea4ce5e23e842845c726ce20c4b8",
+    "semantic_hash": "bd68ea4ce5e23e842845c726ce20c4b8"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\themes.ts": {
+    "mtime": 1778887747.3154485,
+    "ast_hash": "e0bbaf07cfe410fbcfbfb82b863e9131",
+    "semantic_hash": "e0bbaf07cfe410fbcfbfb82b863e9131"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\useDebug.ts": {
+    "mtime": 1778887747.3284483,
+    "ast_hash": "844fd30304801debbff079de7eeedcd7",
+    "semantic_hash": "844fd30304801debbff079de7eeedcd7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\lib\\wpgma.ts": {
+    "mtime": 1778887747.334449,
+    "ast_hash": "be0c07fc509c80c0ba1b47c042aa90ed",
+    "semantic_hash": "be0c07fc509c80c0ba1b47c042aa90ed"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\404.astro": {
+    "mtime": 1778887747.3424485,
+    "ast_hash": "0ccee223c7a2a806ae9b3906f5fe38cf",
+    "semantic_hash": "0ccee223c7a2a806ae9b3906f5fe38cf"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\500.astro": {
+    "mtime": 1778887747.344448,
+    "ast_hash": "61f50d8167c4bd19979528b5fb5ff946",
+    "semantic_hash": "61f50d8167c4bd19979528b5fb5ff946"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\[lang]\\demos\\[demo].astro": {
+    "mtime": 1779287163.321204,
+    "ast_hash": "b1541566d58b1c1625692fb4d9cf15a7",
+    "semantic_hash": "b1541566d58b1c1625692fb4d9cf15a7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\[lang]\\index.astro": {
+    "mtime": 1778887747.3614483,
+    "ast_hash": "aa059dbd8abac88d2fd6604ee191adf9",
+    "semantic_hash": "aa059dbd8abac88d2fd6604ee191adf9"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\algorithms.astro": {
+    "mtime": 1778887747.3714519,
+    "ast_hash": "e8e6fa769f8499172e8aa2042511c60c",
+    "semantic_hash": "e8e6fa769f8499172e8aa2042511c60c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\apa-practica.astro": {
+    "mtime": 1778887747.376451,
+    "ast_hash": "30d097ad0f3df5e3461fa6634d78c59a",
+    "semantic_hash": "30d097ad0f3df5e3461fa6634d78c59a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\bitsx-marato.astro": {
+    "mtime": 1778887747.3804514,
+    "ast_hash": "c11698e70d7ae942071f43f55a27d640",
+    "semantic_hash": "c11698e70d7ae942071f43f55a27d640"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\caim.astro": {
+    "mtime": 1778887747.383955,
+    "ast_hash": "152e1d7d26215d6048245bffa50669cd",
+    "semantic_hash": "152e1d7d26215d6048245bffa50669cd"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\desastres-ia.astro": {
+    "mtime": 1778887747.3879826,
+    "ast_hash": "5e13ba1abb53494e0502151adc910094",
+    "semantic_hash": "5e13ba1abb53494e0502151adc910094"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\draculin.astro": {
+    "mtime": 1778887747.3919795,
+    "ast_hash": "51ac2db5bbdd9363af8731d3932811f2",
+    "semantic_hash": "51ac2db5bbdd9363af8731d3932811f2"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\grafics.astro": {
+    "mtime": 1778887747.3949797,
+    "ast_hash": "158cdb835d784afcdfa025f7d15347da",
+    "semantic_hash": "158cdb835d784afcdfa025f7d15347da"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\joc-eda.astro": {
+    "mtime": 1778887747.399632,
+    "ast_hash": "285a7479a5ca4d60f3f831f0a8c8b344",
+    "semantic_hash": "285a7479a5ca4d60f3f831f0a8c8b344"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\jsbach.astro": {
+    "mtime": 1778887747.403636,
+    "ast_hash": "37f3c8934ce7c0f443c584dbe8672a21",
+    "semantic_hash": "37f3c8934ce7c0f443c584dbe8672a21"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\matriculas.astro": {
+    "mtime": 1778887747.4076357,
+    "ast_hash": "7353094bbbac3e5a4206f4f1c3db1051",
+    "semantic_hash": "7353094bbbac3e5a4206f4f1c3db1051"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\mpids.astro": {
+    "mtime": 1778887747.4116354,
+    "ast_hash": "47010f7252d3b826a17f863c13a5b5ae",
+    "semantic_hash": "47010f7252d3b826a17f863c13a5b5ae"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\par-parallel.astro": {
+    "mtime": 1778887747.4156368,
+    "ast_hash": "da0f814da7594c9b9e9b443896841cc6",
+    "semantic_hash": "da0f814da7594c9b9e9b443896841cc6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\phase-transitions.astro": {
+    "mtime": 1778887747.4206374,
+    "ast_hash": "0fe09ff38c40ac7fb6452b5f95f7147e",
+    "semantic_hash": "0fe09ff38c40ac7fb6452b5f95f7147e"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\planificacion.astro": {
+    "mtime": 1778887747.4246368,
+    "ast_hash": "4f7cf9b7054fd0afbc0e29d0875137ca",
+    "semantic_hash": "4f7cf9b7054fd0afbc0e29d0875137ca"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\pro2.astro": {
+    "mtime": 1778887747.4296367,
+    "ast_hash": "a89912df3254495bf74f146589ae5c14",
+    "semantic_hash": "a89912df3254495bf74f146589ae5c14"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\prop.astro": {
+    "mtime": 1778887747.4366374,
+    "ast_hash": "2718562a57305b4ed39e379f29062a38",
+    "semantic_hash": "2718562a57305b4ed39e379f29062a38"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\rob-robotics.astro": {
+    "mtime": 1778887747.441637,
+    "ast_hash": "668dd3bb6fc6fdd4728c3fb805b84c23",
+    "semantic_hash": "668dd3bb6fc6fdd4728c3fb805b84c23"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\sbc-ia.astro": {
+    "mtime": 1778887747.4446354,
+    "ast_hash": "392ac072327c07a9ccfc6cd8d5c09ab2",
+    "semantic_hash": "392ac072327c07a9ccfc6cd8d5c09ab2"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\tenda.astro": {
+    "mtime": 1778887747.4506366,
+    "ast_hash": "0eac80caf0ff80d29b3d70fb9a31780d",
+    "semantic_hash": "0eac80caf0ff80d29b3d70fb9a31780d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\demos\\tfg-polyps.astro": {
+    "mtime": 1778887747.4556358,
+    "ast_hash": "0bdb8df8e3ec4301d5f540c10a1bff8a",
+    "semantic_hash": "0bdb8df8e3ec4301d5f540c10a1bff8a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\index.astro": {
+    "mtime": 1778767575.1470516,
+    "ast_hash": "a38360b39c6ee19641c54dbc8f6084dd",
+    "semantic_hash": "a38360b39c6ee19641c54dbc8f6084dd"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\src\\pages\\robots.txt.ts": {
+    "mtime": 1778767575.1470516,
+    "ast_hash": "7349b50abd24a95c041a5ce889349e2a",
+    "semantic_hash": "7349b50abd24a95c041a5ce889349e2a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\tsconfig.json": {
+    "mtime": 1778887747.4746356,
+    "ast_hash": "a94519945f584b0e67f3f674808769a7",
+    "semantic_hash": "a94519945f584b0e67f3f674808769a7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\verify-site.mjs": {
+    "mtime": 1778767575.1500418,
+    "ast_hash": "20251f07519c040fb1d3d1a7ebf3ad5b",
+    "semantic_hash": "20251f07519c040fb1d3d1a7ebf3ad5b"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\vitest.config.ts": {
+    "mtime": 1778767575.1500418,
+    "ast_hash": "ed4d26a60401e9f0af51d799fbad7535",
+    "semantic_hash": "ed4d26a60401e9f0af51d799fbad7535"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.github\\FUNDING.yml": {
+    "mtime": 1781799938.504976,
+    "ast_hash": "d8306e7650e06c355518d4621d86d4c7",
+    "semantic_hash": "d8306e7650e06c355518d4621d86d4c7"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.github\\dependabot.yml": {
+    "mtime": 1781794895.3948674,
+    "ast_hash": "99f5bdfed9f3a755a1f9bcae737fbeb3",
+    "semantic_hash": "99f5bdfed9f3a755a1f9bcae737fbeb3"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.github\\pull_request_template.md": {
+    "mtime": 1781040882.4099553,
+    "ast_hash": "26590e1ed9841364e0f4806effbda8b6",
+    "semantic_hash": "26590e1ed9841364e0f4806effbda8b6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.github\\workflows\\deploy.yml": {
+    "mtime": 1781794895.3958673,
+    "ast_hash": "4067cc9b2c9d7180a1913185216a5859",
+    "semantic_hash": "4067cc9b2c9d7180a1913185216a5859"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.github\\workflows\\skills-update.yml": {
+    "mtime": 1781794895.3958673,
+    "ast_hash": "b228c601dd015afca0da5fa2062b827c",
+    "semantic_hash": "b228c601dd015afca0da5fa2062b827c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.github\\workflows\\test.yml": {
+    "mtime": 1781034313.5745893,
+    "ast_hash": "4ade2b14e94e5650525aff02c38a6603",
+    "semantic_hash": "4ade2b14e94e5650525aff02c38a6603"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\.github\\workflows\\visual-baselines.yml": {
+    "mtime": 1781853640.8957717,
+    "ast_hash": "23f178d2f7b922f4dab515c97bab9fd9",
+    "semantic_hash": "23f178d2f7b922f4dab515c97bab9fd9"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\AGENTS.md": {
+    "mtime": 1781794895.3973708,
+    "ast_hash": "6ec4e50852debd0433a19341a47debff",
+    "semantic_hash": "6ec4e50852debd0433a19341a47debff"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\CONTRIBUTING.md": {
+    "mtime": 1779287163.2624738,
+    "ast_hash": "0ab48ebfe395ae14265ddbb50f780056",
+    "semantic_hash": "0ab48ebfe395ae14265ddbb50f780056"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\README.md": {
+    "mtime": 1779812285.0060093,
+    "ast_hash": "714747db5af16057d0b2848fd4b0e63c",
+    "semantic_hash": "714747db5af16057d0b2848fd4b0e63c"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\SECURITY.md": {
+    "mtime": 1778887746.4781785,
+    "ast_hash": "bc29ad835f7bacd292a203aa78c24f65",
+    "semantic_hash": "bc29ad835f7bacd292a203aa78c24f65"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\TODO.md": {
+    "mtime": 1778887746.480183,
+    "ast_hash": "e126b6755f86f25d50a2be9575a0bf2d",
+    "semantic_hash": "e126b6755f86f25d50a2be9575a0bf2d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\crowdin.yml": {
+    "mtime": 1779287163.265473,
+    "ast_hash": "5b9c5ccc91c6feba649bce15d7905084",
+    "semantic_hash": "5b9c5ccc91c6feba649bce15d7905084"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\architecture\\debugging-architecture.md": {
+    "mtime": 1779287163.265918,
+    "ast_hash": "19980cf5f3cb44ee4f43db58a9b8a6c0",
+    "semantic_hash": "19980cf5f3cb44ee4f43db58a9b8a6c0"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\architecture\\decisions.md": {
+    "mtime": 1779287163.266556,
+    "ast_hash": "d54293b73ef5f00c4bf4ac136c247e9f",
+    "semantic_hash": "d54293b73ef5f00c4bf4ac136c247e9f"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\architecture\\observability.md": {
+    "mtime": 1779287163.266556,
+    "ast_hash": "676a610a18fb154df6124e6bf617f3cf",
+    "semantic_hash": "676a610a18fb154df6124e6bf617f3cf"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\architecture\\overview.md": {
+    "mtime": 1779446910.3948982,
+    "ast_hash": "fdd82793464f24be632b5c243f7a5625",
+    "semantic_hash": "fdd82793464f24be632b5c243f7a5625"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\architecture\\ui-experiments.md": {
+    "mtime": 1779287163.266556,
+    "ast_hash": "966577b69383ecb1fbe8a7ecfcdacbb8",
+    "semantic_hash": "966577b69383ecb1fbe8a7ecfcdacbb8"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\guides\\adding-a-demo.md": {
+    "mtime": 1779812285.009696,
+    "ast_hash": "e82bc263273e2dff6a74a9b9f9980cca",
+    "semantic_hash": "e82bc263273e2dff6a74a9b9f9980cca"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\guides\\everyday-tasks.md": {
+    "mtime": 1781034313.5782394,
+    "ast_hash": "b3f96063fe08d37d1f98bfc4ecea8024",
+    "semantic_hash": "b3f96063fe08d37d1f98bfc4ecea8024"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\guides\\i18n.md": {
+    "mtime": 1779812285.0101168,
+    "ast_hash": "7664f8314c2fbb95740fb6d1b053c9ea",
+    "semantic_hash": "7664f8314c2fbb95740fb6d1b053c9ea"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\guides\\testing.md": {
+    "mtime": 1779287163.2694702,
+    "ast_hash": "698322c765257d1d09f07b9ffab62b62",
+    "semantic_hash": "698322c765257d1d09f07b9ffab62b62"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\docs\\troubleshooting.md": {
+    "mtime": 1779287163.2694702,
+    "ast_hash": "90fb0d5a48ac906ec8a58323681ce0ea",
+    "semantic_hash": "90fb0d5a48ac906ec8a58323681ce0ea"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\lefthook.yml": {
+    "mtime": 1778887746.6832094,
+    "ast_hash": "bb3619c7a4edd4fad05a6149f4c4919d",
+    "semantic_hash": "bb3619c7a4edd4fad05a6149f4c4919d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\planner-api\\README.md": {
+    "mtime": 1778767574.9600313,
+    "ast_hash": "fe7427b7b72c9fd75a8cf24eab1ad450",
+    "semantic_hash": "fe7427b7b72c9fd75a8cf24eab1ad450"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\planner-api\\requirements.txt": {
+    "mtime": 1778767574.9620323,
+    "ast_hash": "16266466f8a531bdc5bbf476e65b65e6",
+    "semantic_hash": "16266466f8a531bdc5bbf476e65b65e6"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\certifications\\azure-fundamentals-az900.html": {
+    "mtime": 1778767574.9640355,
+    "ast_hash": "13c6381740c8085f3773f61f6cbf22fc",
+    "semantic_hash": "13c6381740c8085f3773f61f6cbf22fc"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\certifications\\oracle-oci-ai-foundations.html": {
+    "mtime": 1778767574.9650347,
+    "ast_hash": "79c82d3fadf86284ecb96313e43d9848",
+    "semantic_hash": "79c82d3fadf86284ecb96313e43d9848"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\deloitte-physical-ai-press-release.html": {
+    "mtime": 1778767574.9730322,
+    "ast_hash": "335685cbc294a62cd77ef5a47dca9766",
+    "semantic_hash": "335685cbc294a62cd77ef5a47dca9766"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\demos\\joc-eda\\help.html": {
+    "mtime": 1778767574.9800322,
+    "ast_hash": "9c60c1f3bda76efc74d98b787aafe128",
+    "semantic_hash": "9c60c1f3bda76efc74d98b787aafe128"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\demos\\joc-eda\\viewer.html": {
+    "mtime": 1778767575.0485215,
+    "ast_hash": "df3ee4042c0d41600373c684421b05c5",
+    "semantic_hash": "df3ee4042c0d41600373c684421b05c5"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\demos\\mpids\\football.txt": {
+    "mtime": 1778767575.054521,
+    "ast_hash": "885cf5e030530c2209ecb4bfee49f393",
+    "semantic_hash": "885cf5e030530c2209ecb4bfee49f393"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\demos\\mpids\\jazz.txt": {
+    "mtime": 1778767575.054521,
+    "ast_hash": "268e94ebe4a731aada8daecc6077729a",
+    "semantic_hash": "268e94ebe4a731aada8daecc6077729a"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\scripts\\log-relay\\README.md": {
+    "mtime": 1778887746.708317,
+    "ast_hash": "454c91a689064baf89e799eafc1ed278",
+    "semantic_hash": "454c91a689064baf89e799eafc1ed278"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\certifications\\nvidia-ai-infra-ops-associate.pdf": {
+    "mtime": 1781034313.5909016,
+    "ast_hash": "b7484ab2173c6b28804f6b57dbe54641",
+    "semantic_hash": "b7484ab2173c6b28804f6b57dbe54641"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\certifications\\nvidia-genai-llms-associate.pdf": {
+    "mtime": 1781034313.5930462,
+    "ast_hash": "9789f826f8ee739b8a80cc17afd4bd9d",
+    "semantic_hash": "9789f826f8ee739b8a80cc17afd4bd9d"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\certifications\\stratio-data-fabric-basics.pdf": {
+    "mtime": 1778767574.9690306,
+    "ast_hash": "c97c7516d740aa27d24d36c8c3ca85e4",
+    "semantic_hash": "c97c7516d740aa27d24d36c8c3ca85e4"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\certifications\\stratio-data-fabric-operations.pdf": {
+    "mtime": 1778767574.9700305,
+    "ast_hash": "b67623d2ce18fa0cab6e4327a8bfdc81",
+    "semantic_hash": "b67623d2ce18fa0cab6e4327a8bfdc81"
+  },
+  "C:\\Users\\lara\\cuberhaus\\PersonalPortfolio\\public\\certifications\\stratio-data-processing.pdf": {
+    "mtime": 1778767574.9720309,
+    "ast_hash": "381f886780549f9f510d0d226b83a2c0",
+    "semantic_hash": "381f886780549f9f510d0d226b83a2c0"
+  }
+}

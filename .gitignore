@@ -39,3 +39,20 @@ project.inlang/cache/
 NUL
 # Agent skills installed content (lockfile-tracked, content reproducible via `make skills-restore`)
 .agents/skills/
+
+# graphify: keep graph.json / GRAPH_REPORT.md / graph.html / manifest.json /
+# .graphify_labels.json + the semantic cache (skips LLM re-extraction on re-run);
+# drop the AST cache, stat index, temp files, and machine-local scratch
+graphify-out/cache/ast/
+graphify-out/cache/stat-index.json
+graphify-out/cache/*.tmp
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/cost.json
+
+# understand-anything: keep knowledge-graph / meta / fingerprints + scan-result.json
+# (lets the next run skip Phase 1 SCAN); drop the rest of the scratch
+.understand-anything/intermediate/*
+!.understand-anything/intermediate/scan-result.json
+.understand-anything/tmp/
+.understand-anything/.trash-*/

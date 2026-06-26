@@ -21,6 +21,7 @@
     "viewGithub": "View on GitHub"
   },
   "certifications": {
+    "all": "All",
     "label": "Credentials",
     "showLess": "Show less",
     "showMore": "Show more",
@@ -48,6 +49,14 @@
   },
   "demo": {
     "allDemos": "All Demos",
+    "categories": {
+      "academic": "Academic",
+      "ai-ml": "AI / ML",
+      "algorithms": "Algorithms",
+      "graphics": "Graphics",
+      "robotics": "Robotics",
+      "web": "Web"
+    },
     "moreProjects": "More Projects",
     "next": "Next",
     "portfolio": "Portfolio",
@@ -90,7 +99,7 @@
     "experience": "Experience",
     "projects": "Projects",
     "skills": "Skills",
-    "work": "Professional Work"
+    "work": "Work"
   },
   "notFound": {
     "back": "Portfolio",
@@ -128,6 +137,7 @@
     "recommended": "recommended for this design"
   },
   "work": {
+    "client": "Client",
     "label": "Professional Work",
     "subtitle": "Key milestones and AI initiatives delivered in the real world.",
     "title": "Featured Projects"

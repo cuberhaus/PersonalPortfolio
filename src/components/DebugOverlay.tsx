@@ -10,6 +10,7 @@
  * Lazy-loads the network tap and Sentry forwarder once enabled.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Bug, X } from 'lucide-react';
 import {
   subscribe,
   getBuffer,
@@ -196,8 +197,10 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
         onClick={() => setOpen((o) => !o)}
         className="debug-overlay-trigger"
         aria-label={open ? 'Close debug overlay' : 'Open debug overlay'}
+        style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
       >
-        🐛{open ? ' ×' : ''}
+        <Bug size={16} />
+        {open ? <X size={16} /> : ''}
       </button>
       {open && (
         <div className="debug-overlay-panel" role="dialog" aria-label="Debug overlay">

@@ -68,10 +68,17 @@ const t = useTranslations(lang);
     transform: translateY(0);
   }
 
+  @media (max-width: 1024px) {
+    .scroll-to-top {
+      bottom: 2rem;
+      right: 1.5rem;
+    }
+  }
+
   @media (max-width: 768px) {
     .scroll-to-top {
       bottom: 1.5rem;
-      right: 1.5rem;
+      right: 1rem;
       width: 2.5rem;
       height: 2.5rem;
     }

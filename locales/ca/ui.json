@@ -21,6 +21,7 @@
     "viewGithub": "Veure a GitHub"
   },
   "certifications": {
+    "all": "Tots",
     "label": "Credencials",
     "showLess": "Veure menys",
     "showMore": "Veure més",
@@ -48,6 +49,14 @@
   },
   "demo": {
     "allDemos": "Totes les Demos",
+    "categories": {
+      "academic": "Acadèmic",
+      "ai-ml": "IA / ML",
+      "algorithms": "Algorismes",
+      "graphics": "Gràfics",
+      "robotics": "Robòtica",
+      "web": "Web"
+    },
     "moreProjects": "Més Projectes",
     "next": "Següent",
     "portfolio": "Portafolis",
@@ -90,7 +99,7 @@
     "experience": "Experiència",
     "projects": "Projectes",
     "skills": "Habilitats",
-    "work": "Treball Professional"
+    "work": "Treball"
   },
   "notFound": {
     "back": "Portafolis",
@@ -128,6 +137,7 @@
     "recommended": "recomanada per a aquest disseny"
   },
   "work": {
+    "client": "Client",
     "label": "Treball Professional",
     "subtitle": "Fites clau i iniciatives d'IA entregades al món real.",
     "title": "Projectes Destacats"

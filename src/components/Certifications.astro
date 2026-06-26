@@ -34,6 +34,20 @@ const { num } = Astro.props;
       <p class="section-subtitle">{t('certifications.subtitle')}</p>
     </div>
 
+    <div class="cert-filters reveal" role="group" aria-label="Filter certifications by issuer">
+      <button class="cert-filter-btn active" data-issuer="all" aria-pressed="true">
+        {t('certifications.all')}
+      </button>
+      {
+        Array.from(new Set(certs.map((c) => c.issuer))).map((issuer) => (
+          <button class="cert-filter-btn" data-issuer={issuer} aria-pressed="false">
+            {issuer}
+          </button>
+        ))
+      }
+    </div>
+    <div aria-live="polite" class="sr-only" id="cert-filter-announcer"></div>
+
     <ul class="certifications-grid reveal-stagger" id="certifications-grid" data-mobile-limit="3">
       {
         certs.map((c, i) => {
@@ -69,7 +83,8 @@ const { num } = Astro.props;
           );
           return (
             <li
-              class={`certification-card${i >= 6 ? ' certification-card--extra' : i >= 3 ? ' certification-card--extra-mobile' : ''}`}
+              class={`certification-card ${i >= 6 ? 'hidden-demo extra-demo' : ''}${i >= 3 && i < 6 ? ' mobile-extra-demo mobile-hidden-demo' : ''}`}
+              data-issuer={c.issuer}
             >
               {c.link ? (
                 <a
@@ -107,6 +122,38 @@ const { num } = Astro.props;
 </section>
 
 <style>
+  .cert-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+  }
+
+  .cert-filter-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-family: inherit;
+  }
+
+  .cert-filter-btn:hover {
+    border-color: var(--accent-text);
+    color: var(--text-primary);
+  }
+
+  .cert-filter-btn.active {
+    background: color-mix(in srgb, var(--accent-start) 15%, transparent);
+    border-color: var(--accent-text);
+    color: var(--accent-text);
+  }
+
   .certifications-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -251,26 +298,11 @@ const { num } = Astro.props;
   }
 
   /* Desktop: hide items beyond 6 */
-  .certification-card--extra {
-    display: none;
-  }
-
-  .certifications-grid.expanded .certification-card--extra {
-    display: block;
-  }
+  /* (Handled by JS now) */
 
   @media (max-width: 768px) {
     .certifications-grid {
       grid-template-columns: 1fr;
-    }
-
-    /* Mobile: also hide items beyond 3 */
-    .certification-card--extra-mobile {
-      display: none;
-    }
-
-    .certifications-grid.expanded .certification-card--extra-mobile {
-      display: block;
     }
   }
 
@@ -306,19 +338,216 @@ const { num } = Astro.props;
       display: block;
     }
   }
+
+  /* ── Filter / Pagination Animation Classes ── */
+  @media (max-width: 640px) {
+    .mobile-hidden-demo {
+      display: none !important;
+    }
+
+    .mobile-extra-demo {
+      opacity: 0;
+      transform: translateY(20px);
+      transition:
+        opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      transition-delay: 0ms !important;
+    }
+
+    .mobile-extra-demo.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hidden-demo {
+    display: none !important;
+  }
+
+  .extra-demo {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+      transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    transition-delay: 0ms !important;
+  }
+
+  .extra-demo.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
 
 <script>
-  // Show more / Show less toggle
-  const btn = document.getElementById('certifications-toggle');
-  const grid = document.getElementById('certifications-grid');
-  if (btn && grid) {
-    btn.addEventListener('click', () => {
-      const expanded = grid.classList.toggle('expanded');
-      btn.classList.toggle('expanded', expanded);
-      btn.textContent = expanded ? btn.dataset.showLess! : btn.dataset.showMore!;
+  document.addEventListener('astro:page-load', () => {
+    const btn = document.getElementById('certifications-toggle');
+    const grid = document.getElementById('certifications-grid');
+    const filterBtns = document.querySelectorAll('.cert-filter-btn');
+    const announcer = document.getElementById('cert-filter-announcer');
+
+    if (!grid) return;
+
+    let currentIssuer = 'all';
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+    const getAllCards = () => [...grid.querySelectorAll('.certification-card')];
+    const getVisibleCards = () => {
+      if (currentIssuer === 'all') return getAllCards();
+      return getAllCards().filter((c) => c.getAttribute('data-issuer') === currentIssuer);
+    };
+
+    let mobileShown = 3;
+
+    function updateGrid() {
+      const cards = getAllCards();
+      const visibleCards = getVisibleCards();
+      const totalCount = visibleCards.length;
+
+      if (announcer) {
+        announcer.textContent = `Showing ${totalCount} certifications`;
+      }
+
+      // Hide all cards first
+      cards.forEach((card) => {
+        card.classList.remove('visible');
+        card.classList.add('hidden-demo');
+        card.classList.remove('mobile-hidden-demo', 'mobile-extra-demo', 'extra-demo');
+      });
+
+      if (isMobile()) {
+        const end = Math.min(mobileShown, totalCount);
+        for (let i = 0; i < end; i++) {
+          visibleCards[i].classList.remove('hidden-demo');
+          visibleCards[i].classList.add('visible');
+        }
+
+        if (btn) {
+          if (mobileShown >= totalCount) {
+            btn.textContent = btn.getAttribute('data-show-less');
+            btn.setAttribute('aria-expanded', 'true');
+            btn.classList.add('expanded');
+            if (totalCount <= 3) btn.style.display = 'none';
+            else btn.style.display = 'block';
+          } else {
+            btn.textContent = btn.getAttribute('data-show-more');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.classList.remove('expanded');
+            btn.style.display = 'block';
+          }
+        }
+      } else {
+        const isExpanded = btn?.classList.contains('expanded');
+        const limit = isExpanded ? totalCount : Math.min(6, totalCount);
+
+        for (let i = 0; i < limit; i++) {
+          visibleCards[i].classList.remove('hidden-demo');
+          visibleCards[i].classList.add('visible');
+        }
+
+        if (btn) {
+          if (totalCount <= 6) {
+            btn.style.display = 'none';
+          } else {
+            btn.style.display = 'block';
+            btn.textContent = isExpanded
+              ? btn.getAttribute('data-show-less')
+              : btn.getAttribute('data-show-more');
+            btn.setAttribute('aria-expanded', String(isExpanded));
+          }
+        }
+      }
+    }
+
+    filterBtns.forEach((fBtn) => {
+      fBtn.addEventListener('click', () => {
+        const issuer = fBtn.getAttribute('data-issuer') || 'all';
+        if (issuer === currentIssuer) return;
+
+        currentIssuer = issuer;
+        mobileShown = 3;
+        if (btn) {
+          btn.classList.remove('expanded');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.textContent = btn.getAttribute('data-show-more');
+        }
+
+        filterBtns.forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        fBtn.classList.add('active');
+        fBtn.setAttribute('aria-pressed', 'true');
+
+        updateGrid();
+      });
     });
-  }
+
+    function scrollToCerts() {
+      const section = document.getElementById('certifications');
+      if (section) {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        section.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
+      }
+    }
+
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const visibleCards = getVisibleCards();
+        const totalCount = visibleCards.length;
+
+        if (isMobile()) {
+          if (mobileShown >= totalCount) {
+            mobileShown = 3;
+            updateGrid();
+            scrollToCerts();
+          } else {
+            const start = mobileShown;
+            mobileShown = Math.min(mobileShown + 3, totalCount);
+
+            let stagger = 0;
+            for (let i = start; i < mobileShown; i++) {
+              const card = visibleCards[i];
+              card.classList.remove('hidden-demo');
+              const delay = 20 + stagger * 60;
+              setTimeout(() => card.classList.add('visible'), delay);
+              stagger++;
+            }
+
+            if (mobileShown >= totalCount) {
+              btn.textContent = btn.getAttribute('data-show-less');
+              btn.setAttribute('aria-expanded', 'true');
+              btn.classList.add('expanded');
+            }
+          }
+        } else {
+          const isExpanded = btn.classList.toggle('expanded');
+          btn.setAttribute('aria-expanded', String(isExpanded));
+
+          if (isExpanded) {
+            for (let i = 6; i < totalCount; i++) {
+              const card = visibleCards[i];
+              card.classList.remove('hidden-demo');
+              setTimeout(() => card.classList.add('visible'), 20 + (i - 6) * 60);
+            }
+          } else {
+            for (let i = 6; i < totalCount; i++) {
+              const card = visibleCards[i];
+              card.classList.remove('visible');
+              setTimeout(() => card.classList.add('hidden-demo'), 400);
+            }
+            scrollToCerts();
+          }
+
+          btn.textContent = isExpanded
+            ? btn.getAttribute('data-show-less')
+            : btn.getAttribute('data-show-more');
+        }
+      });
+    }
+
+    // Initial setup
+    updateGrid();
+  });
 
   // Fallback: if the external cert link is unreachable, swap to the local copy
   document
@@ -329,10 +558,7 @@ const { num } = Astro.props;
         if (!fallback) return;
         try {
           const res = await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
-          // mode: 'no-cors' returns opaque response (type "opaque", status 0) on success
-          // A network error throws, so if we get here the server responded
         } catch {
-          // Network error — external link is down, redirect to local fallback
           e.preventDefault();
           window.open(fallback, '_blank', 'noopener,noreferrer');
         }

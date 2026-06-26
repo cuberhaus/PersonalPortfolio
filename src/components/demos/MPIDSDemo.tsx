@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { Network, CheckCircle, X } from 'lucide-react';
 import {
   parseGraph,
   greedySolver,
@@ -345,7 +346,7 @@ function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
       {/* Info card */}
       <div style={s.infoCard}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-          <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>🔵</span>
+          <Network size={24} />
           <div>
             <strong style={{ color: 'var(--text-primary)' }}>{t.mpidsTitle}</strong>
             <p
@@ -587,6 +588,25 @@ function MPIDSDemo({ lang = 'en' }: { lang?: Lang }) {
                         {domInfo[tooltip.node].count}/{domInfo[tooltip.node].needed}{' '}
                         {t.neighborsInSet}
                         {domInfo[tooltip.node].dominated ? t.domYes : t.domNo}
+                        {domInfo[tooltip.node].dominated ? (
+                          <CheckCircle
+                            size={12}
+                            style={{
+                              display: 'inline',
+                              marginLeft: '0.2rem',
+                              verticalAlign: 'middle',
+                            }}
+                          />
+                        ) : (
+                          <X
+                            size={12}
+                            style={{
+                              display: 'inline',
+                              marginLeft: '0.2rem',
+                              verticalAlign: 'middle',
+                            }}
+                          />
+                        )}
                       </div>
                     )}
                   </>

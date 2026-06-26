@@ -1,6 +1,7 @@
 [
   {
     "slug": "tfg-polyps",
+    "category": "ai-ml",
     "tags": [
       "PyTorch",
       "CycleGAN",
@@ -18,6 +19,7 @@
   {
     "slug": "draculin",
     "title": "Draculin",
+    "category": "ai-ml",
     "tags": [
       "Flutter",
       "Django",
@@ -37,6 +39,7 @@
   {
     "slug": "bitsx-marato",
     "title": "BitsXLaMarató — Aorta",
+    "category": "ai-ml",
     "tags": [
       "PyTorch",
       "OpenCV",
@@ -54,6 +57,7 @@
   },
   {
     "slug": "matriculas",
+    "category": "ai-ml",
     "tags": [
       "Computer Vision",
       "TypeScript"
@@ -68,6 +72,7 @@
   },
   {
     "slug": "joc-eda",
+    "category": "algorithms",
     "icon": "gamepad",
     "github": "https://github.com/cuberhaus/joc_eda",
     "image": "",
@@ -78,6 +83,7 @@
   },
   {
     "slug": "jsbach",
+    "category": "academic",
     "tags": [
       "ANTLR4",
       "Web Audio",
@@ -93,6 +99,7 @@
   },
   {
     "slug": "tenda",
+    "category": "web",
     "tags": [
       "PHP",
       "MySQL",
@@ -108,6 +115,7 @@
   },
   {
     "slug": "pro2",
+    "category": "algorithms",
     "tags": [
       "TypeScript",
       "Algorithms",
@@ -123,6 +131,7 @@
   },
   {
     "slug": "mpids",
+    "category": "algorithms",
     "icon": "graph",
     "github": "https://github.com/cuberhaus/projectA",
     "image": "",
@@ -133,6 +142,7 @@
   },
   {
     "slug": "phase-transitions",
+    "category": "algorithms",
     "icon": "scatter",
     "github": "https://github.com/cuberhaus/projectA2",
     "image": "",
@@ -143,6 +153,7 @@
   },
   {
     "slug": "planificacion",
+    "category": "ai-ml",
     "tags": [
       "PDDL",
       "Planning",
@@ -159,6 +170,7 @@
   {
     "slug": "desastres-ia",
     "title": "Desastres IA",
+    "category": "ai-ml",
     "icon": "helicopter",
     "github": "https://github.com/cuberhaus/desastresIA",
     "image": "",
@@ -169,6 +181,7 @@
   },
   {
     "slug": "apa-practica",
+    "category": "ai-ml",
     "tags": [
       "Python",
       "Jupyter",
@@ -186,6 +199,7 @@
   },
   {
     "slug": "prop",
+    "category": "web",
     "tags": [
       "Java",
       "Spring Boot",
@@ -202,6 +216,7 @@
   },
   {
     "slug": "caim",
+    "category": "algorithms",
     "tags": [
       "Vanilla TS",
       "D3.js",
@@ -218,6 +233,7 @@
   },
   {
     "slug": "sbc-ia",
+    "category": "ai-ml",
     "tags": [
       "HTMX",
       "Alpine.js",
@@ -234,6 +250,7 @@
   },
   {
     "slug": "par-parallel",
+    "category": "algorithms",
     "tags": [
       "C",
       "OpenMP",
@@ -251,6 +268,7 @@
   },
   {
     "slug": "rob-robotics",
+    "category": "robotics",
     "icon": "bot",
     "github": "https://github.com/cuberhaus/ROB",
     "image": "",
@@ -261,6 +279,7 @@
   },
   {
     "slug": "algorithms",
+    "category": "algorithms",
     "icon": "brain",
     "github": "https://github.com/cuberhaus/fib",
     "image": "",
@@ -271,6 +290,7 @@
   },
   {
     "slug": "grafics",
+    "category": "graphics",
     "tags": [
       "WebGL2",
       "GLSL",
