@@ -21,7 +21,8 @@
     "issuer": "NVIDIA",
     "issuerIcon": "nvidia",
     "link": "https://www.credly.com/badges/665d0756-3e8a-4e8d-90d7-3a17a50ae620",
-    "badgeImage": "https://images.credly.com/size/340x340/images/3a48bfb1-6b85-42f3-8c82-10178b948419/image.png"
+    "badgeImage": "https://images.credly.com/size/340x340/images/3a48bfb1-6b85-42f3-8c82-10178b948419/image.png",
+    "badgeImageFallback": "/certifications/badge-nvidia-genai-multimodal.png"
   },
   {
     "name": "NVIDIA-Certified Associate: Generative AI LLMs",
