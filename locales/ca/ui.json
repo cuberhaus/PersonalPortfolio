@@ -2,7 +2,7 @@
   "about": {
     "cv": "Descarregar CV",
     "cvDownload": "Descarregar",
-    "cvSectionsTitle": "Seccions opcionals",
+    "cvSectionsTitle": "Personalitza les seccions",
     "cvSectionSkills": "Habilitats",
     "cvSectionProjects": "Projectes destacats",
     "cvSectionExtracurricular": "Activitats extracurriculars",
@@ -99,7 +99,7 @@
     "experience": "Experiència",
     "projects": "Projectes",
     "skills": "Habilitats",
-    "work": "Treball"
+    "work": "Treball Professional"
   },
   "notFound": {
     "back": "Portafolis",
