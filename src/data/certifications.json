@@ -1,5 +1,13 @@
 [
   {
+    "name": "NVIDIA Certified Professional: Agentic AI",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "link": "https://www.credly.com/badges/b7d106b5-441a-4cb3-853b-0085df2c2912",
+    "badgeImage": "https://images.credly.com/size/340x340/images/9c5ac530-3a82-4970-ad25-d50fbe755ccb/blob",
+    "badgeImageFallback": "/certifications/badge-nvidia-agentic-ai.png"
+  },
+  {
     "name": "Microsoft Certified: Azure Fundamentals (AZ-900)",
     "issuer": "Microsoft",
     "issuerIcon": "microsoft",
