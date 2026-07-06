@@ -1,0 +1,19 @@
+{
+  "//": "cuberhaus reproducible dev environment (node). Managed source: cuberhaus-workspace/assets/devcontainers/node. Applied per repo by scripts/apply-devcontainers.ps1.",
+  "name": "cuberhaus node",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "remoteUser": "node",
+  "postCreateCommand": "bash -lc 'if [ -f skills-lock.json ]; then make skills-restore || true; fi; if [ -f package-lock.json ]; then npm ci || npm install || true; elif [ -f package.json ]; then npm install || true; fi'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
