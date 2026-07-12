@@ -1,5 +1,13 @@
 [
   {
+    "name": "NVIDIA Certified Professional: OpenUSD Development",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "link": "https://www.credly.com/badges/39035959-608c-491b-929e-38abf4a1617b",
+    "badgeImage": "https://images.credly.com/size/340x340/images/4ecbe231-1875-4d7c-bf24-304c85668e37/blob",
+    "badgeImageFallback": "/certifications/badge-nvidia-openusd-development.png"
+  },
+  {
     "name": "NVIDIA Certified Professional: Agentic AI",
     "issuer": "NVIDIA",
     "issuerIcon": "nvidia",
