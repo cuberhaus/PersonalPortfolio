@@ -16,6 +16,14 @@
     "badgeImageFallback": "/certifications/badge-nvidia-agentic-ai.png"
   },
   {
+    "name": "NVIDIA Certified Professional: Gen AI LLMs",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "link": "https://www.credly.com/badges/25e9fe19-83aa-414b-83f4-5ec541119f5a",
+    "badgeImage": "https://images.credly.com/size/340x340/images/4b94e285-07f8-484f-9bb5-aff9d9d5c709/blob",
+    "badgeImageFallback": "/certifications/badge-nvidia-genai-llms-professional.png"
+  },
+  {
     "name": "Microsoft Certified: Azure Fundamentals (AZ-900)",
     "issuer": "Microsoft",
     "issuerIcon": "microsoft",
