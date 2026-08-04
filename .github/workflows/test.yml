@@ -21,19 +21,41 @@ jobs:
           cache: npm
 
       - name: Install dependencies
+        id: install
+        continue-on-error: true
         run: npm ci
 
       - name: Type-check (astro check)
+        id: typecheck
+        continue-on-error: true
         run: npm run check
 
       - name: Lint
+        id: lint
+        continue-on-error: true
         run: npm run lint
 
       - name: Format check
+        id: format
+        continue-on-error: true
         run: npm run format:check
 
       - name: Production dependency audit
+        id: audit
+        continue-on-error: true
         run: npm run audit:ci
+
+      - name: Quality gate
+        if: ${{ always() && !cancelled() }}
+        run: |
+          if [[ "${{ steps.install.outcome }}" != "success" ||
+                "${{ steps.typecheck.outcome }}" != "success" ||
+                "${{ steps.lint.outcome }}" != "success" ||
+                "${{ steps.format.outcome }}" != "success" ||
+                "${{ steps.audit.outcome }}" != "success" ]]; then
+            echo "One or more quality checks failed."
+            exit 1
+          fi
 
   vitest:
     runs-on: ubuntu-latest
@@ -274,5 +296,7 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Run Lighthouse CI
+        run: npm run lhci
       - name: Run Lighthouse CI
         run: npm run lhci
