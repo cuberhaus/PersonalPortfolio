@@ -304,7 +304,7 @@ March 2026 list prices.
 
 | Path                                                     | Up-front time            | Monthly $              | Maintenance         | Best for                                                                             |
 | -------------------------------------------------------- | ------------------------ | ---------------------- | ------------------- | ------------------------------------------------------------------------------------ |
-| Hetzner Cloud VPS (CPX31, 4 vCPU, 8 GB) + Docker Compose | 1–2 h                    | ~€13 (~$14)            | OS patches, backups | Cheapest viable self-host                                                            |
+| Hetzner Cloud VPS (CPX31, 4 vCPU, 8 GB) + Docker Compose | 1–2 h                    | ~~€13 (~~$14)          | OS patches, backups | Cheapest viable self-host                                                            |
 | DigitalOcean Droplet (4 vCPU, 8 GB) + Docker Compose     | 1–2 h                    | ~$48                   | OS patches, backups | If you already use DO                                                                |
 | Render / Railway / Fly.io                                | 2–4 h                    | $30–80                 | Mostly automated    | No SSH, no OS patching                                                               |
 | Kubernetes (Helm chart)                                  | 30 min if cluster exists | Cluster cost dominates | Cluster ops         | If you already run k8s                                                               |

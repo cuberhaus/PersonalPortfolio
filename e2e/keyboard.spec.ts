@@ -79,8 +79,7 @@ test.describe('Enter-to-submit handlers', () => {
             const propsKey = Object.keys(el).find((k) => k.startsWith('__reactProps$'));
             if (!propsKey) return false;
             const props = (el as unknown as Record<string, unknown>)[propsKey] as
-              | { onKeyDown?: unknown }
-              | undefined;
+              { onKeyDown?: unknown } | undefined;
             return typeof props?.onKeyDown === 'function';
           }),
         { timeout: 15_000 }

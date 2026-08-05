@@ -31,7 +31,7 @@ If a guide conflicts with this file, follow the guide and update the stale rule 
 
 ## Agent skills
 
-Installable skills live under `.agents/skills/` (gitignored; restore with `make skills-restore`). Pinned versions are in [skills-lock.json](skills-lock.json).
+Installable third-party skills live under `.agents/skills/` (gitignored; restore with `make skills-restore`). Pinned versions are in [skills-lock.json](skills-lock.json). Project-owned workflows live under `.github/skills/` and are tracked directly.
 
 - **astro** — consult when modifying `.astro` pages, layouts, or islands hydration directives.
 - **vercel-react-best-practices** — consult when editing React 19 islands under `src/components/`.
@@ -40,6 +40,7 @@ Installable skills live under `.agents/skills/` (gitignored; restore with `make 
 - **accessibility** — consult before merging UI changes; pair with the a11y Playwright project.
 - **performance** — consult when optimizing bundle size, LCP, or Core Web Vitals.
 - **sentry-workflow** — consult when touching Sentry configuration / observability.
+- **add-certification** — consult when adding or updating a certification; keeps the portfolio locale data and all three CV certification sections synchronized.
 
 ## Pitfalls
 
