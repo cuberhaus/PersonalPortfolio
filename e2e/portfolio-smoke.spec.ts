@@ -50,6 +50,18 @@ test.describe('portfolio homepage smoke', () => {
     });
   }
 
+  for (const { route, tagline } of [
+    { route: '/', tagline: 'I like building things with AI & data.' },
+    { route: '/es/', tagline: 'Me gusta construir cosas con IA y datos.' },
+    { route: '/ca/', tagline: "M'agrada construir coses amb IA i dades." },
+  ]) {
+    test(`${route} keeps spacing between hero tagline segments`, async ({ page }) => {
+      await page.goto(route, { waitUntil: 'domcontentloaded' });
+
+      await expect(page.locator('.hero-tagline')).toHaveText(tagline);
+    });
+  }
+
   test('mobile menu opens, navigates, and unlocks body scroll', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
