@@ -2,7 +2,7 @@
   "about": {
     "cv": "Descargar CV",
     "cvDownload": "Descargar",
-    "cvSectionsTitle": "Secciones opcionales",
+    "cvSectionsTitle": "Personaliza las secciones",
     "cvSectionSkills": "Habilidades",
     "cvSectionProjects": "Proyectos seleccionados",
     "cvSectionExtracurricular": "Actividades extracurriculares",
@@ -99,7 +99,7 @@
     "experience": "Experiencia",
     "projects": "Proyectos",
     "skills": "Habilidades",
-    "work": "Trabajo"
+    "work": "Trabajo Profesional"
   },
   "notFound": {
     "back": "Portafolio",
