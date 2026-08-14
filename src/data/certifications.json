@@ -24,6 +24,14 @@
     "badgeImageFallback": "/certifications/badge-nvidia-genai-llms-professional.png"
   },
   {
+    "name": "NVIDIA-Certified Professional: Accelerated Data Science",
+    "issuer": "NVIDIA",
+    "issuerIcon": "nvidia",
+    "link": "https://www.credly.com/badges/fed32b85-03ac-48f0-a38d-1952337d2234",
+    "badgeImage": "https://images.credly.com/size/340x340/images/8ab96265-25a1-4e3c-a246-03534b96dfab/blob",
+    "badgeImageFallback": "/certifications/badge-nvidia-accelerated-data-science.png"
+  },
+  {
     "name": "Microsoft Certified: Azure Fundamentals (AZ-900)",
     "issuer": "Microsoft",
     "issuerIcon": "microsoft",
