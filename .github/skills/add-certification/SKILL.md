@@ -52,3 +52,22 @@ pwsh scripts/build-local.ps1 catalan -Toggles 1000
 Inspect the generated certification variants for page overflow or TeX errors before publishing. Keep unrelated worktree changes intact.
 
 The [parity script](./scripts/check-certification-parity.ps1) verifies contiguous locale indexes, equal locale/source counts, duplicate CV titles, and equal portfolio/CV counts. It does not prove that abbreviated CV titles are semantically equivalent; review those lines directly.
+
+## Pull Requests
+
+When the change is ready, create paired PRs: one in `PersonalPortfolio` for the
+source data, locale entries, and asset; one in `cv` for the TeX mirror.
+
+1. Check each worktree and its current branch before committing. Do not add the
+   certification to a branch that contains unrelated work or an unrelated PR.
+2. From `origin/main`, create matching clean feature branches in both
+   repositories. Stash and restore only the certification changes if needed;
+   preserve all other worktree changes.
+3. Commit each repository separately with a focused certification message, push
+   both branches, and open PRs targeting `main`.
+4. Link the two PRs in their descriptions. The portfolio PR records the source
+   data, display position, localized dates, durable asset, and completed
+   validation. The CV PR identifies the portfolio PR as its source and records
+   any TeX build blocker rather than claiming a successful build.
+5. Confirm both PR URLs, branches, and worktrees after creation. Do not merge
+   either PR unless explicitly asked.
