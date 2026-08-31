@@ -27,6 +27,12 @@ export default defineConfig({
       testMatch: /portfolio-smoke\.spec\.ts/,
     },
     {
+      name: 'readme-gallery',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /readme-gallery\.spec\.ts/,
+      workers: 1,
+    },
+    {
       name: 'browser-demos',
       use: { ...devices['Desktop Chrome'] },
       testMatch: /browser-demos\.spec\.ts/,

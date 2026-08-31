@@ -85,6 +85,30 @@ test.describe('portfolio homepage smoke', () => {
     await expect(page.locator('section#work')).toBeInViewport({ ratio: 0.1 });
   });
 
+  test('mobile homepage and demo navigation share control sizing without title overlap', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const mainControl = await page.locator('.nav-toggle').boundingBox();
+    expect(mainControl).not.toBeNull();
+    expect(mainControl?.width).toBe(40);
+    expect(mainControl?.height).toBe(40);
+
+    await page.goto('/demos/algorithms/', { waitUntil: 'domcontentloaded' });
+    const demoControl = await page.locator('.sidebar-toggle').boundingBox();
+    const titleBox = await page.locator('.demo-nav-title').boundingBox();
+    const backBox = await page.locator('.demo-back').boundingBox();
+    expect(demoControl).not.toBeNull();
+    expect(titleBox).not.toBeNull();
+    expect(backBox).not.toBeNull();
+    expect(demoControl?.width).toBe(40);
+    expect(demoControl?.height).toBe(40);
+    expect(titleBox!.x).toBeGreaterThanOrEqual(backBox!.x + backBox!.width);
+    expect(titleBox!.x + titleBox!.width).toBeLessThanOrEqual(demoControl!.x);
+  });
+
   test('desktop and mobile layouts do not create horizontal overflow', async ({ page }) => {
     for (const viewport of [
       { width: 1280, height: 900 },

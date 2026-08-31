@@ -3,9 +3,11 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIssuerIconSvg } from '../lib/issuer-icons';
 import { certifications as certsData, getTranslations } from '../data/loaders';
 import { visibleEntries } from '../data/visibility';
-import { flattenForLocale } from '../i18n/load';
+import { getLocalizedCertifications } from '../lib/certifications';
 
 type CertEntry = {
+  id: string;
+  displayOrder: number;
   name: string;
   issuer: string;
   issuerIcon: string;
@@ -20,7 +22,10 @@ type CertEntry = {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const certs = visibleEntries(
-  flattenForLocale<CertEntry>(certsData as never, lang, getTranslations('certifications', lang))
+  getLocalizedCertifications<CertEntry>(
+    certsData as CertEntry[],
+    getTranslations('certifications', lang)
+  )
 );
 
 const { num } = Astro.props;

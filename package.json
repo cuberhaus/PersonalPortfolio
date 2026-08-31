@@ -20,6 +20,7 @@
     "test:e2e": "playwright test",
     "test:e2e:smoke": "playwright test --project=portfolio-smoke",
     "test:e2e:a11y": "playwright test --project=a11y",
+    "gallery:capture": "playwright test --project=readme-gallery",
     "lhci": "lhci autorun",
     "og:capture": "node scripts/capture-og-images.mjs",
     "i18n:review": "tsx scripts/i18n-review.ts"

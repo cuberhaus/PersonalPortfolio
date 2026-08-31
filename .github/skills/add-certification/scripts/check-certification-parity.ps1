@@ -9,7 +9,18 @@ $ErrorActionPreference = 'Stop'
 $certificationsPath = Join-Path $PortfolioRoot 'src\data\certifications.json'
 $certifications = @(Get-Content -Raw $certificationsPath | ConvertFrom-Json)
 $expectedCount = $certifications.Count
-$expectedKeys = @(0..($expectedCount - 1) | ForEach-Object { $_.ToString() })
+$expectedKeys = @($certifications | ForEach-Object { $_.id })
+
+if ($expectedKeys.Count -ne @($expectedKeys | Select-Object -Unique).Count) {
+    throw 'Duplicate portfolio certification IDs.'
+}
+
+$duplicateDisplayOrders = $certifications |
+    Group-Object displayOrder |
+    Where-Object Count -gt 1
+if ($duplicateDisplayOrders) {
+    throw "Duplicate portfolio certification display orders: $($duplicateDisplayOrders.Name -join ', ')"
+}
 
 $duplicateNames = $certifications |
     Group-Object { $_.name.Trim().ToLowerInvariant() } |
@@ -27,7 +38,7 @@ foreach ($locale in @('en', 'es', 'ca')) {
         throw "$localePath has $($actualKeys.Count) entries; expected $expectedCount."
     }
     if (Compare-Object $expectedKeys $actualKeys) {
-        throw "$localePath keys must be contiguous and ordered from 0 through $($expectedCount - 1)."
+        throw "$localePath keys must exactly match the certification IDs in src/data/certifications.json."
     }
 }
 
