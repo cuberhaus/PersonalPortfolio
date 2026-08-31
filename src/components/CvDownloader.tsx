@@ -1,30 +1,22 @@
-// CV download with section toggles.
-//
-// Renders 4 checkboxes (skills, projects, extracurricular, certifications)
-// and a download button. The button's href is computed live from the toggle
-// state and points at one of the 48 pre-built variants in public/cv/
-// (cv_<lang>_<cepsbits>.pdf, where each bit toggles certifications /
-// extracurricular / projects / skills, left-to-right). summary, education
-// and experience are always-on (not toggleable; baked into every variant).
-//
-// Variants are fetched in .github/workflows/deploy.yml from the
-// cuberhaus/cv release. See cv repo AGENTS.md for the build mechanism.
-//
-// Default toggles ('0111' = skills+projects+extracurricular, no
-// certifications) match the canonical CV behaviour pre-toggle.
 import { useId, useState } from 'react';
 
 type Lang = 'en' | 'es' | 'ca';
+export type CvPreset = 'standard' | 'technical' | 'complete' | 'concise';
+
+export const CV_PRESETS: ReadonlyArray<{ id: CvPreset }> = [
+  { id: 'standard' },
+  { id: 'technical' },
+  { id: 'complete' },
+  { id: 'concise' },
+];
 
 interface Props {
   lang: Lang;
   labels: {
     title: string;
-    sectionsTitle: string;
-    skills: string;
-    projects: string;
-    extracurricular: string;
-    certifications: string;
+    preset: string;
+    presets: Record<CvPreset, string>;
+    includePhoto: string;
     download: string;
   };
 }
@@ -48,20 +40,21 @@ const basePath =
 // `/portfolio/`.
 const baseStem = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
 
+export function getCvAssetPath(cvLang: string, preset: CvPreset, includePhoto: boolean) {
+  const photoMode = includePhoto ? 'photo' : 'no-photo';
+  return {
+    href: `/cv/cv_${cvLang}_${preset}_${photoMode}.pdf`,
+    filename: `cv_${cvLang}.pdf`,
+  };
+}
+
 export default function CvDownloader({ lang, labels }: Props) {
-  const [skills, setSkills] = useState(true);
-  const [projects, setProjects] = useState(true);
-  const [extracurricular, setExtracurricular] = useState(true);
-  const [certifications, setCertifications] = useState(false);
+  const [preset, setPreset] = useState<CvPreset>('standard');
+  const [includePhoto, setIncludePhoto] = useState(true);
 
   const cvLang = CV_LANG_BY_LOCALE[lang];
-  // Bit order: c, e, p, s (matches cv repo's filename convention).
-  const toggles =
-    (certifications ? '1' : '0') +
-    (extracurricular ? '1' : '0') +
-    (projects ? '1' : '0') +
-    (skills ? '1' : '0');
-  const href = `${baseStem}/cv/cv_${cvLang}_${toggles}.pdf`;
+  const asset = getCvAssetPath(cvLang, preset, includePhoto);
+  const href = `${baseStem}${asset.href}`;
 
   const formId = useId();
 
@@ -73,38 +66,33 @@ export default function CvDownloader({ lang, labels }: Props) {
         <span>{labels.title}</span>
       </h3>
 
-      <fieldset className="cv-dl-options">
-        <legend className="cv-dl-legend">{labels.sectionsTitle}</legend>
+      <div className="cv-dl-options">
+        <label className="cv-dl-field" htmlFor={`${formId}-preset`}>
+          <span>{labels.preset}</span>
+          <select
+            id={`${formId}-preset`}
+            value={preset}
+            onChange={(event) => setPreset(event.target.value as CvPreset)}
+          >
+            {CV_PRESETS.map(({ id }) => (
+              <option key={id} value={id}>
+                {labels.presets[id]}
+              </option>
+            ))}
+          </select>
+        </label>
         <Toggle
-          id={`${formId}-skills`}
-          label={labels.skills}
-          checked={skills}
-          onChange={setSkills}
+          id={`${formId}-photo`}
+          label={labels.includePhoto}
+          checked={includePhoto}
+          onChange={setIncludePhoto}
         />
-        <Toggle
-          id={`${formId}-projects`}
-          label={labels.projects}
-          checked={projects}
-          onChange={setProjects}
-        />
-        <Toggle
-          id={`${formId}-extracurricular`}
-          label={labels.extracurricular}
-          checked={extracurricular}
-          onChange={setExtracurricular}
-        />
-        <Toggle
-          id={`${formId}-certifications`}
-          label={labels.certifications}
-          checked={certifications}
-          onChange={setCertifications}
-        />
-      </fieldset>
+      </div>
 
       <a
         className="cv-dl-btn"
         href={href}
-        download={`cv_${cvLang}_${toggles}.pdf`}
+        download={asset.filename}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -192,29 +180,18 @@ const CV_DL_STYLES = `
     height: 1.1rem;
   }
 
-  .cv-dl-options {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.65rem 1.25rem;
-    border: none;
-    padding: 0;
-    margin: 0;
-    min-width: 0;
+  .cv-dl-options { display: grid; gap: 0.9rem; }
+  .cv-dl-field { display: grid; gap: 0.35rem; color: var(--text-secondary); font-size: 0.9rem; }
+  .cv-dl-field select {
+    min-height: 2.5rem;
+    padding: 0.45rem 0.65rem;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font: inherit;
   }
-  .cv-dl-legend {
-    grid-column: 1 / -1;
-    padding: 0;
-    margin: 0 0 0.15rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    font-weight: 600;
-  }
-  @media (max-width: 480px) {
-    .cv-dl-options { grid-template-columns: 1fr; }
-  }
+  .cv-dl-field select:focus-visible { outline: 2px solid var(--accent-start); outline-offset: 2px; }
 
   .cv-dl-opt {
     display: inline-flex;
@@ -243,7 +220,7 @@ const CV_DL_STYLES = `
     flex: 0 0 auto;
     width: 1.05rem;
     height: 1.05rem;
-    border-radius: 4px;
+    border-radius: var(--radius-full, 9999px);
     border: 1.5px solid var(--border-color-hover);
     background: transparent;
     position: relative;
@@ -267,16 +244,16 @@ const CV_DL_STYLES = `
     content: '';
     position: absolute;
     left: 50%;
-    top: 45%;
-    width: 0.32rem;
-    height: 0.6rem;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    top: 50%;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: #fff;
+    transform: translate(-50%, -50%) translateX(-0.25rem);
     transition: transform var(--transition-fast);
   }
   .cv-dl-input:checked + .cv-dl-box::after {
-    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+    transform: translate(-50%, -50%) translateX(0.25rem);
   }
   .cv-dl-input:checked ~ .cv-dl-label {
     color: var(--text-primary);

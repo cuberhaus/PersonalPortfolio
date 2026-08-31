@@ -30,6 +30,9 @@
   --border-color-hover: #3f3f46;
 
   --nav-height: 4rem;
+  --nav-control-size: 2.5rem;
+  --nav-icon-size: 1.125rem;
+  --nav-focus-ring: 0 0 0 3px color-mix(in srgb, var(--accent-start) 40%, transparent);
   --section-padding: 6rem 0;
   --container-width: 1100px;
   --container-padding: 0 1.5rem;

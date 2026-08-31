@@ -25,7 +25,7 @@ The CV is a sibling repository at `../cv`. Its certification sections are an int
 1. Read `AGENTS.md` in both repositories and inspect both worktrees. Preserve unrelated changes.
 2. Search `src/data/certifications.json` by credential URL and normalized certification name. Update an existing record instead of creating a duplicate.
 3. Confirm the credential details from the supplied badge or certificate. Do not invent a URL, issue date, issuer, badge asset, or expiry date. Do not publish private certificate files or identifiers.
-4. Add or update the identity object in `src/data/certifications.json`. Use an existing `issuerIcon` slug when possible. For a new record, follow the repository convention and append it with the next locale index. If intentionally inserting or reordering records, reindex every subsequent key in all three locale files in the same edit.
+4. Add or update the identity object in `src/data/certifications.json`. Use an existing `issuerIcon` slug when possible. New records need a permanent lowercase-kebab `id` and a unique spaced `displayOrder` (for example, `2100`). Add one matching entry keyed by that ID to all three locale files. Reordering changes only `displayOrder`; never renumber locale entries.
 5. If the issuer is new, add its icon to `src/lib/issuer-icons.ts`. Store durable badge/fallback assets under `public/certifications/` when external resources may expire, and reference them with BASE_URL-compatible `/certifications/...` paths.
 6. Add the localized `issued` value at the matching positional key in all three locale files.
 7. Mirror the record in `../cv/cv/certifications.tex`, `../cv/cv/certifications_es.tex`, and `../cv/cv/certifications_ca.tex`, sorted newest-first. Localize only the date unless TeX escaping or a concise line-length variant is required. Keep the issuer and credential identity semantically equivalent to the portfolio.
@@ -51,7 +51,7 @@ pwsh scripts/build-local.ps1 catalan -Toggles 1000
 
 Inspect the generated certification variants for page overflow or TeX errors before publishing. Keep unrelated worktree changes intact.
 
-The [parity script](./scripts/check-certification-parity.ps1) verifies contiguous locale indexes, equal locale/source counts, duplicate CV titles, and equal portfolio/CV counts. It does not prove that abbreviated CV titles are semantically equivalent; review those lines directly.
+The [parity script](./scripts/check-certification-parity.ps1) verifies matching locale IDs, equal locale/source counts, duplicate CV titles, and equal portfolio/CV counts. It does not prove that abbreviated CV titles are semantically equivalent; review those lines directly.
 
 ## Pull Requests
 

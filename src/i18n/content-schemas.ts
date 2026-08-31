@@ -74,15 +74,40 @@ export const EducationFileSchema = z.array(
 // ─── certifications.json (identity-only) ────────────────────────
 // Each entry: { name, issuer, issuerIcon, link?, fallback?, badgeImage?, badgeImageFallback? }
 
-export const CertificationsFileSchema = z.array(
-  z.object({
-    name: z.string().min(1),
-    issuer: z.string().min(1),
-    issuerIcon: z.enum(issuerIconNames),
-    link: credentialUrl.optional(),
-    fallback: z.string().optional(),
-    badgeImage: imageUrl.optional(),
-    badgeImageFallback: imageUrl.optional(),
-    ...visibility,
-  })
-);
+export const CertificationsFileSchema = z
+  .array(
+    z.object({
+      id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+      displayOrder: z.number().int().positive(),
+      name: z.string().min(1),
+      issuer: z.string().min(1),
+      issuerIcon: z.enum(issuerIconNames),
+      link: credentialUrl.optional(),
+      fallback: z.string().optional(),
+      badgeImage: imageUrl.optional(),
+      badgeImageFallback: imageUrl.optional(),
+      ...visibility,
+    })
+  )
+  .superRefine((certifications, context) => {
+    const seenIds = new Set<string>();
+    const seenDisplayOrders = new Set<number>();
+    certifications.forEach((certification, index) => {
+      if (seenIds.has(certification.id)) {
+        context.addIssue({
+          code: 'custom',
+          message: `duplicate certification id: ${certification.id}`,
+          path: [index, 'id'],
+        });
+      }
+      if (seenDisplayOrders.has(certification.displayOrder)) {
+        context.addIssue({
+          code: 'custom',
+          message: `duplicate certification displayOrder: ${certification.displayOrder}`,
+          path: [index, 'displayOrder'],
+        });
+      }
+      seenIds.add(certification.id);
+      seenDisplayOrders.add(certification.displayOrder);
+    });
+  });

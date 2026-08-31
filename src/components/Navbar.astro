@@ -131,17 +131,34 @@ const links = sections
 
   .nav-toggle {
     display: none;
-    width: 2rem;
-    height: 2rem;
+    width: var(--nav-control-size);
+    height: var(--nav-control-size);
     align-items: center;
     justify-content: center;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  .nav-toggle:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+  }
+
+  .nav-toggle:focus-visible,
+  .nav-link:focus-visible {
+    outline: none;
+    box-shadow: var(--nav-focus-ring);
   }
 
   .hamburger,
   .hamburger::before,
   .hamburger::after {
     display: block;
-    width: 1.25rem;
+    width: var(--nav-icon-size);
     height: 2px;
     background: var(--text-primary);
     border-radius: 2px;

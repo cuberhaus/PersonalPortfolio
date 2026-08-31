@@ -10,7 +10,7 @@ endif
        rebuild free-ports check-registry \
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
-       clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update help ports \
+	clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update gallery-capture help ports \
        i18n-review skills-list skills-update skills-restore \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
@@ -107,6 +107,9 @@ log-relay: ## Start the dev-only log-relay SSE sidecar (default port 9999)
 
 check-registry: ## Run only the demo-services registry consistency tests
 	@npx vitest run src/__tests__/demo-registry.test.ts
+
+gallery-capture: ## Regenerate the three deterministic root README screenshots
+	@npm run gallery:capture
 
 stop: ## Stop all demo backend containers/services
 	@bash scripts/dev-all-demos.sh --stop

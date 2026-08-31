@@ -4,6 +4,15 @@
 
 Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 19** islands for 20 interactive demos. Three-locale i18n (EN / ES / CA). Deployed to **GitHub Pages** via Actions.
 
+## Gallery
+
+| Portfolio overview                                                                                                      | Interactive demo                                                                                 | Mobile navigation                                                                               |
+| ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| ![Desktop portfolio overview showing the hero and project navigation](docs/assets/readme-gallery/portfolio-desktop.jpg) | ![Algorithm Visualizer demo interface](docs/assets/readme-gallery/algorithm-visualizer-demo.jpg) | ![Mobile portfolio navigation menu](docs/assets/readme-gallery/portfolio-mobile-navigation.jpg) |
+| Desktop default design                                                                                                  | Browser-native Algorithm Visualizer                                                              | Open responsive navigation                                                                      |
+
+Regenerate the images with `npm run gallery:capture` (or `make gallery-capture`). The Playwright capture uses fixed viewports, default local storage, disabled motion, and fails before writing an image when a target route does not render.
+
 ## Stack
 
 | Layer          | Tech                                                                                |

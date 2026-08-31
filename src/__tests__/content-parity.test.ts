@@ -34,6 +34,7 @@ import workProjectsCa from '../../locales/ca/work_projects.json';
 import certificationsEn from '../../locales/en/certifications.json';
 import certificationsEs from '../../locales/es/certifications.json';
 import certificationsCa from '../../locales/ca/certifications.json';
+import { getLocalizedCertifications } from '../lib/certifications';
 import demosEn from '../../locales/en/demos.json';
 import demosEs from '../../locales/es/demos.json';
 import demosCa from '../../locales/ca/demos.json';
@@ -232,6 +233,28 @@ describe('Certifications data', () => {
 
   it('locales match', () => {
     assertLocaleParity('certifications', data, translations);
+  });
+
+  it('uses stable IDs, explicit ordering, and ID-keyed locale metadata', () => {
+    const ids = data.map((entry) => entry.id as string);
+    const displayOrders = data.map((entry) => entry.displayOrder as number);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(new Set(displayOrders).size).toBe(displayOrders.length);
+    expect(Object.keys(certificationsEn).sort()).toEqual([...ids].sort());
+    expect(Object.keys(certificationsEs).sort()).toEqual([...ids].sort());
+    expect(Object.keys(certificationsCa).sort()).toEqual([...ids].sort());
+
+    const ordered = getLocalizedCertifications(
+      [
+        { id: 'second', displayOrder: 200, name: 'Second', issuer: 'Issuer', issuerIcon: 'nvidia' },
+        { id: 'first', displayOrder: 100, name: 'First', issuer: 'Issuer', issuerIcon: 'nvidia' },
+      ],
+      { first: { issued: 'First date' }, second: { issued: 'Second date' } }
+    );
+    expect(ordered.map((entry) => [entry.id, entry.issued])).toEqual([
+      ['first', 'First date'],
+      ['second', 'Second date'],
+    ]);
   });
 
   it('every entry has name + issuer + issuerIcon in identity', () => {

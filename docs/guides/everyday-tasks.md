@@ -71,9 +71,11 @@ stays registered, but disappears from the homepage and navbar.
 
 ## 3. Adding a new certification
 
-**Edit:** [src/data/certifications.json](../../src/data/certifications.json) +
-`.es.json` + `.ca.json`. Shape: `identity.{name, issuer, issuerIcon, link,
-fallback?}`, `copy.{en,es,ca}.issued`.
+**Edit:** [src/data/certifications.json](../../src/data/certifications.json) and
+`locales/{en,es,ca}/certifications.json`. Each canonical record needs a stable
+lowercase-kebab `id`, a unique spaced `displayOrder`, and identity fields
+`{name, issuer, issuerIcon, link, fallback?}`. Add one locale entry keyed by
+that ID with `{ issued }`; never use or renumber positional keys.
 
 **Notes:** `issuerIcon` is a known slug (`microsoft`, `nvidia`, `oracle`, …)
 matched by the icon component. If the credential URL might rot, drop a static
@@ -81,7 +83,7 @@ HTML snapshot in `public/certifications/` and reference it with `fallback`. For
 local certificate PDFs, copy the file to `public/certifications/` and use a
 `link` like `/certifications/<file>.pdf`.
 
-**Verify:** `npx vitest run content-parity data-integrity`
+**Verify:** `npx vitest run content-parity content-schemas data-integrity`
 
 ---
 

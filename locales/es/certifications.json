@@ -1,62 +1,62 @@
 {
-  "0": {
+  "nvidia-openusd-development": {
     "issued": "Jul 2026"
   },
-  "1": {
+  "nvidia-agentic-ai": {
     "issued": "Jun 2026"
   },
-  "2": {
+  "nvidia-genai-llms-professional": {
     "issued": "Jul 2026"
   },
-  "3": {
+  "nvidia-accelerated-data-science": {
     "issued": "Ago 2026"
   },
-  "4": {
+  "microsoft-azure-fundamentals-az900": {
     "issued": "May 2025"
   },
-  "5": {
+  "nvidia-genai-multimodal": {
     "issued": "Jun 2026"
   },
-  "6": {
+  "nvidia-genai-llms-associate": {
     "issued": "May 2026"
   },
-  "7": {
+  "nvidia-ai-infrastructure-operations": {
     "issued": "May 2026"
   },
-  "8": {
+  "nvidia-physical-ai-fundamentals": {
     "issued": "Feb 2026"
   },
-  "9": {
+  "google-generative-ai-leader": {
     "issued": "Jul 2025"
   },
-  "10": {
+  "oracle-oci-ai-foundations": {
     "issued": "Abr 2024"
   },
-  "11": {
+  "nvidia-deep-learning": {
     "issued": "Sep 2024"
   },
-  "12": {
+  "universal-robots-e-series-application": {
     "issued": "Feb 2023"
   },
-  "13": {
+  "universal-robots-e-series-core": {
     "issued": "Oct 2022"
   },
-  "14": {
+  "universal-robots-e-series-pro": {
     "issued": "May 2023"
   },
-  "15": {
+  "stratio-data-fabric-operations": {
     "issued": "Mar 2025"
   },
-  "16": {
+  "stratio-data-processing": {
     "issued": "Mar 2025"
   },
-  "17": {
+  "stratio-data-fabric-basics": {
     "issued": "Ene 2025"
   },
-  "18": {
+  "nvidia-aiio-bootcamp": {
     "issued": "May 2026"
   },
-  "19": {
+  "nvidia-genl-bootcamp": {
     "issued": "May 2026"
   }
 }

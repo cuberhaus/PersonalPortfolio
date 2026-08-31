@@ -69,4 +69,10 @@ describe('CertificationsFileSchema rejections', () => {
     e.issuerIcon = 'definitely-not-a-real-issuer';
     expect(CertificationsFileSchema.safeParse([e]).success).toBe(false);
   });
+
+  it('rejects duplicate stable IDs and display orders', () => {
+    const first = cloneFirst(certificationsData) as { id: string; displayOrder: number };
+    const duplicate = structuredClone(first);
+    expect(CertificationsFileSchema.safeParse([first, duplicate]).success).toBe(false);
+  });
 });
