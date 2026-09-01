@@ -16,6 +16,7 @@ interface Props {
     title: string;
     preset: string;
     presets: Record<CvPreset, string>;
+    presetDescriptions: Record<CvPreset, string>;
     includePhoto: string;
     download: string;
   };
@@ -48,6 +49,10 @@ export function getCvAssetPath(cvLang: string, preset: CvPreset, includePhoto: b
   };
 }
 
+export function getCvPresetDescription(descriptions: Record<CvPreset, string>, preset: CvPreset) {
+  return descriptions[preset];
+}
+
 export default function CvDownloader({ lang, labels }: Props) {
   const [preset, setPreset] = useState<CvPreset>('standard');
   const [includePhoto, setIncludePhoto] = useState(true);
@@ -71,6 +76,7 @@ export default function CvDownloader({ lang, labels }: Props) {
           <span>{labels.preset}</span>
           <select
             id={`${formId}-preset`}
+            aria-describedby={`${formId}-preset-description`}
             value={preset}
             onChange={(event) => setPreset(event.target.value as CvPreset)}
           >
@@ -80,6 +86,13 @@ export default function CvDownloader({ lang, labels }: Props) {
               </option>
             ))}
           </select>
+          <span
+            id={`${formId}-preset-description`}
+            className="cv-dl-description"
+            aria-live="polite"
+          >
+            {getCvPresetDescription(labels.presetDescriptions, preset)}
+          </span>
         </label>
         <Toggle
           id={`${formId}-photo`}
@@ -192,6 +205,11 @@ const CV_DL_STYLES = `
     font: inherit;
   }
   .cv-dl-field select:focus-visible { outline: 2px solid var(--accent-start); outline-offset: 2px; }
+  .cv-dl-description {
+    color: var(--text-muted, var(--text-secondary));
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
 
   .cv-dl-opt {
     display: inline-flex;
