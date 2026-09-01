@@ -13,6 +13,13 @@ Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 
 
 Regenerate the images with `npm run gallery:capture` (or `make gallery-capture`). The Playwright capture uses fixed viewports, default local storage, disabled motion, and fails before writing an image when a target route does not render.
 
+## CV downloads
+
+The About section offers curated CV versions and a portrait toggle when the
+named release assets are available. Each version displays a localized summary
+of its included sections, so visitors can distinguish the balanced, technical,
+complete, and concise variants before downloading.
+
 ## Stack
 
 | Layer          | Tech                                                                                |
