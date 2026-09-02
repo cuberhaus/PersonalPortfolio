@@ -12,6 +12,7 @@ export const CV_PRESETS: ReadonlyArray<{ id: CvPreset }> = [
 
 interface Props {
   lang: Lang;
+  assetVersion: string;
   labels: {
     title: string;
     preset: string;
@@ -41,11 +42,17 @@ const basePath =
 // `/portfolio/`.
 const baseStem = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
 
-export function getCvAssetPath(cvLang: string, preset: CvPreset, includePhoto: boolean) {
+export function getCvAssetPath(
+  cvLang: string,
+  preset: CvPreset,
+  includePhoto: boolean,
+  assetVersion: string
+) {
   const photoMode = includePhoto ? 'photo' : 'no-photo';
+  const assetName = `cv_${cvLang}_${preset}_${photoMode}.pdf`;
   return {
-    href: `/cv/cv_${cvLang}_${preset}_${photoMode}.pdf`,
-    filename: `cv_${cvLang}.pdf`,
+    href: `/cv/${assetName}?v=${encodeURIComponent(assetVersion)}`,
+    filename: assetName,
   };
 }
 
@@ -53,12 +60,12 @@ export function getCvPresetDescription(descriptions: Record<CvPreset, string>, p
   return descriptions[preset];
 }
 
-export default function CvDownloader({ lang, labels }: Props) {
+export default function CvDownloader({ lang, assetVersion, labels }: Props) {
   const [preset, setPreset] = useState<CvPreset>('standard');
   const [includePhoto, setIncludePhoto] = useState(true);
 
   const cvLang = CV_LANG_BY_LOCALE[lang];
-  const asset = getCvAssetPath(cvLang, preset, includePhoto);
+  const asset = getCvAssetPath(cvLang, preset, includePhoto, assetVersion);
   const href = `${baseStem}${asset.href}`;
 
   const formId = useId();

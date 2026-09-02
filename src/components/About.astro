@@ -1,6 +1,6 @@
 ---
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { LOCALES, DEFAULT_LOCALE, type Locale } from '../config/locales';
@@ -35,7 +35,17 @@ const hasProfileImage = existsSync(resolve('./public/profile.jpg'));
 const hasCV = cvFile !== null;
 // The selector needs the default named public asset. When absent in local
 // development, retain the language-only fallback button.
-const hasCvVariants = existsSync(resolve('./public/cv/cv_english_standard_photo.pdf'));
+const cvVariantsDir = resolve('./public/cv');
+const hasCvVariants = existsSync(resolve(cvVariantsDir, 'cv_english_standard_photo.pdf'));
+const cvVariantsHash = createHash('sha1');
+if (hasCvVariants) {
+  for (const file of readdirSync(cvVariantsDir)
+    .filter((name) => name.endsWith('.pdf'))
+    .sort()) {
+    cvVariantsHash.update(file).update(readFileSync(resolve(cvVariantsDir, file)));
+  }
+}
+const cvVariantsVersion = hasCvVariants ? cvVariantsHash.digest('hex').slice(0, 8) : '';
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const cvHref = cvFile ? `${base}/${cvFile}?v=${cvHash}` : '#';
 
@@ -85,7 +95,12 @@ const { num } = Astro.props;
         {
           hasCvVariants ? (
             <div class="about-actions">
-              <CvDownloader lang={lang} labels={cvLabels} client:visible />
+              <CvDownloader
+                lang={lang}
+                assetVersion={cvVariantsVersion}
+                labels={cvLabels}
+                client:load
+              />
             </div>
           ) : hasCV ? (
             <div class="about-actions">
