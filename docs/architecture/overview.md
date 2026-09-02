@@ -54,7 +54,7 @@ PersonalPortfolio/
 │   │   ├── sections.ts         # ↑ + Astro component bindings
 │   │   └── site.ts             # Identity (name, URL, socials)
 │   └── styles/               Global CSS + theme token blocks
-├── e2e/                      Playwright specs (8 named projects)
+├── e2e/                      Playwright specs (9 named projects)
 ├── planner-api/              FastAPI + ENHSP (PDDL planner demo)
 ├── scripts/                  Orchestrator, log relay, codemods
 ├── public/                   Static assets (images, PDFs, mock data)
