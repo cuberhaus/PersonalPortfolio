@@ -21,6 +21,9 @@
     "test:e2e:smoke": "playwright test --project=portfolio-smoke",
     "test:e2e:a11y": "playwright test --project=a11y",
     "gallery:capture": "playwright test --project=readme-gallery",
+    "demo-gallery:prepare": "node scripts/demo-gallery.mjs --prepare",
+    "demo-gallery:capture": "npm run demo-gallery:prepare && playwright test --project=readme-gallery --grep=complete.demo.gallery",
+    "demo-gallery:check": "vitest run src/__tests__/demo-gallery.test.ts",
     "lhci": "lhci autorun",
     "og:capture": "node scripts/capture-og-images.mjs",
     "i18n:review": "tsx scripts/i18n-review.ts"

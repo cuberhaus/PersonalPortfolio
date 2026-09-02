@@ -107,6 +107,7 @@ jobs:
       matrix:
         project:
           - portfolio-smoke
+          - readme-gallery
           - browser-demos
           - themes
           - debug-overlay
@@ -142,8 +143,26 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Validate committed demo gallery
+        if: matrix.project == 'readme-gallery'
+        run: npm run demo-gallery:check
+
       - name: Run E2E (${{ matrix.project }})
         run: npx playwright test --project=${{ matrix.project }}
+
+      - name: Check committed demo gallery is current
+        if: matrix.project == 'readme-gallery'
+        run: git diff --exit-code -- docs/demo-gallery.md docs/assets/demo-gallery/
+
+      - name: Upload demo gallery
+        if: always() && matrix.project == 'readme-gallery'
+        uses: actions/upload-artifact@v7
+        with:
+          name: demo-gallery
+          path: |
+            docs/demo-gallery.md
+            docs/assets/demo-gallery/
+          retention-days: 7
 
       - name: Upload Playwright report
         if: always()
@@ -158,7 +177,7 @@ jobs:
   # at 4 because GitHub-hosted runners have 4 CPU cores; raising it makes
   # workers contend for CPU rather than going faster. 12 shards is the
   # ceiling we want — combined with the rest of the workflow (quality +
-  # 5x playwright matrix + visual + lighthouse) it stays under the free-tier
+  # 6x playwright matrix + visual + lighthouse) it stays under the free-tier
   # 20-concurrent-job limit. retries=0 is set per-project in
   # playwright.config.ts since axe results don't flake.
   playwright-a11y:

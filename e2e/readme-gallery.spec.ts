@@ -8,6 +8,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { listGalleryDemos } from '../scripts/demo-gallery.mjs';
 
 const galleryDir = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -16,6 +17,7 @@ const galleryDir = resolve(
   'assets',
   'readme-gallery'
 );
+const demoGalleryDir = resolve(dirname(galleryDir), 'demo-gallery');
 const noMotionCss = `
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; }
@@ -33,6 +35,22 @@ async function prepareCapture(page: Page) {
 
 test.beforeEach(async ({ page }) => {
   await prepareCapture(page);
+});
+
+test.describe('complete demo gallery', () => {
+  for (const demo of listGalleryDemos()) {
+    test(`captures ${demo.slug}`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto(demo.route, { waitUntil: 'networkidle' });
+      await expect(page.locator('main#main-content')).toBeVisible();
+      await expect(page.locator('h1')).toHaveText(demo.title);
+      await page.screenshot({
+        path: resolve(demoGalleryDir, `${demo.slug}.jpg`),
+        type: 'jpeg',
+        quality: 82,
+      });
+    });
+  }
 });
 
 test('captures the desktop portfolio overview', async ({ page }) => {

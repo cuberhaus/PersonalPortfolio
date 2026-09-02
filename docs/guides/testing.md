@@ -22,7 +22,7 @@ add a new test, and how to run only the slice you care about.
               │  a11y    (axe + custom)    │  WCAG AA × every theme
               ├────────────────────────────┤
               │  Playwright projects       │  smoke / browser-demos / live /
-              │  (8 named projects)        │  themes / debug-overlay / keyboard
+              │  (9 named projects)        │  themes / gallery / keyboard
               ├────────────────────────────┤
               │  Vitest  (~30 suites)      │  units, content parity, registry
               ├────────────────────────────┤
@@ -95,7 +95,7 @@ make check-registry                         # only the registry test (sub-second
 
 ## Playwright — end-to-end
 
-8 named projects in [playwright.config.ts](../../playwright.config.ts), each
+9 named projects in [playwright.config.ts](../../playwright.config.ts), each
 with its own `testMatch` regex. `npm run test:e2e` runs all of them and
 auto-starts the dev server on port 4321.
 
@@ -109,6 +109,11 @@ auto-starts the dev server on port 4321.
 | `keyboard`        | Skip-to-content link reachable, Enter-to-submit handlers fire, no keyboard traps inside demos.                                                             | [keyboard.spec.ts](../../e2e/keyboard.spec.ts)               | `make test-keyboard`                                            |
 | `a11y`            | axe-core scan over `/`, `/es/`, `/ca/`, every demo route, every theme, including hover states and a custom gradient-contrast check.                        | [a11y.spec.ts](../../e2e/a11y.spec.ts)                       | `make test-a11y` / `make test-a11y-grep PATTERN=…`              |
 | `visual`          | Pixel-diff vs committed PNG baselines, 1% drift tolerance. Animations disabled via `addInitScript`. **Linux-only baselines** (font hinting differs by OS). | [visual.spec.ts](../../e2e/visual.spec.ts)                   | `make test-visual`                                              |
+| `readme-gallery`  | Deterministic docs captures, including one canonical desktop JPEG per registered demo.                                                                     | [readme-gallery.spec.ts](../../e2e/readme-gallery.spec.ts)   | `npm run demo-gallery:capture`                                  |
+
+`npm run demo-gallery:check` validates that the generated index is current and
+that its stable JPEG set exactly matches the page-backed demo registry. CI also
+runs the capture project so a route that cannot produce a screenshot fails.
 
 ### Adding a Playwright test
 
@@ -165,7 +170,7 @@ backends and ones that have moved to browser-native mocks are excluded.
 `make test` runs everything CI runs in order:
 
 1. **Vitest** — `npm test`
-2. **Playwright** — all 8 projects, dev server auto-started
+2. **Playwright** — all 9 projects, dev server auto-started
 3. **pytest** — TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX,
    planner-api
 4. **Django** — Draculin

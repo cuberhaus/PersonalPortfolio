@@ -111,6 +111,12 @@ check-registry: ## Run only the demo-services registry consistency tests
 gallery-capture: ## Regenerate the three deterministic root README screenshots
 	@npm run gallery:capture
 
+demo-gallery-capture: ## Regenerate the complete registry-driven demo gallery
+	@npm run demo-gallery:capture
+
+demo-gallery-check: ## Validate demo gallery registry, index, and asset parity
+	@npm run demo-gallery:check
+
 stop: ## Stop all demo backend containers/services
 	@bash scripts/dev-all-demos.sh --stop
 

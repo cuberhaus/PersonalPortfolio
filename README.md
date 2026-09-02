@@ -13,6 +13,8 @@ Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 
 
 Regenerate the images with `npm run gallery:capture` (or `make gallery-capture`). The Playwright capture uses fixed viewports, default local storage, disabled motion, and fails before writing an image when a target route does not render.
 
+Browse the [complete screenshot gallery](docs/demo-gallery.md) for one canonical desktop capture of every registered demo.
+
 ## CV downloads
 
 The About section offers curated CV versions and a portrait toggle when the
@@ -29,7 +31,7 @@ complete, and concise variants before downloading.
 | Visualisation  | D3, Canvas, WebGL2, Babylon.js                                                      |
 | CV demos       | Web Workers, OpenCV.js, WASM                                                        |
 | i18n           | i18next (build-time) + inlang — 3 locales, file-based routing (`/`, `/es/`, `/ca/`) |
-| Testing        | Vitest 4 (30 unit suites, 516 tests) · Playwright (3 e2e specs, 141 tests)          |
+| Testing        | Vitest 4 (43 unit suites, 1,271 tests) · Playwright (9 named projects)              |
 
 ## Getting started
 
@@ -134,8 +136,8 @@ make test   # runs everything: Vitest + Playwright + backend pytests + Go + Rust
 
 `make test` runs, in order:
 
-1. **Vitest** — 30 unit suites, 516 tests ([`vitest.config.ts`](vitest.config.ts))
-2. **Playwright** — 3 e2e specs, 141 tests ([`playwright.config.ts`](playwright.config.ts), auto-starts dev server)
+1. **Vitest** — 43 unit suites, 1,271 tests ([`vitest.config.ts`](vitest.config.ts))
+2. **Playwright** — 9 named projects ([`playwright.config.ts`](playwright.config.ts), auto-starts dev server)
 3. **pytest** — backend tests for TFG, bitsXlaMarato, desastresIA, MPIDS, Phase Transitions, CAIM, SBC_IA, planner-api, Draculin (Django)
 4. **Go** — joc_eda backend
 5. **Rust (cargo test)** — pracpro2 backend
