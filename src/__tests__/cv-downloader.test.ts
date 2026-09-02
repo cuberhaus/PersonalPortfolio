@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { CV_PRESETS, getCvAssetPath, getCvPresetDescription } from '../components/CvDownloader';
 
 describe('CV downloader assets', () => {
-  it('defaults to the standard photo asset and a stable language-only filename', () => {
-    expect(getCvAssetPath('english', 'standard', true)).toEqual({
-      href: '/cv/cv_english_standard_photo.pdf',
-      filename: 'cv_english.pdf',
+  it('cache-busts the selected asset and preserves its variant in the filename', () => {
+    expect(getCvAssetPath('english', 'standard', true, 'abc123')).toEqual({
+      href: '/cv/cv_english_standard_photo.pdf?v=abc123',
+      filename: 'cv_english_standard_photo.pdf',
     });
   });
 
@@ -16,9 +16,9 @@ describe('CV downloader assets', () => {
       'complete',
       'concise',
     ]);
-    expect(getCvAssetPath('catalan', 'technical', false)).toEqual({
-      href: '/cv/cv_catalan_technical_no-photo.pdf',
-      filename: 'cv_catalan.pdf',
+    expect(getCvAssetPath('catalan', 'technical', false, 'def456')).toEqual({
+      href: '/cv/cv_catalan_technical_no-photo.pdf?v=def456',
+      filename: 'cv_catalan_technical_no-photo.pdf',
     });
   });
 

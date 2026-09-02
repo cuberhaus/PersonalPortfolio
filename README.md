@@ -20,7 +20,9 @@ Browse the [complete screenshot gallery](docs/demo-gallery.md) for one canonical
 The About section offers curated CV versions and a portrait toggle when the
 named release assets are available. Each version displays a localized summary
 of its included sections, so visitors can distinguish the balanced, technical,
-complete, and concise variants before downloading.
+complete, and concise variants before downloading. Curated PDF URLs use a
+content hash to avoid stale browser caches, and downloaded filenames identify
+the selected version and portrait mode.
 
 ## Stack
 
