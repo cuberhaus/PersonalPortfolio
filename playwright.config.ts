@@ -30,6 +30,7 @@ export default defineConfig({
       name: 'readme-gallery',
       use: { ...devices['Desktop Chrome'], colorScheme: 'dark', locale: 'en-US' },
       testMatch: /readme-gallery\.spec\.ts/,
+      retries: 0,
       workers: 1,
     },
     {

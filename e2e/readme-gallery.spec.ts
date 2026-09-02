@@ -22,6 +22,7 @@ const galleryBaseUrl = new URL(
   process.env.PLAYWRIGHT_BASE_URL ??
     `http://${process.env.PLAYWRIGHT_HOST ?? '127.0.0.1'}:${process.env.PLAYWRIGHT_PORT ?? '4322'}`
 );
+const loopbackHosts = new Set(['127.0.0.1', 'localhost']);
 const noMotionCss = `
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; }
@@ -38,9 +39,16 @@ async function prepareCapture(page: Page) {
     style.textContent = css;
     document.documentElement.appendChild(style);
   }, noMotionCss);
-  await page.route(/^https?:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?\//, (route) => {
+  await page.route('**/*', (route) => {
     const requestUrl = new URL(route.request().url());
-    return requestUrl.origin === galleryBaseUrl.origin ? route.continue() : route.abort();
+    const samePreviewServer =
+      requestUrl.protocol === galleryBaseUrl.protocol &&
+      requestUrl.port === galleryBaseUrl.port &&
+      (requestUrl.hostname === galleryBaseUrl.hostname ||
+        (loopbackHosts.has(requestUrl.hostname) && loopbackHosts.has(galleryBaseUrl.hostname)));
+    return loopbackHosts.has(requestUrl.hostname) && !samePreviewServer
+      ? route.abort()
+      : route.continue();
   });
 }
 
