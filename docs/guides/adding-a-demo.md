@@ -218,7 +218,9 @@ The screenshot gallery is derived from `demo-services.json`; do not maintain a
 second slug list. After registering a page-backed demo, run
 `npm run demo-gallery:capture` and commit the generated index and JPEG. The
 gallery parity test fails when a registered demo is missing or an orphaned
-capture remains.
+capture remains. Captures always use the English locale, dark theme, minimal
+design, disabled animations, and deterministic offline fallbacks; locally
+running demo backends are intentionally ignored.
 
 ---
 

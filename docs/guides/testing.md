@@ -114,6 +114,9 @@ auto-starts the dev server on port 4321.
 `npm run demo-gallery:check` validates that the generated index is current and
 that its stable JPEG set exactly matches the page-backed demo registry. CI also
 runs the capture project so a route that cannot produce a screenshot fails.
+The project pins a 1440x900 viewport, English locale, dark theme, minimal
+design, animation clock, and offline backend state before waiting for fonts and
+canvas rendering to settle.
 
 ### Adding a Playwright test
 
