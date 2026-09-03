@@ -287,11 +287,11 @@ rebuild: ## Force rebuild all Docker images (ignore cache) and Astro site
 preview: ## Serve the built static site from dist/ to verify production behavior
 	npm run preview
 
-test-a11y: ## Run the a11y axe sweep locally (4 workers, fast)
-	npx playwright test --project=a11y --workers=4
+test-a11y: ## Run the a11y axe sweep locally (CPU-aware workers)
+	npx playwright test --project=a11y
 
 test-a11y-grep: ## Run a11y subset, e.g. `make test-a11y-grep PATTERN=dark.*tfg`
-	npx playwright test --project=a11y --workers=4 --grep "$(PATTERN)"
+	npx playwright test --project=a11y --grep "$(PATTERN)"
 
 ##@ Lint / Quality
 

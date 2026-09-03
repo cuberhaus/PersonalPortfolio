@@ -97,11 +97,13 @@ parallel workers can outpace what the dev server can serve.
 **Fix:** drop the worker count locally:
 
 ```bash
-npx playwright test --project=a11y --workers=4   # what `make test-a11y` does
+npx playwright test --project=a11y --workers=4
 ```
 
-If you still see it, drop to `--workers=2`. CI pins this to 4 workers across 4
-shards, see [playwright.config.ts](../playwright.config.ts) `a11y` project.
+`make test-a11y` normally lets Playwright use half the available CPUs. If you
+still see the error with four workers, drop to `--workers=2`. CI pins each of
+its eight shards to four workers; see
+[playwright.config.ts](../playwright.config.ts) `a11y` project.
 
 ---
 
