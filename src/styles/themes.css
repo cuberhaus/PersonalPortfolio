@@ -1,3 +1,66 @@
+/* ── Barcelona Signal ───────────────────────────────────────
+ * A portfolio-specific Mediterranean/technical palette:
+ * mineral surfaces, teal structure, and sparing coral signals.
+ * ─────────────────────────────────────────────────────────── */
+html[data-theme='barcelona-night'] {
+  color-scheme: dark;
+  --bg-primary: #101a18;
+  --bg-primary-rgb: 16, 26, 24;
+  --bg-secondary: #162521;
+  --bg-card: #1b2d28;
+  --bg-card-hover: #223a34;
+  --bg-nav: rgba(16, 26, 24, 0.72);
+  --bg-nav-scrolled: rgba(16, 26, 24, 0.95);
+
+  --text-primary: #f2f6f1;
+  --text-secondary: #c3d0ca;
+  --text-muted: #9aada5;
+
+  --accent-start: #56c7b2;
+  --accent-end: #ff8a65;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #68d2bd;
+  --accent-signal: #ff8a65;
+
+  --glow-color: rgba(86, 199, 178, 0.16);
+  --glow-color-strong: rgba(86, 199, 178, 0.34);
+
+  --border-color: #2d4841;
+  --border-color-hover: #3e6359;
+}
+
+html[data-theme='barcelona-day'] {
+  color-scheme: light;
+  --bg-primary: #f4f7f2;
+  --bg-primary-rgb: 244, 247, 242;
+  --bg-secondary: #e7eee9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #dce7e1;
+  --bg-nav: rgba(244, 247, 242, 0.82);
+  --bg-nav-scrolled: rgba(244, 247, 242, 0.97);
+
+  --text-primary: #17231f;
+  --text-secondary: #3f514b;
+  --text-muted: #52645e;
+
+  --accent-start: #006d72;
+  --accent-end: #b9472f;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #00686d;
+  --accent-signal: #b9472f;
+
+  --glow-color: rgba(0, 109, 114, 0.13);
+  --glow-color-strong: rgba(0, 109, 114, 0.27);
+
+  --border-color: #cbd8d1;
+  --border-color-hover: #afc2b8;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
 /* ── Dracula ──────────────────────────────────────────────── */
 html[data-theme='dracula'] {
   color-scheme: dark;

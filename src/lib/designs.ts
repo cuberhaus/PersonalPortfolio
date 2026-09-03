@@ -77,7 +77,7 @@ export const DESIGNS: DesignMeta[] = [
   defineDesign({
     id: 'swiss',
     preview: { font: '"Inter Tight", Helvetica, Arial, sans-serif', radius: '0', style: 'grid' },
-    recommendedThemes: ['paper', 'light', 'dark'],
+    recommendedThemes: ['barcelona-day', 'barcelona-night', 'nord-light'],
   }),
   defineDesign({
     id: 'pixel',
@@ -156,9 +156,7 @@ export const DESIGNS: DesignMeta[] = [
 ];
 
 export const DESIGN_IDS = DESIGNS.map((d) => d.id);
-// The first entry doubles as the default design. Reordering DESIGNS picks a
-// new default automatically, with no separate constant to keep in sync.
-export const DEFAULT_DESIGN = DESIGNS[0].id;
+export const DEFAULT_DESIGN = 'swiss';
 
 const designsById = new Map(DESIGNS.map((d) => [d.id, d]));
 

@@ -21,7 +21,7 @@ const t = useTranslations(lang);
     <p class="hero-description">
       {t('hero.description')}
     </p>
-    <a href="#projects" class="hero-cta">
+    <a href="#work" class="hero-cta">
       {t('hero.cta')}
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
         <path
@@ -167,6 +167,12 @@ const t = useTranslations(lang);
 
     .hero-cta svg {
       animation: none;
+    }
+  }
+
+  @media (max-height: 700px) {
+    .hero-content {
+      padding-bottom: 4rem;
     }
   }
 </style>

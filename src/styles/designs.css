@@ -183,7 +183,19 @@ html[data-design='swiss'] {
   --shadow-card: none;
   --section-padding: 7rem 0;
   --container-width: 1180px;
-  --swiss-accent: #e10600;
+  --swiss-accent: var(--accent-text);
+  --swiss-signal: var(--accent-signal, var(--accent-text));
+  --swiss-on-accent: var(--bg-primary);
+}
+
+html[data-design='swiss'][data-theme='barcelona-day'],
+html[data-design='swiss'][data-theme='light'],
+html[data-design='swiss'][data-theme='nord-light'],
+html[data-design='swiss'][data-theme='catppuccin-latte'],
+html[data-design='swiss'][data-theme='solarized-light'],
+html[data-design='swiss'][data-theme='sepia'],
+html[data-design='swiss'][data-theme='paper'] {
+  --swiss-on-accent: #fff;
 }
 
 html[data-design='swiss'] body {
@@ -229,7 +241,7 @@ html[data-design='swiss'] .section[data-num]::before {
   right: 0;
   font-size: clamp(3rem, 8vw, 7rem);
   font-weight: 800;
-  color: var(--swiss-accent);
+  color: var(--swiss-signal);
   line-height: 1;
   letter-spacing: -0.05em;
   font-variant-numeric: tabular-nums;
@@ -279,8 +291,8 @@ html[data-design='swiss'] .work-tags li {
 html[data-design='swiss'] .hero-cta,
 html[data-design='swiss'] .contact-submit {
   border-radius: 0;
-  background: var(--swiss-accent);
-  color: #fff;
+  background: var(--swiss-signal);
+  color: var(--swiss-on-accent);
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-weight: 700;

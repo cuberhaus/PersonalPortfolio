@@ -34,6 +34,18 @@ test.describe('Ctrl+K customize modal', () => {
     await expect(page.locator('#theme-modal.open')).not.toBeVisible();
   });
 
+  test('first visits use the Barcelona Signal variant matching system mode', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.evaluate(() => localStorage.removeItem('theme'));
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'barcelona-day');
+
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.evaluate(() => localStorage.removeItem('theme'));
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'barcelona-night');
+  });
+
   test('picks a design and applies data-design to <html>', async ({ page }) => {
     await openModal(page);
     await page.locator('[data-design-id="swiss"]').click();

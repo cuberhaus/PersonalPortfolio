@@ -22,7 +22,7 @@
     "scrollTop": "Scroll to top of page",
     "skipToContent": "Skip to content",
     "toggleMenu": "Toggle menu",
-    "toggleTheme": "Toggle theme (Ctrl+K for more themes)",
+    "toggleTheme": "Customize appearance",
     "viewGithub": "View on GitHub"
   },
   "certifications": {
@@ -102,9 +102,9 @@
     "contact": "Contact",
     "education": "Education",
     "experience": "Experience",
-    "projects": "Projects",
+    "projects": "Interactive Lab",
     "skills": "Skills",
-    "work": "Work"
+    "work": "Client Work"
   },
   "notFound": {
     "back": "Portfolio",

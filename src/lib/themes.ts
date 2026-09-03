@@ -13,6 +13,12 @@ export interface ThemeMeta {
 
 export const THEMES: ThemeMeta[] = [
   // ── Dark ──────────────────────────────────────────────────
+  {
+    id: 'barcelona-night',
+    label: 'Barcelona Signal Night',
+    colorScheme: 'dark',
+    preview: ['#101a18', '#68d2bd'],
+  },
   { id: 'dark', label: 'Default Dark', colorScheme: 'dark', preview: ['#0a0a0f', '#6366f1'] },
   { id: 'dracula', label: 'Dracula', colorScheme: 'dark', preview: ['#282a36', '#bd93f9'] },
   { id: 'nord', label: 'Nord', colorScheme: 'dark', preview: ['#2e3440', '#88c0d0'] },
@@ -28,6 +34,12 @@ export const THEMES: ThemeMeta[] = [
   { id: 'amber-crt', label: 'Amber CRT', colorScheme: 'dark', preview: ['#140a00', '#ffb000'] },
 
   // ── Light ─────────────────────────────────────────────────
+  {
+    id: 'barcelona-day',
+    label: 'Barcelona Signal Day',
+    colorScheme: 'light',
+    preview: ['#f4f7f2', '#00686d'],
+  },
   { id: 'light', label: 'Default Light', colorScheme: 'light', preview: ['#f8fafc', '#4f46e5'] },
   { id: 'nord-light', label: 'Nord Light', colorScheme: 'light', preview: ['#eceff4', '#5e81ac'] },
   {
@@ -64,4 +76,6 @@ export const THEMES: ThemeMeta[] = [
 ];
 
 export const THEME_IDS = THEMES.map((t) => t.id);
-export const DEFAULT_THEME = 'dark';
+export const DEFAULT_DARK_THEME = 'barcelona-night';
+export const DEFAULT_LIGHT_THEME = 'barcelona-day';
+export const DEFAULT_THEME = DEFAULT_DARK_THEME;

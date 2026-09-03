@@ -322,6 +322,30 @@ const links = sections
       margin-right: 0;
     }
   }
+
+  @media (max-width: 1024px) and (max-height: 700px) {
+    .nav-links {
+      justify-content: flex-start;
+      padding-top: calc(var(--nav-height) + 0.5rem);
+    }
+
+    .nav-links-primary {
+      flex: 0 0 auto;
+      justify-content: flex-start;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      padding: 0.25rem;
+      font-size: 1.35rem;
+    }
+
+    .nav-links-primary + .nav-links-util {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      padding-bottom: 1rem;
+    }
+  }
 </style>
 
 <script>

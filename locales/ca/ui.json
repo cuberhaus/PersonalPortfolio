@@ -22,7 +22,7 @@
     "scrollTop": "Anar a dalt",
     "skipToContent": "Saltar al contingut",
     "toggleMenu": "Obrir menú",
-    "toggleTheme": "Canviar tema (Ctrl+K per a més temes)",
+    "toggleTheme": "Personalitzar l'aparença",
     "viewGithub": "Veure a GitHub"
   },
   "certifications": {
@@ -102,9 +102,9 @@
     "contact": "Contacte",
     "education": "Educació",
     "experience": "Experiència",
-    "projects": "Projectes",
+    "projects": "Laboratori interactiu",
     "skills": "Habilitats",
-    "work": "Treball Professional"
+    "work": "Treball per a clients"
   },
   "notFound": {
     "back": "Portafolis",

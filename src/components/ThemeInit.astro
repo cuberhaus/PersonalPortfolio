@@ -1,5 +1,10 @@
 ---
-import { THEMES, THEME_IDS } from '../lib/themes';
+import {
+  THEMES,
+  THEME_IDS,
+  DEFAULT_DARK_THEME,
+  DEFAULT_LIGHT_THEME,
+} from '../lib/themes';
 import { DESIGNS, DESIGN_IDS, DEFAULT_DESIGN } from '../lib/designs';
 
 interface Props {
@@ -26,7 +31,16 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 ---
 
 {position === 'head' && (
-<script is:inline define:vars={{ THEME_IDS, DESIGN_IDS, DEFAULT_DESIGN }}>
+<script
+  is:inline
+  define:vars={{
+    THEME_IDS,
+    DESIGN_IDS,
+    DEFAULT_DESIGN,
+    DEFAULT_DARK_THEME,
+    DEFAULT_LIGHT_THEME,
+  }}
+>
   const VALID_THEMES = THEME_IDS;
   const VALID_DESIGNS = DESIGN_IDS;
 
@@ -50,10 +64,10 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     }
     if (window.matchMedia('(prefers-color-scheme: light)').matches) {
       __themeSource = 'system-light';
-      return 'light';
+      return DEFAULT_LIGHT_THEME;
     }
     __themeSource = 'system-dark';
-    return 'dark';
+    return DEFAULT_DARK_THEME;
   })();
   document.documentElement.setAttribute('data-theme', __theme);
   if (window.__debug) window.__debug.log('info', 'theme', 'resolved', { theme: __theme, source: __themeSource });
