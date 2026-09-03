@@ -43,7 +43,8 @@ make dev                 # Astro only — http://localhost:4321
 make dev-bare            # All local demo backends + Astro (no observability — see `make all` for that)
 make build               # Build all Docker images + Astro static site
 make preview             # Serve dist/ locally
-make test                # Run ALL test suites (Vitest + Playwright + backend pytests + Go + Rust + …)
+make test                # Fast local gate (quality + Vitest + production build)
+make test-full           # Exhaustive Playwright + sibling-backend suites
 make clean               # Remove dist/, node_modules/, .astro/, .build-stamps/
 make help                # Show all available targets
 ```
@@ -133,10 +134,14 @@ The [planificación demo](src/pages/demos/planificacion.astro) can solve PDDL vi
 ## Testing
 
 ```bash
-make test   # runs everything: Vitest + Playwright + backend pytests + Go + Rust + JS
+make test        # type-check, lint, format-check, Vitest, production build
+make test-full   # add every Playwright project and sibling-backend suite
 ```
 
-`make test` runs, in order:
+Use `make test` before routine commits and pushes. It keeps the local gate fast;
+GitHub Actions still runs the complete matrix on pull requests.
+
+`make test-full` runs, in order:
 
 1. **Vitest** — 43 unit suites, 1,271 tests ([`vitest.config.ts`](vitest.config.ts))
 2. **Playwright** — 9 named projects ([`playwright.config.ts`](playwright.config.ts), auto-starts dev server)

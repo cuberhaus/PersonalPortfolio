@@ -31,7 +31,8 @@ export function getStaticPaths() {
 
 const { demo } = Astro.params;
 const Component = demosBySlug[demo as string] as
-  ((props: Record<string, unknown>) => unknown) | undefined;
+  | ((props: Record<string, unknown>) => unknown)
+  | undefined;
 ---
 
 {Component && <Component />}

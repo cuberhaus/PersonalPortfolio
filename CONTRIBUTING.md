@@ -36,10 +36,7 @@ The full backend matrix (which port serves which demo, where each lives on disk)
 ## Before you commit
 
 ```bash
-npm run check          # astro check (TypeScript strict)
-npm run lint           # eslint
-npm run format         # prettier --write
-npm test               # vitest (~1300 tests)
+make test   # type-check, lint, format-check, Vitest, production build
 ```
 
 Lefthook is configured in [lefthook.yml](lefthook.yml):
@@ -62,11 +59,13 @@ Run the same checks CI runs, locally:
 | Unit                      | `npm test`                                                            | `vitest` job                 |
 | Backend (FastAPI planner) | `cd planner-api && pytest`                                            | `planner-api` job            |
 | Browser smoke             | `make test-keyboard`, `npx playwright test --project=portfolio-smoke` | `playwright (matrix)` job    |
-| A11y                      | `make test-a11y`                                                      | `playwright-a11y` (4 shards) |
+| A11y                      | `make test-a11y`                                                      | `playwright-a11y` (8 shards) |
 | Visual regression         | `make test-visual` (after baselines committed)                        | `playwright-visual`          |
 | Performance               | `npm run lhci`                                                        | `lighthouse` job             |
 
-`make test` runs _everything_ including the optional Go and Rust backend tests in sibling repos — that's the full CI equivalent.
+`make test` is the fast local gate. Run `make test-full` for every Playwright
+project plus the optional Go, Rust, Python, and JavaScript backend tests in
+sibling repositories.
 
 ### A11y test patterns
 

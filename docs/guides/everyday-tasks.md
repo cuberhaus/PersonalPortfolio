@@ -6,15 +6,13 @@ block, and a **Verify** command. Deeper topics live in their own docs and are
 linked at the bottom of each recipe.
 
 > **The i18n parity rule.** Most content lives in three sibling JSON files
-> (`foo.json`, `foo.es.json`, `foo.ca.json`). They must stay in lock-step:
-> same length, same field set per entry, same order. The vitest suites
+> (`foo.json`, `foo.es.json`, `foo.ca.json`). They must stay in lock-step: same
+> length, same field set per entry, same order. The vitest suites
 > [`content-parity.test.ts`](../../src/__tests__/content-parity.test.ts) and
 > [`data-integrity.test.ts`](../../src/__tests__/data-integrity.test.ts) enforce
-> this — every content recipe ends with running them.
-
-> **One command before every commit.** `npm run check && npm run lint && npm test`.
-> Lefthook re-runs eslint + prettier on staged files automatically; see
-> [CONTRIBUTING.md](../../CONTRIBUTING.md#before-you-commit).
+> this — every content recipe ends with running them. **One command before every
+> commit.** `make test`. Lefthook re-runs eslint + prettier on staged files
+> automatically; see [CONTRIBUTING.md](../../CONTRIBUTING.md#before-you-commit).
 
 ---
 
@@ -30,8 +28,8 @@ linked at the bottom of each recipe.
   entry, translated. Same array length, same field set.
 
 **Notes:** logos go in `public/logos/`. Use `logo` for the dark-theme SVG and
-`logoLight` for the light-theme variant. Newest first — entries render in
-file order.
+`logoLight` for the light-theme variant. Newest first — entries render in file
+order.
 
 **Verify:** `npx vitest run content-parity data-integrity`
 
@@ -120,20 +118,20 @@ category: append to that entry's `identity.items`.
 **Edit:**
 
 1. [src/config/section-ids.ts](../../src/config/section-ids.ts) — reorder, add,
-   or delete the entry in `SECTION_META`. The numbered prefixes (`01`, `02`,
-   …) are auto-derived from the order of `numbered: true` entries, so
-   renumbering is automatic.
+   or delete the entry in `SECTION_META`. The numbered prefixes (`01`, `02`, …)
+   are auto-derived from the order of `numbered: true` entries, so renumbering
+   is automatic.
 2. [src/config/sections.ts](../../src/config/sections.ts) — add or remove the
    matching `import` and `COMPONENTS` entry.
-3. If the section appears in the navbar, ensure the matching `nav.*` key
-   exists in `locales/{en,es,ca}/ui.json` for all three locales.
+3. If the section appears in the navbar, ensure the matching `nav.*` key exists
+   in `locales/{en,es,ca}/ui.json` for all three locales.
 
 **Notes:** the hero is the only section with `inNav: false` and
 `numbered: false`. To hide a section from the navbar without removing it, flip
 `inNav` to `false`.
 
-**Verify:** `npm run check && npx vitest run structural` and visit `/`,
-`/es/`, `/ca/` in `make dev`.
+**Verify:** `npm run check && npx vitest run structural` and visit `/`, `/es/`,
+`/ca/` in `make dev`.
 
 ---
 
@@ -171,12 +169,12 @@ needs an importable helper, add a tiny accessor under
 [src/i18n/demos/](../../src/i18n/demos/) that calls `getDemoT()` or
 `getDemoTranslations()`.
 
-Use this **only** for copy that's specific to one page/component and can't
-live in shared `ui.json` (because it has inline HTML, `{0}` placeholders, or
-long prose). Don't duplicate fields that already live in `demos.json`.
+Use this **only** for copy that's specific to one page/component and can't live
+in shared `ui.json` (because it has inline HTML, `{0}` placeholders, or long
+prose). Don't duplicate fields that already live in `demos.json`.
 
-See [docs/i18n.md § Pattern C](./i18n.md#pattern-c--per-demo-namespace-json)
-for the full rules.
+See [docs/i18n.md § Pattern C](./i18n.md#pattern-c--per-demo-namespace-json) for
+the full rules.
 
 **Verify:** `npx vitest run`
 
@@ -184,10 +182,10 @@ for the full rules.
 
 ## 9. Adding or removing a demo
 
-Has its own dedicated document. The doc has a fast path for browser-only
-demos (steps 1–7) and a clearly-fenced backend & observability second half
-(steps 8+) — start at step 1 of [docs/adding-a-demo.md](./adding-a-demo.md)
-and stop at the marker if `hasBackend: false`.
+Has its own dedicated document. The doc has a fast path for browser-only demos
+(steps 1–7) and a clearly-fenced backend & observability second half (steps 8+)
+— start at step 1 of [docs/adding-a-demo.md](./adding-a-demo.md) and stop at the
+marker if `hasBackend: false`.
 
 **Verify:** `make check-registry && npx vitest run && npx playwright test`
 
@@ -215,9 +213,9 @@ and stop at the marker if `hasBackend: false`.
 
 The navbar is generated from sections with `inNav: true` in
 [src/config/section-ids.ts](../../src/config/section-ids.ts). The link label
-comes from the `navKey` (e.g. `nav.experience`) looked up in
-the `ui` namespace. To rename a label: edit `locales/{en,es,ca}/ui.json`. To
-hide / reorder: edit `section-ids.ts` (see recipe 6).
+comes from the `navKey` (e.g. `nav.experience`) looked up in the `ui` namespace.
+To rename a label: edit `locales/{en,es,ca}/ui.json`. To hide / reorder: edit
+`section-ids.ts` (see recipe 6).
 
 **Verify:** `npx playwright test --project=portfolio-smoke`
 
@@ -240,11 +238,15 @@ describe('thingUnderTest', () => {
 
 Pick the closest existing test as a starting point:
 
-- **Content / data shape:** [data-integrity.test.ts](../../src/__tests__/data-integrity.test.ts)
-  or [content-parity.test.ts](../../src/__tests__/content-parity.test.ts).
-- **Pure logic / algorithms:** [wpgma.test.ts](../../src/__tests__/wpgma.test.ts).
-- **React component:** [error-boundary.test.tsx](../../src/__tests__/error-boundary.test.tsx).
-- **i18n / utils:** [i18n-utils.test.ts](../../src/__tests__/i18n-utils.test.ts).
+- **Content / data shape:**
+  [data-integrity.test.ts](../../src/__tests__/data-integrity.test.ts) or
+  [content-parity.test.ts](../../src/__tests__/content-parity.test.ts).
+- **Pure logic / algorithms:**
+  [wpgma.test.ts](../../src/__tests__/wpgma.test.ts).
+- **React component:**
+  [error-boundary.test.tsx](../../src/__tests__/error-boundary.test.tsx).
+- **i18n / utils:**
+  [i18n-utils.test.ts](../../src/__tests__/i18n-utils.test.ts).
 
 **Verify:** `npx vitest run <name>` (or `npx vitest` for watch mode).
 
@@ -267,11 +269,12 @@ test.describe('<feature>', () => {
 
 **Notes:** [playwright.config.ts](../../playwright.config.ts) defines named
 projects (`portfolio-smoke`, `browser-demos`, `live-demos`, `themes`,
-`debug-overlay`, `a11y`, `keyboard`, `visual`). Each project has a
-`testMatch` regex — name your file to match an existing project, or add a
-new project block. Closest fixtures to copy:
+`debug-overlay`, `a11y`, `keyboard`, `visual`). Each project has a `testMatch`
+regex — name your file to match an existing project, or add a new project block.
+Closest fixtures to copy:
 
-- **Page-level smoke:** [portfolio-smoke.spec.ts](../../e2e/portfolio-smoke.spec.ts)
+- **Page-level smoke:**
+  [portfolio-smoke.spec.ts](../../e2e/portfolio-smoke.spec.ts)
 - **Keyboard / a11y:** [keyboard.spec.ts](../../e2e/keyboard.spec.ts) or
   [a11y.spec.ts](../../e2e/a11y.spec.ts)
 - **Demo behavior:** [browser-demos.spec.ts](../../e2e/browser-demos.spec.ts)
@@ -285,8 +288,8 @@ new project block. Closest fixtures to copy:
 
 Visual baselines must be regenerated on **Linux** because font hinting is
 OS-specific. The recommended path is the `Refresh visual baselines` GitHub
-Action — see the
-[Visual regression](../../README.md#visual-regression) section in the README.
+Action — see the [Visual regression](../../README.md#visual-regression) section
+in the README.
 
 ---
 
@@ -300,7 +303,8 @@ Action — see the
 | `npx vitest run`      | Unit tests                                             |
 | `npx playwright test` | All e2e projects (auto-starts dev server)              |
 | `make check-registry` | Demo registry consistency (fast, pre-commit)           |
-| `make test`           | Everything CI runs (incl. backend pytests + Go + Rust) |
+| `make test`           | Fast local gate: quality, Vitest, and production build |
+| `make test-full`      | Every Playwright project and sibling-backend suite     |
 
 Lefthook auto-runs eslint + prettier on staged files; the `commit-msg` hook
 rejects direct commits to `main`. See
@@ -314,12 +318,12 @@ rejects direct commits to `main`. See
   troubleshooting
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) — first clone, day-to-day commands,
   test layer cake
-- [docs/guides/adding-a-demo.md](./adding-a-demo.md) — the full demo
-  onboarding checklist
-- [docs/guides/i18n.md](./i18n.md) — translation patterns A / B / C,
-  decision flow
-- [docs/guides/testing.md](./testing.md) — test pyramid, Vitest categories,
-  the 8 Playwright projects
+- [docs/guides/adding-a-demo.md](./adding-a-demo.md) — the full demo onboarding
+  checklist
+- [docs/guides/i18n.md](./i18n.md) — translation patterns A / B / C, decision
+  flow
+- [docs/guides/testing.md](./testing.md) — test pyramid, Vitest categories, the
+  8 Playwright projects
 - [docs/architecture/overview.md](../architecture/overview.md) — one-page
   big-picture map (start here for architecture)
 - [docs/architecture/decisions.md](../architecture/decisions.md),
