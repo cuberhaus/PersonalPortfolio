@@ -1,15 +1,14 @@
 # Testing guide
 
-Tour of the test pyramid: which suite catches which class of bug, where to
-add a new test, and how to run only the slice you care about.
+Tour of the test pyramid: which suite catches which class of bug, where to add a
+new test, and how to run only the slice you care about.
 
-> **Day-to-day pre-commit:** `npm run check && npm run lint && npm test`.
-> Lefthook re-runs eslint + prettier on staged files automatically; see
+> **Day-to-day pre-commit:** `make test`. Lefthook re-runs eslint + prettier on
+> staged files automatically; see
 > [CONTRIBUTING.md § Before you commit](../../CONTRIBUTING.md#before-you-commit).
-
-> **Full CI parity locally:** `make test` runs Vitest + Playwright + every
-> backend's pytest / Go / Rust suite. Use it before opening a PR; use the
-> targeted commands below day-to-day.
+> **Exhaustive local validation:** `make test-full` runs the fast gate +
+> Playwright + every backend's pytest / Go / Rust suite. Use it before opening a
+> PR; use the targeted commands below day-to-day.
 
 ---
 
@@ -66,7 +65,8 @@ Rule of thumb when adding a test:
 
 ### Adding a unit test
 
-Skeleton — see also [everyday-tasks.md § 12](./everyday-tasks.md#12-adding-a-vitest-unit-test):
+Skeleton — see also
+[everyday-tasks.md § 12](./everyday-tasks.md#12-adding-a-vitest-unit-test):
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -113,10 +113,10 @@ auto-starts the dev server on port 4321.
 
 `npm run demo-gallery:check` validates that the generated index is current and
 that its stable JPEG set exactly matches the page-backed demo registry. CI also
-runs the capture project so a route that cannot produce a screenshot fails.
-The project pins a 1440x900 viewport, English locale, dark theme, minimal
-design, animation clock, and offline backend state before waiting for fonts and
-canvas rendering to settle.
+runs the capture project so a route that cannot produce a screenshot fails. The
+project pins a 1440x900 viewport, English locale, dark theme, minimal design,
+animation clock, and offline backend state before waiting for fonts and canvas
+rendering to settle.
 
 ### Adding a Playwright test
 
@@ -124,10 +124,10 @@ Pick an existing project whose `testMatch` regex catches your filename, then
 copy the closest spec as a starting point. Skeleton — see also
 [everyday-tasks.md § 13](./everyday-tasks.md#13-adding-a-playwright-e2e-test).
 
-If the new test doesn't fit any existing project, add a new `projects[]`
-entry in [playwright.config.ts](../../playwright.config.ts) — match the
-existing pattern (testMatch regex, sensible `retries: 0` for deterministic
-suites, custom timeout if it's slow).
+If the new test doesn't fit any existing project, add a new `projects[]` entry
+in [playwright.config.ts](../../playwright.config.ts) — match the existing
+pattern (testMatch regex, sensible `retries: 0` for deterministic suites, custom
+timeout if it's slow).
 
 ### A11y patterns
 
@@ -140,57 +140,57 @@ The `a11y` project runs three kinds of audit per theme:
 | `hover states`      | Hovers each card-ish selector before scanning. Catches contrast bugs that only manifest on `:hover` (yellow-card-with-faint-bullets). |
 | `gradient contrast` | Custom WCAG luminance check on gradient buttons (axe returns `incomplete` on gradients). Skips invisible elements (`opacity < 0.05`). |
 
-When to extend it — see [CONTRIBUTING.md § A11y test patterns](../../CONTRIBUTING.md#a11y-test-patterns).
+When to extend it — see
+[CONTRIBUTING.md § A11y test patterns](../../CONTRIBUTING.md#a11y-test-patterns).
 
 ### Visual baselines
 
-Baselines live at `e2e/visual.spec.ts-snapshots/` and **must be regenerated
-on Linux**. Two paths:
+Baselines live at `e2e/visual.spec.ts-snapshots/` and **must be regenerated on
+Linux**. Two paths:
 
 - **Recommended:** trigger the `Refresh visual baselines` GitHub Action
-  (`Actions → Run workflow`). Opens a PR with the diff so each route's
-  change is reviewable inline.
+  (`Actions → Run workflow`). Opens a PR with the diff so each route's change is
+  reviewable inline.
 - **Locally on Linux/WSL:** `make test-visual-update`, then commit the
   regenerated PNGs.
 
-Don't regenerate on macOS or Windows — the diff will pass locally and fail
-in CI because of font hinting.
+Don't regenerate on macOS or Windows — the diff will pass locally and fail in CI
+because of font hinting.
 
 ### Live demos: why they auto-skip
 
 [live-demos.spec.ts](../../e2e/live-demos.spec.ts) probes
 `http://localhost:<port>/` in `beforeEach` and calls `test.skip(...)` if it
-doesn't answer. Run `make dev-bare` first to bring backends up; otherwise
-the suite is a no-op (intentional — CI without sibling repos can't run it).
+doesn't answer. Run `make dev-bare` first to bring backends up; otherwise the
+suite is a no-op (intentional — CI without sibling repos can't run it).
 
-The live-tested slug list is curated in `LIVE_E2E_SLUGS` — heavy GPU
-backends and ones that have moved to browser-native mocks are excluded.
+The live-tested slug list is curated in `LIVE_E2E_SLUGS` — heavy GPU backends
+and ones that have moved to browser-native mocks are excluded.
 
 ---
 
-## Backend tests (`make test`)
+## Backend tests (`make test-full`)
 
-`make test` runs everything CI runs in order:
+`make test-full` runs the exhaustive local suites in order:
 
 1. **Vitest** — `npm test`
 2. **Playwright** — all 9 projects, dev server auto-started
-3. **pytest** — TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX,
-   planner-api
+3. **pytest** — TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api
 4. **Django** — Draculin
 5. **Go** — joc-eda backend (skipped if `go` not installed)
 6. **Rust** — pracpro2 backend (skipped if `cargo` not installed)
 7. **Vitest (JS)** — Planificación web
 
-Sibling repos that are missing are silently skipped — running `make test`
+Sibling repos that are missing are silently skipped — running `make test-full`
 inside a CI checkout that only has PersonalPortfolio is supported.
 
 ---
 
 ## Performance
 
-Lighthouse CI via `npm run lhci`. Configured in [lighthouserc.json](../../lighthouserc.json).
-Runs against the production `dist/` build. Asserts targets in the same job
-named `lighthouse` in CI.
+Lighthouse CI via `npm run lhci`. Configured in
+[lighthouserc.json](../../lighthouserc.json). Runs against the production
+`dist/` build. Asserts targets in the same job named `lighthouse` in CI.
 
 ---
 
@@ -203,7 +203,7 @@ named `lighthouse` in CI.
 | Vitest                     | `vitest`                     |
 | Backend (FastAPI planner)  | `planner-api`                |
 | Browser smoke              | `playwright (matrix)`        |
-| A11y                       | `playwright-a11y` (4 shards) |
+| A11y                       | `playwright-a11y` (8 shards) |
 | Visual regression          | `playwright-visual`          |
 | Performance                | `lighthouse`                 |
 
@@ -214,5 +214,5 @@ named `lighthouse` in CI.
 - [everyday-tasks.md](./everyday-tasks.md) — recipes 12–14 for adding tests
 - [adding-a-demo.md](./adding-a-demo.md) — what to test when adding a demo
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) — pre-commit + CI parity
-- [README.md § Testing](../../README.md#testing) — `make test` order &
+- [README.md § Testing](../../README.md#testing) — `make test-full` order &
   visual-regression workflow

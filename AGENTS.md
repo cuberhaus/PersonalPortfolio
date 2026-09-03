@@ -18,7 +18,7 @@ If a guide conflicts with this file, follow the guide and update the stale rule 
 
 ## Build and Test
 
-`make dev` (Astro only), `make dev-bare` (all demo backends + Astro), `make build`, `make test` (full suite). Focused: `npm run test` (Vitest), `npm run test:e2e:smoke`, `npm run lint`, `npm run check`. Playwright projects (`browser-demos`, `live-demos`, `themes`) are independent — pick one rather than running all.
+`make dev` (Astro only), `make dev-bare` (all demo backends + Astro), `make build`, `make test` (fast local gate), `make test-full` (all Playwright + backend suites). Focused: `npm run test` (Vitest), `npm run test:e2e:smoke`, `npm run lint`, `npm run check`. Playwright projects (`browser-demos`, `live-demos`, `themes`) are independent — pick one rather than running all.
 
 ## Conventions
 

@@ -137,7 +137,8 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
   useEffect(() => {
     if (!open || tab !== 'perf') return;
     const navEntry = performance.getEntriesByType('navigation')[0] as
-      PerformanceNavigationTiming | undefined;
+      | PerformanceNavigationTiming
+      | undefined;
     if (!navEntry) return;
     setPerf((prev) => ({
       ...prev,

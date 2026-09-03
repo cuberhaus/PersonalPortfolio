@@ -10,7 +10,7 @@ endif
        rebuild free-ports check-registry \
        obs-install obs-up obs-down obs-restart obs-status obs-logs obs-wipe \
        mlops-up mlops-down \
-	clean test test-a11y test-a11y-grep test-keyboard test-visual test-visual-update gallery-capture help ports \
+	clean test test-full test-a11y test-a11y-grep test-keyboard test-visual test-visual-update gallery-capture help ports \
        i18n-review skills-list skills-update skills-restore \
        _db-tfg _db-bitsx _db-tenda _db-draculin _db-pro2 _db-planif \
        _db-desastres _db-mpids _db-phase _db-caim _db-joceda _db-sbcia \
@@ -311,9 +311,14 @@ test-visual: ## Run the visual-regression suite against committed baselines
 test-visual-update: ## Regenerate visual-regression baselines locally (must commit them; CI is Linux-only)
 	npx playwright test --project=visual --update-snapshots
 
-test: ## Run ALL test suites (portfolio + every demo backend)
+test: ## Run the fast local gate (quality, unit tests, production build)
+	npm run check
+	npm run lint
+	npm run format:check
 	npm test
 	npm run build
+
+test-full: test ## Run exhaustive Playwright and sibling-backend suites
 	@echo "=== Preparing Astro preview server for Playwright ==="; \
 	BASE_URL="http://$(E2E_HOST):$(E2E_PORT)"; \
 	DEV_PID=""; \

@@ -1,7 +1,7 @@
 # Weekly dependency-bump PRs against main. Dependabot uses one multi-ecosystem
 # group so npm and GitHub Actions version updates arrive in a single PR instead
 # of one PR per package family. The PR still runs the full CI suite (quality +
-# vitest + planner-api + playwright x 5 + a11y x 4 shards + lighthouse), so a
+# vitest + planner-api + playwright x 6 + a11y x 8 shards + lighthouse), so a
 # bump that breaks the build never lands.
 #
 # Major-version bumps are intentionally ignored so manual review stays in
