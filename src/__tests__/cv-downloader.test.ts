@@ -22,6 +22,21 @@ describe('CV downloader assets', () => {
     });
   });
 
+  it('falls back to the official release assets when local PDFs are unavailable', () => {
+    expect(
+      getCvAssetPath(
+        'spanish',
+        'concise',
+        false,
+        '',
+        'https://github.com/cuberhaus/cv/releases/latest/download'
+      )
+    ).toEqual({
+      href: 'https://github.com/cuberhaus/cv/releases/latest/download/cv_spanish_concise_no-photo.pdf',
+      filename: 'cv_spanish_concise_no-photo.pdf',
+    });
+  });
+
   it('explains the selected preset using localized copy', () => {
     const descriptions = {
       standard: 'Balanced overview',

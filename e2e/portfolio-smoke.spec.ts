@@ -33,6 +33,24 @@ test.describe('portfolio homepage smoke', () => {
     expect(await navHrefs(page)).toEqual(NAV_SECTION_IDS.map((id) => `#${id}`));
   });
 
+  test('CV variants remain downloadable without embedded PDF assets', async ({ page }) => {
+    await page.goto('/#about', { waitUntil: 'domcontentloaded' });
+
+    const preset = page.getByLabel('CV version');
+    const portrait = page.getByRole('checkbox', { name: 'Include portrait' });
+    const download = page.getByRole('link', { name: 'Download', exact: true });
+
+    await expect(preset).toBeVisible();
+    await expect(download).toHaveAttribute('href', /cv_english_standard_photo\.pdf(?:\?|$)/);
+
+    await preset.selectOption('technical');
+    await portrait.focus();
+    await page.keyboard.press('Space');
+
+    await expect(portrait).not.toBeChecked();
+    await expect(download).toHaveAttribute('href', /cv_english_technical_no-photo\.pdf(?:\?|$)/);
+  });
+
   test('navbar links scroll to each homepage section', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
@@ -115,6 +133,7 @@ test.describe('portfolio homepage smoke', () => {
   }) => {
     await page.setViewportSize({ width: 683, height: 418 });
     await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => document.fonts.ready);
 
     const cta = await page.locator('.hero-cta').boundingBox();
     const nextSection = await page.locator('section#work').boundingBox();

@@ -348,13 +348,15 @@ const links = sections
   }
 </style>
 
-<script>
+<script is:inline>
   // @ts-nocheck
   let scrollHandler;
 
-  document.addEventListener('astro:page-load', () => {
+  const initNavbar = () => {
     const navbar = document.getElementById('navbar');
     if (!navbar) return; // Only run on pages with the main navbar
+    if (navbar.hasAttribute('data-navbar-init')) return;
+    navbar.setAttribute('data-navbar-init', 'true');
 
     const toggle = navbar.querySelector('.nav-toggle');
     const links = document.getElementById('nav-links');
@@ -432,5 +434,12 @@ const links = sections
     );
 
     sections.forEach((s) => sectionObserver.observe(s));
-  });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNavbar);
+  } else {
+    initNavbar();
+  }
+  document.addEventListener('astro:page-load', initNavbar);
 </script>

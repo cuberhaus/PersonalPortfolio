@@ -12,6 +12,7 @@ export const CV_PRESETS: ReadonlyArray<{ id: CvPreset }> = [
 
 interface Props {
   lang: Lang;
+  assetBase?: string;
   assetVersion: string;
   labels: {
     title: string;
@@ -46,12 +47,15 @@ export function getCvAssetPath(
   cvLang: string,
   preset: CvPreset,
   includePhoto: boolean,
-  assetVersion: string
+  assetVersion: string,
+  assetBase = '/cv'
 ) {
   const photoMode = includePhoto ? 'photo' : 'no-photo';
   const assetName = `cv_${cvLang}_${preset}_${photoMode}.pdf`;
+  const normalizedBase = assetBase.replace(/\/$/, '');
+  const version = assetVersion ? `?v=${encodeURIComponent(assetVersion)}` : '';
   return {
-    href: `/cv/${assetName}?v=${encodeURIComponent(assetVersion)}`,
+    href: `${normalizedBase}/${assetName}${version}`,
     filename: assetName,
   };
 }
@@ -60,13 +64,18 @@ export function getCvPresetDescription(descriptions: Record<CvPreset, string>, p
   return descriptions[preset];
 }
 
-export default function CvDownloader({ lang, assetVersion, labels }: Props) {
+export default function CvDownloader({ lang, assetBase, assetVersion, labels }: Props) {
   const [preset, setPreset] = useState<CvPreset>('standard');
   const [includePhoto, setIncludePhoto] = useState(true);
 
   const cvLang = CV_LANG_BY_LOCALE[lang];
-  const asset = getCvAssetPath(cvLang, preset, includePhoto, assetVersion);
-  const href = `${baseStem}${asset.href}`;
+  const asset = getCvAssetPath(
+    cvLang,
+    preset,
+    includePhoto,
+    assetVersion,
+    assetBase ?? `${baseStem}/cv`
+  );
 
   const formId = useId();
 
@@ -111,7 +120,7 @@ export default function CvDownloader({ lang, assetVersion, labels }: Props) {
 
       <a
         className="cv-dl-btn"
-        href={href}
+        href={asset.href}
         download={asset.filename}
         target="_blank"
         rel="noopener noreferrer"
@@ -170,17 +179,21 @@ const CV_DL_STYLES = `
   .cv-dl {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    padding: 1.25rem 1.5rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-card);
-    max-width: 28rem;
-    transition: border-color var(--transition-base);
+    gap: 0;
+    width: min(100%, 42rem);
+    max-width: 42rem;
+    padding: 0;
+    background: color-mix(in srgb, var(--bg-card) 72%, transparent);
+    border-top: 2px solid var(--accent-text);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+    box-shadow: none;
+    transition:
+      border-color var(--transition-base),
+      background var(--transition-base);
   }
   .cv-dl:focus-within {
-    border-color: var(--border-color-hover);
+    border-color: var(--accent-text);
   }
 
   .cv-dl-title {
@@ -192,6 +205,8 @@ const CV_DL_STYLES = `
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.2;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--border-color);
   }
   .cv-dl-title svg {
     color: var(--accent-text);
@@ -200,15 +215,27 @@ const CV_DL_STYLES = `
     height: 1.1rem;
   }
 
-  .cv-dl-options { display: grid; gap: 0.9rem; }
-  .cv-dl-field { display: grid; gap: 0.35rem; color: var(--text-secondary); font-size: 0.9rem; }
+  .cv-dl-options {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.25rem;
+    align-items: end;
+    padding: 1rem 0;
+  }
+  .cv-dl-field { display: grid; gap: 0.4rem; color: var(--text-secondary); font-size: 0.82rem; }
+  .cv-dl-field > span:first-child {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
   .cv-dl-field select {
     min-height: 2.5rem;
     padding: 0.45rem 0.65rem;
     color: var(--text-primary);
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    border-radius: 0;
     font: inherit;
   }
   .cv-dl-field select:focus-visible { outline: 2px solid var(--accent-start); outline-offset: 2px; }
@@ -243,9 +270,9 @@ const CV_DL_STYLES = `
   }
   .cv-dl-box {
     flex: 0 0 auto;
-    width: 1.05rem;
-    height: 1.05rem;
-    border-radius: var(--radius-full, 9999px);
+    width: 2.1rem;
+    height: 1.15rem;
+    border-radius: 999px;
     border: 1.5px solid var(--border-color-hover);
     background: transparent;
     position: relative;
@@ -268,17 +295,20 @@ const CV_DL_STYLES = `
   .cv-dl-box::after {
     content: '';
     position: absolute;
-    left: 50%;
+    left: 0.18rem;
     top: 50%;
-    width: 0.45rem;
-    height: 0.45rem;
+    width: 0.65rem;
+    height: 0.65rem;
     border-radius: 50%;
-    background: #fff;
-    transform: translate(-50%, -50%) translateX(-0.25rem);
-    transition: transform var(--transition-fast);
+    background: var(--text-secondary);
+    transform: translateY(-50%);
+    transition:
+      background var(--transition-fast),
+      transform var(--transition-fast);
   }
   .cv-dl-input:checked + .cv-dl-box::after {
-    transform: translate(-50%, -50%) translateX(0.25rem);
+    background: #fff;
+    transform: translate(0.9rem, -50%);
   }
   .cv-dl-input:checked ~ .cv-dl-label {
     color: var(--text-primary);
@@ -289,14 +319,18 @@ const CV_DL_STYLES = `
   .cv-dl-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    padding: 0.7rem 1.4rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--text-primary);
-    background: transparent;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+    min-height: 2.75rem;
+    margin-bottom: 1rem;
+    padding: 0.7rem 1.15rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--demo-action-color);
+    background: var(--demo-action-bg);
+    border: 1px solid var(--accent-text);
+    border-radius: 0;
     text-decoration: none;
     align-self: flex-start;
     cursor: pointer;
@@ -307,9 +341,24 @@ const CV_DL_STYLES = `
       transform var(--transition-fast);
   }
   .cv-dl-btn:hover {
-    color: var(--accent-text);
-    border-color: var(--accent-text);
-    background: rgba(129, 140, 248, 0.08);
+    color: var(--demo-action-color);
+    filter: brightness(1.12);
+    transform: translateY(-1px);
   }
   .cv-dl-btn:active { transform: translateY(1px); }
+  .cv-dl-btn:focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 560px) {
+    .cv-dl-options { grid-template-columns: 1fr; }
+    .cv-dl-btn { width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cv-dl,
+    .cv-dl-box,
+    .cv-dl-btn { transition: none; }
+  }
 `;

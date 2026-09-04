@@ -23,12 +23,13 @@ the matching Barcelona Signal variant for first-time visitors.
 
 ## CV downloads
 
-The About section offers curated CV versions and a portrait toggle when the
-named release assets are available. Each version displays a localized summary
-of its included sections, so visitors can distinguish the balanced, technical,
-complete, and concise variants before downloading. Curated PDF URLs use a
-content hash to avoid stale browser caches, and downloaded filenames identify
-the selected version and portrait mode.
+The About section always offers curated CV versions and a portrait toggle. Each
+version displays a localized summary of its included sections, so visitors can
+distinguish the balanced, technical, complete, and concise variants before
+downloading. Deployments serve cache-busted local PDFs; development builds
+without those assets fall back to the matching files from the latest `cv`
+repository release. Downloaded filenames identify the selected version and
+portrait mode.
 
 ## Stack
 
@@ -39,7 +40,7 @@ the selected version and portrait mode.
 | Visualisation  | D3, Canvas, WebGL2, Babylon.js                                                      |
 | CV demos       | Web Workers, OpenCV.js, WASM                                                        |
 | i18n           | i18next (build-time) + inlang — 3 locales, file-based routing (`/`, `/es/`, `/ca/`) |
-| Testing        | Vitest 4 (43 unit suites, 1,361 tests) · Playwright (9 named projects)              |
+| Testing        | Vitest 4 (43 unit suites, 1,362 tests) · Playwright (9 named projects)              |
 
 ## Getting started
 
