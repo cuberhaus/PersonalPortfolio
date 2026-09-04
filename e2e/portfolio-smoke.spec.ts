@@ -74,9 +74,9 @@ test.describe('portfolio homepage smoke', () => {
   }
 
   for (const { route, tagline } of [
-    { route: '/', tagline: 'I like building things with AI & data.' },
-    { route: '/es/', tagline: 'Me gusta construir cosas con IA y datos.' },
-    { route: '/ca/', tagline: "M'agrada construir coses amb IA i dades." },
+    { route: '/', tagline: 'I build AI & data systems that work in the real world.' },
+    { route: '/es/', tagline: 'Construyo sistemas de IA y datos que funcionan en el mundo real.' },
+    { route: '/ca/', tagline: "Construeixo sistemes d'IA i dades que funcionen al món real." },
   ]) {
     test(`${route} keeps spacing between hero tagline segments`, async ({ page }) => {
       await page.goto(route, { waitUntil: 'domcontentloaded' });
