@@ -178,7 +178,7 @@ test.describe('Ctrl+K customize modal', () => {
     const pseudoContent = await aboutSection.evaluate(
       (el) => getComputedStyle(el, '::before').content
     );
-    expect(pseudoContent).toMatch(/REV-?0?1/i);
+    expect(pseudoContent).toMatch(/REV-?0?3/i);
   });
 
   test('terminal design switches the hero greeting to monospace', async ({ page }) => {
@@ -208,7 +208,7 @@ test.describe('Ctrl+K customize modal', () => {
     const pseudoContent = await aboutSection.evaluate(
       (el) => getComputedStyle(el, '::before').content
     );
-    expect(pseudoContent).toMatch(/01/);
+    expect(pseudoContent).toMatch(/03/);
   });
 
   test('academic design applies EB Garamond to the hero name', async ({ page }) => {
