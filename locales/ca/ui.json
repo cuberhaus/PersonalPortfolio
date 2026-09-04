@@ -87,10 +87,10 @@
   },
   "hero": {
     "cta": "Veure el meu treball",
-    "description": "Enginyer Informàtic de Barcelona, actualment Consultor d'IA i Dades a Deloitte. Gaudeixo explorant noves tecnologies, tirant endavant eines reals i ajudant el meu equip a construir coses que funcionin de veritat.",
-    "greeting": "Hola, em dic",
-    "tagline_1": "M'agrada construir",
-    "tagline_2": "coses amb IA i dades."
+    "description": "Enginyer Informàtic a Barcelona i Consultor d'IA i Dades a Deloitte. Converteixo idees en sistemes preparats per a producció, des de plataformes de dades al núvol fins a visió per computador i IA generativa.",
+    "greeting": "Hola, soc",
+    "tagline_1": "Construeixo sistemes d'IA i dades",
+    "tagline_2": "que funcionen al món real."
   },
   "meta": {
     "description": "Pol Casacuberta — Consultor d'IA i Dades de Barcelona. Construeixo coses amb IA i dades.",
