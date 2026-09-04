@@ -39,7 +39,7 @@ the selected version and portrait mode.
 | Visualisation  | D3, Canvas, WebGL2, Babylon.js                                                      |
 | CV demos       | Web Workers, OpenCV.js, WASM                                                        |
 | i18n           | i18next (build-time) + inlang — 3 locales, file-based routing (`/`, `/es/`, `/ca/`) |
-| Testing        | Vitest 4 (43 unit suites, 1,359 tests) · Playwright (9 named projects)              |
+| Testing        | Vitest 4 (43 unit suites, 1,361 tests) · Playwright (9 named projects)              |
 
 ## Getting started
 

@@ -152,6 +152,7 @@ describe('Portfolio presentation', () => {
     expect(embed.match(/data-live-status=/g)).toHaveLength(3);
     expect(gallery).toMatch(/astro-island\[ssr\]/);
     expect(gallery).toMatch(/data-live-status="checking"/);
+    expect(gallery).toMatch(/DOMContentLoaded.*installStyle/);
   });
 
   it('opens the full appearance studio from the navbar control', () => {

@@ -37,7 +37,9 @@ async function prepareCapture(page: Page) {
     Object.defineProperty(performance, 'now', { value: () => 0 });
     const style = document.createElement('style');
     style.textContent = css;
-    document.documentElement.appendChild(style);
+    const installStyle = () => document.documentElement.appendChild(style);
+    if (document.documentElement) installStyle();
+    else document.addEventListener('DOMContentLoaded', installStyle, { once: true });
   }, noMotionCss);
   await page.route('**/*', (route) => {
     const requestUrl = new URL(route.request().url());
