@@ -120,9 +120,9 @@ export default function LiveAppEmbed({
         style={{
           marginBottom: '1.25rem',
           padding: '1rem 1.25rem',
-          background: 'var(--bg-card)',
-          border: '1px solid var(--border-color)',
-          borderRadius: '0.75rem',
+          background: 'var(--demo-panel-bg)',
+          border: '1px solid var(--demo-panel-border)',
+          borderRadius: 'var(--demo-panel-radius)',
           fontSize: '0.82rem',
         }}
       >
@@ -147,7 +147,7 @@ export default function LiveAppEmbed({
             style={{
               display: 'block',
               padding: '0.45rem 0.75rem',
-              borderRadius: '0.4rem',
+              borderRadius: 'var(--radius-sm)',
               background: 'var(--bg-secondary)',
               border: '1px solid var(--border-color)',
               fontSize: '0.75rem',
@@ -166,7 +166,7 @@ export default function LiveAppEmbed({
                 style={{
                   display: 'block',
                   padding: '0.45rem 0.75rem',
-                  borderRadius: '0.4rem',
+                  borderRadius: 'var(--radius-sm)',
                   background: 'var(--bg-secondary)',
                   border: '1px solid var(--border-color)',
                   fontSize: '0.75rem',
@@ -193,7 +193,9 @@ export default function LiveAppEmbed({
           flexWrap: 'wrap',
           gap: '0.5rem',
           padding: '0.65rem 1rem',
-          borderRadius: expanded ? '0.75rem 0.75rem 0 0' : '0.75rem',
+          borderRadius: expanded
+            ? 'var(--demo-panel-radius) var(--demo-panel-radius) 0 0'
+            : 'var(--demo-panel-radius)',
           background: 'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(14,165,233,0.10))',
           border: '1px solid rgba(16,185,129,0.3)',
           borderBottom: expanded ? 'none' : undefined,
@@ -226,7 +228,7 @@ export default function LiveAppEmbed({
             onClick={() => uiLog.info('open-tab', { url, slug })}
             style={{
               padding: '0.3rem 0.65rem',
-              borderRadius: '0.35rem',
+              borderRadius: 'var(--radius-sm)',
               fontSize: '0.72rem',
               fontWeight: 600,
               background: 'var(--bg-secondary)',
@@ -246,7 +248,7 @@ export default function LiveAppEmbed({
             }}
             style={{
               padding: '0.3rem 0.65rem',
-              borderRadius: '0.35rem',
+              borderRadius: 'var(--radius-sm)',
               fontSize: '0.72rem',
               fontWeight: 600,
               background: 'var(--bg-secondary)',
@@ -268,7 +270,7 @@ export default function LiveAppEmbed({
             height: '80vh',
             border: '1px solid var(--border-color)',
             borderTop: 'none',
-            borderRadius: '0 0 0.75rem 0.75rem',
+            borderRadius: '0 0 var(--demo-panel-radius) var(--demo-panel-radius)',
             background: 'var(--bg-secondary)',
           }}
           allow="clipboard-write"

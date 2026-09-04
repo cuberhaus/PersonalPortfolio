@@ -104,6 +104,24 @@ export default withDemoErrorBoundary(MyCoolDemo, 'my-cool-demo');
 > `<MockBanner>{t.mockBanner}</MockBanner>`.
 > See `BitsXMaratoDemo.tsx` for the canonical usage.
 
+### Keep panels and actions design-aware
+
+Interactive islands inherit both the palette and design axes. Import the shared
+recipes instead of rebuilding a rounded card or gradient button locally:
+
+```tsx
+import { demoPanel, gradientButton } from './_styles';
+
+<section style={demoPanel}>...</section>
+<button style={gradientButton()}>Run</button>
+```
+
+`demoPanel` resolves through `--demo-panel-*` tokens and `gradientButton()`
+through `--demo-action-*`. The default Swiss design therefore uses transparent,
+square technical panels and a solid signal action, while other designs keep
+their own surface treatment. Use theme tokens for smaller internal controls and
+`getThemeColors()` for canvas or D3 drawing APIs.
+
 ---
 
 ## 3. Add the demo card to `demos.json`
@@ -227,7 +245,7 @@ running demo backends are intentionally ignored.
 ## 6. Page-specific copy with HTML or placeholders
 
 If your page or React island has copy that contains inline HTML
-(<strong>`, `<code>`, links) or `{0}`-style placeholders, create a per-demo
+(`<strong>`, `<code>`, links) or `{0}`-style placeholders, create a per-demo
 locale namespace:
 
 - `locales/{en,es,ca}/<slug>-page.json` — for page-level UI strings, or
@@ -344,8 +362,9 @@ without buffering.
 > `before_send` / `before_send_transaction` instead, which fires after
 > every scope merge and works on every SDK version (1.x through 2.x).
 
-<details>
-<summary>Inline alternative (not recommended — duplicates the helper's logic)</summary>
+#### Inline alternative
+
+This is not recommended because it duplicates the helper's logic.
 
 ```python
 import os, sys, json, time, logging
@@ -376,8 +395,6 @@ class JsonLineHandler(logging.Handler):
 
 logging.basicConfig(level=logging.INFO, handlers=[JsonLineHandler()], force=True)
 ```
-
-</details>
 
 #### Flask (`mpids`)
 
@@ -533,11 +550,15 @@ Two edits to [`PersonalPortfolio/Makefile`](../../Makefile):
 **(a)** Add a `_db-<slug>` target, mirroring the existing `_db-tfg`,
 `_db-bitsx`, etc. (see lines ~406–453):
 
+<!-- markdownlint-disable MD010 -->
+
 ```makefile
 _db-<slug>:
 	$(call build_if_changed,<slug>,$(PARENT)/<repo>,<DisplayName>     :<port>,\
 		docker compose -f "$(PARENT)/<repo>/docker-compose.yml" build $(DOCKER_BUILD_OPTS))
 ```
+
+<!-- markdownlint-enable MD010 -->
 
 **(b)** Append the target to `DEMO_TARGETS` (Makefile line ~402) so
 `make build` rebuilds it in parallel with the rest:

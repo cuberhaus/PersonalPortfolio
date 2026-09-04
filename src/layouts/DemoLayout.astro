@@ -110,7 +110,7 @@ const siteBase = Astro.site || Astro.url;
           </svg>
           <span class="demo-back-label">{t('demo.portfolio')}</span>
         </a>
-        <span class="demo-nav-title gradient-text">{title}</span>
+        <span class="demo-nav-title">{title}</span>
 
         <div class="demo-controls">
           <button
@@ -181,7 +181,7 @@ const siteBase = Astro.site || Astro.url;
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 1.25rem;
-        border-radius: var(--radius-full, 9999px);
+        border-radius: var(--radius-md);
         background: var(--bg-secondary);
         color: var(--text-secondary);
         border: 1px solid var(--border-color);
@@ -337,6 +337,7 @@ const siteBase = Astro.site || Astro.url;
     text-overflow: ellipsis;
     max-width: 100%;
     min-width: 0;
+    color: var(--accent-text);
   }
 
   .demo-controls {
@@ -350,6 +351,13 @@ const siteBase = Astro.site || Astro.url;
     min-height: calc(100vh - var(--nav-height));
     padding: 2rem 0;
     color: var(--text-primary);
+  }
+
+  html[data-design='swiss'] .demo-nav {
+    background: var(--bg-primary);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom-color: var(--text-primary);
   }
 
   .demo-main p,
@@ -384,6 +392,10 @@ const siteBase = Astro.site || Astro.url;
 
     .demo-nav-title {
       font-size: 0.95rem;
+    }
+
+    .demo-main {
+      padding-top: 1rem;
     }
   }
 </style>

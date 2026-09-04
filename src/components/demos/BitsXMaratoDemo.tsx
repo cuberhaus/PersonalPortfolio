@@ -8,17 +8,12 @@ const FRAME = { w: 472, h: 296, maskPolygon: '2,205 470,185 470,215 2,236' };
 
 import { TRANSLATIONS } from '../../i18n/demos/bits-xmarato-demo';
 import { useDemoLifecycle } from '../../lib/useDebug';
-import { gradientButton } from './_styles';
+import { demoPanel, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
 /* ── shared styles ── */
-const card = {
-  background: 'var(--bg-card)',
-  border: '1px solid var(--border-color)',
-  borderRadius: '1rem',
-  padding: '1.5rem',
-} as const;
+const card = demoPanel;
 
 const accent1 = 'var(--accent-start)';
 const accent2 = 'var(--accent-end)';

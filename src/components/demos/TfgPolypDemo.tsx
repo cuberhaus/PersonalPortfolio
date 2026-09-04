@@ -13,18 +13,13 @@ import modelData from '../../data/tfg-model-results.json' with { type: 'json' };
 import LiveAppEmbed from './LiveAppEmbed';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { gradientButton } from './_styles';
+import { demoPanel, gradientButton } from './_styles';
 
 /* ── constants ── */
 const accent1 = 'var(--accent-start)';
 const accent2 = 'var(--accent-end)';
 
-const card = {
-  background: 'var(--bg-card)',
-  border: '1px solid var(--border-color)',
-  borderRadius: '1rem',
-  padding: '1.5rem',
-} as const;
+const card = demoPanel;
 
 import { TRANSLATIONS } from '../../i18n/demos/tfg-polyp-demo';
 
@@ -37,7 +32,7 @@ type ModelResult = (typeof modelData)[number];
 /* ════════════════════════════════════════════════════════════════════════ */
 function PipelineStrip({ t }: { t: typeof TRANSLATIONS.en }) {
   return (
-    <div style={{ ...card, marginBottom: '1.25rem', background: 'var(--bg-card)' }}>
+    <div style={{ ...card, marginBottom: '1.25rem' }}>
       <div
         style={{
           display: 'flex',

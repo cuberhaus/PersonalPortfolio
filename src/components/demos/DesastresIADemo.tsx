@@ -24,17 +24,12 @@ import { AssignmentMapFigure, PerHeliBreakdown, QueueStrips } from './DesastresV
 import { TRANSLATIONS } from '../../i18n/demos/desastres-ia-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { gradientButton } from './_styles';
+import { demoPanel, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
 /* ── shared styles ── */
-const card = {
-  background: 'var(--bg-card)',
-  border: '1px solid var(--border-color)',
-  borderRadius: '1rem',
-  padding: '1.5rem',
-} as const;
+const card = demoPanel;
 
 const accent1 = 'var(--accent-start)';
 const accent2 = 'var(--accent-end)';
