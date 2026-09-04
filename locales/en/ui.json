@@ -87,10 +87,10 @@
   },
   "hero": {
     "cta": "View my work",
-    "description": "Computer Science Engineer from Barcelona, currently an AI & Data Consultant at Deloitte. I enjoy exploring new tech, shipping real tools, and helping my team build things that actually work.",
-    "greeting": "Hi, my name is",
-    "tagline_1": "I like building",
-    "tagline_2": "things with AI & data."
+    "description": "Computer Science Engineer in Barcelona and AI & Data Consultant at Deloitte. I turn ideas into production-ready systems across cloud data platforms, computer vision, and generative AI.",
+    "greeting": "Hi, I'm",
+    "tagline_1": "I build AI & data systems",
+    "tagline_2": "that work in the real world."
   },
   "meta": {
     "description": "Pol Casacuberta — AI & Data Consultant from Barcelona. I build things with AI and data.",
