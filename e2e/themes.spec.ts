@@ -46,6 +46,20 @@ test.describe('Ctrl+K customize modal', () => {
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'barcelona-night');
   });
 
+  test('Deloitte logo follows the Barcelona palette color scheme', async ({ page }) => {
+    const logo = page.getByAltText('Deloitte logo');
+
+    await page.evaluate(() =>
+      (window as unknown as { setTheme(id: string): void }).setTheme('barcelona-day')
+    );
+    await expect(logo).toHaveAttribute('src', /Logo_of_Deloitte\.svg$/);
+
+    await page.evaluate(() =>
+      (window as unknown as { setTheme(id: string): void }).setTheme('barcelona-night')
+    );
+    await expect(logo).toHaveAttribute('src', /Deloitte_logo_white\.svg$/);
+  });
+
   test('picks a design and applies data-design to <html>', async ({ page }) => {
     await openModal(page);
     await page.locator('[data-design-id="swiss"]').click();
