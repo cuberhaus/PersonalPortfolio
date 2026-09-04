@@ -22,7 +22,7 @@
     "scrollTop": "Ir arriba",
     "skipToContent": "Saltar al contenido",
     "toggleMenu": "Abrir menú",
-    "toggleTheme": "Cambiar tema (Ctrl+K para más temas)",
+    "toggleTheme": "Personalizar apariencia",
     "viewGithub": "Ver en GitHub"
   },
   "certifications": {
@@ -102,9 +102,9 @@
     "contact": "Contacto",
     "education": "Educación",
     "experience": "Experiencia",
-    "projects": "Proyectos",
+    "projects": "Laboratorio interactivo",
     "skills": "Habilidades",
-    "work": "Trabajo Profesional"
+    "work": "Trabajo para clientes"
   },
   "notFound": {
     "back": "Portafolio",
