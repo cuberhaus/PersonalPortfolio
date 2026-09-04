@@ -76,6 +76,9 @@ export const THEMES: ThemeMeta[] = [
 ];
 
 export const THEME_IDS = THEMES.map((t) => t.id);
+export const LIGHT_THEME_IDS = THEMES.filter((theme) => theme.colorScheme === 'light').map(
+  (theme) => theme.id
+);
 export const DEFAULT_DARK_THEME = 'barcelona-night';
 export const DEFAULT_LIGHT_THEME = 'barcelona-day';
 export const DEFAULT_THEME = DEFAULT_DARK_THEME;

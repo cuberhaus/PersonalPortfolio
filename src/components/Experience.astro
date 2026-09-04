@@ -3,6 +3,7 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { experience as experienceData, getTranslations } from '../data/loaders';
 import { visibleEntries } from '../data/visibility';
 import { flattenForLocale } from '../i18n/load';
+import { LIGHT_THEME_IDS } from '../lib/themes';
 
 type ExpEntry = {
   role: string;
@@ -27,7 +28,12 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const { num } = Astro.props;
 ---
 
-<section class="section experience" id="experience" data-num={num}>
+<section
+  class="section experience"
+  id="experience"
+  data-num={num}
+  data-light-themes={LIGHT_THEME_IDS.join(' ')}
+>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('experience.label')}</span>
@@ -308,18 +314,11 @@ const { num } = Astro.props;
 </style>
 
 <script>
-  const LIGHT_SCHEMES = [
-    'light',
-    'nord-light',
-    'catppuccin-latte',
-    'solarized-light',
-    'sepia',
-    'paper',
-  ];
-
   function updateLogos() {
+    const lightThemes =
+      document.querySelector<HTMLElement>('.experience')?.dataset.lightThemes?.split(' ') ?? [];
     const theme = document.documentElement.getAttribute('data-theme') || 'dark';
-    const isLight = LIGHT_SCHEMES.includes(theme);
+    const isLight = lightThemes.includes(theme);
     document.querySelectorAll<HTMLImageElement>('img.theme-logo').forEach((img) => {
       const src = isLight ? img.dataset.light : img.dataset.dark;
       if (src && img.src !== src) img.src = src;
