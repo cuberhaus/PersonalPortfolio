@@ -277,10 +277,15 @@ const { num } = Astro.props;
   }
 
   .timeline-bullets li::before {
-    content: '▹';
+    content: '';
     position: absolute;
-    left: 0;
-    color: var(--accent-text);
+    left: 0.1rem;
+    top: 0.58rem;
+    width: 0.38rem;
+    height: 0.38rem;
+    border-top: 1px solid var(--accent-text);
+    border-right: 1px solid var(--accent-text);
+    transform: rotate(45deg);
   }
 
   @media (max-width: 768px) {

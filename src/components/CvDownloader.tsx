@@ -88,20 +88,29 @@ export default function CvDownloader({ lang, assetBase, assetVersion, labels }: 
       </h3>
 
       <div className="cv-dl-options">
-        <label className="cv-dl-field" htmlFor={`${formId}-preset`}>
-          <span>{labels.preset}</span>
-          <select
-            id={`${formId}-preset`}
+        <div className="cv-dl-field">
+          <span id={`${formId}-preset-label`} className="cv-dl-field-label">
+            {labels.preset}
+          </span>
+          <div
+            className="cv-dl-segments"
+            role="radiogroup"
+            aria-labelledby={`${formId}-preset-label`}
             aria-describedby={`${formId}-preset-description`}
-            value={preset}
-            onChange={(event) => setPreset(event.target.value as CvPreset)}
           >
             {CV_PRESETS.map(({ id }) => (
-              <option key={id} value={id}>
-                {labels.presets[id]}
-              </option>
+              <label key={id} className="cv-dl-segment">
+                <input
+                  type="radio"
+                  name={`${formId}-preset`}
+                  value={id}
+                  checked={preset === id}
+                  onChange={() => setPreset(id)}
+                />
+                <span>{labels.presets[id]}</span>
+              </label>
             ))}
-          </select>
+          </div>
           <span
             id={`${formId}-preset-description`}
             className="cv-dl-description"
@@ -109,7 +118,7 @@ export default function CvDownloader({ lang, assetBase, assetVersion, labels }: 
           >
             {getCvPresetDescription(labels.presetDescriptions, preset)}
           </span>
-        </label>
+        </div>
         <Toggle
           id={`${formId}-photo`}
           label={labels.includePhoto}
@@ -217,28 +226,71 @@ const CV_DL_STYLES = `
 
   .cv-dl-options {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 1.25rem;
-    align-items: end;
+    grid-template-columns: minmax(0, 1fr) minmax(9rem, auto);
+    gap: 1rem;
+    align-items: start;
     padding: 1rem 0;
   }
   .cv-dl-field { display: grid; gap: 0.4rem; color: var(--text-secondary); font-size: 0.82rem; }
-  .cv-dl-field > span:first-child {
+  .cv-dl-field-label {
     font-family: var(--font-mono);
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
   }
-  .cv-dl-field select {
-    min-height: 2.5rem;
-    padding: 0.45rem 0.65rem;
-    color: var(--text-primary);
-    background: var(--bg-secondary);
+  .cv-dl-segments {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    padding: 1px;
+    background: var(--border-color);
     border: 1px solid var(--border-color);
-    border-radius: 0;
-    font: inherit;
   }
-  .cv-dl-field select:focus-visible { outline: 2px solid var(--accent-start); outline-offset: 2px; }
+  .cv-dl-segment {
+    position: relative;
+    min-width: 0;
+    cursor: pointer;
+  }
+  .cv-dl-segment input {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .cv-dl-segment span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.35rem;
+    padding: 0.45rem 0.6rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: center;
+    transition:
+      color var(--transition-fast),
+      background var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+  .cv-dl-segment:hover span {
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--accent-start) 8%, var(--bg-secondary));
+  }
+  .cv-dl-segment input:checked + span {
+    color: var(--accent-text);
+    background: color-mix(in srgb, var(--accent-start) 14%, var(--bg-secondary));
+    box-shadow: inset 0 -2px 0 var(--accent-text);
+  }
+  .cv-dl-segment input:focus-visible + span {
+    outline: 2px solid var(--accent-start);
+    outline-offset: -2px;
+  }
   .cv-dl-description {
     color: var(--text-muted, var(--text-secondary));
     font-size: 0.82rem;
@@ -253,6 +305,7 @@ const CV_DL_STYLES = `
     user-select: none;
     color: var(--text-secondary);
     font-size: 0.9rem;
+    margin-top: 1.55rem;
     transition: color var(--transition-fast);
   }
   .cv-dl-opt:hover { color: var(--text-primary); }
@@ -353,6 +406,7 @@ const CV_DL_STYLES = `
 
   @media (max-width: 560px) {
     .cv-dl-options { grid-template-columns: 1fr; }
+    .cv-dl-opt { margin-top: 0; }
     .cv-dl-btn { width: 100%; }
   }
 

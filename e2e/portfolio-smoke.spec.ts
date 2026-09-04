@@ -36,17 +36,19 @@ test.describe('portfolio homepage smoke', () => {
   test('CV variants remain downloadable without embedded PDF assets', async ({ page }) => {
     await page.goto('/#about', { waitUntil: 'domcontentloaded' });
 
-    const preset = page.getByLabel('CV version');
+    const preset = page.getByRole('radiogroup', { name: 'CV version' });
+    const technical = page.getByRole('radio', { name: 'Technical' });
     const portrait = page.getByRole('checkbox', { name: 'Include portrait' });
     const download = page.getByRole('link', { name: 'Download', exact: true });
 
     await expect(preset).toBeVisible();
     await expect(download).toHaveAttribute('href', /cv_english_standard_photo\.pdf(?:\?|$)/);
 
-    await preset.selectOption('technical');
+    await technical.click();
     await portrait.focus();
     await page.keyboard.press('Space');
 
+    await expect(technical).toBeChecked();
     await expect(portrait).not.toBeChecked();
     await expect(download).toHaveAttribute('href', /cv_english_technical_no-photo\.pdf(?:\?|$)/);
   });
