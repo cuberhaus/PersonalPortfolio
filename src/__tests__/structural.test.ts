@@ -46,6 +46,26 @@ describe('Icon parity: demo-icons.ts covers all demos.json icons', () => {
 // ─── Navbar / homepage section invariants ───────────────────────
 
 describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
+  it('leads with proof of work and keeps the primary navigation focused', () => {
+    expect(SECTION_META.map((section) => section.id)).toEqual([
+      'hero',
+      'work',
+      'projects',
+      'about',
+      'experience',
+      'skills',
+      'certifications',
+      'education',
+      'contact',
+    ]);
+    expect(SECTION_META.filter((section) => section.inNav).map((section) => section.id)).toEqual([
+      'work',
+      'projects',
+      'about',
+      'contact',
+    ]);
+  });
+
   it('every section in the SSOT has a matching component file with the right id', () => {
     for (const section of SECTION_META) {
       const path = `components/${componentFileName(section.id)}.astro`;
@@ -74,6 +94,19 @@ describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
     expect(navbar).toMatch(/href="#hero"/);
   });
 
+  it('the primary hero CTA points to professional work', () => {
+    const hero = read('components/Hero.astro');
+    expect(hero).toMatch(/href="#work"/);
+  });
+
+  it('the mobile menu protects short viewports from centered overflow', () => {
+    const navbar = read('components/Navbar.astro');
+    expect(navbar).toMatch(/@media\s*\(max-width:\s*1024px\)\s*and\s*\(max-height:\s*700px\)/);
+    expect(navbar).toMatch(
+      /@media\s*\(max-width:\s*1024px\)\s*and\s*\(max-height:\s*700px\)[\s\S]*?\.nav-links-primary\s*\{[\s\S]*?justify-content:\s*flex-start/
+    );
+  });
+
   it('default and localized homepages render the same SSOT-driven map', () => {
     const en = read('pages/index.astro');
     const localized = read('pages/[lang]/index.astro');
@@ -91,6 +124,41 @@ describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
     expect(SECTION_IDS).toEqual(
       SECTION_META.filter((s) => s.id !== 'hero' && s.hidden !== true).map((s) => s.id)
     );
+  });
+});
+
+// ─── Portfolio presentation contracts ─────────────────────────
+
+describe('Portfolio presentation', () => {
+  it('uses the generated demo gallery as real card media', () => {
+    const demos = read('components/Demos.astro');
+    expect(demos).toMatch(
+      /import\.meta\.glob(?:<[^>]+>)?\(['"]\.\.\/\.\.\/docs\/assets\/demo-gallery\/\*\.jpg['"]/
+    );
+    expect(demos).toMatch(/class="demo-preview"/);
+  });
+
+  it('neutralizes captured theme colors in project-card previews', () => {
+    const demos = read('components/Demos.astro');
+    expect(demos).toMatch(/\.demo-preview\s*\{[\s\S]*?isolation:\s*isolate/);
+    expect(demos).toMatch(
+      /\.demo-preview img\s*\{[\s\S]*?filter:\s*grayscale\(1\)[\s\S]*?mix-blend-mode:\s*luminosity/
+    );
+  });
+
+  it('waits for hydrated, settled live demos before capturing gallery images', () => {
+    const embed = read('components/demos/LiveAppEmbed.tsx');
+    const gallery = read('../e2e/readme-gallery.spec.ts');
+    expect(embed.match(/data-live-status=/g)).toHaveLength(3);
+    expect(gallery).toMatch(/astro-island\[ssr\]/);
+    expect(gallery).toMatch(/data-live-status="checking"/);
+    expect(gallery).toMatch(/DOMContentLoaded.*installStyle/);
+  });
+
+  it('opens the full appearance studio from the navbar control', () => {
+    const toggle = read('components/ThemeToggle.astro');
+    expect(toggle).toContain("new CustomEvent('open-theme-modal')");
+    expect(toggle).not.toContain("localStorage.setItem('theme'");
   });
 });
 

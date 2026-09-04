@@ -7,6 +7,18 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const demos = listDemos(lang);
 
+const previewModules = import.meta.glob<string>('../../docs/assets/demo-gallery/*.jpg', {
+  eager: true,
+  import: 'default',
+  query: '?url',
+});
+const previews = Object.fromEntries(
+  Object.entries(previewModules).map(([path, url]) => [
+    path.split('/').at(-1)?.replace('.jpg', ''),
+    url,
+  ])
+);
+
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
 const { num } = Astro.props;
@@ -44,6 +56,16 @@ const { num } = Astro.props;
             data-index={index}
             data-category={demo.category || 'other'}
           >
+            <div class="demo-preview" aria-hidden="true">
+              <img
+                src={previews[demo.slug]}
+                alt=""
+                width="1440"
+                height="900"
+                loading={index < 3 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </div>
             <div class="demo-card-inner">
               <div class="demo-icon" set:html={renderIconSvg(demo.icon, 28)} />
 
@@ -376,6 +398,7 @@ const { num } = Astro.props;
     background: var(--accent-gradient);
     opacity: 0;
     transition: opacity var(--transition-base);
+    z-index: 2;
   }
 
   .demo-card:hover {
@@ -386,6 +409,35 @@ const { num } = Astro.props;
 
   .demo-card:hover::before {
     opacity: 1;
+  }
+
+  .demo-preview {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: color-mix(in oklab, var(--accent-text) 18%, var(--bg-secondary));
+    border-bottom: 1px solid var(--border-color);
+    isolation: isolate;
+  }
+
+  .demo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    filter: grayscale(1) contrast(0.92);
+    mix-blend-mode: luminosity;
+    opacity: 0.72;
+    transform: scale(1.01);
+    transition:
+      filter var(--transition-base),
+      opacity var(--transition-base),
+      transform var(--transition-slow);
+  }
+
+  .demo-card:hover .demo-preview img {
+    filter: grayscale(1) contrast(1);
+    opacity: 0.88;
+    transform: scale(1.035);
   }
 
   .demo-card-inner {
@@ -412,6 +464,11 @@ const { num } = Astro.props;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--accent-text);
+    background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.5rem;
+    backdrop-filter: blur(8px);
     opacity: 0;
     transform: translateX(-8px);
     transition:

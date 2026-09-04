@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { DEFAULT_THEME, THEME_IDS, THEMES } from '../lib/themes';
+import {
+  DEFAULT_DARK_THEME,
+  DEFAULT_LIGHT_THEME,
+  DEFAULT_THEME,
+  THEME_IDS,
+  THEMES,
+} from '../lib/themes';
 
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;
 
@@ -18,6 +24,15 @@ describe('theme registry', () => {
 
     expect(defaultTheme).toBeDefined();
     expect(defaultTheme?.hidden).not.toBe(true);
+  });
+
+  it('uses the custom Barcelona Signal family for first visits', () => {
+    expect(DEFAULT_DARK_THEME).toBe('barcelona-night');
+    expect(DEFAULT_LIGHT_THEME).toBe('barcelona-day');
+    expect(DEFAULT_THEME).toBe(DEFAULT_DARK_THEME);
+
+    expect(THEMES.find((theme) => theme.id === DEFAULT_DARK_THEME)?.colorScheme).toBe('dark');
+    expect(THEMES.find((theme) => theme.id === DEFAULT_LIGHT_THEME)?.colorScheme).toBe('light');
   });
 
   it('defines complete metadata for every theme', () => {

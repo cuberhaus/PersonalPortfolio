@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { countSignificantPixels } from '../../scripts/compare-demo-gallery.mjs';
 import { renderGalleryIndex } from '../../scripts/demo-gallery.mjs';
 
 interface DemoService {
@@ -60,6 +61,22 @@ describe('demo screenshot gallery', () => {
         height: 900,
       });
     }
+  });
+
+  it('tolerates sparse subpixel rasterization noise', () => {
+    const expected = Buffer.alloc(1_000 * 4, 100);
+    const actual = Buffer.from(expected);
+    for (let pixel = 0; pixel < 100; pixel++) actual[pixel * 4] += 4;
+
+    expect(countSignificantPixels(expected, actual, 8)).toBe(0);
+  });
+
+  it('detects a materially changed image region', () => {
+    const expected = Buffer.alloc(1_000 * 4, 100);
+    const actual = Buffer.from(expected);
+    for (let pixel = 0; pixel < 600; pixel++) actual[pixel * 4] += 40;
+
+    expect(countSignificantPixels(expected, actual, 8)).toBe(600);
   });
 
   it('has exactly one generated index entry for every registered demo', () => {

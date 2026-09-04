@@ -2,7 +2,7 @@
 
 **Live:** [polcasacubertagil.com](https://polcasacubertagil.com)
 
-Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 19** islands for 20 interactive demos. Three-locale i18n (EN / ES / CA). Deployed to **GitHub Pages** via Actions.
+Design-customizable portfolio built with **[Astro 7](https://astro.build)** and **React 19** islands for 20 interactive demos. Three-locale i18n (EN / ES / CA). Deployed to **GitHub Pages** via Actions.
 
 ## Gallery
 
@@ -14,6 +14,12 @@ Dark-themed portfolio built with **[Astro 5](https://astro.build)** and **React 
 Regenerate the images with `npm run gallery:capture` (or `make gallery-capture`). The Playwright capture uses fixed viewports, default local storage, disabled motion, and fails before writing an image when a target route does not render.
 
 Browse the [complete screenshot gallery](docs/demo-gallery.md) for one canonical desktop capture of every registered demo.
+
+The homepage defaults to the Swiss visual system and the custom Barcelona
+Signal day/night palette, leads with client work, and uses those generated demo
+captures as project-card previews. The appearance control in the navigation
+opens the full design and palette studio; system light/dark preference selects
+the matching Barcelona Signal variant for first-time visitors.
 
 ## CV downloads
 
@@ -28,12 +34,12 @@ the selected version and portrait mode.
 
 | Layer          | Tech                                                                                |
 | -------------- | ----------------------------------------------------------------------------------- |
-| Framework      | Astro 5.18, TypeScript strict                                                       |
+| Framework      | Astro 7, TypeScript strict                                                          |
 | Interactive UI | React 19 islands (`client:visible` / `client:load`)                                 |
 | Visualisation  | D3, Canvas, WebGL2, Babylon.js                                                      |
 | CV demos       | Web Workers, OpenCV.js, WASM                                                        |
 | i18n           | i18next (build-time) + inlang — 3 locales, file-based routing (`/`, `/es/`, `/ca/`) |
-| Testing        | Vitest 4 (43 unit suites, 1,271 tests) · Playwright (9 named projects)              |
+| Testing        | Vitest 4 (43 unit suites, 1,361 tests) · Playwright (9 named projects)              |
 
 ## Getting started
 
@@ -143,7 +149,7 @@ GitHub Actions still runs the complete matrix on pull requests.
 
 `make test-full` runs, in order:
 
-1. **Vitest** — 43 unit suites, 1,271 tests ([`vitest.config.ts`](vitest.config.ts))
+1. **Vitest** — 43 unit suites, 1,277 tests ([`vitest.config.ts`](vitest.config.ts))
 2. **Playwright** — 9 named projects ([`playwright.config.ts`](playwright.config.ts), auto-starts dev server)
 3. **pytest** — backend tests for TFG, bitsXlaMarato, desastresIA, MPIDS, Phase Transitions, CAIM, SBC_IA, planner-api, Draculin (Django)
 4. **Go** — joc_eda backend

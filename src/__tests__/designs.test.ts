@@ -34,6 +34,10 @@ describe('DESIGNS registry', () => {
     expect(DESIGN_IDS).toContain(DEFAULT_DESIGN);
   });
 
+  it('uses the distinctive Swiss system as the first-visit default', () => {
+    expect(DEFAULT_DESIGN).toBe('swiss');
+  });
+
   it('ids are unique', () => {
     const set = new Set(DESIGN_IDS);
     expect(set.size).toBe(DESIGN_IDS.length);
@@ -79,6 +83,13 @@ describe('designs.css coverage', () => {
 
   it('reduced-motion gates design animations', () => {
     expect(designsCss).toMatch(/@media\s*\(prefers-reduced-motion:\s*no-preference\)/);
+  });
+
+  it('lets the Swiss system inherit the selected palette accent', () => {
+    expect(designsCss).toMatch(
+      /html\[data-design=['"]swiss['"]\]\s*\{[\s\S]*?--swiss-accent:\s*var\(--accent-text\)/
+    );
+    expect(designsCss.match(/--swiss-accent:/g)).toHaveLength(1);
   });
 });
 

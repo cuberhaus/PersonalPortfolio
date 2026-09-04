@@ -34,6 +34,18 @@ test.describe('Ctrl+K customize modal', () => {
     await expect(page.locator('#theme-modal.open')).not.toBeVisible();
   });
 
+  test('first visits use the Barcelona Signal variant matching system mode', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.evaluate(() => localStorage.removeItem('theme'));
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'barcelona-day');
+
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.evaluate(() => localStorage.removeItem('theme'));
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'barcelona-night');
+  });
+
   test('picks a design and applies data-design to <html>', async ({ page }) => {
     await openModal(page);
     await page.locator('[data-design-id="swiss"]').click();
@@ -166,7 +178,7 @@ test.describe('Ctrl+K customize modal', () => {
     const pseudoContent = await aboutSection.evaluate(
       (el) => getComputedStyle(el, '::before').content
     );
-    expect(pseudoContent).toMatch(/REV-?0?1/i);
+    expect(pseudoContent).toMatch(/REV-?0?3/i);
   });
 
   test('terminal design switches the hero greeting to monospace', async ({ page }) => {
@@ -196,7 +208,7 @@ test.describe('Ctrl+K customize modal', () => {
     const pseudoContent = await aboutSection.evaluate(
       (el) => getComputedStyle(el, '::before').content
     );
-    expect(pseudoContent).toMatch(/01/);
+    expect(pseudoContent).toMatch(/03/);
   });
 
   test('academic design applies EB Garamond to the hero name', async ({ page }) => {

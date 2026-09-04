@@ -110,12 +110,13 @@ export default function LiveAppEmbed({
   }, [status, fallbackSelector]);
 
   if (status === 'checking') {
-    return <div style={{ minHeight: 1 }} />;
+    return <div data-live-status="checking" style={{ minHeight: 1 }} />;
   }
 
   if (status === 'offline') {
     return (
       <div
+        data-live-status="offline"
         style={{
           marginBottom: '1.25rem',
           padding: '1rem 1.25rem',
@@ -183,7 +184,7 @@ export default function LiveAppEmbed({
   }
 
   return (
-    <div style={{ marginBottom: '1.25rem' }}>
+    <div data-live-status="online" style={{ marginBottom: '1.25rem' }}>
       <div
         style={{
           display: 'flex',

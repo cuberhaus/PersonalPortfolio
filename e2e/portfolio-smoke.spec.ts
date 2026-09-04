@@ -8,9 +8,12 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { SECTION_IDS, SECTION_IDS_WITH_HERO } from '../src/config/section-ids';
+import { SECTION_IDS, SECTION_IDS_WITH_HERO, SECTION_META } from '../src/config/section-ids';
 
 const SECTION_ORDER = SECTION_IDS;
+const NAV_SECTION_IDS = SECTION_META.filter((section) => section.inNav).map(
+  (section) => section.id
+);
 const SECTION_SELECTOR = SECTION_IDS_WITH_HERO.map((id) => `section#${id}`).join(', ');
 
 async function navHrefs(page: import('@playwright/test').Page) {
@@ -27,13 +30,13 @@ test.describe('portfolio homepage smoke', () => {
     await expect(page.locator('main#main-content')).toBeVisible();
     await expect(page.locator('section#hero')).toBeVisible();
     await expect(page.locator(SECTION_SELECTOR)).toHaveCount(SECTION_ORDER.length + 1);
-    expect(await navHrefs(page)).toEqual(SECTION_ORDER.map((id) => `#${id}`));
+    expect(await navHrefs(page)).toEqual(NAV_SECTION_IDS.map((id) => `#${id}`));
   });
 
   test('navbar links scroll to each homepage section', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-    for (const id of SECTION_ORDER) {
+    for (const id of NAV_SECTION_IDS) {
       await page.locator(`.nav-link[href="#${id}"]`).click();
       await expect(page).toHaveURL(new RegExp(`#${id}$`));
       await expect(page.locator(`section#${id}`)).toBeInViewport({ ratio: 0.1 });
@@ -46,7 +49,7 @@ test.describe('portfolio homepage smoke', () => {
 
       await expect(page.locator('main#main-content')).toBeVisible();
       await expect(page.locator(SECTION_SELECTOR)).toHaveCount(SECTION_ORDER.length + 1);
-      expect(await navHrefs(page)).toEqual(SECTION_ORDER.map((id) => `#${id}`));
+      expect(await navHrefs(page)).toEqual(NAV_SECTION_IDS.map((id) => `#${id}`));
     });
   }
 
@@ -83,6 +86,42 @@ test.describe('portfolio homepage smoke', () => {
     await expect(links).not.toHaveClass(/open/);
     await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('');
     await expect(page.locator('section#work')).toBeInViewport({ ratio: 0.1 });
+  });
+
+  test('short mobile menu keeps every primary action reachable', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 568 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    await page.locator('.nav-toggle').click();
+    await expect(page.locator('#nav-links')).toHaveClass(/open/);
+
+    for (const id of NAV_SECTION_IDS) {
+      await expect(page.locator(`.nav-link[href="#${id}"]`)).toBeInViewport();
+    }
+    await expect(page.locator('.theme-toggle-btn')).toBeInViewport();
+
+    const menuDimensions = await page.locator('#nav-links').evaluate((menu) => ({
+      clientHeight: menu.clientHeight,
+      scrollHeight: menu.scrollHeight,
+    }));
+    expect(menuDimensions.scrollHeight).toBeLessThanOrEqual(menuDimensions.clientHeight);
+
+    await page.locator('.theme-toggle-btn').click();
+    await expect(page.locator('#theme-modal')).toHaveAttribute('aria-hidden', 'false');
+  });
+
+  test('short viewport hero keeps a clean transition below the primary action', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 683, height: 418 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    const cta = await page.locator('.hero-cta').boundingBox();
+    const nextSection = await page.locator('section#work').boundingBox();
+    expect(cta).not.toBeNull();
+    expect(nextSection).not.toBeNull();
+    expect((nextSection?.y ?? 0) - ((cta?.y ?? 0) + (cta?.height ?? 0))).toBeGreaterThanOrEqual(40);
+    await expect(page.locator('section#work')).toHaveCSS('border-top-width', '1px');
   });
 
   test('mobile homepage and demo navigation share control sizing without title overlap', async ({

@@ -153,7 +153,7 @@ jobs:
 
       - name: Check committed demo gallery is current
         if: matrix.project == 'readme-gallery'
-        run: git diff --exit-code -- docs/demo-gallery.md docs/assets/demo-gallery/
+        run: npm run demo-gallery:compare
 
       - name: Upload demo gallery
         if: always() && matrix.project == 'readme-gallery'

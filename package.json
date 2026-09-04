@@ -24,6 +24,7 @@
     "demo-gallery:prepare": "node scripts/demo-gallery.mjs --prepare",
     "demo-gallery:capture": "npm run demo-gallery:prepare && playwright test --project=readme-gallery --grep=complete.demo.gallery",
     "demo-gallery:check": "vitest run src/__tests__/demo-gallery.test.ts",
+    "demo-gallery:compare": "node scripts/compare-demo-gallery.mjs",
     "lhci": "lhci autorun",
     "og:capture": "node scripts/capture-og-images.mjs",
     "i18n:review": "tsx scripts/i18n-review.ts"
@@ -66,6 +67,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^5.1.0",
     "globals": "^15.14.0",
+    "jpeg-js": "^0.4.4",
     "lefthook": "^1.10.10",
     "prettier": "^3.9.5",
     "prettier-plugin-astro": "^0.14.1",
