@@ -52,6 +52,17 @@ async function prepareCapture(page: Page) {
   });
 }
 
+async function waitForStableDemo(page: Page) {
+  await expect(page.locator('astro-island[ssr]')).toHaveCount(0, { timeout: 10_000 });
+  await expect(page.locator('[data-live-status="checking"]')).toHaveCount(0, { timeout: 10_000 });
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise<void>((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+    );
+  });
+}
+
 test.beforeEach(async ({ page }) => {
   await prepareCapture(page);
 });
@@ -63,12 +74,7 @@ test.describe('complete demo gallery', () => {
       await page.goto(demo.route, { waitUntil: 'networkidle' });
       await expect(page.locator('main#main-content')).toBeVisible();
       await expect(page.locator('h1')).toHaveText(demo.title);
-      await page.evaluate(async () => {
-        await document.fonts.ready;
-        await new Promise<void>((resolve) =>
-          requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
-        );
-      });
+      await waitForStableDemo(page);
       if (demo.slug === 'par-parallel') {
         await expect
           .poll(() =>

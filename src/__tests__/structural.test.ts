@@ -146,6 +146,14 @@ describe('Portfolio presentation', () => {
     );
   });
 
+  it('waits for hydrated, settled live demos before capturing gallery images', () => {
+    const embed = read('components/demos/LiveAppEmbed.tsx');
+    const gallery = read('../e2e/readme-gallery.spec.ts');
+    expect(embed.match(/data-live-status=/g)).toHaveLength(3);
+    expect(gallery).toMatch(/astro-island\[ssr\]/);
+    expect(gallery).toMatch(/data-live-status="checking"/);
+  });
+
   it('opens the full appearance studio from the navbar control', () => {
     const toggle = read('components/ThemeToggle.astro');
     expect(toggle).toContain("new CustomEvent('open-theme-modal')");
