@@ -186,6 +186,11 @@ html[data-design='swiss'] {
   --swiss-accent: var(--accent-text);
   --swiss-signal: var(--accent-signal, var(--accent-text));
   --swiss-on-accent: var(--bg-primary);
+  --demo-panel-bg: transparent;
+  --demo-panel-border: var(--text-primary);
+  --demo-panel-radius: 0;
+  --demo-action-bg: var(--swiss-signal);
+  --demo-action-color: var(--swiss-on-accent);
 }
 
 html[data-design='swiss'][data-theme='barcelona-day'],

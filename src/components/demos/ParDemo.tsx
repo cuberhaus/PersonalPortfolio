@@ -240,6 +240,7 @@ function HeatMini({ lang }: { lang: Lang }) {
 
 function PiMini({ lang }: { lang: Lang }) {
   const t = T[lang];
+  const numberLocale = lang === 'en' ? 'en-US' : `${lang}-ES`;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const log = useDebug('demo:par');
   const [steps, setSteps] = useState(100000);
@@ -318,7 +319,7 @@ function PiMini({ lang }: { lang: Lang }) {
       <p className="par-desc">{t.piDesc}</p>
       <div className="par-controls">
         <label>
-          {t.steps}: {steps.toLocaleString()}
+          {t.steps}: {steps.toLocaleString(numberLocale)}
           <input
             type="range"
             min={100}

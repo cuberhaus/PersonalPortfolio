@@ -65,6 +65,14 @@
   --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.2);
   --border-width: 1px;
   --border-style: solid;
+
+  /* Interactive-project surfaces. Designs can reshape the shared demo
+     shell without requiring each React island to know the active design. */
+  --demo-panel-bg: var(--bg-card);
+  --demo-panel-border: var(--border-color);
+  --demo-panel-radius: var(--radius-lg);
+  --demo-action-bg: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--accent-gradient);
+  --demo-action-color: #fff;
 }
 
 html[data-theme='light'] {

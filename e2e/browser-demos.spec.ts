@@ -74,6 +74,64 @@ test.describe('DemoNav sidebar', () => {
   });
 });
 
+// ─── Shared demo workbench design ───────────────────────────────
+
+test.describe('Shared demo workbench design', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/demos/tfg-polyps', { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => {
+      localStorage.removeItem('theme');
+      localStorage.removeItem('design');
+    });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+  });
+
+  test('uses a left-aligned Swiss project identity instead of decorative gradients', async ({
+    page,
+  }) => {
+    const header = page.locator('.demo-header');
+    const title = page.locator('.demo-hdr-title');
+
+    await expect(header).toBeVisible();
+    await expect(header).toHaveCSS('text-align', 'left');
+    await expect(title).toHaveCSS('background-image', 'none');
+    await expect(title).toHaveCSS('letter-spacing', '-1.92px');
+  });
+
+  test('keeps the project shell within a compact mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(page.locator('.demo-nav-title')).toBeVisible();
+
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(overflow).toBeLessThanOrEqual(1);
+  });
+
+  test('treats status and related projects as structural bands under Swiss', async ({ page }) => {
+    const offlineStatus = page.locator('[data-live-status="offline"]');
+    await expect(offlineStatus).toBeVisible({ timeout: 5_000 });
+    await expect(offlineStatus).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(offlineStatus).toHaveCSS('border-radius', '0px');
+
+    const relatedProject = page.locator('.prevnext-card').first();
+    await relatedProject.scrollIntoViewIfNeeded();
+    await expect(relatedProject).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(relatedProject).toHaveCSS('border-radius', '0px');
+  });
+
+  test('carries Swiss surfaces and actions into the interactive island', async ({ page }) => {
+    const pipeline = page.getByText('End-to-End Pipeline', { exact: true }).locator('../..');
+    await expect(pipeline).toBeVisible();
+    await expect(pipeline).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(pipeline).toHaveCSS('border-radius', '0px');
+
+    const runButton = page.getByRole('button', { name: 'Run demo inference' });
+    await runButton.scrollIntoViewIfNeeded();
+    await expect(runButton).toHaveCSS('background-image', 'none');
+  });
+});
+
 // ─── i18n: Spanish and Catalan routes ───────────────────────────
 
 test.describe('i18n demo pages', () => {
