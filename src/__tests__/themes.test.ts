@@ -3,6 +3,7 @@ import {
   DEFAULT_DARK_THEME,
   DEFAULT_LIGHT_THEME,
   DEFAULT_THEME,
+  LIGHT_THEME_IDS,
   THEME_IDS,
   THEMES,
 } from '../lib/themes';
@@ -17,6 +18,13 @@ describe('theme registry', () => {
 
   it('keeps THEME_IDS in sync with THEMES order', () => {
     expect(THEME_IDS).toEqual(THEMES.map((theme) => theme.id));
+  });
+
+  it('derives light theme ids from the registry', () => {
+    expect(LIGHT_THEME_IDS).toEqual(
+      THEMES.filter((theme) => theme.colorScheme === 'light').map((theme) => theme.id)
+    );
+    expect(LIGHT_THEME_IDS).toContain('barcelona-day');
   });
 
   it('registers DEFAULT_THEME as a visible theme', () => {
