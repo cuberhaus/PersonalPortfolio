@@ -143,6 +143,19 @@ describe('demo-services.json ↔ scripts/dev-all-demos.sh parity', () => {
   });
 });
 
+describe('demo image Make module', () => {
+  it('keeps private image builders behind the root Makefile interface', () => {
+    const makefile = read('Makefile');
+    const buildTargets = read('scripts/demo-build-targets.mk');
+
+    expect(makefile).toContain('include scripts/demo-build-targets.mk');
+    expect(makefile).not.toContain('define build_if_changed');
+    expect(buildTargets).toContain('define build_if_changed');
+    expect(buildTargets).toContain('DEMO_TARGETS :=');
+    expect(buildTargets).toContain('_db-tfg:');
+  });
+});
+
 describe('LiveAppEmbed call sites use slug, not literal URLs', () => {
   it('every <LiveAppEmbed/> in pages/components passes a slug prop', () => {
     const offenders: string[] = [];
