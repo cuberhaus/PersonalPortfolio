@@ -3,6 +3,7 @@ import { ClientRouter } from 'astro:transitions';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import ScrollToTop from '../components/ScrollToTop.astro';
 import ThemeInit from '../components/ThemeInit.astro';
+import SiteIcons from '../components/SiteIcons.astro';
 import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
@@ -81,7 +82,7 @@ const hasCredential = certs.map((cert) => ({
       hreflang="x-default"
       href={new URL(base + '/', Astro.site || Astro.url)}
     />
-    <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
+    <SiteIcons base={base} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
