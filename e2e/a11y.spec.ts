@@ -256,6 +256,41 @@ async function runAxeOnHover(page: Page, theme: string, selector: string) {
   return { skipped: false as const, blocking };
 }
 
+test.describe('filtered collections', () => {
+  test('keeps filter and reveal state accessible for demos and certifications', async ({
+    page,
+  }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    const demoFilter = page.locator('.demo-filter-btn[data-category="ai-ml"]');
+    await demoFilter.click();
+    await expect(demoFilter).toHaveAttribute('aria-pressed', 'true');
+    const visibleDemos = page.locator('#demo-grid .demo-card:not(.hidden-demo)');
+    expect(await visibleDemos.count()).toBeGreaterThan(0);
+    expect(
+      await visibleDemos.evaluateAll((cards) =>
+        cards.every((card) => card.getAttribute('data-category') === 'ai-ml')
+      )
+    ).toBe(true);
+
+    const certificationFilter = page.locator('.cert-filter-btn[data-issuer="Microsoft"]');
+    await certificationFilter.click();
+    await expect(certificationFilter).toHaveAttribute('aria-pressed', 'true');
+    const visibleCertifications = page.locator(
+      '#certifications-grid .certification-card:not(.hidden-demo)'
+    );
+    await expect(visibleCertifications).toHaveCount(1);
+    await expect(visibleCertifications.first()).toHaveAttribute('data-issuer', 'Microsoft');
+
+    const allCertifications = page.locator('.cert-filter-btn[data-issuer="all"]');
+    await allCertifications.click();
+    const toggle = page.locator('#certifications-toggle');
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await toggle.click();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  });
+});
+
 for (const theme of ALL_THEME_IDS) {
   test.describe(`a11y [${theme}] — homepage shells`, () => {
     for (const route of HOME_ROUTES) {

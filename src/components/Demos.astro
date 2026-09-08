@@ -160,178 +160,23 @@ const { num } = Astro.props;
 </section>
 
 <script>
+  import { initializeFilteredCollection } from '../lib/filtered-collection';
+
   document.addEventListener('astro:page-load', () => {
-    const btn = document.getElementById('show-more-demos');
-    const filterBtns = document.querySelectorAll('.demo-filter-btn');
-    const announcer = document.getElementById('demo-filter-announcer');
-    let currentCategory = 'all';
-
-    if (!btn || btn.hasAttribute('data-initialized')) return;
-    btn.setAttribute('data-initialized', 'true');
-
-    const isMobile = () => window.matchMedia('(max-width: 640px)').matches;
-    const getAllCards = () => [...document.querySelectorAll('#demo-grid .demo-card')];
-    const getVisibleCards = () => {
-      if (currentCategory === 'all') return getAllCards();
-      return getAllCards().filter((c) => c.getAttribute('data-category') === currentCategory);
-    };
-
-    let mobileShown = 3;
-
-    function updateGrid() {
-      const cards = getAllCards();
-      const visibleCards = getVisibleCards();
-      const totalCount = visibleCards.length;
-
-      // Update announcer for screen readers
-      if (announcer) {
-        announcer.textContent = `Showing ${totalCount} projects`;
-      }
-
-      // Hide all cards first
-      cards.forEach((card) => {
-        card.classList.remove('visible');
-        card.classList.add('hidden-demo');
-        card.classList.remove('mobile-hidden-demo', 'mobile-extra-demo', 'extra-demo');
-      });
-
-      if (isMobile()) {
-        const end = Math.min(mobileShown, totalCount);
-        for (let i = 0; i < end; i++) {
-          visibleCards[i].classList.remove('hidden-demo');
-          visibleCards[i].classList.add('visible');
-        }
-
-        if (btn) {
-          if (mobileShown >= totalCount) {
-            btn.textContent = btn.getAttribute('data-less');
-            btn.setAttribute('aria-expanded', 'true');
-            btn.classList.add('expanded');
-            if (totalCount <= 3) btn.style.display = 'none';
-            else btn.style.display = 'inline-block';
-          } else {
-            btn.textContent = btn.getAttribute('data-more');
-            btn.setAttribute('aria-expanded', 'false');
-            btn.classList.remove('expanded');
-            btn.style.display = 'inline-block';
-          }
-        }
-      } else {
-        const isExpanded = btn?.classList.contains('expanded');
-        const limit = isExpanded ? totalCount : Math.min(6, totalCount);
-
-        for (let i = 0; i < limit; i++) {
-          visibleCards[i].classList.remove('hidden-demo');
-          visibleCards[i].classList.add('visible');
-        }
-
-        if (btn) {
-          if (totalCount <= 6) {
-            btn.style.display = 'none';
-          } else {
-            btn.style.display = 'inline-block';
-            btn.textContent = isExpanded
-              ? btn.getAttribute('data-less')
-              : btn.getAttribute('data-more');
-            btn.setAttribute('aria-expanded', String(isExpanded));
-          }
-        }
-      }
-    }
-
-    // Filter click handlers
-    filterBtns.forEach((fBtn) => {
-      fBtn.addEventListener('click', () => {
-        const cat = fBtn.getAttribute('data-category') || 'all';
-        if (cat === currentCategory) return;
-
-        currentCategory = cat;
-        mobileShown = 3; // Reset mobile count on filter change
-        if (btn) {
-          btn.classList.remove('expanded');
-          btn.setAttribute('aria-expanded', 'false');
-          btn.textContent = btn.getAttribute('data-more');
-        }
-
-        filterBtns.forEach((b) => {
-          b.classList.remove('active');
-          b.setAttribute('aria-pressed', 'false');
-        });
-        fBtn.classList.add('active');
-        fBtn.setAttribute('aria-pressed', 'true');
-
-        updateGrid();
-      });
+    initializeFilteredCollection({
+      gridId: 'demo-grid',
+      cardSelector: '.demo-card',
+      filterSelector: '.demo-filter-btn',
+      filterValueAttribute: 'data-category',
+      buttonId: 'show-more-demos',
+      announcerId: 'demo-filter-announcer',
+      sectionId: 'projects',
+      showMoreAttribute: 'data-more',
+      showLessAttribute: 'data-less',
+      itemLabel: 'projects',
+      mobileBreakpoint: 640,
+      buttonDisplay: 'inline-block',
     });
-
-    function scrollToProjects() {
-      const section = document.getElementById('projects');
-      if (section) {
-        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        section.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
-      }
-    }
-
-    if (btn) {
-      btn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        const totalCount = visibleCards.length;
-
-        if (isMobile()) {
-          if (mobileShown >= totalCount) {
-            // Collapse back to 3
-            mobileShown = 3;
-            updateGrid();
-            scrollToProjects();
-          } else {
-            // Reveal next 3
-            const start = mobileShown;
-            mobileShown = Math.min(mobileShown + 3, totalCount);
-
-            let stagger = 0;
-            for (let i = start; i < mobileShown; i++) {
-              const card = visibleCards[i];
-              card.classList.remove('hidden-demo');
-              const delay = 20 + stagger * 60;
-              setTimeout(() => card.classList.add('visible'), delay);
-              stagger++;
-            }
-
-            if (mobileShown >= totalCount) {
-              btn.textContent = btn.getAttribute('data-less');
-              btn.setAttribute('aria-expanded', 'true');
-              btn.classList.add('expanded');
-            }
-          }
-        } else {
-          // Desktop: toggle all extras at once
-          const isExpanded = btn.classList.toggle('expanded');
-          btn.setAttribute('aria-expanded', String(isExpanded));
-
-          if (isExpanded) {
-            for (let i = 6; i < totalCount; i++) {
-              const card = visibleCards[i];
-              card.classList.remove('hidden-demo');
-              setTimeout(() => card.classList.add('visible'), 20 + (i - 6) * 60);
-            }
-          } else {
-            for (let i = 6; i < totalCount; i++) {
-              const card = visibleCards[i];
-              card.classList.remove('visible');
-              setTimeout(() => card.classList.add('hidden-demo'), 400);
-            }
-            scrollToProjects();
-          }
-
-          btn.textContent = isExpanded
-            ? btn.getAttribute('data-less')
-            : btn.getAttribute('data-more');
-        }
-      });
-    }
-
-    // Initial setup
-    updateGrid();
   });
 </script>
 

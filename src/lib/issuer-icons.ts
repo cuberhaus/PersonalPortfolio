@@ -17,7 +17,7 @@
  *     glyphs that are visually distinct from the other issuers.
  *   - medal: generic fallback for any future cert without a registered logo.
  */
-export const ISSUER_ICON_PATHS: Record<string, string> = {
+const ISSUER_ICON_SVG_PATHS: Record<string, string> = {
   microsoft:
     '<path d="M11.4 24H0V12.6h11.4zM24 24H12.6V12.6H24zM11.4 11.4H0V0h11.4zm12.6 0H12.6V0H24z" fill="currentColor" stroke="none"/>',
   nvidia:
@@ -34,7 +34,24 @@ export const ISSUER_ICON_PATHS: Record<string, string> = {
   medal: '<circle cx="12" cy="9" r="6"/><path d="M8 14l-2 7 6-3 6 3-2-7"/>',
 };
 
-export function renderIssuerIconSvg(icon: string, size: number): string {
-  const inner = ISSUER_ICON_PATHS[icon] ?? ISSUER_ICON_PATHS.medal;
+export const ISSUERS = {
+  microsoft: { name: 'Microsoft', icon: 'microsoft' },
+  nvidia: { name: 'NVIDIA', icon: 'nvidia' },
+  oracle: { name: 'Oracle', icon: 'oracle' },
+  stratio: { name: 'Stratio', icon: 'stratio' },
+  'universal-robots': { name: 'Universal Robots', icon: 'universal-robots' },
+  'google-cloud': { name: 'Google Cloud', icon: 'google-cloud' },
+} as const;
+
+export type IssuerId = keyof typeof ISSUERS;
+
+export const ISSUER_ICON_PATHS: Record<string, string> = ISSUER_ICON_SVG_PATHS;
+
+export function getIssuerAttribution(issuer: IssuerId) {
+  return ISSUERS[issuer];
+}
+
+export function renderIssuerIconSvg(issuer: IssuerId, size: number): string {
+  const inner = ISSUER_ICON_PATHS[getIssuerAttribution(issuer).icon] ?? ISSUER_ICON_PATHS.medal;
   return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
 }

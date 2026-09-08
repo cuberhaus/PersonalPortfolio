@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { ICON_PATHS } from '../lib/demo-icons';
-import { ISSUER_ICON_PATHS } from '../lib/issuer-icons';
+import { ISSUERS } from '../lib/issuer-icons';
 
 const iconNames = Object.keys(ICON_PATHS) as [string, ...string[]];
-const issuerIconNames = Object.keys(ISSUER_ICON_PATHS) as [string, ...string[]];
+const issuerNames = Object.keys(ISSUERS) as [string, ...string[]];
 
 // Empty string is treated as "no link" (matches existing data conventions
 // where an unset link is sometimes serialised as `""` rather than omitted).
@@ -72,7 +72,7 @@ export const EducationFileSchema = z.array(
 );
 
 // ─── certifications.json (identity-only) ────────────────────────
-// Each entry: { name, issuer, issuerIcon, link?, fallback?, badgeImage?, badgeImageFallback? }
+// Each entry: { name, issuer, link?, fallback?, badgeImage?, badgeImageFallback? }
 
 export const CertificationsFileSchema = z
   .array(
@@ -80,8 +80,7 @@ export const CertificationsFileSchema = z
       id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
       displayOrder: z.number().int().positive(),
       name: z.string().min(1),
-      issuer: z.string().min(1),
-      issuerIcon: z.enum(issuerIconNames),
+      issuer: z.enum(issuerNames),
       link: credentialUrl.optional(),
       fallback: z.string().optional(),
       badgeImage: imageUrl.optional(),
