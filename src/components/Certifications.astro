@@ -1,32 +1,12 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIssuerIconSvg } from '../lib/issuer-icons';
-import { certifications as certsData, getTranslations } from '../data/loaders';
 import { visibleEntries } from '../data/visibility';
 import { getLocalizedCertifications } from '../lib/certifications';
 
-type CertEntry = {
-  id: string;
-  displayOrder: number;
-  name: string;
-  issuer: string;
-  issuerIcon: string;
-  issued: string;
-  link?: string;
-  fallback?: string;
-  badgeImage?: string;
-  badgeImageFallback?: string;
-  hidden?: boolean;
-};
-
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const certs = visibleEntries(
-  getLocalizedCertifications<CertEntry>(
-    certsData as CertEntry[],
-    getTranslations('certifications', lang)
-  )
-);
+const certs = visibleEntries(getLocalizedCertifications(lang));
 
 const { num } = Astro.props;
 ---

@@ -243,18 +243,17 @@ describe('Certifications data', () => {
     expect(Object.keys(certificationsEn).sort()).toEqual([...ids].sort());
     expect(Object.keys(certificationsEs).sort()).toEqual([...ids].sort());
     expect(Object.keys(certificationsCa).sort()).toEqual([...ids].sort());
+  });
 
-    const ordered = getLocalizedCertifications(
-      [
-        { id: 'second', displayOrder: 200, name: 'Second', issuer: 'Issuer', issuerIcon: 'nvidia' },
-        { id: 'first', displayOrder: 100, name: 'First', issuer: 'Issuer', issuerIcon: 'nvidia' },
-      ],
-      { first: { issued: 'First date' }, second: { issued: 'Second date' } }
+  it('projects localized certifications in curated display order', () => {
+    const localized = getLocalizedCertifications('es');
+
+    expect(localized.map((entry) => entry.displayOrder)).toEqual(
+      [...localized].map((entry) => entry.displayOrder).sort((left, right) => left - right)
     );
-    expect(ordered.map((entry) => [entry.id, entry.issued])).toEqual([
-      ['first', 'First date'],
-      ['second', 'Second date'],
-    ]);
+    expect(localized.find((entry) => entry.id === 'nvidia-accelerated-data-science')?.issued).toBe(
+      'Ago 2026'
+    );
   });
 
   it('every entry has name + issuer + issuerIcon in identity', () => {

@@ -31,6 +31,16 @@ If a guide conflicts with this file, follow the guide and update the stale rule 
 
 ## Agent skills
 
+### Issue tracker
+
+Issues and specs are tracked in GitHub Issues for `cuberhaus/PersonalPortfolio`. See [docs/agents/issue-tracker.md](docs/agents/issue-tracker.md).
+
+### Domain docs
+
+This is a single-context repository. Domain language belongs in root `CONTEXT.md`; durable decisions belong in `docs/adr/`. Both are created lazily. See [docs/agents/domain.md](docs/agents/domain.md).
+
+### Installed skills
+
 Installable third-party skills live under `.agents/skills/` (gitignored; restore with `make skills-restore`). Pinned versions are in [skills-lock.json](skills-lock.json). Project-owned workflows live under `.github/skills/` and are tracked directly.
 
 - **astro** — consult when modifying `.astro` pages, layouts, or islands hydration directives.
