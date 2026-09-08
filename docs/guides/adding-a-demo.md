@@ -543,12 +543,12 @@ is dropped — including buggy third-party iframes.
 - Pick a unique port not used by another demo. The registry test
   asserts uniqueness on the field `backend.port`.
 
-## 11. Makefile
+## 11. Demo build targets
 
-Two edits to [`PersonalPortfolio/Makefile`](../../Makefile):
+Add the demo to [`scripts/demo-build-targets.mk`](../../scripts/demo-build-targets.mk):
 
 **(a)** Add a `_db-<slug>` target, mirroring the existing `_db-tfg`,
-`_db-bitsx`, etc. (see lines ~406–453):
+`_db-bitsx`, etc.:
 
 <!-- markdownlint-disable MD010 -->
 
@@ -560,15 +560,16 @@ _db-<slug>:
 
 <!-- markdownlint-enable MD010 -->
 
-**(b)** Append the target to `DEMO_TARGETS` (Makefile line ~402) so
+**(b)** Append the target to `DEMO_TARGETS` so
 `make build` rebuilds it in parallel with the rest:
 
 ```makefile
 DEMO_TARGETS := _db-tfg _db-bitsx ... _db-grafics _db-<slug>
 ```
 
-The `.PHONY` block at the top of the file (line ~14) also lists every
-`_db-*` target — add yours there too.
+The `.PHONY` block in that file also lists every `_db-*` target — add yours
+there too. The root Makefile includes this internal module; its public
+`build-images`, `build`, and `rebuild` targets remain the stable interface.
 
 `scripts/dev-all-demos.sh` reads the registry directly, so no edit there.
 Confirm with:
@@ -653,7 +654,7 @@ To safely retire a demo, delete in order:
 4. The entry in `src/data/demos.json` (+ `.es.json` + `.ca.json`)
 5. The entry in `src/data/demo-services.json`
 6. The slug in `e2e/browser-demos.spec.ts` `ALL_SLUGS`
-7. The `_db-<slug>` Makefile target, its `DEMO_TARGETS` reference, and its `.PHONY` listing
+7. The `_db-<slug>` target in `scripts/demo-build-targets.mk`, its `DEMO_TARGETS` reference, and its `.PHONY` listing
 8. Any `e2e/<slug>.spec.ts` fixture
 9. Mention in `README.md` if the demo is featured
 
