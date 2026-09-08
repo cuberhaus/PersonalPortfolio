@@ -3,6 +3,7 @@ import DemoNav from '../components/DemoNav.astro';
 import DemoSidebar from '../components/DemoSidebar.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import ThemeInit from '../components/ThemeInit.astro';
+import SiteIcons from '../components/SiteIcons.astro';
 import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
@@ -64,7 +65,7 @@ const siteBase = Astro.site || Astro.url;
     <ThemeInit position="head" />
     <DebugInit />
 
-    <link rel="icon" type="image/svg+xml" href={base + '/favicon.svg'} />
+    <SiteIcons base={base} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
