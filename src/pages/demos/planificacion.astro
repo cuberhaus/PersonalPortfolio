@@ -2,12 +2,9 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import PlanificacionDemo from '../../components/demos/PlanificacionDemo';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import { getDemo } from '../../i18n/demo';
+import { getDemoPageContext } from '../../lib/demo-page';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const demo = getDemo('planificacion', lang);
+const { lang, t, demo } = getDemoPageContext(Astro.url, 'planificacion');
 ---
 
 <DemoLayout

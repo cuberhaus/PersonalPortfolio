@@ -84,19 +84,17 @@ One command starts everything the demos can use locally (then **Ctrl+C** tears i
 | planner-api       | 8765                    | `/demos/planificacion` Run planner | `planner-api/` (in this repo) — Python + Java 17+ |
 | **Astro**         | 4321                    | Site                               | this repo                                         |
 
-Requires **bash**, **Docker**, and **jq** (registry parser). Missing sibling repos are silently skipped. `planner-api/` ships with this project.
+Requires **bash**, **Node.js**, and **Docker**. Missing sibling repos are silently skipped. `planner-api/` ships with this project.
 
 Flags: `--skip-docker`, `--skip-planner`.
 
 > **Service registry.** The list above is generated from
 > [`src/data/demo-services.json`](src/data/demo-services.json), which is the single source of
-> truth shared by `scripts/dev-all-demos.sh`, `LiveAppEmbed.tsx` (via
-> `getIframeUrl`), the `Makefile`'s `DEMO_PORTS`, `e2e/live-demos.spec.ts`,
-> `sentry.client.config.ts` (via `listTracedBackendPorts`), the log relay
-> sidecar in `scripts/log-relay/`, the registry test, and
-> [`docs/guides/adding-a-demo.md`](docs/guides/adding-a-demo.md). The in-page debug overlay
-> (`src/lib/debug-docker.ts`) reads slug + log-relay paths only and does not
-> consume the registry. Adding or removing a demo
+> truth. `src/data/demo-services.ts` validates and projects it for browser code;
+> `scripts/demo-registry.mjs` validates and projects it for Node, Make, and shell code.
+> Those adapters feed `scripts/dev-all-demos.sh`, `LiveAppEmbed.tsx` (via `getIframeUrl`),
+> the `Makefile`'s `DEMO_PORTS`, `e2e/live-demos.spec.ts`, `sentry.client.config.ts`,
+> the log relay sidecar, the gallery, and the registry tests. Adding or removing a demo
 > means editing this JSON file plus following the onboarding checklist.
 
 **Windows:** use **WSL** or **Git Bash**, or start each stack manually.
@@ -205,6 +203,7 @@ two sections, writing a unit test), see [docs/guides/everyday-tasks.md](docs/gui
 - **Start here:** [docs/architecture/overview.md](docs/architecture/overview.md) — one-page big-picture map of the project.
 - **Guides** (how to do things): [everyday-tasks](docs/guides/everyday-tasks.md), [adding-a-demo](docs/guides/adding-a-demo.md), [i18n](docs/guides/i18n.md), [testing](docs/guides/testing.md).
 - **Architecture** (why the code looks like it does): [decisions](docs/architecture/decisions.md), [debugging-architecture](docs/architecture/debugging-architecture.md), [observability](docs/architecture/observability.md), [ui-experiments](docs/architecture/ui-experiments.md).
+- **Domain context and decisions:** [CONTEXT.md](CONTEXT.md), [ADR-0001](docs/adr/0001-validated-demo-runtime-boundaries.md).
 - **Stuck on an error?** [docs/troubleshooting.md](docs/troubleshooting.md) — searchable index of footguns and fixes.
 
 Agent note: before coding, read the guide that matches the task. Use

@@ -3,12 +3,9 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import SbcDemo from '../../components/demos/SbcDemo';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import { getDemo } from '../../i18n/demo';
+import { getDemoPageContext } from '../../lib/demo-page';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const demo = getDemo('sbc-ia', lang);
+const { lang, t, demo } = getDemoPageContext(Astro.url, 'sbc-ia');
 ---
 
 <DemoLayout

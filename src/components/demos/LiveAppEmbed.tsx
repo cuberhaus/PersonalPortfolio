@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { TRANSLATIONS } from '../../i18n/demos/live-app-embed';
-import { getIframeUrl, getRunHints } from '../../data/demo-services';
 import { debug } from '../../lib/debug';
 import { installIframeForwarder } from '../../lib/debug-iframe';
+import { getLiveAppOrigin, resolveLiveApp, startLiveAppProbe } from '../../lib/live-app-embed';
 
 const log = debug('net:embed');
 const uiLog = debug('ui:embed');
@@ -38,67 +38,53 @@ export default function LiveAppEmbed({
   lang = 'en',
   fallbackSelector,
 }: LiveAppEmbedProps) {
-  const url = useMemo(() => {
-    if (explicitUrl) return explicitUrl;
-    if (slug) {
-      const fromRegistry = getIframeUrl(slug);
-      if (fromRegistry) return fromRegistry;
-      console.warn(
-        `[LiveAppEmbed] slug="${slug}" not found or has no iframeUrl in demo-services.json`
-      );
-    }
-    return '';
-  }, [slug, explicitUrl]);
-
-  const { dockerCmd, devCmd } = useMemo(() => {
-    const registry = slug ? getRunHints(slug) : {};
-    return {
-      dockerCmd: dockerCmdProp ?? registry.dockerCmd ?? '',
-      devCmd: devCmdProp ?? registry.devCmd,
-    };
-  }, [slug, dockerCmdProp, devCmdProp]);
+  const { url, dockerCmd, devCmd } = useMemo(
+    () =>
+      resolveLiveApp({
+        slug,
+        explicitUrl,
+        dockerCmd: dockerCmdProp,
+        devCmd: devCmdProp,
+        onMissingSlug: (missingSlug) =>
+          console.warn(
+            `[LiveAppEmbed] slug="${missingSlug}" not found or has no iframeUrl in demo-services.json`
+          ),
+      }),
+    [slug, explicitUrl, dockerCmdProp, devCmdProp]
+  );
   const [status, setStatus] = useState<'checking' | 'online' | 'offline'>('checking');
   const [expanded, setExpanded] = useState(true);
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
-  const probe = useCallback(() => {
-    const ctrl = new AbortController();
-    if (!url) {
-      setStatus('offline');
-      return ctrl;
-    }
+  useEffect(() => {
     log.info('probe', { url, slug });
-    const timer = setTimeout(() => ctrl.abort(), 2000);
-    fetch(url, { mode: 'no-cors', signal: ctrl.signal })
-      .then(() => {
-        setStatus('online');
-        log.info('probe-result', { url, slug, status: 'online' });
-      })
-      .catch((err) => {
-        setStatus('offline');
-        if (err instanceof DOMException && err.name === 'AbortError') {
+    let active = true;
+    const probe = startLiveAppProbe({
+      url,
+      slug,
+      onEvent: (event) => {
+        if (event.type === 'online') {
+          log.info('probe-result', { url, slug, status: 'online' });
+        } else if (event.type === 'aborted') {
           log.warn('probe-aborted', { url, slug });
         } else {
-          log.warn('probe-failed', { url, slug, err: String(err) });
+          log.warn('probe-failed', { url, slug });
         }
-      })
-      .finally(() => clearTimeout(timer));
-    return ctrl;
+      },
+    });
+    void probe.promise.then((nextStatus) => {
+      if (active) setStatus(nextStatus);
+    });
+    return () => {
+      active = false;
+      probe.cancel();
+    };
   }, [url, slug]);
 
   useEffect(() => {
-    const ctrl = probe();
-    return () => ctrl.abort();
-  }, [probe]);
-
-  useEffect(() => {
     if (!url) return;
-    let origin: string;
-    try {
-      origin = new URL(url).origin;
-    } catch {
-      return;
-    }
+    const origin = getLiveAppOrigin(url);
+    if (!origin) return;
     installIframeForwarder({ allowedOrigins: [origin] });
   }, [url]);
 

@@ -11,10 +11,14 @@ flowchart LR
     visitor["Visitor"] --> astro["Astro 5 site<br/>(static, GH Pages)"]
     astro --> islands["React 19 islands<br/>(per-demo)"]
     astro --> registry[("demo-services.json<br/>(SSOT)")]
-    registry --> orchestrator["dev-all-demos.sh<br/>(local only)"]
-    registry --> islands
+    registry --> browserProjection["demo-services.ts<br/>(validated browser projection)"]
+    registry --> nodeProjection["demo-registry.mjs<br/>(validated Node projection)"]
+    browserProjection --> islands
+    browserProjection --> live["live-app-embed.ts<br/>(resolve + probe)"]
+    nodeProjection --> orchestrator["dev-all-demos.sh<br/>(local only)"]
+    nodeProjection --> scripts["Make / gallery / log relay"]
     orchestrator --> docker["Docker backends<br/>(sibling repos)"]
-    islands -. "iframe" .-> docker
+    live -. "iframe" .-> docker
     astro --> sentry["Sentry<br/>(errors, replay, traces)"]
     docker --> sentry
 ```
@@ -30,6 +34,7 @@ The whole thing is observable through one Sentry org.
 
 ```text
 PersonalPortfolio/
+├── CONTEXT.md              Domain glossary for demo runtime boundaries
 ├── src/
 │   ├── pages/                Astro routes
 │   │   ├── index.astro         # Homepage (the section list)
@@ -38,7 +43,7 @@ PersonalPortfolio/
 │   │   └── demos/<slug>.astro  # One per demo
 │   ├── components/           Astro layout + Swiss-design sections
 │   │   └── demos/              React islands (one per demo)
-│   ├── data/                 Source of truth JSON
+│   ├── data/                 Source of truth + validated browser projections
 │   │   ├── demo-services.json  ← orchestrator, ports, backends
 │   │   ├── demos.json          ← homepage cards (+ .es / .ca parity)
 │   │   ├── experience.json, education.json, ...
@@ -47,7 +52,10 @@ PersonalPortfolio/
 │   │   └── demos/              # Pattern C — per-feature TS modules
 │   ├── lib/                  Shared utilities
 │   │   ├── debug.ts            # Custom event bus
+│   │   ├── debug-lifecycle.ts  # Idempotent adapter activation/teardown
 │   │   ├── debug-sentry.ts     # Bus → Sentry forwarder
+│   │   ├── demo-page.ts        # Shared localized route context
+│   │   ├── live-app-embed.ts   # Registry resolution + bounded probe
 │   │   └── ...                 # Per-demo algorithms (wpgma, etc.)
 │   ├── config/
 │   │   ├── section-ids.ts      # Section order SSOT (homepage + nav)
@@ -56,7 +64,7 @@ PersonalPortfolio/
 │   └── styles/               Global CSS + theme token blocks
 ├── e2e/                      Playwright specs (9 named projects)
 ├── planner-api/              FastAPI + ENHSP (PDDL planner demo)
-├── scripts/                  Orchestrator, log relay, codemods
+├── scripts/                  Validated Node projections, orchestration, relay
 ├── public/                   Static assets (images, PDFs, mock data)
 └── docs/
     ├── guides/                 # everyday-tasks, adding-a-demo, i18n, testing
@@ -70,11 +78,11 @@ PersonalPortfolio/
 The codebase is built around three SSOTs. Editing one of these is a
 documented "everyday task"; editing things derived from them isn't.
 
-| File                                                              | Drives                                                                                                                                                                                                                                                          |
-| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [src/data/demo-services.json](../../src/data/demo-services.json)  | Orchestrator script, log-relay sidecar, `LiveAppEmbed.tsx`'s iframe URLs, Makefile `DEMO_PORTS`, Sentry traced-port list, `live-demos.spec.ts`. Adding a backend means editing this and following the [adding-a-demo.md](../guides/adding-a-demo.md) checklist. |
-| [src/data/demos.json](../../src/data/demos.json) (+ `.es`, `.ca`) | Homepage demo grid. Card title, description, accent colors, icon, github link. Schema is enforced by [demo-schema.ts](../../src/i18n/demo-schema.ts) (Zod).                                                                                                     |
-| [src/config/section-ids.ts](../../src/config/section-ids.ts)      | Homepage section order, navbar anchor order, scroll-spy targets. Numbered prefixes (`01`, `02`, …) auto-derived from `numbered: true` flags.                                                                                                                    |
+| File                                                              | Drives                                                                                                                                                                                                                                                                                               |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [src/data/demo-services.json](../../src/data/demo-services.json)  | Validated browser projection, Node projection, orchestration, log relay, `LiveAppEmbed.tsx`'s iframe URLs, Makefile `DEMO_PORTS`, Sentry traced-port list, and `live-demos.spec.ts`. Adding a backend means editing this and following the [adding-a-demo.md](../guides/adding-a-demo.md) checklist. |
+| [src/data/demos.json](../../src/data/demos.json) (+ `.es`, `.ca`) | Homepage demo grid. Card title, description, accent colors, icon, github link. Schema is enforced by [demo-schema.ts](../../src/i18n/demo-schema.ts) (Zod).                                                                                                                                          |
+| [src/config/section-ids.ts](../../src/config/section-ids.ts)      | Homepage section order, navbar anchor order, scroll-spy targets. Numbered prefixes (`01`, `02`, …) auto-derived from `numbered: true` flags.                                                                                                                                                         |
 
 The [demo-registry.test.ts](../../src/__tests__/demo-registry.test.ts) and
 [structural.test.ts](../../src/__tests__/structural.test.ts) suites police
@@ -100,11 +108,11 @@ consistency between these and everything that derives from them.
 
 ### Demo with a live backend
 
-1. Locally, `make dev-bare` reads
-   [demo-services.json](../../src/data/demo-services.json), starts each
-   listed Docker compose service on its declared port.
-2. The demo page renders `<LiveAppEmbed slug="…" />`, which derives the
-   iframe URL from the registry.
+1. Locally, `make dev-bare` asks the validated Node registry projection for
+   service rows and starts each listed Docker compose service on its declared
+   port.
+2. The demo page renders `<LiveAppEmbed slug="…" />`, which resolves and
+   probes the iframe URL through [live-app-embed.ts](../../src/lib/live-app-embed.ts).
 3. The iframe loads `http://localhost:<port>/`. On GitHub Pages it falls
    back to `<MockBanner />` because there's no backend to embed.
 4. The iframe app voluntarily emits debug events via
@@ -113,7 +121,7 @@ consistency between these and everything that derives from them.
 
 ---
 
-## The debug bus
+## The debug bus and lifecycle
 
 A single producer surface
 ([src/lib/debug.ts](../../src/lib/debug.ts)) every component logs into.
@@ -125,6 +133,11 @@ Consumers subscribe independently:
 debug(ns).info ─┼─ debug-sentry.ts → Sentry SDK
                 └─ debug-network.ts (X-Session-Id forwarder)
 ```
+
+`DebugOverlay.tsx` owns one `DebugLifecycle`. The lifecycle makes network,
+Sentry, and Docker subscriptions idempotent and generation-aware, including
+the case where an asynchronous Sentry import resolves after debug mode was
+disabled.
 
 Backend events arrive at the same Sentry org tagged with `service:<slug>`
 and the same `session_id` as the browser session, so a Sentry filter
@@ -189,6 +202,7 @@ Both persist in `localStorage` and are restored before paint by
 ## See also
 
 - [decisions.md](./decisions.md) — full decision-rationale catalogue
+- [0001-validated-demo-runtime-boundaries.md](../adr/0001-validated-demo-runtime-boundaries.md) — runtime projection and ownership decision
 - [debugging-architecture.md](./debugging-architecture.md) — debug bus +
   Sentry SDK rollout
 - [observability.md](./observability.md) — operational manual

@@ -5,6 +5,7 @@ import {
   listAllowedIframeOrigins,
   listBackedSlugs,
   listDemoServices,
+  listOrchestratedServices,
   listTracedBackendPorts,
 } from '../data/demo-services';
 
@@ -73,5 +74,20 @@ describe('demo service helpers', () => {
     expect(ports).toEqual(expected);
     expect(ports).toEqual([...ports].sort((a, b) => a - b));
     expect(new Set(ports).size).toBe(ports.length);
+  });
+
+  it('projects orchestrator configuration without exposing raw backend shape', () => {
+    const tenda = listOrchestratedServices().find((service) => service.slug === 'tenda');
+
+    expect(tenda).toMatchObject({
+      slug: 'tenda',
+      type: 'compose',
+      displayName: 'Tenda Online',
+      port: 8888,
+      extra: '',
+    });
+    expect(listOrchestratedServices().every((service) => service.displayName.length > 0)).toBe(
+      true
+    );
   });
 });

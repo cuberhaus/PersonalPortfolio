@@ -21,11 +21,15 @@ import { emitNetwork, requireEnabled } from './debug';
 import { getSessionId } from './debug-session';
 import { listAllowedIframeOrigins } from '../data/demo-services';
 
-const INSTALLED_KEY = '__debugNetworkTapInstalled';
+const STATE_KEY = '__debugNetworkTapState';
 const SESSION_HEADER = 'X-Session-Id';
 
-interface InstallFlag {
-  [INSTALLED_KEY]?: boolean;
+interface NetworkTapState {
+  uninstall: () => void;
+}
+
+interface NetworkTapWindow {
+  [STATE_KEY]?: NetworkTapState;
 }
 
 let allowedOrigins: ReadonlySet<string> | null = null;
@@ -52,15 +56,30 @@ function shouldInjectSession(url: string): boolean {
   }
 }
 
-export function installNetworkTap(): void {
-  if (typeof window === 'undefined') return;
-  if (!requireEnabled()) return;
-  const flagHolder = window as unknown as InstallFlag;
-  if (flagHolder[INSTALLED_KEY]) return;
-  flagHolder[INSTALLED_KEY] = true;
+export function installNetworkTap(): () => void {
+  if (typeof window === 'undefined' || !requireEnabled()) return () => {};
+  const stateHolder = window as unknown as NetworkTapWindow;
+  const existing = stateHolder[STATE_KEY];
+  if (existing) return existing.uninstall;
 
-  patchFetch();
-  patchXhr();
+  const restoreFetch = patchFetch();
+  const restoreXhr = patchXhr();
+  let active = true;
+  const uninstall = () => {
+    if (!active) return;
+    active = false;
+    restoreXhr();
+    restoreFetch();
+    if (stateHolder[STATE_KEY]?.uninstall === uninstall) delete stateHolder[STATE_KEY];
+    allowedOrigins = null;
+  };
+  stateHolder[STATE_KEY] = { uninstall };
+  return uninstall;
+}
+
+export function uninstallNetworkTap(): void {
+  if (typeof window === 'undefined') return;
+  (window as unknown as NetworkTapWindow)[STATE_KEY]?.uninstall();
 }
 
 function withSessionHeader(init: RequestInit | undefined, url: string): RequestInit | undefined {
@@ -72,11 +91,11 @@ function withSessionHeader(init: RequestInit | undefined, url: string): RequestI
   return { ...(init ?? {}), headers };
 }
 
-function patchFetch(): void {
-  if (typeof window.fetch !== 'function') return;
-  const original = window.fetch.bind(window);
+function patchFetch(): () => void {
+  if (typeof window.fetch !== 'function') return () => {};
+  const original = window.fetch;
 
-  window.fetch = async function patchedFetch(input, init) {
+  const patchedFetch = async function patchedFetch(input: RequestInfo | URL, init?: RequestInit) {
     const startedAt = Date.now();
     const method = (
       init?.method ?? (input instanceof Request ? input.method : 'GET')
@@ -89,7 +108,7 @@ function patchFetch(): void {
     const finalInit = withSessionHeader(init, url);
 
     try {
-      const res = await original(input as RequestInfo, finalInit);
+      const res = await original.call(window, input, finalInit);
       emitNetwork({
         method,
         url,
@@ -114,21 +133,27 @@ function patchFetch(): void {
       throw err;
     }
   };
+  window.fetch = patchedFetch;
+  return () => {
+    if (window.fetch === patchedFetch) window.fetch = original;
+  };
 }
 
 type XhrWithMeta = XMLHttpRequest & {
   __debugMethod?: string;
   __debugUrl?: string;
   __debugStartedAt?: number;
+  __debugCleanup?: () => void;
 };
 
-function patchXhr(): void {
-  if (typeof XMLHttpRequest === 'undefined') return;
+function patchXhr(): () => void {
+  if (typeof XMLHttpRequest === 'undefined') return () => {};
   const proto = XMLHttpRequest.prototype;
   const originalOpen = proto.open;
   const originalSend = proto.send;
+  const activeCleanups = new Set<() => void>();
 
-  proto.open = function patchedOpen(
+  const patchedOpen = function patchedOpen(
     this: XhrWithMeta,
     method: string,
     url: string | URL,
@@ -138,8 +163,10 @@ function patchXhr(): void {
     this.__debugUrl = String(url);
     return (originalOpen as (...a: unknown[]) => void).call(this, method, url, ...rest);
   } as typeof proto.open;
+  proto.open = patchedOpen;
 
-  proto.send = function patchedSend(this: XhrWithMeta, ...args: unknown[]) {
+  const patchedSend = function patchedSend(this: XhrWithMeta, ...args: unknown[]) {
+    xhrCleanup(this);
     this.__debugStartedAt = Date.now();
     // eslint-disable-next-line @typescript-eslint/no-this-alias -- closure captures `this` for the addEventListener callbacks below
     const xhr = this;
@@ -151,7 +178,12 @@ function patchXhr(): void {
         // header name — the patch is best-effort.
       }
     }
+    let finished = false;
+    let cleanup = () => {};
     const finish = (status: number, ok: boolean, errorMsg?: string) => {
+      if (finished) return;
+      finished = true;
+      cleanup();
       emitNetwork({
         method: xhr.__debugMethod ?? 'GET',
         url: xhr.__debugUrl ?? '',
@@ -163,9 +195,37 @@ function patchXhr(): void {
         error: errorMsg,
       });
     };
-    xhr.addEventListener('load', () => finish(xhr.status, xhr.status >= 200 && xhr.status < 400));
-    xhr.addEventListener('error', () => finish(0, false, 'network error'));
-    xhr.addEventListener('abort', () => finish(0, false, 'aborted'));
-    return (originalSend as (...a: unknown[]) => void).apply(xhr, args);
+    const onLoad = () => finish(xhr.status, xhr.status >= 200 && xhr.status < 400);
+    const onError = () => finish(0, false, 'network error');
+    const onAbort = () => finish(0, false, 'aborted');
+    cleanup = () => {
+      xhr.removeEventListener('load', onLoad);
+      xhr.removeEventListener('error', onError);
+      xhr.removeEventListener('abort', onAbort);
+      activeCleanups.delete(cleanup);
+      if (xhr.__debugCleanup === cleanup) delete xhr.__debugCleanup;
+    };
+    xhr.__debugCleanup = cleanup;
+    activeCleanups.add(cleanup);
+    xhr.addEventListener('load', onLoad);
+    xhr.addEventListener('error', onError);
+    xhr.addEventListener('abort', onAbort);
+    try {
+      return (originalSend as (...a: unknown[]) => void).apply(xhr, args);
+    } catch (error) {
+      cleanup();
+      throw error;
+    }
   } as typeof proto.send;
+  proto.send = patchedSend;
+
+  return () => {
+    for (const cleanup of activeCleanups) cleanup();
+    if (proto.open === patchedOpen) proto.open = originalOpen;
+    if (proto.send === patchedSend) proto.send = originalSend;
+  };
+}
+
+function xhrCleanup(xhr: XhrWithMeta): void {
+  xhr.__debugCleanup?.();
 }

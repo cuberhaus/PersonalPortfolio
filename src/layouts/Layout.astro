@@ -232,18 +232,6 @@ const hasCredential = certs.map((cert) => ({
         } catch {}
       });
     </script>
-
-    <script>
-      // Open SSE streams from the dev-only log relay for every visible
-      // [data-demo-slug] element on the page. Production builds never
-      // open these connections (requireEnabled() inside subscribeAllVisible).
-      document.addEventListener('astro:page-load', async () => {
-        try {
-          const mod = await import('../lib/debug-docker');
-          mod.subscribeAllVisible();
-        } catch {}
-      });
-    </script>
   </body>
 </html>
 

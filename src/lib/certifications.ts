@@ -7,7 +7,7 @@ export type Certification = {
   displayOrder: number;
   name: string;
   issuer: string;
-  issuerIcon: string;
+  issuerIcon: IssuerId;
   issued: string;
   link?: string;
   fallback?: string;

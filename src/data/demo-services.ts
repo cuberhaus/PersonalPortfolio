@@ -1,57 +1,74 @@
 import registry from './demo-services.json' with { type: 'json' };
+import { z } from 'zod';
 
-export type BackendStack =
-  | 'fastapi'
-  | 'django'
-  | 'flask'
-  | 'spring'
-  | 'sveltekit'
-  | 'qwik'
-  | 'ember'
-  | 'rust'
-  | 'go'
-  | 'php'
-  | 'node';
+const BACKEND_STACKS = [
+  'fastapi',
+  'django',
+  'flask',
+  'spring',
+  'sveltekit',
+  'qwik',
+  'ember',
+  'rust',
+  'go',
+  'php',
+  'node',
+] as const;
 
-export interface DemoBackend {
-  container: string | null;
+const orchestratorSchema = z.object({
+  displayName: z.string().min(1),
+  type: z.enum(['compose', 'run', 'process']),
+  extra: z.string(),
+  image: z.string().optional(),
+});
+
+const backendSchema = z.object({
+  container: z.string().nullable(),
+  port: z.number().int().positive(),
+  extraPorts: z.array(z.number().int().positive()).optional(),
+  iframeUrl: z.string().nullable(),
+  composeFile: z.string().nullable(),
+  makefile: z.string().nullable(),
+  stack: z.enum(BACKEND_STACKS),
+  needsSentry: z.boolean(),
+  notes: z.string().optional(),
+  dockerCmd: z.string().optional(),
+  devCmd: z.string().optional(),
+  orchestrator: orchestratorSchema.optional(),
+});
+
+const serviceSchema = z.object({
+  slug: z.string().min(1),
+  page: z.string().nullable(),
+  component: z.string().nullable(),
+  hasBackend: z.boolean(),
+  backend: backendSchema.optional(),
+});
+
+const registrySchema = z.object({
+  version: z.number().int().nonnegative(),
+  services: z.array(serviceSchema),
+});
+
+export type BackendStack = (typeof BACKEND_STACKS)[number];
+export type DemoOrchestrator = z.infer<typeof orchestratorSchema>;
+export type DemoBackend = z.infer<typeof backendSchema>;
+export type DemoService = z.infer<typeof serviceSchema>;
+export type DemoServiceRegistry = z.infer<typeof registrySchema>;
+
+const REGISTRY = registrySchema.parse(registry);
+
+export interface OrchestratedDemoService {
+  slug: string;
   port: number;
-  /**
-   * Additional host ports that the backend binds to but doesn't surface as
-   * the iframe URL — e.g. Draculin's Django API on :8889 alongside the
-   * Flutter UI nginx on :8890. Included by `listAllBackendPorts()` so the
-   * Makefile's `free-ports` target sees every port the backend can occupy.
-   */
-  extraPorts?: number[];
-  iframeUrl: string | null;
+  type: DemoOrchestrator['type'];
+  displayName: string;
+  extra: string;
+  image?: string;
   composeFile: string | null;
   makefile: string | null;
-  stack: BackendStack;
-  needsSentry: boolean;
-  notes?: string;
-  /**
-   * Hint strings rendered by `<LiveAppEmbed>` when the backend isn't
-   * reachable. The component falls back to these defaults when the page
-   * doesn't pass `dockerCmd` / `devCmd` props explicitly.
-   */
-  dockerCmd?: string;
-  devCmd?: string;
+  container: string | null;
 }
-
-export interface DemoService {
-  slug: string;
-  page: string | null;
-  component: string | null;
-  hasBackend: boolean;
-  backend?: DemoBackend;
-}
-
-export interface DemoServiceRegistry {
-  version: number;
-  services: DemoService[];
-}
-
-const REGISTRY = registry as unknown as DemoServiceRegistry;
 
 export function listDemoServices(): readonly DemoService[] {
   return REGISTRY.services;
@@ -78,6 +95,27 @@ export function getRunHints(slug: string): { dockerCmd?: string; devCmd?: string
     dockerCmd: backend.dockerCmd,
     devCmd: backend.devCmd,
   };
+}
+
+export function listOrchestratedServices(): readonly OrchestratedDemoService[] {
+  return REGISTRY.services.flatMap((service) => {
+    const backend = service.backend;
+    const orchestrator = backend?.orchestrator;
+    if (!backend || !service.hasBackend || !orchestrator) return [];
+    return [
+      {
+        slug: service.slug,
+        port: backend.port,
+        type: orchestrator.type,
+        displayName: orchestrator.displayName,
+        extra: orchestrator.extra,
+        image: orchestrator.image,
+        composeFile: backend.composeFile,
+        makefile: backend.makefile,
+        container: backend.container,
+      },
+    ];
+  });
 }
 
 export function listBackedSlugs(): readonly string[] {
@@ -147,9 +185,7 @@ export function listLivePortfolioBackends(): readonly {
     if (!svc.hasBackend || !svc.page) continue;
     const port = svc.backend?.port;
     const iframeUrl = svc.backend?.iframeUrl;
-    const displayName =
-      (svc.backend as { orchestrator?: { displayName?: string } } | undefined)?.orchestrator
-        ?.displayName ?? svc.slug;
+    const displayName = svc.backend?.orchestrator?.displayName ?? svc.slug;
     if (typeof port !== 'number' || !iframeUrl) continue;
     out.push({ slug: svc.slug, port, iframeUrl, displayName });
   }

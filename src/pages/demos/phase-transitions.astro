@@ -3,12 +3,9 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import PhaseTransitionsDemo from '../../components/demos/PhaseTransitionsDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import { getDemo } from '../../i18n/demo';
+import { getDemoPageContext } from '../../lib/demo-page';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const demo = getDemo('phase-transitions', lang);
+const { lang, t, demo } = getDemoPageContext(Astro.url, 'phase-transitions');
 ---
 
 <DemoLayout

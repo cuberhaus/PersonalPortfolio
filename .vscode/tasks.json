@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "focused-architecture-vitest-capture",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"npx vitest run src/__tests__/live-app-orchestration.test.ts src/__tests__/debug-lifecycle.test.ts src/__tests__/debug-network.test.ts src/__tests__/demo-services.test.ts src/__tests__/demo-registry.test.ts src/__tests__/demo-registry-adapter.test.ts src/__tests__/demo-page.test.ts > /tmp/personalportfolio-task-vitest.log 2>&1; printf '%s\\n' $? > /tmp/personalportfolio-task-vitest.exit"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}

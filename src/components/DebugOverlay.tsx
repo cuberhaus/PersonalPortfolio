@@ -24,6 +24,7 @@ import {
   type DebugLevel,
   type DebugSource,
 } from '../lib/debug';
+import { createDebugLifecycle, type DebugLifecycle } from '../lib/debug-lifecycle';
 
 type Tab = 'logs' | 'state' | 'perf' | 'network';
 
@@ -65,6 +66,7 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
   const [minLevel, setMinLevelState] = useState<DebugLevel>('trace');
   const [sourceFilter, setSourceFilter] = useState<Set<DebugSource>>(() => new Set(SOURCES_ORDER));
   const fpsFrameRef = useRef<number>(0);
+  const debugLifecycleRef = useRef<DebugLifecycle | null>(null);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -81,19 +83,32 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
   // CustomEvent above is the single source of truth that updates this state.
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      debugLifecycleRef.current?.disable();
+      debugLifecycleRef.current = null;
+      return;
+    }
     let cancelled = false;
-    void (async () => {
-      const [{ installNetworkTap }, { installSentryForwarder }] = await Promise.all([
-        import('../lib/debug-network'),
-        import('../lib/debug-sentry'),
-      ]);
+    void Promise.all([
+      import('../lib/debug-network'),
+      import('../lib/debug-sentry'),
+      import('../lib/debug-docker'),
+    ]).then(([network, sentry, docker]) => {
       if (cancelled) return;
-      installNetworkTap();
-      void installSentryForwarder();
-    })();
+      const lifecycle = createDebugLifecycle({
+        installNetworkTap: network.installNetworkTap,
+        installSentryForwarder: sentry.installSentryForwarder,
+        uninstallSentryForwarder: sentry.uninstallSentryForwarder,
+        subscribeAllVisible: docker.subscribeAllVisible,
+        unsubscribeAll: docker.unsubscribeAll,
+      });
+      debugLifecycleRef.current = lifecycle;
+      void lifecycle.enable();
+    });
     return () => {
       cancelled = true;
+      debugLifecycleRef.current?.disable();
+      debugLifecycleRef.current = null;
     };
   }, [enabled]);
 

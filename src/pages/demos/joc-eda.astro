@@ -2,14 +2,11 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import { getDemo } from '../../i18n/demo';
+import { getDemoPageContext } from '../../lib/demo-page';
 import { getJocEdaCopy } from '../../i18n/demos/joc-eda-page';
 
-const lang = getLangFromUrl(Astro.url);
-const demo = getDemo('joc-eda', lang);
+const { lang, t, demo } = getDemoPageContext(Astro.url, 'joc-eda');
 const tr = getJocEdaCopy(lang);
-const t = useTranslations(lang);
 ---
 
 <DemoLayout

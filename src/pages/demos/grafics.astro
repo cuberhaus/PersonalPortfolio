@@ -3,12 +3,9 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import GraficsDemo from '../../components/demos/GraficsDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import { getDemo } from '../../i18n/demo';
+import { getDemoPageContext } from '../../lib/demo-page';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const demo = getDemo('grafics', lang);
+const { lang, t, demo } = getDemoPageContext(Astro.url, 'grafics');
 ---
 
 <DemoLayout

@@ -21,12 +21,7 @@
 
 import http from 'node:http';
 import { spawn } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const REGISTRY_PATH = resolve(__dirname, '..', '..', 'src', 'data', 'demo-services.json');
+import { listBackedServices } from '../demo-registry.mjs';
 
 const ALLOWED_ORIGINS = ['http://localhost:4321', 'http://127.0.0.1:4321'];
 
@@ -34,25 +29,12 @@ const argv = process.argv.slice(2);
 const portArgIdx = argv.indexOf('--port');
 const PORT = portArgIdx >= 0 ? parseInt(argv[portArgIdx + 1], 10) : 9999;
 
-function loadRegistry() {
-  try {
-    const raw = readFileSync(REGISTRY_PATH, 'utf8');
-    return JSON.parse(raw);
-  } catch (err) {
-    console.error('[log-relay] failed to load registry:', err.message);
-    return { services: [] };
-  }
-}
-
 function backedSlugs() {
-  const reg = loadRegistry();
-  const out = [];
-  for (const s of reg.services) {
-    if (s.hasBackend && s.backend?.container) {
-      out.push({ slug: s.slug, container: s.backend.container, stack: s.backend.stack });
-    }
-  }
-  return out;
+  return listBackedServices().map((service) => ({
+    slug: service.slug,
+    container: service.backend.container,
+    stack: service.backend.stack,
+  }));
 }
 
 function applyCors(req, res) {
