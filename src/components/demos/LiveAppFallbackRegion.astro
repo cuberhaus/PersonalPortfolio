@@ -1,0 +1,14 @@
+<div data-live-app-region>
+  <slot name="embed" />
+  <div data-live-app-fallback>
+    <slot name="fallback" />
+  </div>
+</div>
+
+<script>
+  import { initializeLiveAppFallbackRegions } from '../../lib/live-app-fallback';
+
+  const initialize = () => initializeLiveAppFallbackRegions();
+  initialize();
+  document.addEventListener('astro:page-load', initialize);
+</script>

@@ -37,7 +37,8 @@ describe('backend log processor', () => {
       'warn',
       'demo:tenda:backend:worker',
       'started',
-      []
+      [],
+      0
     );
     expect(emit).toHaveBeenNthCalledWith(
       2,
@@ -46,7 +47,8 @@ describe('backend log processor', () => {
       'error',
       'demo:tenda:backend:db',
       'failed',
-      []
+      [],
+      0
     );
     expect(emit).toHaveBeenCalledTimes(2);
   });
@@ -77,7 +79,8 @@ describe('backend log processor', () => {
       'info',
       'demo:tenda:backend:worker',
       'after-reset',
-      []
+      [],
+      1000
     );
   });
 });

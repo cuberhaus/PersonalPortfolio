@@ -213,7 +213,8 @@ export function emitFrom(
   level: DebugLevel,
   ns: string,
   msg: string,
-  args: unknown[]
+  args: unknown[],
+  timestamp?: number
 ): void {
   const state = getState();
 
@@ -226,7 +227,7 @@ export function emitFrom(
     level,
     msg,
     args,
-    ts: Date.now(),
+    ts: timestamp ?? Date.now(),
     err: errArg,
     source,
     origin,

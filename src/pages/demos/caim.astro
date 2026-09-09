@@ -3,6 +3,7 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import CAIMDemo from '../../components/demos/CAIMDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
 import { getDemoPageContext } from '../../lib/demo-page';
 
 const { lang, t, demo } = getDemoPageContext(Astro.url, 'caim');
@@ -24,15 +25,11 @@ const { lang, t, demo } = getDemoPageContext(Astro.url, 'caim');
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="caim"
-      title="CAIM IR Explorer"
-      lang={lang}
-      fallbackSelector=".caim-mock"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed slot="embed" slug="caim" title="CAIM IR Explorer" lang={lang} client:load />
 
-    <CAIMDemo lang={lang} client:visible />
+      <CAIMDemo slot="fallback" lang={lang} client:visible />
+    </LiveAppFallbackRegion>
 
     <div class="demo-info">
       <h3>{demo.aboutTitle}</h3>

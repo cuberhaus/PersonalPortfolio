@@ -1,19 +1,7 @@
-import { emitFrom, type DebugLevel } from './debug';
-
-const VALID_LEVELS: ReadonlySet<DebugLevel> = new Set<DebugLevel>([
-  'trace',
-  'info',
-  'warn',
-  'error',
-]);
+import { emitFrom } from './debug';
+import { normalizeDebugEvent } from './debug-event.mjs';
 
 const DEFAULT_RATE_LIMIT = 100;
-
-interface RelayPayload {
-  level: DebugLevel;
-  ns: string;
-  msg: string;
-}
 
 export interface BackendLogProcessor {
   handle: (data: unknown) => void;
@@ -25,27 +13,6 @@ export interface BackendLogProcessorOptions {
   limit?: number;
   now?: () => number;
   emit?: typeof emitFrom;
-}
-
-function parseRelayPayload(data: unknown): RelayPayload | null {
-  let value: unknown = data;
-  if (typeof data === 'string') {
-    try {
-      value = JSON.parse(data);
-    } catch {
-      return null;
-    }
-  }
-  if (typeof value !== 'object' || value === null) return null;
-
-  const payload = value as Record<string, unknown>;
-  const level =
-    typeof payload.level === 'string' && VALID_LEVELS.has(payload.level as DebugLevel)
-      ? (payload.level as DebugLevel)
-      : 'info';
-  const ns = typeof payload.ns === 'string' ? payload.ns : '';
-  const msg = typeof payload.msg === 'string' ? payload.msg : '';
-  return { level, ns, msg };
 }
 
 export function createBackendLogProcessor({
@@ -71,8 +38,15 @@ export function createBackendLogProcessor({
   };
 
   const handle = (data: unknown) => {
-    const payload = parseRelayPayload(data);
-    if (!payload) return;
+    const event = normalizeDebugEvent(data, {
+      source: 'backend',
+      origin: slug,
+      namespacePrefix: `demo:${slug}:backend`,
+      defaultNamespace: `demo:${slug}:backend`,
+      requireMessage: true,
+      now,
+    });
+    if (!event) return;
 
     const timestamp = now();
     resetBucketIfNeeded(timestamp);
@@ -82,13 +56,7 @@ export function createBackendLogProcessor({
     }
     remaining--;
 
-    const ns =
-      payload.ns.length > 0
-        ? payload.ns.startsWith('demo:')
-          ? payload.ns
-          : `demo:${slug}:backend:${payload.ns}`
-        : `demo:${slug}:backend`;
-    emit('backend', slug, payload.level, ns, payload.msg, []);
+    emit(event.source, event.origin, event.level, event.ns, event.msg, event.args, event.ts);
   };
 
   return { handle, flush };

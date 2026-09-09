@@ -2,6 +2,7 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
 import { getDemoPageContext } from '../../lib/demo-page';
 import { getPropCopy } from '../../i18n/demos/prop-page';
 
@@ -25,211 +26,103 @@ const tr = getPropCopy(lang);
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="prop"
-      title="PROP Recommendation System"
-      lang={lang}
-      fallbackSelector="#prop-mock-fallback"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed
+        slot="embed"
+        slug="prop"
+        title="PROP Recommendation System"
+        lang={lang}
+        client:load
+      />
 
-    <div id="prop-mock-fallback" class="demo-local-section">
-      <div class="demo-local-header" style="justify-content: space-between;">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <h3>{tr.demoUnavail}</h3>
+      <div slot="fallback" id="prop-mock-fallback" class="demo-local-section">
+        <div class="demo-local-header" style="justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <h3>{tr.demoUnavail}</h3>
+          </div>
+          <span class="badge" style="margin: 0; font-size: 0.65rem;">Interactive Mock</span>
         </div>
-        <span class="badge" style="margin: 0; font-size: 0.65rem;">Interactive Mock</span>
-      </div>
-      <div class="mock-browser">
-        <div class="mock-nav">
-          <div class="mock-nav-brand">{tr.mockNavBrand}</div>
-          <div class="mock-nav-links">
-            <button class="mock-nav-link active" data-mock-tab="home">{tr.mockNavHome}</button>
-            <button class="mock-nav-link" data-mock-tab="types">{tr.mockNavTypes}</button>
-            <button class="mock-nav-link" data-mock-tab="items">{tr.mockNavItems}</button>
-            <button class="mock-nav-link" data-mock-tab="users">{tr.mockNavUsers}</button>
-            <button class="mock-nav-link" data-mock-tab="ratings">{tr.mockNavRatings}</button>
-            <button class="mock-nav-link" data-mock-tab="recs">{tr.mockNavRecs}</button>
-          </div>
-        </div>
-        <div class="mock-content">
-          <div class="mock-tab-content active" id="mock-home">
-            <h2 class="mock-page-title">{tr.mockDashTitle}</h2>
-            <div class="mock-alert">
-              <strong>Hint:</strong>
-              {tr.mockHint}
-            </div>
-            <div class="mock-dashboard-grid">
-              <div class="mock-card">
-                <div class="mock-card-title">{tr.mockDashType}</div>
-                <div class="mock-card-value text-accent">Films</div>
-              </div>
-              <div class="mock-card">
-                <div class="mock-card-title">{tr.mockDashUsers}</div>
-                <div class="mock-card-value">2</div>
-              </div>
-              <div class="mock-card">
-                <div class="mock-card-title">{tr.mockDashItems}</div>
-                <div class="mock-card-value">250</div>
-              </div>
-              <div class="mock-card">
-                <div class="mock-card-title">{tr.mockDashRatings}</div>
-                <div class="mock-card-value">878</div>
-              </div>
-            </div>
-            <div class="mock-card mock-session-card">
-              <div class="mock-card-title">{tr.mockDashSession}</div>
-              <div class="mock-card-value text-success">{tr.mockSessionActive}</div>
+        <div class="mock-browser">
+          <div class="mock-nav">
+            <div class="mock-nav-brand">{tr.mockNavBrand}</div>
+            <div class="mock-nav-links">
+              <button class="mock-nav-link active" data-mock-tab="home">{tr.mockNavHome}</button>
+              <button class="mock-nav-link" data-mock-tab="types">{tr.mockNavTypes}</button>
+              <button class="mock-nav-link" data-mock-tab="items">{tr.mockNavItems}</button>
+              <button class="mock-nav-link" data-mock-tab="users">{tr.mockNavUsers}</button>
+              <button class="mock-nav-link" data-mock-tab="ratings">{tr.mockNavRatings}</button>
+              <button class="mock-nav-link" data-mock-tab="recs">{tr.mockNavRecs}</button>
             </div>
           </div>
+          <div class="mock-content">
+            <div class="mock-tab-content active" id="mock-home">
+              <h2 class="mock-page-title">{tr.mockDashTitle}</h2>
+              <div class="mock-alert">
+                <strong>Hint:</strong>
+                {tr.mockHint}
+              </div>
+              <div class="mock-dashboard-grid">
+                <div class="mock-card">
+                  <div class="mock-card-title">{tr.mockDashType}</div>
+                  <div class="mock-card-value text-accent">Films</div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card-title">{tr.mockDashUsers}</div>
+                  <div class="mock-card-value">2</div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card-title">{tr.mockDashItems}</div>
+                  <div class="mock-card-value">250</div>
+                </div>
+                <div class="mock-card">
+                  <div class="mock-card-title">{tr.mockDashRatings}</div>
+                  <div class="mock-card-value">878</div>
+                </div>
+              </div>
+              <div class="mock-card mock-session-card">
+                <div class="mock-card-title">{tr.mockDashSession}</div>
+                <div class="mock-card-value text-success">{tr.mockSessionActive}</div>
+              </div>
+            </div>
 
-          <div class="mock-tab-content" id="mock-types">
-            <h2 class="mock-page-title">{tr.mockNavTypes}</h2>
-            <div class="mock-card">
-              <table class="mock-table">
-                <thead>
-                  <tr>
-                    <th>Nom</th>
-                    <th>Accions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Films</td>
-                    <td>
-                      <button
-                        class="mock-btn mock-btn-outline"
-                        onclick="alert('In the live demo, this selects the dataset.')"
-                        >Selecciona</button
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Books</td>
-                    <td>
-                      <button
-                        class="mock-btn mock-btn-outline"
-                        onclick="alert('In the live demo, this selects the dataset.')"
-                        >Selecciona</button
-                      >
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="mock-tab-content" id="mock-items">
-            <h2 class="mock-page-title">{tr.mockNavItems}</h2>
-            <div class="mock-card">
-              <div class="mock-table-responsive">
+            <div class="mock-tab-content" id="mock-types">
+              <h2 class="mock-page-title">{tr.mockNavTypes}</h2>
+              <div class="mock-card">
                 <table class="mock-table">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Title</th>
-                      <th>Director</th>
-                      <th>Genre</th>
+                      <th>Nom</th>
+                      <th>Accions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>101</td>
-                      <td>Inception</td>
-                      <td>Nolan</td>
-                      <td>Sci-Fi</td>
+                      <td>Films</td>
+                      <td>
+                        <button
+                          class="mock-btn mock-btn-outline"
+                          onclick="alert('In the live demo, this selects the dataset.')"
+                          >Selecciona</button
+                        >
+                      </td>
                     </tr>
                     <tr>
-                      <td>102</td>
-                      <td>Interstellar</td>
-                      <td>Nolan</td>
-                      <td>Sci-Fi</td>
-                    </tr>
-                    <tr>
-                      <td>103</td>
-                      <td>The Godfather</td>
-                      <td>Coppola</td>
-                      <td>Crime</td>
+                      <td>Books</td>
+                      <td>
+                        <button
+                          class="mock-btn mock-btn-outline"
+                          onclick="alert('In the live demo, this selects the dataset.')"
+                          >Selecciona</button
+                        >
+                      </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-          </div>
 
-          <div class="mock-tab-content" id="mock-users">
-            <h2 class="mock-page-title">{tr.mockNavUsers}</h2>
-            <div class="mock-card">
-              <table class="mock-table">
-                <thead>
-                  <tr>
-                    <th>Nom</th>
-                    <th>ID</th>
-                    <th>Actiu</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>admin</td>
-                    <td>1</td>
-                    <td>true</td>
-                  </tr>
-                  <tr>
-                    <td>test_user</td>
-                    <td>2</td>
-                    <td>true</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="mock-tab-content" id="mock-ratings">
-            <h2 class="mock-page-title">{tr.mockNavRatings}</h2>
-            <div class="mock-card">
-              <table class="mock-table">
-                <thead>
-                  <tr>
-                    <th>Usuari</th>
-                    <th>Ítem</th>
-                    <th>Valoració</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>101</td>
-                    <td>5.0</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>102</td>
-                    <td>4.5</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="mock-tab-content" id="mock-recs">
-            <h2 class="mock-page-title">{tr.mockNavRecs}</h2>
-            <div class="mock-recs-grid">
-              <div class="mock-card">
-                <h3 style="margin-top: 0; font-size: 1rem; margin-bottom: 1rem; color: #fff;">
-                  Mètode de recomanació
-                </h3>
-                <select class="mock-select" style="margin-bottom: 1rem;">
-                  <option>Collaborative</option>
-                  <option>Content Based</option>
-                  <option>Hybrid</option>
-                </select>
-                <button
-                  class="mock-btn mock-btn-primary"
-                  style="width: 100%;"
-                  onclick="alert('In the live demo, this computes recommendations based on your profile.')"
-                  >Obté recomanació</button
-                >
-              </div>
+            <div class="mock-tab-content" id="mock-items">
+              <h2 class="mock-page-title">{tr.mockNavItems}</h2>
               <div class="mock-card">
                 <div class="mock-table-responsive">
                   <table class="mock-table">
@@ -237,29 +130,139 @@ const tr = getPropCopy(lang);
                       <tr>
                         <th>ID</th>
                         <th>Title</th>
+                        <th>Director</th>
                         <th>Genre</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>104</td>
-                        <td>Pulp Fiction</td>
-                        <td>Crime</td>
+                        <td>101</td>
+                        <td>Inception</td>
+                        <td>Nolan</td>
+                        <td>Sci-Fi</td>
                       </tr>
                       <tr>
-                        <td>105</td>
-                        <td>Spirited Away</td>
-                        <td>Animation</td>
+                        <td>102</td>
+                        <td>Interstellar</td>
+                        <td>Nolan</td>
+                        <td>Sci-Fi</td>
+                      </tr>
+                      <tr>
+                        <td>103</td>
+                        <td>The Godfather</td>
+                        <td>Coppola</td>
+                        <td>Crime</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
+
+            <div class="mock-tab-content" id="mock-users">
+              <h2 class="mock-page-title">{tr.mockNavUsers}</h2>
+              <div class="mock-card">
+                <table class="mock-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>ID</th>
+                      <th>Actiu</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>admin</td>
+                      <td>1</td>
+                      <td>true</td>
+                    </tr>
+                    <tr>
+                      <td>test_user</td>
+                      <td>2</td>
+                      <td>true</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="mock-tab-content" id="mock-ratings">
+              <h2 class="mock-page-title">{tr.mockNavRatings}</h2>
+              <div class="mock-card">
+                <table class="mock-table">
+                  <thead>
+                    <tr>
+                      <th>Usuari</th>
+                      <th>Ítem</th>
+                      <th>Valoració</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>101</td>
+                      <td>5.0</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>102</td>
+                      <td>4.5</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="mock-tab-content" id="mock-recs">
+              <h2 class="mock-page-title">{tr.mockNavRecs}</h2>
+              <div class="mock-recs-grid">
+                <div class="mock-card">
+                  <h3 style="margin-top: 0; font-size: 1rem; margin-bottom: 1rem; color: #fff;">
+                    Mètode de recomanació
+                  </h3>
+                  <select class="mock-select" style="margin-bottom: 1rem;">
+                    <option>Collaborative</option>
+                    <option>Content Based</option>
+                    <option>Hybrid</option>
+                  </select>
+                  <button
+                    class="mock-btn mock-btn-primary"
+                    style="width: 100%;"
+                    onclick="alert('In the live demo, this computes recommendations based on your profile.')"
+                    >Obté recomanació</button
+                  >
+                </div>
+                <div class="mock-card">
+                  <div class="mock-table-responsive">
+                    <table class="mock-table">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Title</th>
+                          <th>Genre</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>104</td>
+                          <td>Pulp Fiction</td>
+                          <td>Crime</td>
+                        </tr>
+                        <tr>
+                          <td>105</td>
+                          <td>Spirited Away</td>
+                          <td>Animation</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </LiveAppFallbackRegion>
   </div>
 
   <div class="demo-info">

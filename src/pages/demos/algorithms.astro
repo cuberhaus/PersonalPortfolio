@@ -3,6 +3,7 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import FibDemo from '../../components/demos/FibDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
 import { getDemoPageContext } from '../../lib/demo-page';
 
 const { lang, t, demo } = getDemoPageContext(Astro.url, 'algorithms');
@@ -24,16 +25,18 @@ const { lang, t, demo } = getDemoPageContext(Astro.url, 'algorithms');
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="algorithms"
-      title="Algorithm Visualizer"
-      lang={lang}
-      fallbackSelector="#fib-mock-fallback"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed
+        slot="embed"
+        slug="algorithms"
+        title="Algorithm Visualizer"
+        lang={lang}
+        client:load
+      />
 
-    <div id="fib-mock-fallback">
-      <FibDemo lang={lang} client:visible />
-    </div>
+      <div slot="fallback" id="fib-mock-fallback">
+        <FibDemo lang={lang} client:visible />
+      </div>
+    </LiveAppFallbackRegion>
   </div>
 </DemoLayout>

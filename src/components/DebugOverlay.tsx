@@ -22,7 +22,8 @@ import {
   type DebugLevel,
   type DebugSource,
 } from '../lib/debug';
-import { createDebugLifecycle, type DebugLifecycle } from '../lib/debug-lifecycle';
+import { loadDebugLifecycle } from '../lib/debug-bootstrap';
+import type { DebugLifecycle } from '../lib/debug-lifecycle';
 
 type Tab = 'logs' | 'state' | 'perf' | 'network';
 
@@ -87,23 +88,12 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
       return;
     }
     let cancelled = false;
-    void Promise.all([
-      import('../lib/debug-network'),
-      import('../lib/debug-sentry'),
-      import('../lib/debug-docker'),
-      import('../lib/debug-iframe'),
-    ])
-      .then(([network, sentry, docker, iframe]) => {
-        if (cancelled) return;
-        const lifecycle = createDebugLifecycle({
-          installNetworkTap: network.installNetworkTap,
-          installIframeForwarder: iframe.installIframeForwarder,
-          uninstallIframeForwarder: iframe.uninstallIframeForwarder,
-          installSentryForwarder: sentry.installSentryForwarder,
-          uninstallSentryForwarder: sentry.uninstallSentryForwarder,
-          subscribeAllVisible: docker.subscribeAllVisible,
-          unsubscribeAll: docker.unsubscribeAll,
-        });
+    void loadDebugLifecycle()
+      .then((lifecycle) => {
+        if (cancelled) {
+          lifecycle.disable();
+          return;
+        }
         debugLifecycleRef.current = lifecycle;
         void lifecycle.enable().catch((error: unknown) => {
           if (!cancelled) debug('debug:lifecycle').error('enable-failed', error);

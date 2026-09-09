@@ -11,8 +11,13 @@ const certs = visibleEntries(getLocalizedCertifications(lang));
 const { num } = Astro.props;
 ---
 
-<section class="section certifications" id="certifications" data-num={num}>
-  <div class={`container${certs.length > 6 ? ' has-desktop-extra' : ''}`}>
+<section
+  class="section certifications"
+  id="certifications"
+  data-num={num}
+  data-item-label={t('nav.certifications')}
+>
+  <div class="container">
     <div class="reveal">
       <span class="section-label">{t('certifications.label')}</span>
       <h2 class="section-title">{t('certifications.title')}</h2>
@@ -23,7 +28,6 @@ const { num } = Astro.props;
       <button
         class="cert-filter-btn active"
         data-issuer="all"
-        data-filtered-collection-filter="true"
         data-filter-value="all"
         aria-pressed="true"
       >
@@ -34,7 +38,6 @@ const { num } = Astro.props;
           <button
             class="cert-filter-btn"
             data-issuer={issuer}
-            data-filtered-collection-filter="true"
             data-filter-value={issuer}
             aria-pressed="false"
           >
@@ -43,22 +46,11 @@ const { num } = Astro.props;
         ))
       }
     </div>
-    <div
-      aria-live="polite"
-      class="sr-only"
-      id="cert-filter-announcer"
-      data-filtered-collection-announcer="true"
-    >
-    </div>
+    <div aria-live="polite" class="sr-only" id="cert-filter-announcer"></div>
 
-    <ul
-      class="certifications-grid reveal-stagger"
-      id="certifications-grid"
-      data-mobile-limit="3"
-      data-filtered-collection-grid="true"
-    >
+    <ul class="certifications-grid reveal-stagger" id="certifications-grid">
       {
-        certs.map((c, i) => {
+        certs.map((c) => {
           const Inner = (
             <>
               <div
@@ -90,12 +82,7 @@ const { num } = Astro.props;
             </>
           );
           return (
-            <li
-              class={`certification-card ${i >= 6 ? 'hidden-demo extra-demo' : ''}${i >= 3 && i < 6 ? ' mobile-extra-demo mobile-hidden-demo' : ''}`}
-              data-issuer={c.issuer}
-              data-filtered-collection-card="true"
-              data-filter-value={c.issuer}
-            >
+            <li class="certification-card" data-issuer={c.issuer} data-filter-value={c.issuer}>
               {c.link ? (
                 <a
                   href={c.link}
@@ -121,12 +108,11 @@ const { num } = Astro.props;
         <button
           class="certifications-toggle"
           id="certifications-toggle"
-          data-filtered-collection-toggle="true"
-          data-filtered-collection-toggle-container="true"
-          data-filtered-collection-more={t('certifications.showMore')}
-          data-filtered-collection-less={t('certifications.showLess')}
-          data-show-more={t('certifications.showMore')}
-          data-show-less={t('certifications.showLess')}
+          type="button"
+          aria-expanded="false"
+          aria-controls="certifications-grid"
+          data-more-label={t('certifications.showMore')}
+          data-less-label={t('certifications.showLess')}
         >
           {t('certifications.showMore')}
         </button>
@@ -341,55 +327,8 @@ const { num } = Astro.props;
     box-shadow: 0 4px 20px var(--glow-color);
   }
 
-  /* Show button on desktop when there are >6 items */
-  .has-desktop-extra .certifications-toggle {
+  .certifications-toggle {
     display: block;
-  }
-
-  /* Show button on mobile always (rendered only when >3 items) */
-  @media (max-width: 768px) {
-    .certifications-toggle {
-      display: block;
-    }
-  }
-
-  /* ── Filter / Pagination Animation Classes ── */
-  @media (max-width: 640px) {
-    .mobile-hidden-demo {
-      display: none !important;
-    }
-
-    .mobile-extra-demo {
-      opacity: 0;
-      transform: translateY(20px);
-      transition:
-        opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-        transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-      transition-delay: 0ms !important;
-    }
-
-    .mobile-extra-demo.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .hidden-demo {
-    display: none !important;
-  }
-
-  .extra-demo {
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-      transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-    transition-delay: 0ms !important;
-  }
-
-  .extra-demo.visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 </style>
 
@@ -397,10 +336,14 @@ const { num } = Astro.props;
   import { initializeFilteredCollection } from '../lib/filtered-collection';
 
   document.addEventListener('astro:page-load', () => {
+    const button = document.getElementById('certifications-toggle');
     initializeFilteredCollection({
       rootId: 'certifications',
-      itemLabel: 'certifications',
+      gridId: 'certifications-grid',
+      itemLabel: document.getElementById('certifications')?.dataset.itemLabel ?? '',
       mobileBreakpoint: 768,
+      moreLabel: button?.dataset.moreLabel ?? '',
+      lessLabel: button?.dataset.lessLabel ?? '',
     });
   });
 

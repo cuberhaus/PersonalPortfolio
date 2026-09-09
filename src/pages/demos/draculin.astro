@@ -3,6 +3,7 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import DraculinDemo from '../../components/demos/DraculinDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
 import { getDemoPageContext } from '../../lib/demo-page';
 
 const { lang, t, demo } = getDemoPageContext(Astro.url, 'draculin');
@@ -24,17 +25,19 @@ const { lang, t, demo } = getDemoPageContext(Astro.url, 'draculin');
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="draculin"
-      title="Draculin Flutter App"
-      lang={lang}
-      fallbackSelector="#draculin-mock-fallback"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed
+        slot="embed"
+        slug="draculin"
+        title="Draculin Flutter App"
+        lang={lang}
+        client:load
+      />
 
-    <div id="draculin-mock-fallback" class="draculin-demo-wrapper">
-      <DraculinDemo lang={lang} client:visible />
-    </div>
+      <div slot="fallback" id="draculin-mock-fallback" class="draculin-demo-wrapper">
+        <DraculinDemo lang={lang} client:visible />
+      </div>
+    </LiveAppFallbackRegion>
 
     <div class="demo-info">
       <h3>{demo.aboutTitle}</h3>

@@ -2,6 +2,7 @@
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
 import SbcDemo from '../../components/demos/SbcDemo';
 import { getDemoPageContext } from '../../lib/demo-page';
 
@@ -24,17 +25,19 @@ const { lang, t, demo } = getDemoPageContext(Astro.url, 'sbc-ia');
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="sbc-ia"
-      title="SBC_IA Trip Planner"
-      lang={lang}
-      fallbackSelector="#sbc-mock-fallback"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed
+        slot="embed"
+        slug="sbc-ia"
+        title="SBC_IA Trip Planner"
+        lang={lang}
+        client:load
+      />
 
-    <div id="sbc-mock-fallback" class="sbc-demo-wrapper">
-      <SbcDemo lang={lang} client:visible />
-    </div>
+      <div slot="fallback" id="sbc-mock-fallback" class="sbc-demo-wrapper">
+        <SbcDemo lang={lang} client:visible />
+      </div>
+    </LiveAppFallbackRegion>
   </div>
 </DemoLayout>
 

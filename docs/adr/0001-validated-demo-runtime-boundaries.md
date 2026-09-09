@@ -27,6 +27,18 @@ explicit runtime projections:
    teardown for debug adapters, including iframe forwarding.
 6. `src/lib/demo-page.ts` owns shared locale, translation, and demo metadata
    assembly; page files keep only route-specific content.
+7. `src/lib/filtered-collection.ts` owns the semantic DOM protocol shared by
+   the demos and certifications collections; callers provide IDs, labels, and
+   card/filter markup without runtime marker attributes.
+8. `src/components/demos/LiveAppFallbackRegion.astro` owns the relationship
+   between a live embed and its route-specific fallback through the typed
+   `live-app:status` event contract.
+9. `src/lib/debug-event.mjs` owns shared ingress normalization, while iframe
+   origin checks, backend rate limiting, and debug lifecycle composition remain
+   in their respective adapters.
+10. `src/lib/demo-dispatch.ts` owns pure path-to-slug extraction and lookup for
+    localized demo dispatch; the route reuses one typed module map for lookup
+    and static paths and renders an explicit localized 404 for missing slugs.
 
 Tests cross these public seams instead of duplicating the implementation under
 test.
@@ -43,6 +55,14 @@ test.
 - Debug teardown is safe across repeated toggles and asynchronous imports.
 - Docker relay parsing and rate limiting have a focused internal module while
   transport and visibility remain behind the lifecycle-facing adapter.
+- Collection behavior is shared without making the Astro callers depend on
+  private implementation markers.
+- Live fallback visibility is coordinated by a local region boundary rather
+  than document-wide selectors or route-specific event handlers.
+- External debug transports converge on one event shape without merging their
+  security and throttling responsibilities.
+- Localized demo dispatch has one typed lookup and an explicit missing-route
+  behavior.
 - Adding a registry field requires updating the schema and the projections that
   intentionally expose it; this is explicit maintenance rather than hidden
   coupling.

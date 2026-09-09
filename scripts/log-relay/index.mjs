@@ -22,6 +22,7 @@
 import http from 'node:http';
 import { spawn } from 'node:child_process';
 import { listBackedServices } from '../demo-registry.mjs';
+import { normalizeDebugEvent } from '../../src/lib/debug-event.mjs';
 
 const ALLOWED_ORIGINS = ['http://localhost:4321', 'http://127.0.0.1:4321'];
 
@@ -52,21 +53,15 @@ function sendJson(res, status, body) {
   res.end(JSON.stringify(body));
 }
 
-function tryParseStructured(line) {
-  if (!line.startsWith('{') || !line.endsWith('}')) return null;
-  try {
-    const obj = JSON.parse(line);
-    if (typeof obj !== 'object' || obj === null) return null;
-    const level =
-      typeof obj.level === 'string' && ['trace', 'info', 'warn', 'error'].includes(obj.level)
-        ? obj.level
-        : 'info';
-    const ns = typeof obj.ns === 'string' ? obj.ns : 'backend';
-    const msg = typeof obj.msg === 'string' ? obj.msg : line;
-    return { level, ns, msg };
-  } catch {
-    return null;
-  }
+function normalizeRelayLine(line, slug) {
+  return normalizeDebugEvent(line, {
+    source: 'backend',
+    origin: slug,
+    namespacePrefix: `demo:${slug}:backend`,
+    defaultNamespace: `demo:${slug}:backend`,
+    fallbackMessage: line,
+    allowPlainText: true,
+  });
 }
 
 function streamSse(req, res, slug) {
@@ -91,16 +86,17 @@ function streamSse(req, res, slug) {
 
   const send = (line) => {
     if (!line) return;
-    const parsed = tryParseStructured(line) ?? {
-      level: 'info',
-      ns: `demo:${slug}:backend`,
-      msg: line,
-    };
+    const parsed = normalizeRelayLine(line, slug);
+    if (!parsed) return;
     const payload = JSON.stringify({
       slug,
       stack: svc.stack,
-      ...parsed,
-      ts: Date.now(),
+      source: parsed.source,
+      origin: parsed.origin,
+      level: parsed.level,
+      ns: parsed.ns,
+      msg: parsed.msg,
+      ts: parsed.ts,
     });
     res.write(`data: ${payload}\n\n`);
   };

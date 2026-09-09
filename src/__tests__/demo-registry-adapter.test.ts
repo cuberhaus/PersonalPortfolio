@@ -1,11 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import {
+  listAllBackendPorts as listBrowserBackendPorts,
+  listOrchestratedServices as listBrowserOrchestratedServices,
+  listDemoServices,
+  parseDemoServiceRegistry,
+} from '../data/demo-services';
+import {
   listAllBackendPorts,
   listOrchestratedServices,
   loadDemoRegistry,
   parseDemoRegistry as parseNodeDemoRegistry,
 } from '../../scripts/demo-registry.mjs';
-import { parseDemoServiceRegistry } from '../data/demo-services';
 import type {
   DemoServiceRegistry,
   OrchestratedDemoService,
@@ -32,6 +37,31 @@ describe('Node demo registry adapter', () => {
     });
     expect(ports).toContain(8888);
     expect(ports).toEqual([...new Set(ports)].sort((a, b) => a - b));
+  });
+
+  it('keeps browser and Node projections semantically aligned', () => {
+    const normalize = (service: ReturnType<typeof listBrowserOrchestratedServices>[number]) => ({
+      ...service,
+      image: service.image ?? null,
+      composeFile: service.composeFile,
+      makefile: service.makefile,
+      container: service.container,
+    });
+    const normalizeNode = (service: ReturnType<typeof listOrchestratedServices>[number]) => ({
+      ...service,
+      image: service.image || null,
+      composeFile: service.composeFile || null,
+      makefile: service.makefile || null,
+      container: service.container || null,
+    });
+
+    expect(listBrowserBackendPorts()).toEqual(listAllBackendPorts());
+    expect(listBrowserOrchestratedServices().map(normalize)).toEqual(
+      listOrchestratedServices().map(normalizeNode)
+    );
+    expect(listDemoServices().map((service) => service.slug)).toEqual(
+      loadDemoRegistry().services.map((service) => service.slug)
+    );
   });
 
   it('keeps browser and Node adapters on the same complete contract', () => {
@@ -77,6 +107,24 @@ describe('Node demo registry adapter', () => {
       ...validRegistry,
       services: [validRegistry.services[0], { ...validRegistry.services[0] }],
     };
+    const mismatchedBackendRegistry = {
+      ...validRegistry,
+      services: [{ ...validRegistry.services[0], hasBackend: false }],
+    };
+    const invalidOrchestratorRegistry = {
+      ...validRegistry,
+      services: [
+        {
+          ...validRegistry.services[0],
+          backend: {
+            ...validRegistry.services[0].backend,
+            container: 'planner-1',
+            composeFile: 'docker-compose.yml',
+            orchestrator: { displayName: 'Planner', type: 'process', extra: '' },
+          },
+        },
+      ],
+    };
 
     expect(parseDemoServiceRegistry(validRegistry)).toEqual(validRegistry);
     expect(parseNodeDemoRegistry(validRegistry)).toEqual(validRegistry);
@@ -85,5 +133,9 @@ describe('Node demo registry adapter', () => {
     expect(() => parseNodeDemoRegistry(incompleteRegistry)).toThrow();
     expect(() => parseDemoServiceRegistry(duplicateRegistry)).toThrow();
     expect(() => parseNodeDemoRegistry(duplicateRegistry)).toThrow();
+    expect(() => parseDemoServiceRegistry(mismatchedBackendRegistry)).toThrow();
+    expect(() => parseNodeDemoRegistry(mismatchedBackendRegistry)).toThrow();
+    expect(() => parseDemoServiceRegistry(invalidOrchestratorRegistry)).toThrow();
+    expect(() => parseNodeDemoRegistry(invalidOrchestratorRegistry)).toThrow();
   });
 });

@@ -3,6 +3,7 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import GraficsDemo from '../../components/demos/GraficsDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
 import { getDemoPageContext } from '../../lib/demo-page';
 
 const { lang, t, demo } = getDemoPageContext(Astro.url, 'grafics');
@@ -24,16 +25,18 @@ const { lang, t, demo } = getDemoPageContext(Astro.url, 'grafics');
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="grafics"
-      title="Gràfics Shader Playground"
-      lang={lang}
-      fallbackSelector="#grafics-mock-fallback"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed
+        slot="embed"
+        slug="grafics"
+        title="Gràfics Shader Playground"
+        lang={lang}
+        client:load
+      />
 
-    <div id="grafics-mock-fallback">
-      <GraficsDemo lang={lang} client:visible />
-    </div>
+      <div slot="fallback" id="grafics-mock-fallback">
+        <GraficsDemo lang={lang} client:visible />
+      </div>
+    </LiveAppFallbackRegion>
   </div>
 </DemoLayout>

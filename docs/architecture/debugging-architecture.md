@@ -66,6 +66,30 @@ dashboard, with the surrounding session captured for replay.
 Full rationale (Why not Highlight? Why not Faro? What got rejected and why?)
 in [`decisions.md` § Recommendation rationale](./decisions.md#recommendation-rationale).
 
+## Ingress and composition boundaries
+
+The bus remains the producer surface, but external transports do not write
+directly into it with ad hoc parsing:
+
+- [`debug-event.mjs`](../../src/lib/debug-event.mjs) is the shared ingress
+  normalizer for iframe envelopes and backend/relay lines. It validates the
+  required shape for each transport, canonicalizes levels and namespaces, and
+  supplies a finite timestamp fallback.
+- [`debug-iframe.ts`](../../src/lib/debug-iframe.ts) retains origin allowlisting
+  and the `postMessage` listener, then emits the normalized event as
+  `source: 'iframe'`.
+- [`debug-docker-log.ts`](../../src/lib/debug-docker-log.ts) retains the
+  per-demo rate limiter and dropped-line summary, then emits normalized
+  `source: 'backend'` events. The Node relay uses the same normalizer before
+  serializing SSE payloads.
+- [`debug-bootstrap.ts`](../../src/lib/debug-bootstrap.ts) composes dynamic
+  adapter imports into the lifecycle. `DebugOverlay.tsx` owns presentation and
+  lifecycle calls, not the module graph.
+
+This keeps transport-specific security and throttling local while making the
+event shape consistent at the bus boundary. Namespace prefixes are preserved
+when already present and added exactly once for relative ingress namespaces.
+
 ---
 
 ## Backend observability — Option A (Sentry SDKs everywhere)
@@ -291,7 +315,7 @@ languages and is deferred until a real PII leak is observed.
 
 ## Sketch of the chosen design
 
-```
+```text
                 ┌────────────────────────────────────────┐
                 │         debug('demo:rob').info(...)    │
                 │         debug('theme').error(...)      │

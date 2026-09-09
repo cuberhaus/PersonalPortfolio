@@ -24,7 +24,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const { num } = Astro.props;
 ---
 
-<section class="section demos" id="projects" data-num={num}>
+<section class="section demos" id="projects" data-num={num} data-item-label={t('nav.projects')}>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('projects.label')}</span>
@@ -38,7 +38,6 @@ const { num } = Astro.props;
       <button
         class="demo-filter-btn active"
         data-category="all"
-        data-filtered-collection-filter="true"
         data-filter-value="all"
         aria-pressed="true"
       >
@@ -49,7 +48,6 @@ const { num } = Astro.props;
           <button
             class="demo-filter-btn"
             data-category={cat}
-            data-filtered-collection-filter="true"
             data-filter-value={cat}
             aria-pressed="false"
           >
@@ -58,22 +56,15 @@ const { num } = Astro.props;
         ))
       }
     </div>
-    <div
-      aria-live="polite"
-      class="sr-only"
-      id="demo-filter-announcer"
-      data-filtered-collection-announcer="true"
-    >
-    </div>
+    <div aria-live="polite" class="sr-only" id="demo-filter-announcer"></div>
 
-    <div class="demo-grid reveal-stagger" id="demo-grid" data-filtered-collection-grid="true">
+    <div class="demo-grid reveal-stagger" id="demo-grid">
       {
         demos.map((demo, index) => (
           <article
-            class={`demo-card ${index >= 6 ? 'hidden-demo extra-demo' : ''}${index >= 3 && index < 6 ? ' mobile-extra-demo mobile-hidden-demo' : ''}`}
+            class="demo-card"
             data-index={index}
             data-category={demo.category || 'other'}
-            data-filtered-collection-card="true"
             data-filter-value={demo.category || 'other'}
           >
             <div class="demo-preview" aria-hidden="true">
@@ -162,17 +153,14 @@ const { num } = Astro.props;
 
     {
       demos.length > 6 && (
-        <div class="show-more-container reveal" data-filtered-collection-toggle-container="true">
+        <div class="show-more-container reveal">
           <button
             id="show-more-demos"
             class="show-more-btn"
-            data-filtered-collection-toggle="true"
             aria-expanded="false"
             aria-controls="demo-grid"
-            data-more={t('projects.showMore')}
-            data-less={t('projects.showLess')}
-            data-filtered-collection-more={t('projects.showMore')}
-            data-filtered-collection-less={t('projects.showLess')}
+            data-more-label={t('projects.showMore')}
+            data-less-label={t('projects.showLess')}
           >
             {t('projects.showMore')}
           </button>
@@ -186,10 +174,14 @@ const { num } = Astro.props;
   import { initializeFilteredCollection } from '../lib/filtered-collection';
 
   document.addEventListener('astro:page-load', () => {
+    const button = document.getElementById('show-more-demos');
     initializeFilteredCollection({
       rootId: 'projects',
-      itemLabel: 'projects',
+      gridId: 'demo-grid',
+      itemLabel: document.getElementById('projects')?.dataset.itemLabel ?? '',
       mobileBreakpoint: 640,
+      moreLabel: button?.dataset.moreLabel ?? '',
+      lessLabel: button?.dataset.lessLabel ?? '',
     });
   });
 </script>
@@ -427,42 +419,6 @@ const { num } = Astro.props;
     .demo-grid {
       grid-template-columns: 1fr;
     }
-
-    .mobile-hidden-demo {
-      display: none !important;
-    }
-
-    .mobile-extra-demo {
-      opacity: 0;
-      transform: translateY(20px);
-      transition:
-        opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-        transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-      transition-delay: 0ms !important;
-    }
-
-    .mobile-extra-demo.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .hidden-demo {
-    display: none !important;
-  }
-
-  .extra-demo {
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-      transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-    transition-delay: 0ms !important;
-  }
-
-  .extra-demo.visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .show-more-container {

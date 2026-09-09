@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { TRANSLATIONS } from '../../i18n/demos/live-app-embed';
 import { debug } from '../../lib/debug';
+import { LIVE_APP_STATUS_EVENT, type LiveAppStatusEventDetail } from '../../lib/live-app-fallback';
 import { resolveLiveApp, startLiveAppProbe } from '../../lib/live-app-embed';
 
 const log = debug('net:embed');
@@ -25,7 +26,6 @@ interface LiveAppEmbedProps {
   /** Override the devCmd hint from the registry. Optional — defaults to demo-services.json. */
   devCmd?: string;
   lang?: Lang;
-  fallbackSelector?: string;
 }
 
 export default function LiveAppEmbed({
@@ -35,7 +35,6 @@ export default function LiveAppEmbed({
   dockerCmd: dockerCmdProp,
   devCmd: devCmdProp,
   lang = 'en',
-  fallbackSelector,
 }: LiveAppEmbedProps) {
   const { url, dockerCmd, devCmd } = useMemo(
     () =>
@@ -53,7 +52,15 @@ export default function LiveAppEmbed({
   );
   const [status, setStatus] = useState<'checking' | 'online' | 'offline'>('checking');
   const [expanded, setExpanded] = useState(true);
+  const statusTargetRef = useRef<HTMLDivElement>(null);
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
+  useEffect(() => {
+    const target = statusTargetRef.current;
+    if (!target) return;
+    const detail: LiveAppStatusEventDetail = { status, slug };
+    target.dispatchEvent(new CustomEvent(LIVE_APP_STATUS_EVENT, { bubbles: true, detail }));
+  }, [slug, status]);
 
   useEffect(() => {
     log.info('probe', { url, slug });
@@ -80,20 +87,14 @@ export default function LiveAppEmbed({
     };
   }, [url, slug]);
 
-  useEffect(() => {
-    if (!fallbackSelector) return;
-    const el = document.querySelector(fallbackSelector) as HTMLElement | null;
-    if (!el) return;
-    el.style.display = status === 'online' ? 'none' : '';
-  }, [status, fallbackSelector]);
-
   if (status === 'checking') {
-    return <div data-live-status="checking" style={{ minHeight: 1 }} />;
+    return <div ref={statusTargetRef} data-live-status="checking" style={{ minHeight: 1 }} />;
   }
 
   if (status === 'offline') {
     return (
       <div
+        ref={statusTargetRef}
         data-live-status="offline"
         style={{
           marginBottom: '1.25rem',
@@ -162,7 +163,7 @@ export default function LiveAppEmbed({
   }
 
   return (
-    <div data-live-status="online" style={{ marginBottom: '1.25rem' }}>
+    <div ref={statusTargetRef} data-live-status="online" style={{ marginBottom: '1.25rem' }}>
       <div
         style={{
           display: 'flex',

@@ -54,8 +54,13 @@ PersonalPortfolio/
 │   ├── lib/                  Shared utilities
 │   │   ├── debug.ts            # Custom event bus
 │   │   ├── debug-lifecycle.ts  # Idempotent adapter activation/teardown
+│   │   ├── debug-bootstrap.ts  # Dynamic adapter composition
+│   │   ├── debug-event.mjs     # Shared ingress normalization
 │   │   ├── debug-sentry.ts     # Bus → Sentry forwarder
 │   │   ├── demo-page.ts        # Shared localized route context
+│   │   ├── demo-dispatch.ts    # Typed localized demo lookup
+│   │   ├── filtered-collection.ts # Filter/grid DOM protocol
+│   │   ├── live-app-fallback.ts # Live status → fallback visibility
 │   │   ├── live-app-embed.ts   # Registry resolution + bounded probe
 │   │   └── ...                 # Per-demo algorithms (wpgma, etc.)
 │   ├── config/
@@ -120,6 +125,20 @@ consistency between these and everything that derives from them.
    [debug-iframe-emitter.ts](../../src/lib/debug-iframe-emitter.ts)
    (postMessage); the parent forwards them onto the central debug bus.
 
+`LiveAppFallbackRegion.astro` owns the relationship between the embed and the
+route-specific fallback. `LiveAppEmbed.tsx` dispatches `checking`, `online`,
+or `offline` from its own status root; the region hides the fallback only for
+`online`. The route still owns the fallback's actual mock or local demo markup.
+
+### Filtered collections
+
+The demos and certifications grids share one runtime protocol in
+[`filtered-collection.ts`](../../src/lib/filtered-collection.ts). It finds
+controls by `data-filter-value`, the grid by its ID, and the live announcer by
+`aria-live`. It owns filtering, responsive page limits, hidden state,
+`aria-expanded`, and animation cancellation. The Astro callers expose those
+semantic inputs without leaking implementation marker attributes.
+
 ---
 
 ## The debug bus and lifecycle
@@ -141,6 +160,13 @@ including the case where an asynchronous Sentry import resolves after debug
 mode was disabled. Docker relay parsing and rate limiting live in a focused
 internal log processor; transport and visibility remain behind the same
 lifecycle-facing adapter.
+
+`debug-bootstrap.ts` is the composition boundary for the dynamically imported
+adapters, so the overlay only controls the lifecycle. Iframe envelopes and
+Docker/relay lines enter through the shared `debug-event.mjs` normalizer. The
+normalizer supplies canonical levels, namespaces, messages, arguments, and
+timestamps; origin allowlisting remains in the iframe adapter and rate
+limiting remains in the backend adapter.
 
 Backend events arrive at the same Sentry org tagged with `service:<slug>`
 and the same `session_id` as the browser session, so a Sentry filter
@@ -184,6 +210,15 @@ Two orthogonal axes:
 
 Both persist in `localStorage` and are restored before paint by
 [ThemeInit.astro](../../src/components/ThemeInit.astro) so there's no FOUC.
+
+## Localized demo dispatch
+
+The localized `[lang]/demos/[demo].astro` route uses one typed eager module glob
+for both lookup and static-path generation. The pure
+[`demo-dispatch.ts`](../../src/lib/demo-dispatch.ts) helper extracts slugs and
+builds the lookup without non-null assertions or unchecked module casts. A
+missing slug receives a localized 404 page and a `404` response status; the
+individual demo pages keep their route-specific markup.
 
 ---
 

@@ -3,6 +3,7 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import TendaDemo from '../../components/demos/TendaDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
 import { getDemoPageContext } from '../../lib/demo-page';
 
 const { lang, t, demo } = getDemoPageContext(Astro.url, 'tenda');
@@ -24,17 +25,13 @@ const { lang, t, demo } = getDemoPageContext(Astro.url, 'tenda');
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="tenda"
-      title="Tenda Online"
-      lang={lang}
-      fallbackSelector="#tenda-mock-fallback"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed slot="embed" slug="tenda" title="Tenda Online" lang={lang} client:load />
 
-    <div id="tenda-mock-fallback" class="tenda-demo-wrapper">
-      <TendaDemo lang={lang} client:visible />
-    </div>
+      <div slot="fallback" id="tenda-mock-fallback" class="tenda-demo-wrapper">
+        <TendaDemo lang={lang} client:visible />
+      </div>
+    </LiveAppFallbackRegion>
 
     <div class="demo-info">
       <h3>{demo.aboutTitle}</h3>

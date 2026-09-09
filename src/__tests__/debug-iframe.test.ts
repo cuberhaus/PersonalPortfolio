@@ -48,6 +48,7 @@ describe('iframe debug forwarder', () => {
       ns: 'worker',
       msg: 'started',
       args: [{ id: 1 }],
+      ts: 1234,
     });
     sendMessage('http://localhost:9999', {
       type: 'debug:log',
@@ -65,6 +66,7 @@ describe('iframe debug forwarder', () => {
       ns: 'iframe:worker',
       msg: 'started',
       args: [{ id: 1 }],
+      ts: 1234,
     });
   });
 
