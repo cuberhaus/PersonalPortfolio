@@ -4,6 +4,8 @@ import { createDebugLifecycle, type DebugLifecycleAdapters } from '../lib/debug-
 function makeAdapters(overrides: Partial<DebugLifecycleAdapters> = {}) {
   const adapters: DebugLifecycleAdapters = {
     installNetworkTap: vi.fn(() => vi.fn()),
+    installIframeForwarder: vi.fn(),
+    uninstallIframeForwarder: vi.fn(),
     installSentryForwarder: vi.fn(async () => undefined),
     uninstallSentryForwarder: vi.fn(),
     subscribeAllVisible: vi.fn(() => vi.fn()),
@@ -28,10 +30,12 @@ describe('debug lifecycle', () => {
     lifecycle.disable();
 
     expect(adapters.installNetworkTap).toHaveBeenCalledTimes(1);
+    expect(adapters.installIframeForwarder).toHaveBeenCalledTimes(1);
     expect(adapters.installSentryForwarder).toHaveBeenCalledTimes(1);
     expect(adapters.subscribeAllVisible).toHaveBeenCalledTimes(1);
     expect(networkCleanup).toHaveBeenCalledOnce();
     expect(dockerCleanup).toHaveBeenCalledOnce();
+    expect(adapters.uninstallIframeForwarder).toHaveBeenCalledOnce();
     expect(adapters.unsubscribeAll).toHaveBeenCalledOnce();
     expect(adapters.uninstallSentryForwarder).toHaveBeenCalledOnce();
   });
@@ -63,6 +67,7 @@ describe('debug lifecycle', () => {
     await lifecycle.enable();
 
     expect(adapters.installNetworkTap).toHaveBeenCalledTimes(2);
+    expect(adapters.installIframeForwarder).toHaveBeenCalledTimes(2);
     expect(adapters.installSentryForwarder).toHaveBeenCalledTimes(2);
     expect(adapters.subscribeAllVisible).toHaveBeenCalledTimes(2);
   });

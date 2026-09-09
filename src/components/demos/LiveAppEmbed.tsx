@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { TRANSLATIONS } from '../../i18n/demos/live-app-embed';
 import { debug } from '../../lib/debug';
-import { installIframeForwarder } from '../../lib/debug-iframe';
-import { getLiveAppOrigin, resolveLiveApp, startLiveAppProbe } from '../../lib/live-app-embed';
+import { resolveLiveApp, startLiveAppProbe } from '../../lib/live-app-embed';
 
 const log = debug('net:embed');
 const uiLog = debug('ui:embed');
@@ -80,13 +79,6 @@ export default function LiveAppEmbed({
       probe.cancel();
     };
   }, [url, slug]);
-
-  useEffect(() => {
-    if (!url) return;
-    const origin = getLiveAppOrigin(url);
-    if (!origin) return;
-    installIframeForwarder({ allowedOrigins: [origin] });
-  }, [url]);
 
   useEffect(() => {
     if (!fallbackSelector) return;

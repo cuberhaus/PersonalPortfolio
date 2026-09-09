@@ -12,22 +12,21 @@ type PresentationOptions = {
 };
 
 export type FilteredCollectionConfig = {
-  gridId: string;
-  cardSelector: string;
-  filterSelector: string;
-  filterValueAttribute: string;
-  buttonId: string;
-  announcerId: string;
-  sectionId: string;
-  showMoreAttribute: string;
-  showLessAttribute: string;
+  rootId: string;
   itemLabel: string;
   mobileBreakpoint: number;
-  buttonDisplay: 'block' | 'inline-block';
 };
 
 const MOBILE_PAGE_SIZE = 3;
 const DESKTOP_LIMIT = 6;
+const FILTERED_COLLECTION_MARKERS = {
+  grid: '[data-filtered-collection-grid]',
+  card: '[data-filtered-collection-card]',
+  filter: '[data-filtered-collection-filter]',
+  toggle: '[data-filtered-collection-toggle]',
+  announcer: '[data-filtered-collection-announcer]',
+  toggleContainer: '[data-filtered-collection-toggle-container]',
+} as const;
 
 export function getFilteredCollectionPresentation({
   totalCount,
@@ -51,40 +50,56 @@ export function getFilteredCollectionPresentation({
 }
 
 export function initializeFilteredCollection(config: FilteredCollectionConfig): void {
-  const grid = document.getElementById(config.gridId);
-  if (!grid || grid.dataset.filteredCollectionInitialized) return;
-  grid.dataset.filteredCollectionInitialized = 'true';
+  const root = document.getElementById(config.rootId);
+  const grid = root?.querySelector<HTMLElement>(FILTERED_COLLECTION_MARKERS.grid);
+  if (!root || !grid || root.dataset.filteredCollectionInitialized) return;
+  root.dataset.filteredCollectionInitialized = 'true';
 
-  const button = document.getElementById(config.buttonId) as HTMLButtonElement | null;
-  const filterButtons = [...document.querySelectorAll<HTMLButtonElement>(config.filterSelector)];
-  const announcer = document.getElementById(config.announcerId);
+  const button = root.querySelector<HTMLButtonElement>(FILTERED_COLLECTION_MARKERS.toggle);
+  const filterButtons = [
+    ...root.querySelectorAll<HTMLButtonElement>(FILTERED_COLLECTION_MARKERS.filter),
+  ];
+  const announcer = root.querySelector(FILTERED_COLLECTION_MARKERS.announcer);
+  const toggleContainer = root.querySelector<HTMLElement>(
+    FILTERED_COLLECTION_MARKERS.toggleContainer
+  );
+  const animationTimers = new Set<ReturnType<typeof setTimeout>>();
   let currentFilter = 'all';
   let mobileShown = MOBILE_PAGE_SIZE;
 
   const isMobile = () => window.matchMedia(`(max-width: ${config.mobileBreakpoint}px)`).matches;
-  const getAllCards = () => [...grid.querySelectorAll<HTMLElement>(config.cardSelector)];
+  const getAllCards = () => [
+    ...grid.querySelectorAll<HTMLElement>(FILTERED_COLLECTION_MARKERS.card),
+  ];
+  const getFilterValue = (element: HTMLElement) => element.dataset.filterValue ?? 'all';
   const getFilteredCards = () => {
     const cards = getAllCards();
     return currentFilter === 'all'
       ? cards
-      : cards.filter((card) => card.getAttribute(config.filterValueAttribute) === currentFilter);
+      : cards.filter((card) => getFilterValue(card) === currentFilter);
+  };
+  const clearAnimationTimers = () => {
+    for (const timer of animationTimers) clearTimeout(timer);
+    animationTimers.clear();
   };
   const setButton = (presentation: FilteredCollectionPresentation) => {
     if (!button) return;
-    button.style.display = presentation.buttonVisible ? config.buttonDisplay : 'none';
-    button.textContent = button.getAttribute(
-      presentation.expanded ? config.showLessAttribute : config.showMoreAttribute
-    );
+    button.hidden = !presentation.buttonVisible;
+    if (toggleContainer && toggleContainer !== button) {
+      toggleContainer.hidden = !presentation.buttonVisible;
+    }
+    button.textContent = presentation.expanded
+      ? (button.dataset.filteredCollectionLess ?? button.textContent)
+      : (button.dataset.filteredCollectionMore ?? button.textContent);
     button.setAttribute('aria-expanded', String(presentation.expanded));
     button.classList.toggle('expanded', presentation.expanded);
   };
   const scrollToCollection = () => {
-    const section = document.getElementById(config.sectionId);
-    if (!section) return;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    section.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    root.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
-  const updateGrid = () => {
+  const updateGrid = (animateFromIndex: number | null = null) => {
+    clearAnimationTimers();
     const allCards = getAllCards();
     const filteredCards = getFilteredCards();
     const expanded = button?.classList.contains('expanded') ?? false;
@@ -100,16 +115,27 @@ export function initializeFilteredCollection(config: FilteredCollectionConfig): 
       card.classList.remove('visible', 'mobile-hidden-demo', 'mobile-extra-demo', 'extra-demo');
       card.classList.add('hidden-demo');
     });
-    filteredCards.slice(0, presentation.visibleCount).forEach((card) => {
+    filteredCards.slice(0, presentation.visibleCount).forEach((card, index) => {
       card.classList.remove('hidden-demo');
-      card.classList.add('visible');
+      if (animateFromIndex !== null && index >= animateFromIndex) {
+        const timer = setTimeout(
+          () => {
+            animationTimers.delete(timer);
+            card.classList.add('visible');
+          },
+          20 + (index - animateFromIndex) * 60
+        );
+        animationTimers.add(timer);
+      } else {
+        card.classList.add('visible');
+      }
     });
     setButton(presentation);
   };
 
   filterButtons.forEach((filterButton) => {
     filterButton.addEventListener('click', () => {
-      const filter = filterButton.getAttribute(config.filterValueAttribute) ?? 'all';
+      const filter = getFilterValue(filterButton);
       if (filter === currentFilter) return;
       currentFilter = filter;
       mobileShown = MOBILE_PAGE_SIZE;
@@ -123,6 +149,7 @@ export function initializeFilteredCollection(config: FilteredCollectionConfig): 
   });
 
   button?.addEventListener('click', () => {
+    if (!button) return;
     const filteredCards = getFilteredCards();
     if (isMobile()) {
       if (mobileShown >= filteredCards.length) {
@@ -134,27 +161,19 @@ export function initializeFilteredCollection(config: FilteredCollectionConfig): 
       }
       const start = mobileShown;
       mobileShown = Math.min(mobileShown + MOBILE_PAGE_SIZE, filteredCards.length);
-      filteredCards.slice(start, mobileShown).forEach((card, index) => {
-        card.classList.remove('hidden-demo');
-        setTimeout(() => card.classList.add('visible'), 20 + index * 60);
-      });
-      updateGrid();
+      updateGrid(start);
       return;
     }
 
-    const expanded = button.classList.toggle('expanded');
-    filteredCards.slice(DESKTOP_LIMIT).forEach((card, index) => {
-      if (expanded) {
-        card.classList.remove('hidden-demo');
-        setTimeout(() => card.classList.add('visible'), 20 + index * 60);
-      } else {
-        card.classList.remove('visible');
-        setTimeout(() => card.classList.add('hidden-demo'), 400);
-      }
-    });
-    updateGrid();
+    const expanded = !button.classList.contains('expanded');
+    button.classList.toggle('expanded', expanded);
+    updateGrid(expanded ? DESKTOP_LIMIT : null);
     if (!expanded) scrollToCollection();
   });
 
+  const activeFilter = filterButtons.find((filterButton) =>
+    filterButton.classList.contains('active')
+  );
+  currentFilter = activeFilter ? getFilterValue(activeFilter) : 'all';
   updateGrid();
 }

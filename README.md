@@ -90,8 +90,9 @@ Flags: `--skip-docker`, `--skip-planner`.
 
 > **Service registry.** The list above is generated from
 > [`src/data/demo-services.json`](src/data/demo-services.json), which is the single source of
-> truth. `src/data/demo-services.ts` validates and projects it for browser code;
-> `scripts/demo-registry.mjs` validates and projects it for Node, Make, and shell code.
+> truth. `src/data/demo-registry-contract.mjs` owns the shared Zod contract;
+> `src/data/demo-services.ts` and `scripts/demo-registry.mjs` validate through it and keep
+> separate browser and Node projections.
 > Those adapters feed `scripts/dev-all-demos.sh`, `LiveAppEmbed.tsx` (via `getIframeUrl`),
 > the `Makefile`'s `DEMO_PORTS`, `e2e/live-demos.spec.ts`, `sentry.client.config.ts`,
 > the log relay sidecar, the gallery, and the registry tests. Adding or removing a demo

@@ -1,81 +1,18 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { parseDemoRegistry } from '../src/data/demo-registry-contract.mjs';
 
 const REGISTRY_PATH = fileURLToPath(new URL('../src/data/demo-services.json', import.meta.url));
-const BACKEND_STACKS = new Set([
-  'fastapi',
-  'django',
-  'flask',
-  'spring',
-  'sveltekit',
-  'qwik',
-  'ember',
-  'rust',
-  'go',
-  'php',
-  'node',
-]);
-const ORCHESTRATOR_TYPES = new Set(['compose', 'run', 'process']);
 
-/**
- * @typedef {{ displayName: string, type: 'compose'|'run'|'process', extra: string, image?: string }} DemoOrchestrator
- * @typedef {{ container: string|null, port: number, extraPorts?: number[], iframeUrl: string|null, composeFile: string|null, makefile: string|null, stack: string, needsSentry: boolean, notes?: string, dockerCmd?: string, devCmd?: string, orchestrator?: DemoOrchestrator }} DemoBackend
- * @typedef {{ slug: string, page: string|null, component: string|null, hasBackend: boolean, backend?: DemoBackend }} DemoService
- * @typedef {{ version: number, services: DemoService[] }} DemoServiceRegistry
- * @typedef {{ slug: string, type: 'compose'|'run'|'process', displayName: string, port: number, composeFile: string, makefile: string, image: string, extra: string, container: string }} OrchestratedDemoService
- */
+/** @typedef {import('./demo-registry.d.mts').DemoServiceRegistry} DemoServiceRegistry */
+/** @typedef {import('./demo-registry.d.mts').DemoService} DemoService */
+/** @typedef {import('./demo-registry.d.mts').OrchestratedDemoService} OrchestratedDemoService */
 
-function assertString(value, path) {
-  if (typeof value !== 'string' || value.length === 0) {
-    throw new Error(`${path} must be a non-empty string`);
-  }
-}
-
-/** @param {DemoServiceRegistry} registry */
-function validateRegistry(registry) {
-  if (!registry || typeof registry !== 'object' || !Array.isArray(registry.services)) {
-    throw new Error('demo-services.json must contain a services array');
-  }
-
-  const slugs = new Set();
-  for (const [index, service] of registry.services.entries()) {
-    const path = `services[${index}]`;
-    assertString(service.slug, `${path}.slug`);
-    if (slugs.has(service.slug)) throw new Error(`duplicate demo slug: ${service.slug}`);
-    slugs.add(service.slug);
-    if (typeof service.hasBackend !== 'boolean') {
-      throw new Error(`${path}.hasBackend must be boolean`);
-    }
-    if (service.page !== null && typeof service.page !== 'string') {
-      throw new Error(`${path}.page must be a string or null`);
-    }
-    if (!service.backend) continue;
-
-    const backend = service.backend;
-    if (!Number.isInteger(backend.port) || backend.port <= 0) {
-      throw new Error(`${path}.backend.port must be a positive integer`);
-    }
-    if (!BACKEND_STACKS.has(backend.stack)) {
-      throw new Error(`${path}.backend.stack is not supported: ${backend.stack}`);
-    }
-    if (backend.orchestrator) {
-      assertString(backend.orchestrator.displayName, `${path}.backend.orchestrator.displayName`);
-      if (!ORCHESTRATOR_TYPES.has(backend.orchestrator.type)) {
-        throw new Error(
-          `${path}.backend.orchestrator.type is not supported: ${backend.orchestrator.type}`
-        );
-      }
-      if (typeof backend.orchestrator.extra !== 'string') {
-        throw new Error(`${path}.backend.orchestrator.extra must be a string`);
-      }
-    }
-  }
-  return registry;
-}
+export { parseDemoRegistry };
 
 /** @returns {DemoServiceRegistry} */
 export function loadDemoRegistry() {
-  return validateRegistry(JSON.parse(readFileSync(REGISTRY_PATH, 'utf8')));
+  return parseDemoRegistry(JSON.parse(readFileSync(REGISTRY_PATH, 'utf8')));
 }
 
 /** @returns {DemoService[]} */

@@ -45,6 +45,7 @@ PersonalPortfolio/
 │   │   └── demos/              React islands (one per demo)
 │   ├── data/                 Source of truth + validated browser projections
 │   │   ├── demo-services.json  ← orchestrator, ports, backends
+│   │   ├── demo-registry-contract.mjs ← shared browser/Node validation
 │   │   ├── demos.json          ← homepage cards (+ .es / .ca parity)
 │   │   ├── experience.json, education.json, ...
 │   ├── i18n/                 Translation infrastructure
@@ -135,9 +136,11 @@ debug(ns).info ─┼─ debug-sentry.ts → Sentry SDK
 ```
 
 `DebugOverlay.tsx` owns one `DebugLifecycle`. The lifecycle makes network,
-Sentry, and Docker subscriptions idempotent and generation-aware, including
-the case where an asynchronous Sentry import resolves after debug mode was
-disabled.
+iframe, Sentry, and Docker subscriptions idempotent and generation-aware,
+including the case where an asynchronous Sentry import resolves after debug
+mode was disabled. Docker relay parsing and rate limiting live in a focused
+internal log processor; transport and visibility remain behind the same
+lifecycle-facing adapter.
 
 Backend events arrive at the same Sentry org tagged with `service:<slug>`
 and the same `session_id` as the browser session, so a Sentry filter

@@ -1,5 +1,7 @@
 export interface DebugLifecycleAdapters {
   installNetworkTap: () => void | (() => void);
+  installIframeForwarder: () => void;
+  uninstallIframeForwarder: () => void;
   installSentryForwarder: () => Promise<void>;
   uninstallSentryForwarder: () => void;
   subscribeAllVisible: () => void | (() => void);
@@ -26,6 +28,7 @@ export function createDebugLifecycle(adapters: DebugLifecycleAdapters): DebugLif
   let generation = 0;
   let networkCleanup: (() => void) | null = null;
   let dockerCleanup: (() => void) | null = null;
+  let iframeInstalled = false;
   let sentryInstallation: SentryInstallation | null = null;
   let pendingSentryInstall: Promise<void> | null = null;
   let pendingEnable: Promise<void> | null = null;
@@ -45,6 +48,10 @@ export function createDebugLifecycle(adapters: DebugLifecycleAdapters): DebugLif
     dockerCleanup?.();
     networkCleanup = null;
     dockerCleanup = null;
+    if (iframeInstalled) {
+      adapters.uninstallIframeForwarder();
+      iframeInstalled = false;
+    }
     adapters.unsubscribeAll();
     if (sentryInstallation) cleanupSentry(sentryInstallation);
   };
@@ -75,6 +82,8 @@ export function createDebugLifecycle(adapters: DebugLifecycleAdapters): DebugLif
 
       networkCleanup = normalizeCleanup(adapters.installNetworkTap());
       dockerCleanup = normalizeCleanup(adapters.subscribeAllVisible());
+      adapters.installIframeForwarder();
+      iframeInstalled = true;
 
       const sentryInstall = adapters.installSentryForwarder();
       pendingSentryInstall = sentryInstall;

@@ -159,7 +159,8 @@ for context.
 - The local relay in `scripts/log-relay/` — it tails Docker stdout for the
   in-page overlay; that's useful in every option.
 - The iframe forwarder in [`src/lib/debug-iframe.ts`](../../src/lib/debug-iframe.ts)
-  — boundary-only postMessage receiver, agnostic to the backend stack chosen.
+  — lifecycle-owned, boundary-only postMessage receiver, agnostic to the
+  backend stack chosen.
 - The service registry [`src/data/demo-services.json`](../../src/data/demo-services.json) —
   its `stack` field becomes more useful in Options A/B/C because the
   onboarding doc snippets diverge per stack, but the file itself is the same.
@@ -326,9 +327,9 @@ State of the system at runtime:
   init script is ~1 KB. Sentry SDK is loaded by the official Astro integration
   but `Sentry.init()` is gated by env so visitors don't ship traffic to your
   Sentry project unless you flip the flag.
-- **Enabled state** → overlay + network tap + Sentry transport all subscribe;
-  everything happens live in the overlay and is replayable in Sentry's
-  dashboard.
+- **Enabled state** → overlay + network tap + iframe forwarder + Docker relay +
+  Sentry transport all subscribe; everything happens live in the overlay and is
+  replayable in Sentry's dashboard.
 - **Bus is the single producer** → swapping Sentry for Highlight, Faro or a
   local WebSocket sink is a one-line subscriber change.
 

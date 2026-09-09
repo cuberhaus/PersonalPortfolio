@@ -1,62 +1,24 @@
 import registry from './demo-services.json' with { type: 'json' };
-import { z } from 'zod';
+import { parseDemoRegistry } from './demo-registry-contract.mjs';
+import type {
+  DemoOrchestrator,
+  DemoService,
+  DemoServiceRegistry,
+} from './demo-registry-contract.mjs';
 
-const BACKEND_STACKS = [
-  'fastapi',
-  'django',
-  'flask',
-  'spring',
-  'sveltekit',
-  'qwik',
-  'ember',
-  'rust',
-  'go',
-  'php',
-  'node',
-] as const;
+export type {
+  BackendStack,
+  DemoBackend,
+  DemoOrchestrator,
+  DemoService,
+  DemoServiceRegistry,
+} from './demo-registry-contract.mjs';
 
-const orchestratorSchema = z.object({
-  displayName: z.string().min(1),
-  type: z.enum(['compose', 'run', 'process']),
-  extra: z.string(),
-  image: z.string().optional(),
-});
+export function parseDemoServiceRegistry(value: unknown): DemoServiceRegistry {
+  return parseDemoRegistry(value);
+}
 
-const backendSchema = z.object({
-  container: z.string().nullable(),
-  port: z.number().int().positive(),
-  extraPorts: z.array(z.number().int().positive()).optional(),
-  iframeUrl: z.string().nullable(),
-  composeFile: z.string().nullable(),
-  makefile: z.string().nullable(),
-  stack: z.enum(BACKEND_STACKS),
-  needsSentry: z.boolean(),
-  notes: z.string().optional(),
-  dockerCmd: z.string().optional(),
-  devCmd: z.string().optional(),
-  orchestrator: orchestratorSchema.optional(),
-});
-
-const serviceSchema = z.object({
-  slug: z.string().min(1),
-  page: z.string().nullable(),
-  component: z.string().nullable(),
-  hasBackend: z.boolean(),
-  backend: backendSchema.optional(),
-});
-
-const registrySchema = z.object({
-  version: z.number().int().nonnegative(),
-  services: z.array(serviceSchema),
-});
-
-export type BackendStack = (typeof BACKEND_STACKS)[number];
-export type DemoOrchestrator = z.infer<typeof orchestratorSchema>;
-export type DemoBackend = z.infer<typeof backendSchema>;
-export type DemoService = z.infer<typeof serviceSchema>;
-export type DemoServiceRegistry = z.infer<typeof registrySchema>;
-
-const REGISTRY = registrySchema.parse(registry);
+const REGISTRY = parseDemoServiceRegistry(registry);
 
 export interface OrchestratedDemoService {
   slug: string;

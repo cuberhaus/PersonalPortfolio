@@ -15,12 +15,10 @@ import {
   subscribe,
   getBuffer,
   clearBuffer,
-  isEnabled,
   emitPerf,
   debug,
   type DebugLogEntry,
   type DebugNetworkEntry,
-  type DebugPerfEntry,
   type DebugLevel,
   type DebugSource,
 } from '../lib/debug';
@@ -93,18 +91,27 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
       import('../lib/debug-network'),
       import('../lib/debug-sentry'),
       import('../lib/debug-docker'),
-    ]).then(([network, sentry, docker]) => {
-      if (cancelled) return;
-      const lifecycle = createDebugLifecycle({
-        installNetworkTap: network.installNetworkTap,
-        installSentryForwarder: sentry.installSentryForwarder,
-        uninstallSentryForwarder: sentry.uninstallSentryForwarder,
-        subscribeAllVisible: docker.subscribeAllVisible,
-        unsubscribeAll: docker.unsubscribeAll,
+      import('../lib/debug-iframe'),
+    ])
+      .then(([network, sentry, docker, iframe]) => {
+        if (cancelled) return;
+        const lifecycle = createDebugLifecycle({
+          installNetworkTap: network.installNetworkTap,
+          installIframeForwarder: iframe.installIframeForwarder,
+          uninstallIframeForwarder: iframe.uninstallIframeForwarder,
+          installSentryForwarder: sentry.installSentryForwarder,
+          uninstallSentryForwarder: sentry.uninstallSentryForwarder,
+          subscribeAllVisible: docker.subscribeAllVisible,
+          unsubscribeAll: docker.unsubscribeAll,
+        });
+        debugLifecycleRef.current = lifecycle;
+        void lifecycle.enable().catch((error: unknown) => {
+          if (!cancelled) debug('debug:lifecycle').error('enable-failed', error);
+        });
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) debug('debug:lifecycle').error('adapter-load-failed', error);
       });
-      debugLifecycleRef.current = lifecycle;
-      void lifecycle.enable();
-    });
     return () => {
       cancelled = true;
       debugLifecycleRef.current?.disable();

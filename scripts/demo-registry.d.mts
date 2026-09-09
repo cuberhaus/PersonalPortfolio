@@ -1,37 +1,14 @@
-export interface DemoOrchestrator {
-  displayName: string;
-  type: 'compose' | 'run' | 'process';
-  extra: string;
-  image?: string;
-}
+import type { DemoOrchestrator, DemoServiceRegistry } from '../src/data/demo-registry-contract.mjs';
 
-export interface DemoBackend {
-  container: string | null;
-  port: number;
-  extraPorts?: number[];
-  iframeUrl: string | null;
-  composeFile: string | null;
-  makefile: string | null;
-  stack: string;
-  needsSentry: boolean;
-  notes?: string;
-  dockerCmd?: string;
-  devCmd?: string;
-  orchestrator?: DemoOrchestrator;
-}
+export type {
+  BackendStack,
+  DemoBackend,
+  DemoOrchestrator,
+  DemoService,
+  DemoServiceRegistry,
+} from '../src/data/demo-registry-contract.mjs';
 
-export interface DemoService {
-  slug: string;
-  page: string | null;
-  component: string | null;
-  hasBackend: boolean;
-  backend?: DemoBackend;
-}
-
-export interface DemoServiceRegistry {
-  version: number;
-  services: DemoService[];
-}
+export function parseDemoRegistry(value: unknown): DemoServiceRegistry;
 
 export interface OrchestratedDemoService {
   slug: string;

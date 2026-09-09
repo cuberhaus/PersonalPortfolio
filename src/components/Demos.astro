@@ -35,26 +35,46 @@ const { num } = Astro.props;
     </div>
 
     <div class="demo-filters reveal" role="group" aria-label="Filter projects by category">
-      <button class="demo-filter-btn active" data-category="all" aria-pressed="true">
+      <button
+        class="demo-filter-btn active"
+        data-category="all"
+        data-filtered-collection-filter="true"
+        data-filter-value="all"
+        aria-pressed="true"
+      >
         {t('demo.allDemos')}
       </button>
       {
         ['ai-ml', 'web', 'algorithms', 'graphics', 'robotics', 'academic'].map((cat) => (
-          <button class="demo-filter-btn" data-category={cat} aria-pressed="false">
+          <button
+            class="demo-filter-btn"
+            data-category={cat}
+            data-filtered-collection-filter="true"
+            data-filter-value={cat}
+            aria-pressed="false"
+          >
             {t(`demo.categories.${cat}` as keyof typeof t)}
           </button>
         ))
       }
     </div>
-    <div aria-live="polite" class="sr-only" id="demo-filter-announcer"></div>
+    <div
+      aria-live="polite"
+      class="sr-only"
+      id="demo-filter-announcer"
+      data-filtered-collection-announcer="true"
+    >
+    </div>
 
-    <div class="demo-grid reveal-stagger" id="demo-grid">
+    <div class="demo-grid reveal-stagger" id="demo-grid" data-filtered-collection-grid="true">
       {
         demos.map((demo, index) => (
           <article
             class={`demo-card ${index >= 6 ? 'hidden-demo extra-demo' : ''}${index >= 3 && index < 6 ? ' mobile-extra-demo mobile-hidden-demo' : ''}`}
             data-index={index}
             data-category={demo.category || 'other'}
+            data-filtered-collection-card="true"
+            data-filter-value={demo.category || 'other'}
           >
             <div class="demo-preview" aria-hidden="true">
               <img
@@ -142,14 +162,17 @@ const { num } = Astro.props;
 
     {
       demos.length > 6 && (
-        <div class="show-more-container reveal">
+        <div class="show-more-container reveal" data-filtered-collection-toggle-container="true">
           <button
             id="show-more-demos"
             class="show-more-btn"
+            data-filtered-collection-toggle="true"
             aria-expanded="false"
             aria-controls="demo-grid"
             data-more={t('projects.showMore')}
             data-less={t('projects.showLess')}
+            data-filtered-collection-more={t('projects.showMore')}
+            data-filtered-collection-less={t('projects.showLess')}
           >
             {t('projects.showMore')}
           </button>
@@ -164,18 +187,9 @@ const { num } = Astro.props;
 
   document.addEventListener('astro:page-load', () => {
     initializeFilteredCollection({
-      gridId: 'demo-grid',
-      cardSelector: '.demo-card',
-      filterSelector: '.demo-filter-btn',
-      filterValueAttribute: 'data-category',
-      buttonId: 'show-more-demos',
-      announcerId: 'demo-filter-announcer',
-      sectionId: 'projects',
-      showMoreAttribute: 'data-more',
-      showLessAttribute: 'data-less',
+      rootId: 'projects',
       itemLabel: 'projects',
       mobileBreakpoint: 640,
-      buttonDisplay: 'inline-block',
     });
   });
 </script>

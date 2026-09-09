@@ -20,20 +20,43 @@ const { num } = Astro.props;
     </div>
 
     <div class="cert-filters reveal" role="group" aria-label="Filter certifications by issuer">
-      <button class="cert-filter-btn active" data-issuer="all" aria-pressed="true">
+      <button
+        class="cert-filter-btn active"
+        data-issuer="all"
+        data-filtered-collection-filter="true"
+        data-filter-value="all"
+        aria-pressed="true"
+      >
         {t('certifications.all')}
       </button>
       {
         Array.from(new Set(certs.map((c) => c.issuer))).map((issuer) => (
-          <button class="cert-filter-btn" data-issuer={issuer} aria-pressed="false">
+          <button
+            class="cert-filter-btn"
+            data-issuer={issuer}
+            data-filtered-collection-filter="true"
+            data-filter-value={issuer}
+            aria-pressed="false"
+          >
             {issuer}
           </button>
         ))
       }
     </div>
-    <div aria-live="polite" class="sr-only" id="cert-filter-announcer"></div>
+    <div
+      aria-live="polite"
+      class="sr-only"
+      id="cert-filter-announcer"
+      data-filtered-collection-announcer="true"
+    >
+    </div>
 
-    <ul class="certifications-grid reveal-stagger" id="certifications-grid" data-mobile-limit="3">
+    <ul
+      class="certifications-grid reveal-stagger"
+      id="certifications-grid"
+      data-mobile-limit="3"
+      data-filtered-collection-grid="true"
+    >
       {
         certs.map((c, i) => {
           const Inner = (
@@ -70,6 +93,8 @@ const { num } = Astro.props;
             <li
               class={`certification-card ${i >= 6 ? 'hidden-demo extra-demo' : ''}${i >= 3 && i < 6 ? ' mobile-extra-demo mobile-hidden-demo' : ''}`}
               data-issuer={c.issuer}
+              data-filtered-collection-card="true"
+              data-filter-value={c.issuer}
             >
               {c.link ? (
                 <a
@@ -96,6 +121,10 @@ const { num } = Astro.props;
         <button
           class="certifications-toggle"
           id="certifications-toggle"
+          data-filtered-collection-toggle="true"
+          data-filtered-collection-toggle-container="true"
+          data-filtered-collection-more={t('certifications.showMore')}
+          data-filtered-collection-less={t('certifications.showLess')}
           data-show-more={t('certifications.showMore')}
           data-show-less={t('certifications.showLess')}
         >
@@ -369,18 +398,9 @@ const { num } = Astro.props;
 
   document.addEventListener('astro:page-load', () => {
     initializeFilteredCollection({
-      gridId: 'certifications-grid',
-      cardSelector: '.certification-card',
-      filterSelector: '.cert-filter-btn',
-      filterValueAttribute: 'data-issuer',
-      buttonId: 'certifications-toggle',
-      announcerId: 'cert-filter-announcer',
-      sectionId: 'certifications',
-      showMoreAttribute: 'data-show-more',
-      showLessAttribute: 'data-show-less',
+      rootId: 'certifications',
       itemLabel: 'certifications',
       mobileBreakpoint: 768,
-      buttonDisplay: 'block',
     });
   });
 

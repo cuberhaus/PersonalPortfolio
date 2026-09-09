@@ -3,7 +3,9 @@ import {
   listAllBackendPorts,
   listOrchestratedServices,
   loadDemoRegistry,
+  parseDemoRegistry as parseNodeDemoRegistry,
 } from '../../scripts/demo-registry.mjs';
+import { parseDemoServiceRegistry } from '../data/demo-services';
 import type {
   DemoServiceRegistry,
   OrchestratedDemoService,
@@ -30,5 +32,58 @@ describe('Node demo registry adapter', () => {
     });
     expect(ports).toContain(8888);
     expect(ports).toEqual([...new Set(ports)].sort((a, b) => a - b));
+  });
+
+  it('keeps browser and Node adapters on the same complete contract', () => {
+    const validRegistry = {
+      version: 1,
+      services: [
+        {
+          slug: 'planner',
+          page: null,
+          component: null,
+          hasBackend: true,
+          backend: {
+            container: null,
+            port: 9000,
+            extraPorts: [],
+            iframeUrl: null,
+            composeFile: null,
+            makefile: null,
+            stack: 'fastapi',
+            needsSentry: false,
+            orchestrator: {
+              displayName: 'Planner',
+              type: 'process',
+              extra: '',
+            },
+          },
+        },
+      ],
+    };
+    const incompleteRegistry = {
+      version: 1,
+      services: [
+        {
+          slug: 'broken',
+          page: null,
+          component: null,
+          hasBackend: true,
+          backend: { container: null, port: 9000, stack: 'fastapi', needsSentry: false },
+        },
+      ],
+    };
+    const duplicateRegistry = {
+      ...validRegistry,
+      services: [validRegistry.services[0], { ...validRegistry.services[0] }],
+    };
+
+    expect(parseDemoServiceRegistry(validRegistry)).toEqual(validRegistry);
+    expect(parseNodeDemoRegistry(validRegistry)).toEqual(validRegistry);
+    expect(parseDemoServiceRegistry(validRegistry).services[0].backend?.container).toBeNull();
+    expect(() => parseDemoServiceRegistry(incompleteRegistry)).toThrow();
+    expect(() => parseNodeDemoRegistry(incompleteRegistry)).toThrow();
+    expect(() => parseDemoServiceRegistry(duplicateRegistry)).toThrow();
+    expect(() => parseNodeDemoRegistry(duplicateRegistry)).toThrow();
   });
 });
