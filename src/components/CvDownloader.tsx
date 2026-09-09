@@ -192,7 +192,7 @@ const CV_DL_STYLES = `
     width: min(100%, 42rem);
     max-width: 42rem;
     min-width: 0;
-    padding: 0;
+    padding: 0 1rem 1rem;
     background: color-mix(in srgb, var(--bg-card) 72%, transparent);
     border-top: 2px solid var(--accent-text);
     border-bottom: 1px solid var(--border-color);

@@ -7,7 +7,7 @@
  * Run: npm run test:e2e:smoke
  */
 
-import { test, expect } from '@playwright/test';
+import { test, expect, type Locator } from '@playwright/test';
 import { SECTION_IDS, SECTION_IDS_WITH_HERO, SECTION_META } from '../src/config/section-ids';
 
 const SECTION_ORDER = SECTION_IDS;
@@ -51,6 +51,103 @@ test.describe('portfolio homepage smoke', () => {
     await expect(technical).toBeChecked();
     await expect(portrait).not.toBeChecked();
     await expect(download).toHaveAttribute('href', /cv_english_technical_no-photo\.pdf(?:\?|$)/);
+  });
+
+  test('CV downloader content stays inset from its panel edges', async ({ page }) => {
+    for (const route of ['/', '/es/', '/ca/']) {
+      for (const viewport of [
+        { width: 768, height: 900 },
+        { width: 390, height: 844 },
+      ]) {
+        await page.setViewportSize(viewport);
+        await page.goto(`${route}#about`, { waitUntil: 'domcontentloaded' });
+
+        const measureLayout = async () =>
+          page.locator('.cv-dl').evaluate((panel) => {
+            const panelBox = panel.getBoundingClientRect();
+            const contentBoxes = Array.from(
+              panel.querySelectorAll(
+                '.cv-dl-title, .cv-dl-field-label, .cv-dl-segments, .cv-dl-opt, .cv-dl-description, .cv-dl-btn'
+              )
+            ).map((content) => {
+              const box = content.getBoundingClientRect();
+              return { left: box.left, right: box.right };
+            });
+
+            return {
+              panelLeft: panelBox.left,
+              panelRight: panelBox.right,
+              contentBoxes,
+              viewportWidth: window.innerWidth,
+              documentWidth: document.documentElement.scrollWidth,
+            };
+          });
+
+        const assertInsetLayout = async () => {
+          const layout = await measureLayout();
+
+          expect(layout.contentBoxes).toHaveLength(6);
+          expect(layout.panelLeft).toBeGreaterThanOrEqual(0);
+          expect(layout.panelRight).toBeLessThanOrEqual(layout.viewportWidth);
+          expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth);
+          for (const contentBox of layout.contentBoxes) {
+            expect(contentBox.left - layout.panelLeft).toBeGreaterThanOrEqual(12);
+            expect(layout.panelRight - contentBox.right).toBeGreaterThanOrEqual(12);
+          }
+        };
+
+        await assertInsetLayout();
+        await page.locator('.cv-dl-segment input[value="complete"]').check();
+        await assertInsetLayout();
+
+        const assertFocusSurface = async (control: Locator) => {
+          const isButton = await control.evaluate((element) =>
+            element.classList.contains('cv-dl-btn')
+          );
+          await expect(control).toBeFocused();
+          await expect(control).toBeVisible();
+          await expect
+            .poll(() =>
+              control.evaluate((element, button) => {
+                const panelBox = element.closest('.cv-dl')?.getBoundingClientRect();
+                const surface = button ? element : element.nextElementSibling;
+                const surfaceBox = surface?.getBoundingClientRect();
+                return Boolean(
+                  surfaceBox &&
+                  panelBox &&
+                  surfaceBox.left >= panelBox.left &&
+                  surfaceBox.right <= panelBox.right &&
+                  surfaceBox.top >= panelBox.top &&
+                  surfaceBox.bottom <= panelBox.bottom
+                );
+              }, isButton)
+            )
+            .toBe(true);
+        };
+
+        const radios = page.locator('.cv-dl-segment input');
+        const checkedRadio = page.locator('.cv-dl-segment input:checked');
+        const checkedIndex = await radios.evaluateAll((inputs) =>
+          inputs.findIndex((input) => (input as HTMLInputElement).checked)
+        );
+        await checkedRadio.focus();
+        await assertFocusSurface(checkedRadio);
+
+        for (let step = 1; step < (await radios.count()); step += 1) {
+          const expectedIndex = (checkedIndex + step) % (await radios.count());
+          await page.keyboard.press('ArrowRight');
+          await assertFocusSurface(radios.nth(expectedIndex));
+        }
+
+        const checkbox = page.locator('.cv-dl-input');
+        await page.keyboard.press('Tab');
+        await assertFocusSurface(checkbox);
+
+        const download = page.locator('.cv-dl-btn');
+        await page.keyboard.press('Tab');
+        await assertFocusSurface(download);
+      }
+    }
   });
 
   test('navbar links scroll to each homepage section', async ({ page }) => {
