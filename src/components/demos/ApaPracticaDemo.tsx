@@ -24,7 +24,7 @@ const LINEAR_NB = 'PracticaAPA-Hipotiroidismo-ModelsLineals.ipynb';
 
 import { TRANSLATIONS } from '../../i18n/demos/apa-practica-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
-import { demoPanel, gradientButton } from './_styles';
+import { demoPanel, gradientBadge, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -565,15 +565,14 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
           <div
+            data-gradient-action="true"
             style={{
               padding: '0.2rem 0.55rem',
-              borderRadius: '0.35rem',
+              ...gradientBadge(),
               fontSize: '0.65rem',
               fontWeight: 700,
               letterSpacing: '0.06em',
               textTransform: 'uppercase' as const,
-              background: 'var(--accent-gradient)',
-              color: 'var(--text-primary)',
             }}
           >
             {t.mlPipeline}
@@ -846,11 +845,9 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
                   fontSize: '0.72rem',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  background:
-                    nbFile === nb.file && showNb
-                      ? `linear-gradient(135deg, ${accent1}, ${accent2})`
-                      : 'var(--bg-card-hover)',
-                  color: nbFile === nb.file && showNb ? '#fff' : 'var(--text-muted)',
+                  ...(nbFile === nb.file && showNb
+                    ? gradientButton({ accent1, accent2 })
+                    : { background: 'var(--bg-card-hover)', color: 'var(--text-muted)' }),
                 }}
               >
                 {nb.label}

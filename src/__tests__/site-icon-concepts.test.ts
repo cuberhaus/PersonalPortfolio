@@ -9,6 +9,7 @@ const siteIconsPath = resolve(process.cwd(), 'src/components/SiteIcons.astro');
 const manifestPath = resolve(publicRoot, 'site.webmanifest');
 const concepts = ['organic', 'signal', 'monogram', 'aperture'] as const;
 const treatments = ['contained', 'transparent'] as const;
+const comparisonOnlySvgFiles = new Set(['previous.svg']);
 
 const pngDimensions = (fileName: string) => {
   const png = readFileSync(resolve(publicRoot, fileName));
@@ -38,7 +39,7 @@ describe('site icon concept set', () => {
     expect(existsSync(conceptsRoot)).toBe(true);
 
     const svgFiles = readdirSync(conceptsRoot)
-      .filter((file) => file.endsWith('.svg'))
+      .filter((file) => file.endsWith('.svg') && !comparisonOnlySvgFiles.has(file))
       .sort();
     expect(svgFiles).toEqual(
       concepts

@@ -24,7 +24,7 @@ import { AssignmentMapFigure, PerHeliBreakdown, QueueStrips } from './DesastresV
 import { TRANSLATIONS } from '../../i18n/demos/desastres-ia-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { demoPanel, gradientButton } from './_styles';
+import { demoPanel, gradientBadge, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -253,15 +253,14 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
           }}
         >
           <div
+            data-gradient-action="true"
             style={{
               padding: '0.2rem 0.55rem',
-              borderRadius: '0.35rem',
+              ...gradientBadge(),
               fontSize: '0.65rem',
               fontWeight: 700,
               letterSpacing: '0.06em',
               textTransform: 'uppercase' as const,
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-              color: 'var(--text-primary)',
             }}
           >
             {t.localSearch}
@@ -343,13 +342,12 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
             {t.webAppTitle}
           </h4>
           <span
+            data-gradient-action="true"
             style={{
               padding: '0.15rem 0.45rem',
-              borderRadius: '0.3rem',
+              ...gradientBadge(),
               fontSize: '0.6rem',
               fontWeight: 700,
-              background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-              color: '#fff',
               letterSpacing: '0.05em',
               textTransform: 'uppercase' as const,
             }}
@@ -544,17 +542,18 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
               <span
                 key={o.fn}
                 title={o.desc}
+                data-gradient-action={o.name === 'SWAP' ? 'true' : undefined}
                 style={{
                   padding: '0.25rem 0.5rem',
-                  borderRadius: '0.35rem',
+                  ...(o.name === 'SWAP'
+                    ? gradientBadge()
+                    : {
+                        background: 'var(--bg-card-hover)',
+                        border: '1px solid var(--border-color)',
+                        color: 'var(--text-muted)',
+                      }),
                   fontSize: '0.68rem',
                   fontWeight: 600,
-                  background:
-                    o.name === 'SWAP'
-                      ? `linear-gradient(135deg, ${accent1}, ${accent2})`
-                      : 'var(--bg-card-hover)',
-                  border: o.name === 'SWAP' ? 'none' : '1px solid var(--border-color)',
-                  color: o.name === 'SWAP' ? '#fff' : 'var(--text-muted)',
                   cursor: 'help',
                 }}
               >

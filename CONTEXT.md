@@ -81,3 +81,17 @@ locale and metadata lookup policy.
 `[lang]/demos/[demo].astro` route. The route creates one typed eager glob
 lookup, reuses it for static-path generation, and renders a localized 404 with
 an explicit response status when a slug is not present.
+
+## Site identity
+
+**Visual icon variant**:
+A distinct piece of artwork representing the portfolio in browser and PWA icon surfaces.
+_Avoid_: Format variant, size variant.
+
+**Format variant**:
+An export of the same visual icon artwork for a particular file format or display size.
+_Avoid_: Alternative icon.
+
+**Canonical site icon**:
+The selected visual icon artwork that serves as the source for every browser and PWA format variant.
+_Avoid_: Default favicon.
