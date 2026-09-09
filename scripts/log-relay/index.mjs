@@ -21,12 +21,8 @@
 
 import http from 'node:http';
 import { spawn } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const REGISTRY_PATH = resolve(__dirname, '..', '..', 'src', 'data', 'demo-services.json');
+import { listBackedServices } from '../demo-registry.mjs';
+import { normalizeRelayLine } from './normalize.mjs';
 
 const ALLOWED_ORIGINS = ['http://localhost:4321', 'http://127.0.0.1:4321'];
 
@@ -34,25 +30,12 @@ const argv = process.argv.slice(2);
 const portArgIdx = argv.indexOf('--port');
 const PORT = portArgIdx >= 0 ? parseInt(argv[portArgIdx + 1], 10) : 9999;
 
-function loadRegistry() {
-  try {
-    const raw = readFileSync(REGISTRY_PATH, 'utf8');
-    return JSON.parse(raw);
-  } catch (err) {
-    console.error('[log-relay] failed to load registry:', err.message);
-    return { services: [] };
-  }
-}
-
 function backedSlugs() {
-  const reg = loadRegistry();
-  const out = [];
-  for (const s of reg.services) {
-    if (s.hasBackend && s.backend?.container) {
-      out.push({ slug: s.slug, container: s.backend.container, stack: s.backend.stack });
-    }
-  }
-  return out;
+  return listBackedServices().map((service) => ({
+    slug: service.slug,
+    container: service.backend.container,
+    stack: service.backend.stack,
+  }));
 }
 
 function applyCors(req, res) {
@@ -68,23 +51,6 @@ function applyCors(req, res) {
 function sendJson(res, status, body) {
   res.writeHead(status, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify(body));
-}
-
-function tryParseStructured(line) {
-  if (!line.startsWith('{') || !line.endsWith('}')) return null;
-  try {
-    const obj = JSON.parse(line);
-    if (typeof obj !== 'object' || obj === null) return null;
-    const level =
-      typeof obj.level === 'string' && ['trace', 'info', 'warn', 'error'].includes(obj.level)
-        ? obj.level
-        : 'info';
-    const ns = typeof obj.ns === 'string' ? obj.ns : 'backend';
-    const msg = typeof obj.msg === 'string' ? obj.msg : line;
-    return { level, ns, msg };
-  } catch {
-    return null;
-  }
 }
 
 function streamSse(req, res, slug) {
@@ -109,16 +75,17 @@ function streamSse(req, res, slug) {
 
   const send = (line) => {
     if (!line) return;
-    const parsed = tryParseStructured(line) ?? {
-      level: 'info',
-      ns: `demo:${slug}:backend`,
-      msg: line,
-    };
+    const parsed = normalizeRelayLine(line, slug);
+    if (!parsed) return;
     const payload = JSON.stringify({
       slug,
       stack: svc.stack,
-      ...parsed,
-      ts: Date.now(),
+      source: parsed.source,
+      origin: parsed.origin,
+      level: parsed.level,
+      ns: parsed.ns,
+      msg: parsed.msg,
+      ts: parsed.ts,
     });
     res.write(`data: ${payload}\n\n`);
   };

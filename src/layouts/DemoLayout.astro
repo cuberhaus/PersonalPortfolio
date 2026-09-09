@@ -236,19 +236,6 @@ const siteBase = Astro.site || Astro.url;
       document.addEventListener('astro:page-load', logNav);
     </script>
 
-    <script>
-      // Subscribe to backend log SSE streams for every visible
-      // [data-demo-slug] element. Dev-only — `requireEnabled()` inside
-      // subscribeAllVisible() blocks this in production builds.
-      async function subscribeBackends() {
-        try {
-          const mod = await import('../lib/debug-docker');
-          mod.subscribeAllVisible();
-        } catch {}
-      }
-      subscribeBackends();
-      document.addEventListener('astro:page-load', subscribeBackends);
-    </script>
     <DebugMount />
   </body>
 </html>

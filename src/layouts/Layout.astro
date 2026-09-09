@@ -7,8 +7,7 @@ import SiteIcons from '../components/SiteIcons.astro';
 import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
-import { certifications as certificationsData } from '../data/loaders';
-import { flattenForLocale } from '../i18n/load';
+import { getLocalizedCertifications } from '../lib/certifications';
 import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
 import { SITE_URLS } from '../config/site';
 
@@ -28,8 +27,7 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
 // schema.org/Person.hasCredential — locale-aware so search engines see cert
 // names in the same language as the rest of the page.
-type LayoutCert = { name: string; issuer: string; link?: string };
-const certs = flattenForLocale<LayoutCert>(certificationsData as never, lang);
+const certs = getLocalizedCertifications(lang);
 const hasCredential = certs.map((cert) => ({
   '@type': 'EducationalOccupationalCredential',
   name: cert.name,
@@ -231,18 +229,6 @@ const hasCredential = certs.map((cert) => ({
             lang: document.documentElement.lang,
             title: document.title,
           });
-        } catch {}
-      });
-    </script>
-
-    <script>
-      // Open SSE streams from the dev-only log relay for every visible
-      // [data-demo-slug] element on the page. Production builds never
-      // open these connections (requireEnabled() inside subscribeAllVisible).
-      document.addEventListener('astro:page-load', async () => {
-        try {
-          const mod = await import('../lib/debug-docker');
-          mod.subscribeAllVisible();
         } catch {}
       });
     </script>

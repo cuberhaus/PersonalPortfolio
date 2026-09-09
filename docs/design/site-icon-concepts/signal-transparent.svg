@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="signal-transparent-title signal-transparent-desc">
+  <title id="signal-transparent-title">Signal site icon concept, transparent</title>
+  <desc id="signal-transparent-desc">A rising mint signal line with a coral endpoint without a background.</desc>
+  <path d="M12 43C18 43 19 23 27 23C35 23 34 42 42 42C48 42 49 31 53 31" fill="none" stroke="#68d2bd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="53" cy="31" r="5" fill="#ff8a65" stroke="#101a18" stroke-width="1.5"/>
+  <circle cx="53" cy="31" r="1.75" fill="#f2f6f1"/>
+</svg>

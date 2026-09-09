@@ -87,7 +87,8 @@ esac
 export SENTRY_DSN_DOCKER
 
 # ── Single source of truth: src/data/demo-services.json ──────────────────
-# Build the SERVICE_REGISTRY array dynamically from the JSON via jq.
+# Build the SERVICE_REGISTRY array dynamically through the validated Node
+# adapter. The shell owns process control; the adapter owns registry shape.
 # Format kept identical to the previous static array (so existing logic below
 # keeps working): "displayName|port|type|dir|composeFileOrImage|extra"
 #   - type: compose | run | process
@@ -97,9 +98,8 @@ export SENTRY_DSN_DOCKER
 #                         empty for process
 #   - extra: display annotation (e.g. "(GPU)") for compose / process,
 #            or container name for run
-if ! command -v jq >/dev/null 2>&1; then
-  echo "ERROR: jq is required to read ${REGISTRY_FILE}." >&2
-  echo "       Install with: sudo apt install jq  (or brew install jq)" >&2
+if ! command -v node >/dev/null 2>&1; then
+  echo "ERROR: node is required to read ${REGISTRY_FILE}." >&2
   exit 1
 fi
 if [[ ! -f "$REGISTRY_FILE" ]]; then
@@ -149,24 +149,7 @@ while IFS="$_US" read -r slug type display port compose_path makefile_path image
       SERVICE_REGISTRY+=("${display}|${port}|process|||${extra}")
       ;;
   esac
-done < <(
-  jq -r --arg US "$_US" '
-    .services[]
-    | select(.hasBackend == true and .backend.orchestrator)
-    | [
-        .slug,
-        .backend.orchestrator.type,
-        .backend.orchestrator.displayName,
-        (.backend.port | tostring),
-        (.backend.composeFile // ""),
-        (.backend.makefile // ""),
-        (.backend.orchestrator.image // ""),
-        (.backend.orchestrator.extra // ""),
-        (.backend.container // "")
-      ]
-    | join($US)
-  ' "$REGISTRY_FILE"
-)
+done < <(node "$PORTFOLIO/scripts/demo-registry.mjs" --orchestrators | tr '\t' "$_US")
 
 # Convenience: per-repo absolute paths used later (referenced by Makefile etc)
 _pp() { local r="$1"; cd "$PORTFOLIO/../$r" 2>/dev/null && pwd || echo ""; }

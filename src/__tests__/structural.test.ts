@@ -150,6 +150,7 @@ describe('Portfolio presentation', () => {
     const embed = read('components/demos/LiveAppEmbed.tsx');
     const gallery = read('../e2e/readme-gallery.spec.ts');
     expect(embed.match(/data-live-status=/g)).toHaveLength(3);
+    expect(embed).not.toContain('fallbackSelector');
     expect(gallery).toMatch(/astro-island\[ssr\]/);
     expect(gallery).toMatch(/data-live-status="checking"/);
     expect(gallery).toMatch(/DOMContentLoaded.*installStyle/);
@@ -159,6 +160,74 @@ describe('Portfolio presentation', () => {
     const toggle = read('components/ThemeToggle.astro');
     expect(toggle).toContain("new CustomEvent('open-theme-modal')");
     expect(toggle).not.toContain("localStorage.setItem('theme'");
+  });
+});
+
+describe('filtered collection callers use the module DOM contract', () => {
+  it('keep runtime markers and visibility classes inside filtered-collection.ts', () => {
+    for (const file of ['components/Demos.astro', 'components/Certifications.astro']) {
+      const source = read(file);
+      expect(source, `${file} should declare a filtered collection root`).toContain(
+        'data-filtered-collection'
+      );
+      expect(source, `${file} should declare its mobile breakpoint`).toContain(
+        'data-mobile-breakpoint'
+      );
+      expect(source, `${file} should not expose implementation markers`).not.toContain(
+        'data-filtered-collection-'
+      );
+      expect(source, `${file} should not expose runtime visibility classes`).not.toMatch(
+        /hidden-demo|extra-demo|mobile-hidden-demo|mobile-extra-demo/
+      );
+    }
+
+    const implementation = read('lib/filtered-collection.ts');
+    expect(implementation).toContain('initializeFilteredCollections');
+    expect(implementation).toContain('button[data-filter-value]');
+    expect(implementation).toContain('[aria-live="polite"]');
+  });
+});
+
+describe('live app fallback regions keep coordination local', () => {
+  const fallbackPages = [
+    'algorithms',
+    'caim',
+    'draculin',
+    'grafics',
+    'par-parallel',
+    'prop',
+    'rob-robotics',
+    'sbc-ia',
+    'tenda',
+  ];
+
+  it('wrap each live embed and route-specific fallback in named slots', () => {
+    for (const slug of fallbackPages) {
+      const source = read(`pages/demos/${slug}.astro`);
+      expect(source, `${slug} should use the fallback region`).toContain('<LiveAppFallbackRegion>');
+      expect(source, `${slug} should name the live embed slot`).toContain('slot="embed"');
+      expect(source, `${slug} should name the fallback slot`).toContain('slot="fallback"');
+      expect(source, `${slug} should not coordinate through selectors`).not.toContain(
+        'fallbackSelector'
+      );
+    }
+
+    const region = read('components/demos/LiveAppFallbackRegion.astro');
+    expect(region).toContain('data-live-app-region');
+    expect(region).toContain('data-live-app-fallback');
+  });
+});
+
+describe('localized demo dispatch', () => {
+  it('uses typed lookup and explicit missing-demo behavior', () => {
+    const route = read('pages/[lang]/demos/[demo].astro');
+    const dispatch = read('lib/demo-modules.ts');
+    expect(route).not.toContain('as Record<');
+    expect(route).not.toContain('![1]');
+    expect(route).toContain('loadDemoModules');
+    expect(dispatch.match(/import\.meta\.glob/g)).toHaveLength(1);
+    expect(route).toContain('Astro.response.status = 404');
+    expect(route).toContain('createDemoModuleLookup');
   });
 });
 

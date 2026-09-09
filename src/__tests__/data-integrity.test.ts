@@ -124,14 +124,18 @@ describe('i18n translations', () => {
 describe('Dynamic demo router ([lang]/demos/[demo].astro)', () => {
   const routerPath = join(__dirname, '..', 'pages', '[lang]', 'demos', '[demo].astro');
   const routerContent = readFileSync(routerPath, 'utf-8') as string;
+  const dispatchContent = readFileSync(join(__dirname, '..', 'lib', 'demo-modules.ts'), 'utf-8');
 
   // The router globs every page in src/pages/demos/ at build time, so slug
   // coverage is enforced by the "every slug has a corresponding .astro page"
   // and "every .astro page has a corresponding slug" assertions above. Here
   // we just verify the router is using the SSOT-compatible glob pattern.
 
-  it('uses import.meta.glob to discover demo pages', () => {
-    expect(routerContent).toMatch(/import\.meta\.glob\(\s*['"]\.\.\/\.\.\/demos\/\*\.astro['"]/);
+  it('uses the shared dispatch helper to discover demo pages', () => {
+    expect(routerContent).toContain('loadDemoModules');
+    expect(dispatchContent).toMatch(
+      /import\.meta\.glob(?:<[^(\n]+>)?\(\s*['"]\.\.\/pages\/demos\/\*\.astro['"]/
+    );
   });
 
   it('imports the locale list from the locales SSOT', () => {

@@ -15,6 +15,7 @@ import {
   EducationFileSchema,
   CertificationsFileSchema,
 } from '../i18n/content-schemas';
+import { getIssuerAttribution } from '../lib/issuer-icons';
 
 const cloneFirst = (data: unknown): unknown => structuredClone((data as unknown[])[0]);
 
@@ -64,9 +65,9 @@ describe('EducationFileSchema rejections', () => {
 });
 
 describe('CertificationsFileSchema rejections', () => {
-  it('rejects an unknown issuerIcon', () => {
-    const e = cloneFirst(certificationsData) as { issuerIcon: string };
-    e.issuerIcon = 'definitely-not-a-real-issuer';
+  it('rejects an unknown issuer ID', () => {
+    const e = cloneFirst(certificationsData) as { issuer: string };
+    e.issuer = 'definitely-not-a-real-issuer';
     expect(CertificationsFileSchema.safeParse([e]).success).toBe(false);
   });
 
@@ -74,5 +75,14 @@ describe('CertificationsFileSchema rejections', () => {
     const first = cloneFirst(certificationsData) as { id: string; displayOrder: number };
     const duplicate = structuredClone(first);
     expect(CertificationsFileSchema.safeParse([first, duplicate]).success).toBe(false);
+  });
+});
+
+describe('Issuer attribution', () => {
+  it('projects the canonical display name and icon from one issuer ID', () => {
+    expect(getIssuerAttribution('nvidia')).toMatchObject({
+      name: 'NVIDIA',
+      icon: 'nvidia',
+    });
   });
 });

@@ -12,32 +12,15 @@
  * ring buffer.
  */
 
-import { emitFrom, requireEnabled, type DebugLevel } from './debug';
-
-const VALID_LEVELS: ReadonlySet<DebugLevel> = new Set<DebugLevel>([
-  'trace',
-  'info',
-  'warn',
-  'error',
-]);
+import { emitFrom, requireEnabled } from './debug';
+import { createBackendLogProcessor, type BackendLogProcessor } from './debug-docker-log';
 
 const DEFAULT_RELAY = 'http://127.0.0.1:9999';
 const RATE_LIMIT_PER_SEC = 100;
 
-interface RelayPayload {
-  slug: string;
-  stack?: string;
-  level: DebugLevel;
-  ns: string;
-  msg: string;
-  ts: number;
-}
-
 interface SlugSubscription {
   source: EventSource;
-  bucket: number;
-  resetAt: number;
-  dropped: number;
+  processor: BackendLogProcessor;
   flushTimer: ReturnType<typeof setInterval> | null;
 }
 
@@ -49,36 +32,6 @@ function getRelayBase(): string {
     if (w.__DEBUG_LOG_RELAY_URL) return w.__DEBUG_LOG_RELAY_URL;
   }
   return DEFAULT_RELAY;
-}
-
-function flushDropped(slug: string, sub: SlugSubscription): void {
-  if (sub.dropped <= 0) return;
-  emitFrom('backend', slug, 'warn', `demo:${slug}:backend`, 'rate-limited', [
-    { dropped: sub.dropped },
-  ]);
-  sub.dropped = 0;
-}
-
-function handleLine(slug: string, payload: RelayPayload, sub: SlugSubscription): void {
-  const now = Date.now();
-  if (now >= sub.resetAt) {
-    sub.bucket = RATE_LIMIT_PER_SEC;
-    sub.resetAt = now + 1000;
-  }
-  if (sub.bucket <= 0) {
-    sub.dropped++;
-    return;
-  }
-  sub.bucket--;
-
-  const level = VALID_LEVELS.has(payload.level) ? payload.level : 'info';
-  const ns =
-    typeof payload.ns === 'string' && payload.ns.length > 0
-      ? payload.ns.startsWith('demo:')
-        ? payload.ns
-        : `demo:${slug}:backend:${payload.ns}`
-      : `demo:${slug}:backend`;
-  emitFrom('backend', slug, level, ns, payload.msg ?? '', []);
 }
 
 export function subscribeBackend(slug: string): () => void {
@@ -101,24 +54,17 @@ export function subscribeBackend(slug: string): () => void {
 
   const sub: SlugSubscription = {
     source,
-    bucket: RATE_LIMIT_PER_SEC,
-    resetAt: Date.now() + 1000,
-    dropped: 0,
+    processor: createBackendLogProcessor({ slug, limit: RATE_LIMIT_PER_SEC }),
     flushTimer: null,
   };
 
-  source.onmessage = (e) => {
-    try {
-      const payload = JSON.parse(e.data) as RelayPayload;
-      handleLine(slug, payload, sub);
-    } catch {}
-  };
+  source.onmessage = (e) => sub.processor.handle(e.data);
   source.onerror = () => {};
   source.addEventListener('end', () => {
     unsubscribeBackend(slug);
   });
 
-  sub.flushTimer = setInterval(() => flushDropped(slug, sub), 1000);
+  sub.flushTimer = setInterval(() => sub.processor.flush(), 1000);
   subscriptions.set(slug, sub);
 
   emitFrom('backend', slug, 'info', `demo:${slug}:backend`, 'subscribed', [{ url }]);
@@ -130,7 +76,7 @@ export function unsubscribeBackend(slug: string): void {
   const sub = subscriptions.get(slug);
   if (!sub) return;
   if (sub.flushTimer) clearInterval(sub.flushTimer);
-  flushDropped(slug, sub);
+  sub.processor.flush();
   try {
     sub.source.close();
   } catch {

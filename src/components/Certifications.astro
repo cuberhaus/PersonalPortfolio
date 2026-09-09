@@ -1,38 +1,25 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIssuerIconSvg } from '../lib/issuer-icons';
-import { certifications as certsData, getTranslations } from '../data/loaders';
 import { visibleEntries } from '../data/visibility';
 import { getLocalizedCertifications } from '../lib/certifications';
 
-type CertEntry = {
-  id: string;
-  displayOrder: number;
-  name: string;
-  issuer: string;
-  issuerIcon: string;
-  issued: string;
-  link?: string;
-  fallback?: string;
-  badgeImage?: string;
-  badgeImageFallback?: string;
-  hidden?: boolean;
-};
-
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const certs = visibleEntries(
-  getLocalizedCertifications<CertEntry>(
-    certsData as CertEntry[],
-    getTranslations('certifications', lang)
-  )
-);
+const certs = visibleEntries(getLocalizedCertifications(lang));
 
 const { num } = Astro.props;
 ---
 
-<section class="section certifications" id="certifications" data-num={num}>
-  <div class={`container${certs.length > 6 ? ' has-desktop-extra' : ''}`}>
+<section
+  class="section certifications"
+  id="certifications"
+  data-num={num}
+  data-filtered-collection
+  data-item-label={t('nav.certifications')}
+  data-mobile-breakpoint="768"
+>
+  <div class="container">
     <div class="reveal">
       <span class="section-label">{t('certifications.label')}</span>
       <h2 class="section-title">{t('certifications.title')}</h2>
@@ -40,12 +27,22 @@ const { num } = Astro.props;
     </div>
 
     <div class="cert-filters reveal" role="group" aria-label="Filter certifications by issuer">
-      <button class="cert-filter-btn active" data-issuer="all" aria-pressed="true">
+      <button
+        class="cert-filter-btn active"
+        data-issuer="all"
+        data-filter-value="all"
+        aria-pressed="true"
+      >
         {t('certifications.all')}
       </button>
       {
         Array.from(new Set(certs.map((c) => c.issuer))).map((issuer) => (
-          <button class="cert-filter-btn" data-issuer={issuer} aria-pressed="false">
+          <button
+            class="cert-filter-btn"
+            data-issuer={issuer}
+            data-filter-value={issuer}
+            aria-pressed="false"
+          >
             {issuer}
           </button>
         ))
@@ -53,9 +50,9 @@ const { num } = Astro.props;
     </div>
     <div aria-live="polite" class="sr-only" id="cert-filter-announcer"></div>
 
-    <ul class="certifications-grid reveal-stagger" id="certifications-grid" data-mobile-limit="3">
+    <ul class="certifications-grid reveal-stagger" id="certifications-grid">
       {
-        certs.map((c, i) => {
+        certs.map((c) => {
           const Inner = (
             <>
               <div
@@ -87,10 +84,7 @@ const { num } = Astro.props;
             </>
           );
           return (
-            <li
-              class={`certification-card ${i >= 6 ? 'hidden-demo extra-demo' : ''}${i >= 3 && i < 6 ? ' mobile-extra-demo mobile-hidden-demo' : ''}`}
-              data-issuer={c.issuer}
-            >
+            <li class="certification-card" data-issuer={c.issuer} data-filter-value={c.issuer}>
               {c.link ? (
                 <a
                   href={c.link}
@@ -116,8 +110,11 @@ const { num } = Astro.props;
         <button
           class="certifications-toggle"
           id="certifications-toggle"
-          data-show-more={t('certifications.showMore')}
-          data-show-less={t('certifications.showLess')}
+          type="button"
+          aria-expanded="false"
+          aria-controls="certifications-grid"
+          data-more-label={t('certifications.showMore')}
+          data-less-label={t('certifications.showLess')}
         >
           {t('certifications.showMore')}
         </button>
@@ -332,226 +329,16 @@ const { num } = Astro.props;
     box-shadow: 0 4px 20px var(--glow-color);
   }
 
-  /* Show button on desktop when there are >6 items */
-  .has-desktop-extra .certifications-toggle {
+  .certifications-toggle {
     display: block;
-  }
-
-  /* Show button on mobile always (rendered only when >3 items) */
-  @media (max-width: 768px) {
-    .certifications-toggle {
-      display: block;
-    }
-  }
-
-  /* ── Filter / Pagination Animation Classes ── */
-  @media (max-width: 640px) {
-    .mobile-hidden-demo {
-      display: none !important;
-    }
-
-    .mobile-extra-demo {
-      opacity: 0;
-      transform: translateY(20px);
-      transition:
-        opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-        transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-      transition-delay: 0ms !important;
-    }
-
-    .mobile-extra-demo.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .hidden-demo {
-    display: none !important;
-  }
-
-  .extra-demo {
-    opacity: 0;
-    transform: translateY(20px);
-    transition:
-      opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-      transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-    transition-delay: 0ms !important;
-  }
-
-  .extra-demo.visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 </style>
 
 <script>
+  import { initializeFilteredCollections } from '../lib/filtered-collection';
+
   document.addEventListener('astro:page-load', () => {
-    const btn = document.getElementById('certifications-toggle');
-    const grid = document.getElementById('certifications-grid');
-    const filterBtns = document.querySelectorAll('.cert-filter-btn');
-    const announcer = document.getElementById('cert-filter-announcer');
-
-    if (!grid) return;
-
-    let currentIssuer = 'all';
-    const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
-    const getAllCards = () => [...grid.querySelectorAll('.certification-card')];
-    const getVisibleCards = () => {
-      if (currentIssuer === 'all') return getAllCards();
-      return getAllCards().filter((c) => c.getAttribute('data-issuer') === currentIssuer);
-    };
-
-    let mobileShown = 3;
-
-    function updateGrid() {
-      const cards = getAllCards();
-      const visibleCards = getVisibleCards();
-      const totalCount = visibleCards.length;
-
-      if (announcer) {
-        announcer.textContent = `Showing ${totalCount} certifications`;
-      }
-
-      // Hide all cards first
-      cards.forEach((card) => {
-        card.classList.remove('visible');
-        card.classList.add('hidden-demo');
-        card.classList.remove('mobile-hidden-demo', 'mobile-extra-demo', 'extra-demo');
-      });
-
-      if (isMobile()) {
-        const end = Math.min(mobileShown, totalCount);
-        for (let i = 0; i < end; i++) {
-          visibleCards[i].classList.remove('hidden-demo');
-          visibleCards[i].classList.add('visible');
-        }
-
-        if (btn) {
-          if (mobileShown >= totalCount) {
-            btn.textContent = btn.getAttribute('data-show-less');
-            btn.setAttribute('aria-expanded', 'true');
-            btn.classList.add('expanded');
-            if (totalCount <= 3) btn.style.display = 'none';
-            else btn.style.display = 'block';
-          } else {
-            btn.textContent = btn.getAttribute('data-show-more');
-            btn.setAttribute('aria-expanded', 'false');
-            btn.classList.remove('expanded');
-            btn.style.display = 'block';
-          }
-        }
-      } else {
-        const isExpanded = btn?.classList.contains('expanded');
-        const limit = isExpanded ? totalCount : Math.min(6, totalCount);
-
-        for (let i = 0; i < limit; i++) {
-          visibleCards[i].classList.remove('hidden-demo');
-          visibleCards[i].classList.add('visible');
-        }
-
-        if (btn) {
-          if (totalCount <= 6) {
-            btn.style.display = 'none';
-          } else {
-            btn.style.display = 'block';
-            btn.textContent = isExpanded
-              ? btn.getAttribute('data-show-less')
-              : btn.getAttribute('data-show-more');
-            btn.setAttribute('aria-expanded', String(isExpanded));
-          }
-        }
-      }
-    }
-
-    filterBtns.forEach((fBtn) => {
-      fBtn.addEventListener('click', () => {
-        const issuer = fBtn.getAttribute('data-issuer') || 'all';
-        if (issuer === currentIssuer) return;
-
-        currentIssuer = issuer;
-        mobileShown = 3;
-        if (btn) {
-          btn.classList.remove('expanded');
-          btn.setAttribute('aria-expanded', 'false');
-          btn.textContent = btn.getAttribute('data-show-more');
-        }
-
-        filterBtns.forEach((b) => {
-          b.classList.remove('active');
-          b.setAttribute('aria-pressed', 'false');
-        });
-        fBtn.classList.add('active');
-        fBtn.setAttribute('aria-pressed', 'true');
-
-        updateGrid();
-      });
-    });
-
-    function scrollToCerts() {
-      const section = document.getElementById('certifications');
-      if (section) {
-        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        section.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
-      }
-    }
-
-    if (btn) {
-      btn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        const totalCount = visibleCards.length;
-
-        if (isMobile()) {
-          if (mobileShown >= totalCount) {
-            mobileShown = 3;
-            updateGrid();
-            scrollToCerts();
-          } else {
-            const start = mobileShown;
-            mobileShown = Math.min(mobileShown + 3, totalCount);
-
-            let stagger = 0;
-            for (let i = start; i < mobileShown; i++) {
-              const card = visibleCards[i];
-              card.classList.remove('hidden-demo');
-              const delay = 20 + stagger * 60;
-              setTimeout(() => card.classList.add('visible'), delay);
-              stagger++;
-            }
-
-            if (mobileShown >= totalCount) {
-              btn.textContent = btn.getAttribute('data-show-less');
-              btn.setAttribute('aria-expanded', 'true');
-              btn.classList.add('expanded');
-            }
-          }
-        } else {
-          const isExpanded = btn.classList.toggle('expanded');
-          btn.setAttribute('aria-expanded', String(isExpanded));
-
-          if (isExpanded) {
-            for (let i = 6; i < totalCount; i++) {
-              const card = visibleCards[i];
-              card.classList.remove('hidden-demo');
-              setTimeout(() => card.classList.add('visible'), 20 + (i - 6) * 60);
-            }
-          } else {
-            for (let i = 6; i < totalCount; i++) {
-              const card = visibleCards[i];
-              card.classList.remove('visible');
-              setTimeout(() => card.classList.add('hidden-demo'), 400);
-            }
-            scrollToCerts();
-          }
-
-          btn.textContent = isExpanded
-            ? btn.getAttribute('data-show-less')
-            : btn.getAttribute('data-show-more');
-        }
-      });
-    }
-
-    // Initial setup
-    updateGrid();
+    initializeFilteredCollections();
   });
 
   // Fallback: if the external cert link is unreachable, swap to the local copy

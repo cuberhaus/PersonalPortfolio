@@ -1,6 +1,7 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { listPageServices } from './demo-registry.mjs';
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -22,9 +23,7 @@ function decodeText(value) {
 }
 
 export function listGalleryDemos() {
-  const services = readJson('src/data/demo-services.json').services.filter(
-    (service) => service.page !== null
-  );
+  const services = listPageServices();
   const identities = readJson('src/data/demos.json');
   const copy = readJson('locales/en/demos.json');
   const identityBySlug = new Map(identities.map((demo, index) => [demo.slug, { demo, index }]));

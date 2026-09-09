@@ -3,12 +3,10 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import GraficsDemo from '../../components/demos/GraficsDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import { getDemo } from '../../i18n/demo';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
+import { getDemoPageContext } from '../../lib/demo-page';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const demo = getDemo('grafics', lang);
+const { lang, t, demo } = getDemoPageContext(Astro.url, 'grafics');
 ---
 
 <DemoLayout
@@ -27,16 +25,18 @@ const demo = getDemo('grafics', lang);
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="grafics"
-      title="Gràfics Shader Playground"
-      lang={lang}
-      fallbackSelector="#grafics-mock-fallback"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed
+        slot="embed"
+        slug="grafics"
+        title="Gràfics Shader Playground"
+        lang={lang}
+        client:load
+      />
 
-    <div id="grafics-mock-fallback">
-      <GraficsDemo lang={lang} client:visible />
-    </div>
+      <div slot="fallback" id="grafics-mock-fallback">
+        <GraficsDemo lang={lang} client:visible />
+      </div>
+    </LiveAppFallbackRegion>
   </div>
 </DemoLayout>

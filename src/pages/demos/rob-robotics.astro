@@ -3,12 +3,10 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import RobDemo from '../../components/demos/RobDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import { getDemo } from '../../i18n/demo';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
+import { getDemoPageContext } from '../../lib/demo-page';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const demo = getDemo('rob-robotics', lang);
+const { lang, t, demo } = getDemoPageContext(Astro.url, 'rob-robotics');
 ---
 
 <DemoLayout
@@ -27,16 +25,18 @@ const demo = getDemo('rob-robotics', lang);
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="rob-robotics"
-      title="ROB Robotics Dashboard"
-      lang={lang}
-      fallbackSelector="#rob-mock-fallback"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed
+        slot="embed"
+        slug="rob-robotics"
+        title="ROB Robotics Dashboard"
+        lang={lang}
+        client:load
+      />
 
-    <div id="rob-mock-fallback">
-      <RobDemo lang={lang} client:visible />
-    </div>
+      <div slot="fallback" id="rob-mock-fallback">
+        <RobDemo lang={lang} client:visible />
+      </div>
+    </LiveAppFallbackRegion>
   </div>
 </DemoLayout>

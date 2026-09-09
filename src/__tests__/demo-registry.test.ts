@@ -10,7 +10,12 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync, readdirSync, statSync } from 'fs';
 import { join, resolve } from 'path';
-import { listDemoServices, type DemoService, type BackendStack } from '../data/demo-services';
+import {
+  listDemoServices,
+  listOrchestratedServices,
+  type DemoService,
+  type BackendStack,
+} from '../data/demo-services';
 
 const SRC = join(__dirname, '..');
 const ROOT = resolve(SRC, '..');
@@ -112,21 +117,16 @@ describe('demo-services.json ↔ scripts/dev-all-demos.sh parity', () => {
   const script = read('scripts/dev-all-demos.sh');
 
   it('orchestrator block reads from src/data/demo-services.json', () => {
-    expect(script).toContain('demo-services.json');
+    expect(script).toContain('demo-registry.mjs');
   });
 
   it('every backed slug shows up either in `_compose_up`, `_docker_run`, or as planner-api/PROP', () => {
-    const orchestrated = backed.filter(
-      (s) => (s.backend as { orchestrator?: { type?: string } } | undefined)?.orchestrator?.type
-    );
+    const orchestrated = listOrchestratedServices();
     for (const s of orchestrated) {
-      const b = s.backend as { orchestrator?: { displayName?: string; type?: string } };
-      const display = b.orchestrator?.displayName ?? '';
-      const type = b.orchestrator?.type ?? '';
-      if (type === 'compose' || type === 'run') {
+      if (s.type === 'compose' || s.type === 'run') {
         // orchestrator displayName must appear verbatim in the script
-        expect(script, `dev-all-demos.sh missing line for ${s.slug} (${display})`).toContain(
-          display
+        expect(script, `dev-all-demos.sh missing line for ${s.slug} (${s.displayName})`).toContain(
+          s.displayName
         );
       }
     }

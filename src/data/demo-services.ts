@@ -1,57 +1,40 @@
 import registry from './demo-services.json' with { type: 'json' };
+import {
+  collectBackendPorts,
+  parseDemoRegistry,
+  projectOrchestratedServices,
+} from './demo-registry-contract.mjs';
+import type {
+  DemoOrchestrator,
+  DemoService,
+  DemoServiceRegistry,
+} from './demo-registry-contract.mjs';
 
-export type BackendStack =
-  | 'fastapi'
-  | 'django'
-  | 'flask'
-  | 'spring'
-  | 'sveltekit'
-  | 'qwik'
-  | 'ember'
-  | 'rust'
-  | 'go'
-  | 'php'
-  | 'node';
+export type {
+  BackendStack,
+  DemoBackend,
+  DemoOrchestrator,
+  DemoService,
+  DemoServiceRegistry,
+} from './demo-registry-contract.mjs';
 
-export interface DemoBackend {
-  container: string | null;
+export function parseDemoServiceRegistry(value: unknown): DemoServiceRegistry {
+  return parseDemoRegistry(value);
+}
+
+const REGISTRY = parseDemoServiceRegistry(registry);
+
+export interface OrchestratedDemoService {
+  slug: string;
   port: number;
-  /**
-   * Additional host ports that the backend binds to but doesn't surface as
-   * the iframe URL — e.g. Draculin's Django API on :8889 alongside the
-   * Flutter UI nginx on :8890. Included by `listAllBackendPorts()` so the
-   * Makefile's `free-ports` target sees every port the backend can occupy.
-   */
-  extraPorts?: number[];
-  iframeUrl: string | null;
+  type: DemoOrchestrator['type'];
+  displayName: string;
+  extra: string;
+  image: string | null;
   composeFile: string | null;
   makefile: string | null;
-  stack: BackendStack;
-  needsSentry: boolean;
-  notes?: string;
-  /**
-   * Hint strings rendered by `<LiveAppEmbed>` when the backend isn't
-   * reachable. The component falls back to these defaults when the page
-   * doesn't pass `dockerCmd` / `devCmd` props explicitly.
-   */
-  dockerCmd?: string;
-  devCmd?: string;
+  container: string | null;
 }
-
-export interface DemoService {
-  slug: string;
-  page: string | null;
-  component: string | null;
-  hasBackend: boolean;
-  backend?: DemoBackend;
-}
-
-export interface DemoServiceRegistry {
-  version: number;
-  services: DemoService[];
-}
-
-const REGISTRY = registry as unknown as DemoServiceRegistry;
 
 export function listDemoServices(): readonly DemoService[] {
   return REGISTRY.services;
@@ -78,6 +61,10 @@ export function getRunHints(slug: string): { dockerCmd?: string; devCmd?: string
     dockerCmd: backend.dockerCmd,
     devCmd: backend.devCmd,
   };
+}
+
+export function listOrchestratedServices(): readonly OrchestratedDemoService[] {
+  return projectOrchestratedServices(REGISTRY);
 }
 
 export function listBackedSlugs(): readonly string[] {
@@ -123,12 +110,7 @@ export function listTracedBackendPorts(): readonly number[] {
  * so the registry stays the single source of truth for the port universe.
  */
 export function listAllBackendPorts(): readonly number[] {
-  const ports = new Set<number>();
-  for (const svc of REGISTRY.services) {
-    if (typeof svc.backend?.port === 'number') ports.add(svc.backend.port);
-    for (const extra of svc.backend?.extraPorts ?? []) ports.add(extra);
-  }
-  return Array.from(ports).sort((a, b) => a - b);
+  return collectBackendPorts(REGISTRY);
 }
 
 /**
@@ -147,9 +129,7 @@ export function listLivePortfolioBackends(): readonly {
     if (!svc.hasBackend || !svc.page) continue;
     const port = svc.backend?.port;
     const iframeUrl = svc.backend?.iframeUrl;
-    const displayName =
-      (svc.backend as { orchestrator?: { displayName?: string } } | undefined)?.orchestrator
-        ?.displayName ?? svc.slug;
+    const displayName = svc.backend?.orchestrator?.displayName ?? svc.slug;
     if (typeof port !== 'number' || !iframeUrl) continue;
     out.push({ slug: svc.slug, port, iframeUrl, displayName });
   }

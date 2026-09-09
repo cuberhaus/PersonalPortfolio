@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="aperture-contained-title aperture-contained-desc">
+  <title id="aperture-contained-title">Aperture site icon concept, contained</title>
+  <desc id="aperture-contained-desc">Four flat blades form a mint and coral aperture around a light center on a dark green square.</desc>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#101a18" stroke="#2d4841" stroke-width="2"/>
+  <path d="M20 12H44L37 29H27Z" fill="#68d2bd"/>
+  <path d="M52 20V44L35 37V27Z" fill="#ff8a65"/>
+  <path d="M44 52H20L27 35H37Z" fill="#82dfca"/>
+  <path d="M12 44V20L29 27V37Z" fill="#ff8a65"/>
+  <path d="M32 23L41 32L32 41L23 32Z" fill="#f2f6f1"/>
+  <circle cx="32" cy="32" r="3" fill="#101a18"/>
+</svg>

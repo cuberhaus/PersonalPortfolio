@@ -39,7 +39,7 @@ import demosEn from '../../locales/en/demos.json';
 import demosEs from '../../locales/es/demos.json';
 import demosCa from '../../locales/ca/demos.json';
 
-import { ISSUER_ICON_PATHS } from '../lib/issuer-icons';
+import { ISSUERS } from '../lib/issuer-icons';
 import { LOCALES } from '../config/locales';
 import { visibleSkillItems, type SkillItem } from '../data/visibility';
 import { flattenForLocale } from '../i18n/load';
@@ -243,26 +243,24 @@ describe('Certifications data', () => {
     expect(Object.keys(certificationsEn).sort()).toEqual([...ids].sort());
     expect(Object.keys(certificationsEs).sort()).toEqual([...ids].sort());
     expect(Object.keys(certificationsCa).sort()).toEqual([...ids].sort());
-
-    const ordered = getLocalizedCertifications(
-      [
-        { id: 'second', displayOrder: 200, name: 'Second', issuer: 'Issuer', issuerIcon: 'nvidia' },
-        { id: 'first', displayOrder: 100, name: 'First', issuer: 'Issuer', issuerIcon: 'nvidia' },
-      ],
-      { first: { issued: 'First date' }, second: { issued: 'Second date' } }
-    );
-    expect(ordered.map((entry) => [entry.id, entry.issued])).toEqual([
-      ['first', 'First date'],
-      ['second', 'Second date'],
-    ]);
   });
 
-  it('every entry has name + issuer + issuerIcon in identity', () => {
+  it('projects localized certifications in curated display order', () => {
+    const localized = getLocalizedCertifications('es');
+
+    expect(localized.map((entry) => entry.displayOrder)).toEqual(
+      [...localized].map((entry) => entry.displayOrder).sort((left, right) => left - right)
+    );
+    expect(localized.find((entry) => entry.id === 'nvidia-accelerated-data-science')?.issued).toBe(
+      'Ago 2026'
+    );
+  });
+
+  it('every entry has a name and issuer ID in identity', () => {
     for (const entry of data) {
-      const id = entry as { name?: string; issuer?: string; issuerIcon?: string };
+      const id = entry as { name?: string; issuer?: string };
       expect((id.name ?? '').trim().length).toBeGreaterThan(0);
       expect((id.issuer ?? '').trim().length).toBeGreaterThan(0);
-      expect((id.issuerIcon ?? '').trim().length).toBeGreaterThan(0);
     }
   });
 
@@ -289,11 +287,11 @@ describe('Certifications data', () => {
     }
   });
 
-  it('every issuerIcon slug exists in issuer-icons.ts', () => {
-    const registered = new Set(Object.keys(ISSUER_ICON_PATHS));
+  it('every issuer ID exists in issuer-icons.ts', () => {
+    const registered = new Set(Object.keys(ISSUERS));
     for (const entry of data) {
-      const slug = entry.issuerIcon as string;
-      expect(registered, `issuer-icons.ts missing slug "${slug}"`).toContain(slug);
+      const issuer = entry.issuer as string;
+      expect(registered, `issuer-icons.ts missing issuer "${issuer}"`).toContain(issuer);
     }
   });
 });

@@ -15,15 +15,15 @@ import {
   subscribe,
   getBuffer,
   clearBuffer,
-  isEnabled,
   emitPerf,
   debug,
   type DebugLogEntry,
   type DebugNetworkEntry,
-  type DebugPerfEntry,
   type DebugLevel,
   type DebugSource,
 } from '../lib/debug';
+import { loadDebugLifecycle } from '../lib/debug-bootstrap';
+import type { DebugLifecycle } from '../lib/debug-lifecycle';
 
 type Tab = 'logs' | 'state' | 'perf' | 'network';
 
@@ -65,6 +65,7 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
   const [minLevel, setMinLevelState] = useState<DebugLevel>('trace');
   const [sourceFilter, setSourceFilter] = useState<Set<DebugSource>>(() => new Set(SOURCES_ORDER));
   const fpsFrameRef = useRef<number>(0);
+  const debugLifecycleRef = useRef<DebugLifecycle | null>(null);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -81,19 +82,30 @@ export default function DebugOverlay({ initiallyEnabled = false }: DebugOverlayP
   // CustomEvent above is the single source of truth that updates this state.
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      debugLifecycleRef.current?.disable();
+      debugLifecycleRef.current = null;
+      return;
+    }
     let cancelled = false;
-    void (async () => {
-      const [{ installNetworkTap }, { installSentryForwarder }] = await Promise.all([
-        import('../lib/debug-network'),
-        import('../lib/debug-sentry'),
-      ]);
-      if (cancelled) return;
-      installNetworkTap();
-      void installSentryForwarder();
-    })();
+    void loadDebugLifecycle()
+      .then((lifecycle) => {
+        if (cancelled) {
+          lifecycle.disable();
+          return;
+        }
+        debugLifecycleRef.current = lifecycle;
+        void lifecycle.enable().catch((error: unknown) => {
+          if (!cancelled) debug('debug:lifecycle').error('enable-failed', error);
+        });
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) debug('debug:lifecycle').error('adapter-load-failed', error);
+      });
     return () => {
       cancelled = true;
+      debugLifecycleRef.current?.disable();
+      debugLifecycleRef.current = null;
     };
   }, [enabled]);
 

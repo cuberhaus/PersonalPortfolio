@@ -4,25 +4,21 @@
  *
  * Adding a new demo? Drop a new file at `src/pages/demos/<slug>.astro` and
  * the corresponding entry in `src/data/demos.json` (+ .es.json / .ca.json).
- * `import.meta.glob` picks the page up automatically — no edits needed here.
+ * The eager page glob picks the page up automatically — no edits needed here.
  */
 import { LOCALES } from '../../../config/locales';
+import ErrorPage from '../../../components/ErrorPage.astro';
+import Layout from '../../../layouts/Layout.astro';
+import { getLangFromUrl, useTranslations } from '../../../i18n/utils';
+import { createDemoModuleLookup, listDemoSlugs } from '../../../lib/demo-dispatch';
+import { loadDemoModules } from '../../../lib/demo-modules';
 
-const demoModules = import.meta.glob('../../demos/*.astro', { eager: true }) as Record<
-  string,
-  { default: unknown }
->;
+type DemoComponent = typeof import('../../demos/algorithms.astro').default;
 
-const demosBySlug = Object.fromEntries(
-  Object.entries(demoModules).map(([path, mod]) => {
-    const slug = path.match(/\/([^/]+)\.astro$/)![1];
-    return [slug, mod.default];
-  })
-);
+const demosBySlug = createDemoModuleLookup(loadDemoModules<DemoComponent>());
 
 export function getStaticPaths() {
-  const localeModules = import.meta.glob('../../demos/*.astro', { eager: true });
-  const slugs = Object.keys(localeModules).map((p) => p.match(/\/([^/]+)\.astro$/)![1]);
+  const slugs = listDemoSlugs(loadDemoModules<DemoComponent>());
   // Default locale is served from /demos/<slug>; this dynamic route only
   // exists for the prefixed locales (es, ca, …).
   const langs = LOCALES.filter((l) => l !== LOCALES[0]);
@@ -30,8 +26,26 @@ export function getStaticPaths() {
 }
 
 const { demo } = Astro.params;
-const Component = demosBySlug[demo as string] as
-  ((props: Record<string, unknown>) => unknown) | undefined;
+const Component = demo ? demosBySlug[demo] : undefined;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+
+if (!Component) Astro.response.status = 404;
 ---
 
-{Component && <Component />}
+{
+  Component ? (
+    <Component />
+  ) : (
+    <Layout title={`404 — ${t('notFound.title')}`} description={t('notFound.message')}>
+      <ErrorPage
+        code={404}
+        title={t('notFound.title')}
+        message={t('notFound.message')}
+        backLabel={t('notFound.back')}
+        backHref={base || '/'}
+      />
+    </Layout>
+  )
+}

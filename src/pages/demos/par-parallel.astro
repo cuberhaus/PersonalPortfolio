@@ -3,12 +3,10 @@ import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
 import ParDemo from '../../components/demos/ParDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import { getDemo } from '../../i18n/demo';
+import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
+import { getDemoPageContext } from '../../lib/demo-page';
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const demo = getDemo('par-parallel', lang);
+const { lang, t, demo } = getDemoPageContext(Astro.url, 'par-parallel');
 ---
 
 <DemoLayout
@@ -27,16 +25,18 @@ const demo = getDemo('par-parallel', lang);
       accent={demo.accent}
     />
 
-    <LiveAppEmbed
-      slug="par-parallel"
-      title="PAR Parallel Computing"
-      lang={lang}
-      fallbackSelector="#par-mock-fallback"
-      client:load
-    />
+    <LiveAppFallbackRegion>
+      <LiveAppEmbed
+        slot="embed"
+        slug="par-parallel"
+        title="PAR Parallel Computing"
+        lang={lang}
+        client:load
+      />
 
-    <div id="par-mock-fallback">
-      <ParDemo lang={lang} client:visible />
-    </div>
+      <div slot="fallback" id="par-mock-fallback">
+        <ParDemo lang={lang} client:visible />
+      </div>
+    </LiveAppFallbackRegion>
   </div>
 </DemoLayout>
