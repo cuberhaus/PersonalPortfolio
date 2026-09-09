@@ -34,7 +34,7 @@
     "@astrojs/sitemap": "^3.7.3",
     "@sentry/astro": "^10.66.0",
     "@zootools/email-spell-checker": "^1.12.0",
-    "astro": "^7.1.6",
+    "astro": "^7.3.2",
     "d3-array": "^3.2.4",
     "d3-geo": "^3.1.1",
     "d3-scale": "^4.0.2",
@@ -77,6 +77,15 @@
   },
   "overrides": {
     "hono": "^4.12.26",
-    "vite": "^8.0.13"
+    "vite": "^8.0.13",
+    "@astrojs/internal-helpers": {
+      "js-yaml": "^4.3.2",
+      "smol-toml": "^1.8.0"
+    },
+    "astro": {
+      "js-yaml": "^4.3.2",
+      "smol-toml": "^1.8.0",
+      "svgo": "^4.1.0"
+    }
   }
 }
