@@ -1,12 +1,17 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { parseDemoRegistry } from '../src/data/demo-registry-contract.mjs';
+import {
+  collectBackendPorts,
+  parseDemoRegistry,
+  projectOrchestratedServices,
+} from '../src/data/demo-registry-contract.mjs';
 
 const REGISTRY_PATH = fileURLToPath(new URL('../src/data/demo-services.json', import.meta.url));
 
 /** @typedef {import('./demo-registry.d.mts').DemoServiceRegistry} DemoServiceRegistry */
 /** @typedef {import('./demo-registry.d.mts').DemoService} DemoService */
 /** @typedef {import('./demo-registry.d.mts').OrchestratedDemoService} OrchestratedDemoService */
+/** @typedef {import('../src/data/demo-registry-contract.d.mts').DemoServiceRegistry} DemoServiceRegistry */
 
 export { parseDemoRegistry };
 
@@ -29,35 +34,18 @@ export function listBackedServices() {
 
 /** @returns {OrchestratedDemoService[]} */
 export function listOrchestratedServices() {
-  return loadDemoRegistry().services.flatMap((service) => {
-    const backend = service.backend;
-    const orchestrator = backend?.orchestrator;
-    if (!service.hasBackend || !backend || !orchestrator) return [];
-    return [
-      {
-        slug: service.slug,
-        type: orchestrator.type,
-        displayName: orchestrator.displayName,
-        port: backend.port,
-        composeFile: backend.composeFile ?? '',
-        makefile: backend.makefile ?? '',
-        image: orchestrator.image ?? '',
-        extra: orchestrator.extra,
-        container: backend.container ?? '',
-      },
-    ];
-  });
+  return projectOrchestratedServices(loadDemoRegistry()).map((service) => ({
+    ...service,
+    composeFile: service.composeFile ?? '',
+    makefile: service.makefile ?? '',
+    image: service.image ?? '',
+    container: service.container ?? '',
+  }));
 }
 
 /** @returns {number[]} */
 export function listAllBackendPorts() {
-  const ports = new Set();
-  for (const service of loadDemoRegistry().services) {
-    if (!service.backend) continue;
-    ports.add(service.backend.port);
-    for (const extra of service.backend.extraPorts ?? []) ports.add(extra);
-  }
-  return [...ports].sort((a, b) => a - b);
+  return collectBackendPorts(loadDemoRegistry());
 }
 
 function printOrchestrators() {

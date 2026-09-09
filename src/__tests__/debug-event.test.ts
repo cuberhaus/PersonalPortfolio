@@ -1,7 +1,68 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeDebugEvent } from '../lib/debug-event.mjs';
+import {
+  normalizeBackendDebugEvent,
+  normalizeDebugEvent,
+  normalizeIframeDebugEvent,
+} from '../lib/debug-event.mjs';
+import { normalizeRelayLine } from '../../scripts/log-relay/normalize.mjs';
 
 describe('debug ingress normalization', () => {
+  it('gives each runtime adapter a narrow canonicalization helper', () => {
+    expect(
+      normalizeIframeDebugEvent(
+        {
+          type: 'debug:log',
+          level: 'warn',
+          ns: 'worker',
+          msg: 'started',
+        },
+        'http://localhost:8888'
+      )
+    ).toMatchObject({
+      source: 'iframe',
+      origin: 'http://localhost:8888',
+      level: 'warn',
+      ns: 'iframe:worker',
+      msg: 'started',
+      args: [],
+    });
+
+    expect(
+      normalizeBackendDebugEvent({ level: 'error', ns: 'worker', msg: 'failed' }, 'tenda', {
+        now: () => 42,
+      })
+    ).toMatchObject({
+      source: 'backend',
+      origin: 'tenda',
+      level: 'error',
+      ns: 'demo:tenda:backend:worker',
+      msg: 'failed',
+      ts: 42,
+    });
+  });
+
+  it('keeps Node relay lines semantically identical to browser backend events', () => {
+    const structured = JSON.stringify({
+      level: 'warn',
+      ns: 'worker',
+      msg: 'ready',
+      ts: 1234,
+    });
+
+    expect(normalizeRelayLine(structured, 'tenda')).toEqual(
+      normalizeBackendDebugEvent(JSON.parse(structured), 'tenda', {
+        now: () => 999,
+        allowPlainText: true,
+      })
+    );
+    expect(normalizeRelayLine('plain log line', 'tenda')).toMatchObject({
+      source: 'backend',
+      origin: 'tenda',
+      ns: 'demo:tenda:backend',
+      msg: 'plain log line',
+    });
+  });
+
   it('normalizes iframe envelopes with source, namespace, and timestamp', () => {
     expect(
       normalizeDebugEvent(

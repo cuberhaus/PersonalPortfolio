@@ -26,6 +26,33 @@ function normalizeNamespace(value, namespacePrefix, defaultNamespace) {
   return `${namespacePrefix}:${raw}`;
 }
 
+export function normalizeIframeDebugEvent(value, origin, options = {}) {
+  return normalizeDebugEvent(value, {
+    source: 'iframe',
+    origin,
+    namespacePrefix: 'iframe',
+    defaultNamespace: 'iframe',
+    expectedType: 'debug:log',
+    requireLevel: true,
+    requireNamespace: true,
+    requireMessage: true,
+    requireArgsArray: true,
+    now: options.now,
+  });
+}
+
+export function normalizeBackendDebugEvent(value, slug, options = {}) {
+  const namespace = `demo:${slug}:backend`;
+  return normalizeDebugEvent(value, {
+    source: 'backend',
+    origin: slug,
+    namespacePrefix: namespace,
+    defaultNamespace: namespace,
+    allowPlainText: options.allowPlainText ?? false,
+    now: options.now,
+  });
+}
+
 /**
  * Convert an iframe envelope or relay payload into one canonical ingress event.
  * Plain text is accepted only by the relay, where a raw Docker log line is a

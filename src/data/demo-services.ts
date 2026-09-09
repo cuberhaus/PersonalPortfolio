@@ -1,5 +1,9 @@
 import registry from './demo-services.json' with { type: 'json' };
-import { parseDemoRegistry } from './demo-registry-contract.mjs';
+import {
+  collectBackendPorts,
+  parseDemoRegistry,
+  projectOrchestratedServices,
+} from './demo-registry-contract.mjs';
 import type {
   DemoOrchestrator,
   DemoService,
@@ -26,7 +30,7 @@ export interface OrchestratedDemoService {
   type: DemoOrchestrator['type'];
   displayName: string;
   extra: string;
-  image?: string;
+  image: string | null;
   composeFile: string | null;
   makefile: string | null;
   container: string | null;
@@ -60,24 +64,7 @@ export function getRunHints(slug: string): { dockerCmd?: string; devCmd?: string
 }
 
 export function listOrchestratedServices(): readonly OrchestratedDemoService[] {
-  return REGISTRY.services.flatMap((service) => {
-    const backend = service.backend;
-    const orchestrator = backend?.orchestrator;
-    if (!backend || !service.hasBackend || !orchestrator) return [];
-    return [
-      {
-        slug: service.slug,
-        port: backend.port,
-        type: orchestrator.type,
-        displayName: orchestrator.displayName,
-        extra: orchestrator.extra,
-        image: orchestrator.image,
-        composeFile: backend.composeFile,
-        makefile: backend.makefile,
-        container: backend.container,
-      },
-    ];
-  });
+  return projectOrchestratedServices(REGISTRY);
 }
 
 export function listBackedSlugs(): readonly string[] {
@@ -123,12 +110,7 @@ export function listTracedBackendPorts(): readonly number[] {
  * so the registry stays the single source of truth for the port universe.
  */
 export function listAllBackendPorts(): readonly number[] {
-  const ports = new Set<number>();
-  for (const svc of REGISTRY.services) {
-    if (typeof svc.backend?.port === 'number') ports.add(svc.backend.port);
-    for (const extra of svc.backend?.extraPorts ?? []) ports.add(extra);
-  }
-  return Array.from(ports).sort((a, b) => a - b);
+  return collectBackendPorts(REGISTRY);
 }
 
 /**

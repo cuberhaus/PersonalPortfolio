@@ -11,17 +11,14 @@ type PresentationOptions = {
   expanded: boolean;
 };
 
-export type FilteredCollectionConfig = {
-  rootId: string;
-  gridId: string;
-  itemLabel: string;
-  mobileBreakpoint: number;
-  moreLabel: string;
-  lessLabel: string;
-};
-
 const MOBILE_PAGE_SIZE = 3;
 const DESKTOP_LIMIT = 6;
+
+export function initializeFilteredCollections(scope: ParentNode = document): void {
+  scope
+    .querySelectorAll<HTMLElement>('[data-filtered-collection]')
+    .forEach(initializeFilteredCollection);
+}
 
 export function getFilteredCollectionPresentation({
   totalCount,
@@ -44,16 +41,16 @@ export function getFilteredCollectionPresentation({
   };
 }
 
-export function initializeFilteredCollection(config: FilteredCollectionConfig): void {
-  const root = document.getElementById(config.rootId);
-  const grid = document.getElementById(config.gridId);
+export function initializeFilteredCollection(root: HTMLElement): void {
+  const button = [...root.querySelectorAll<HTMLButtonElement>('button')].find(
+    (candidate) => candidate.getAttribute('aria-controls') !== null
+  );
+  const gridId = button?.getAttribute('aria-controls');
+  const grid = gridId ? root.ownerDocument.getElementById(gridId) : null;
   if (!root || !grid || root.dataset.filteredCollectionInitialized) return;
   if (!root.contains(grid)) return;
   root.dataset.filteredCollectionInitialized = 'true';
 
-  const button = [...root.querySelectorAll<HTMLButtonElement>('button')].find(
-    (candidate) => candidate.getAttribute('aria-controls') === config.gridId
-  );
   const filterButtons = [...root.querySelectorAll<HTMLButtonElement>('button[data-filter-value]')];
   const announcer = root.querySelector<HTMLElement>('[aria-live="polite"]');
   const toggleContainer =
@@ -62,12 +59,15 @@ export function initializeFilteredCollection(config: FilteredCollectionConfig): 
       : button;
   const animationTimers = new Set<ReturnType<typeof setTimeout>>();
   const animations = new Set<Animation>();
+  const itemLabel = root.dataset.itemLabel ?? '';
+  const mobileBreakpoint = Number(root.dataset.mobileBreakpoint) || 640;
+  const moreLabel = button?.dataset.moreLabel ?? '';
+  const lessLabel = button?.dataset.lessLabel ?? '';
   let currentFilter = 'all';
   let mobileShown = MOBILE_PAGE_SIZE;
 
-  const isMobile = () => window.matchMedia(`(max-width: ${config.mobileBreakpoint}px)`).matches;
-  const getAllCards = () =>
-    [...grid.children].filter((card): card is HTMLElement => card instanceof HTMLElement);
+  const isMobile = () => window.matchMedia(`(max-width: ${mobileBreakpoint}px)`).matches;
+  const getAllCards = () => [...grid.children].filter(isCollectionCard);
   const getFilterValue = (element: HTMLElement) => element.dataset.filterValue ?? 'all';
   const getFilteredCards = () => {
     const cards = getAllCards();
@@ -85,7 +85,7 @@ export function initializeFilteredCollection(config: FilteredCollectionConfig): 
     if (!button) return;
     button.hidden = !presentation.buttonVisible;
     if (toggleContainer) toggleContainer.hidden = !presentation.buttonVisible;
-    button.textContent = presentation.expanded ? config.lessLabel : config.moreLabel;
+    button.textContent = presentation.expanded ? lessLabel : moreLabel;
     button.setAttribute('aria-expanded', String(presentation.expanded));
   };
   const scrollToCollection = () => {
@@ -104,7 +104,7 @@ export function initializeFilteredCollection(config: FilteredCollectionConfig): 
       expanded,
     });
 
-    if (announcer) announcer.textContent = `Showing ${filteredCards.length} ${config.itemLabel}`;
+    if (announcer) announcer.textContent = `Showing ${filteredCards.length} ${itemLabel}`;
     allCards.forEach((card) => (card.hidden = true));
     filteredCards.slice(0, presentation.visibleCount).forEach((card, index) => {
       card.hidden = false;
@@ -185,4 +185,8 @@ export function initializeFilteredCollection(config: FilteredCollectionConfig): 
   );
   currentFilter = activeFilter ? getFilterValue(activeFilter) : 'all';
   updateGrid();
+}
+
+function isCollectionCard(value: Element): value is HTMLElement {
+  return 'dataset' in value && 'hidden' in value;
 }

@@ -24,7 +24,14 @@ const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 const { num } = Astro.props;
 ---
 
-<section class="section demos" id="projects" data-num={num} data-item-label={t('nav.projects')}>
+<section
+  class="section demos"
+  id="projects"
+  data-num={num}
+  data-filtered-collection
+  data-item-label={t('nav.projects')}
+  data-mobile-breakpoint="640"
+>
   <div class="container">
     <div class="reveal">
       <span class="section-label">{t('projects.label')}</span>
@@ -171,18 +178,10 @@ const { num } = Astro.props;
 </section>
 
 <script>
-  import { initializeFilteredCollection } from '../lib/filtered-collection';
+  import { initializeFilteredCollections } from '../lib/filtered-collection';
 
   document.addEventListener('astro:page-load', () => {
-    const button = document.getElementById('show-more-demos');
-    initializeFilteredCollection({
-      rootId: 'projects',
-      gridId: 'demo-grid',
-      itemLabel: document.getElementById('projects')?.dataset.itemLabel ?? '',
-      mobileBreakpoint: 640,
-      moreLabel: button?.dataset.moreLabel ?? '',
-      lessLabel: button?.dataset.lessLabel ?? '',
-    });
+    initializeFilteredCollections();
   });
 </script>
 

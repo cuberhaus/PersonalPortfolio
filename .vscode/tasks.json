@@ -11,6 +11,28 @@
 			],
 			"isBackground": false,
 			"problemMatcher": []
+		},
+		{
+			"label": "six-candidate-focused-vitest",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"./node_modules/.bin/vitest run src/__tests__/filtered-collection.test.ts src/__tests__/live-app-fallback.test.ts src/__tests__/live-app-orchestration.test.ts src/__tests__/demo-dispatch.test.ts src/__tests__/demo-registry-adapter.test.ts src/__tests__/debug-event.test.ts src/__tests__/debug-bootstrap.test.ts src/__tests__/debug-iframe.test.ts src/__tests__/debug-docker-log.test.ts src/__tests__/structural.test.ts > /tmp/personalportfolio-six-candidate-vitest.log 2>&1; printf '%s\\n' $? > /tmp/personalportfolio-six-candidate-vitest.exit"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "focused-architecture-vitest-capture",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"./node_modules/.bin/vitest run src/__tests__/filtered-collection.test.ts src/__tests__/live-app-fallback.test.ts src/__tests__/live-app-orchestration.test.ts src/__tests__/demo-dispatch.test.ts src/__tests__/demo-registry-adapter.test.ts src/__tests__/debug-event.test.ts src/__tests__/debug-bootstrap.test.ts src/__tests__/debug-iframe.test.ts src/__tests__/debug-docker-log.test.ts src/__tests__/structural.test.ts"
+			],
+			"isBackground": false,
+			"problemMatcher": []
 		}
 	]
 }

@@ -1,5 +1,5 @@
 import { emitFrom } from './debug';
-import { normalizeDebugEvent } from './debug-event.mjs';
+import { normalizeBackendDebugEvent } from './debug-event.mjs';
 
 const DEFAULT_RATE_LIMIT = 100;
 
@@ -38,14 +38,7 @@ export function createBackendLogProcessor({
   };
 
   const handle = (data: unknown) => {
-    const event = normalizeDebugEvent(data, {
-      source: 'backend',
-      origin: slug,
-      namespacePrefix: `demo:${slug}:backend`,
-      defaultNamespace: `demo:${slug}:backend`,
-      requireMessage: true,
-      now,
-    });
+    const event = normalizeBackendDebugEvent(data, slug, { now });
     if (!event) return;
 
     const timestamp = now();

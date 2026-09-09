@@ -167,6 +167,12 @@ describe('filtered collection callers use the module DOM contract', () => {
   it('keep runtime markers and visibility classes inside filtered-collection.ts', () => {
     for (const file of ['components/Demos.astro', 'components/Certifications.astro']) {
       const source = read(file);
+      expect(source, `${file} should declare a filtered collection root`).toContain(
+        'data-filtered-collection'
+      );
+      expect(source, `${file} should declare its mobile breakpoint`).toContain(
+        'data-mobile-breakpoint'
+      );
       expect(source, `${file} should not expose implementation markers`).not.toContain(
         'data-filtered-collection-'
       );
@@ -176,6 +182,7 @@ describe('filtered collection callers use the module DOM contract', () => {
     }
 
     const implementation = read('lib/filtered-collection.ts');
+    expect(implementation).toContain('initializeFilteredCollections');
     expect(implementation).toContain('button[data-filter-value]');
     expect(implementation).toContain('[aria-live="polite"]');
   });

@@ -18,7 +18,7 @@
 
 import { emitFrom, requireEnabled } from './debug';
 import { listAllowedIframeOrigins } from '../data/demo-services';
-import { normalizeDebugEvent } from './debug-event.mjs';
+import { normalizeIframeDebugEvent } from './debug-event.mjs';
 
 let installedListener: ((e: MessageEvent) => void) | null = null;
 const allowed = new Set<string>();
@@ -42,17 +42,7 @@ export function installIframeForwarder(opts: InstallIframeForwarderOptions = {})
 
   installedListener = (e: MessageEvent) => {
     if (!allowed.has(e.origin)) return;
-    const event = normalizeDebugEvent(e.data, {
-      source: 'iframe',
-      origin: e.origin,
-      namespacePrefix: 'iframe',
-      defaultNamespace: 'iframe',
-      expectedType: 'debug:log',
-      requireLevel: true,
-      requireNamespace: true,
-      requireMessage: true,
-      requireArgsArray: true,
-    });
+    const event = normalizeIframeDebugEvent(e.data, e.origin);
     if (!event) return;
     emitFrom(event.source, event.origin, event.level, event.ns, event.msg, event.args, event.ts);
   };

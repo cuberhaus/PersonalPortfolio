@@ -21,6 +21,10 @@ Browser and Node projections are intentionally separate. Parity tests compare
 their meaning at the adapter boundary without making either runtime consume
 the other's API.
 
+The validated contract also owns the canonical meaning of orchestrated service
+rows and the complete backend port set. Browser and Node adapters reuse those
+pure projections, then retain their own nullability and process-facing shape.
+
 ## Live app orchestration
 
 A live app definition is the resolved URL plus optional run hints for one demo.
@@ -38,12 +42,14 @@ mock or local component.
 ## Filtered collections
 
 `src/lib/filtered-collection.ts` owns the runtime protocol for filtered grids:
-semantic lookup by collection IDs, filter buttons, `aria-live` announcements,
-hidden state, `aria-expanded`, pagination, animation cancellation, and
-responsive presentation. `Demos.astro` and `Certifications.astro` provide
-only the semantic IDs, `data-filter-value` values, labels, and card markup.
+`src/lib/filtered-collection.ts` owns the runtime protocol for filtered grids:
+declarative root discovery, filter buttons, `aria-live` announcements, hidden
+state, `aria-expanded`, pagination, animation cancellation, and responsive
+presentation. `Demos.astro` and `Certifications.astro` provide only the
+semantic collection root, `data-filter-value` values, labels, and card markup.
 They do not expose implementation marker attributes or runtime visibility
-classes.
+classes. The initializer is tested through that DOM contract rather than only
+through the pure presentation function.
 
 ## Debug lifecycle
 
@@ -55,8 +61,11 @@ Sentry install must still receive exactly one teardown after it resolves.
 `src/lib/debug-bootstrap.ts` composes the dynamically loaded adapters into the
 lifecycle without making `DebugOverlay.tsx` know the module graph. Iframe and
 Docker/relay ingress both pass through `src/lib/debug-event.mjs`, which
-validates required fields, normalizes namespaces and timestamps, and preserves
-transport-specific security and rate limiting in their owning adapters.
+`src/lib/debug-event.mjs`, which validates required fields, normalizes
+namespaces and timestamps, and exposes narrow iframe/backend adapter helpers.
+The Node relay's line adapter is pure and parity-tested against backend browser
+normalization. Transport-specific security and rate limiting remain in their
+owning adapters.
 
 ## Demo page context
 

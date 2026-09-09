@@ -52,8 +52,26 @@ export interface DemoServiceRegistry {
   services: DemoService[];
 }
 
+export interface OrchestratedDemoServiceProjection {
+  slug: string;
+  type: OrchestratorType;
+  displayName: string;
+  port: number;
+  composeFile: string | null;
+  makefile: string | null;
+  image: string | null;
+  extra: string;
+  container: string | null;
+}
+
 export declare const registrySchema: {
   parse(value: unknown): DemoServiceRegistry;
 };
 
 export declare function parseDemoRegistry(value: unknown): DemoServiceRegistry;
+
+export declare function projectOrchestratedServices(
+  registry: DemoServiceRegistry
+): OrchestratedDemoServiceProjection[];
+
+export declare function collectBackendPorts(registry: DemoServiceRegistry): number[];

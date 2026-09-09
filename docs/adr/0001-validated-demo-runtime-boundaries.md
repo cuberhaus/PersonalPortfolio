@@ -1,3 +1,6 @@
+1. `src/data/demo-registry-contract.mjs` owns the structural Zod contract and
+   canonical pure projections for orchestrated services and backend ports.
+
 # ADR-0001: Validated Runtime Boundaries for Demos
 
 - Status: accepted
@@ -28,15 +31,20 @@ explicit runtime projections:
 6. `src/lib/demo-page.ts` owns shared locale, translation, and demo metadata
    assembly; page files keep only route-specific content.
 7. `src/lib/filtered-collection.ts` owns the semantic DOM protocol shared by
-   the demos and certifications collections; callers provide IDs, labels, and
-   card/filter markup without runtime marker attributes.
-8. `src/components/demos/LiveAppFallbackRegion.astro` owns the relationship
+8. `src/lib/filtered-collection.ts` owns the semantic DOM protocol shared by
+   the demos and certifications collections; callers declare a collection root
+   and provide labels, filters, and card markup without runtime marker
+   attributes or imperative ID/config wiring.
+9. `src/components/demos/LiveAppFallbackRegion.astro` owns the relationship
    between a live embed and its route-specific fallback through the typed
    `live-app:status` event contract.
-9. `src/lib/debug-event.mjs` owns shared ingress normalization, while iframe
-   origin checks, backend rate limiting, and debug lifecycle composition remain
-   in their respective adapters.
-10. `src/lib/demo-dispatch.ts` owns pure path-to-slug extraction and lookup for
+10. `src/lib/debug-event.mjs` owns shared ingress normalization, while iframe
+11. `src/lib/debug-event.mjs` owns shared ingress normalization and narrow
+    iframe/backend adapter helpers, while iframe origin checks, backend
+    rate limiting, and debug lifecycle composition remain in their respective
+    adapters. The Node relay line adapter stays pure and shares backend
+    semantics.
+12. `src/lib/demo-dispatch.ts` owns pure path-to-slug extraction and lookup for
     localized demo dispatch; the route reuses one typed module map for lookup
     and static paths and renders an explicit localized 404 for missing slugs.
 
@@ -48,7 +56,8 @@ test.
 - Registry shape errors fail at the browser or Node boundary instead of later in
   a script, page, or iframe.
 - Browser and Node adapters share one structural contract without sharing their
-  runtime-specific projections or side effects.
+  - Canonical registry projection meaning is shared without collapsing browser
+    and Node representations.
 - Runtime-specific adapters remain small and can evolve without making the
   JSON schema a shell or React API.
 - A route still has local markup, but repeated setup policy has one owner.
@@ -56,11 +65,12 @@ test.
 - Docker relay parsing and rate limiting have a focused internal module while
   transport and visibility remain behind the lifecycle-facing adapter.
 - Collection behavior is shared without making the Astro callers depend on
-  private implementation markers.
+  private implementation markers or repeated imperative setup.
 - Live fallback visibility is coordinated by a local region boundary rather
   than document-wide selectors or route-specific event handlers.
 - External debug transports converge on one event shape without merging their
-  security and throttling responsibilities.
+  - Live status dispatch and detail validation share one event seam across React
+    and Astro without requiring a specific `CustomEvent` constructor identity.
 - Localized demo dispatch has one typed lookup and an explicit missing-route
   behavior.
 - Adding a registry field requires updating the schema and the projections that

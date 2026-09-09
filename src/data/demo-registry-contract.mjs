@@ -155,3 +155,35 @@ export const registrySchema = z.object({
 export function parseDemoRegistry(value) {
   return registrySchema.parse(value);
 }
+
+export function projectOrchestratedServices(registry) {
+  return registry.services.flatMap((service) => {
+    const backend = service.backend;
+    const orchestrator = backend?.orchestrator;
+    if (!service.hasBackend || !backend || !orchestrator) return [];
+    return [
+      {
+        slug: service.slug,
+        type: orchestrator.type,
+        displayName: orchestrator.displayName,
+        port: backend.port,
+        composeFile: backend.composeFile,
+        makefile: backend.makefile,
+        image: orchestrator.image ?? null,
+        extra: orchestrator.extra,
+        container: backend.container,
+      },
+    ];
+  });
+}
+
+export function collectBackendPorts(registry) {
+  const ports = new Set();
+  for (const service of registry.services) {
+    const backend = service.backend;
+    if (!backend) continue;
+    ports.add(backend.port);
+    for (const extra of backend.extraPorts ?? []) ports.add(extra);
+  }
+  return [...ports].sort((a, b) => a - b);
+}

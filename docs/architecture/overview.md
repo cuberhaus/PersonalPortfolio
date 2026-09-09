@@ -94,6 +94,11 @@ The [demo-registry.test.ts](../../src/__tests__/demo-registry.test.ts) and
 [structural.test.ts](../../src/__tests__/structural.test.ts) suites police
 consistency between these and everything that derives from them.
 
+The registry contract also exposes pure canonical projections for orchestrated
+service rows and all backend ports. Browser and Node adapters consume those
+projections independently, then preserve their runtime-specific nullability and
+process-facing representation.
+
 ---
 
 ## How a request flows
@@ -133,11 +138,13 @@ or `offline` from its own status root; the region hides the fallback only for
 ### Filtered collections
 
 The demos and certifications grids share one runtime protocol in
-[`filtered-collection.ts`](../../src/lib/filtered-collection.ts). It finds
-controls by `data-filter-value`, the grid by its ID, and the live announcer by
-`aria-live`. It owns filtering, responsive page limits, hidden state,
-`aria-expanded`, and animation cancellation. The Astro callers expose those
-semantic inputs without leaking implementation marker attributes.
+[`filtered-collection.ts`](../../src/lib/filtered-collection.ts). It discovers
+declarative roots, finds controls by `data-filter-value`, resolves the grid
+through the existing `aria-controls` relationship, and finds the live announcer
+by `aria-live`. It owns filtering, responsive page limits, hidden state,
+`aria-expanded`, and animation cancellation. The Astro callers provide semantic
+root metadata and markup without repeating imperative ID/config wiring or
+leaking implementation marker attributes.
 
 ---
 
@@ -167,6 +174,11 @@ Docker/relay lines enter through the shared `debug-event.mjs` normalizer. The
 normalizer supplies canonical levels, namespaces, messages, arguments, and
 timestamps; origin allowlisting remains in the iframe adapter and rate
 limiting remains in the backend adapter.
+
+Iframe and backend ingress use narrow helpers from `debug-event.mjs`; the Node
+relay line adapter shares the backend helper, while iframe origin checks and
+backend rate limiting stay in their owning adapters. Live status dispatch uses
+the same explicit event contract across the React island and Astro region.
 
 Backend events arrive at the same Sentry org tagged with `service:<slug>`
 and the same `session_id` as the browser session, so a Sentry filter

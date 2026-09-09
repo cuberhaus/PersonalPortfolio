@@ -6,6 +6,10 @@ import {
   parseDemoServiceRegistry,
 } from '../data/demo-services';
 import {
+  collectBackendPorts,
+  projectOrchestratedServices,
+} from '../data/demo-registry-contract.mjs';
+import {
   listAllBackendPorts,
   listOrchestratedServices,
   loadDemoRegistry,
@@ -40,24 +44,21 @@ describe('Node demo registry adapter', () => {
   });
 
   it('keeps browser and Node projections semantically aligned', () => {
-    const normalize = (service: ReturnType<typeof listBrowserOrchestratedServices>[number]) => ({
-      ...service,
-      image: service.image ?? null,
-      composeFile: service.composeFile,
-      makefile: service.makefile,
-      container: service.container,
-    });
-    const normalizeNode = (service: ReturnType<typeof listOrchestratedServices>[number]) => ({
-      ...service,
-      image: service.image || null,
-      composeFile: service.composeFile || null,
-      makefile: service.makefile || null,
-      container: service.container || null,
-    });
+    const registry = loadDemoRegistry();
+    const canonicalOrchestrators = projectOrchestratedServices(registry);
+    const canonicalPorts = collectBackendPorts(registry);
 
-    expect(listBrowserBackendPorts()).toEqual(listAllBackendPorts());
-    expect(listBrowserOrchestratedServices().map(normalize)).toEqual(
-      listOrchestratedServices().map(normalizeNode)
+    expect(listBrowserBackendPorts()).toEqual(canonicalPorts);
+    expect(listBrowserOrchestratedServices()).toEqual(canonicalOrchestrators);
+    expect(listAllBackendPorts()).toEqual(canonicalPorts);
+    expect(listOrchestratedServices()).toEqual(
+      canonicalOrchestrators.map((service) => ({
+        ...service,
+        image: service.image ?? '',
+        composeFile: service.composeFile ?? '',
+        makefile: service.makefile ?? '',
+        container: service.container ?? '',
+      }))
     );
     expect(listDemoServices().map((service) => service.slug)).toEqual(
       loadDemoRegistry().services.map((service) => service.slug)

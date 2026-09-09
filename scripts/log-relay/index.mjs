@@ -22,7 +22,7 @@
 import http from 'node:http';
 import { spawn } from 'node:child_process';
 import { listBackedServices } from '../demo-registry.mjs';
-import { normalizeDebugEvent } from '../../src/lib/debug-event.mjs';
+import { normalizeRelayLine } from './normalize.mjs';
 
 const ALLOWED_ORIGINS = ['http://localhost:4321', 'http://127.0.0.1:4321'];
 
@@ -51,17 +51,6 @@ function applyCors(req, res) {
 function sendJson(res, status, body) {
   res.writeHead(status, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify(body));
-}
-
-function normalizeRelayLine(line, slug) {
-  return normalizeDebugEvent(line, {
-    source: 'backend',
-    origin: slug,
-    namespacePrefix: `demo:${slug}:backend`,
-    defaultNamespace: `demo:${slug}:backend`,
-    fallbackMessage: line,
-    allowPlainText: true,
-  });
 }
 
 function streamSse(req, res, slug) {

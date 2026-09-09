@@ -7,6 +7,16 @@ export interface LiveAppStatusEventDetail {
   slug?: string;
 }
 
+export function createLiveAppStatusEvent(
+  detail: LiveAppStatusEventDetail
+): CustomEvent<LiveAppStatusEventDetail> {
+  return new CustomEvent(LIVE_APP_STATUS_EVENT, { bubbles: true, detail });
+}
+
+export function dispatchLiveAppStatus(target: EventTarget, detail: LiveAppStatusEventDetail): void {
+  target.dispatchEvent(createLiveAppStatusEvent(detail));
+}
+
 export function shouldHideLiveAppFallback(status: LiveAppPresentationStatus): boolean {
   return status === 'online';
 }
@@ -15,6 +25,19 @@ function isStatusEventDetail(value: unknown): value is LiveAppStatusEventDetail 
   if (typeof value !== 'object' || value === null) return false;
   const detail = value as Record<string, unknown>;
   return detail.status === 'checking' || detail.status === 'online' || detail.status === 'offline';
+}
+
+function getStatusEventDetail(event: Event): LiveAppStatusEventDetail | null {
+  if (typeof event !== 'object' || event === null || !('detail' in event)) return null;
+  const detail = (event as Event & { detail?: unknown }).detail;
+  return isStatusEventDetail(detail) ? detail : null;
+}
+
+function setFallbackVisibility(
+  fallback: Pick<HTMLElement, 'hidden'>,
+  status: LiveAppPresentationStatus
+): void {
+  fallback.hidden = shouldHideLiveAppFallback(status);
 }
 
 function isLiveAppStatus(value: string | undefined): value is LiveAppPresentationStatus {
@@ -30,12 +53,11 @@ export function initializeLiveAppFallbackRegions(root: ParentNode = document): v
     region.dataset.liveAppFallbackInitialized = 'true';
     const renderedStatus =
       region.querySelector<HTMLElement>('[data-live-status]')?.dataset.liveStatus;
-    fallback.hidden = isLiveAppStatus(renderedStatus)
-      ? shouldHideLiveAppFallback(renderedStatus)
-      : false;
+    if (isLiveAppStatus(renderedStatus)) setFallbackVisibility(fallback, renderedStatus);
     region.addEventListener(LIVE_APP_STATUS_EVENT, (event) => {
-      if (!(event instanceof CustomEvent) || !isStatusEventDetail(event.detail)) return;
-      fallback.hidden = shouldHideLiveAppFallback(event.detail.status);
+      const detail = getStatusEventDetail(event);
+      if (!detail) return;
+      setFallbackVisibility(fallback, detail.status);
     });
   }
 }

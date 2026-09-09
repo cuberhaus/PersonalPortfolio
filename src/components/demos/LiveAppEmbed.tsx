@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { TRANSLATIONS } from '../../i18n/demos/live-app-embed';
 import { debug } from '../../lib/debug';
-import { LIVE_APP_STATUS_EVENT, type LiveAppStatusEventDetail } from '../../lib/live-app-fallback';
+import { dispatchLiveAppStatus } from '../../lib/live-app-fallback';
 import { resolveLiveApp, startLiveAppProbe } from '../../lib/live-app-embed';
 
 const log = debug('net:embed');
@@ -58,8 +58,7 @@ export default function LiveAppEmbed({
   useEffect(() => {
     const target = statusTargetRef.current;
     if (!target) return;
-    const detail: LiveAppStatusEventDetail = { status, slug };
-    target.dispatchEvent(new CustomEvent(LIVE_APP_STATUS_EVENT, { bubbles: true, detail }));
+    dispatchLiveAppStatus(target, { status, slug });
   }, [slug, status]);
 
   useEffect(() => {
