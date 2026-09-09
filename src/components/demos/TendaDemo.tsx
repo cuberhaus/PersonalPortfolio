@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { MOCK_CATEGORIES, MOCK_PRODUCTS, type Category, type Product } from '../../data/tenda-mock';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
+import { gradientBadge, gradientButton } from './_styles';
 
 type View = 'home' | 'category' | 'product' | 'cart' | 'checkout';
 import { TRANSLATIONS } from '../../i18n/demos/tenda-demo';
@@ -41,8 +42,7 @@ const styles = {
   },
   linkHover: { color: 'var(--accent-text)' },
   cartBadge: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
+    ...gradientBadge(),
     fontSize: '0.7rem',
     padding: '0.15rem 0.45rem',
     borderRadius: '999px',
@@ -101,8 +101,7 @@ const styles = {
     transition: 'all 0.15s',
   },
   primaryBtn: {
-    background: 'linear-gradient(135deg, var(--accent-start), var(--accent-end))',
-    color: 'var(--text-primary)',
+    ...gradientButton(),
   },
   secondaryBtn: { background: 'var(--bg-secondary)', color: 'var(--text-secondary)' },
   table: {
@@ -298,7 +297,12 @@ function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
             onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-start)')}
             onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
           >
-            {t.cart} {cartCount > 0 && <span style={styles.cartBadge}>{cartCount}</span>}
+            {t.cart}{' '}
+            {cartCount > 0 && (
+              <span data-gradient-action="true" style={styles.cartBadge}>
+                {cartCount}
+              </span>
+            )}
           </span>
         </div>
       </nav>

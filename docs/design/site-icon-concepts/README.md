@@ -1,8 +1,9 @@
 # Site Icon Concepts
 
-This directory contains the four visual icon families explored for issue #254.
-The files are design artifacts, not production assets. The production icon set
-is generated from the one selected canonical site icon.
+This directory contains the four visual icon families explored for issue #254,
+plus the previous production mark as a comparison baseline. The files are
+design artifacts, not production assets. The production icon set is generated
+from the one selected canonical site icon.
 
 ## Brief
 
@@ -37,7 +38,8 @@ filters, shadows, literal medical imagery, or generic brain/robot imagery.
 
 Open `comparison.html` directly in a browser, or serve this directory with a
 static file server. It shows every concept at 16px, 32px, 64px, 180px, 192px,
-and 512px on both dark and light surfaces.
+and 512px on both dark and light surfaces, with `previous.svg` included as the
+single-treatment baseline for the former production mark.
 
 ## Decision record
 

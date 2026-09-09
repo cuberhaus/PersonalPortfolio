@@ -296,6 +296,16 @@
             </figure>
           </div>
         </article>
+        <article data-concept="previous">
+          <h2>Previous mark</h2>
+          <p>The pre-selection production mark, included as a visual baseline for comparison.</p>
+          <div class="treatments">
+            <figure class="contained" data-source="./previous.svg">
+              <figcaption>previous production SVG</figcaption>
+              <div class="sizes"></div>
+            </figure>
+          </div>
+        </article>
       </section>
       <footer>
         Inspect at 16px first. The largest sample is a visual aid, not a production export.
@@ -305,15 +315,17 @@
       const sizes = [16, 32, 64, 180, 192, 512];
       const concepts = ['organic', 'signal', 'monogram', 'aperture'];
       document.querySelectorAll('article').forEach((article, conceptIndex) => {
+        const concept = article.dataset.concept || concepts[conceptIndex];
         article.querySelectorAll('figure').forEach((figure, treatmentIndex) => {
           const treatment = treatmentIndex === 0 ? 'contained' : 'transparent';
           const sizesRoot = figure.querySelector('.sizes');
+          const source = figure.dataset.source || `./${concept}-${treatment}.svg`;
           sizes.forEach((size) => {
             const sample = document.createElement('div');
             sample.className = `sample size-${size}`;
             const image = document.createElement('img');
-            image.src = `./${concepts[conceptIndex]}-${treatment}.svg`;
-            image.alt = `${concepts[conceptIndex]} ${treatment} icon at ${size} pixels`;
+            image.src = source;
+            image.alt = `${concept} ${treatment} icon at ${size} pixels`;
             const label = document.createElement('span');
             label.textContent = size;
             sample.append(image, label);

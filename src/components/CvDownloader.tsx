@@ -191,6 +191,7 @@ const CV_DL_STYLES = `
     gap: 0;
     width: min(100%, 42rem);
     max-width: 42rem;
+    min-width: 0;
     padding: 0;
     background: color-mix(in srgb, var(--bg-card) 72%, transparent);
     border-top: 2px solid var(--accent-text);
@@ -231,7 +232,13 @@ const CV_DL_STYLES = `
     align-items: start;
     padding: 1rem 0;
   }
-  .cv-dl-field { display: grid; gap: 0.4rem; color: var(--text-secondary); font-size: 0.82rem; }
+  .cv-dl-field {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+  }
   .cv-dl-field-label {
     font-family: var(--font-mono);
     font-size: 0.72rem;
@@ -301,6 +308,7 @@ const CV_DL_STYLES = `
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
+    min-width: 0;
     cursor: pointer;
     user-select: none;
     color: var(--text-secondary);
@@ -367,7 +375,11 @@ const CV_DL_STYLES = `
     color: var(--text-primary);
   }
 
-  .cv-dl-label { line-height: 1.3; }
+  .cv-dl-label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    line-height: 1.3;
+  }
 
   .cv-dl-btn {
     display: inline-flex;
@@ -383,9 +395,13 @@ const CV_DL_STYLES = `
     color: var(--demo-action-color);
     background: var(--demo-action-bg);
     border: 1px solid var(--accent-text);
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     text-decoration: none;
     align-self: flex-start;
+    width: fit-content;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
     cursor: pointer;
     transition:
       color var(--transition-base),
@@ -405,9 +421,8 @@ const CV_DL_STYLES = `
   }
 
   @media (max-width: 560px) {
-    .cv-dl-options { grid-template-columns: 1fr; }
+    .cv-dl-options { grid-template-columns: minmax(0, 1fr); }
     .cv-dl-opt { margin-top: 0; }
-    .cv-dl-btn { width: 100%; }
   }
 
   @media (prefers-reduced-motion: reduce) {

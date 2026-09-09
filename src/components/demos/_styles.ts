@@ -23,6 +23,15 @@ export const demoPanel: CSSProperties = {
   padding: '1.5rem',
 };
 
+export function gradientBadge(): CSSProperties {
+  return {
+    background: 'var(--demo-action-bg)',
+    color: 'var(--demo-action-color)',
+    border: '1px solid color-mix(in srgb, var(--demo-action-color) 32%, transparent)',
+    borderRadius: 'var(--radius-sm)',
+  };
+}
+
 export interface GradientButtonOptions {
   /** Pre-computed accent endpoints. Defaults to the theme's `--accent-start`/`--accent-end`. */
   accent1?: string;

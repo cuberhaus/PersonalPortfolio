@@ -5,7 +5,7 @@ import LiveAppEmbed from './LiveAppEmbed';
 import { TRANSLATIONS } from '../../i18n/demos/planificacion-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { demoPanel, gradientButton } from './_styles';
+import { demoPanel, gradientBadge, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -464,16 +464,18 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
           {(Array.isArray((t as any).extensions) ? (t as any).extensions : []).map((e: any) => (
             <span
               key={e.name}
+              data-gradient-action={e.active ? 'true' : undefined}
               style={{
                 padding: '0.3rem 0.6rem',
-                borderRadius: '0.4rem',
+                ...(e.active
+                  ? gradientBadge()
+                  : {
+                      background: 'var(--bg-card-hover)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-muted)',
+                    }),
                 fontSize: '0.72rem',
                 fontWeight: 600,
-                background: e.active
-                  ? `linear-gradient(135deg, ${accent1}, ${accent2})`
-                  : 'var(--bg-card-hover)',
-                border: e.active ? 'none' : '1px solid var(--border-color)',
-                color: e.active ? '#fff' : 'var(--text-muted)',
               }}
             >
               {e.name}
@@ -754,13 +756,13 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
                         }}
                       >
                         <div
+                          data-gradient-action="true"
                           style={{
                             width: 22,
                             height: 22,
+                            ...gradientBadge(),
                             borderRadius: '50%',
                             flexShrink: 0,
-                            background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-                            color: '#fff',
                             fontSize: '0.65rem',
                             fontWeight: 700,
                             display: 'flex',

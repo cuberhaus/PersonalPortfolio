@@ -13,7 +13,7 @@ import modelData from '../../data/tfg-model-results.json' with { type: 'json' };
 import LiveAppEmbed from './LiveAppEmbed';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { demoPanel, gradientButton } from './_styles';
+import { demoPanel, gradientBadge, gradientButton } from './_styles';
 
 /* ── constants ── */
 const accent1 = 'var(--accent-start)';
@@ -43,15 +43,14 @@ function PipelineStrip({ t }: { t: typeof TRANSLATIONS.en }) {
         }}
       >
         <div
+          data-gradient-action="true"
           style={{
             padding: '0.2rem 0.55rem',
-            borderRadius: '0.35rem',
+            ...gradientBadge(),
             fontSize: '0.65rem',
             fontWeight: 700,
             letterSpacing: '0.06em',
             textTransform: 'uppercase' as const,
-            background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-            color: 'var(--text-primary)',
           }}
         >
           {t.pipelineTitle}

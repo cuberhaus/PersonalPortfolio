@@ -8,7 +8,7 @@ const FRAME = { w: 472, h: 296, maskPolygon: '2,205 470,185 470,215 2,236' };
 
 import { TRANSLATIONS } from '../../i18n/demos/bits-xmarato-demo';
 import { useDemoLifecycle } from '../../lib/useDebug';
-import { demoPanel, gradientButton } from './_styles';
+import { demoPanel, gradientBadge, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -391,15 +391,14 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
           }}
         >
           <div
+            data-gradient-action="true"
             style={{
               padding: '0.2rem 0.55rem',
-              borderRadius: '0.35rem',
+              ...gradientBadge(),
               fontSize: '0.65rem',
               fontWeight: 700,
               letterSpacing: '0.06em',
               textTransform: 'uppercase' as const,
-              background: `linear-gradient(135deg, ${accent1}, ${accent2})`,
-              color: 'var(--text-primary)',
             }}
           >
             {t.cvPipeline}

@@ -88,12 +88,19 @@ const HOVER_TARGETS = [
 //
 // `button` already covers the icon-only FAB (.scroll-to-top), .contact-submit,
 // and every demo's run/upload button. `a.btn` and `.btn-primary` catch link-
-// styled CTAs that don't use the <button> element.
-const GRADIENT_TEXT_SELECTORS = ['button', 'a.btn', '.btn-primary'];
+// styled CTAs that don't use the <button> element. `.launch-btn` and the data
+// attribute cover gradient actions and badges rendered by demo-specific markup.
+const GRADIENT_TEXT_SELECTORS = [
+  'button',
+  'a.btn',
+  '.btn-primary',
+  '.launch-btn',
+  '[data-gradient-action]',
+];
 
 type GradientFinding = { tag: string; text: string; ratio: number; bg: string; fg: string };
 
-async function scanGradientButtons(page: Page): Promise<GradientFinding[]> {
+async function scanGradientText(page: Page): Promise<GradientFinding[]> {
   return await page.evaluate(
     ({ selectors }) => {
       // sRGB → relative luminance per WCAG.
@@ -206,7 +213,7 @@ async function checkGradientTextContrast(page: Page, route: string, theme: strin
     }
   };
 
-  collect(await scanGradientButtons(page));
+  collect(await scanGradientText(page));
 
   const tabIds = await page.$$eval('[data-tab]', (els) =>
     els.map((e) => e.getAttribute('data-tab') ?? '').filter(Boolean)
@@ -216,7 +223,7 @@ async function checkGradientTextContrast(page: Page, route: string, theme: strin
     if ((await tabBtn.count()) === 0) continue;
     await tabBtn.click({ trial: false }).catch(() => undefined);
     await page.waitForTimeout(150);
-    collect(await scanGradientButtons(page));
+    collect(await scanGradientText(page));
   }
 
   if (findings.length > 0) {
