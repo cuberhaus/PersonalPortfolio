@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Site icon concepts</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #10211f;
+        --paper: #f2f6f1;
+        --muted: #a8c0b9;
+        --mint: #68d2bd;
+        --coral: #ff8a65;
+        --line: #2d4841;
+        --panel: #162522;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background: var(--ink);
+        color: var(--paper);
+        font-family: Georgia, 'Times New Roman', serif;
+      }
+
+      main {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 48px 0 64px;
+      }
+
+      header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: end;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 28px;
+      }
+
+      h1 {
+        max-width: 680px;
+        margin: 0;
+        color: var(--paper);
+        font-size: clamp(2.2rem, 6vw, 5rem);
+        font-weight: 400;
+        line-height: 0.95;
+      }
+
+      header p {
+        max-width: 360px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        margin: 22px 0 28px;
+        color: var(--muted);
+        font:
+          0.75rem/1.4 'Courier New',
+          monospace;
+      }
+
+      .legend span::before {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-right: 7px;
+        border-radius: 50%;
+        content: '';
+        vertical-align: -1px;
+      }
+
+      .legend .contained::before {
+        background: var(--mint);
+      }
+      .legend .transparent::before {
+        background: var(--coral);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      article {
+        min-width: 0;
+        padding: 20px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      article h2 {
+        margin: 0 0 6px;
+        color: var(--paper);
+        font-size: 1.35rem;
+        font-weight: 400;
+      }
+
+      article p {
+        min-height: 44px;
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.45;
+      }
+
+      .treatments {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      figure {
+        margin: 0;
+        padding: 14px;
+        border: 1px solid var(--line);
+        background: #f2f6f1;
+      }
+
+      figure.contained {
+        background: #101a18;
+      }
+
+      figcaption {
+        margin-bottom: 12px;
+        color: #38544c;
+        font:
+          0.7rem/1.2 'Courier New',
+          monospace;
+      }
+
+      figure.contained figcaption {
+        color: #a8c0b9;
+      }
+
+      .sizes {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: flex-start;
+        gap: 16px 12px;
+        min-height: 512px;
+        max-width: 100%;
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+
+      .sample {
+        display: grid;
+        flex: 0 0 auto;
+        justify-items: center;
+        gap: 6px;
+        color: #527066;
+        font:
+          0.62rem/1 'Courier New',
+          monospace;
+      }
+
+      figure.contained .sample {
+        color: #a8c0b9;
+      }
+
+      img {
+        display: block;
+      }
+      .size-16 img {
+        width: 16px;
+        height: 16px;
+      }
+      .size-32 img {
+        width: 32px;
+        height: 32px;
+      }
+      .size-64 img {
+        width: 64px;
+        height: 64px;
+      }
+      .size-180 img {
+        width: 180px;
+        height: 180px;
+      }
+      .size-192 img {
+        width: 192px;
+        height: 192px;
+      }
+      .size-512 img {
+        width: 512px;
+        height: 512px;
+      }
+
+      footer {
+        margin-top: 28px;
+        color: var(--muted);
+        font:
+          0.75rem/1.5 'Courier New',
+          monospace;
+      }
+
+      @media (max-width: 760px) {
+        main {
+          padding-top: 28px;
+        }
+        header {
+          grid-template-columns: 1fr;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Site icon studio</h1>
+        <p>Four visual directions. Eight treatments. The signal mark is now canonical.</p>
+      </header>
+      <div class="legend" aria-label="Treatment legend">
+        <span class="contained">contained on the portfolio dark</span>
+        <span class="transparent">transparent on paper</span>
+      </div>
+      <section class="grid" aria-label="Icon concepts">
+        <article>
+          <h2>Organic</h2>
+          <p>Three leaves keep the warmth of the current mark while opening the silhouette.</p>
+          <div class="treatments">
+            <figure class="contained">
+              <figcaption>contained</figcaption>
+              <div class="sizes"></div>
+            </figure>
+            <figure>
+              <figcaption>transparent</figcaption>
+              <div class="sizes"></div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Signal</h2>
+          <p>A rising waveform turns technical curiosity into a single legible gesture.</p>
+          <div class="treatments">
+            <figure class="contained">
+              <figcaption>contained</figcaption>
+              <div class="sizes"></div>
+            </figure>
+            <figure>
+              <figcaption>transparent</figcaption>
+              <div class="sizes"></div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Monogram</h2>
+          <p>Interlocking P and C strokes make the personal identity explicit without text.</p>
+          <div class="treatments">
+            <figure class="contained">
+              <figcaption>contained</figcaption>
+              <div class="sizes"></div>
+            </figure>
+            <figure>
+              <figcaption>transparent</figcaption>
+              <div class="sizes"></div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Aperture</h2>
+          <p>Four inward blades create a portal-like mark with a different visual grammar.</p>
+          <div class="treatments">
+            <figure class="contained">
+              <figcaption>contained</figcaption>
+              <div class="sizes"></div>
+            </figure>
+            <figure>
+              <figcaption>transparent</figcaption>
+              <div class="sizes"></div>
+            </figure>
+          </div>
+        </article>
+      </section>
+      <footer>
+        Inspect at 16px first. The largest sample is a visual aid, not a production export.
+      </footer>
+    </main>
+    <script>
+      const sizes = [16, 32, 64, 180, 192, 512];
+      const concepts = ['organic', 'signal', 'monogram', 'aperture'];
+      document.querySelectorAll('article').forEach((article, conceptIndex) => {
+        article.querySelectorAll('figure').forEach((figure, treatmentIndex) => {
+          const treatment = treatmentIndex === 0 ? 'contained' : 'transparent';
+          const sizesRoot = figure.querySelector('.sizes');
+          sizes.forEach((size) => {
+            const sample = document.createElement('div');
+            sample.className = `sample size-${size}`;
+            const image = document.createElement('img');
+            image.src = `./${concepts[conceptIndex]}-${treatment}.svg`;
+            image.alt = `${concepts[conceptIndex]} ${treatment} icon at ${size} pixels`;
+            const label = document.createElement('span');
+            label.textContent = size;
+            sample.append(image, label);
+            sizesRoot.appendChild(sample);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
