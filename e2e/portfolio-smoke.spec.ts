@@ -53,6 +53,49 @@ test.describe('portfolio homepage smoke', () => {
     await expect(download).toHaveAttribute('href', /cv_english_technical_no-photo\.pdf(?:\?|$)/);
   });
 
+  test('CV download action stays compact across theme and viewport variants', async ({ page }) => {
+    for (const locale of ['/', '/es/', '/ca/']) {
+      for (const [theme, design] of [
+        ['barcelona-night', 'swiss'],
+        ['barcelona-day', 'swiss'],
+        ['dark', 'minimal'],
+      ]) {
+        for (const viewport of [
+          { width: 390, height: 844 },
+          { width: 1440, height: 900 },
+        ]) {
+          await page.setViewportSize(viewport);
+          await page.goto(`${locale}?theme=${theme}&design=${design}#about`, {
+            waitUntil: 'domcontentloaded',
+          });
+
+          const measurements = await page.locator('.cv-dl-btn').evaluate((button) => {
+            const container = button.closest('.cv-dl');
+            if (!container) throw new Error('CV download container is missing');
+
+            const buttonStyle = getComputedStyle(button);
+            const buttonBox = button.getBoundingClientRect();
+            const containerBox = container.getBoundingClientRect();
+            const root = document.documentElement;
+
+            return {
+              buttonWidth: buttonBox.width,
+              containerWidth: containerBox.width,
+              borderRadius: parseFloat(buttonStyle.borderRadius),
+              whiteSpace: buttonStyle.whiteSpace,
+              horizontalOverflow: root.scrollWidth - root.clientWidth,
+            };
+          });
+
+          expect(measurements.buttonWidth).toBeLessThan(measurements.containerWidth);
+          expect(measurements.borderRadius).toBeGreaterThan(0);
+          expect(measurements.whiteSpace).toBe('nowrap');
+          expect(measurements.horizontalOverflow).toBeLessThanOrEqual(1);
+        }
+      }
+    }
+  });
+
   test('navbar links scroll to each homepage section', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
 
