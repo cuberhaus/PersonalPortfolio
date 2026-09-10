@@ -49,10 +49,10 @@ files as historical design references; they must not be copied into `public/`.
 
 ## Decision
 
-The **signal** family is the canonical site icon. The contained treatment is
-used for production because the dark square stays stable in browser chrome,
-the PWA manifest, and the Apple touch icon. The transparent treatment remains
-available as the flexible counterpart for future surfaces.
+The **signal** family is the canonical site icon. The transparent treatment is
+used for browser chrome so the mark sits cleanly on white tabs. The contained
+treatment remains the source for the Apple touch icon and PWA exports, where a
+stable background is more reliable across standalone surfaces.
 
 Why signal won:
 
@@ -60,9 +60,9 @@ Why signal won:
    into a small cluster of details.
 2. The coral endpoint creates a memorable focal point without introducing
    text, a literal neural-network cliché, or medical imagery.
-3. The contained and transparent treatments preserve the same silhouette and
-   palette, so the family is coherent across surfaces.
-4. The signal gesture carries technical curiosity, human warmth, and
-   experimental confidence without relying on a literal technology symbol.
+3. The transparent browser treatment avoids a dark square or white-looking
+   corner halo when the favicon sits on a light tab.
+4. The contained treatment keeps the same silhouette and palette on Apple
+   touch icons and PWA surfaces that benefit from a stable background.
 5. The stroke and endpoint still have enough presence at 180px, 192px, and
-   512px for a polished PWA and touch-icon export.
+   512px for polished standalone exports.
