@@ -388,20 +388,19 @@ const CV_DL_STYLES = `
     gap: 0.5rem;
     min-height: 2.75rem;
     margin-bottom: 1rem;
-    padding: 0.7rem 1.15rem;
+    padding: 0.65rem 1rem;
     font-family: var(--font-mono);
     font-weight: 700;
     font-size: 0.78rem;
     color: var(--demo-action-color);
     background: var(--demo-action-bg);
-    border: 1px solid var(--accent-text);
-    border-radius: var(--radius-sm);
+    border: 1px solid color-mix(in srgb, var(--demo-action-color) 30%, transparent);
+    border-radius: 999px;
     text-decoration: none;
     align-self: flex-start;
     width: fit-content;
     max-width: 100%;
-    white-space: normal;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
     cursor: pointer;
     transition:
       color var(--transition-base),
