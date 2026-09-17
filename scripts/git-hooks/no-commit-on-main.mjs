@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Aborts commits made directly on protected branches.
-// Wired up via lefthook.yml (commit-msg hook).
+// Wired up via lefthook.yml (pre-commit and commit-msg hooks).
 import { execSync } from 'node:child_process';
 
 const PROTECTED = new Set(['main', 'master']);

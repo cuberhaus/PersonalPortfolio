@@ -30,9 +30,10 @@ else
 	command -v cargo >/dev/null 2>&1 || { echo "Installing Rust..."; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; }
 endif
 
-hooks: ## Enable tracked git hooks (pre-push guard against direct main/master pushes)
-	git config core.hooksPath .githooks
-	@echo "Git hooks enabled from .githooks/ (pre-push blocks direct main/master pushes)."
+hooks: ## Enable git hooks via lefthook (pre-commit linters and branch protection)
+	@git config --unset core.hooksPath 2>/dev/null || true
+	npx lefthook install
+	@echo "Git hooks enabled via lefthook (pre-commit linters and branch protection)."
 
 ##@ Dev
 
