@@ -383,12 +383,6 @@ skills-update: ## Update project skills and show what changed
 skills-restore: ## Restore pinned skills from skills-lock.json
 	@npx skills experimental_install
 
-##@ Understand (knowledge graph)
-
-.PHONY: understand-dashboard
-understand-dashboard:
-	@node -e "require(require('os').homedir()+'/.understand-anything/repo/understand-anything-plugin/packages/dashboard/launch.cjs')"
-
 ##@ Cleanup
 
 clean: ## Remove build artifacts and node_modules
