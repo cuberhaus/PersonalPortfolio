@@ -268,11 +268,19 @@ test.describe('filtered collections', () => {
     page,
   }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('#projects')).toHaveAttribute(
+      'data-filtered-collection-initialized',
+      'true'
+    );
+    await expect(page.locator('#certifications')).toHaveAttribute(
+      'data-filtered-collection-initialized',
+      'true'
+    );
 
     const demoFilter = page.locator('.demo-filter-btn[data-category="ai-ml"]');
     await demoFilter.click();
     await expect(demoFilter).toHaveAttribute('aria-pressed', 'true');
-    const visibleDemos = page.locator('#demo-grid .demo-card:not(.hidden-demo)');
+    const visibleDemos = page.locator('#demo-grid .demo-card:not([hidden])');
     expect(await visibleDemos.count()).toBeGreaterThan(0);
     expect(
       await visibleDemos.evaluateAll((cards) =>
@@ -284,7 +292,7 @@ test.describe('filtered collections', () => {
     await certificationFilter.click();
     await expect(certificationFilter).toHaveAttribute('aria-pressed', 'true');
     const visibleCertifications = page.locator(
-      '#certifications-grid .certification-card:not(.hidden-demo)'
+      '#certifications-grid .certification-card:not([hidden])'
     );
     await expect(visibleCertifications).toHaveCount(1);
     await expect(visibleCertifications.first()).toHaveAttribute('data-issuer', 'Microsoft');
