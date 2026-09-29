@@ -13,7 +13,7 @@ import modelData from '../../data/tfg-model-results.json' with { type: 'json' };
 import LiveAppEmbed from './LiveAppEmbed';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { demoPanel, gradientBadge, gradientButton } from './_styles';
+import { demoPanel, gradientButton } from './_styles';
 
 /* ── constants ── */
 const accent1 = 'var(--accent-start)';
@@ -43,10 +43,14 @@ function PipelineStrip({ t }: { t: typeof TRANSLATIONS.en }) {
         }}
       >
         <div
-          data-gradient-action="true"
           style={{
             padding: '0.2rem 0.55rem',
-            ...gradientBadge(),
+            // A label, not an action: a quiet accent tint over the panel keeps the
+            // theme identity without competing with the step cards below it.
+            background: 'color-mix(in srgb, var(--accent-start) 12%, transparent)',
+            color: 'var(--text-primary)',
+            border: '1px solid color-mix(in srgb, var(--accent-start) 45%, transparent)',
+            borderRadius: 'var(--radius-sm)',
             fontSize: '0.65rem',
             fontWeight: 700,
             letterSpacing: '0.06em',
