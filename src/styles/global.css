@@ -119,6 +119,10 @@ html[data-theme='light'] {
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: var(--nav-height);

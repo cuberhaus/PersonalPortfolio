@@ -332,14 +332,25 @@ const { num } = Astro.props;
   .certifications-toggle {
     display: block;
   }
+
+  .certifications-toggle[hidden] {
+    display: none !important;
+  }
 </style>
 
 <script>
   import { initializeFilteredCollections } from '../lib/filtered-collection';
 
-  document.addEventListener('astro:page-load', () => {
+  function init() {
     initializeFilteredCollections();
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  document.addEventListener('astro:page-load', init);
 
   // Fallback: if the external cert link is unreachable, swap to the local copy
   document

@@ -180,9 +180,16 @@ const { num } = Astro.props;
 <script>
   import { initializeFilteredCollections } from '../lib/filtered-collection';
 
-  document.addEventListener('astro:page-load', () => {
+  function init() {
     initializeFilteredCollections();
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  document.addEventListener('astro:page-load', init);
 </script>
 
 <style>
@@ -236,6 +243,10 @@ const { num } = Astro.props;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+  }
+
+  .demo-card[hidden] {
+    display: none !important;
   }
 
   .demo-card::before {
@@ -424,6 +435,10 @@ const { num } = Astro.props;
     display: flex;
     justify-content: center;
     margin-top: 3rem;
+  }
+
+  .show-more-container[hidden] {
+    display: none !important;
   }
 
   .show-more-btn {
