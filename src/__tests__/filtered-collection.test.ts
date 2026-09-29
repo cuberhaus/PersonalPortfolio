@@ -121,7 +121,7 @@ function createFilteredCollectionFixture() {
     getElementById: (id: string) => (id === 'demo-grid' ? grid : null),
   };
 
-  return { root, toggle, cards, announcer, scope: new FakeScope([root]) };
+  return { root, toggle, toggleContainer, filters, cards, announcer, scope: new FakeScope([root]) };
 }
 
 describe('getFilteredCollectionPresentation', () => {
@@ -169,7 +169,8 @@ describe('getFilteredCollectionPresentation', () => {
 describe('initializeFilteredCollections', () => {
   it('initializes declarative roots and owns their DOM presentation state', () => {
     vi.useFakeTimers();
-    const { root, toggle, cards, announcer, scope } = createFilteredCollectionFixture();
+    const { root, toggle, toggleContainer, filters, cards, announcer, scope } =
+      createFilteredCollectionFixture();
     const globalWithWindow = globalThis as unknown as { window: Window };
     const windowValue = globalWithWindow.window;
     const fakeWindow = Object.create(null) as Window;
@@ -204,6 +205,103 @@ describe('initializeFilteredCollections', () => {
       expect(cards.every((card) => !card.hidden)).toBe(true);
       expect(toggle.textContent).toBe('Show less');
       expect(toggle.getAttribute('aria-expanded')).toBe('true');
+
+      // Collapse back to compact state
+      toggle.click();
+      vi.runAllTimers();
+
+      expect(cards.slice(0, 6).every((card) => !card.hidden)).toBe(true);
+      expect(cards[6]?.hidden).toBe(true);
+      expect(toggle.textContent).toBe('Show more');
+      expect(toggle.getAttribute('aria-expanded')).toBe('false');
+
+      // Filter to category with results <= limit (1 card)
+      filters[1]?.click();
+      vi.runAllTimers();
+
+      expect(cards[6]?.hidden).toBe(false);
+      expect(cards.slice(0, 6).every((card) => card.hidden)).toBe(true);
+      expect(toggle.hidden).toBe(true);
+      expect(toggleContainer.hidden).toBe(true);
+      expect(announcer.textContent).toBe('Showing 1 projects');
+      expect(filters[1]?.getAttribute('aria-pressed')).toBe('true');
+      expect(filters[0]?.getAttribute('aria-pressed')).toBe('false');
+
+      // Filter back to all: restores compact 6-card limit and reveals toggle
+      filters[0]?.click();
+      vi.runAllTimers();
+
+      expect(cards.slice(0, 6).every((card) => !card.hidden)).toBe(true);
+      expect(cards[6]?.hidden).toBe(true);
+      expect(toggle.hidden).toBe(false);
+      expect(toggleContainer.hidden).toBe(false);
+      expect(toggle.textContent).toBe('Show more');
+      expect(toggle.getAttribute('aria-expanded')).toBe('false');
+      expect(announcer.textContent).toBe('Showing 7 projects');
+
+      // Idempotent reinitialization does not attach duplicate listeners or alter state
+      initializeFilteredCollections(scope as unknown as ParentNode);
+      expect(root.dataset.filteredCollectionInitialized).toBe('true');
+      expect(cards.slice(0, 6).every((card) => !card.hidden)).toBe(true);
+      expect(cards[6]?.hidden).toBe(true);
+    } finally {
+      globalWithWindow.window = windowValue;
+      vi.useRealTimers();
+    }
+  });
+
+  it('paginates mobile results in increments of 3 and resets on overflow', () => {
+    vi.useFakeTimers();
+    const { root, toggle, cards, scope } = createFilteredCollectionFixture();
+    const globalWithWindow = globalThis as unknown as { window: Window };
+    const windowValue = globalWithWindow.window;
+    const fakeWindow = Object.create(null) as Window;
+    const mediaQueryList = {
+      matches: true,
+      media: '(max-width: 640px)',
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    } as MediaQueryList;
+    Object.defineProperty(fakeWindow, 'matchMedia', {
+      value: vi.fn(() => mediaQueryList),
+    });
+    globalWithWindow.window = fakeWindow;
+
+    try {
+      initializeFilteredCollections(scope as unknown as ParentNode);
+
+      // Initial mobile page size is 3
+      expect(cards.slice(0, 3).every((card) => !card.hidden)).toBe(true);
+      expect(cards.slice(3).every((card) => card.hidden)).toBe(true);
+      expect(toggle.textContent).toBe('Show more');
+      expect(toggle.getAttribute('aria-expanded')).toBe('false');
+
+      // Click 1: reveals 3 more (total 6 visible)
+      toggle.click();
+      vi.runAllTimers();
+      expect(cards.slice(0, 6).every((card) => !card.hidden)).toBe(true);
+      expect(cards[6]?.hidden).toBe(true);
+      expect(toggle.textContent).toBe('Show more');
+      expect(toggle.getAttribute('aria-expanded')).toBe('false');
+
+      // Click 2: reveals remaining 1 (total 7 visible, expanded)
+      toggle.click();
+      vi.runAllTimers();
+      expect(cards.every((card) => !card.hidden)).toBe(true);
+      expect(toggle.textContent).toBe('Show less');
+      expect(toggle.getAttribute('aria-expanded')).toBe('true');
+
+      // Click 3: resets back to initial mobile limit of 3
+      toggle.click();
+      vi.runAllTimers();
+      expect(cards.slice(0, 3).every((card) => !card.hidden)).toBe(true);
+      expect(cards.slice(3).every((card) => card.hidden)).toBe(true);
+      expect(toggle.textContent).toBe('Show more');
+      expect(toggle.getAttribute('aria-expanded')).toBe('false');
     } finally {
       globalWithWindow.window = windowValue;
       vi.useRealTimers();

@@ -323,4 +323,123 @@ test.describe('portfolio homepage smoke', () => {
       expect(overflow).toBeLessThanOrEqual(1);
     }
   });
+
+  test('Interactive Lab preserves progressive disclosure and category filtering on desktop', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/#projects', { waitUntil: 'domcontentloaded' });
+
+    const grid = page.locator('#demo-grid');
+    await expect(grid).toBeVisible();
+
+    const allCards = grid.locator('.demo-card');
+    const totalCount = await allCards.count();
+    expect(totalCount).toBeGreaterThan(6);
+
+    const visibleCards = grid.locator('.demo-card:not([hidden])');
+    await expect(visibleCards).toHaveCount(6);
+
+    // Verify hidden cards are genuinely removed from layout via display: none
+    const hiddenCards = grid.locator('.demo-card[hidden]');
+    expect(await hiddenCards.count()).toBe(totalCount - 6);
+    const hiddenDisplay = await hiddenCards.first().evaluate((el) => getComputedStyle(el).display);
+    expect(hiddenDisplay).toBe('none');
+
+    const toggleBtn = page.locator('#show-more-demos');
+    await expect(toggleBtn).toBeVisible();
+    await expect(toggleBtn).toHaveAttribute('aria-expanded', 'false');
+
+    // Click Show more -> expands all matching cards
+    await toggleBtn.click();
+    await expect(toggleBtn).toHaveAttribute('aria-expanded', 'true');
+    await expect(grid.locator('.demo-card:not([hidden])')).toHaveCount(totalCount);
+
+    // Click Show less -> restores compact 6-card limit
+    await toggleBtn.click();
+    await expect(toggleBtn).toHaveAttribute('aria-expanded', 'false');
+    await expect(grid.locator('.demo-card:not([hidden])')).toHaveCount(6);
+
+    // Filter-aware disclosure: switch to category with <= 6 items
+    const graphicsFilter = page.locator('.demo-filter-btn[data-filter-value="graphics"]');
+    await graphicsFilter.click();
+    await expect(graphicsFilter).toHaveAttribute('aria-pressed', 'true');
+
+    const matchingCount = await grid.locator('.demo-card:not([hidden])').count();
+    expect(matchingCount).toBeLessThanOrEqual(6);
+    expect(matchingCount).toBeGreaterThan(0);
+
+    // Show more container should be hidden when filtered results fit in one page
+    const toggleContainer = page.locator('.demos .show-more-container');
+    const containerDisplay = await toggleContainer.evaluate((el) => getComputedStyle(el).display);
+    expect(containerDisplay).toBe('none');
+
+    // Switch back to "all" -> restores toggle and 6-card limit
+    const allFilter = page.locator('.demo-filter-btn[data-filter-value="all"]');
+    await allFilter.click();
+    await expect(grid.locator('.demo-card:not([hidden])')).toHaveCount(6);
+    await expect(toggleBtn).toBeVisible();
+  });
+
+  test('Interactive Lab preserves progressive disclosure and scroll reveal on mobile', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/#projects', { waitUntil: 'domcontentloaded' });
+
+    const grid = page.locator('#demo-grid');
+    await grid.scrollIntoViewIfNeeded();
+
+    // Verify initial mobile page size is 3
+    const visibleCards = grid.locator('.demo-card:not([hidden])');
+    await expect(visibleCards).toHaveCount(3);
+
+    // Verify scroll-reveal sets opacity 1 on visible mobile cards
+    await expect(visibleCards.first()).toHaveCSS('opacity', '1');
+
+    const toggleBtn = page.locator('#show-more-demos');
+    await expect(toggleBtn).toBeVisible();
+    await expect(toggleBtn).toHaveAttribute('aria-expanded', 'false');
+
+    // Click Show more -> reveals next batch of 3 (total 6 visible)
+    await toggleBtn.click();
+    await expect(grid.locator('.demo-card:not([hidden])')).toHaveCount(6);
+  });
+
+  test('demo navigation Previous and Next cards maintain stable inline breathing room', async ({
+    page,
+  }) => {
+    for (const viewport of [
+      { width: 1280, height: 900 },
+      { width: 390, height: 844 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.goto('/demos/draculin/', { waitUntil: 'domcontentloaded' });
+
+      const prevCard = page.locator('.prevnext-prev');
+      const nextCard = page.locator('.prevnext-next');
+
+      if ((await prevCard.count()) > 0) {
+        const paddingLeft = await prevCard.evaluate((el) =>
+          parseFloat(getComputedStyle(el).paddingLeft)
+        );
+        const paddingRight = await prevCard.evaluate((el) =>
+          parseFloat(getComputedStyle(el).paddingRight)
+        );
+        expect(paddingLeft).toBeGreaterThanOrEqual(12);
+        expect(paddingRight).toBeGreaterThanOrEqual(12);
+      }
+
+      if ((await nextCard.count()) > 0) {
+        const paddingLeft = await nextCard.evaluate((el) =>
+          parseFloat(getComputedStyle(el).paddingLeft)
+        );
+        const paddingRight = await nextCard.evaluate((el) =>
+          parseFloat(getComputedStyle(el).paddingRight)
+        );
+        expect(paddingLeft).toBeGreaterThanOrEqual(12);
+        expect(paddingRight).toBeGreaterThanOrEqual(12);
+      }
+    }
+  });
 });
