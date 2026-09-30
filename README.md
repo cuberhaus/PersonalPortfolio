@@ -102,9 +102,10 @@ Flags: `--skip-docker`, `--skip-planner`.
 
 Optional env (copy from `.env.example`):
 
-| Variable             | Purpose                                                                                                                                         |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PUBLIC_PLANNER_URL` | Base URL of [planner-api](planner-api/) for `/demos/planificacion` **Run planner** (production builds; dev defaults to `http://127.0.0.1:8765`) |
+| Variable             | Purpose                                                                                                                                                                                                                  |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `PUBLIC_PLANNER_URL` | Base URL of [planner-api](planner-api/) for `/demos/planificacion` **Run planner** (production builds; dev defaults to `http://127.0.0.1:8765`)                                                                          |
+| `PUBLIC_GA_ID`       | GA4 measurement ID (`G-…`). Unset means no analytics and no banner; set means a consent banner, and nothing loads from Google until a visitor accepts. See [analytics and privacy](docs/guides/analytics-and-privacy.md) |
 
 ## Demo pages
 

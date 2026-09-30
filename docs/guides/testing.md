@@ -58,6 +58,7 @@ Rule of thumb when adding a test:
 | **Content parity**            | [content-parity.test.ts](../../src/__tests__/content-parity.test.ts), [data-integrity.test.ts](../../src/__tests__/data-integrity.test.ts)                                                                                                                                                                                                                                                                     | i18n parity rule: `foo.json` / `foo.es.json` / `foo.ca.json` must match length, field set, and order. **Run these after every content edit.**                                                   |
 | **Schema enforcement**        | [demo-schema.test.ts](../../src/__tests__/demo-schema.test.ts), [content-schemas.test.ts](../../src/__tests__/content-schemas.test.ts)                                                                                                                                                                                                                                                                         | Zod schemas for demo cards, certifications, etc. Catches typos in icon enum, broken github URLs.                                                                                                |
 | **Cross-file SSOT**           | [structural.test.ts](../../src/__tests__/structural.test.ts), [demo-registry.test.ts](../../src/__tests__/demo-registry.test.ts), [demo-registry-adapter.test.ts](../../src/__tests__/demo-registry-adapter.test.ts)                                                                                                                                                                                           | Section IDs match between sections SSOT and Astro components, registry projections validate, ports are unique, and every backend stack is documented in [adding-a-demo.md](./adding-a-demo.md). |
+| **Consent-first analytics**   | [analytics-consent.test.ts](../../src/__tests__/analytics-consent.test.ts), [analytics-source-guard.test.ts](../../src/__tests__/analytics-source-guard.test.ts)                                                                                                                                                                                                                                               | The consent controller against fake storage, window and document, plus static guards that only the consent module names Google. See [analytics-and-privacy.md](./analytics-and-privacy.md).     |
 | **Static contrast**           | [theme-contrast.test.ts](../../src/__tests__/theme-contrast.test.ts)                                                                                                                                                                                                                                                                                                                                           | WCAG AA on token pairs in `global.css` + `themes.css`. Complements axe, which only sees rendered DOM.                                                                                           |
 | **Debug bus internals**       | [debug.test.ts](../../src/__tests__/debug.test.ts), [debug-sentry.test.ts](../../src/__tests__/debug-sentry.test.ts), [debug-session.test.ts](../../src/__tests__/debug-session.test.ts), [debug-lifecycle.test.ts](../../src/__tests__/debug-lifecycle.test.ts), [debug-network.test.ts](../../src/__tests__/debug-network.test.ts), [debug-docker-log.test.ts](../../src/__tests__/debug-docker-log.test.ts) | The custom event bus, reversible network and iframe taps, Docker relay processing, and lifecycle that drive the in-page overlay + Sentry forwarder.                                             |
 | **Runtime orchestration**     | [live-app-orchestration.test.ts](../../src/__tests__/live-app-orchestration.test.ts), [demo-page.test.ts](../../src/__tests__/demo-page.test.ts)                                                                                                                                                                                                                                                               | Live URL resolution/probing and shared locale/metadata assembly at their production seams.                                                                                                      |
@@ -104,8 +105,9 @@ node scripts/demo-registry.mjs --orchestrators
 
 ## Playwright — end-to-end
 
-9 named projects in [playwright.config.ts](../../playwright.config.ts), each
-with its own `testMatch` regex. `npm run test:e2e` runs all of them and
+10 test projects (plus one setup project) in
+[playwright.config.ts](../../playwright.config.ts), each with its own `testMatch`
+regex. `npm run test:e2e` runs all of them and
 auto-starts the dev server on port 4321.
 
 | Project           | What it covers                                                                                                                                             | Spec                                                         | Local command                                                   |
@@ -119,6 +121,13 @@ auto-starts the dev server on port 4321.
 | `a11y`            | axe-core scan over `/`, `/es/`, `/ca/`, every demo route, every theme, including hover states and a custom gradient-contrast check.                        | [a11y.spec.ts](../../e2e/a11y.spec.ts)                       | `make test-a11y` / `make test-a11y-grep PATTERN=…`              |
 | `visual`          | Pixel-diff vs committed PNG baselines, 1% drift tolerance. Animations disabled via `addInitScript`. **Linux-only baselines** (font hinting differs by OS). | [visual.spec.ts](../../e2e/visual.spec.ts)                   | `make test-visual`                                              |
 | `readme-gallery`  | Deterministic docs captures, including one canonical desktop JPEG per registered demo.                                                                     | [readme-gallery.spec.ts](../../e2e/readme-gallery.spec.ts)   | `npm run demo-gallery:capture`                                  |
+
+Two more projects belong to consent-first analytics. `analytics-consent-build` is
+the setup project: it builds a **second copy** of the site with a fake GA4 ID,
+because the default `dist` must stay analytics-free for everything else.
+`analytics-consent` then tests that copy in a real browser with every Google
+request stubbed (`npm run test:e2e:consent`, `make test-consent`). See
+[analytics-and-privacy.md § Testing](./analytics-and-privacy.md#testing).
 
 `npm run demo-gallery:check` validates that the generated index is current and
 that its stable JPEG set exactly matches the page-backed demo registry. CI also
@@ -212,6 +221,7 @@ Lighthouse CI via `npm run lhci`. Configured in
 | Vitest                     | `vitest`                     |
 | Backend (FastAPI planner)  | `planner-api`                |
 | Browser smoke              | `playwright (matrix)`        |
+| Analytics consent          | `playwright` (keyboard leg)  |
 | A11y                       | `playwright-a11y` (8 shards) |
 | Visual regression          | `playwright-visual`          |
 | Performance                | `lighthouse`                 |

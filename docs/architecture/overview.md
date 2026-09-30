@@ -62,18 +62,21 @@ PersonalPortfolio/
 │   │   ├── filtered-collection.ts # Filter/grid DOM protocol
 │   │   ├── live-app-fallback.ts # Live status → fallback visibility
 │   │   ├── live-app-embed.ts   # Registry resolution + bounded probe
+│   │   ├── analytics-consent.ts # Consent-first GA4; the only module that names Google
+│   │   ├── analytics-consent-ui.ts # Consent panel behaviour (DOM binder)
 │   │   └── ...                 # Per-demo algorithms (wpgma, etc.)
 │   ├── config/
+│   │   ├── analytics.ts        # GA4 measurement ID from PUBLIC_GA_ID (null = analytics off)
 │   │   ├── section-ids.ts      # Section order SSOT (homepage + nav)
 │   │   ├── sections.ts         # ↑ + Astro component bindings
 │   │   └── site.ts             # Identity (name, URL, socials)
 │   └── styles/               Global CSS + theme token blocks
-├── e2e/                      Playwright specs (9 named projects)
+├── e2e/                      Playwright specs (10 test projects)
 ├── planner-api/              FastAPI + ENHSP (PDDL planner demo)
 ├── scripts/                  Validated Node projections, orchestration, relay
 ├── public/                   Static assets (images, PDFs, mock data)
 └── docs/
-    ├── guides/                 # everyday-tasks, adding-a-demo, i18n, testing
+    ├── guides/                 # everyday-tasks, adding-a-demo, i18n, testing, analytics-and-privacy
     └── architecture/           # this file, decisions, debugging-architecture, observability
 ```
 

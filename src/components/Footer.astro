@@ -1,6 +1,7 @@
 ---
 import { Palette } from 'lucide-react';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import AnalyticsSettingsButton from './AnalyticsSettingsButton.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -17,6 +18,7 @@ const t = useTranslations(lang);
       <Palette size={16} strokeWidth={1.5} aria-hidden="true" />
       <span>{t('theme.customize')}</span>
     </button>
+    <AnalyticsSettingsButton variant="footer" />
   </div>
 </footer>
 
@@ -39,6 +41,7 @@ const t = useTranslations(lang);
 
   .footer-inner {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 1rem;

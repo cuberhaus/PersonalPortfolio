@@ -18,6 +18,18 @@
     "p3": "Fora de la feina em sol trobar escalant, ficat en un videojoc o fent veure que els meus atalls de Vim em fan més ràpid del que soc. Aquestes són algunes de les tecnologies amb què he treballat últimament:",
     "title": "Una mica sobre mi"
   },
+  "analytics": {
+    "accept": "Accepta l'analítica",
+    "close": "Tanca",
+    "description": "Aquest lloc pot fer servir Google Analytics per mesurar quines pàgines i demos es visiten. Això desa galetes al teu navegador i envia dades d'ús a Google. No es carrega res de Google tret que ho acceptis, i pots canviar la teva elecció en qualsevol moment des de «Configuració de privadesa».",
+    "reject": "Rebutja l'analítica",
+    "savedDenied": "Analítica desactivada.",
+    "savedGranted": "Analítica activada.",
+    "settings": "Configuració de privadesa",
+    "statusDenied": "L'analítica està desactivada.",
+    "statusGranted": "L'analítica està activada.",
+    "title": "Preferències d'analítica"
+  },
   "aria": {
     "scrollTop": "Anar a dalt",
     "skipToContent": "Saltar al contingut",

@@ -32,6 +32,11 @@ const BASE = process.env.OG_BASE_URL ?? 'http://localhost:4321';
 const OUT_ROOT = resolve(ROOT, process.env.OG_OUT_DIR ?? 'public');
 const DEMO_OUT_DIR = resolve(OUT_ROOT, 'og');
 
+// The production build can carry the analytics consent banner. Arrive as a visitor who already said
+// no: the banner stays out of the screenshots and this browser never loads Google. Mirrors
+// ANALYTICS_CONSENT_STORAGE_KEY in src/lib/analytics-consent.ts (pinned by analytics-source-guard.test.ts).
+const CONSENT_STORAGE_KEY = 'analytics-consent';
+
 async function loadSlugs() {
   const raw = await readFile(resolve(ROOT, 'src/data/demos.json'), 'utf8');
   const demos = JSON.parse(raw);
@@ -65,6 +70,16 @@ async function main() {
     viewport: { width: 1200, height: 630 },
     deviceScaleFactor: 1,
   });
+  await context.addInitScript(
+    ([key, value]) => {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch {
+        // Storage blocked: nothing to seed, and the banner is not this script's concern.
+      }
+    },
+    [CONSENT_STORAGE_KEY, 'denied']
+  );
 
   const targets = [
     { url: `${BASE}/`, out: resolve(OUT_ROOT, 'og-image.png') },

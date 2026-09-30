@@ -1,20 +1,206 @@
 ---
-// Google Analytics (GA4) — set PUBLIC_GA_ID in your environment to activate.
-// In production GitHub Pages deploys, set it as a repo variable / secret and
-// expose it to the build step (Astro inlines PUBLIC_*-prefixed env vars).
-const measurementId = (import.meta.env.PUBLIC_GA_ID ?? '').trim();
-const isValid = /^G-[A-Z0-9]+$/.test(measurementId);
+/**
+ * Consent-first analytics UI (issue #13).
+ *
+ * The layouts render this only when PUBLIC_GA_ID is a valid GA4 measurement
+ * ID (and it prints nothing otherwise), so a build without one shows no
+ * banner or settings buttons, loads no consent script and never loads Google.
+ * When it is set, the panel below is hidden until the visitor needs to choose
+ * (or reopens it from a "Privacy settings" button); Google's tag is injected
+ * by src/lib/analytics-consent.ts only after an explicit accept.
+ *
+ * Place directly after the skip link in <body> so keyboard users reach the
+ * choice before the rest of the page. See docs/guides/analytics-and-privacy.md.
+ */
+import { ANALYTICS_MEASUREMENT_ID, ANALYTICS_PANEL_ID } from '../config/analytics';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const measurementId = ANALYTICS_MEASUREMENT_ID;
+const t = useTranslations(getLangFromUrl(Astro.url));
 ---
 
-{isValid && (
-  <>
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`} is:inline></script>
-    <script define:vars={{ measurementId }} is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+{
+  measurementId && (
+    <div
+      class="analytics-consent"
+      data-analytics-consent
+      data-measurement-id={measurementId}
+      data-status-granted={t('analytics.statusGranted')}
+      data-status-denied={t('analytics.statusDenied')}
+      data-saved-granted={t('analytics.savedGranted')}
+      data-saved-denied={t('analytics.savedDenied')}
+    >
+      <p class="sr-only" role="status" aria-live="polite" data-consent-live />
+      <section
+        id={ANALYTICS_PANEL_ID}
+        class="analytics-consent__panel"
+        aria-labelledby="analytics-consent-title"
+        data-consent-panel
+        tabindex="-1"
+        hidden
+      >
+        <p id="analytics-consent-title" class="analytics-consent__title">
+          {t('analytics.title')}
+        </p>
+        <p class="analytics-consent__text">{t('analytics.description')}</p>
+        <p class="analytics-consent__status" data-consent-status hidden />
+        <div class="analytics-consent__actions">
+          <button type="button" class="analytics-consent__btn" data-consent-action="reject">
+            {t('analytics.reject')}
+          </button>
+          <button type="button" class="analytics-consent__btn" data-consent-action="accept">
+            {t('analytics.accept')}
+          </button>
+          <button
+            type="button"
+            class="analytics-consent__btn analytics-consent__btn--quiet"
+            data-consent-action="close"
+            hidden
+          >
+            {t('analytics.close')}
+          </button>
+        </div>
+      </section>
+    </div>
+  )
+}
 
-      gtag('config', measurementId);
-    </script>
-  </>
-)}
+<script>
+  // The banner logic is a separate chunk, fetched only when the page actually
+  // contains the consent root, and this loader is only attached to pages whose
+  // layout renders the component (i.e. builds with PUBLIC_GA_ID). No page's
+  // HTML ever references Google's tag or servers.
+  function initConsentUi() {
+    if (!document.querySelector('[data-analytics-consent]')) return;
+    import('../lib/analytics-consent-ui')
+      .then((ui) => ui.initAnalyticsConsentUi())
+      .catch((error) => console.warn('Analytics consent UI failed to load', error));
+  }
+
+  // First load, then again whenever client-side navigation swaps in a new page.
+  initConsentUi();
+  document.addEventListener('astro:page-load', initConsentUi);
+</script>
+
+<style>
+  /* Above the sticky nav (1000) and demo sidebar (1100); below the skip link (9999) and modals. */
+  .analytics-consent__panel {
+    position: fixed;
+    inset-inline: 1rem;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 1500;
+    display: grid;
+    gap: 0.75rem;
+    max-width: 46rem;
+    /* Never taller than the screen (landscape phones, 400% zoom): scroll inside the panel
+       instead of cutting off its top. The 100vh line is the fallback for browsers without dvh. */
+    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin-inline: auto;
+    padding: 1rem 1.25rem;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .analytics-consent__panel[hidden] {
+    display: none;
+  }
+
+  .analytics-consent__title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .analytics-consent__text,
+  .analytics-consent__status {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+
+  .analytics-consent__status {
+    font-weight: 600;
+  }
+
+  .analytics-consent__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  /* Accept and reject share every visual property, including width: neither is favoured. */
+  .analytics-consent__btn {
+    flex: 1 1 0;
+    min-width: 9rem;
+    max-width: 14rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 1.1rem;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--accent-text);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition:
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  .analytics-consent__btn:hover {
+    background: color-mix(in srgb, var(--accent-text) 14%, var(--bg-secondary));
+  }
+
+  .analytics-consent__btn--quiet {
+    border-color: var(--border-color);
+  }
+
+  .analytics-consent__btn[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .analytics-consent__actions {
+      flex-direction: column;
+    }
+
+    .analytics-consent__btn {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .analytics-consent__panel:not([hidden]) {
+      animation: analytics-consent-in var(--transition-base) both;
+    }
+
+    @keyframes analytics-consent-in {
+      from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+
+  @media print {
+    .analytics-consent__panel {
+      display: none;
+    }
+  }
+</style>

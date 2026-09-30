@@ -18,6 +18,18 @@
     "p3": "Fuera del trabajo me suelen encontrar escalando, metido en un videojuego o fingiendo que mis atajos de Vim me hacen más rápido de lo que soy. Estas son algunas de las tecnologías con las que he trabajado últimamente:",
     "title": "Un poco sobre mí"
   },
+  "analytics": {
+    "accept": "Aceptar analítica",
+    "close": "Cerrar",
+    "description": "Este sitio puede usar Google Analytics para medir qué páginas y demos se visitan. Esto guarda cookies en tu navegador y envía datos de uso a Google. No se carga nada de Google a menos que aceptes, y puedes cambiar tu elección en cualquier momento desde «Ajustes de privacidad».",
+    "reject": "Rechazar analítica",
+    "savedDenied": "Analítica desactivada.",
+    "savedGranted": "Analítica activada.",
+    "settings": "Ajustes de privacidad",
+    "statusDenied": "La analítica está desactivada.",
+    "statusGranted": "La analítica está activada.",
+    "title": "Preferencias de analítica"
+  },
   "aria": {
     "scrollTop": "Ir arriba",
     "skipToContent": "Saltar al contenido",

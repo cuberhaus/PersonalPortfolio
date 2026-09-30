@@ -18,6 +18,18 @@
     "p3": "Outside of work you'll usually find me climbing, deep in a videogame, or pretending my Vim keybindings make me faster than I really am. Here's some of the tech I've been using lately:",
     "title": "A bit about me"
   },
+  "analytics": {
+    "accept": "Accept analytics",
+    "close": "Close",
+    "description": "This site can use Google Analytics to measure which pages and demos are visited. Doing so sets cookies in your browser and sends usage data to Google. Nothing is loaded from Google unless you accept, and you can change your choice at any time with “Privacy settings”.",
+    "reject": "Reject analytics",
+    "savedDenied": "Analytics turned off.",
+    "savedGranted": "Analytics turned on.",
+    "settings": "Privacy settings",
+    "statusDenied": "Analytics is currently off.",
+    "statusGranted": "Analytics is currently on.",
+    "title": "Analytics preferences"
+  },
   "aria": {
     "scrollTop": "Scroll to top of page",
     "skipToContent": "Skip to content",

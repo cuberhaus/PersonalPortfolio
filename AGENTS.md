@@ -11,6 +11,7 @@ Before non-trivial work, read the matching guide:
 - Content/data edits → [docs/guides/everyday-tasks.md](docs/guides/everyday-tasks.md)
 - New demo, React island, or live embed → [docs/guides/adding-a-demo.md](docs/guides/adding-a-demo.md)
 - Translations, Crowdin, locale JSON → [docs/guides/i18n.md](docs/guides/i18n.md)
+- Analytics, the consent banner, `PUBLIC_GA_ID` → [docs/guides/analytics-and-privacy.md](docs/guides/analytics-and-privacy.md)
 - Choosing validation commands → [docs/guides/testing.md](docs/guides/testing.md)
 - Cross-cutting/architectural → [docs/architecture/overview.md](docs/architecture/overview.md)
 
@@ -18,13 +19,14 @@ If a guide conflicts with this file, follow the guide and update the stale rule 
 
 ## Build and Test
 
-`make dev` (Astro only), `make dev-bare` (all demo backends + Astro), `make build`, `make test` (fast local gate), `make test-full` (all Playwright + backend suites). Focused: `npm run test` (Vitest), `npm run test:e2e:smoke`, `npm run lint`, `npm run check`. Playwright projects (`browser-demos`, `live-demos`, `themes`) are independent — pick one rather than running all.
+`make dev` (Astro only), `make dev-bare` (all demo backends + Astro), `make build`, `make test` (fast local gate), `make test-full` (all Playwright + backend suites). Focused: `npm run test` (Vitest), `npm run test:e2e:smoke`, `npm run test:e2e:consent` (builds a second site with a test GA ID), `npm run lint`, `npm run check`. Playwright projects (`browser-demos`, `live-demos`, `themes`) are independent — pick one rather than running all.
 
 ## Conventions
 
 - **Adding a certification** — touch all four or parity tests fail: append object to [src/data/certifications.json](src/data/certifications.json); if a new `issuerIcon` slug, add to `ISSUER_ICON_PATHS` in [src/lib/issuer-icons.ts](src/lib/issuer-icons.ts); append a positional key (next integer = array length − 1) with `{ "issued": "<Mon YYYY>" }` to `locales/{en,es,ca}/certifications.json` (Catalan months: `Gen Feb Març Abr Maig Jun Jul Ago Set Oct Nov Des`); verify with `npx vitest run content-parity data-integrity`.
 - **i18n** — no inline `TRANSLATIONS` objects, hardcoded English, alt text, ARIA labels, or mock-banner copy in `.astro`/`.tsx`. Place strings in `locales/{locale}/ui.json` (shared), `demos.json` (card/header), `<slug>-demo.json` (island), or `designs.json`. Locale namespaces must keep identical keys/order (enforced by `content-parity.test.ts`, `data-integrity.test.ts`, `designs.test.ts`).
 - **Theming in demos** — never hardcode hex colors. Use `demoPanel` and `gradientButton` from [src/components/demos/_styles.ts](src/components/demos/_styles.ts) for primary panels and actions so the active design can reshape them; other CSS/HTML/JSX styles use `var(--accent-start)`, `var(--bg-card)`, `var(--text-primary)`, etc. Semi-transparent accents use `color-mix(in srgb, var(--accent-start) 15%, transparent)`. For `<canvas>` `fillStyle`/`strokeStyle` and D3 `.attr('fill', …)`, CSS vars don't resolve — import `getThemeColors()` from [src/lib/demo-theme.ts](src/lib/demo-theme.ts). Designs with custom tokens (`--comic-ink`, `--deco-gold`, …) require light-theme override blocks covering `light`, `nord-light`, `solarized-light`, `sepia`, `paper`.
+- **Analytics** — consent-first: nothing loads from Google until a visitor accepts. Only [`src/lib/analytics-consent.ts`](src/lib/analytics-consent.ts) may name Google's hosts, globals or IDs, and only [`src/config/analytics.ts`](src/config/analytics.ts) reads `PUBLIC_GA_ID` (both enforced by `analytics-source-guard.test.ts`). A page shell that owns `<html>` renders `{ANALYTICS_MEASUREMENT_ID && <Analytics />}` once in `<body>` after the skip link (never ungated, or every page of an unconfigured build loads the consent script); content pages add `<AnalyticsSettingsButton />`. Consent copy lives under `analytics` in `locales/*/ui.json`. After touching any of it, run `npm run test:e2e:consent`.
 - **React islands** — receive `lang` as a prop; do not read it from URL or context. Prefer `client:visible`; reserve `client:load` for above-the-fold interactivity. Split heavy subtabs with `React.lazy` + `<Suspense>`.
 - **Asset paths** — always BASE_URL-aware: `const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;` then `base + '/asset.png'`. Use `existsSync()` for optional assets (profile image, CV).
 - **Accessibility & motion** — semantic landmarks, `aria-expanded`/`aria-controls`/`aria-current`, `role="status" aria-live="polite"` for dynamic feedback, `aria-hidden="true"` for decorative SVGs. Wrap animations in `@media (prefers-reduced-motion: reduce)` and use `--transition-fast/base/slow` instead of literal ms.
