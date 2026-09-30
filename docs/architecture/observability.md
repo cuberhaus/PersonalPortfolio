@@ -10,6 +10,15 @@ this document only covers running and using the dashboards.
 > distributed traces / issue grouping, run **self-hosted Sentry** with
 > `make obs-up`. For production deploys, use **Sentry.io cloud free tier**.
 
+> **Sentry is not covered by the analytics consent banner.** The consent-first
+> Google Analytics banner gates only Google Analytics, and a test pins that the
+> consent code never touches Sentry. Today the deploy workflow sets no
+> `PUBLIC_SENTRY_DSN`, so the browser SDK falls back to a placeholder DSN and
+> reports nothing from production. If a real DSN is ever configured there,
+> revisit whether error reporting and error-triggered replay need their own
+> disclosure or consent. See
+> [analytics-and-privacy.md](../guides/analytics-and-privacy.md).
+
 ---
 
 ## Where do my events go? — quick chooser

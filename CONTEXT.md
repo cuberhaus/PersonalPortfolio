@@ -95,3 +95,46 @@ _Avoid_: Alternative icon.
 **Canonical site icon**:
 The selected visual icon artwork that serves as the source for every browser and PWA format variant.
 _Avoid_: Default favicon.
+
+## Demo services and hosting
+
+**Demo**:
+An interactive showcase of one project, presented on its own page of the portfolio.
+
+**Demo service**:
+A running program that a demo depends on to be fully interactive. Every demo service is either a backend or a static live app. In `src/data/demo-services.json` it is the `backend` block of an entry; browser-only demos (`hasBackend: false`) have none.
+_Avoid_: Service (alone), interactive demo backend
+
+**Backend**:
+A demo service that runs server-side code on behalf of the visitor.
+_Avoid_: Backend-powered demo
+
+**Static live app**:
+A demo service that only serves prebuilt front-end files. It is interactive in the browser but runs no server-side code.
+
+**Live app**:
+The interactive application that a demo service exposes and that the demo page embeds.
+
+**Hosted demo service**:
+A demo service that runs on a public host, so any visitor of the deployed portfolio can use its live app.
+_Avoid_: Production backend, deployed backend
+
+**Local demo service**:
+A demo service that runs on the owner's own machine, so its live app is reachable only from that machine.
+
+**Sleeping**:
+The state of a hosted demo service that is not running. It starts only when a visitor asks for its live app.
+_Avoid_: Cold start (that word names the delay, not the state)
+
+**Fallback demo**:
+The browser-only version of a demo that the page shows when its live app is not available.
+
+**Analytics consent**:
+A visitor's stored answer to whether the portfolio may measure their visit with Google Analytics. It is either granted or denied; until the visitor answers there is no decision and nothing is measured or requested from Google.
+_Avoid_: Cookie consent (the choice covers analytics as a whole, not only cookies), opt-in flag
+
+**Measurement ID**:
+The public identifier of the portfolio's Google Analytics property, supplied when the site is built. A build without a valid one has no analytics and no consent prompt.
+
+**Privacy settings**:
+The button on content pages that reopens the analytics consent choice, so a visitor can review, change or withdraw it at any time.

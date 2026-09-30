@@ -54,8 +54,42 @@ async function setThemeBeforeLoad(page: Page, theme: string, route: string) {
   await page.goto(route, { waitUntil: 'domcontentloaded' });
 }
 
+/**
+ * Wait until the page has stopped playing finite animations.
+ *
+ * Homepage sections fade in (`.reveal`, about 0.5s) right after load. Axe
+ * samples the *rendered* foreground, so scanning mid-fade reports the contrast
+ * of half-transparent text that no visitor sees at rest; the theme with the
+ * least contrast headroom (catppuccin-latte) fails first. The fade is started
+ * by an IntersectionObserver callback that runs a frame or two after load, so
+ * two frames pass before looking for animations. Looping ignores infinite
+ * animations (spinners, glows) and the deadline keeps a stuck one from hanging
+ * the run.
+ */
+async function waitForAnimationsToSettle(page: Page) {
+  await page.evaluate(async () => {
+    const deadline = Date.now() + 3000;
+    const nextFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    const isFinite = (animation: Animation) =>
+      Number.isFinite(animation.effect?.getComputedTiming().endTime);
+    await nextFrame();
+    await nextFrame();
+    while (Date.now() < deadline) {
+      const playing = document
+        .getAnimations()
+        .filter((animation) => animation.playState === 'running' && isFinite(animation));
+      if (playing.length === 0) return;
+      await Promise.race([
+        Promise.allSettled(playing.map((animation) => animation.finished)),
+        new Promise((resolve) => setTimeout(resolve, Math.max(0, deadline - Date.now()))),
+      ]);
+    }
+  });
+}
+
 async function runAxe(page: Page, route: string, theme: string) {
   await setThemeBeforeLoad(page, theme, route);
+  await waitForAnimationsToSettle(page);
   // AxeBuilder's `Page` type comes from a slightly older playwright-core version
   // pinned by @axe-core/playwright; a structural cast keeps both happy.
   const results = await new AxeBuilder({ page: page as never }).withTags(STANDARD_TAGS).analyze();

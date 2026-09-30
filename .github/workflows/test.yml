@@ -151,6 +151,16 @@ jobs:
       - name: Run E2E (${{ matrix.project }})
         run: npx playwright test --project=${{ matrix.project }} --workers=${{ matrix.project == 'browser-demos' && 4 || 1 }}
 
+      # Consent-first analytics (issue #13). Hosted in this short leg rather than a matrix leg of its
+      # own: the workflow is at 19 jobs, one below GitHub's 20-concurrent-job limit (see the note on
+      # playwright-a11y). The project first builds a second copy of the site with a test measurement
+      # ID. `!cancelled()` keeps it running when the keyboard tests fail, so neither hides the other.
+      - name: Run E2E (analytics-consent)
+        if: ${{ !cancelled() && matrix.project == 'keyboard' }}
+        env:
+          PLAYWRIGHT_HTML_REPORT: playwright-report-analytics-consent
+        run: npx playwright test --project=analytics-consent
+
       - name: Check committed demo gallery is current
         if: matrix.project == 'readme-gallery'
         run: npm run demo-gallery:compare
@@ -171,6 +181,14 @@ jobs:
         with:
           name: playwright-report-${{ matrix.project }}
           path: playwright-report/
+          retention-days: 7
+
+      - name: Upload analytics-consent report
+        if: always() && matrix.project == 'keyboard'
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-analytics-consent
+          path: playwright-report-analytics-consent/
           retention-days: 7
 
   # a11y is sharded across 8 runners for speed. ~830 tests / 8 shards / 4

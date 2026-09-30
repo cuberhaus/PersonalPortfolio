@@ -8,6 +8,7 @@ import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
 import { getLocalizedCertifications } from '../lib/certifications';
+import { ANALYTICS_MEASUREMENT_ID } from '../config/analytics';
 import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
 import { SITE_URLS } from '../config/site';
 
@@ -111,11 +112,11 @@ const hasCredential = certs.map((cert) => ({
       })}
     />
     <ClientRouter />
-    <Analytics />
   </head>
   <body>
     <ThemeInit position="body" />
     <a href="#main-content" class="skip-to-content">{t('aria.skipToContent')}</a>
+    {ANALYTICS_MEASUREMENT_ID && <Analytics />}
     <slot />
     <div class="main-bottom-design">
       <button

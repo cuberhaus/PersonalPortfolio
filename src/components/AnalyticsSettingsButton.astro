@@ -1,0 +1,70 @@
+---
+/**
+ * "Privacy settings" button that reopens the analytics consent panel
+ * (issue #13). Renders nothing when analytics is not configured. The click is
+ * handled by the delegated listener in src/lib/analytics-consent-ui.ts.
+ */
+import { ShieldCheck } from 'lucide-react';
+import { ANALYTICS_MEASUREMENT_ID, ANALYTICS_PANEL_ID } from '../config/analytics';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+interface Props {
+  /** `footer` matches the compact footer buttons; `demo` matches the demo pages' bottom row. */
+  variant?: 'footer' | 'demo';
+}
+
+const { variant = 'footer' } = Astro.props;
+const t = useTranslations(getLangFromUrl(Astro.url));
+---
+
+{
+  ANALYTICS_MEASUREMENT_ID && (
+    <button
+      type="button"
+      class={`analytics-settings-btn analytics-settings-btn--${variant}`}
+      data-analytics-settings
+      aria-controls={ANALYTICS_PANEL_ID}
+      aria-expanded="false"
+    >
+      <ShieldCheck size={16} strokeWidth={1.5} aria-hidden="true" />
+      <span>{t('analytics.settings')}</span>
+    </button>
+  )
+}
+
+<style>
+  .analytics-settings-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2rem;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition:
+      border-color var(--transition-base),
+      color var(--transition-base),
+      background-color var(--transition-fast);
+  }
+
+  .analytics-settings-btn--footer {
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--radius-sm, 6px);
+    background: var(--bg-card, transparent);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .analytics-settings-btn--demo {
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
+
+  .analytics-settings-btn:hover {
+    border-color: var(--accent-text);
+    color: var(--accent-text);
+  }
+</style>

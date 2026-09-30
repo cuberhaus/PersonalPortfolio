@@ -58,6 +58,12 @@ jobs:
           done
 
       - name: Build site
+        env:
+          # Public GA4 measurement ID, stored as a repository *variable* (Settings > Secrets and
+          # variables > Actions > Variables): it ships in the page, so it is not a secret. Unset or
+          # invalid means analytics stays entirely off, with no consent UI in the build at all.
+          # Even when set, nothing loads from Google until a visitor opts in.
+          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
         run: npm run build
 
       - name: Cache Playwright browsers

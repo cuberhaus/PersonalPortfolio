@@ -79,6 +79,25 @@ export default defineConfig({
       retries: 0,
     },
     {
+      // Consent behaviour only exists in a site built with a GA4 measurement
+      // ID, so this pair builds and tests its own copy of the site instead of
+      // the default `dist` (which must stay analytics-free for every other
+      // project). The build project runs automatically as a dependency; the
+      // spec serves the result itself, on a free port per worker.
+      name: 'analytics-consent-build',
+      testMatch: /analytics-consent\.setup\.ts/,
+      retries: 0,
+    },
+    {
+      name: 'analytics-consent',
+      dependencies: ['analytics-consent-build'],
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /analytics-consent\.spec\.ts/,
+      // Deterministic by design (no timers, every wait is on observable state). A retry would only
+      // hide the kind of race this suite exists to catch.
+      retries: 0,
+    },
+    {
       name: 'visual',
       use: {
         ...devices['Desktop Chrome'],

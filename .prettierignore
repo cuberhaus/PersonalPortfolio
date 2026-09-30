@@ -17,5 +17,4 @@ package-lock.json
 
 # prettier-plugin-astro can't parse `is:inline` script blocks containing
 # function declarations or var statements — keep these formatted manually.
-src/components/Analytics.astro
 src/components/ThemeInit.astro

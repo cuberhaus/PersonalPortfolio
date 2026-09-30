@@ -302,6 +302,9 @@ lint: ## Type-check, ESLint, and Prettier format-check
 test-keyboard:
 	npx playwright test --project=keyboard
 
+test-consent: ## Run the analytics-consent suite (builds a second site with a test GA ID; PLAYWRIGHT_REUSE_CONSENT_BUILD=1 skips the rebuild)
+	npx playwright test --project=analytics-consent
+
 test-visual: ## Run the visual-regression suite against committed baselines
 	npx playwright test --project=visual
 

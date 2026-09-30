@@ -20,6 +20,7 @@
     "test:e2e": "playwright test",
     "test:e2e:smoke": "playwright test --project=portfolio-smoke",
     "test:e2e:a11y": "playwright test --project=a11y",
+    "test:e2e:consent": "playwright test --project=analytics-consent",
     "gallery:capture": "playwright test --project=readme-gallery",
     "demo-gallery:prepare": "node scripts/demo-gallery.mjs --prepare",
     "demo-gallery:capture": "npm run demo-gallery:prepare && playwright test --project=readme-gallery --grep=complete.demo.gallery",
