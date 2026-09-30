@@ -132,6 +132,126 @@ test.describe('Shared demo workbench design', () => {
   });
 });
 
+// ─── TFG pipeline label (#250) ──────────────────────────────────
+//
+// "End-to-End Pipeline" is a label, not an action. It must read as a restrained,
+// legible surface that follows the active theme x design, rather than filling
+// with the accent gradient and competing with the step cards below it.
+
+const PIPELINE_VIEWPORTS = {
+  laptop: { width: 1440, height: 900 },
+  iphone: { width: 390, height: 844 },
+} as const;
+
+type PipelineLabelCase = {
+  theme: string;
+  design: string;
+  viewport: keyof typeof PIPELINE_VIEWPORTS;
+};
+
+// Issue #250 acceptance: Barcelona day and night at laptop and iPhone sizes,
+// under the default design (swiss) and the shared fallback tokens (minimal).
+// The remaining rows are representative non-Barcelona palettes and designs,
+// including the highest-chroma accents (synthwave, phosphor) where a
+// translucent tint is easiest to over-saturate.
+const PIPELINE_LABEL_CASES: PipelineLabelCase[] = [
+  ...(['barcelona-night', 'barcelona-day'] as const).flatMap((theme) =>
+    (['swiss', 'minimal'] as const).flatMap((design) =>
+      (['laptop', 'iphone'] as const).map((viewport) => ({ theme, design, viewport }))
+    )
+  ),
+  { theme: 'dracula', design: 'minimal', viewport: 'laptop' },
+  { theme: 'nord-light', design: 'swiss', viewport: 'laptop' },
+  { theme: 'synthwave', design: 'cyber', viewport: 'laptop' },
+  { theme: 'phosphor', design: 'terminal', viewport: 'laptop' },
+  { theme: 'sepia', design: 'editorial', viewport: 'laptop' },
+];
+
+/**
+ * Runs in the browser. Colors are normalised by painting them onto a 1x1 canvas,
+ * so `color-mix()` / `color(srgb …)` computed values resolve exactly as rendered
+ * and translucent layers are composited over their ancestors' backgrounds.
+ * Must stay self-contained: Playwright serialises it into the page.
+ */
+function measurePipelineLabel(label: HTMLElement) {
+  const ctx = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+  // label -> header row -> panel: the same hops the Swiss surface test uses.
+  const panel = label.parentElement?.parentElement;
+  if (!ctx || !panel) throw new Error('pipeline label is not rendered inside its panel');
+
+  const paint = (layers: string[]): number[] => {
+    ctx.clearRect(0, 0, 1, 1);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, 1, 1);
+    for (const css of layers) {
+      if (!CSS.supports('color', css)) throw new Error(`unparseable color: ${css}`);
+      ctx.fillStyle = css;
+      ctx.fillRect(0, 0, 1, 1);
+    }
+    return Array.from(ctx.getImageData(0, 0, 1, 1).data.slice(0, 3));
+  };
+  const backdrops = (node: Element): string[] => {
+    const layers: string[] = [];
+    for (let n: Element | null = node; n; n = n.parentElement) {
+      layers.unshift(getComputedStyle(n).backgroundColor);
+    }
+    return layers;
+  };
+  const luminance = ([r, g, b]: number[]) => {
+    const linear = (c: number) => {
+      const v = c / 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+  };
+  const contrast = (a: number[], b: number[]) => {
+    const [lighter, darker] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+    return (lighter + 0.05) / (darker + 0.05);
+  };
+
+  const style = getComputedStyle(label);
+  const layers = backdrops(label);
+  const surface = paint(layers);
+  return {
+    backgroundImage: style.backgroundImage,
+    surfaceVsPanel: contrast(surface, paint(backdrops(panel))),
+    textVsSurface: contrast(paint([...layers, style.color]), surface),
+  };
+}
+
+test.describe('Shared demo workbench design: pipeline label', () => {
+  for (const { theme, design, viewport } of PIPELINE_LABEL_CASES) {
+    test(`title is a restrained, legible label on ${theme} / ${design} / ${viewport}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(PIPELINE_VIEWPORTS[viewport]);
+      // ThemeInit applies (and persists) ?theme / ?design before first paint.
+      await page.goto(`/demos/tfg-polyps?theme=${theme}&design=${design}`, {
+        waitUntil: 'domcontentloaded',
+      });
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await expect(page.locator('html')).toHaveAttribute('data-design', design);
+
+      // The title and its semantic region (same accessible name) are still rendered.
+      const label = page.getByText('End-to-End Pipeline', { exact: true });
+      await expect(label).toBeVisible();
+      await expect(page.getByRole('region', { name: 'End-to-End Pipeline' })).toBeVisible();
+
+      const { backgroundImage, surfaceVsPanel, textVsSurface } =
+        await label.evaluate(measurePipelineLabel);
+      expect(backgroundImage, 'label must not fill with the accent gradient').toBe('none');
+      expect(
+        surfaceVsPanel,
+        'label surface must stay a subtle tint of its panel (<= 1.5:1), not a solid block'
+      ).toBeLessThanOrEqual(1.5);
+      expect(
+        textVsSurface,
+        'title must meet WCAG AA (4.5:1) on its surface'
+      ).toBeGreaterThanOrEqual(4.5);
+    });
+  }
+});
+
 // ─── i18n: Spanish and Catalan routes ───────────────────────────
 
 test.describe('i18n demo pages', () => {
