@@ -73,7 +73,8 @@ export PUBLIC_SENTRY_RELEASE="$SENTRY_RELEASE"
 
 # When backends run inside Docker, `localhost` resolves to the container,
 # not the host. Rewrite the DSN host portion so the Sentry SDKs inside
-# containers can reach Spotlight (or any other host-bound DSN sidecar).
+# containers can reach a host-bound collector (e.g. self-hosted Sentry or
+# GlitchTip on localhost).
 # Each backend's docker-compose.yml reads `SENTRY_DSN_DOCKER` first, then
 # falls back to `SENTRY_DSN`. Host-only processes (PROP, planner-api)
 # keep the original `SENTRY_DSN` so they still resolve `localhost` fine.
@@ -131,7 +132,7 @@ _split_repo_path() {
 # multiple consecutive whitespace separators into one.
 _US=$'\x1f'
 SERVICE_REGISTRY=()
-while IFS="$_US" read -r slug type display port compose_path makefile_path image extra container; do
+while IFS="$_US" read -r _slug type display port compose_path makefile_path image extra container; do
   [[ -z "$type" || "$type" == "null" ]] && continue
   case "$type" in
     compose)
@@ -239,24 +240,11 @@ cleanup() {
   if [[ "${_CLEANUP_RAN:-0}" == 1 ]]; then return; fi
   _CLEANUP_RAN=1
 
-  # ── Spotlight's sidecar (npm: @spotlightjs/sidecar, spawned by
-  # @spotlightjs/astro) ignores its first SIGINT — its handler only logs
-  # "Shutting down gracefully…" and then waits for a SECOND SIGINT before
-  # actually exiting. That made `make all` / `npm run dev:all` require
-  # multiple Ctrl+Cs to fully tear down. We send SIGTERM directly to the
-  # sidecar (and any orphaned spotlight node process) up front, so the
-  # rest of the chain (npm → astro → spotlight integration) can exit
-  # cleanly on the first signal. Quiet on stderr because pkill returns
-  # exit code 1 when no match is found, which is the common case in
-  # rerun / restart flows.
-  pkill -TERM -f '@spotlightjs/sidecar'  2>/dev/null || true
-  pkill -TERM -f 'spotlight.*sidecar'    2>/dev/null || true
-
   if [[ -n "${NPM_DEV_PID}" ]] && kill -0 "$NPM_DEV_PID" 2>/dev/null; then
     echo ""
     echo "Stopping Astro / npm dev (pid $NPM_DEV_PID)..."
     kill -TERM "$NPM_DEV_PID" 2>/dev/null || true
-    # Give the integration ~1.5s to drain; if it's still around, escalate.
+    # Give the dev server ~1.5s to drain; if it's still around, escalate.
     for _ in 1 2 3 4 5 6; do
       kill -0 "$NPM_DEV_PID" 2>/dev/null || break
       sleep 0.25
@@ -264,7 +252,6 @@ cleanup() {
     if kill -0 "$NPM_DEV_PID" 2>/dev/null; then
       kill -KILL "$NPM_DEV_PID" 2>/dev/null || true
       pkill -KILL -P "$NPM_DEV_PID" 2>/dev/null || true
-      pkill -KILL -f '@spotlightjs/sidecar' 2>/dev/null || true
     fi
     wait "$NPM_DEV_PID" 2>/dev/null || true
   fi
@@ -380,8 +367,8 @@ if [[ "$SKIP_DOCKER" == 0 ]]; then
     # Helper: launch a docker run service in the background (build-if-missing)
     # Passes through SENTRY_* env vars so the per-backend SDKs (Phase 14) can
     # initialise themselves if PersonalPortfolio/.env.shared sets a DSN.
-    # Uses SENTRY_DSN_DOCKER so `localhost`-based DSNs (e.g. Spotlight) are
-    # auto-rewritten to `host.docker.internal` for the container.
+    # Uses SENTRY_DSN_DOCKER so `localhost`-based DSNs (e.g. self-hosted
+    # Sentry) are auto-rewritten to `host.docker.internal` for the container.
     _docker_run() {
       local name="$1" url="$2" dir="$3" image="$4" port="$5" container="$6"
       local sentry_env=(
@@ -513,12 +500,10 @@ fi
 cd "$PORTFOLIO"
 echo "==> Astro            http://localhost:4321"
 echo ""
-# Run Astro (and its Spotlight sidecar) in the background so bash's
-# `wait` builtin can be interrupted by SIGINT immediately. Running it
-# foreground would mean bash blocks here until npm exits — which only
-# happens AFTER the user has Ctrl+C'd Spotlight twice. Backgrounding +
-# wait + the trap-driven Spotlight kill above make the first Ctrl+C
-# actually shut everything down.
+# Run Astro in the background so bash's `wait` builtin is interrupted by
+# SIGINT immediately and the cleanup trap fires on the first Ctrl+C.
+# Running it in the foreground would make bash defer the trap until npm
+# exits.
 npm run dev &
 NPM_DEV_PID=$!
 wait "$NPM_DEV_PID"

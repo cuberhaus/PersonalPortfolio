@@ -4,7 +4,6 @@ import { writeFile } from 'node:fs/promises';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import sentry from '@sentry/astro';
-import spotlight from '@spotlightjs/astro';
 import { LOCALES, DEFAULT_LOCALE } from './src/config/locales.ts';
 import { SITE as SITE_CONFIG } from './src/config/site.ts';
 
@@ -52,7 +51,6 @@ export default defineConfig({
         telemetry: false,
       },
     }),
-    spotlight(),
   ],
   i18n: {
     defaultLocale: DEFAULT_LOCALE,

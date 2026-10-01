@@ -379,63 +379,40 @@ existing tests in [`PersonalPortfolio/src/__tests__/`](../../src/__tests__/)).
 
 Runs offline in milliseconds: `npm test`.
 
-### Layer 2 — Integration with Sentry SDK via Sentry Spotlight
+### Layer 2 — Integration with the Sentry SDK against a local collector
 
-[Sentry Spotlight](https://spotlightjs.com) is a free, open-source (MIT) local
-dashboard maintained by the Sentry team. It receives the **same events** the
-official Astro Sentry integration would send to the cloud, renders them in a
-sidecar UI injected into `astro dev`, and never opens a network connection
-outside `localhost`.
+The official Astro Sentry integration (`@sentry/astro`) is already wired in
+[`astro.config.mjs`](../../astro.config.mjs) and emits the **same events**
+locally as it would to the cloud; only the DSN differs. Point
+`PUBLIC_SENTRY_DSN` (browser and SSR, in `.env`) and `SENTRY_DSN` (backends,
+in `.env.shared`) at a collector running on your own machine and nothing
+leaves `localhost`:
 
-Setup:
+- **Self-hosted Sentry** (`make obs-up`) — full Sentry parity, heavier on RAM
+  and disk.
+- **GlitchTip** — lighter, Sentry-API-compatible, less polished.
 
-```bash
-npm install @sentry/astro @spotlightjs/astro
-```
-
-```ts
-// astro.config.mjs
-import sentry from '@sentry/astro';
-import spotlight from '@spotlightjs/astro';
-
-export default defineConfig({
-  integrations: [
-    sentry({ dsn: 'https://test@test/0', environment: 'local' }),
-    spotlight(), // automatically stripped from production builds
-  ],
-});
-```
+Setup, resource costs, and tag-filtering checks live in
+[`observability.md`](./observability.md).
 
 What you get locally:
 
-- Sentry-style dashboard at the dev toolbar — no account required.
-- Errors, transactions, breadcrumbs, source-mapped stack traces.
-- Source maps from Vite work without manual upload.
+- A real Sentry-style dashboard — no sentry.io account required.
+- Errors, transactions, breadcrumbs, and distributed traces.
 - Same SDK behaviour as production → no "works locally, breaks in prod"
   surprises.
-
-What's _not_ covered by Spotlight (vs hosted Sentry):
-
-- Session replay (Spotlight doesn't render replays).
-- Alerts and notifications (no alerting backend locally).
-- Issue grouping across releases (single-session view only).
-- Team / org / SSO features.
-
-Replay specifically can be verified separately by enabling the Replay
-integration once with a real DSN; you only need to do this once to confirm
-the wiring.
 
 ### Layer 3 — Real Sentry hosted dashboard
 
 When the time comes to verify the actual `sentry.io` dashboard:
 
 1. Free account + new "Astro" project; copy DSN.
-2. Replace the fake DSN in `astro.config.mjs` (or move it behind
-   `import.meta.env.PUBLIC_SENTRY_DSN` and put the real value in `.env`).
+2. Set `PUBLIC_SENTRY_DSN` in `.env` (without it, the placeholder DSN in
+   `sentry.client.config.ts` is used).
 3. Run `astro dev`, trigger a test error → confirm it lands in the hosted UI
    within ~5 s.
-4. If unsatisfied: delete the project, restore the fake DSN, back to
-   Spotlight only. No data orphaned.
+4. If unsatisfied: delete the project, unset `PUBLIC_SENTRY_DSN`, back to the
+   local collector only. No data orphaned.
 
 ### Local-only test paths for other backends
 
@@ -443,7 +420,7 @@ For the other backends in [`decisions.md` § Migration matrix](./decisions.md#mi
 
 | Backend                       | Local-only test path                                                                |
 | ----------------------------- | ----------------------------------------------------------------------------------- |
-| **Sentry hosted**             | Sentry Spotlight (this section)                                                     |
+| **Sentry hosted**             | Self-hosted Sentry or GlitchTip (Layer 2 above)                                     |
 | **Highlight self-hosted**     | `docker compose up` from the Highlight repo — same code as production               |
 | **Highlight hosted**          | Free hobby project at app.highlight.io                                              |
 | **PostHog self-hosted**       | Single-container `posthog/posthog` Docker image                                     |

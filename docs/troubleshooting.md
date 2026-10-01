@@ -271,17 +271,6 @@ support (no `:fluents` — that's why we're not on Fast Downward).
 
 ## Sentry / observability
 
-### Spotlight banner doesn't appear
-
-**Cause:** Spotlight only mounts when `astro dev` runs, not on `astro preview`
-(production build).
-
-**Fix:** use `make dev` or `make dev-bare`. For production, paste a real DSN
-into `.env.shared` (see
-[docs/architecture/observability.md](./architecture/observability.md)).
-
----
-
 ### Self-hosted Sentry: web UI loads but events don't appear
 
 **Diagnose:**
