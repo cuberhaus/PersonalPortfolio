@@ -5,6 +5,12 @@
  * intercepted and recorded, so the suite proves what the browser actually
  * tried to load without ever contacting Google.
  *
+ * The same build also carries a fake code for the cookieless visit counter,
+ * which counts every visitor whatever they choose about Google Analytics.
+ * Requests to its host are recorded and answered the same way, so the suite
+ * proves what the counter sent (and that it left nothing behind) without
+ * ever contacting GoatCounter.
+ *
  * Run: npx playwright test --project=analytics-consent
  * Iterate faster once a build exists: PLAYWRIGHT_REUSE_CONSENT_BUILD=1 ...
  */
@@ -16,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { THEMES } from '../src/lib/themes';
 import {
   CONSENT_TEST_MEASUREMENT_ID as ID,
+  COUNTER_TEST_ENDPOINT,
   DEFAULT_SITE_URL,
   startConsentSite,
 } from './analytics-consent-site';
@@ -25,12 +32,14 @@ const GOOGLE_ANALYTICS_HOST =
   /(^|\.)(googletagmanager\.com|google-analytics\.com|analytics\.google\.com|googleadservices\.com|doubleclick\.net)$/;
 /** Stands in for gtag.js and counts how many times the browser executed it. */
 const STUB_TAG_SCRIPT = 'window.__gtagScriptLoads = (window.__gtagScriptLoads || 0) + 1;';
+const COUNTER_HOST = /(^|\.)goatcounter\.com$/;
 
 type Lang = 'en' | 'es' | 'ca';
 interface ConsentCopy {
   accept: string;
   close: string;
   description: string;
+  descriptionWithCounter: string;
   reject: string;
   savedDenied: string;
   savedGranted: string;
@@ -52,7 +61,10 @@ const DESIGN_IDS: string[] = Object.keys(
 
 // Fixture callbacks call their continuation `provide`, not Playwright's usual `use`:
 // eslint-plugin-react-hooks mistakes a call to `use(...)` for a React hook.
-const test = base.extend<{ googleRequests: string[] }, { consentSiteUrl: string }>({
+const test = base.extend<
+  { googleRequests: string[]; counterRequests: string[] },
+  { consentSiteUrl: string }
+>({
   // One static server per worker for the analytics-enabled build.
   consentSiteUrl: [
     // eslint-disable-next-line no-empty-pattern
@@ -90,6 +102,27 @@ const test = base.extend<{ googleRequests: string[] }, { consentSiteUrl: string 
     },
     { auto: true },
   ],
+  // Auto-fixture: every request to the visit counter's host is recorded and answered with an empty
+  // 204. The test site is served from 127.0.0.1, which the counter ignores as a development page,
+  // so every page also gets GoatCounter's own `allow_local` switch; the one test about development
+  // pages opens a context without it.
+  counterRequests: [
+    async ({ context }, provide) => {
+      const requests: string[] = [];
+      await context.addInitScript(() => {
+        (window as unknown as { goatcounter: object }).goatcounter = { allow_local: true };
+      });
+      await context.route(
+        (url) => COUNTER_HOST.test(url.hostname),
+        async (route) => {
+          requests.push(route.request().url());
+          await route.fulfill({ status: 204 });
+        }
+      );
+      await provide(requests);
+    },
+    { auto: true },
+  ],
 });
 
 const consentRoot = (page: Page) => page.locator('[data-analytics-consent]');
@@ -99,6 +132,10 @@ const tagRequests = (requests: string[]) =>
   requests.filter((url) => new URL(url).pathname.endsWith('/gtag/js'));
 const storedDecision = (page: Page) =>
   page.evaluate((key) => localStorage.getItem(key), STORAGE_KEY);
+/** The fields of one counted view, as the counting service would read them. */
+const counterQuery = (url: string) => Object.fromEntries(new URL(url).searchParams);
+/** The page path of every view counted so far, in order. */
+const countedPaths = (requests: string[]) => requests.map((url) => counterQuery(url).p);
 
 /** Navigate and wait until the (lazily loaded) consent UI has initialised. */
 async function openPage(page: Page, path = '/'): Promise<void> {
@@ -112,6 +149,7 @@ test.describe('first visit, before any decision', () => {
     await page.waitForLoadState('networkidle');
 
     await expect(panel(page)).toBeVisible();
+    await expect(panel(page)).toContainText(en.descriptionWithCounter);
     await expect(page.getByRole('button', { name: en.accept })).toBeVisible();
     await expect(page.getByRole('button', { name: en.reject })).toBeVisible();
 
@@ -518,7 +556,8 @@ test.describe('localisation', () => {
 
       await expect(page.locator('html')).toHaveAttribute('lang', lang);
       await expect(panel(page, lang)).toBeVisible();
-      await expect(panel(page, lang)).toContainText(ui.description);
+      // This build ships the visit counter, so the panel must describe it (and name Google Analytics).
+      await expect(panel(page, lang)).toContainText(ui.descriptionWithCounter);
       await expect(page.getByRole('button', { name: ui.accept })).toBeVisible();
       await expect(page.getByRole('button', { name: ui.reject })).toBeVisible();
 
@@ -541,24 +580,25 @@ test.describe('localisation', () => {
     });
   }
 });
-test.describe('Astro client-side navigation (ClientRouter)', () => {
-  /** Follow a link through ClientRouter and prove no full reload happened. */
-  async function softNavigate(page: Page, href: string): Promise<void> {
-    await page.evaluate((target) => {
-      (window as any).__softNavMarker = true;
-      const link = document.createElement('a');
-      link.id = 'soft-nav-link';
-      link.href = target;
-      link.textContent = 'soft navigation';
-      link.style.cssText =
-        'position:fixed;top:45%;left:40%;z-index:99999;padding:8px;background:#fff;color:#000';
-      document.body.append(link);
-    }, href);
-    await page.locator('#soft-nav-link').click();
-    await expect(page).toHaveURL(new RegExp(`${href}$`));
-    await expect.poll(() => page.evaluate(() => (window as any).__softNavMarker)).toBe(true);
-  }
 
+/** Follow a link through ClientRouter and prove no full reload happened. */
+async function softNavigate(page: Page, href: string): Promise<void> {
+  await page.evaluate((target) => {
+    (window as any).__softNavMarker = true;
+    const link = document.createElement('a');
+    link.id = 'soft-nav-link';
+    link.href = target;
+    link.textContent = 'soft navigation';
+    link.style.cssText =
+      'position:fixed;top:45%;left:40%;z-index:99999;padding:8px;background:#fff;color:#000';
+    document.body.append(link);
+  }, href);
+  await page.locator('#soft-nav-link').click();
+  await expect(page).toHaveURL(new RegExp(`${href}$`));
+  await expect.poll(() => page.evaluate(() => (window as any).__softNavMarker)).toBe(true);
+}
+
+test.describe('Astro client-side navigation (ClientRouter)', () => {
   test('an undecided visitor is asked again on the new page, in its language', async ({
     page,
     googleRequests,
@@ -872,13 +912,189 @@ test.describe('accessibility of the consent UI', () => {
   }
 });
 
-test.describe('the default build (no PUBLIC_GA_ID)', () => {
+test.describe('the cookieless visit counter', () => {
+  test('counts a first visit once, before any decision, and leaves nothing in the browser', async ({
+    page,
+    googleRequests,
+    counterRequests,
+  }) => {
+    await openPage(page);
+    await expect.poll(() => counterRequests).toHaveLength(1);
+    await page.waitForLoadState('networkidle');
+
+    expect(counterRequests).toHaveLength(1);
+    const url = new URL(counterRequests[0]);
+    expect(`${url.origin}${url.pathname}`).toBe(COUNTER_TEST_ENDPOINT);
+    expect(counterQuery(counterRequests[0])).toMatchObject({
+      p: '/',
+      s: String(await page.evaluate(() => window.screen.width)),
+    });
+
+    // The choice is still open and Google has heard nothing, yet the visit is counted.
+    await expect(panel(page)).toBeVisible();
+    expect(googleRequests).toEqual([]);
+    // And the counter left nothing behind: no cookie from anyone, no stored key of its own. (The
+    // site's own debug logger keeps a session id in localStorage; it has nothing to do with this.)
+    expect(await page.context().cookies()).toEqual([]);
+    expect(await page.evaluate(() => document.cookie)).toBe('');
+    const storedKeys = await page.evaluate(() => Object.keys(localStorage));
+    expect(storedKeys.filter((key) => key !== 'debug.session_id')).toEqual([]);
+  });
+
+  test('counts a visitor who rejects Google Analytics, and again when they come back', async ({
+    page,
+    googleRequests,
+    counterRequests,
+  }) => {
+    await openPage(page);
+    await expect.poll(() => counterRequests).toHaveLength(1);
+
+    await page.getByRole('button', { name: en.reject }).click();
+    await expect(consentRoot(page)).toHaveAttribute('data-consent-state', 'denied');
+    await page.waitForLoadState('networkidle');
+    // Deciding neither adds nor removes a count.
+    expect(counterRequests).toHaveLength(1);
+
+    // A returning visitor who already said no: counted again, Google still untouched.
+    await openPage(page);
+    await expect.poll(() => counterRequests).toHaveLength(2);
+    expect(await storedDecision(page)).toBe('denied');
+    expect(googleRequests).toEqual([]);
+  });
+
+  test('does not count the visit a second time when Google Analytics is accepted', async ({
+    page,
+    googleRequests,
+    counterRequests,
+  }) => {
+    await openPage(page);
+    await expect.poll(() => counterRequests).toHaveLength(1);
+
+    await page.getByRole('button', { name: en.accept }).click();
+    await expect.poll(() => tagRequests(googleRequests)).toHaveLength(1);
+    await page.waitForLoadState('networkidle');
+
+    expect(counterRequests).toHaveLength(1);
+  });
+
+  test('counts each page of a visit once, in every language and layout', async ({
+    page,
+    counterRequests,
+  }) => {
+    const visited = ['/', '/demos/sbc-ia/', '/es/', '/ca/demos/sbc-ia/'];
+    for (const path of visited) await openPage(page, path);
+    await expect.poll(() => countedPaths(counterRequests)).toEqual(visited);
+    await page.waitForLoadState('networkidle');
+
+    expect(countedPaths(counterRequests)).toEqual(visited);
+  });
+
+  test('counts a client-side navigation once, without a reload', async ({
+    page,
+    counterRequests,
+  }) => {
+    await openPage(page);
+    await expect.poll(() => countedPaths(counterRequests)).toEqual(['/']);
+
+    await softNavigate(page, '/es/');
+    await expect.poll(() => countedPaths(counterRequests)).toEqual(['/', '/es/']);
+    await page.waitForLoadState('networkidle');
+
+    expect(countedPaths(counterRequests)).toEqual(['/', '/es/']);
+  });
+
+  test('sends the page path and nothing from the address bar or the page', async ({
+    page,
+    counterRequests,
+  }) => {
+    await page.goto('/?email=visitor%40example.com&utm_source=newsletter#about', {
+      waitUntil: 'domcontentloaded',
+    });
+    await expect.poll(() => counterRequests).toHaveLength(1);
+
+    const query = counterQuery(counterRequests[0]);
+    expect(query.p).toBe('/');
+    // Playwright is an automated browser and says so, which is how a bot is told apart from a person.
+    expect(query.b).toBe('153');
+    expect(Object.keys(query).sort()).toEqual(['b', 'p', 'rnd', 's']);
+    expect(decodeURIComponent(counterRequests[0])).not.toMatch(/email|visitor|newsletter|about/i);
+  });
+
+  test('reduces a visit from another site to that site’s origin and path', async ({
+    page,
+    counterRequests,
+  }) => {
+    await page.goto('/', {
+      referer: 'https://news.example.org/post/1?utm_source=x&email=a%40b.c#frag',
+      waitUntil: 'domcontentloaded',
+    });
+    await expect.poll(() => counterRequests).toHaveLength(1);
+
+    expect(counterQuery(counterRequests[0]).r).toBe('https://news.example.org/post/1');
+  });
+
+  test('skips the owner’s own browser once it sets the skipgc flag', async ({
+    page,
+    context,
+    counterRequests,
+  }) => {
+    await context.addInitScript(() => window.localStorage.setItem('skipgc', 't'));
+    await openPage(page);
+    await page.waitForLoadState('networkidle');
+
+    expect(counterRequests).toEqual([]);
+  });
+
+  test('does not count development pages unless they opt in', async ({
+    browser,
+    consentSiteUrl,
+  }) => {
+    // A fresh context: unlike the fixtures' one, it has no allow_local opt-in.
+    const context = await browser.newContext();
+    const seen: string[] = [];
+    await context.route(
+      (url) => COUNTER_HOST.test(url.hostname),
+      async (route) => {
+        seen.push(route.request().url());
+        await route.fulfill({ status: 204 });
+      }
+    );
+    const page = await context.newPage();
+    await page.goto(`${consentSiteUrl}/`, { waitUntil: 'domcontentloaded' });
+    await expect(consentRoot(page)).toHaveAttribute('data-consent-state', /.+/);
+    await page.waitForLoadState('networkidle');
+    await context.close();
+
+    expect(seen).toEqual([]);
+  });
+
+  test('a blocked counter never breaks the page', async ({ page, context }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    // Registered after the fixture's route, so it answers first.
+    await context.route(
+      (url) => COUNTER_HOST.test(url.hostname),
+      (route) => route.abort()
+    );
+
+    await openPage(page);
+    await page.waitForLoadState('networkidle');
+    await expect(panel(page)).toBeVisible();
+    await page.getByRole('button', { name: en.reject }).click();
+
+    await expect(consentRoot(page)).toHaveAttribute('data-consent-state', 'denied');
+    expect(errors).toEqual([]);
+  });
+});
+
+test.describe('the default build (no PUBLIC_GA_ID, no PUBLIC_GOATCOUNTER_CODE)', () => {
   const PAGES = ['/', '/es/', '/demos/sbc-ia/', '/404.html'];
 
-  test('renders no consent UI and never contacts Google', async ({
+  test('renders no consent UI and never contacts Google or the visit counter', async ({
     page,
     request,
     googleRequests,
+    counterRequests,
   }) => {
     for (const path of PAGES) {
       const html = await (await request.get(`${DEFAULT_SITE_URL}${path}`)).text();
@@ -891,6 +1107,9 @@ test.describe('the default build (no PUBLIC_GA_ID)', () => {
       expect(html, `${path} must not reference Google's tag or servers`).not.toMatch(
         /googletagmanager|google-analytics|gtag\(/i
       );
+      // Not "visitcounter": Astro may name a shared stylesheet after any component. The script
+      // test below checks that no counter code is fetched.
+      expect(html, `${path} must not name the counting service`).not.toMatch(/goatcounter/i);
     }
 
     await page.goto(`${DEFAULT_SITE_URL}/`, { waitUntil: 'domcontentloaded' });
@@ -898,12 +1117,13 @@ test.describe('the default build (no PUBLIC_GA_ID)', () => {
     await expect(page.locator('[data-analytics-consent]')).toHaveCount(0);
     await expect(page.getByRole('button', { name: en.settings })).toHaveCount(0);
     expect(googleRequests).toEqual([]);
+    expect(counterRequests).toEqual([]);
     expect(await page.evaluate(() => (window as any).dataLayer)).toBeUndefined();
   });
 
-  test('loads no consent script on any page', async ({ page }) => {
+  test('loads no consent or counter script on any page', async ({ page }) => {
     // The script chunks are named after their component, so a page that fetches
-    // the consent loader or the banner logic shows it in the script URLs.
+    // the consent loader, the banner logic or the counter shows it in the script URLs.
     const scripts: string[] = [];
     page.on('request', (request) => {
       if (request.resourceType() === 'script') scripts.push(request.url());
@@ -915,6 +1135,6 @@ test.describe('the default build (no PUBLIC_GA_ID)', () => {
     }
 
     expect(scripts.length, 'the pages load scripts at all').toBeGreaterThan(0);
-    expect(scripts.filter((url) => /analytics/i.test(url))).toEqual([]);
+    expect(scripts.filter((url) => /analytics|visitcounter/i.test(url))).toEqual([]);
   });
 });

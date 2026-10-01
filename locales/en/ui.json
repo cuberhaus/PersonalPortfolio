@@ -22,13 +22,14 @@
     "accept": "Accept analytics",
     "close": "Close",
     "description": "This site can use Google Analytics to measure which pages and demos are visited. Doing so sets cookies in your browser and sends usage data to Google. Nothing is loaded from Google unless you accept, and you can change your choice at any time with “Privacy settings”.",
+    "descriptionWithCounter": "A cookieless counter (GoatCounter) counts visits whether or not you accept, storing nothing in your browser. Google Analytics, which sets cookies and sends usage data to Google, loads only if you accept. You can change your choice at any time with “Privacy settings”.",
     "reject": "Reject analytics",
-    "savedDenied": "Analytics turned off.",
-    "savedGranted": "Analytics turned on.",
+    "savedDenied": "Google Analytics turned off.",
+    "savedGranted": "Google Analytics turned on.",
     "settings": "Privacy settings",
-    "statusDenied": "Analytics is currently off.",
-    "statusGranted": "Analytics is currently on.",
-    "title": "Analytics preferences"
+    "statusDenied": "Google Analytics is currently off.",
+    "statusGranted": "Google Analytics is currently on.",
+    "title": "Google Analytics preferences"
   },
   "aria": {
     "scrollTop": "Scroll to top of page",

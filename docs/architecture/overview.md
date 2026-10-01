@@ -67,9 +67,11 @@ PersonalPortfolio/
 │   │   ├── live-app-embed.ts   # Registry resolution + bounded probe
 │   │   ├── analytics-consent.ts # Consent-first GA4; the only module that names Google
 │   │   ├── analytics-consent-ui.ts # Consent panel behaviour (DOM binder)
+│   │   ├── visit-counter.ts    # Cookieless GoatCounter beacon; the only module that names the counting service
 │   │   └── ...                 # Per-demo algorithms (wpgma, etc.)
 │   ├── config/
 │   │   ├── analytics.ts        # GA4 measurement ID from PUBLIC_GA_ID (null = analytics off)
+│   │   ├── visit-counter.ts    # GoatCounter site code from PUBLIC_GOATCOUNTER_CODE (null = counter off)
 │   │   ├── section-ids.ts      # Section order SSOT (homepage + nav)
 │   │   ├── sections.ts         # ↑ + Astro component bindings
 │   │   └── site.ts             # Identity (name, URL, socials)

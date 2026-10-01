@@ -8,7 +8,9 @@ import DebugInit from '../components/DebugInit.astro';
 import DebugMount from '../components/DebugMount.astro';
 import Analytics from '../components/Analytics.astro';
 import AnalyticsSettingsButton from '../components/AnalyticsSettingsButton.astro';
+import VisitCounter from '../components/VisitCounter.astro';
 import { ANALYTICS_MEASUREMENT_ID } from '../config/analytics';
+import { VISIT_COUNTER_CODE } from '../config/visit-counter';
 import { LOCALES, DEFAULT_LOCALE } from '../config/locales';
 
 interface Props {
@@ -90,6 +92,7 @@ const siteBase = Astro.site || Astro.url;
     <ThemeInit position="body" />
     <a href="#main-content" class="skip-to-content">{t('aria.skipToContent')}</a>
     {ANALYTICS_MEASUREMENT_ID && <Analytics />}
+    {VISIT_COUNTER_CODE && <VisitCounter />}
     <DemoSidebar currentSlug={slug} />
     <nav class="demo-nav">
       <div class="demo-nav-inner container">
