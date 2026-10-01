@@ -5,10 +5,10 @@ sent to. The architectural rationale (why Sentry, why Option A SDK rollout,
 etc.) lives in [`debugging-architecture.md`](./debugging-architecture.md);
 this document only covers running and using the dashboards.
 
-> **TL;DR** — for daily local development, use **Sentry Spotlight** (ships
-> with the Astro dev server, zero setup). For real queryable filtering /
-> distributed traces / issue grouping, run **self-hosted Sentry** with
-> `make obs-up`. For production deploys, use **Sentry.io cloud free tier**.
+> **TL;DR** — for local development, run **self-hosted Sentry** with
+> `make obs-up` (queryable tag filtering, distributed traces, issue
+> grouping), or the lighter **GlitchTip**. For production deploys, use
+> **Sentry.io cloud free tier**.
 
 > **Sentry is not covered by the analytics consent banner.** The consent-first
 > Google Analytics banner gates only Google Analytics, and a test pins that the
@@ -25,50 +25,17 @@ this document only covers running and using the dashboards.
 
 | Need                                                            | Pick                    | Setup time          | Resource cost            | Queryable tags? | Trace waterfalls? |
 | --------------------------------------------------------------- | ----------------------- | ------------------- | ------------------------ | --------------- | ----------------- |
-| "Is anything reaching me at all" while coding                   | **Spotlight**           | 0 (built-in)        | ~0 MB                    | No              | Basic             |
 | Real local dashboard with full Sentry parity                    | **Self-hosted Sentry**  | 15-25 min first run | ~3-10 GB RAM, 30 GB disk | **Yes**         | **Full**          |
 | Lightest queryable local dashboard, less polished               | **GlitchTip**           | 3-5 min             | ~1-2 GB RAM              | Yes             | Basic             |
 | Persistent + remote-accessible, don't care about data ownership | **Sentry.io free tier** | 5 min signup        | 0 (cloud)                | Yes             | Full              |
 
-The four options are **mutually exclusive at the DSN level**: every backend
+The three options are **mutually exclusive at the DSN level**: every backend
 reads `SENTRY_DSN` from `.env.shared` and points at exactly one collector.
 You can switch by editing `.env.shared` and bouncing the backends.
 
 ---
 
-## Option 1 — Sentry Spotlight (default)
-
-Spotlight is integrated by `@spotlightjs/astro` in [`astro.config.mjs`](../../astro.config.mjs).
-It starts automatically when you run `npm run dev`, `make dev-bare`, or `make all`.
-
-**To use it:**
-
-1. Set in `PersonalPortfolio/.env.shared`:
-   ```bash
-   SENTRY_DSN=http://public@localhost:8969/1
-   ```
-2. `make stop && make dev-bare`
-3. Open <http://localhost:8969> (or click the Spotlight badge in the
-   bottom-left of any page).
-
-**What works:**
-
-- All errors, transactions, and breadcrumbs from frontend + every backend
-  (Python, Java/Spring, SvelteKit, Rust, Go, PHP) appear within seconds.
-- Frontend ↔ backend traces are linked by `sentry-trace` headers — click
-  a `</>` browser pageload to see the chained 🐍 backend handler underneath.
-
-**What's intentionally limited:**
-
-- The search box only filters on transaction names. **Tag filtering like
-  `service:tfg-polyps` does NOT work** — Spotlight is a notification bus,
-  not a queryable database. Use Option 2 or 4 for that.
-- All events are kept in memory and lost when the dev server restarts.
-- No issue grouping, alerts, dashboards, replay, or release tracking.
-
----
-
-## Option 2 — Self-hosted Sentry (recommended for serious local debugging)
+## Option 1 — Self-hosted Sentry (recommended for local debugging)
 
 The full Sentry stack runs as ~22 Docker containers under
 `~/cuberhaus/sentry-self-hosted/`. The repo is checked out at tag `26.4.1`.
@@ -161,7 +128,7 @@ to reclaim, or use Sentry's built-in retention policies (Settings → Project
 
 ---
 
-## Option 3 — GlitchTip (lightweight Sentry-API-compatible alternative)
+## Option 2 — GlitchTip (lightweight Sentry-API-compatible alternative)
 
 If 16 GB RAM for self-hosted Sentry is overkill, GlitchTip implements the
 Sentry ingestion protocol with ~5 containers and ~1 GB RAM.
@@ -189,7 +156,7 @@ view ◐, no replay / sessions / discover query builder.
 
 ---
 
-## Option 4 — Sentry.io cloud free tier
+## Option 3 — Sentry.io cloud free tier
 
 Recommended for production deploys (no local resource cost, persistent,
 accessible from anywhere).
@@ -211,11 +178,11 @@ directly.
 
 ## Switching between dashboards
 
-All four options use the same `SENTRY_DSN` env variable, so switching is:
+All three options use the same `SENTRY_DSN` env variable, so switching is:
 
 ```bash
 # Edit one line in .env.shared:
-sed -i 's|^SENTRY_DSN=.*|SENTRY_DSN=http://public@localhost:8969/1|' .env.shared
+sed -i 's|^SENTRY_DSN=.*|SENTRY_DSN=http://abc1234567890@localhost:9000/2|' .env.shared
 
 # Bounce the backends so they reinitialise their SDKs:
 make stop && make dev-bare
@@ -438,11 +405,6 @@ The auth token only needs the `project:releases` scope.
 ---
 
 ## Troubleshooting
-
-### "Looks like there are no traces recorded matching the applied search & filters"
-
-You're using **Spotlight** and trying to filter by tag. Tag filtering only
-works in self-hosted Sentry or sentry.io — see Option 2/4 above.
 
 ### Events appear in the browser overlay but not in Sentry
 

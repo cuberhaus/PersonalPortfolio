@@ -39,7 +39,9 @@ const cleanBase = base === '/' ? '' : base;
     display: flex;
     gap: 0.75rem;
     align-items: center;
-    padding-left: 1rem;
+    /* Hosts that draw no divider (the collapsed navbar menu) set this to 0 rather than
+       overriding padding-left, which would also strip the pill inset at 768px and below. */
+    padding-left: var(--language-picker-divider-gap, 1rem);
     border-left: 1px solid var(--border-color);
   }
   .lang-link {
@@ -57,13 +59,7 @@ const cleanBase = base === '/' ? '' : base;
 
   @media (max-width: 768px) {
     .language-picker {
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 0;
       border-left: none;
-      margin-top: 1.25rem;
-      padding-top: 0;
-      border-top: none;
       width: fit-content;
       justify-content: center;
       gap: 0.15rem;

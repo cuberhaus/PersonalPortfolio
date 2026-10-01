@@ -12,7 +12,7 @@ The tests stub out the `sentry_sdk` import to keep the suite hermetic.
 That is the right tradeoff for unit-level coverage of the pure-Python
 parts (scrubber, env-aware rate resolver, before_send chain, contextvar
 binding); end-to-end SDK behaviour is exercised separately when each
-backend's integration tests run with a Spotlight DSN.
+backend's integration tests run against a real Sentry DSN.
 """
 
 import os

@@ -54,7 +54,6 @@
     "@eslint/js": "^9.39.5",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.61.1",
-    "@spotlightjs/astro": "^3.2.6",
     "@types/d3-array": "^3.2.2",
     "@types/d3-geo": "^3.1.0",
     "@types/d3-scale": "^4.0.9",

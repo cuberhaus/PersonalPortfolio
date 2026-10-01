@@ -1,8 +1,9 @@
 /**
  * Sentry forwarder: a bus subscriber that maps debug events onto the Sentry
- * SDK API. Runs locally against Sentry Spotlight (no account needed) and
- * automatically targets sentry.io once a real DSN is configured via
- * `PUBLIC_SENTRY_DSN` in `.env`.
+ * SDK API. It reports to whatever `PUBLIC_SENTRY_DSN` in `.env` points at (a
+ * local self-hosted Sentry / GlitchTip, or sentry.io); without one, the
+ * placeholder DSN from `sentry.client.config.ts` is used and its events go
+ * nowhere.
  *
  * Mapping rationale (see docs/architecture/decisions.md, "Concept mapping cheat sheet"):
  *   info / warn      → addBreadcrumb({ level })

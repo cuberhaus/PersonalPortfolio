@@ -5,9 +5,9 @@
  * here rather than inline in astro.config.mjs (the inline form was deprecated
  * in @sentry/astro v8+).
  *
- * DSN: defaults to a placeholder so a fresh clone works against Spotlight
- * without any setup. Set `PUBLIC_SENTRY_DSN` in `.env` to point at a real
- * sentry.io project.
+ * DSN: defaults to a placeholder so the SDK initialises on a fresh clone
+ * without any setup (events sent to it go nowhere). Set `PUBLIC_SENTRY_DSN`
+ * in `.env` to point at a real sentry.io project or a local collector.
  *
  * tracePropagationTargets: derived from `src/data/demo-services.json` via
  * `listTracedBackendPorts()` so the registry is the single source of truth

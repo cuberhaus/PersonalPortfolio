@@ -4,7 +4,6 @@ import { writeFile } from 'node:fs/promises';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import sentry from '@sentry/astro';
-import spotlight from '@spotlightjs/astro';
 import { LOCALES, DEFAULT_LOCALE } from './src/config/locales.ts';
 import { SITE as SITE_CONFIG } from './src/config/site.ts';
 
@@ -23,7 +22,12 @@ const cnameIntegration = {
 export default defineConfig({
   site: SITE,
   integrations: [
-    react(),
+    // Works around a dev-server-only failure (vite 8.2.0 + @vitejs/plugin-react 5.2.0): plugin-react's
+    // default `include` (/\.[tj]sx?$/) also matches hoisted-script modules such as
+    // `Foo.astro?astro&type=script&lang.ts`, and Vite then parses their TypeScript as JavaScript, so
+    // `astro dev` answers HTTP 500 for them. Every React component here is a .tsx file, so claim only
+    // those. Production builds were never affected. Remove once vite / plugin-react are upgraded.
+    react({ include: ['**/*.tsx', '**/*.jsx'] }),
     sitemap(),
     cnameIntegration,
     sentry({
@@ -52,7 +56,6 @@ export default defineConfig({
         telemetry: false,
       },
     }),
-    spotlight(),
   ],
   i18n: {
     defaultLocale: DEFAULT_LOCALE,
