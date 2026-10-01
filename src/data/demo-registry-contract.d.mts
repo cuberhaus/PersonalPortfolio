@@ -24,11 +24,19 @@ export interface DemoOrchestrator {
   image?: string;
 }
 
+export interface DemoHostedApp {
+  /** HTTPS address of the hosted live app, or null until it has been provisioned. */
+  url: string | null;
+  /** Registry off switch: false makes the page show the fallback demo. */
+  enabled: boolean;
+}
+
 export interface DemoBackend {
   container: string | null;
   port: number;
   extraPorts?: number[];
   iframeUrl: string | null;
+  hosted?: DemoHostedApp;
   composeFile: string | null;
   makefile: string | null;
   stack: BackendStack;

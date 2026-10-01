@@ -1,6 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, describe, it, expect, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import {
   getDemoService,
+  getHostedApp,
   getIframeUrl,
   listAllowedIframeOrigins,
   listBackedSlugs,
@@ -89,5 +92,80 @@ describe('demo service helpers', () => {
     expect(listOrchestratedServices().every((service) => service.displayName.length > 0)).toBe(
       true
     );
+  });
+});
+
+describe('hosted demo services', () => {
+  it('exposes the hosted live app only for services that declare one', () => {
+    expect(getHostedApp('sbc-ia')).toMatchObject({ enabled: expect.any(Boolean) });
+    expect(getHostedApp('tenda')).toBeNull();
+    expect(getHostedApp('missing-demo')).toBeNull();
+  });
+
+  it('ships every declared hosted live app switched off until it has a URL', () => {
+    for (const service of services) {
+      const hosted = service.backend?.hosted;
+      if (!hosted) continue;
+      expect(hosted.url !== null || hosted.enabled === false, service.slug).toBe(true);
+    }
+  });
+});
+
+describe('hosted demo services stay out of request-header allowlists', () => {
+  const hostedFixture = {
+    version: 1,
+    services: [
+      {
+        slug: 'pilot',
+        page: 'src/pages/demos/pilot.astro',
+        component: null,
+        hasBackend: true,
+        backend: {
+          container: 'pilot-1',
+          port: 9100,
+          iframeUrl: 'http://localhost:9100',
+          hosted: { url: 'https://pilot.example.com', enabled: true },
+          composeFile: 'docker-compose.yml',
+          makefile: null,
+          stack: 'fastapi',
+          needsSentry: true,
+          orchestrator: { displayName: 'Pilot', type: 'compose', extra: '' },
+        },
+      },
+    ],
+  };
+
+  afterEach(() => {
+    vi.doUnmock('../data/demo-services.json');
+    vi.resetModules();
+  });
+
+  it('never adds a hosted origin to the iframe allowlist or the traced ports', async () => {
+    vi.resetModules();
+    vi.doMock('../data/demo-services.json', () => ({ default: hostedFixture }));
+    const adapter = await import('../data/demo-services');
+
+    expect(adapter.getHostedApp('pilot')).toEqual({
+      url: 'https://pilot.example.com',
+      enabled: true,
+    });
+    // A custom request header (X-Session-Id, sentry-trace) on the hosted origin
+    // would turn the /health poll into a preflighted CORS request.
+    expect(adapter.listAllowedIframeOrigins()).toEqual(['http://localhost:9100']);
+    expect(adapter.listTracedBackendPorts()).toEqual([9100]);
+  });
+
+  it('keeps the header-injecting consumers on the local projections only', () => {
+    const root = resolve(__dirname, '..', '..');
+    const consumers = [
+      'sentry.client.config.ts',
+      'src/lib/debug-network.ts',
+      'src/lib/debug-iframe.ts',
+    ];
+
+    for (const file of consumers) {
+      const source = readFileSync(resolve(root, file), 'utf-8');
+      expect(source, `${file} must not read hosted origins`).not.toMatch(/getHostedApp|\.hosted\b/);
+    }
   });
 });

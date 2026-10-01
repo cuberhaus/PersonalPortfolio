@@ -20,8 +20,8 @@ new test, and how to run only the slice you care about.
               ├────────────────────────────┤
               │  a11y    (axe + custom)    │  WCAG AA × every theme
               ├────────────────────────────┤
-              │  Playwright projects       │  smoke / browser-demos / live /
-              │  (9 named projects)        │  themes / gallery / keyboard
+              │  Playwright projects       │  smoke / browser-demos / live / hosted /
+              │  (11 test projects)        │  themes / gallery / keyboard
               ├────────────────────────────┤
               │  Vitest  (~30 suites)      │  units, content parity, registry
               ├────────────────────────────┤
@@ -42,6 +42,7 @@ Rule of thumb when adding a test:
 | Color contrast / ARIA               | Playwright `a11y`                                                   |
 | Layout drift                        | Playwright `visual` (regenerate baselines on Linux only)            |
 | Live backend integration            | Playwright `live-demos` (auto-skips if backend down)                |
+| Hosted (sleeping) live app flow     | Playwright `hosted-demos` (no backend needed; never skips)          |
 
 ---
 
@@ -105,7 +106,7 @@ node scripts/demo-registry.mjs --orchestrators
 
 ## Playwright — end-to-end
 
-10 test projects (plus one setup project) in
+11 test projects (plus one setup project) in
 [playwright.config.ts](../../playwright.config.ts), each with its own `testMatch`
 regex. `npm run test:e2e` runs all of them and
 auto-starts the dev server on port 4321.
@@ -115,6 +116,7 @@ auto-starts the dev server on port 4321.
 | `portfolio-smoke` | Homepage + localized shells render, navbar anchors point at real sections, scroll-spy works.                                                               | [portfolio-smoke.spec.ts](../../e2e/portfolio-smoke.spec.ts) | `npm run test:e2e:smoke`                                        |
 | `browser-demos`   | Every demo route in `ALL_SLUGS` loads without uncaught console errors. Sidebar nav covers every demo.                                                      | [browser-demos.spec.ts](../../e2e/browser-demos.spec.ts)     | `npx playwright test --project=browser-demos`                   |
 | `live-demos`      | Iframe-embedded demos against running Docker backends. **Auto-skips** if the backend on its port doesn't answer.                                           | [live-demos.spec.ts](../../e2e/live-demos.spec.ts)           | `make dev-bare` then `npx playwright test --project=live-demos` |
+| `hosted-demos`    | Hosted live app: sleeps until started, wakes via `/health`, times out and retries, switched-off state, es/ca copy, loopback stays local, axe per state.    | [hosted-demos.spec.ts](../../e2e/hosted-demos.spec.ts)       | `npx playwright test --project=hosted-demos`                    |
 | `themes`          | Ctrl+K modal opens, design + palette persist across reload, font-family actually changes.                                                                  | [themes.spec.ts](../../e2e/themes.spec.ts)                   | `npx playwright test --project=themes`                          |
 | `debug-overlay`   | `?debug=1` gates the overlay, the in-DOM ring buffer captures the right namespaces / levels, `?debug=0` disables it.                                       | [debug-overlay.spec.ts](../../e2e/debug-overlay.spec.ts)     | `npx playwright test --project=debug-overlay`                   |
 | `keyboard`        | Skip-to-content link reachable, Enter-to-submit handlers fire, no keyboard traps inside demos.                                                             | [keyboard.spec.ts](../../e2e/keyboard.spec.ts)               | `make test-keyboard`                                            |
@@ -220,6 +222,35 @@ suite is a no-op (intentional — CI without sibling repos can't run it).
 The live-tested slug list is curated in `LIVE_E2E_SLUGS` — heavy GPU backends
 and ones that have moved to browser-native mocks are excluded.
 
+### Hosted demos: how they are tested without a host
+
+A hosted live app only appears when the page is **not** served from loopback, and
+the registry ships its switch off until the service exists. The `hosted-demos`
+project therefore builds the situation itself, against the normal production
+build, so it never skips:
+
+- **Public-looking hostname.** The project's baseURL is `hosted.portfolio.test`,
+  mapped to the preview server by Chromium's `--host-resolver-rules` (see
+  [playwright.config.ts](../../playwright.config.ts)). Any non-loopback page host
+  switches the embed into hosted mode.
+- **Registry state per test.** `serveHostedRegistry` rewrites the registry's
+  `hosted` block inside the JS the preview server sends, so each test picks
+  on/off and the URL. It asserts the block was found exactly once, so a change to
+  the bundle's shape fails loudly instead of silently testing the shipped switch.
+  `route.fetch` runs in Node, where the browser's host mapping does not apply, so
+  it fetches through the loopback address.
+- **The hosted origin is played by the test.** `serveHostedService` answers
+  `/health` (503 while "waking", 200 when ready, or never) and serves a tiny
+  page for the iframe. It also records requests so the suite can assert that
+  nothing is sent before the visitor presses Start, and that the poll is a simple
+  CORS request (no `X-Session-Id`, `sentry-trace`, `baggage` or cookies).
+- **Time is controlled, not waited for.** `page.clock.fastForward` crosses the
+  120 s wake deadline in one step.
+
+The loopback test (`stays on the local behaviour…`) uses the plain
+`127.0.0.1` URL, which is how `live-demos` and the rest of the suite keep seeing
+the local demo service.
+
 ---
 
 ## Backend tests (`make test-full`)
@@ -227,7 +258,7 @@ and ones that have moved to browser-native mocks are excluded.
 `make test-full` runs the exhaustive local suites in order:
 
 1. **Vitest** — `npm test`
-2. **Playwright** — all 9 projects, dev server auto-started
+2. **Playwright** — all 10 projects, dev server auto-started
 3. **pytest** — TFG, MPIDS, Phase, CAIM, SBC_IA, DesastresIA, BitsX, planner-api
 4. **Django** — Draculin
 5. **Go** — joc-eda backend (skipped if `go` not installed)

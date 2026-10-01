@@ -19,13 +19,16 @@ flowchart LR
     nodeProjection --> scripts["Make / gallery / log relay"]
     orchestrator --> docker["Docker backends<br/>(sibling repos)"]
     live -. "iframe" .-> docker
+    live -. "iframe, only after Start" .-> hosted["Hosted demo service<br/>(sleeps until started)"]
     astro --> sentry["Sentry<br/>(errors, replay, traces)"]
     docker --> sentry
+    hosted --> sentry
 ```
 
 **Read it as:** the static Astro site is the surface area. Each demo card
 links to a page that hydrates a React island; the island either renders a
-browser-only mock or iframes a Docker backend running on `localhost:<port>`.
+browser-only mock, iframes a Docker backend running on `localhost:<port>`, or,
+on a public page, offers to wake a hosted copy of that backend.
 The whole thing is observable through one Sentry org.
 
 ---
@@ -71,7 +74,7 @@ PersonalPortfolio/
 │   │   ├── sections.ts         # ↑ + Astro component bindings
 │   │   └── site.ts             # Identity (name, URL, socials)
 │   └── styles/               Global CSS + theme token blocks
-├── e2e/                      Playwright specs (10 test projects)
+├── e2e/                      Playwright specs (11 test projects)
 ├── planner-api/              FastAPI + ENHSP (PDDL planner demo)
 ├── scripts/                  Validated Node projections, orchestration, relay
 ├── public/                   Static assets (images, PDFs, mock data)
@@ -87,11 +90,11 @@ PersonalPortfolio/
 The codebase is built around three SSOTs. Editing one of these is a
 documented "everyday task"; editing things derived from them isn't.
 
-| File                                                              | Drives                                                                                                                                                                                                                                                                                               |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [src/data/demo-services.json](../../src/data/demo-services.json)  | Validated browser projection, Node projection, orchestration, log relay, `LiveAppEmbed.tsx`'s iframe URLs, Makefile `DEMO_PORTS`, Sentry traced-port list, and `live-demos.spec.ts`. Adding a backend means editing this and following the [adding-a-demo.md](../guides/adding-a-demo.md) checklist. |
-| [src/data/demos.json](../../src/data/demos.json) (+ `.es`, `.ca`) | Homepage demo grid. Card title, description, accent colors, icon, github link. Schema is enforced by [demo-schema.ts](../../src/i18n/demo-schema.ts) (Zod).                                                                                                                                          |
-| [src/config/section-ids.ts](../../src/config/section-ids.ts)      | Homepage section order, navbar anchor order, scroll-spy targets. Numbered prefixes (`01`, `02`, …) auto-derived from `numbered: true` flags.                                                                                                                                                         |
+| File                                                              | Drives                                                                                                                                                                                                                                                                                                                                               |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [src/data/demo-services.json](../../src/data/demo-services.json)  | Validated browser projection, Node projection, orchestration, log relay, `LiveAppEmbed.tsx`'s iframe URLs and optional hosted live app (URL + off switch), Makefile `DEMO_PORTS`, Sentry traced-port list, and `live-demos.spec.ts`. Adding a backend means editing this and following the [adding-a-demo.md](../guides/adding-a-demo.md) checklist. |
+| [src/data/demos.json](../../src/data/demos.json) (+ `.es`, `.ca`) | Homepage demo grid. Card title, description, accent colors, icon, github link. Schema is enforced by [demo-schema.ts](../../src/i18n/demo-schema.ts) (Zod).                                                                                                                                                                                          |
+| [src/config/section-ids.ts](../../src/config/section-ids.ts)      | Homepage section order, navbar anchor order, scroll-spy targets. Numbered prefixes (`01`, `02`, …) auto-derived from `numbered: true` flags.                                                                                                                                                                                                         |
 
 The [demo-registry.test.ts](../../src/__tests__/demo-registry.test.ts) and
 [structural.test.ts](../../src/__tests__/structural.test.ts) suites police
@@ -135,8 +138,40 @@ process-facing representation.
 
 `LiveAppFallbackRegion.astro` owns the relationship between the embed and the
 route-specific fallback. `LiveAppEmbed.tsx` dispatches `checking`, `online`,
-or `offline` from its own status root; the region hides the fallback only for
-`online`. The route still owns the fallback's actual mock or local demo markup.
+or `offline` (local probe) and `idle`, `waking`, or `unavailable` (hosted) from
+its own status root; the region hides the fallback only for `online`. The route
+still owns the fallback's actual mock or local demo markup.
+
+### Demo with a hosted live app
+
+A demo whose registry entry has a `backend.hosted` block (`url` + `enabled`) can
+reach a public copy of its backend, which is what a visitor to the deployed site
+sees instead of the "run it locally" panel.
+
+1. On hydration, `LiveAppEmbed.tsx` asks `resolveLiveAppHosting` whether this
+   page is hosted. The rule is runtime and by hostname: a loopback page host
+   (`localhost`, `127.0.0.1`, `::1`) keeps the local probe exactly as before;
+   any other host, with no explicit `url` override, takes the hosted path.
+   Deciding at runtime keeps one production build serving both the owner's
+   local setup and the public site.
+2. A switched-off or unprovisioned hosted live app (`enabled: false`) shows
+   the unavailable panel with no action. Otherwise the panel offers **Start live
+   app** and **nothing is requested yet**: the hosted service is asleep by
+   design (a free host spins down when idle), and nothing pings it.
+3. On Start, `startHostedWake` polls the service's `/health` every 3 s for up to
+   120 s with a simple CORS request (no custom headers, no credentials), and
+   reports `waking`. The first 2xx answer reports `online` and the same region
+   swaps the panel for the iframe; the deadline reports `unavailable` with a
+   retry.
+4. Throughout, the route's fallback demo stays visible, and one persistent
+   `role="status"` region announces the wake, its result and a timeout.
+
+The hosted origin is deliberately **not** in `listAllowedIframeOrigins()`, whose
+origins get an `X-Session-Id` header from the debug network tap (and are trusted
+as debug message sources), nor in Sentry's trace-propagation targets, which add
+`sentry-trace` and `baggage`. A custom request header would turn the `/health`
+poll into a preflighted request against a service that is still starting.
+`demo-services.test.ts` pins this.
 
 ### Filtered collections
 

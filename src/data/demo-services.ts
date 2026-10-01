@@ -5,6 +5,7 @@ import {
   projectOrchestratedServices,
 } from './demo-registry-contract.mjs';
 import type {
+  DemoHostedApp,
   DemoOrchestrator,
   DemoService,
   DemoServiceRegistry,
@@ -13,6 +14,7 @@ import type {
 export type {
   BackendStack,
   DemoBackend,
+  DemoHostedApp,
   DemoOrchestrator,
   DemoService,
   DemoServiceRegistry,
@@ -47,6 +49,20 @@ export function getDemoService(slug: string): DemoService | undefined {
 export function getIframeUrl(slug: string): string | null {
   const svc = getDemoService(slug);
   return svc?.backend?.iframeUrl ?? null;
+}
+
+/**
+ * The hosted copy of a service's live app (public HTTPS URL plus the registry
+ * off switch), or null when the service declares none.
+ *
+ * Deliberately separate from {@link getIframeUrl} and kept out of
+ * {@link listAllowedIframeOrigins} / {@link listTracedBackendPorts}: those feed
+ * request headers (`X-Session-Id`, `sentry-trace`) that would turn the hosted
+ * `/health` poll into a preflighted CORS request.
+ */
+export function getHostedApp(slug: string): DemoHostedApp | null {
+  const svc = getDemoService(slug);
+  return svc?.backend?.hosted ?? null;
 }
 
 /**

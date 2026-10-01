@@ -210,7 +210,10 @@ asserts:
 - every `hasBackend: true` entry has `container`, `port`, `stack`;
 - backend `port`s are unique across the registry;
 - the orchestrator script's service list matches the registry;
-- every `<LiveAppEmbed/>` use passes `slug=`, never a literal URL.
+- every `<LiveAppEmbed/>` use passes `slug=`, never a literal URL;
+- a `backend.hosted` block is only valid on page-backed demos, and `enabled: true`
+  needs an HTTPS `url` with no credentials, query string or fragment (see
+  [Hosted live app](#hosted-live-app-opt-in)).
 
 ---
 
@@ -531,6 +534,67 @@ window.__embed_debug?.info('demo:<slug>', 'mounted', { build: '0.1.2' });
 The parent only accepts envelopes from the registered iframe origin
 (see `src/data/demo-services.json` → `backend.iframeUrl`). Anything else
 is dropped — including buggy third-party iframes.
+
+### Hosted live app (opt-in)
+
+A demo can also have a **hosted demo service**: a public copy of its backend that
+a visitor of the deployed site starts from the page. It is opt-in and off by
+default; skip this unless the demo's real backend should be reachable by the
+public. Nothing is requested until the visitor presses **Start live app**, so an
+idle free-tier host is never pinged awake.
+
+1. **Declare it** inside the demo's `backend` block in `demo-services.json`:
+
+   ```json
+   "hosted": { "url": "https://<service>.onrender.com", "enabled": true }
+   ```
+
+   - `url` is the origin the iframe loads: HTTPS, no credentials, query string or
+     fragment.
+   - `enabled` is the off switch. `true` needs a `url`, so ship
+     `{ "url": null, "enabled": false }` until the service exists. Setting it back
+     to `false` and redeploying is the rollback: visitors see the unavailable
+     panel and the demo's fallback.
+   - Only page-backed demos can declare it; the registry contract rejects it
+     otherwise.
+
+2. **Keep the embed as is.** `<LiveAppEmbed slug="<slug>" … />` chooses the hosted
+   path at runtime from the page hostname: on a loopback host (`localhost`,
+   `127.0.0.1`, `::1`) it probes the local service exactly as before, anywhere
+   else it offers Start. An explicit `url=` prop keeps the local behaviour. The
+   page must still render its fallback inside `LiveAppFallbackRegion`, which
+   stays visible until the live app is online.
+
+3. **What the hosted service must provide.**
+   - `GET /health` answers 2xx once the app can be served. After Start the page
+     polls it every 3 s for up to 120 s.
+   - CORS: answer `/health` with `Access-Control-Allow-Origin` for the portfolio
+     origin. The poll is a simple request (no custom headers, no cookies), so no
+     preflight handling is needed.
+   - Allow framing by the portfolio origin
+     (`Content-Security-Policy: frame-ancestors …`), not `X-Frame-Options: DENY`.
+   - It is public by design: no authentication, no secrets, stateless, with body
+     size, request time and parallelism limits, and the Sentry DSN supplied only
+     through environment variables. See
+     [SECURITY.md](../../SECURITY.md#hosted-demo-services-public-tier).
+
+4. **Do not add the hosted origin anywhere else.** Not to `iframeUrl`, and not to
+   the debug iframe origins or Sentry's trace-propagation targets: those add
+   `X-Session-Id` / `sentry-trace` headers, which would turn the `/health` poll
+   into a preflighted request. `getHostedApp(slug)` is the only reader;
+   `demo-services.test.ts` checks that the allowlists exclude the hosted origin
+   and that the Sentry config and debug modules never read it.
+
+5. **Copy** lives in the `hosted*` keys of `locales/{en,es,ca}/live-app-embed.json`
+   and is shared by every hosted demo.
+
+6. **Verify.** Run
+   `npx vitest run live-app demo-services demo-registry-adapter hosted-live-app-panel`
+   and `npx playwright test --project=hosted-demos` (see
+   [testing.md](./testing.md#hosted-demos-how-they-are-tested-without-a-host)).
+   Before setting `enabled` to `true`, open the deployed page from a public URL
+   once: start the app, confirm the iframe loads, and confirm the fallback demo
+   still works when the service is slow or down.
 
 ## 10. Docker plumbing
 

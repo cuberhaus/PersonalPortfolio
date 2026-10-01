@@ -5,6 +5,10 @@ const PLAYWRIGHT_PORT = process.env.PLAYWRIGHT_PORT ?? '4322';
 const PLAYWRIGHT_BASE_URL =
   process.env.PLAYWRIGHT_BASE_URL ?? `http://${PLAYWRIGHT_HOST}:${PLAYWRIGHT_PORT}`;
 const PLAYWRIGHT_WEB_SERVER_TIMEOUT = Number(process.env.PLAYWRIGHT_WEB_SERVER_TIMEOUT ?? 240_000);
+// A public-looking hostname that resolves to the preview server only inside the
+// `hosted-demos` browser. The portfolio treats any non-loopback page host as a
+// deployment, which is what switches live app embeds into hosted mode.
+const HOSTED_TEST_HOST = 'hosted.portfolio.test';
 const WEB_SERVER_COMMAND = process.env.CI
   ? `npm run preview:static -- --host ${PLAYWRIGHT_HOST} --port ${PLAYWRIGHT_PORT}`
   : `npm run build && npm run preview:static -- --host ${PLAYWRIGHT_HOST} --port ${PLAYWRIGHT_PORT}`;
@@ -42,6 +46,17 @@ export default defineConfig({
       name: 'live-demos',
       use: { ...devices['Desktop Chrome'] },
       testMatch: /live-demos\.spec\.ts/,
+    },
+    {
+      name: 'hosted-demos',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: `http://${HOSTED_TEST_HOST}:${PLAYWRIGHT_PORT}`,
+        launchOptions: {
+          args: [`--host-resolver-rules=MAP ${HOSTED_TEST_HOST} ${PLAYWRIGHT_HOST}`],
+        },
+      },
+      testMatch: /hosted-demos\.spec\.ts/,
     },
     {
       name: 'themes',

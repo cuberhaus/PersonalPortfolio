@@ -40,7 +40,7 @@ portrait mode.
 | Visualisation  | D3, Canvas, WebGL2, Babylon.js                                                      |
 | CV demos       | Web Workers, OpenCV.js, WASM                                                        |
 | i18n           | i18next (build-time) + inlang — 3 locales, file-based routing (`/`, `/es/`, `/ca/`) |
-| Testing        | Vitest 4 (43 unit suites, 1,362 tests) · Playwright (9 named projects)              |
+| Testing        | Vitest 4 (58 unit suites, 1,541 tests) · Playwright (11 test projects)              |
 
 ## Getting started
 
@@ -93,8 +93,9 @@ Flags: `--skip-docker`, `--skip-planner`.
 > truth. `src/data/demo-registry-contract.mjs` owns the shared Zod contract;
 > `src/data/demo-services.ts` and `scripts/demo-registry.mjs` validate through it and keep
 > separate browser and Node projections.
-> Those adapters feed `scripts/dev-all-demos.sh`, `LiveAppEmbed.tsx` (via `getIframeUrl`),
-> the `Makefile`'s `DEMO_PORTS`, `e2e/live-demos.spec.ts`, `sentry.client.config.ts`,
+> Those adapters feed `scripts/dev-all-demos.sh`, `LiveAppEmbed.tsx` (via `getIframeUrl`, and
+> `getHostedApp` for a hosted live app), the `Makefile`'s `DEMO_PORTS`, `e2e/live-demos.spec.ts`,
+> `sentry.client.config.ts`,
 > the log relay sidecar, the gallery, and the registry tests. Adding or removing a demo
 > means editing this JSON file plus following the onboarding checklist.
 
@@ -150,8 +151,8 @@ GitHub Actions still runs the complete matrix on pull requests.
 
 `make test-full` runs, in order:
 
-1. **Vitest** — 43 unit suites, 1,277 tests ([`vitest.config.ts`](vitest.config.ts))
-2. **Playwright** — 9 named projects ([`playwright.config.ts`](playwright.config.ts), auto-starts dev server)
+1. **Vitest** — 58 unit suites, 1,541 tests ([`vitest.config.ts`](vitest.config.ts))
+2. **Playwright** — 11 test projects ([`playwright.config.ts`](playwright.config.ts), auto-starts dev server)
 3. **pytest** — backend tests for TFG, bitsXlaMarato, desastresIA, MPIDS, Phase Transitions, CAIM, SBC_IA, planner-api, Draculin (Django)
 4. **Go** — joc_eda backend
 5. **Rust (cargo test)** — pracpro2 backend

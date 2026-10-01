@@ -268,8 +268,8 @@ test.describe('<feature>', () => {
 ```
 
 **Notes:** [playwright.config.ts](../../playwright.config.ts) defines named
-projects (`portfolio-smoke`, `browser-demos`, `live-demos`, `themes`,
-`debug-overlay`, `a11y`, `keyboard`, `visual`). Each project has a `testMatch`
+projects (`portfolio-smoke`, `browser-demos`, `live-demos`, `hosted-demos`,
+`themes`, `debug-overlay`, `a11y`, `keyboard`, `visual`). Each project has a `testMatch`
 regex — name your file to match an existing project, or add a new project block.
 Closest fixtures to copy:
 

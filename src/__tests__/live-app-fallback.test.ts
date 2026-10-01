@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   initializeLiveAppFallbackRegions,
   LIVE_APP_STATUS_EVENT,
+  LIVE_APP_STATUSES,
   shouldHideLiveAppFallback,
 } from '../lib/live-app-fallback';
 
@@ -41,6 +42,63 @@ describe('live-app fallback visibility', () => {
 
   it('hides the fallback only after the live app is online', () => {
     expect(shouldHideLiveAppFallback('online')).toBe(true);
+  });
+
+  it('keeps the fallback visible through every hosted phase before the live app is online', () => {
+    for (const status of ['idle', 'waking', 'unavailable'] as const) {
+      expect(shouldHideLiveAppFallback(status), status).toBe(false);
+    }
+  });
+
+  it('recognises exactly the statuses the live app embed can report', () => {
+    expect(LIVE_APP_STATUSES).toEqual([
+      'checking',
+      'online',
+      'offline',
+      'idle',
+      'waking',
+      'unavailable',
+    ]);
+  });
+
+  it('follows a hosted wake through the region and ignores unknown statuses', () => {
+    const fallback = new FakeElement();
+    const region = new FakeElement({ '[data-live-app-fallback]': fallback });
+    initializeLiveAppFallbackRegions(new FakeScope([region]) as unknown as ParentNode);
+
+    const send = (status: unknown) =>
+      region.dispatchEvent({ type: LIVE_APP_STATUS_EVENT, detail: { status, slug: 'sbc-ia' } });
+
+    for (const [status, hidden] of [
+      ['idle', false],
+      ['waking', false],
+      ['unavailable', false],
+      ['waking', false],
+      ['online', true],
+      ['waking', false],
+      ['online', true],
+    ] as const) {
+      send(status);
+      expect(fallback.hidden, `after ${status}`).toBe(hidden);
+    }
+
+    send('exploded');
+    expect(fallback.hidden).toBe(true);
+  });
+
+  it('honours a hosted status already rendered before hydration', () => {
+    const status = new FakeElement();
+    status.dataset.liveStatus = 'online';
+    const fallback = new FakeElement();
+    fallback.hidden = false;
+    const region = new FakeElement({
+      '[data-live-app-fallback]': fallback,
+      '[data-live-status]': status,
+    });
+
+    initializeLiveAppFallbackRegions(new FakeScope([region]) as unknown as ParentNode);
+
+    expect(fallback.hidden).toBe(true);
   });
 
   it('coordinates the real region transition without document-wide selectors', () => {

@@ -207,6 +207,10 @@
         "container": "sbc_ia-web-1",
         "port": 8088,
         "iframeUrl": "http://localhost:8088",
+        "hosted": {
+          "url": null,
+          "enabled": false
+        },
         "composeFile": "../SBC_IA/docker-compose.yml",
         "makefile": "../SBC_IA/Makefile",
         "stack": "fastapi",
