@@ -62,7 +62,7 @@
   "cgTrans": "Traducción CycleGAN",
   "unpaired": "Imagen a imagen no emparejada",
   "cgDesc1": "CycleGAN aprende una traducción no emparejada ",
-  "cgDesc2": "máscara ↔ pólipo",
+  "cgDesc2": "máscara ↔\ufe0e pólipo",
   "cgDesc3": ". SPADE usa normalización espacial adaptativa para síntesis máscara → pólipo.",
   "m2p": "Máscara → Pólipo",
   "p2m": "Pólipo → Máscara",

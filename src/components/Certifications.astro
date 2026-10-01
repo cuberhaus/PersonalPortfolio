@@ -3,6 +3,7 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIssuerIconSvg } from '../lib/issuer-icons';
 import { visibleEntries } from '../data/visibility';
 import { getLocalizedCertifications } from '../lib/certifications';
+import ExternalArrow from './ExternalArrow';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -65,7 +66,7 @@ const { num } = Astro.props;
               <p class="certification-issuer">{c.issuer}</p>
               {c.link && (
                 <p class="certification-credential">
-                  {t('certifications.viewCredential')} <span aria-hidden="true">↗</span>
+                  {t('certifications.viewCredential')} <ExternalArrow />
                 </p>
               )}
               {c.badgeImage && (

@@ -55,10 +55,10 @@
   "dataP2c": " — handled via imputation, appropriate metrics (F1, ROC-AUC).",
   "nan": "NaN",
   "imbalance": "imbalance",
-  "ghRepo": "GitHub repo ↗",
+  "ghRepo": "GitHub repo",
   "nbPreview": "Jupyter notebook preview",
   "fullPractica": "Full practica",
   "linModels": "Linear models",
-  "openNbviewer": "Open in Nbviewer ↗",
+  "openNbviewer": "Open in Nbviewer",
   "runLocal": "▸ Run the notebooks locally"
 }

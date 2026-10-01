@@ -128,7 +128,7 @@
   "finalQueues": "Final queues",
   "initialState": "Initial state breakdown & raw log",
   "compact": "Compact:",
-  "ghRepo": "GitHub repo ↗",
+  "ghRepo": "GitHub repo",
   "webAppTitle": "Full Web App",
   "webAppDesc": "Run the Docker container to access the full interactive solver with all features below.",
   "webAppFeatures": [

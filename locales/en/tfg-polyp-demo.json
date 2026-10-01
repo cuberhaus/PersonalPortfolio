@@ -62,7 +62,7 @@
   "cgTrans": "CycleGAN translation",
   "unpaired": "Unpaired image-to-image",
   "cgDesc1": "CycleGAN learns unpaired ",
-  "cgDesc2": "mask ↔ polyp",
+  "cgDesc2": "mask ↔\ufe0e polyp",
   "cgDesc3": " translation. SPADE uses spatially-adaptive normalization for mask → polyp synthesis.",
   "m2p": "Mask → Polyp",
   "p2m": "Polyp → Mask",
