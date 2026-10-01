@@ -142,16 +142,44 @@ rendering to settle.
 
 The `readme-gallery` CI job captures every demo and then runs
 `npm run demo-gallery:compare`. It fails when `docs/demo-gallery.md` changed, when a
-committed JPEG's dimensions changed, or when more than 500 pixels differ from the
-committed image by over 8 in any colour channel. A UI change that shifts a demo's
-layout, such as a border that makes every chip 2 px larger, therefore has to refresh
-that demo's image in the same PR.
+committed JPEG's dimensions changed, or when a capture differs materially from the
+committed image. A UI change that shifts a demo's layout, such as a border that makes
+every chip 2 px larger, therefore has to refresh that demo's image in the same PR.
+
+"Materially" means either limit in `comparisonPolicy`
+([compare-demo-gallery.mjs](../../scripts/compare-demo-gallery.mjs)) is exceeded, where a
+pixel's delta is its largest difference in any colour channel:
+
+| Limit      | Fails when                              | Catches                                                    |
+| ---------- | --------------------------------------- | ---------------------------------------------------------- |
+| Structural | more than 40 pixels differ by over 88   | changed content, layout or colour (anything high-contrast) |
+| Broad      | more than 4,000 pixels differ by over 8 | wide, low-contrast changes such as a shifted background    |
+
+Anything smaller is treated as rasterization noise. A glyph that lands one sub-pixel step
+(a quarter pixel) off moves an edge pixel by at most a quarter of the text/background
+contrast, about 64, plus a little from JPEG quantisation. A single "pixels over 8" count
+cannot tell that apart from a real change, which is why the structural limit counts only
+large deltas. The numbers were fitted to measured CI renders: the smallest real change in
+the gallery's history has 78 pixels over 88 and the ROB canvas label font race had 123,
+while the noise described below has none. If you retune a limit, check it against both
+groups; [demo-gallery.test.ts](../../src/__tests__/demo-gallery.test.ts) models the noise
+and the regressions.
+
+Known noise: on 2026-10-01 one CI run rendered two of the twenty pages with some glyphs a
+sub-pixel step off (`algorithms.jpg` 778 pixels over 8, `draculin.jpg` 1,000, largest delta
+62). The next run, with identical content, was clean. The cause was not identified and about
+1,300 local captures could not reproduce it, so the policy tolerates the symptom rather than
+explaining it. Tolerated images are still logged as
+`<slug>.jpg: tolerated <N> rasterized pixels (max delta <D>)`, so a recurrence, or a max delta
+creeping towards 88, stays visible in the compare step's log.
 
 Take the new images from CI, not from a local run: a Windows capture is not reliably
-within that tolerance, and CI's capture is the one the job compares against.
+within these limits, and CI's capture is the one the job compares against.
 
-1. Open the failing `Tests` run and read the compare step's log; it names every image
-   as `<slug>.jpg: <N> materially changed pixels`.
+1. Open the failing `Tests` run and read the compare step's log; it names every failing
+   image with the limit it broke, the region of the picture that changed and the largest
+   delta, for example
+   `rob-robotics.jpg: 123 pixels changed by more than 88 (limit 40), in x603-701 y887-894; max delta 157`.
 2. Download the `demo-gallery` artifact (kept for 7 days and uploaded even when the
    compare step fails).
 3. Copy the named JPEGs from `assets/demo-gallery/` in the archive to
