@@ -55,9 +55,10 @@ jobs:
       - name: Open PR with refreshed baselines
         uses: peter-evans/create-pull-request@v8
         with:
-          # Default GITHUB_TOKEN is fine; the auto-PR's checks won't run
-          # Pages deploy (which needs id-token), but the test suite + the
-          # playwright-visual job will, which is what matters for review.
+          # The default GITHUB_TOKEN can open the PR, but GitHub never starts
+          # workflows for events that token causes, so the PR has no checks
+          # until someone closes and reopens it. Do that once, then wait for
+          # `Tests` (playwright-visual) before merging.
           branch: visual/refresh-baselines
           delete-branch: true
           add-paths: e2e/visual.spec.ts-snapshots/
