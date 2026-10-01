@@ -163,7 +163,7 @@ A `visual` Playwright project diffs each route against a committed PNG baseline 
 
 Baselines live at `e2e/visual.spec.ts-snapshots/` and **must be generated on Linux** (font hinting is OS-specific). To refresh after an intentional design change:
 
-- **Recommended** — trigger the `Refresh visual baselines` GitHub Action (`Actions → Run workflow`). It regenerates the PNGs on a Linux runner and opens a PR with the diff so you can eyeball each route's change inline. Merge if the changes match an intended design shift.
+- **Recommended** — trigger the `Refresh visual baselines` GitHub Action (`Actions → Run workflow`). It regenerates the PNGs on a Linux runner and opens a PR with the diff so you can eyeball each route's change inline. The PR opens without checks (GitHub does not run workflows for PRs created with the default `GITHUB_TOKEN`), so close and reopen it once to run `Tests`, then merge if `playwright-visual` is green and the changes match an intended design shift.
 - **Locally on Linux/WSL** — `make test-visual-update` regenerates them in place; commit and push manually.
 
 Use `make test-visual` for a local diff run against existing baselines.

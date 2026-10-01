@@ -136,6 +136,31 @@ project pins a 1440x900 viewport, English locale, dark theme, minimal design,
 animation clock, and offline backend state before waiting for fonts and canvas
 rendering to settle.
 
+### Refreshing the demo gallery
+
+The `readme-gallery` CI job captures every demo and then runs
+`npm run demo-gallery:compare`. It fails when `docs/demo-gallery.md` changed, when a
+committed JPEG's dimensions changed, or when more than 500 pixels differ from the
+committed image by over 8 in any colour channel. A UI change that shifts a demo's
+layout, such as a border that makes every chip 2 px larger, therefore has to refresh
+that demo's image in the same PR.
+
+Take the new images from CI, not from a local run: a Windows capture is not reliably
+within that tolerance, and CI's capture is the one the job compares against.
+
+1. Open the failing `Tests` run and read the compare step's log; it names every image
+   as `<slug>.jpg: <N> materially changed pixels`.
+2. Download the `demo-gallery` artifact (kept for 7 days and uploaded even when the
+   compare step fails).
+3. Copy the named JPEGs from `assets/demo-gallery/` in the archive to
+   `docs/assets/demo-gallery/`, commit them, and push. If the log also says
+   `docs/demo-gallery.md changed`, copy `demo-gallery.md` to `docs/` too.
+
+A UI change that moves both the gallery and the [visual baselines](#visual-baselines)
+needs both refreshes, and each refresh PR fails the other's job until both are merged:
+`playwright-visual` on the gallery PR, `readme-gallery` on the baselines PR. Merge them
+back to back.
+
 ### Adding a Playwright test
 
 Pick an existing project whose `testMatch` regex catches your filename, then
@@ -168,7 +193,9 @@ Linux**. Two paths:
 
 - **Recommended:** trigger the `Refresh visual baselines` GitHub Action
   (`Actions → Run workflow`). Opens a PR with the diff so each route's change is
-  reviewable inline.
+  reviewable inline. The PR opens **without any checks**: GitHub does not start
+  workflows for events caused by the default `GITHUB_TOKEN`. Close and reopen it
+  once so `Tests` runs, and merge when `playwright-visual` is green.
 - **Locally on Linux/WSL:** `make test-visual-update`, then commit the
   regenerated PNGs.
 

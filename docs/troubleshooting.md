@@ -85,7 +85,7 @@ If you just want to inspect the diff locally on macOS/Windows, run
 commit the new baselines from there.
 
 CI source:
-[.github/workflows/visual-baselines-refresh.yml](../.github/workflows/visual-baselines-refresh.yml).
+[.github/workflows/visual-baselines.yml](../.github/workflows/visual-baselines.yml).
 
 ---
 
