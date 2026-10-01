@@ -122,6 +122,12 @@ square technical panels and a solid signal action, while other designs keep
 their own surface treatment. Use theme tokens for smaller internal controls and
 `getThemeColors()` for canvas or D3 drawing APIs.
 
+Canvas text is rasterised once, with whichever face the browser has at that
+moment, so a webfont that is still downloading is baked in as its fallback and
+the pixels depend on network timing. Draw once, then return
+`redrawOnFontLoad(draw)` from [`src/lib/canvas-fonts.ts`](../../src/lib/canvas-fonts.ts)
+in the same effect, or use a local font such as `monospace`.
+
 ---
 
 ## 3. Add the demo card to `demos.json`

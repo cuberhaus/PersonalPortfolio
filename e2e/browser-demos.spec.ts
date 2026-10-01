@@ -1001,6 +1001,41 @@ test.describe('Canvas fallback demos', () => {
     await expect(page.locator('#rob-mock-fallback input[type="range"]')).toHaveCount(3);
   });
 
+  test('Robotics wall-following label is repainted when fonts finish loading', async ({ page }) => {
+    // The label is canvas text: it is rasterised once with whichever face exists at that
+    // moment, and Inter arrives from Google Fonts after the island hydrates. The panel has
+    // to repaint on `loadingdone` or the gallery capture depends on network timing.
+    type LabelProbe = { __robLabelDraws: number };
+    await page.addInitScript(() => {
+      const probe = window as unknown as LabelProbe;
+      probe.__robLabelDraws = 0;
+      const fillText = CanvasRenderingContext2D.prototype.fillText;
+      CanvasRenderingContext2D.prototype.fillText = function (
+        this: CanvasRenderingContext2D,
+        text: string,
+        x: number,
+        y: number,
+        maxWidth?: number
+      ) {
+        if (text.startsWith('k1=')) probe.__robLabelDraws++;
+        return fillText.call(this, text, x, y, maxWidth);
+      };
+    });
+    const labelDraws = () => page.evaluate(() => (window as unknown as LabelProbe).__robLabelDraws);
+
+    await page.goto('/demos/rob-robotics', { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => {
+      const fallback = document.querySelector('#rob-mock-fallback') as HTMLElement;
+      if (fallback) fallback.style.display = '';
+      fallback?.scrollIntoView({ block: 'center' });
+    });
+    await expect.poll(labelDraws).toBeGreaterThan(0);
+    const before = await labelDraws();
+
+    await page.evaluate(() => document.fonts.dispatchEvent(new Event('loadingdone')));
+    await expect.poll(labelDraws).toBeGreaterThan(before);
+  });
+
   test('Algorithm visualizer renders all mini visualizations', async ({ page }) => {
     await page.goto('/demos/algorithms', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(3000);
