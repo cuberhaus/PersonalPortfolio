@@ -1,0 +1,22 @@
+---
+/**
+ * Cookieless visit counter (see src/lib/visit-counter.ts).
+ *
+ * The layouts render this only when PUBLIC_GOATCOUNTER_CODE is a valid GoatCounter site code, so a
+ * build without one ships no counter script and sends no request. It prints no markup, only a
+ * script, which Astro attaches to every page whose layout renders the component.
+ *
+ * Unlike <Analytics />, it does not depend on the visitor's consent choice: the counter sets no
+ * cookie and stores nothing in the browser. Render it once in <body> of each page shell that owns
+ * the document. See docs/guides/analytics-and-privacy.md.
+ */
+---
+
+<script>
+  import { VISIT_COUNTER_CODE } from '../config/visit-counter';
+  import { startVisitCounter } from '../lib/visit-counter';
+
+  // Astro runs a bundled module once per document, even across ClientRouter navigations, so the
+  // counter itself listens for `astro:page-load` to count each page that is swapped in later.
+  startVisitCounter({ code: VISIT_COUNTER_CODE, win: window, doc: document });
+</script>

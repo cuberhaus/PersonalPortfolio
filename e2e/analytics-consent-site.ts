@@ -4,9 +4,10 @@
  * Consent behaviour only exists in a site built with a GA4 measurement ID, but
  * every other project must keep testing the default (analytics-off) site. So
  * the `analytics-consent-build` setup project builds a *second* copy of the
- * site with a fake ID, and each test worker serves it from its own static
- * server on a free port (no fixed port to collide with a dev server or a
- * stale process). Imported by the setup file and the spec.
+ * site with a fake ID (and a fake visit-counter code, which the same spec
+ * covers), and each test worker serves it from its own static server on a
+ * free port (no fixed port to collide with a dev server or a stale process).
+ * Imported by the setup file and the spec.
  */
 import { spawn } from 'node:child_process';
 import { createServer, type AddressInfo } from 'node:net';
@@ -18,6 +19,12 @@ const HOST = '127.0.0.1';
 
 /** Well-formed but fake GA4 ID. Google is never contacted: the spec stubs every Google request. */
 export const CONSENT_TEST_MEASUREMENT_ID = 'G-TESTCONSENT';
+
+/** Well-formed but fake GoatCounter site code. GoatCounter is never contacted: the spec stubs every request to it. */
+export const CONSENT_TEST_COUNTER_CODE = 'test-counter';
+
+/** Where the visit counter must send views for that code. Spelled out so a typo in the module cannot hide itself. */
+export const COUNTER_TEST_ENDPOINT = 'https://test-counter.goatcounter.com/count';
 
 /** Output of the analytics-enabled build. Under node_modules/.cache so every tool already ignores it. */
 export const CONSENT_SITE_DIR = resolve(

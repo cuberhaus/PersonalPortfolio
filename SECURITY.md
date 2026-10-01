@@ -40,7 +40,8 @@ See [docs/guides/adding-a-demo.md](docs/guides/adding-a-demo.md#hosted-live-app-
 - Ensure no sensitive data (API keys, credentials, personal tokens) is included in the static build output.
 - Review third-party scripts and analytics for privacy implications.
 - Google Analytics 4 is **opt-in**: it is configured only when `PUBLIC_GA_ID` is set at build time, and even then nothing loads from Google until a visitor accepts the consent banner. The choice is kept in the visitor's own browser (`localStorage`), never on a server. See [docs/guides/analytics-and-privacy.md](docs/guides/analytics-and-privacy.md).
-- If you add a `Content-Security-Policy`, allow Google's tag only for analytics: `https://www.googletagmanager.com` in `script-src`, and `https://*.google-analytics.com`, `https://*.analytics.google.com` and `https://*.googletagmanager.com` in `connect-src`.
+- A cookieless visit counter ([GoatCounter](https://www.goatcounter.com)) is configured only when `PUBLIC_GOATCOUNTER_CODE` is set at build time. It runs whatever the visitor chose about Google Analytics, so it is built to need no consent: no cookie, nothing written to the browser, no third-party script. It sends only the page path, an external referrer (origin and path), the screen width and a bot hint, never the query string or the page title. See [docs/guides/analytics-and-privacy.md](docs/guides/analytics-and-privacy.md).
+- If you add a `Content-Security-Policy`, allow Google's tag only for analytics: `https://www.googletagmanager.com` in `script-src`, and `https://*.google-analytics.com`, `https://*.analytics.google.com` and `https://*.googletagmanager.com` in `connect-src`. For the visit counter also allow `https://*.goatcounter.com` in `connect-src` (and `img-src`, for the image fallback).
 - Set security headers via hosting platform: `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`.
 
 ### Recommendations

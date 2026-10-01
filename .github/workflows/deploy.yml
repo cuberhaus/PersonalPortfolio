@@ -64,6 +64,11 @@ jobs:
           # invalid means analytics stays entirely off, with no consent UI in the build at all.
           # Even when set, nothing loads from Google until a visitor opts in.
           PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
+          # GoatCounter site code for the cookieless visit counter, also a repository *variable*
+          # (it ships in the script). Unset or invalid means no counter script in the build at all.
+          # When set it counts every visit, whatever the visitor chose about Google Analytics: it
+          # sets no cookie and stores nothing in the browser. See docs/guides/analytics-and-privacy.md.
+          PUBLIC_GOATCOUNTER_CODE: ${{ vars.PUBLIC_GOATCOUNTER_CODE }}
         run: npm run build
 
       - name: Cache Playwright browsers

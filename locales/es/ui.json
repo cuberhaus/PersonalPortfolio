@@ -22,13 +22,14 @@
     "accept": "Aceptar analítica",
     "close": "Cerrar",
     "description": "Este sitio puede usar Google Analytics para medir qué páginas y demos se visitan. Esto guarda cookies en tu navegador y envía datos de uso a Google. No se carga nada de Google a menos que aceptes, y puedes cambiar tu elección en cualquier momento desde «Ajustes de privacidad».",
+    "descriptionWithCounter": "Un contador sin cookies (GoatCounter) cuenta las visitas, lo aceptes o no, y no guarda nada en tu navegador. Google Analytics, que guarda cookies y envía datos de uso a Google, solo se carga si aceptas. Puedes cambiar tu elección cuando quieras en «Ajustes de privacidad».",
     "reject": "Rechazar analítica",
-    "savedDenied": "Analítica desactivada.",
-    "savedGranted": "Analítica activada.",
+    "savedDenied": "Google Analytics desactivado.",
+    "savedGranted": "Google Analytics activado.",
     "settings": "Ajustes de privacidad",
-    "statusDenied": "La analítica está desactivada.",
-    "statusGranted": "La analítica está activada.",
-    "title": "Preferencias de analítica"
+    "statusDenied": "Google Analytics está desactivado.",
+    "statusGranted": "Google Analytics está activado.",
+    "title": "Preferencias de Google Analytics"
   },
   "aria": {
     "scrollTop": "Ir arriba",

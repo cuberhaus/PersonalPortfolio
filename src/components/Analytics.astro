@@ -13,10 +13,16 @@
  * choice before the rest of the page. See docs/guides/analytics-and-privacy.md.
  */
 import { ANALYTICS_MEASUREMENT_ID, ANALYTICS_PANEL_ID } from '../config/analytics';
+import { VISIT_COUNTER_CODE } from '../config/visit-counter';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 const measurementId = ANALYTICS_MEASUREMENT_ID;
 const t = useTranslations(getLangFromUrl(Astro.url));
+// The panel only describes the cookieless counter (src/components/VisitCounter.astro) in builds
+// that actually ship it; otherwise that sentence would promise something the site does not do.
+const description = t(
+  VISIT_COUNTER_CODE ? 'analytics.descriptionWithCounter' : 'analytics.description'
+);
 ---
 
 {
@@ -43,7 +49,7 @@ const t = useTranslations(getLangFromUrl(Astro.url));
           <p id="analytics-consent-title" class="analytics-consent__title">
             {t('analytics.title')}
           </p>
-          <p class="analytics-consent__text">{t('analytics.description')}</p>
+          <p class="analytics-consent__text">{description}</p>
           <p class="analytics-consent__status" data-consent-status hidden />
         </div>
         <div class="analytics-consent__actions">
