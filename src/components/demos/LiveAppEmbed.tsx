@@ -1,13 +1,42 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { TRANSLATIONS } from '../../i18n/demos/live-app-embed';
 import { debug } from '../../lib/debug';
-import { dispatchLiveAppStatus } from '../../lib/live-app-fallback';
-import { resolveLiveApp, startLiveAppProbe } from '../../lib/live-app-embed';
+import { dispatchLiveAppStatus, type LiveAppPresentationStatus } from '../../lib/live-app-fallback';
+import {
+  getHostedAnnouncementKey,
+  resolveLiveApp,
+  resolveLiveAppHosting,
+  startHostedWake,
+  startLiveAppProbe,
+  type HostedWake,
+  type LiveAppHosting,
+} from '../../lib/live-app-embed';
+import HostedLiveAppPanel, {
+  type HostedLiveAppLabels,
+  type HostedLiveAppPhase,
+} from './HostedLiveAppPanel';
 
 const log = debug('net:embed');
 const uiLog = debug('ui:embed');
 
 type Lang = 'en' | 'es' | 'ca';
+
+function toHostedPhase(status: LiveAppPresentationStatus): HostedLiveAppPhase {
+  if (status === 'waking' || status === 'unavailable') return status;
+  return 'idle';
+}
+
+/**
+ * The one live region for a hosted live app. It outlives the panel, so the
+ * result of a wake is still announced when the panel gives way to the iframe.
+ */
+function HostedAnnouncer({ text }: { text: string }) {
+  return (
+    <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+      {text}
+    </div>
+  );
+}
 
 interface LiveAppEmbedProps {
   /**
@@ -50,9 +79,13 @@ export default function LiveAppEmbed({
       }),
     [slug, explicitUrl, dockerCmdProp, devCmdProp]
   );
-  const [status, setStatus] = useState<'checking' | 'online' | 'offline'>('checking');
+  const [status, setStatus] = useState<LiveAppPresentationStatus>('checking');
+  // Decided on the client from the page's hostname, so the server render (and
+  // every page without a hosted live app) stays on the local behaviour.
+  const [hosting, setHosting] = useState<LiveAppHosting | null>(null);
   const [expanded, setExpanded] = useState(true);
   const statusTargetRef = useRef<HTMLDivElement>(null);
+  const wakeRef = useRef<HostedWake | null>(null);
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   useEffect(() => {
@@ -61,7 +94,28 @@ export default function LiveAppEmbed({
     dispatchLiveAppStatus(target, { status, slug });
   }, [slug, status]);
 
+  useEffect(
+    () => () => {
+      wakeRef.current?.cancel();
+    },
+    []
+  );
+
   useEffect(() => {
+    const nextHosting = resolveLiveAppHosting({
+      slug,
+      explicitUrl,
+      hostname: window.location.hostname,
+    });
+    setHosting(nextHosting);
+
+    if (nextHosting.mode === 'hosted') {
+      // Nothing is requested until the visitor asks for the live app.
+      log.info('hosted', { slug, enabled: nextHosting.enabled });
+      setStatus(nextHosting.enabled ? 'idle' : 'unavailable');
+      return;
+    }
+
     log.info('probe', { url, slug });
     let active = true;
     const probe = startLiveAppProbe({
@@ -84,7 +138,60 @@ export default function LiveAppEmbed({
       active = false;
       probe.cancel();
     };
-  }, [url, slug]);
+  }, [url, slug, explicitUrl]);
+
+  const startWake = useCallback(() => {
+    if (hosting?.mode !== 'hosted' || !hosting.enabled) return;
+    const { url: hostedUrl, healthUrl } = hosting;
+
+    wakeRef.current?.cancel();
+    uiLog.info('hosted-start', { url: hostedUrl, slug });
+    setStatus('waking');
+
+    const wake = startHostedWake({
+      healthUrl,
+      slug,
+      onEvent: (event) => {
+        if (event.type === 'timeout') {
+          log.warn('wake-timeout', { url: healthUrl, slug, attempts: event.attempt });
+        } else {
+          log.info(`wake-${event.type}`, {
+            url: healthUrl,
+            slug,
+            attempt: event.attempt,
+            detail: event.detail,
+          });
+        }
+      },
+    });
+    wakeRef.current = wake;
+
+    void wake.promise.then((result) => {
+      if (wakeRef.current !== wake) return;
+      if (result === 'ready') setStatus('online');
+      else if (result === 'timeout') setStatus('unavailable');
+    });
+  }, [hosting, slug]);
+
+  const hostedUrl = hosting?.mode === 'hosted' && hosting.enabled ? hosting.url : null;
+  const liveUrl = hostedUrl ?? url;
+  const announcementKey =
+    hosting?.mode === 'hosted' ? getHostedAnnouncementKey(status, hosting.enabled) : null;
+  const announcement = announcementKey ? String(t[announcementKey] ?? '') : '';
+
+  if (hosting?.mode === 'hosted' && status !== 'online') {
+    return (
+      <div ref={statusTargetRef} data-live-status={status}>
+        <HostedAnnouncer text={announcement} />
+        <HostedLiveAppPanel
+          phase={toHostedPhase(status)}
+          canStart={hosting.enabled}
+          labels={t as HostedLiveAppLabels}
+          onStart={startWake}
+        />
+      </div>
+    );
+  }
 
   if (status === 'checking') {
     return <div ref={statusTargetRef} data-live-status="checking" style={{ minHeight: 1 }} />;
@@ -163,6 +270,7 @@ export default function LiveAppEmbed({
 
   return (
     <div ref={statusTargetRef} data-live-status="online" style={{ marginBottom: '1.25rem' }}>
+      {hosting?.mode === 'hosted' && <HostedAnnouncer text={announcement} />}
       <div
         style={{
           display: 'flex',
@@ -190,20 +298,22 @@ export default function LiveAppEmbed({
               boxShadow: '0 0 6px color-mix(in srgb, var(--status-online) 55%, transparent)',
             }}
           />
-          <strong style={{ fontSize: '0.82rem', color: 'var(--text-primary)' }}>{t.live}</strong>
+          <strong style={{ fontSize: '0.82rem', color: 'var(--text-primary)' }}>
+            {hostedUrl ? t.hostedLive : t.live}
+          </strong>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
             {t.runningAt}{' '}
             <code style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono, monospace)' }}>
-              {url}
+              {liveUrl}
             </code>
           </span>
         </div>
         <div style={{ display: 'flex', gap: '0.4rem' }}>
           <a
-            href={url}
+            href={liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => uiLog.info('open-tab', { url, slug })}
+            onClick={() => uiLog.info('open-tab', { url: liveUrl, slug })}
             style={{
               padding: '0.3rem 0.65rem',
               borderRadius: 'var(--radius-sm)',
@@ -222,7 +332,7 @@ export default function LiveAppEmbed({
             onClick={() => {
               const next = !expanded;
               setExpanded(next);
-              uiLog.info(next ? 'expand' : 'collapse', { url, slug });
+              uiLog.info(next ? 'expand' : 'collapse', { url: liveUrl, slug });
             }}
             style={{
               padding: '0.3rem 0.65rem',
@@ -241,7 +351,7 @@ export default function LiveAppEmbed({
       </div>
       {expanded && (
         <iframe
-          src={url}
+          src={liveUrl}
           title={title}
           style={{
             width: '100%',

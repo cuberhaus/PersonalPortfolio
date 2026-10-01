@@ -23,11 +23,65 @@ const orchestratorSchema = z.object({
   image: z.string().optional(),
 });
 
+/**
+ * The public, always-reachable copy of a backend's live app. `url` is the
+ * iframe address (null until the service has been provisioned); `enabled` is
+ * the registry off switch that makes the page show the fallback demo instead.
+ * The `/health` endpoint is derived from the URL's origin, so the URL must be
+ * a plain HTTPS address with no credentials, query or fragment.
+ */
+const hostedSchema = z
+  .object({
+    url: z.string().url().nullable(),
+    enabled: z.boolean(),
+  })
+  .superRefine((hosted, context) => {
+    if (hosted.url === null) {
+      if (hosted.enabled) {
+        context.addIssue({
+          code: 'custom',
+          path: ['enabled'],
+          message: 'A hosted live app cannot be switched on without a URL',
+        });
+      }
+      return;
+    }
+
+    let url;
+    try {
+      url = new URL(hosted.url);
+    } catch {
+      return;
+    }
+    if (url.protocol !== 'https:') {
+      context.addIssue({
+        code: 'custom',
+        path: ['url'],
+        message: 'A hosted live app must be served over HTTPS',
+      });
+    }
+    if (url.username !== '' || url.password !== '') {
+      context.addIssue({
+        code: 'custom',
+        path: ['url'],
+        message: 'A hosted live app URL cannot contain credentials',
+      });
+    }
+    if (url.search !== '' || url.hash !== '') {
+      context.addIssue({
+        code: 'custom',
+        path: ['url'],
+        message: 'A hosted live app URL cannot contain a query string or fragment',
+      });
+    }
+  });
+
 const backendSchema = z.object({
   container: z.string().nullable(),
   port: z.number().int().positive(),
   extraPorts: z.array(z.number().int().positive()).optional(),
   iframeUrl: z.string().url().nullable(),
+  hosted: hostedSchema.optional(),
   composeFile: z.string().nullable(),
   makefile: z.string().nullable(),
   stack: z.enum(BACKEND_STACKS),
@@ -84,6 +138,13 @@ const servicesSchema = z.array(serviceSchema).superRefine((services, context) =>
         code: 'custom',
         path: [index, 'backend', 'iframeUrl'],
         message: 'A page-backed service must expose an iframe URL',
+      });
+    }
+    if (service.page === null && backend.hosted !== undefined) {
+      context.addIssue({
+        code: 'custom',
+        path: [index, 'backend', 'hosted'],
+        message: 'A service without a portfolio page cannot declare a hosted live app',
       });
     }
 

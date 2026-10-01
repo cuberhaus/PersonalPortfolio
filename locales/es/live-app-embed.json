@@ -7,5 +7,15 @@
   "expand": "Mostrar app en vivo",
   "offline": "Ejecútalo localmente para ver la app completa",
   "offlineDesc": "Inicia el backend con Docker o de forma nativa, luego recarga esta página.",
-  "or": "o"
+  "or": "o",
+  "hostedIdleTitle": "La app en vivo duerme hasta que la inicies",
+  "hostedIdleDesc": "La app completa se ejecuta en un alojamiento gratuito que se duerme cuando no se usa, e iniciarla tarda aproximadamente un minuto. La demo de abajo funciona sin ella.",
+  "hostedStart": "Iniciar app en vivo",
+  "hostedWakingTitle": "Iniciando la app en vivo…",
+  "hostedWakingDesc": "Suele tardar aproximadamente un minuto. La app en vivo aparecerá aquí en cuanto esté lista.",
+  "hostedUnavailableTitle": "App en vivo no disponible",
+  "hostedUnavailableDesc": "La app en vivo no se inició a tiempo. La demo de abajo sigue funcionando, o puedes intentarlo de nuevo.",
+  "hostedDisabledDesc": "La app en vivo alojada no está disponible ahora mismo. La demo de abajo sigue funcionando.",
+  "hostedRetry": "Intentar de nuevo",
+  "hostedLive": "App en vivo lista"
 }

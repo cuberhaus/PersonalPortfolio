@@ -33,11 +33,24 @@ origin extraction, bounded probing, cancellation, and probe events.
 `LiveAppEmbed.tsx` owns presentation and delegates those policies to the
 orchestrator.
 
+A **local demo service** is a backend on the visitor's own machine, reached at
+the registry's `iframeUrl` and probed on page load. A **hosted demo service** is
+a public copy of that backend declared by the optional `backend.hosted` registry
+block (`url` plus an `enabled` off switch). It is **sleeping** until a visitor
+asks for it, so nothing is requested on load. `resolveLiveAppHosting` decides
+between the two at runtime from the page hostname: a loopback host keeps the
+local probe, any other host takes the hosted path, and an explicit URL override
+opts out. `startHostedWake` then polls the service's `/health` with a simple CORS
+request, bounded by a deadline, and is cancellable. The hosted origin is
+deliberately kept out of every allowlist that adds request headers
+(`listAllowedIframeOrigins`, Sentry trace targets).
+
 `LiveAppFallbackRegion.astro` owns the DOM region that pairs one live embed
 with one route-specific fallback. `live-app-fallback.ts` listens for the
-bubbling `live-app:status` contract and hides the fallback only after an
-`online` status. Demo routes retain their fallback markup and choose their own
-mock or local component.
+bubbling `live-app:status` contract (`checking`, `online`, `offline` for a local
+probe; `idle`, `waking`, `unavailable` for a hosted one) and hides the fallback
+only after an `online` status. Demo routes retain their fallback markup and
+choose their own mock or local component.
 
 ## Filtered collections
 

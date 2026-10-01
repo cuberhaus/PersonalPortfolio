@@ -3,6 +3,7 @@ import type { DemoOrchestrator, DemoServiceRegistry } from '../src/data/demo-reg
 export type {
   BackendStack,
   DemoBackend,
+  DemoHostedApp,
   DemoOrchestrator,
   DemoService,
   DemoServiceRegistry,

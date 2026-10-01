@@ -149,7 +149,17 @@ describe('Portfolio presentation', () => {
   it('waits for hydrated, settled live demos before capturing gallery images', () => {
     const embed = read('components/demos/LiveAppEmbed.tsx');
     const gallery = read('../e2e/readme-gallery.spec.ts');
-    expect(embed.match(/data-live-status=/g)).toHaveLength(3);
+    // Every rendered state carries a status marker: the three local probe states
+    // plus the hosted states (idle / waking / unavailable), which share one site.
+    for (const marker of [
+      'data-live-status="checking"',
+      'data-live-status="offline"',
+      'data-live-status="online"',
+      'data-live-status={status}',
+    ]) {
+      expect(embed).toContain(marker);
+    }
+    expect(embed.match(/data-live-status=/g)).toHaveLength(4);
     expect(embed).not.toContain('fallbackSelector');
     expect(gallery).toMatch(/astro-island\[ssr\]/);
     expect(gallery).toMatch(/data-live-status="checking"/);

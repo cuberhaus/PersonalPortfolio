@@ -7,5 +7,15 @@
   "expand": "Show live app",
   "offline": "Run locally to see the full app",
   "offlineDesc": "Start the backend with Docker or natively, then refresh this page.",
-  "or": "or"
+  "or": "or",
+  "hostedIdleTitle": "The live app sleeps until you start it",
+  "hostedIdleDesc": "The full app runs on a free host that sleeps when idle, and starting it takes about a minute. The demo below works without it.",
+  "hostedStart": "Start live app",
+  "hostedWakingTitle": "Starting the live app…",
+  "hostedWakingDesc": "This usually takes about a minute. The live app will appear here as soon as it is ready.",
+  "hostedUnavailableTitle": "Live app unavailable",
+  "hostedUnavailableDesc": "The live app did not start in time. The demo below still works, or you can try again.",
+  "hostedDisabledDesc": "The hosted live app is not available right now. The demo below still works.",
+  "hostedRetry": "Try again",
+  "hostedLive": "Live app ready"
 }

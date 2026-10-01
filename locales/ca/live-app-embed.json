@@ -7,5 +7,15 @@
   "expand": "Mostrar app en viu",
   "offline": "Executa'l localment per veure l'app completa",
   "offlineDesc": "Inicia el backend amb Docker o de forma nativa, després recarrega aquesta pàgina.",
-  "or": "o"
+  "or": "o",
+  "hostedIdleTitle": "L'app en viu dorm fins que la iniciïs",
+  "hostedIdleDesc": "L'app completa s'executa en un allotjament gratuït que s'adorm quan no s'utilitza, i iniciar-la triga aproximadament un minut. La demo d'aquí sota funciona sense ella.",
+  "hostedStart": "Iniciar app en viu",
+  "hostedWakingTitle": "Iniciant l'app en viu…",
+  "hostedWakingDesc": "Sol trigar aproximadament un minut. L'app en viu apareixerà aquí tan bon punt estigui llesta.",
+  "hostedUnavailableTitle": "App en viu no disponible",
+  "hostedUnavailableDesc": "L'app en viu no s'ha iniciat a temps. La demo d'aquí sota continua funcionant, o ho pots tornar a provar.",
+  "hostedDisabledDesc": "L'app en viu allotjada no està disponible ara mateix. La demo d'aquí sota continua funcionant.",
+  "hostedRetry": "Torna-ho a provar",
+  "hostedLive": "App en viu llesta"
 }

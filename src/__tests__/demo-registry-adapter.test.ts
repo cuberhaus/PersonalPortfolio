@@ -140,3 +140,76 @@ describe('Node demo registry adapter', () => {
     expect(() => parseNodeDemoRegistry(invalidOrchestratorRegistry)).toThrow();
   });
 });
+
+describe('hosted demo service contract', () => {
+  const pageBacked = (hosted?: unknown) => ({
+    version: 1,
+    services: [
+      {
+        slug: 'pilot',
+        page: 'src/pages/demos/pilot.astro',
+        component: null,
+        hasBackend: true,
+        backend: {
+          container: 'pilot-1',
+          port: 9100,
+          iframeUrl: 'http://localhost:9100',
+          composeFile: 'docker-compose.yml',
+          makefile: null,
+          stack: 'fastapi',
+          needsSentry: true,
+          orchestrator: { displayName: 'Pilot', type: 'compose', extra: '' },
+          ...(hosted === undefined ? {} : { hosted }),
+        },
+      },
+    ],
+  });
+
+  it('accepts a public HTTPS live app, with the off switch on or off, and keeps it', () => {
+    const accepted = [
+      { url: 'https://pilot.example.com', enabled: true },
+      { url: 'https://pilot.example.com/', enabled: false },
+      { url: null, enabled: false },
+    ];
+
+    for (const hosted of accepted) {
+      const registry = pageBacked(hosted);
+      expect(parseDemoServiceRegistry(registry)).toEqual(registry);
+      expect(parseNodeDemoRegistry(registry)).toEqual(registry);
+    }
+  });
+
+  it('rejects a hosted block that could not be served safely, in both adapters', () => {
+    const rejected: Array<[string, unknown]> = [
+      ['switched on without a URL', { url: null, enabled: true }],
+      ['plain http URL', { url: 'http://pilot.example.com', enabled: true }],
+      ['credentials in the URL', { url: 'https://user:pw@pilot.example.com', enabled: true }],
+      ['query string in the URL', { url: 'https://pilot.example.com/?token=1', enabled: true }],
+      ['fragment in the URL', { url: 'https://pilot.example.com/#x', enabled: true }],
+      ['missing off switch', { url: 'https://pilot.example.com' }],
+      ['non-boolean off switch', { url: 'https://pilot.example.com', enabled: 'yes' }],
+    ];
+
+    for (const [label, hosted] of rejected) {
+      expect(() => parseDemoServiceRegistry(pageBacked(hosted)), label).toThrow();
+      expect(() => parseNodeDemoRegistry(pageBacked(hosted)), label).toThrow();
+    }
+  });
+
+  it('rejects a hosted block on a service that has no portfolio page to embed it', () => {
+    const base = pageBacked({ url: 'https://pilot.example.com', enabled: true });
+    const pageless = {
+      ...base,
+      services: [
+        {
+          ...base.services[0],
+          page: null,
+          backend: { ...base.services[0].backend, iframeUrl: null },
+        },
+      ],
+    };
+
+    expect(() => parseDemoServiceRegistry(pageless)).toThrow();
+    expect(() => parseNodeDemoRegistry(pageless)).toThrow();
+  });
+});

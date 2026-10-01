@@ -1,6 +1,23 @@
 export const LIVE_APP_STATUS_EVENT = 'live-app:status';
 
-export type LiveAppPresentationStatus = 'checking' | 'online' | 'offline';
+/**
+ * Every state the live app embed can report to its region.
+ *
+ * - `checking` / `online` / `offline`: probing a local demo service.
+ * - `idle` / `waking` / `unavailable`: a hosted demo service, before the visitor
+ *   starts it, while it wakes, and when it will not start (or is switched off).
+ *   A woken hosted service reports `online`.
+ */
+export const LIVE_APP_STATUSES = [
+  'checking',
+  'online',
+  'offline',
+  'idle',
+  'waking',
+  'unavailable',
+] as const;
+
+export type LiveAppPresentationStatus = (typeof LIVE_APP_STATUSES)[number];
 
 export interface LiveAppStatusEventDetail {
   status: LiveAppPresentationStatus;
@@ -21,10 +38,13 @@ export function shouldHideLiveAppFallback(status: LiveAppPresentationStatus): bo
   return status === 'online';
 }
 
+function isLiveAppStatus(value: unknown): value is LiveAppPresentationStatus {
+  return typeof value === 'string' && (LIVE_APP_STATUSES as readonly string[]).includes(value);
+}
+
 function isStatusEventDetail(value: unknown): value is LiveAppStatusEventDetail {
   if (typeof value !== 'object' || value === null) return false;
-  const detail = value as Record<string, unknown>;
-  return detail.status === 'checking' || detail.status === 'online' || detail.status === 'offline';
+  return isLiveAppStatus((value as Record<string, unknown>).status);
 }
 
 function getStatusEventDetail(event: Event): LiveAppStatusEventDetail | null {
@@ -38,10 +58,6 @@ function setFallbackVisibility(
   status: LiveAppPresentationStatus
 ): void {
   fallback.hidden = shouldHideLiveAppFallback(status);
-}
-
-function isLiveAppStatus(value: string | undefined): value is LiveAppPresentationStatus {
-  return value === 'checking' || value === 'online' || value === 'offline';
 }
 
 export function initializeLiveAppFallbackRegions(root: ParentNode = document): void {
