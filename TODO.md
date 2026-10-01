@@ -25,10 +25,10 @@ After go-live, finish GA4 Admin (see [GA4 admin checklist (after go-live)](docs/
 
 ## Visit counter (GoatCounter)
 
-A cookieless counter that counts every visit, whatever the visitor chose about Google Analytics, is built and tested. It stays off until a site code is configured, so nothing changes in production until these are done. Details in [docs/guides/analytics-and-privacy.md](docs/guides/analytics-and-privacy.md#the-visit-counter-goatcounter):
+A cookieless counter that counts every visit, whatever the visitor chose about Google Analytics, is built and tested. It is off in any build without a site code. The first two steps are done, so the first deploy of this code builds with the counter on; the rest verify and tune it. Details in [docs/guides/analytics-and-privacy.md](docs/guides/analytics-and-privacy.md#the-visit-counter-goatcounter):
 
-- [ ] Create a free GoatCounter site at [goatcounter.com/signup](https://www.goatcounter.com/signup) and note the site code (the part before `.goatcounter.com`).
-- [ ] Add it as the repository **variable** `PUBLIC_GOATCOUNTER_CODE` (Settings → Secrets and variables → Actions → Variables), then re-run the **Deploy to GitHub Pages** workflow.
+- [x] Create a free GoatCounter site at [goatcounter.com/signup](https://www.goatcounter.com/signup) and note the site code (the part before `.goatcounter.com`).
+- [x] Add it as the repository **variable** `PUBLIC_GOATCOUNTER_CODE` (Settings → Secrets and variables → Actions → Variables). The next deploy builds with it; re-run **Deploy to GitHub Pages** only if the variable changes later.
 - [ ] Check it in a fresh private window: one request to `<code>.goatcounter.com/count` before you touch the panel, nothing to Google after **Reject analytics**, and the visit in the GoatCounter dashboard.
 - [ ] Exclude your own browsers: run `localStorage.setItem('skipgc', 't')` in the console on the live site, once per browser.
 - [ ] Review what GoatCounter keeps in its settings and switch off anything you do not need.
