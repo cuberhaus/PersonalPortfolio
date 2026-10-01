@@ -6,6 +6,7 @@ import {
 } from '../../lib/rob-kernels';
 
 import { T } from '../../i18n/demos/rob-demo';
+import { redrawOnFontLoad } from '../../lib/canvas-fonts';
 import { getThemeColors, lighten, withAlpha } from '../../lib/demo-theme';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
@@ -92,55 +93,64 @@ function WallPanel({ t }: { t: (typeof T)['en'] }) {
     const dpr = window.devicePixelRatio || 1;
     const W = 280,
       H = 180;
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const tc = getThemeColors();
-    ctx.fillStyle = tc.bgSecondary;
-    ctx.fillRect(0, 0, W, H);
+    const draw = () => {
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Walls
-    ctx.strokeStyle = tc.borderColorHover;
-    ctx.lineWidth = 2;
-    const walls = [
-      [20, 20, 260, 20],
-      [260, 20, 260, 160],
-      [260, 160, 20, 160],
-      [20, 160, 20, 20],
-      [80, 60, 200, 60],
-      [200, 60, 200, 110],
-    ];
-    for (const [x1, y1, x2, y2] of walls) {
+      const tc = getThemeColors();
+      ctx.fillStyle = tc.bgSecondary;
+      ctx.fillRect(0, 0, W, H);
+
+      // Walls
+      ctx.strokeStyle = tc.borderColorHover;
+      ctx.lineWidth = 2;
+      const walls = [
+        [20, 20, 260, 20],
+        [260, 20, 260, 160],
+        [260, 160, 20, 160],
+        [20, 160, 20, 20],
+        [80, 60, 200, 60],
+        [200, 60, 200, 110],
+      ];
+      for (const [x1, y1, x2, y2] of walls) {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+
+      // Simulated path
+      const trail = wallFollowingStep(150);
+      ctx.strokeStyle = withAlpha(tc.accentStart, 0.4);
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
+      for (let i = 0; i < trail.length; i++) {
+        i === 0 ? ctx.moveTo(trail[i].x, trail[i].y) : ctx.lineTo(trail[i].x, trail[i].y);
+      }
       ctx.stroke();
-    }
 
-    // Simulated path
-    const trail = wallFollowingStep(150);
-    ctx.strokeStyle = withAlpha(tc.accentStart, 0.4);
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    for (let i = 0; i < trail.length; i++) {
-      i === 0 ? ctx.moveTo(trail[i].x, trail[i].y) : ctx.lineTo(trail[i].x, trail[i].y);
-    }
-    ctx.stroke();
+      // Robot
+      const last = trail[trail.length - 1];
+      ctx.fillStyle = tc.accentEnd;
+      ctx.beginPath();
+      ctx.arc(last.x, last.y, 3, 0, Math.PI * 2);
+      ctx.fill();
 
-    // Robot
-    const last = trail[trail.length - 1];
-    ctx.fillStyle = tc.accentEnd;
-    ctx.beginPath();
-    ctx.arc(last.x, last.y, 3, 0, Math.PI * 2);
-    ctx.fill();
+      // Gains display
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillStyle = tc.accentStart;
+      ctx.fillText('k1=0.3  k2=0.1  k3=0.7', 30, H - 8);
+    };
 
-    // Gains display
-    ctx.font = '10px Inter, sans-serif';
-    ctx.fillStyle = tc.accentStart;
-    ctx.fillText('k1=0.3  k2=0.1  k3=0.7', 30, H - 8);
+    draw();
+    // The label is canvas text in the Inter webfont. Inter comes from Google Fonts behind a
+    // deferred stylesheet, usually after this effect has run, and a canvas never repaints by
+    // itself, so redraw once fonts finish loading or the label keeps the fallback face.
+    return redrawOnFontLoad(draw);
   }, []);
 
   return (
