@@ -46,6 +46,34 @@ async function languagePickerInsets(page: Page) {
   });
 }
 
+/** Opens a demo page's slide-over sidebar, whose footer hosts the theme toggle and language picker. */
+async function openDemoSidebar(page: Page) {
+  await page.locator('.sidebar-toggle').click();
+  await expect(page.locator('#demo-sidebar')).toHaveClass(/open/);
+}
+
+/** How the sidebar footer's theme toggle and language picker sit against each other and the footer. */
+async function sidebarFooterLayout(page: Page) {
+  const footer = page.locator('#demo-sidebar .sidebar-footer');
+  // Fail with a named locator, not a null dereference, if the footer's markup ever changes.
+  await expect(footer.locator('.theme-toggle-btn')).toBeVisible();
+  await expect(footer.locator('.language-picker')).toBeVisible();
+  return footer.evaluate((element) => {
+    const toggle = element.querySelector('.theme-toggle-btn')!.getBoundingClientRect();
+    const picker = element.querySelector('.language-picker')!.getBoundingClientRect();
+    const frame = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    return {
+      // Positive when the picker sits lower than the toggle.
+      levelOffset: (picker.top + picker.bottom) / 2 - (toggle.top + toggle.bottom) / 2,
+      // Free space between the pair and the footer's content edges.
+      leftSlack: Math.min(toggle.left, picker.left) - (frame.left + parseFloat(style.paddingLeft)),
+      rightSlack:
+        frame.right - parseFloat(style.paddingRight) - Math.max(toggle.right, picker.right),
+    };
+  });
+}
+
 test.describe('portfolio homepage smoke', () => {
   test('homepage renders the expected shell and section anchors', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -326,6 +354,28 @@ test.describe('portfolio homepage smoke', () => {
       // collapsed menu must carry neither, so the first option starts at the picker's own edge.
       const insets = await languagePickerInsets(page);
       expect(insets.left, `${width}px: space left of the first option`).toBeCloseTo(0, 0);
+    }
+  });
+
+  // The demo sidebar reuses the picker's phone-width pill. Its leftover stacked-layout margins sat
+  // the pill ~10px below the theme toggle and pinned the toggle to the footer's left edge.
+  test('demo sidebar footer keeps the theme toggle and language picker level and centered', async ({
+    page,
+  }) => {
+    for (const width of [320, 390, 768, 769, 1280]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto('/demos/algorithms/', { waitUntil: 'domcontentloaded' });
+      await openDemoSidebar(page);
+
+      const layout = await sidebarFooterLayout(page);
+      expect(layout.levelOffset, `${width}px: picker center against toggle center`).toBeCloseTo(
+        0,
+        0
+      );
+      expect(layout.rightSlack, `${width}px: space beside the pair, right vs left`).toBeCloseTo(
+        layout.leftSlack,
+        0
+      );
     }
   });
 
