@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { Calendar, Hotel, TrendingDown, Building2 } from 'lucide-react';
+import { Calendar, Hotel, TrendingDown, Building2, Settings } from 'lucide-react';
 import LiveAppEmbed from './LiveAppEmbed';
 
 import { TRANSLATIONS } from '../../i18n/demos/planificacion-demo';
@@ -681,12 +681,12 @@ function PlanificacionDemo({ lang = 'en' }: { lang?: Lang }) {
           >
             <span
               style={{
-                display: 'inline-block',
+                display: 'inline-flex',
                 animation: 'spin 1s linear infinite',
                 fontSize: '1rem',
               }}
             >
-              &#9881;
+              <Settings size="1em" aria-hidden="true" />
             </span>
             {t.mockRunning}
             <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>

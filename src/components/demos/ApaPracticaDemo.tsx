@@ -12,6 +12,7 @@ import pcaPointsData from '../../data/pca_points.json' with { type: 'json' };
 import { clamp, dist2, knnVote, predict, absCoefs, maxCoef } from '../../lib/apa-predictor';
 import type { Pt } from '../../lib/apa-predictor';
 import { getThemeColors, lighten, withAlpha } from '../../lib/demo-theme';
+import ExternalArrow from '../ExternalArrow';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 /* ── constants ── */
@@ -866,7 +867,7 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
               textDecoration: 'none',
             }}
           >
-            {t.openNbviewer}
+            {t.openNbviewer} <ExternalArrow />
           </a>
         </div>
         {showNb && (

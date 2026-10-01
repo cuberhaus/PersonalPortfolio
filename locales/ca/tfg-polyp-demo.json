@@ -62,7 +62,7 @@
   "cgTrans": "Traducció CycleGAN",
   "unpaired": "Imatge a imatge no emparellada",
   "cgDesc1": "CycleGAN aprèn una traducció no emparellada ",
-  "cgDesc2": "màscara ↔ pòlip",
+  "cgDesc2": "màscara ↔\ufe0e pòlip",
   "cgDesc3": ". SPADE utilitza normalització espacial adaptativa per síntesi màscara → pòlip.",
   "m2p": "Màscara → Pòlip",
   "p2m": "Pòlip → Màscara",

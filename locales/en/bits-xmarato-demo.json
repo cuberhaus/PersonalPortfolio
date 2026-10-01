@@ -91,7 +91,7 @@
   "projScreenshots": "Project screenshots",
   "team": "Team",
   "teamMembers": ["Pol Casacuberta", "Tatiana Meyer", "Pablo Vega", "Ton Vilà"],
-  "devpostLabel": "Devpost ↗",
+  "devpostLabel": "Devpost",
   "runLocal": "▸ Run the original project locally",
   "localDesc1": "The app is a ",
   "localDesc2": "Python + Tkinter",

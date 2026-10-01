@@ -2428,7 +2428,9 @@ html[data-design='ide'] .contact-submit {
 
 html[data-design='ide'] .hero-cta::before,
 html[data-design='ide'] .contact-submit::before {
-  content: '▶ ';
+  /* \FE0E asks for the text form of U+25B6 (iOS would draw a colour emoji tile, #280); \20 is the
+     trailing space, because a hex escape swallows the one space that follows it. */
+  content: '▶\FE0E\20 ';
   font-size: 0.75rem;
 }
 

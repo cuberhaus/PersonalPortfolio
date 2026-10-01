@@ -96,7 +96,7 @@
     "Pablo Vega",
     "Ton Vilà"
   ],
-  "devpostLabel": "Devpost ↗",
+  "devpostLabel": "Devpost",
   "runLocal": "▸ Ejecutar el proyecto original localmente",
   "localDesc1": "La app es una GUI en ",
   "localDesc2": "Python + Tkinter",

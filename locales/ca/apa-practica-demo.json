@@ -91,10 +91,10 @@
   "dataP2c": " — gestionat mitjançant imputació, mètriques adequades (F1, ROC-AUC).",
   "nan": "NaN",
   "imbalance": "desequilibri de classes",
-  "ghRepo": "Repositori a GitHub ↗",
+  "ghRepo": "Repositori a GitHub",
   "nbPreview": "Vista prèvia de Jupyter notebook",
   "fullPractica": "Pràctica completa",
   "linModels": "Models lineals",
-  "openNbviewer": "Obrir a Nbviewer ↗",
+  "openNbviewer": "Obrir a Nbviewer",
   "runLocal": "▸ Executar els notebooks localmente"
 }

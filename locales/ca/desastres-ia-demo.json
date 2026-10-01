@@ -128,7 +128,7 @@
   "finalQueues": "Cues finals",
   "initialState": "Desglossament estat inicial i log cru",
   "compact": "Compacte:",
-  "ghRepo": "Repositori a GitHub ↗",
+  "ghRepo": "Repositori a GitHub",
   "webAppTitle": "Web App completa",
   "webAppDesc": "Executa el contenidor Docker per accedir al solucionador interactiu complet amb totes les funcionalitats.",
   "webAppFeatures": [

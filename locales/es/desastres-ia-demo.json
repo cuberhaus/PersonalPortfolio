@@ -128,7 +128,7 @@
   "finalQueues": "Colas finales",
   "initialState": "Desglose estado inicial y log crudo",
   "compact": "Compacto:",
-  "ghRepo": "Repositorio en GitHub ↗",
+  "ghRepo": "Repositorio en GitHub",
   "webAppTitle": "Web App completa",
   "webAppDesc": "Ejecuta el contenedor Docker para acceder al solucionador interactivo completo con todas las funcionalidades.",
   "webAppFeatures": [

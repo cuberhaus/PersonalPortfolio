@@ -11,6 +11,7 @@ import {
   type HostedWake,
   type LiveAppHosting,
 } from '../../lib/live-app-embed';
+import ExternalArrow from '../ExternalArrow';
 import HostedLiveAppPanel, {
   type HostedLiveAppLabels,
   type HostedLiveAppPhase,
@@ -326,7 +327,7 @@ export default function LiveAppEmbed({
               cursor: 'pointer',
             }}
           >
-            {t.openTab} &#8599;
+            {t.openTab} <ExternalArrow />
           </a>
           <button
             onClick={() => {

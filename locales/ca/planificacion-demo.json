@@ -54,7 +54,7 @@
   "domain": "Domini (Ext 2)",
   "problem": "Problema (Ext 2)",
   "download": "Descarregar ↓",
-  "ghRepo": "Repositori a GitHub ↗",
+  "ghRepo": "Repositori a GitHub",
   "mockTitle": "Vista prèvia del planificador",
   "mockDesc": "Pla òptim pre-calculat per al problema de l'Extensió 2.",
   "mockRun": "Simular planificador",

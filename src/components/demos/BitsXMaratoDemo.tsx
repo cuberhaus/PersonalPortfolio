@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef, useId, useMemo } from 'react';
 import { Microscope, Ruler, Clapperboard, Brain, Cuboid, Layers } from 'lucide-react';
 import LiveAppEmbed from './LiveAppEmbed';
+import ExternalArrow from '../ExternalArrow';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 /* ── frame data ── */
@@ -643,6 +644,7 @@ function BitsXMaratoDemo({ lang = 'en' }: { lang?: Lang }) {
             }}
           >
             {t.devpostLabel}
+            <ExternalArrow />
           </a>
         </div>
       </div>
