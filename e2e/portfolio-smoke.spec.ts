@@ -7,7 +7,7 @@
  * Run: npm run test:e2e:smoke
  */
 
-import { test, expect, type Locator } from '@playwright/test';
+import { test, expect, type Locator, type Page } from '@playwright/test';
 import { SECTION_IDS, SECTION_IDS_WITH_HERO, SECTION_META } from '../src/config/section-ids';
 
 const SECTION_ORDER = SECTION_IDS;
@@ -20,6 +20,30 @@ async function navHrefs(page: import('@playwright/test').Page) {
   return page
     .locator('.nav-links-primary a.nav-link')
     .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+}
+
+/** Opens the collapsed navigation menu. The viewport must already be narrow enough to collapse it. */
+async function openMobileMenu(page: Page) {
+  const toggle = page.locator('.nav-toggle');
+  await expect(toggle).toHaveAttribute('data-initialized', 'true');
+  await toggle.click();
+  await expect(page.locator('#nav-links')).toHaveClass(/open/);
+}
+
+/** Space between the menu's language picker edges and the language options it frames. */
+async function languagePickerInsets(page: Page) {
+  return page.locator('#nav-links .language-picker').evaluate((picker) => {
+    const frame = picker.getBoundingClientRect();
+    const options = Array.from(picker.querySelectorAll('.lang-link'), (option) =>
+      option.getBoundingClientRect()
+    );
+    return {
+      left: Math.min(...options.map((box) => box.left)) - frame.left,
+      right: frame.right - Math.max(...options.map((box) => box.right)),
+      top: Math.min(...options.map((box) => box.top)) - frame.top,
+      bottom: frame.bottom - Math.max(...options.map((box) => box.bottom)),
+    };
+  });
 }
 
 test.describe('portfolio homepage smoke', () => {
@@ -268,6 +292,41 @@ test.describe('portfolio homepage smoke', () => {
 
     await page.locator('.theme-toggle-btn').click();
     await expect(page.locator('#theme-modal')).toHaveAttribute('aria-hidden', 'false');
+  });
+
+  // Issue #291: the menu's reset of the desktop divider spacing also removed the picker's left
+  // inset, so the first language option sat flush against the edge and looked cut off.
+  for (const route of ['/', '/es/', '/ca/']) {
+    test(`${route} mobile menu frames the language picker evenly on every side`, async ({
+      page,
+    }) => {
+      for (const width of [320, 390, 768]) {
+        await page.setViewportSize({ width, height: 844 });
+        await page.goto(route, { waitUntil: 'domcontentloaded' });
+        await openMobileMenu(page);
+
+        const insets = await languagePickerInsets(page);
+        const at = `${route} at ${width}px`;
+        // A visible frame, not a hairline, and the same on all four sides.
+        expect(insets.left, `${at}: space left of the first option`).toBeGreaterThanOrEqual(2);
+        expect(insets.right, `${at}: space right of the last option`).toBeCloseTo(insets.left, 0);
+        expect(insets.top, `${at}: space above the options`).toBeCloseTo(insets.left, 0);
+        expect(insets.bottom, `${at}: space below the options`).toBeCloseTo(insets.left, 0);
+      }
+    });
+  }
+
+  test('tablet menu keeps the language picker free of the desktop divider', async ({ page }) => {
+    for (const width of [769, 900, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
+      await openMobileMenu(page);
+
+      // Desktop widths reserve a divider line plus a gap (17px) before the first option; the
+      // collapsed menu must carry neither, so the first option starts at the picker's own edge.
+      const insets = await languagePickerInsets(page);
+      expect(insets.left, `${width}px: space left of the first option`).toBeCloseTo(0, 0);
+    }
   });
 
   test('short viewport hero keeps a clean transition below the primary action', async ({
