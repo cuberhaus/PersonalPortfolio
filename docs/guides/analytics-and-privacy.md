@@ -153,6 +153,22 @@ also capped to the height of the screen and scrolls inside itself, so on a phone
 held sideways or at 400% zoom (320x200) its title is never cut off; the suite
 checks both sizes.
 
+**Keep it small.** The panel is a notice, not a banner, and it should stay out of the
+way: about 100 px tall on a desktop, with the buttons beside the text, and side by
+side under it on a phone (roughly 155-190 px). The title leads the paragraph on the
+same line instead of getting a row of its own, so a longer description is the main
+thing that makes the panel grow; shorten the copy before adding chrome. Two layout
+traps to avoid when editing the CSS:
+
+- **Put the type size and line height on `.analytics-consent__body`,** not only on
+  the title and text inside it. Those two are inline, and an inline child cannot
+  shrink the line boxes of its block parent, so a page-sized parent line height
+  silently spaces every line about 50% further apart.
+- **Don't place the buttons with `grid-row: 1 / -1`.** With no explicit rows `-1`
+  is the first line, so the buttons span only row 1 and stretch it to their own
+  height, leaving a tall gap between the title and the text. This is why the panel
+  is a flex row (a column below 641 px) rather than a grid.
+
 ## Testing
 
 | Seam                                             | Run                                               | Proves                                                                                                                                                                                              |

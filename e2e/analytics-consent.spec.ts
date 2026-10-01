@@ -434,24 +434,43 @@ test.describe('keyboard use and equal prominence', () => {
     ]);
   });
 
-  const buttonVisualSnapshot = (page: Page, name: string) =>
-    page.getByRole('button', { name }).evaluate((element) => {
-      const style = getComputedStyle(element);
-      const box = element.getBoundingClientRect();
-      return {
-        width: Math.round(box.width),
-        height: Math.round(box.height),
-        color: style.color,
-        background: style.backgroundColor,
-        borderColor: style.borderTopColor,
-        borderWidth: style.borderTopWidth,
-        fontSize: style.fontSize,
-        fontWeight: style.fontWeight,
-        padding: style.padding,
-        radius: style.borderRadius,
-        opacity: style.opacity,
-      };
-    });
+  /**
+   * Accept and reject, measured by ONE script. A button's width follows its label (on a wide screen
+   * the column is only as wide as the longer one) and the page swaps in its web fonts a moment
+   * after first paint, which moves both buttons together by a few pixels. Two separate reads can
+   * straddle that swap and disagree although the buttons match at every instant; one synchronous
+   * script sees a single, consistent layout.
+   */
+  async function choiceVisualSnapshots(page: Page) {
+    const [accept, reject] = await Promise.all([
+      page.getByRole('button', { name: en.accept }).elementHandle(),
+      page.getByRole('button', { name: en.reject }).elementHandle(),
+    ]);
+    return page.evaluate(
+      ([acceptButton, rejectButton]) => {
+        const snapshot = (element: Element | null) => {
+          if (!element) throw new Error('A consent choice button is missing');
+          const style = getComputedStyle(element);
+          const box = element.getBoundingClientRect();
+          return {
+            width: Math.round(box.width),
+            height: Math.round(box.height),
+            color: style.color,
+            background: style.backgroundColor,
+            borderColor: style.borderTopColor,
+            borderWidth: style.borderTopWidth,
+            fontSize: style.fontSize,
+            fontWeight: style.fontWeight,
+            padding: style.padding,
+            radius: style.borderRadius,
+            opacity: style.opacity,
+          };
+        };
+        return { accept: snapshot(acceptButton), reject: snapshot(rejectButton) };
+      },
+      [accept, reject]
+    );
+  }
 
   async function expectButtonsFullyVisible(page: Page, label: string): Promise<void> {
     const viewport = page.viewportSize()!;
@@ -483,9 +502,8 @@ test.describe('keyboard use and equal prominence', () => {
         await page.goto('/', { waitUntil: 'domcontentloaded' });
         await page.evaluate((chosen) => localStorage.setItem('theme', chosen), theme);
         await openPage(page);
-        expect(await buttonVisualSnapshot(page, en.accept)).toEqual(
-          await buttonVisualSnapshot(page, en.reject)
-        );
+        const { accept, reject } = await choiceVisualSnapshots(page);
+        expect(accept).toEqual(reject);
         await expectButtonsFullyVisible(page, `${viewport.label} ${theme}`);
       });
     }

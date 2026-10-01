@@ -39,11 +39,13 @@ const t = useTranslations(getLangFromUrl(Astro.url));
         tabindex="-1"
         hidden
       >
-        <p id="analytics-consent-title" class="analytics-consent__title">
-          {t('analytics.title')}
-        </p>
-        <p class="analytics-consent__text">{t('analytics.description')}</p>
-        <p class="analytics-consent__status" data-consent-status hidden />
+        <div class="analytics-consent__body">
+          <p id="analytics-consent-title" class="analytics-consent__title">
+            {t('analytics.title')}
+          </p>
+          <p class="analytics-consent__text">{t('analytics.description')}</p>
+          <p class="analytics-consent__status" data-consent-status hidden />
+        </div>
         <div class="analytics-consent__actions">
           <button type="button" class="analytics-consent__btn" data-consent-action="accept">
             {t('analytics.accept')}
@@ -83,27 +85,32 @@ const t = useTranslations(getLangFromUrl(Astro.url));
 </script>
 
 <style>
-  /* Above the sticky nav (1000) and demo sidebar (1100); below the skip link (9999) and modals. */
+  /* A quiet notice, not a banner: compact type, a modest width and a short, wide shape so it covers
+     as little of the page as possible. Narrow screens stack the text above the choices. */
   .analytics-consent__panel {
+    /* Gap to the screen edge (wider on larger screens, see the media query below). */
+    --consent-edge: 0.5rem;
     position: fixed;
-    inset-inline: 1rem;
-    bottom: max(1rem, env(safe-area-inset-bottom));
+    inset-inline: var(--consent-edge);
+    bottom: max(var(--consent-edge), env(safe-area-inset-bottom));
+    /* Above the sticky nav (1000) and demo sidebar (1100); below the skip link (9999) and modals. */
     z-index: 1500;
-    display: grid;
-    gap: 0.75rem;
-    max-width: 46rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 40rem;
     /* Never taller than the screen (landscape phones, 400% zoom): scroll inside the panel
        instead of cutting off its top. The 100vh line is the fallback for browsers without dvh. */
-    max-height: calc(100vh - 2rem);
-    max-height: calc(100dvh - 2rem - env(safe-area-inset-bottom, 0px));
+    max-height: calc(100vh - 2 * var(--consent-edge));
+    max-height: calc(100dvh - 2 * var(--consent-edge) - env(safe-area-inset-bottom, 0px));
     overflow-y: auto;
     overscroll-behavior: contain;
     margin-inline: auto;
-    padding: 1rem 1.25rem;
+    padding: 0.7rem 0.8rem;
     background: var(--bg-card);
-    color: var(--text-primary);
+    color: var(--text-secondary);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     box-shadow: var(--shadow-card-hover);
   }
 
@@ -111,46 +118,58 @@ const t = useTranslations(getLangFromUrl(Astro.url));
     display: none;
   }
 
-  .analytics-consent__title {
+  /* The compact type lives on the container, not only on its children: the title and the text are
+     inline, so the container's own (page-sized) line height would otherwise set every line's pitch. */
+  .analytics-consent__body {
+    min-width: 0;
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .analytics-consent__title,
+  .analytics-consent__text,
+  .analytics-consent__status {
     margin: 0;
-    font-size: 0.95rem;
+  }
+
+  /* The title leads the paragraph on the same line instead of costing a row of its own. */
+  .analytics-consent__title {
+    display: inline;
+    margin-inline-end: 0.3em;
     font-weight: 700;
     color: var(--text-primary);
   }
 
-  .analytics-consent__text,
-  .analytics-consent__status {
-    margin: 0;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: var(--text-primary);
+  .analytics-consent__text {
+    display: inline;
   }
 
   .analytics-consent__status {
+    margin-top: 0.3rem;
     font-weight: 600;
+    color: var(--text-primary);
   }
 
   .analytics-consent__actions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   /* Accept and reject share every visual property, including width: neither is favoured. */
   .analytics-consent__btn {
-    flex: 1 1 0;
-    min-width: 9rem;
-    max-width: 14rem;
-    min-height: 2.5rem;
-    padding: 0.5rem 1.1rem;
+    flex: 1 1 7rem;
+    min-width: 0;
+    min-height: 2rem;
+    padding: 0.3rem 0.7rem;
     font: inherit;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     font-weight: 600;
+    line-height: 1.25;
     color: var(--text-primary);
     background: var(--bg-secondary);
     border: 1px solid var(--accent-text);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     cursor: pointer;
     transition:
       background-color var(--transition-fast),
@@ -161,7 +180,10 @@ const t = useTranslations(getLangFromUrl(Astro.url));
     background: color-mix(in srgb, var(--accent-text) 14%, var(--bg-secondary));
   }
 
+  /* Not a consent choice, so it need not match the pair: it takes only its label's width, which lets
+     all three buttons share one row on most phones instead of Close costing a row of its own. */
   .analytics-consent__btn--quiet {
+    flex: 0 0 auto;
     border-color: var(--border-color);
   }
 
@@ -169,61 +191,38 @@ const t = useTranslations(getLangFromUrl(Astro.url));
     display: none;
   }
 
+  /* Wider screens: the text takes the room and the choices sit beside it in a column that is only
+     as wide as the longest label, so every button stretches to the same size. */
   @media (min-width: 641px) {
     .analytics-consent__panel {
-      grid-template-columns: 1fr auto;
-      column-gap: 1.25rem;
-      align-items: start;
-    }
-
-    .analytics-consent__title,
-    .analytics-consent__text,
-    .analytics-consent__status {
-      grid-column: 1;
-    }
-
-    .analytics-consent__actions {
-      grid-column: 2;
-      grid-row: 1 / -1;
-      flex-direction: column;
-      flex-wrap: nowrap;
-      justify-content: center;
-      align-self: center;
-      width: min(14rem, 100%);
-      min-width: 9rem;
-    }
-
-    .analytics-consent__btn {
-      flex: 0 0 auto;
-      width: 100%;
-      max-width: none;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .analytics-consent__actions {
-      flex-direction: column;
-    }
-
-    .analytics-consent__btn {
-      flex: 0 0 auto;
-      width: 100%;
-      max-width: none;
-    }
-  }
-
-  /* Short viewports: keep both choices visible without scrolling inside the panel. */
-  @media (max-height: 500px) {
-    .analytics-consent__actions {
+      --consent-edge: 1rem;
       flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+    }
+
+    .analytics-consent__body {
+      flex: 1 1 0;
+    }
+
+    .analytics-consent__actions {
+      flex: 0 0 auto;
+      flex-direction: column;
       flex-wrap: nowrap;
+      gap: 0.4rem;
     }
 
     .analytics-consent__btn {
-      flex: 1 1 0;
-      min-width: 0;
-      width: auto;
-      max-width: none;
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+  }
+
+  /* Touch screens keep finger-sized targets; a mouse gets the compact size. */
+  @media (pointer: coarse) {
+    .analytics-consent__btn {
+      min-height: 2.5rem;
     }
   }
 
