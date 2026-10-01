@@ -43,6 +43,18 @@ const BLOCKING_IMPACTS = new Set(['serious', 'critical']);
 
 const ALL_THEME_IDS = THEMES.map((t) => t.id);
 
+// Emulate `prefers-reduced-motion: reduce` for every scan. Homepage sections start at
+// `opacity: 0` and fade in as they scroll into view, and axe treats an invisible element as
+// not applicable, so a default scan audits only what is revealed on load and never sees the
+// controls further down the page. The site's reduced-motion CSS shows every `.reveal` straight
+// away, without a transition, so the whole page is audited and nothing is mid-fade when axe
+// samples a colour (a scan that landed mid-fade once read a 5.5:1 colour as 4.2:1 and failed
+// a CI shard).
+//
+// It has to be `contextOptions`: Playwright Test silently ignores a top-level `reducedMotion`
+// in `test.use`.
+test.use({ contextOptions: { reducedMotion: 'reduce' } });
+
 async function setThemeBeforeLoad(page: Page, theme: string, route: string) {
   // Land on a same-origin page so localStorage is writable, set the theme,
   // then navigate to the target route. ThemeInit reads localStorage on every
@@ -57,14 +69,14 @@ async function setThemeBeforeLoad(page: Page, theme: string, route: string) {
 /**
  * Wait until the page has stopped playing finite animations.
  *
- * Homepage sections fade in (`.reveal`, about 0.5s) right after load. Axe
- * samples the *rendered* foreground, so scanning mid-fade reports the contrast
- * of half-transparent text that no visitor sees at rest; the theme with the
- * least contrast headroom (catppuccin-latte) fails first. The fade is started
- * by an IntersectionObserver callback that runs a frame or two after load, so
- * two frames pass before looking for animations. Looping ignores infinite
- * animations (spinners, glows) and the deadline keeps a stuck one from hanging
- * the run.
+ * Reduced motion (see `test.use` above) already removes the homepage's
+ * `.reveal` fade, so this is the backstop for any other finite animation. Axe
+ * samples the *rendered* foreground, so scanning mid-animation reports the
+ * contrast of half-transparent text that no visitor sees at rest. An animation
+ * started by a script callback (an IntersectionObserver, say) begins a frame or
+ * two after load, so two frames pass before looking for animations. Looping
+ * ignores infinite animations (spinners, glows) and the deadline keeps a stuck
+ * one from hanging the run.
  */
 async function waitForAnimationsToSettle(page: Page) {
   await page.evaluate(async () => {

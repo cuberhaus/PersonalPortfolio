@@ -183,6 +183,14 @@ The `a11y` project runs three kinds of audit per theme:
 | `hover states`      | Hovers each card-ish selector before scanning. Catches contrast bugs that only manifest on `:hover` (yellow-card-with-faint-bullets). |
 | `gradient contrast` | Custom WCAG luminance check on gradient buttons (axe returns `incomplete` on gradients). Skips invisible elements (`opacity < 0.05`). |
 
+The project emulates `prefers-reduced-motion: reduce` (`test.use` at the top of
+`a11y.spec.ts`). The site then shows every `.reveal` section immediately, so axe
+audits the whole homepage. Without it, sections below the fold sit at
+`opacity: 0` until scrolled into view, axe treats them as not applicable, and only
+what is revealed on load gets checked. It also removes the reveal fade, so no scan
+lands mid-transition. Use `contextOptions: { reducedMotion: 'reduce' }`: Playwright
+Test silently ignores a top-level `reducedMotion` option.
+
 When to extend it — see
 [CONTRIBUTING.md § A11y test patterns](../../CONTRIBUTING.md#a11y-test-patterns).
 

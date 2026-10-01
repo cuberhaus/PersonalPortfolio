@@ -290,7 +290,7 @@ const CV_DL_STYLES = `
     background: color-mix(in srgb, var(--accent-start) 8%, var(--bg-secondary));
   }
   .cv-dl-segment input:checked + span {
-    color: var(--accent-text);
+    color: var(--text-primary);
     background: color-mix(in srgb, var(--accent-start) 14%, var(--bg-secondary));
     box-shadow: inset 0 -2px 0 var(--accent-text);
   }

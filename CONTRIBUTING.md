@@ -78,6 +78,8 @@ The `a11y` Playwright project ([e2e/a11y.spec.ts](e2e/a11y.spec.ts)) runs three 
 | `hover states`           | Hovers each card-ish selector (`.work-card`, `.timeline-content`, etc.) before scanning. Catches the **yellow-card-with-faint-bullets** class of bug — issues that only manifest on `:hover`.                                                                              |
 | `gradient text contrast` | Custom WCAG luminance check on `button` / `a.btn` / `.btn-primary`. axe-core returns `incomplete` (not `violation`) when the background is a gradient — we sample the gradient ourselves and assert >= 4.5:1. Skips invisible elements (`display:none`, `opacity < 0.05`). |
 
+The project emulates `prefers-reduced-motion: reduce`, which makes the site show every `.reveal` section at once, so the homepage scans cover the whole page rather than only the sections revealed on load.
+
 #### When to add a new selector or route
 
 - **New gradient button:** if it's `button`/`a.btn`/`.btn-primary`, it's already covered when its route is in the test list. Otherwise add the selector to `GRADIENT_TEXT_SELECTORS`.
