@@ -40,6 +40,56 @@ To try it locally: `PUBLIC_GA_ID=G-YOURID npm run build && npm run preview:stati
 [.env.example](../../.env.example), `G-XXXXXXXXXX`, is rejected on purpose so that
 copying the file verbatim enables nothing.
 
+## GA4 admin checklist (after go-live)
+
+The repository and deploy side are only half the setup. These are one-time choices
+in the GA4 **Admin** UI (gear icon, bottom left). Menu labels move between GA4
+releases; if something is not where described, use the search box in Admin.
+
+### Confirm data arrives
+
+Do this before you activate any internal-traffic filter. Step 4 under
+[Turning it on (owner steps)](#turning-it-on-owner-steps) is the short version;
+use this when you want to be sure the property is receiving hits:
+
+1. Open the live site in a **private window with extensions disabled** (ad blockers
+   block GA).
+2. In DevTools **Network**, confirm there is no request to `googletagmanager.com`
+   or `google-analytics.com` before you click anything on the banner.
+3. Click **Accept analytics**. Expect `gtag/js?id=G-XXXXXXXXXX`, then a `collect`
+   request to `region1.google-analytics.com/g/collect` with `tid=G-XXXXXXXXXX` and
+   `_ga` and `_ga_<ID without G->` cookies set.
+4. In GA4 **Reports > Realtime**, the visit should appear within about a minute.
+   Standard reports lag **24-48 hours**.
+
+### Property settings (Admin)
+
+| Setting                                                                                           | Where in GA4 Admin                                                                                                                                                                                                                                    | Why                                                                                                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Google signals off **(REQUIRED)**                                                                 | Data collection and modification > Data Collection                                                                                                                                                                                                    | The tag already disables signals on every request; turn this off so the property matches the banner. [Google signals](https://support.google.com/analytics/answer/9445345)                                                                                                 |
+| Keep **Page changes based on browser history events** on **(REQUIRED)**; Site search may stay off | Data collection and modification > Data streams > your web stream > Enhanced measurement                                                                                                                                                              | The layout uses View Transitions and the code never sends a manual `page_view`, so history events are how in-site navigation is counted; turning this off undercounts. The site has no search. [Enhanced measurement](https://support.google.com/analytics/answer/9216061) |
+| Event data retention **14 months (RECOMMENDED)**                                                  | Data collection and modification > Data retention                                                                                                                                                                                                     | Default is 2 months, which limits Explorations. [Data retention](https://support.google.com/analytics/answer/7667196)                                                                                                                                                      |
+| Exclude your own visits **(RECOMMENDED)**                                                         | Simplest: click **Reject analytics** in your own browsers (stored per browser; Reject sends nothing). Alternative: Data streams > Configure tag settings > Define internal traffic, then Data filters > Internal Traffic (Testing first, then Active) | Home IPs change, so the filter needs upkeep. [Internal traffic](https://support.google.com/analytics/answer/10104470)                                                                                                                                                      |
+| Key event for CV downloads **(RECOMMENDED)**                                                      | Data display > Events > switch on **Mark as key event** for `file_download` once the first CV click has arrived                                                                                                                                       | The one conversion a portfolio has. The event records the file name (`cv_<lang>_<preset>_<photo-mode>.pdf`), so variants split in Explorations without custom code. [Key events](https://support.google.com/analytics/answer/13128484)                                     |
+| Data sharing settings **(RECOMMENDED)**                                                           | Account > Account details                                                                                                                                                                                                                             | Turn off what you do not need. [Data sharing](https://support.google.com/analytics/answer/1011397)                                                                                                                                                                         |
+| Consent settings page **(INFO)**                                                                  | Data collection and modification > Consent settings                                                                                                                                                                                                   | May warn about consent signals until traffic with granted consent arrives; expected when nothing loads before Accept. [Consent settings](https://support.google.com/analytics/answer/14275483)                                                                             |
+
+**Account hygiene:** enable 2-step verification on the Google account and keep yourself
+as the only Administrator on the GA4 account.
+
+**Optional extras:** linking [Search Console](https://search.google.com/search-console)
+is free and gives consent-independent search data. BigQuery export, audiences and
+custom dimensions are usually not worth the effort on a personal portfolio.
+
+**What the numbers mean:** only visitors who click **Accept analytics** are measured
+(basic consent mode), so counts undercount real traffic. Use them for trends, not
+absolute totals.
+
+**Still missing in the repo:** there is no public privacy or cookie notice page yet,
+and the banner does not link to one (tracked in [TODO.md](../../TODO.md)). Sentry
+error reporting runs outside the banner's choice and should be mentioned in that
+notice when it exists; see [observability.md](../architecture/observability.md).
+
 ## How it works
 
 | Piece                                                                                              | Responsibility                                                                                                                     |
@@ -93,7 +143,11 @@ Two properties are enforced by tests rather than convention:
 
 Change the wording in all three `locales/*/ui.json` files together
 ([i18n guide](./i18n.md)); privacy copy deserves the owner's review. Styling uses
-theme tokens only. The panel must stay **opaque**: the end-to-end suite asserts
+theme tokens only. **Accept** is listed before **Reject** in the markup (tab order
+follows), but both buttons must stay **identical in every visual property** — same
+size, border, background, text colour, and hover/focus affordance — because EU
+regulators allow reordering yet forbid asymmetry that nudges one choice over the
+other ([AEPD cookie guide](https://www.aepd.es/guias/guia-cookies.pdf)). The panel must stay **opaque**: the end-to-end suite asserts
 it, because then contrast can never depend on what happens to be behind it. It is
 also capped to the height of the screen and scrolls inside itself, so on a phone
 held sideways or at 400% zoom (320x200) its title is never cut off; the suite

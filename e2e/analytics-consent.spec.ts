@@ -397,18 +397,18 @@ test.describe('keyboard use and equal prominence', () => {
     await page.keyboard.press('Tab');
     await expect(page.locator('a.skip-to-content')).toBeFocused();
     await page.keyboard.press('Tab');
-    await expect(reject).toBeFocused();
-    await page.keyboard.press('Tab');
     await expect(accept).toBeFocused();
-    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Tab');
     await expect(reject).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(accept).toBeFocused();
 
     await page.keyboard.press('Enter');
 
-    await expect(consentRoot(page)).toHaveAttribute('data-consent-state', 'denied');
+    await expect(consentRoot(page)).toHaveAttribute('data-consent-state', 'granted');
     await expect(panel(page)).toBeHidden();
     await page.waitForLoadState('networkidle');
-    expect(googleRequests).toEqual([]);
+    await expect.poll(() => tagRequests(googleRequests)).toHaveLength(1);
   });
 
   test('Space activates the focused choice too', async ({ page, googleRequests }) => {
@@ -421,29 +421,75 @@ test.describe('keyboard use and equal prominence', () => {
     await expect.poll(() => tagRequests(googleRequests)).toHaveLength(1);
   });
 
-  test('accepting and rejecting are presented identically', async ({ page }) => {
+  test('accept precedes reject in the DOM', async ({ page }) => {
     await openPage(page);
-    const look = (name: string) =>
-      page.getByRole('button', { name }).evaluate((element) => {
-        const style = getComputedStyle(element);
-        const box = element.getBoundingClientRect();
-        return {
-          width: Math.round(box.width),
-          height: Math.round(box.height),
-          color: style.color,
-          background: style.backgroundColor,
-          borderColor: style.borderTopColor,
-          borderWidth: style.borderTopWidth,
-          fontSize: style.fontSize,
-          fontWeight: style.fontWeight,
-          padding: style.padding,
-          radius: style.borderRadius,
-          opacity: style.opacity,
-        };
-      });
-
-    expect(await look(en.accept)).toEqual(await look(en.reject));
+    const actions = await page
+      .locator('.analytics-consent__actions [data-consent-action]')
+      .evaluateAll((elements) =>
+        elements.map((el) => (el as HTMLElement).dataset.consentAction ?? '')
+      );
+    expect(actions.filter((action) => action === 'accept' || action === 'reject')).toEqual([
+      'accept',
+      'reject',
+    ]);
   });
+
+  const buttonVisualSnapshot = (page: Page, name: string) =>
+    page.getByRole('button', { name }).evaluate((element) => {
+      const style = getComputedStyle(element);
+      const box = element.getBoundingClientRect();
+      return {
+        width: Math.round(box.width),
+        height: Math.round(box.height),
+        color: style.color,
+        background: style.backgroundColor,
+        borderColor: style.borderTopColor,
+        borderWidth: style.borderTopWidth,
+        fontSize: style.fontSize,
+        fontWeight: style.fontWeight,
+        padding: style.padding,
+        radius: style.borderRadius,
+        opacity: style.opacity,
+      };
+    });
+
+  async function expectButtonsFullyVisible(page: Page, label: string): Promise<void> {
+    const viewport = page.viewportSize()!;
+    for (const name of [en.accept, en.reject] as const) {
+      const box = await page.getByRole('button', { name }).boundingBox();
+      expect(box, `${label}: ${name} is laid out`).not.toBeNull();
+      expect(box!.y, `${label}: ${name} top is clipped`).toBeGreaterThanOrEqual(0);
+      expect(box!.y + box!.height, `${label}: ${name} bottom is clipped`).toBeLessThanOrEqual(
+        viewport.height
+      );
+      expect(box!.x, `${label}: ${name} left is clipped`).toBeGreaterThanOrEqual(0);
+      expect(box!.x + box!.width, `${label}: ${name} right is clipped`).toBeLessThanOrEqual(
+        viewport.width
+      );
+    }
+  }
+
+  for (const viewport of [
+    { label: '1280x800 desktop', width: 1280, height: 800 },
+    { label: '390x844 phone', width: 390, height: 844 },
+    { label: '844x390 landscape phone', width: 844, height: 390 },
+    { label: '320x568 narrow phone', width: 320, height: 568 },
+  ]) {
+    for (const theme of ['light', 'dark'] as const) {
+      test(`accept and reject match visually at ${viewport.label}, theme ${theme}`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.goto('/', { waitUntil: 'domcontentloaded' });
+        await page.evaluate((chosen) => localStorage.setItem('theme', chosen), theme);
+        await openPage(page);
+        expect(await buttonVisualSnapshot(page, en.accept)).toEqual(
+          await buttonVisualSnapshot(page, en.reject)
+        );
+        await expectButtonsFullyVisible(page, `${viewport.label} ${theme}`);
+      });
+    }
+  }
 });
 
 test.describe('localisation', () => {

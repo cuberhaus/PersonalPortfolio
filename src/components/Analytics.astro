@@ -45,11 +45,11 @@ const t = useTranslations(getLangFromUrl(Astro.url));
         <p class="analytics-consent__text">{t('analytics.description')}</p>
         <p class="analytics-consent__status" data-consent-status hidden />
         <div class="analytics-consent__actions">
-          <button type="button" class="analytics-consent__btn" data-consent-action="reject">
-            {t('analytics.reject')}
-          </button>
           <button type="button" class="analytics-consent__btn" data-consent-action="accept">
             {t('analytics.accept')}
+          </button>
+          <button type="button" class="analytics-consent__btn" data-consent-action="reject">
+            {t('analytics.reject')}
           </button>
           <button
             type="button"
@@ -169,6 +169,37 @@ const t = useTranslations(getLangFromUrl(Astro.url));
     display: none;
   }
 
+  @media (min-width: 641px) {
+    .analytics-consent__panel {
+      grid-template-columns: 1fr auto;
+      column-gap: 1.25rem;
+      align-items: start;
+    }
+
+    .analytics-consent__title,
+    .analytics-consent__text,
+    .analytics-consent__status {
+      grid-column: 1;
+    }
+
+    .analytics-consent__actions {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-self: center;
+      width: min(14rem, 100%);
+      min-width: 9rem;
+    }
+
+    .analytics-consent__btn {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: none;
+    }
+  }
+
   @media (max-width: 640px) {
     .analytics-consent__actions {
       flex-direction: column;
@@ -177,6 +208,21 @@ const t = useTranslations(getLangFromUrl(Astro.url));
     .analytics-consent__btn {
       flex: 0 0 auto;
       width: 100%;
+      max-width: none;
+    }
+  }
+
+  /* Short viewports: keep both choices visible without scrolling inside the panel. */
+  @media (max-height: 500px) {
+    .analytics-consent__actions {
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
+
+    .analytics-consent__btn {
+      flex: 1 1 0;
+      min-width: 0;
+      width: auto;
       max-width: none;
     }
   }
