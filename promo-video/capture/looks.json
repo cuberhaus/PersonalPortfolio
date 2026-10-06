@@ -1,0 +1,347 @@
+{
+  "base": "https://polcasacubertagil.com",
+  "shot": [
+    {
+      "file": "look-00-default.png",
+      "theme": "barcelona-day",
+      "design": "swiss",
+      "requested": {
+        "design": null,
+        "theme": null
+      }
+    },
+    {
+      "file": "look-01-comic-light.png",
+      "theme": "light",
+      "design": "comic",
+      "requested": {
+        "design": "comic",
+        "theme": "light"
+      }
+    },
+    {
+      "file": "look-02-terminal-phosphor.png",
+      "theme": "phosphor",
+      "design": "terminal",
+      "requested": {
+        "design": "terminal",
+        "theme": "phosphor"
+      }
+    },
+    {
+      "file": "look-03-newspaper-sepia.png",
+      "theme": "sepia",
+      "design": "newspaper",
+      "requested": {
+        "design": "newspaper",
+        "theme": "sepia"
+      }
+    },
+    {
+      "file": "look-04-pixel-synthwave.png",
+      "theme": "synthwave",
+      "design": "pixel",
+      "requested": {
+        "design": "pixel",
+        "theme": "synthwave"
+      }
+    },
+    {
+      "file": "look-05-blueprint-nord.png",
+      "theme": "nord",
+      "design": "blueprint",
+      "requested": {
+        "design": "blueprint",
+        "theme": "nord"
+      }
+    },
+    {
+      "file": "look-06-risograph-gruvbox-dark.png",
+      "theme": "gruvbox-dark",
+      "design": "risograph",
+      "requested": {
+        "design": "risograph",
+        "theme": "gruvbox-dark"
+      }
+    },
+    {
+      "file": "look-07-deco-dark.png",
+      "theme": "dark",
+      "design": "deco",
+      "requested": {
+        "design": "deco",
+        "theme": "dark"
+      }
+    },
+    {
+      "file": "look-08-cyber-tokyo-night.png",
+      "theme": "tokyo-night",
+      "design": "cyber",
+      "requested": {
+        "design": "cyber",
+        "theme": "tokyo-night"
+      }
+    },
+    {
+      "file": "look-09-notebook-paper.png",
+      "theme": "paper",
+      "design": "notebook",
+      "requested": {
+        "design": "notebook",
+        "theme": "paper"
+      }
+    },
+    {
+      "file": "look-10-wabisabi-nord-light.png",
+      "theme": "nord-light",
+      "design": "wabisabi",
+      "requested": {
+        "design": "wabisabi",
+        "theme": "nord-light"
+      }
+    },
+    {
+      "file": "look-11-brutalist-light.png",
+      "theme": "light",
+      "design": "brutalist",
+      "requested": {
+        "design": "brutalist",
+        "theme": "light"
+      }
+    },
+    {
+      "file": "look-12-minimal-dark.png",
+      "theme": "dark",
+      "design": "minimal",
+      "requested": {
+        "design": "minimal",
+        "theme": "dark"
+      }
+    },
+    {
+      "file": "look-13-editorial-paper.png",
+      "theme": "paper",
+      "design": "editorial",
+      "requested": {
+        "design": "editorial",
+        "theme": "paper"
+      }
+    },
+    {
+      "file": "look-14-swiss-barcelona-night.png",
+      "theme": "barcelona-night",
+      "design": "swiss",
+      "requested": {
+        "design": "swiss",
+        "theme": "barcelona-night"
+      }
+    },
+    {
+      "file": "look-15-academic-solarized-light.png",
+      "theme": "solarized-light",
+      "design": "academic",
+      "requested": {
+        "design": "academic",
+        "theme": "solarized-light"
+      }
+    },
+    {
+      "file": "look-16-ide-gruvbox-dark.png",
+      "theme": "gruvbox-dark",
+      "design": "ide",
+      "requested": {
+        "design": "ide",
+        "theme": "gruvbox-dark"
+      }
+    },
+    {
+      "file": "look-17-zine-synthwave.png",
+      "theme": "synthwave",
+      "design": "zine",
+      "requested": {
+        "design": "zine",
+        "theme": "synthwave"
+      }
+    },
+    {
+      "file": "look-18-terminal-amber-crt.png",
+      "theme": "amber-crt",
+      "design": "terminal",
+      "requested": {
+        "design": "terminal",
+        "theme": "amber-crt"
+      }
+    },
+    {
+      "file": "look-19-pixel-phosphor.png",
+      "theme": "phosphor",
+      "design": "pixel",
+      "requested": {
+        "design": "pixel",
+        "theme": "phosphor"
+      }
+    },
+    {
+      "file": "look-20-cyber-synthwave.png",
+      "theme": "synthwave",
+      "design": "cyber",
+      "requested": {
+        "design": "cyber",
+        "theme": "synthwave"
+      }
+    },
+    {
+      "file": "look-21-comic-dracula.png",
+      "theme": "dracula",
+      "design": "comic",
+      "requested": {
+        "design": "comic",
+        "theme": "dracula"
+      }
+    },
+    {
+      "file": "look-22-deco-dracula.png",
+      "theme": "dracula",
+      "design": "deco",
+      "requested": {
+        "design": "deco",
+        "theme": "dracula"
+      }
+    },
+    {
+      "file": "look-23-blueprint-tokyo-night.png",
+      "theme": "tokyo-night",
+      "design": "blueprint",
+      "requested": {
+        "design": "blueprint",
+        "theme": "tokyo-night"
+      }
+    },
+    {
+      "file": "look-24-risograph-synthwave.png",
+      "theme": "synthwave",
+      "design": "risograph",
+      "requested": {
+        "design": "risograph",
+        "theme": "synthwave"
+      }
+    },
+    {
+      "file": "look-25-notebook-solarized-light.png",
+      "theme": "solarized-light",
+      "design": "notebook",
+      "requested": {
+        "design": "notebook",
+        "theme": "solarized-light"
+      }
+    },
+    {
+      "file": "look-26-newspaper-solarized-light.png",
+      "theme": "solarized-light",
+      "design": "newspaper",
+      "requested": {
+        "design": "newspaper",
+        "theme": "solarized-light"
+      }
+    },
+    {
+      "file": "look-27-brutalist-gruvbox-dark.png",
+      "theme": "gruvbox-dark",
+      "design": "brutalist",
+      "requested": {
+        "design": "brutalist",
+        "theme": "gruvbox-dark"
+      }
+    },
+    {
+      "file": "look-28-minimal-nord.png",
+      "theme": "nord",
+      "design": "minimal",
+      "requested": {
+        "design": "minimal",
+        "theme": "nord"
+      }
+    },
+    {
+      "file": "look-29-swiss-nord-light.png",
+      "theme": "nord-light",
+      "design": "swiss",
+      "requested": {
+        "design": "swiss",
+        "theme": "nord-light"
+      }
+    },
+    {
+      "file": "look-30-comic-synthwave.png",
+      "theme": "synthwave",
+      "design": "comic",
+      "requested": {
+        "design": "comic",
+        "theme": "synthwave"
+      }
+    },
+    {
+      "file": "look-31-ide-dark.png",
+      "theme": "dark",
+      "design": "ide",
+      "requested": {
+        "design": "ide",
+        "theme": "dark"
+      }
+    },
+    {
+      "file": "look-32-zine-paper.png",
+      "theme": "paper",
+      "design": "zine",
+      "requested": {
+        "design": "zine",
+        "theme": "paper"
+      }
+    },
+    {
+      "file": "look-33-editorial-dark.png",
+      "theme": "dark",
+      "design": "editorial",
+      "requested": {
+        "design": "editorial",
+        "theme": "dark"
+      }
+    },
+    {
+      "file": "look-34-academic-sepia.png",
+      "theme": "sepia",
+      "design": "academic",
+      "requested": {
+        "design": "academic",
+        "theme": "sepia"
+      }
+    },
+    {
+      "file": "look-35-wabisabi-paper.png",
+      "theme": "paper",
+      "design": "wabisabi",
+      "requested": {
+        "design": "wabisabi",
+        "theme": "paper"
+      }
+    },
+    {
+      "file": "look-36-deco-sepia.png",
+      "theme": "sepia",
+      "design": "deco",
+      "requested": {
+        "design": "deco",
+        "theme": "sepia"
+      }
+    },
+    {
+      "file": "look-37-minimal-light.png",
+      "theme": "light",
+      "design": "minimal",
+      "requested": {
+        "design": "minimal",
+        "theme": "light"
+      }
+    }
+  ]
+}

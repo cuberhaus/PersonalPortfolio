@@ -1,0 +1,229 @@
+<template>
+  <div data-hf-id="hf-9hzy" id="root" data-composition-id="01-plain-page" data-start="0" data-duration="4" data-width="1080" data-height="1080">
+    <!-- Track 0: full-bleed ink ground (shows through the slice gaps during the snap) -->
+    <div data-hf-id="hf-d61v" id="f01-ground" class="clip f01-ground" data-start="0" data-duration="4" data-track-index="0" aria-hidden="true"></div>
+
+    <!-- Track 1: the two plates. A = default look, B = comic look. Bands/channels are built in the script. -->
+    <div data-hf-id="hf-5d04" id="f01-stage" class="clip f01-stage" data-start="0" data-duration="4" data-track-index="1" aria-hidden="true">
+      <div data-hf-id="hf-luz8" id="f01-plate-A" class="f01-plate">
+        <div data-hf-id="hf-vftx" id="f01-base-A" class="f01-pic f01-pic-A"></div>
+        <div data-hf-id="hf-xk0w" id="f01-glitch-A" class="f01-glitch"></div>
+      </div>
+      <div data-hf-id="hf-tq9w" id="f01-plate-B" class="f01-plate f01-plate-hidden">
+        <div data-hf-id="hf-ol95" id="f01-base-B" class="f01-pic f01-pic-B"></div>
+        <div data-hf-id="hf-67wr" id="f01-glitch-B" class="f01-glitch"></div>
+      </div>
+    </div>
+
+    <!-- Track 2/3: snap dressing -->
+    <div data-hf-id="hf-d6tx" id="f01-scan" class="clip f01-scan" data-start="0" data-duration="4" data-track-index="2" aria-hidden="true"></div>
+    <div data-hf-id="hf-68zi" id="f01-flash" class="clip f01-flash" data-start="0" data-duration="4" data-track-index="3" aria-hidden="true"></div>
+
+    <!-- Track 4: the ink plate that lands at 2.1s -->
+    <div data-hf-id="hf-o1fj" id="f01-ink" class="clip f01-ink" data-start="2.1" data-duration="1.9" data-track-index="4">
+      <p data-hf-id="hf-z684" id="f01-same" class="f01-same" data-layout-allow-overlap>same page.</p>
+      <p data-hf-id="hf-77h7" id="f01-label" class="f01-label" data-layout-allow-overlap>COMIC × LIGHT</p>
+    </div>
+
+    <svg data-hf-id="hf-266z" class="f01-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter data-hf-id="hf-o4ea" id="f01-mat-r" color-interpolation-filters="sRGB">
+        <fecolormatrix data-hf-id="hf-gt7a" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+      </filter>
+      <filter data-hf-id="hf-ybpj" id="f01-mat-g" color-interpolation-filters="sRGB">
+        <fecolormatrix data-hf-id="hf-x6l8" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+      </filter>
+      <filter data-hf-id="hf-6zle" id="f01-mat-b" color-interpolation-filters="sRGB">
+        <fecolormatrix data-hf-id="hf-wwem" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" />
+      </filter>
+    </svg>
+  </div>
+
+  <style>
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("assets/fonts/captured-UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "JetBrains Mono";
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url("assets/fonts/captured-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2") format("woff2");
+    }
+
+    #root {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .f01-ground { position: absolute; inset: 0; background: #17231f; }
+    .f01-stage { position: absolute; inset: 0; overflow: hidden; }
+    .f01-plate { position: absolute; inset: 0; overflow: hidden; }
+    .f01-plate-hidden { opacity: 0; }
+
+    /* Site screenshot (1080x1360 at scale 1): shifted up 70px so the site nav is cropped away; the band
+       shown, y 70-1150, is all hero. No zoom, so no text is cut at the left or right edge. */
+    .f01-pic {
+      position: absolute;
+      left: 0;
+      top: -70px;
+      width: 1080px;
+      height: 1360px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+    .f01-pic-A { background-image: url("assets/look-00-default.png"); }
+    .f01-pic-B { background-image: url("assets/look-01-comic-light.png"); }
+
+    /* Glitch layer: black backdrop + three single-channel layers screened back together. */
+    .f01-glitch { position: absolute; inset: 0; background: #000; opacity: 0; isolation: isolate; }
+    .f01-ch { position: absolute; inset: 0; mix-blend-mode: screen; }
+    .f01-ch-r { filter: url(#f01-mat-r); }
+    .f01-ch-g { filter: url(#f01-mat-g); }
+    .f01-ch-b { filter: url(#f01-mat-b); }
+    .f01-band { position: absolute; left: 0; width: 1080px; height: 180px; overflow: hidden; }
+    .f01-bandpic {
+      position: absolute;
+      left: 0;
+      width: 1080px;
+      height: 1360px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+    .f01-glitch-A .f01-bandpic { background-image: url("assets/look-00-default.png"); }
+    .f01-glitch-B .f01-bandpic { background-image: url("assets/look-01-comic-light.png"); }
+
+    .f01-scan {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0px, rgba(0, 0, 0, 0.22) 1px, transparent 1px, transparent 4px);
+    }
+    .f01-flash { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: #ffffff; }
+
+    .f01-ink {
+      position: absolute;
+      top: 56px;
+      right: 0;
+      padding: 26px 56px 24px 40px;
+      background: #17231f;
+    }
+    .f01-same {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 112px;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      text-transform: lowercase;
+      color: #c2d5d2;
+    }
+    .f01-label {
+      margin: 18px 0 0;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 30px;
+      letter-spacing: 0.14em;
+      color: #c2d5d2;
+      opacity: 0.85;
+    }
+    .f01-defs { position: absolute; width: 0; height: 0; }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FRAME_ID = "01-plain-page";
+      var BANDS = 6;
+      var BAND_H = 180;
+
+      // Build the glitch layers (3 channels x 6 bands) for each plate. Deterministic, no randomness.
+      ["A", "B"].forEach(function (key) {
+        var glitch = document.getElementById("f01-glitch-" + key);
+        glitch.className = "f01-glitch f01-glitch-" + key;
+        ["r", "g", "b"].forEach(function (chan) {
+          var ch = document.createElement("div");
+          ch.id = "f01-ch-" + key + chan;
+          ch.className = "f01-ch f01-ch-" + chan;
+          for (var i = 0; i < BANDS; i++) {
+            var band = document.createElement("div");
+            band.className = "f01-band";
+            band.style.top = i * BAND_H + "px";
+            var pic = document.createElement("div");
+            pic.className = "f01-bandpic";
+            pic.setAttribute("data-b", String(i));
+            pic.style.top = -70 - i * BAND_H + "px";
+            band.appendChild(pic);
+            ch.appendChild(band);
+          }
+          glitch.appendChild(ch);
+        });
+      });
+
+      // cut-the-curve: every band travels RIGHTWARD; accelerates into the cut, decelerates out of it.
+      var SHIFT = [46, 112, 68, 148, 90, 58];
+      var CHROMA = 20;
+      var S = 1.1; // snap starts (outgoing accelerates)
+      var CUT = 1.3; // hard cut at peak velocity
+      var E = 1.5; // snap settles
+
+      function pics(key) {
+        return gsap.utils.toArray("#f01-glitch-" + key + " .f01-bandpic");
+      }
+      function bandX(sign) {
+        return function (i, el) {
+          return sign * SHIFT[parseInt(el.getAttribute("data-b"), 10)];
+        };
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // ---- Scene 1 (0 - 1.1s): total stillness on the default look.
+
+      // ---- Scene 2 (1.1 - 1.5s): the snap.
+      // Outgoing: swap the clean base for the split channels, then accelerate rightward.
+      tl.set("#f01-base-A", { opacity: 0 }, S);
+      tl.set("#f01-glitch-A", { opacity: 1 }, S);
+      tl.fromTo(pics("A"), { x: 0 }, { x: bandX(1), duration: CUT - S, ease: "power2.in" }, S);
+      tl.fromTo("#f01-ch-Ar", { x: 0 }, { x: -CHROMA, duration: CUT - S, ease: "power2.in" }, S);
+      tl.fromTo("#f01-ch-Ab", { x: 0 }, { x: CHROMA, duration: CUT - S, ease: "power2.in" }, S);
+
+      // The cut: plate B replaces plate A at the same speed and direction.
+      tl.set("#f01-plate-A", { opacity: 0 }, CUT);
+      tl.set("#f01-plate-B", { opacity: 1 }, CUT);
+      tl.set("#f01-base-B", { opacity: 0 }, CUT);
+      tl.set("#f01-glitch-B", { opacity: 1 }, CUT);
+      tl.fromTo(pics("B"), { x: bandX(-1) }, { x: 0, duration: E - CUT, ease: "power2.out" }, CUT);
+      tl.fromTo("#f01-ch-Br", { x: -CHROMA }, { x: 0, duration: E - CUT, ease: "power2.out" }, CUT);
+      tl.fromTo("#f01-ch-Bb", { x: CHROMA }, { x: 0, duration: E - CUT, ease: "power2.out" }, CUT);
+
+      // Settle onto the clean comic image.
+      tl.set("#f01-glitch-B", { opacity: 0 }, E);
+      tl.set("#f01-base-B", { opacity: 1 }, E);
+
+      // Dressing: scanlines ride the snap, a one-frame-ish flash lands on the cut.
+      tl.fromTo("#f01-scan", { opacity: 0 }, { opacity: 0.55, duration: CUT - S, ease: "power2.in" }, S);
+      tl.to("#f01-scan", { opacity: 0, duration: E - CUT, ease: "power2.out" }, CUT);
+      tl.fromTo("#f01-flash", { opacity: 0 }, { opacity: 0.28, duration: 0.05, ease: "none" }, CUT - 0.05);
+      tl.to("#f01-flash", { opacity: 0, duration: 0.1, ease: "none" }, CUT);
+
+      // ---- Scene 3 (1.5 - 3.6s): the comic look holds. Ink plate slams in, then the label. No drift.
+      tl.fromTo(
+        "#f01-ink",
+        { scale: 1.45, filter: "blur(14px)", opacity: 0, transformOrigin: "100% 0%" },
+        { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "power4.out" },
+        2.1
+      );
+      tl.fromTo("#f01-label", { x: 48, opacity: 0 }, { x: 0, opacity: 0.85, duration: 0.45, ease: "expo.out" }, 2.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>

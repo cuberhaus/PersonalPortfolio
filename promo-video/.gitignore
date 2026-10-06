@@ -1,0 +1,34 @@
+# Promo video project (HyperFrames). Keep SOURCES in git; everything below is
+# regenerable media, tool caches, or local backups.
+
+# Website capture output (screenshots, extracted assets, a .cursorrules and a
+# duplicate AGENTS.md/CLAUDE.md written by `hyperframes capture`). Only the two
+# small manifests are real inputs to scripts/shoot-*.mjs.
+/capture/*
+!/capture/looks.json
+!/capture/demos.json
+
+# Staged by assemble-index.mjs from capture/ (plates, fonts) plus the music bed
+# (bgm/source.wav is fetched from the HeyGen library; bgm/bed.wav is built from
+# it by scripts/make-bed.sh).
+/assets/
+
+# Review and render output
+/snapshots/
+/renders/
+
+# Local backups of earlier builds (1:1 before the 4:5 rework, and the 4:5 build)
+/.backups/
+
+# HyperFrames caches and audio-engine sidecars
+/.hyperframes/
+/.media/
+/.thumbnails/
+/.waveform-cache/
+/audio_engine_meta.json
+/audio_request.json
+/node_modules/
+
+# Byte-identical to AGENTS.md (written by `hyperframes init`); the workspace
+# keeps AGENTS.md as the single source of agent guidance.
+/CLAUDE.md

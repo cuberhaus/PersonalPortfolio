@@ -19,6 +19,11 @@ export default [
       'verification-screenshots/**',
       '.build-stamps/**',
       'public/**',
+      // HyperFrames video projects (the promo and the site tour): generated
+      // composition HTML and their own capture scripts follow that tool's
+      // rules, not this site's.
+      'promo-video/**',
+      'tour-video/**',
       '**/*.min.js',
       // eslint-plugin-astro's parser errors on certain inline-script layouts
       // that astro check already validates fine. Skip rather than rewrite the

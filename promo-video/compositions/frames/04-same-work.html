@@ -1,0 +1,84 @@
+<template>
+  <div data-hf-id="hf-ic2y" id="root" data-composition-id="04-same-work" data-start="0" data-duration="4.1" data-width="1080" data-height="1080">
+    <div data-hf-id="hf-m7dw" id="f04-ground" class="clip f04-ground" data-start="0" data-duration="4.1" data-track-index="0" aria-hidden="true"></div>
+
+    <!-- The real default hero, cropped below the site nav, held completely still. -->
+    <div data-hf-id="hf-umbp" id="f04-hero" class="clip f04-hero" data-start="0" data-duration="4.1" data-track-index="1" aria-hidden="true">
+      <div data-hf-id="hf-gyxp" class="f04-pic"></div>
+    </div>
+
+    <!-- One flat ink plate drops into the clear band above the hero copy (y 48-318; the copy starts at y 350) and holds. -->
+    <div data-hf-id="hf-nppd" id="f04-plate" class="clip f04-plate" data-start="0" data-duration="4.1" data-track-index="2">
+      <div data-hf-id="hf-nflo" class="f04-rule" aria-hidden="true"></div>
+      <p data-hf-id="hf-dyvg" id="f04-line" class="f04-line">same work<br data-hf-id="hf-x5px">underneath.</p>
+    </div>
+  </div>
+
+  <style>
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("assets/fonts/captured-UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2") format("woff2");
+    }
+
+    #root {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .f04-ground { position: absolute; inset: 0; background: #17231f; }
+    .f04-hero { position: absolute; inset: 0; overflow: hidden; }
+    .f04-pic {
+      position: absolute;
+      left: 0;
+      top: -70px;
+      width: 1080px;
+      height: 1360px;
+      background: url("assets/look-00-default.png") 0 0 / 100% 100% no-repeat;
+    }
+
+    /* 70/30 asymmetry: the plate takes the left 70% and bleeds off the left edge. */
+    .f04-plate {
+      position: absolute;
+      left: 0;
+      top: 48px;
+      width: 756px;
+      height: 270px;
+      box-sizing: border-box;
+      padding: 40px 48px 0 59px;
+      background: #17231f;
+    }
+    .f04-rule { width: 36px; height: 2px; background: #b9472f; margin-bottom: 22px; }
+    .f04-line {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 104px;
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      text-transform: lowercase;
+      color: #c2d5d2;
+      white-space: nowrap;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FRAME_ID = "04-same-work";
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 (0 - 1.2s): nothing moves. The viewer reads the site's own tagline.
+      // Scene 2 (1.2 - 3.6s): one restrained move: the plate drops in from above the canvas edge on a power3 settle.
+      tl.fromTo("#f04-plate", { y: -340 }, { y: 0, duration: 1.0, ease: "power3.out" }, 1.2);
+      // Then a still hold to the end.
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>
