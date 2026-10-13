@@ -264,3 +264,34 @@ describe('Demo pages pass correct slug to DemoLayout', () => {
     });
   }
 });
+
+describe('Shell and modal hygiene', () => {
+  it('ThemeInit localizes modal labels at build time and loads design fonts on modal pick', () => {
+    const themeInit = read('components/ThemeInit.astro');
+    const modalScript = themeInit.split('<script>').pop() ?? '';
+    expect(modalScript).not.toMatch(/from\s+['"]\.\.\/(i18n|lib)\//);
+    expect(modalScript).toContain('__loadDesignFonts');
+  });
+
+  it('Layout and DemoLayout load only the three core Google font families upfront', () => {
+    for (const file of ['layouts/Layout.astro', 'layouts/DemoLayout.astro']) {
+      const src = read(file);
+      const printLink = src.match(/<link[^>]*media="print"[^>]*>/s)?.[0] ?? '';
+      expect(printLink, `${file} should defer only core fonts`).toContain('family=Inter:');
+      expect(printLink, `${file} should not eagerly load design fonts`).not.toContain(
+        'Playfair+Display'
+      );
+    }
+  });
+
+  it('404 and 500 pages share ErrorPage.astro without bundling i18next on the client', () => {
+    for (const file of ['pages/404.astro', 'pages/500.astro']) {
+      const src = read(file);
+      const clientScript = src.split('<script>').pop() ?? '';
+      expect(src, `${file} should render <ErrorPage`).toContain('<ErrorPage');
+      expect(clientScript, `${file} client script must not import i18n/utils`).not.toContain(
+        '../i18n/utils'
+      );
+    }
+  });
+});

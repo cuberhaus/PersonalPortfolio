@@ -5,13 +5,16 @@ import {
   DEFAULT_DARK_THEME,
   DEFAULT_LIGHT_THEME,
 } from '../lib/themes';
-import { DESIGNS, DESIGN_IDS, DEFAULT_DESIGN } from '../lib/designs';
+import { DESIGNS, DESIGN_IDS, DEFAULT_DESIGN, getDesignName, getDesignBlurb } from '../lib/designs';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 interface Props {
   position: 'head' | 'body';
 }
 
 const { position } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const darkThemes = THEMES.filter(t => t.colorScheme === 'dark' && !t.hidden);
 const lightThemes = THEMES.filter(t => t.colorScheme === 'light' && !t.hidden);
 
@@ -166,13 +169,13 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 {position === 'body' && (
 <div id="theme-modal" class="theme-modal" aria-hidden="true">
   <div class="theme-modal-backdrop"></div>
-  <div class="theme-modal-panel" role="dialog" aria-modal="true" data-i18n-aria-label>
+  <div class="theme-modal-panel" role="dialog" aria-modal="true" aria-label={t('theme.customize')}>
     <div class="theme-modal-header">
       <div class="theme-modal-title-group">
-        <span class="theme-modal-title" data-i18n-title></span>
+        <span class="theme-modal-title">{t('theme.customize')}</span>
         <kbd class="theme-modal-hint">Ctrl+K</kbd>
       </div>
-      <button class="theme-modal-close" aria-label="Close" data-i18n-close-aria>
+      <button class="theme-modal-close" aria-label={t('analytics.close')}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -181,7 +184,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     </div>
 
     <div class="theme-modal-group">
-      <span class="theme-modal-label" data-i18n-design></span>
+      <span class="theme-modal-label">{t('theme.design')}</span>
       <div class="theme-modal-design-grid">
         {DESIGNS.filter(d => !d.hidden).map(design => (
           <button
@@ -195,8 +198,8 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
               <span class="theme-modal-design-sample">Aa</span>
             </span>
             <span class="theme-modal-design-meta">
-              <span class="theme-modal-design-name" data-i18n-design-name={design.id}>{design.label}</span>
-              <span class="theme-modal-design-blurb" data-i18n-design-blurb={design.id}>{design.blurb}</span>
+              <span class="theme-modal-design-name">{getDesignName(design.id, lang) ?? design.label}</span>
+              <span class="theme-modal-design-blurb">{getDesignBlurb(design.id, lang) ?? design.blurb}</span>
             </span>
           </button>
         ))}
@@ -207,14 +210,14 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 
     <div class="theme-modal-group">
       <span class="theme-modal-label">
-        <span data-i18n-palette></span>
+        <span>{t('theme.palette')}</span>
         <span class="theme-modal-rec-legend" aria-hidden="true">
           <span class="theme-modal-rec-legend-star">★</span>
-          <span data-i18n-recommended></span>
+          <span>{t('theme.recommended')}</span>
         </span>
       </span>
       <div class="theme-modal-subgroup">
-        <span class="theme-modal-sublabel" data-i18n-dark></span>
+        <span class="theme-modal-sublabel">{t('theme.dark')}</span>
         <div class="theme-modal-grid">
           {darkThemes.map(theme => (
             <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id} data-recommended-for={recFor(theme.id)}>
@@ -226,7 +229,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
         </div>
       </div>
       <div class="theme-modal-subgroup">
-        <span class="theme-modal-sublabel" data-i18n-light></span>
+        <span class="theme-modal-sublabel">{t('theme.light')}</span>
         <div class="theme-modal-grid">
           {lightThemes.map(theme => (
             <button class="theme-modal-swatch" data-kind="theme" data-theme-id={theme.id} data-recommended-for={recFor(theme.id)}>
@@ -240,7 +243,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     </div>
 
     <div class="theme-modal-footer">
-      <span data-i18n-footer></span>
+      <span set:html={t('theme.closeHint')} />
     </div>
   </div>
 </div>
@@ -1002,50 +1005,10 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
 </style>
 
 <script>
-  import { pickLang, useTranslations, type Lang } from '../i18n/utils';
-  import { getDesignName, getDesignBlurb } from '../lib/designs';
-
-  // Lightweight wrapper so the modal call sites read `tr(lang, key)` like
-  // they did before the refactor; under the hood we lean on the shared
-  // `useTranslations(lang)` accessor + a string fallback for missing keys.
-  type UiKey = Parameters<ReturnType<typeof useTranslations>>[0];
-  const tr = (lang: Lang, key: UiKey): string => useTranslations(lang)(key) || '';
-
   const initThemeModal = () => {
     const modal = document.getElementById('theme-modal');
     if (!modal || modal.hasAttribute('data-tm-init')) return;
     modal.setAttribute('data-tm-init', 'true');
-
-    const lang = pickLang(document.documentElement.getAttribute('lang'));
-
-    const titleEl = modal.querySelector('[data-i18n-title]');
-    const designLabelEl = modal.querySelector('[data-i18n-design]');
-    const paletteLabelEl = modal.querySelector('[data-i18n-palette]');
-    const recLegendEl = modal.querySelector('[data-i18n-recommended]');
-    const darkEl = modal.querySelector('[data-i18n-dark]');
-    const lightEl = modal.querySelector('[data-i18n-light]');
-    const footerEl = modal.querySelector('[data-i18n-footer]');
-    const panelEl = modal.querySelector('[data-i18n-aria-label]');
-    const title = tr(lang, 'theme.customize');
-    if (titleEl) titleEl.textContent = title;
-    if (designLabelEl) designLabelEl.textContent = tr(lang, 'theme.design');
-    if (paletteLabelEl) paletteLabelEl.textContent = tr(lang, 'theme.palette');
-    if (recLegendEl) recLegendEl.textContent = tr(lang, 'theme.recommended');
-    if (darkEl) darkEl.textContent = tr(lang, 'theme.dark');
-    if (lightEl) lightEl.textContent = tr(lang, 'theme.light');
-    if (footerEl) footerEl.innerHTML = tr(lang, 'theme.closeHint');
-    if (panelEl) panelEl.setAttribute('aria-label', title);
-
-    modal.querySelectorAll<HTMLElement>('[data-i18n-design-name]').forEach(el => {
-      const id = el.getAttribute('data-i18n-design-name') ?? '';
-      const localized = getDesignName(id, lang as Parameters<typeof getDesignName>[1]);
-      if (localized) el.textContent = localized;
-    });
-    modal.querySelectorAll<HTMLElement>('[data-i18n-design-blurb]').forEach(el => {
-      const id = el.getAttribute('data-i18n-design-blurb') ?? '';
-      const localized = getDesignBlurb(id, lang as Parameters<typeof getDesignBlurb>[1]);
-      if (localized) el.textContent = localized;
-    });
 
     let previouslyFocused: Element | null = null;
 
@@ -1117,6 +1080,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
         if (!id) return;
         document.documentElement.setAttribute('data-design', id);
         try { localStorage.setItem('design', id); } catch (_err) { /* private mode */ }
+        (window as unknown as { __loadDesignFonts?: (id: string) => void }).__loadDesignFonts?.(id);
         refreshActive();
         __debug()?.log('info', 'design', 'select', { id, source: 'modal' });
         return;

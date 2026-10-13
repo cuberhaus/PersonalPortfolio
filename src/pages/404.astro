@@ -23,7 +23,6 @@ const t = useTranslations(DEFAULT_LOCALE);
 
 <script>
   import { ui } from '../i18n/ui';
-  import { pickLang } from '../i18n/utils';
   import { PREFIXED_LOCALES } from '../config/locales';
 
   // Pull the locale prefix out of the URL (e.g. `/es/foo` → `'es'`); fall
@@ -32,8 +31,7 @@ const t = useTranslations(DEFAULT_LOCALE);
   const segments = window.location.pathname.replace(/^\/+/, '').split('/');
   const detected = PREFIXED_LOCALES.find((l) => segments.includes(l));
   if (detected) {
-    const lang = pickLang(detected);
-    const bundle = ui[lang];
+    const bundle = ui[detected];
     const title = document.getElementById('error-title');
     const msg = document.getElementById('error-message');
     const back = document.getElementById('back-label');
