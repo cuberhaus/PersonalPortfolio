@@ -52,9 +52,7 @@ export function computePageRank(input: PageRankInput): PageRankResult {
   for (let i = 0; i < n; i++) idx.set(nodes[i], i);
 
   // Build in-edges and out-weights
-  const inEdges: Map<number, [number, number][]>[] = new Array(n);
   const outWeight = new Float64Array(n);
-  for (let i = 0; i < n; i++) inEdges[i] = new Map();
 
   // inEdgesArr[dest] = [[srcIdx, weight], ...]
   const inEdgesArr: [number, number][][] = new Array(n);

@@ -1097,20 +1097,41 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       }
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        if (modal.classList.contains('open')) close('shortcut');
-        else open('shortcut');
-      }
-      if (e.key === 'Escape' && modal.classList.contains('open')) {
-        close('escape');
-      }
-    });
+    type ModalController = {
+      isOpen: () => boolean;
+      open: (source?: string) => void;
+      close: (source?: string) => void;
+    };
+    const win = window as unknown as {
+      __themeModalCtrl?: ModalController;
+      __themeModalDocBound?: boolean;
+    };
+    win.__themeModalCtrl = {
+      isOpen: () => modal.classList.contains('open'),
+      open,
+      close,
+    };
 
-    document.addEventListener('open-theme-modal', () => {
-      if (!modal.classList.contains('open')) open('event');
-    });
+    if (!win.__themeModalDocBound) {
+      win.__themeModalDocBound = true;
+      document.addEventListener('keydown', (e) => {
+        const ctrl = win.__themeModalCtrl;
+        if (!ctrl) return;
+        if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          if (ctrl.isOpen()) ctrl.close('shortcut');
+          else ctrl.open('shortcut');
+        }
+        if (e.key === 'Escape' && ctrl.isOpen()) {
+          ctrl.close('escape');
+        }
+      });
+
+      document.addEventListener('open-theme-modal', () => {
+        const ctrl = win.__themeModalCtrl;
+        if (ctrl && !ctrl.isOpen()) ctrl.open('event');
+      });
+    }
   };
 
   initThemeModal();

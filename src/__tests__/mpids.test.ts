@@ -37,6 +37,19 @@ describe('parseGraph', () => {
     expect(g.n).toBe(3);
     expect(g.edges).toHaveLength(3);
   });
+
+  it('returns an empty graph for empty or whitespace input', () => {
+    expect(parseGraph('')).toEqual({ n: 0, edges: [], adj: [] });
+    expect(parseGraph('   \n  ')).toEqual({ n: 0, edges: [], adj: [] });
+  });
+
+  it('ignores self-loop edges so greedySolver stays valid', () => {
+    const g = parseGraph('2 2\n1 1\n1 2');
+    expect(g.edges).toEqual([[0, 1]]);
+    expect(g.adj[0]).toEqual([1]);
+    const res = greedySolver(g);
+    expect(isDominant(g, res.set)).toBe(true);
+  });
 });
 
 describe('isDominant', () => {

@@ -1,5 +1,10 @@
-import { getDemoTranslations } from '../locale-glob';
+import { fromLocaleGlob } from '../locale-bundle';
 
-export const TRANSLATIONS = getDemoTranslations('tfg-polyp-demo');
+export const TRANSLATIONS = fromLocaleGlob(
+  import.meta.glob<Record<string, unknown>>('../../../locales/*/tfg-polyp-demo.json', {
+    eager: true,
+    import: 'default',
+  })
+);
 
 export type DemoTranslations = Record<string, unknown>;

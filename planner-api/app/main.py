@@ -41,6 +41,7 @@ import os
 import re
 import subprocess
 import tempfile
+import threading
 import time
 from pathlib import Path
 
@@ -53,8 +54,10 @@ from .normalize import normalize_domain_for_planner
 
 MAX_BODY_BYTES = int(os.environ.get("MAX_BODY_BYTES", "262144"))
 PLAN_TIMEOUT_SEC = float(os.environ.get("PLAN_TIMEOUT_SEC", "30"))
+MAX_CONCURRENT_PLANS = max(1, int(os.environ.get("MAX_CONCURRENT_PLANS", "2")))
 API_KEY = os.environ.get("PLANNER_API_KEY", "").strip()
 CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "*").strip()
+_PLAN_SEMAPHORE = threading.BoundedSemaphore(MAX_CONCURRENT_PLANS)
 
 
 def _enhsp_jar() -> Path:
@@ -73,10 +76,11 @@ app = FastAPI(title="PDDL Planner API", version="1.0.0")
 app.add_middleware(_SessionIdMiddleware)
 
 _origins = [o.strip() for o in CORS_ORIGINS.split(",") if o.strip()]
+_wildcard_cors = not _origins or _origins == ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=_origins if _origins != ["*"] else ["*"],
-    allow_credentials=True,
+    allow_origins=["*"] if _wildcard_cors else _origins,
+    allow_credentials=not _wildcard_cors,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -113,13 +117,25 @@ async def limit_body_size(request: Request, call_next):
                     )
             except ValueError:
                 pass
+        chunks: list[bytes] = []
+        total = 0
+        async for chunk in request.stream():
+            total += len(chunk)
+            if total > MAX_BODY_BYTES:
+                return JSONResponse(
+                    {"ok": False, "error": "Request body too large", "plan": []},
+                    status_code=413,
+                )
+            chunks.append(chunk)
+        request._body = b"".join(chunks)
     return await call_next(request)
 
 
 @app.post("/plan")
 def plan(req: PlanRequest, request: Request):
-    if API_KEY:
-        if request.headers.get("X-API-Key") != API_KEY:
+    api_key = os.environ.get("PLANNER_API_KEY", API_KEY).strip()
+    if api_key:
+        if request.headers.get("X-API-Key") != api_key:
             raise HTTPException(status_code=401, detail="Invalid or missing API key")
 
     domain = normalize_domain_for_planner(req.domain.strip())
@@ -165,7 +181,7 @@ def plan(req: PlanRequest, request: Request):
                 jar=str(jar), timeout_sec=PLAN_TIMEOUT_SEC,
             )
             t0 = time.monotonic()
-            with _span(
+            with _PLAN_SEMAPHORE, _span(
                 "enhsp.subprocess",
                 description="java -jar enhsp",
                 domain_size_kb=domain_kb,

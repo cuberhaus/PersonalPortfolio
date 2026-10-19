@@ -13,10 +13,19 @@ def _balanced_paren_block(s: str, open_idx: int) -> tuple[str, int] | tuple[None
     if open_idx < 0 or open_idx >= len(s) or s[open_idx] != "(":
         return None, None
     depth = 0
+    in_comment = False
     for i in range(open_idx, len(s)):
-        if s[i] == "(":
+        ch = s[i]
+        if in_comment:
+            if ch == "\n":
+                in_comment = False
+            continue
+        if ch == ";":
+            in_comment = True
+            continue
+        if ch == "(":
             depth += 1
-        elif s[i] == ")":
+        elif ch == ")":
             depth -= 1
             if depth == 0:
                 return s[open_idx : i + 1], i + 1
@@ -30,7 +39,8 @@ def fix_types_block(domain: str) -> str:
     block, after = _balanced_paren_block(domain, m.start())
     if not block:
         return domain
-    inner = block[block.index("(:types") + len("(:types") :].strip()
+    uncommented = "\n".join(line.split(";", 1)[0] for line in block.splitlines())
+    inner = uncommented[uncommented.index("(:types") + len("(:types") :].strip()
     inner = inner.rstrip(")").strip()
     types: list[str] = []
     for line in inner.splitlines():

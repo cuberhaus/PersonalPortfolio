@@ -1,5 +1,5 @@
 import { LOCALES, DEFAULT_LOCALE, type Locale } from '../config/locales';
-import { getFixedT } from './i18next';
+import { ui } from './ui';
 
 export type Lang = Locale;
 
@@ -29,9 +29,10 @@ export function getLangFromUrl(url: URL): Lang {
 }
 
 export function useTranslations(lang: Lang) {
-  const t = getFixedT(lang);
-  return function (key: string) {
-    return t(key);
+  const bundle = ui[lang] ?? ui[DEFAULT_LOCALE];
+  const fallback = ui[DEFAULT_LOCALE];
+  return function (key: string): string {
+    return bundle[key] ?? fallback[key] ?? key;
   };
 }
 

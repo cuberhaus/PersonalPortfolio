@@ -93,6 +93,12 @@ declare global {
   interface Window {
     __DEBUG_ENABLED?: boolean;
     __debugBusState?: BusState;
+    __debugPendingErrors?: Array<{
+      level: DebugLevel;
+      ns: string;
+      msg: string;
+      err?: unknown;
+    }>;
     __debug?: {
       log: (level: DebugLevel, ns: string, msg: string, ...args: unknown[]) => void;
       enable: () => void;
@@ -307,6 +313,27 @@ export function __resetBusForTesting(): void {
 }
 
 /**
+ * Drain any early errors captured by DebugInit.astro before lib/debug.ts was
+ * loaded as a module.
+ */
+export function drainPendingErrors(): void {
+  const holder = getStateHolder() as {
+    __debugPendingErrors?: Array<{
+      level: DebugLevel;
+      ns: string;
+      msg: string;
+      err?: unknown;
+    }>;
+  };
+  const pending = holder.__debugPendingErrors;
+  if (!Array.isArray(pending) || pending.length === 0) return;
+  for (const item of pending.splice(0)) {
+    const args = item.err !== undefined ? [item.err] : [];
+    emit(item.level || 'error', item.ns || 'global', item.msg || 'Uncaught error', args);
+  }
+}
+
+/**
  * Install a tiny global so inline scripts in DebugInit.astro can push errors
  * into the bus before lib/debug.ts is loaded as a module.
  */
@@ -320,4 +347,5 @@ if (isBrowser) {
       window.__DEBUG_ENABLED = false;
     },
   };
+  drainPendingErrors();
 }

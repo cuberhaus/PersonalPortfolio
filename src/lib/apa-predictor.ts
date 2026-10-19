@@ -25,7 +25,7 @@ export function knnVote(
   let c0 = 0,
     c1 = 0;
   for (const n of neighbors) n.cls === 0 ? c0++ : c1++;
-  const cls: 0 | 1 = c1 > c0 ? 1 : c0 > c1 ? 0 : neighbors[0].cls;
+  const cls: 0 | 1 = c1 > c0 ? 1 : c0 > c1 ? 0 : (neighbors[0]?.cls ?? 0);
   return { cls, neighbors };
 }
 

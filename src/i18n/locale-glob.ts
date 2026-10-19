@@ -4,9 +4,14 @@
  * creating the `locales/<lang>/` directory and JSON files; no import
  * statements need to be added anywhere.
  *
- * This module is the backbone of the SSOT locale system.
+ * This module is the backbone of the server-side SSOT locale system. Client
+ * bundles use scoped globs via `src/i18n/locale-bundle.ts` so each island only
+ * ships its own namespace.
  */
 import { LOCALES, DEFAULT_LOCALE, type Locale } from '../config/locales';
+import { flattenDottedKeys, fromLocaleGlob } from './locale-bundle';
+
+export { flattenDottedKeys, fromLocaleGlob };
 
 // Eagerly import every JSON file under locales/ at build time.
 // Vite resolves this at compile time — the glob pattern must be a string literal.
@@ -28,22 +33,6 @@ export function getLocaleNamespace(locale: Locale, namespace: string): Record<st
   return (allModules[key(locale, namespace)] as Record<string, unknown>) ?? {};
 }
 
-export function flattenDottedKeys(
-  value: Record<string, unknown>,
-  prefix = '',
-  result: Record<string, unknown> = {}
-): Record<string, unknown> {
-  for (const [entryKey, entryValue] of Object.entries(value)) {
-    const dottedKey = prefix ? `${prefix}.${entryKey}` : entryKey;
-    if (entryValue && typeof entryValue === 'object' && !Array.isArray(entryValue)) {
-      flattenDottedKeys(entryValue as Record<string, unknown>, dottedKey, result);
-    } else {
-      result[dottedKey] = entryValue;
-    }
-  }
-  return result;
-}
-
 /** Get a namespace's translations for all locales as a Record<Locale, ...>. */
 export function getAllLocalesForNamespace<T = Record<string, any>>(
   namespace: string
@@ -51,18 +40,6 @@ export function getAllLocalesForNamespace<T = Record<string, any>>(
   const result = {} as Record<Locale, T>;
   for (const locale of LOCALES) {
     result[locale] = (allModules[key(locale, namespace)] ?? {}) as T;
-  }
-  return result;
-}
-
-/**
- * Get the UI namespace for all locales, shaped for i18next resources.
- * Returns `{ en: { ui: {...} }, es: { ui: {...} }, ... }`
- */
-export function getI18nextResources(): Record<Locale, { ui: Record<string, unknown> }> {
-  const result = {} as Record<Locale, { ui: Record<string, unknown> }>;
-  for (const locale of LOCALES) {
-    result[locale] = { ui: flattenDottedKeys(getLocaleNamespace(locale, 'ui')) };
   }
   return result;
 }
@@ -80,7 +57,7 @@ export function getDataTranslations(
 
 /**
  * Get a demo-specific namespace for a given locale, with fallback to default.
- * Used by React demo components: `const t = getDemoT('tfg-polyp-demo', lang);`
+ * Used by Astro pages / components: `const t = getDemoT('tfg-polyp-demo', lang);`
  */
 export function getDemoT<T = Record<string, any>>(namespace: string, lang: string): T {
   const locale = (LOCALES as readonly string[]).includes(lang) ? (lang as Locale) : DEFAULT_LOCALE;
@@ -90,7 +67,6 @@ export function getDemoT<T = Record<string, any>>(namespace: string, lang: strin
 
 /**
  * Get all locale variants for a demo namespace.
- * Replaces the old per-demo `{ en, es, ca }` export objects.
  */
 export function getDemoTranslations<T = Record<string, any>>(namespace: string): Record<Locale, T> {
   return getAllLocalesForNamespace<T>(namespace);
