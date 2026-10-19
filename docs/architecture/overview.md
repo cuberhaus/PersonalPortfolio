@@ -8,7 +8,7 @@ _why_, this answers _what_.
 
 ```mermaid
 flowchart LR
-    visitor["Visitor"] --> astro["Astro 5 site<br/>(static, GH Pages)"]
+    visitor["Visitor"] --> astro["Astro 7 site<br/>(static, GH Pages)"]
     astro --> islands["React 19 islands<br/>(per-demo)"]
     astro --> registry[("demo-services.json<br/>(SSOT)")]
     registry --> browserProjection["demo-services.ts<br/>(validated browser projection)"]

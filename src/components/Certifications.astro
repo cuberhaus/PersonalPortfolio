@@ -344,6 +344,39 @@ const { num } = Astro.props;
 
   function init() {
     initializeFilteredCollections();
+
+    // Fallback: if the external cert link is unreachable, swap to the local copy
+    document
+      .querySelectorAll<HTMLAnchorElement>('a.certification-link[data-fallback]')
+      .forEach((link) => {
+        if (link.hasAttribute('data-fallback-init')) return;
+        link.setAttribute('data-fallback-init', 'true');
+        const fallback = link.dataset.fallback;
+        if (!fallback) return;
+
+        let probePromise: Promise<string> | null = null;
+        const probe = () => {
+          if (!probePromise) {
+            const primary = link.href;
+            probePromise = fetch(primary, { method: 'HEAD', mode: 'no-cors' })
+              .then(() => primary)
+              .catch(() => {
+                link.href = fallback;
+                return fallback;
+              });
+          }
+          return probePromise;
+        };
+
+        link.addEventListener('pointerenter', probe, { once: true });
+        link.addEventListener('focus', probe, { once: true });
+        link.addEventListener('click', async (e) => {
+          if (link.href === new URL(fallback, window.location.origin).href) return;
+          e.preventDefault();
+          const target = await probe();
+          window.open(target, '_blank', 'noopener,noreferrer');
+        });
+      });
   }
 
   if (document.readyState === 'loading') {
@@ -352,20 +385,4 @@ const { num } = Astro.props;
     init();
   }
   document.addEventListener('astro:page-load', init);
-
-  // Fallback: if the external cert link is unreachable, swap to the local copy
-  document
-    .querySelectorAll<HTMLAnchorElement>('a.certification-link[data-fallback]')
-    .forEach((link) => {
-      link.addEventListener('click', async (e) => {
-        const fallback = link.dataset.fallback;
-        if (!fallback) return;
-        try {
-          const res = await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
-        } catch {
-          e.preventDefault();
-          window.open(fallback, '_blank', 'noopener,noreferrer');
-        }
-      });
-    });
 </script>

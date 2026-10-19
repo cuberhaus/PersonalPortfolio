@@ -51,6 +51,12 @@ class TestBalancedParenBlock:
         block, after = _balanced_paren_block("(missing close", 0)
         assert block is None
 
+    def test_ignores_parens_in_pddl_comments(self):
+        s = "(:types\n  ciudad ; (legacy) )\n) trailing"
+        block, after = _balanced_paren_block(s, 0)
+        assert block == "(:types\n  ciudad ; (legacy) )\n)"
+        assert s[after:] == " trailing"
+
 
 # ─── fix_types_block ─────────────────────────────────────────────
 
@@ -84,6 +90,20 @@ class TestFixTypesBlock:
         assert "ciudad" in result
         assert "hotel" in result
         assert "vuelo" in result
+
+    def test_strips_pddl_comments_in_types_block(self):
+        domain = (
+            "(define (domain d)\n"
+            "\t(:types\n"
+            "\t\tciudad - ciudad ; self-ref (old)\n"
+            "\t\thotel - object ; accommodation - note\n"
+            "\t))"
+        )
+        result = fix_types_block(domain)
+        assert "ciudad" in result
+        assert "hotel" in result
+        assert "self-ref" not in result
+        assert "accommodation" not in result
 
 
 # ─── predicates_before_functions ─────────────────────────────────

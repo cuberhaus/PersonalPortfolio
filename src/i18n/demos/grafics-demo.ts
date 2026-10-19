@@ -1,5 +1,10 @@
-import { getDemoTranslations } from '../locale-glob';
+import { fromLocaleGlob } from '../locale-bundle';
 
-export const T = getDemoTranslations('grafics-demo');
+export const T = fromLocaleGlob(
+  import.meta.glob<Record<string, unknown>>('../../../locales/*/grafics-demo.json', {
+    eager: true,
+    import: 'default',
+  })
+);
 
 export type DemoTranslations = Record<string, unknown>;

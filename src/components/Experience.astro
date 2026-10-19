@@ -106,26 +106,31 @@ const { num } = Astro.props;
 </section>
 
 <script>
-  document.querySelectorAll<HTMLSpanElement>('.js-duration').forEach((el) => {
-    const start = el.dataset.start!;
-    const end = el.dataset.end || undefined;
-    const labels = {
-      yr: el.dataset.durationYr ?? '',
-      yrs: el.dataset.durationYrs ?? '',
-      mo: el.dataset.durationMo ?? '',
-      mos: el.dataset.durationMos ?? '',
-    };
-    const [sY, sM] = start.split('-').map(Number);
+  function updateDurations() {
     const now = new Date();
-    const [eY, eM] = end ? end.split('-').map(Number) : [now.getFullYear(), now.getMonth() + 1];
-    const total = (eY - sY) * 12 + (eM - sM);
-    const years = Math.floor(total / 12);
-    const months = total % 12;
-    const parts: string[] = [];
-    if (years > 0) parts.push(`${years} ${years === 1 ? labels.yr : labels.yrs}`);
-    if (months > 0) parts.push(`${months} ${months === 1 ? labels.mo : labels.mos}`);
-    el.textContent = parts.join(' ') || `< 1 ${labels.mo}`;
-  });
+    document.querySelectorAll<HTMLSpanElement>('.js-duration').forEach((el) => {
+      const start = el.dataset.start!;
+      const end = el.dataset.end || undefined;
+      const labels = {
+        yr: el.dataset.durationYr ?? '',
+        yrs: el.dataset.durationYrs ?? '',
+        mo: el.dataset.durationMo ?? '',
+        mos: el.dataset.durationMos ?? '',
+      };
+      const [sY, sM] = start.split('-').map(Number);
+      const [eY, eM] = end ? end.split('-').map(Number) : [now.getFullYear(), now.getMonth() + 1];
+      const total = (eY - sY) * 12 + (eM - sM);
+      const years = Math.floor(total / 12);
+      const months = total % 12;
+      const parts: string[] = [];
+      if (years > 0) parts.push(`${years} ${years === 1 ? labels.yr : labels.yrs}`);
+      if (months > 0) parts.push(`${months} ${months === 1 ? labels.mo : labels.mos}`);
+      el.textContent = parts.join(' ') || `< 1 ${labels.mo}`;
+    });
+  }
+
+  updateDurations();
+  document.addEventListener('astro:page-load', updateDurations);
 </script>
 
 <style>
@@ -326,9 +331,13 @@ const { num } = Astro.props;
   }
 
   updateLogos();
-  new MutationObserver(updateLogos).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['data-theme'],
-  });
+  const win = window as unknown as { __expLogoObserverBound?: boolean };
+  if (!win.__expLogoObserverBound) {
+    win.__expLogoObserverBound = true;
+    new MutationObserver(updateLogos).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+  }
   document.addEventListener('astro:page-load', updateLogos);
 </script>

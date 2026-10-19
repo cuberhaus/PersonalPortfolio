@@ -69,6 +69,12 @@ describe('APA Practica — predictor helpers', () => {
       const result = knnVote(0.4, 0, tiePoints, 2);
       expect(result.cls).toBe(0);
     });
+
+    it('defaults to class 0 when points array is empty', () => {
+      const result = knnVote(0, 0, [], 3);
+      expect(result.cls).toBe(0);
+      expect(result.neighbors).toEqual([]);
+    });
   });
 
   describe('predict (logistic regression)', () => {

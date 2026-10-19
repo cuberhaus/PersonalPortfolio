@@ -18,6 +18,9 @@ export function parseGraph(text: string): Graph {
     .trim()
     .split(/\r?\n/)
     .filter((l) => l.trim().length > 0);
+  if (lines.length === 0) {
+    return { n: 0, edges: [], adj: [] };
+  }
   let idx = 0;
   const first = lines[idx++].trim().split(/\s+/).map(Number);
   let n: number, m: number;
@@ -26,7 +29,10 @@ export function parseGraph(text: string): Graph {
     m = first[1];
   } else {
     n = first[0];
-    m = Number(lines[idx++].trim());
+    m = idx < lines.length ? Number(lines[idx++].trim()) : 0;
+  }
+  if (!Number.isFinite(n) || n <= 0) {
+    return { n: 0, edges: [], adj: [] };
   }
   const adj: number[][] = Array.from({ length: n }, () => []);
   const edges: [number, number][] = [];
@@ -34,7 +40,7 @@ export function parseGraph(text: string): Graph {
     const parts = lines[idx].trim().split(/\s+/).map(Number);
     const u = parts[0] - 1,
       v = parts[1] - 1;
-    if (u < 0 || v < 0 || u >= n || v >= n) continue;
+    if (u < 0 || v < 0 || u >= n || v >= n || u === v) continue;
     adj[u].push(v);
     adj[v].push(u);
     edges.push([u, v]);

@@ -23,22 +23,26 @@ const t = useTranslations(DEFAULT_LOCALE);
 
 <script>
   import { ui } from '../i18n/ui';
-  import { pickLang } from '../i18n/utils';
   import { PREFIXED_LOCALES } from '../config/locales';
 
   // Pull the locale prefix out of the URL (e.g. `/es/foo` → `'es'`); fall
   // back to the default locale's already-server-rendered copy when the URL
   // has no recognised prefix.
-  const segments = window.location.pathname.replace(/^\/+/, '').split('/');
-  const detected = PREFIXED_LOCALES.find((l) => segments.includes(l));
+  const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL.replace(/\/+$/, '');
+  const rawPath = window.location.pathname;
+  const relPath = base && rawPath.startsWith(base) ? rawPath.slice(base.length) : rawPath;
+  const firstSegment = relPath.replace(/^\/+/, '').split('/')[0];
+  const detected = PREFIXED_LOCALES.find((l) => l === firstSegment);
   if (detected) {
-    const lang = pickLang(detected);
-    const bundle = ui[lang];
+    document.documentElement.lang = detected;
+    const bundle = ui[detected];
     const title = document.getElementById('error-title');
     const msg = document.getElementById('error-message');
     const back = document.getElementById('back-label');
+    const backBtn = document.getElementById('back-btn') as HTMLAnchorElement | null;
     if (title) title.textContent = bundle['notFound.title'];
     if (msg) msg.textContent = bundle['notFound.message'];
     if (back) back.textContent = bundle['notFound.back'];
+    if (backBtn) backBtn.href = `${base}/${detected}/`;
   }
 </script>

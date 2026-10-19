@@ -71,7 +71,8 @@ function demoHref(slug: string) {
     const backdrop = document.getElementById('sidebar-backdrop');
     const closeBtn = document.getElementById('sidebar-close');
     const toggleBtn = document.getElementById('sidebar-toggle');
-    if (!sidebar) return;
+    if (!sidebar || sidebar.hasAttribute('data-sidebar-init')) return;
+    sidebar.setAttribute('data-sidebar-init', 'true');
 
     const dbg = (lvl: string, ns: string, msg: string, ...rest: unknown[]) =>
       (window as any).__debug?.log?.(lvl, ns, msg, ...rest);
@@ -92,9 +93,19 @@ function demoHref(slug: string) {
     backdrop?.addEventListener('click', close);
     closeBtn?.addEventListener('click', close);
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && sidebar!.classList.contains('open')) close();
-    });
+    const win = window as unknown as {
+      __demoSidebarClose?: () => void;
+      __demoSidebarKeyBound?: boolean;
+    };
+    win.__demoSidebarClose = () => {
+      if (sidebar.classList.contains('open')) close();
+    };
+    if (!win.__demoSidebarKeyBound) {
+      win.__demoSidebarKeyBound = true;
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') win.__demoSidebarClose?.();
+      });
+    }
   }
 
   initSidebar();
