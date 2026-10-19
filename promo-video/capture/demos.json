@@ -1,0 +1,165 @@
+{
+  "base": "https://polcasacubertagil.com",
+  "demos": [
+    {
+      "slug": "algorithms",
+      "url": "https://polcasacubertagil.com/demos/algorithms/",
+      "status": 200,
+      "title": "Algorithm Visualizer — Pol Casacuberta",
+      "h1": "Algorithm Visualizer",
+      "file": "demo-algorithms.png"
+    },
+    {
+      "slug": "apa-practica",
+      "url": "https://polcasacubertagil.com/demos/apa-practica/",
+      "status": 200,
+      "title": "Machine Learning — Hypothyroid — Pol Casacuberta",
+      "h1": "Machine Learning — Hypothyroid",
+      "file": "demo-apa-practica.png"
+    },
+    {
+      "slug": "bitsx-marato",
+      "url": "https://polcasacubertagil.com/demos/bitsx-marato/",
+      "status": 200,
+      "title": "BitsXLaMarató — Aorta / AAA (Mask R-CNN) — Pol Casacuberta",
+      "h1": "BitsXLaMarató — Aorta",
+      "file": "demo-bitsx-marato.png"
+    },
+    {
+      "slug": "caim",
+      "url": "https://polcasacubertagil.com/demos/caim/",
+      "status": 200,
+      "title": "CAIM IR Explorer — Pol Casacuberta",
+      "h1": "CAIM IR Explorer",
+      "file": "demo-caim.png"
+    },
+    {
+      "slug": "desastres-ia",
+      "url": "https://polcasacubertagil.com/demos/desastres-ia/",
+      "status": 200,
+      "title": "Desastres IA — Pol Casacuberta",
+      "h1": "Desastres IA",
+      "file": "demo-desastres-ia.png"
+    },
+    {
+      "slug": "draculin",
+      "url": "https://polcasacubertagil.com/demos/draculin/",
+      "status": 200,
+      "title": "Draculin — Pol Casacuberta",
+      "h1": "Draculin",
+      "file": "demo-draculin.png"
+    },
+    {
+      "slug": "grafics",
+      "url": "https://polcasacubertagil.com/demos/grafics/",
+      "status": 200,
+      "title": "Computer Graphics Shader Playground — Pol Casacuberta",
+      "h1": "Computer Graphics Shader Playground",
+      "file": "demo-grafics.png"
+    },
+    {
+      "slug": "joc-eda",
+      "url": "https://polcasacubertagil.com/demos/joc-eda/",
+      "status": 200,
+      "title": "Programming Game Viewer — Pol Casacuberta",
+      "h1": "Programming Game Viewer",
+      "file": "demo-joc-eda.png"
+    },
+    {
+      "slug": "jsbach",
+      "url": "https://polcasacubertagil.com/demos/jsbach/",
+      "status": 200,
+      "title": "JSBach Interpreter — Pol Casacuberta",
+      "h1": "JSBach Interpreter",
+      "file": "demo-jsbach.png"
+    },
+    {
+      "slug": "matriculas",
+      "url": "https://polcasacubertagil.com/demos/matriculas/",
+      "status": 200,
+      "title": "License Plate Detection — Pol Casacuberta",
+      "h1": "License Plate Detection",
+      "file": "demo-matriculas.png"
+    },
+    {
+      "slug": "mpids",
+      "url": "https://polcasacubertagil.com/demos/mpids/",
+      "status": 200,
+      "title": "MPIDS Solver — Pol Casacuberta",
+      "h1": "MPIDS Solver",
+      "file": "demo-mpids.png"
+    },
+    {
+      "slug": "par-parallel",
+      "url": "https://polcasacubertagil.com/demos/par-parallel/",
+      "status": 200,
+      "title": "Parallel Computing Labs — Pol Casacuberta",
+      "h1": "Parallel Computing Labs",
+      "file": "demo-par-parallel.png"
+    },
+    {
+      "slug": "phase-transitions",
+      "url": "https://polcasacubertagil.com/demos/phase-transitions/",
+      "status": 200,
+      "title": "Graph Phase Transitions — Pol Casacuberta",
+      "h1": "Graph Phase Transitions",
+      "file": "demo-phase-transitions.png"
+    },
+    {
+      "slug": "planificacion",
+      "url": "https://polcasacubertagil.com/demos/planificacion/",
+      "status": 200,
+      "title": "Travel Agency Planning (PDDL) — Pol Casacuberta",
+      "h1": "Travel agency (PDDL)",
+      "file": "demo-planificacion.png"
+    },
+    {
+      "slug": "pro2",
+      "url": "https://polcasacubertagil.com/demos/pro2/",
+      "status": 200,
+      "title": "WPGMA Clustering — Pol Casacuberta",
+      "h1": "WPGMA Clustering",
+      "file": "demo-pro2.png"
+    },
+    {
+      "slug": "prop",
+      "url": "https://polcasacubertagil.com/demos/prop/",
+      "status": 200,
+      "title": "Recommendation System — Pol Casacuberta",
+      "h1": "Recommendation System",
+      "file": "demo-prop.png"
+    },
+    {
+      "slug": "rob-robotics",
+      "url": "https://polcasacubertagil.com/demos/rob-robotics/",
+      "status": 200,
+      "title": "Robotics Dashboard — Pol Casacuberta",
+      "h1": "Robotics Dashboard",
+      "file": "demo-rob-robotics.png"
+    },
+    {
+      "slug": "sbc-ia",
+      "url": "https://polcasacubertagil.com/demos/sbc-ia/",
+      "status": 200,
+      "title": "Trip Planner (Expert System) — Pol Casacuberta",
+      "h1": "Trip Planner (Expert System)",
+      "file": "demo-sbc-ia.png"
+    },
+    {
+      "slug": "tenda",
+      "url": "https://polcasacubertagil.com/demos/tenda/",
+      "status": 200,
+      "title": "Tenda Online — Pol Casacuberta",
+      "h1": "Tenda Online",
+      "file": "demo-tenda.png"
+    },
+    {
+      "slug": "tfg-polyps",
+      "url": "https://polcasacubertagil.com/demos/tfg-polyps/",
+      "status": 200,
+      "title": "Bachelor's Thesis — Polyp Detection — Pol Casacuberta",
+      "h1": "Bachelor's Thesis — Polyp Detection",
+      "file": "demo-tfg-polyps.png"
+    }
+  ]
+}

@@ -1,0 +1,338 @@
+<template>
+  <div data-hf-id="hf-msfs" id="root" data-composition-id="03-look-ramp" data-start="0" data-duration="14" data-width="1080" data-height="1080">
+    <div data-hf-id="hf-2vu4" id="f03-ground" class="clip f03-ground" data-start="0" data-duration="14" data-track-index="0" aria-hidden="true"></div>
+
+    <!-- Plates: real captures, one on screen at a time, accelerating cut by cut. Built from LOOKS in the script. -->
+    <div data-hf-id="hf-qif5" id="f03-plates" class="clip f03-plates" data-start="0" data-duration="14" data-track-index="1" aria-hidden="true">
+      <div data-hf-id="hf-genq" id="f03-scan" class="f03-scan"></div>
+      <div data-hf-id="hf-l8uy" id="f03-flash" class="f03-flash"></div>
+    </div>
+
+    <!-- Fixed chrome: label slot (design left, palette right) + hairline carrying one tick per look. -->
+    <div data-hf-id="hf-wa0r" id="f03-strip" class="clip f03-strip" data-start="0" data-duration="14" data-track-index="2">
+      <div data-hf-id="hf-dfx4" id="f03-tok-d" class="f03-slot f03-slot-d"></div>
+      <div data-hf-id="hf-ogso" id="f03-tok-p" class="f03-slot f03-slot-p"></div>
+      <div data-hf-id="hf-lj93" id="f03-ticks" class="f03-ticks" aria-hidden="true"></div>
+      <div data-hf-id="hf-irwy" class="f03-hair"></div>
+    </div>
+
+    <svg data-hf-id="hf-howx" class="f03-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter data-hf-id="hf-mnbw" id="f03-mat-r" color-interpolation-filters="sRGB">
+        <fecolormatrix data-hf-id="hf-gt7a" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+      </filter>
+      <filter data-hf-id="hf-h5sh" id="f03-mat-g" color-interpolation-filters="sRGB">
+        <fecolormatrix data-hf-id="hf-x6l8" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+      </filter>
+      <filter data-hf-id="hf-1kj0" id="f03-mat-b" color-interpolation-filters="sRGB">
+        <fecolormatrix data-hf-id="hf-wwem" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" />
+      </filter>
+    </svg>
+  </div>
+
+  <style>
+    @font-face {
+      font-family: "JetBrains Mono";
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url("assets/fonts/captured-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2") format("woff2");
+    }
+
+    #root {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .f03-ground { position: absolute; inset: 0; background: #17231f; }
+
+    /* Plate region: everything below the 80px strip + 1px hairline (81px). 999px tall. */
+    .f03-plates { position: absolute; left: 0; top: 81px; width: 1080px; height: 999px; overflow: hidden; }
+    .f03-plate { position: absolute; inset: 0; overflow: hidden; opacity: 0; }
+    .f03-plate-first { opacity: 1; }
+
+    /* Screenshot is 1080x1360; shift up 70px so the site nav is cropped away (the region shows y 70-1069, all hero). */
+    .f03-base,
+    .f03-bandpic {
+      position: absolute;
+      left: 0;
+      width: 1080px;
+      height: 1360px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+    .f03-base { top: -70px; }
+
+    .f03-glitch { position: absolute; inset: 0; background: #000; opacity: 0; isolation: isolate; }
+    .f03-ch { position: absolute; inset: 0; mix-blend-mode: screen; }
+    .f03-ch-r { filter: url(#f03-mat-r); }
+    .f03-ch-g { filter: url(#f03-mat-g); }
+    .f03-ch-b { filter: url(#f03-mat-b); }
+    .f03-band { position: absolute; left: 0; width: 1080px; height: 167px; overflow: hidden; }
+
+    .f03-scan {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 5;
+      background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0px, rgba(0, 0, 0, 0.22) 1px, transparent 1px, transparent 4px);
+    }
+    .f03-flash { position: absolute; inset: 0; opacity: 0; pointer-events: none; z-index: 6; background: #ffffff; }
+
+    .f03-strip { position: absolute; left: 0; top: 0; width: 1080px; height: 81px; background: #17231f; }
+    .f03-slot {
+      position: absolute;
+      top: 21px;
+      height: 34px;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 27px;
+      line-height: 34px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #c2d5d2;
+    }
+    .f03-slot-d { left: 59px; }
+    .f03-slot-p { right: 59px; text-align: right; }
+    .f03-slot-p .f03-tok { right: 0; opacity: 0; }
+    .f03-slot-p .f03-tok { color: rgba(194, 213, 210, 0.78); }
+    .f03-tok { position: absolute; top: 0; opacity: 0; }
+    .f03-slot-d .f03-tok { left: 0; }
+    /* No !important: GSAP's inline opacity must be able to hide the first tokens at the first cut. */
+    .f03-slot-d .f03-tok.f03-tok-first,
+    .f03-slot-p .f03-tok.f03-tok-first { opacity: 1; }
+
+    .f03-hair { position: absolute; left: 59px; top: 80px; width: 962px; height: 1px; background: rgba(194, 213, 210, 0.45); }
+    .f03-ticks { position: absolute; left: 59px; top: 56px; width: 962px; height: 24px; }
+    .f03-tick {
+      position: absolute;
+      bottom: 0;
+      width: 4px;
+      height: 14px;
+      margin-left: -2px;
+      background: rgba(194, 213, 210, 0.22);
+      transform-origin: 50% 100%;
+    }
+    .f03-defs { position: absolute; width: 0; height: 0; }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FRAME_ID = "03-look-ramp";
+
+      // [design label, palette label, plate file, how long the look stays, in beats of the music bed]
+      // Labels are the site's own UI names. The durations are the ramp: 3 beats (1.3s) at the start,
+      // 2, 1.5, 1, then 0.5 beat (0.22s) for the last burst; the final look lands and holds.
+      //
+      // Order is deliberate for two reasons. (1) Photosensitivity: once the cuts come faster than about
+      // three a second, neighbouring looks must have similar brightness or the picture strobes, so the
+      // fast stretch is one run of dark looks that crosses to light exactly once and then stays light
+      // (the frame after this one is a light page, so the hand-off is smooth). (2) Variety: no design
+      // sits next to itself, and every cut changes the hue as well as the layout.
+      var LOOKS = [
+        ["Terminal", "Phosphor Green", "look-02-terminal-phosphor", 3],
+        ["Newspaper", "Sepia", "look-03-newspaper-sepia", 2.5],
+        ["Pixel", "Synthwave", "look-04-pixel-synthwave", 2],
+        ["Notebook", "Paper", "look-09-notebook-paper", 2],
+        ["Cyberpunk", "Tokyo Night", "look-08-cyber-tokyo-night", 1.5],
+        ["Blueprint", "Nord", "look-05-blueprint-nord", 1.5],
+        ["Risograph", "Gruvbox Dark", "look-06-risograph-gruvbox-dark", 1.5],
+        ["Art Deco", "Dark", "look-07-deco-dark", 1.5],
+        ["Swiss", "Barcelona Signal Night", "look-14-swiss-barcelona-night", 1],
+        ["Zine", "Synthwave", "look-17-zine-synthwave", 1],
+        ["IDE", "Gruvbox Dark", "look-16-ide-gruvbox-dark", 1],
+        ["Comic", "Dracula", "look-21-comic-dracula", 1],
+        ["Terminal", "Amber CRT", "look-18-terminal-amber-crt", 1],
+        ["Pixel", "Phosphor Green", "look-19-pixel-phosphor", 1],
+        ["Minimal", "Default Dark", "look-12-minimal-dark", 1],
+        ["Editorial", "Default Dark", "look-33-editorial-dark", 1],
+        ["Cyberpunk", "Synthwave", "look-20-cyber-synthwave", 0.5],
+        ["Comic", "Synthwave", "look-30-comic-synthwave", 0.5],
+        ["Art Deco", "Dracula", "look-22-deco-dracula", 0.5],
+        ["Blueprint", "Tokyo Night", "look-23-blueprint-tokyo-night", 0.5],
+        ["Risograph", "Synthwave", "look-24-risograph-synthwave", 0.5],
+        ["Newspaper", "Solarized Light", "look-26-newspaper-solarized-light", 0.5],
+        ["Notebook", "Solarized Light", "look-25-notebook-solarized-light", 0.5],
+        ["Swiss", "Nord Light", "look-29-swiss-nord-light", 0.5],
+        ["Zine", "Paper", "look-32-zine-paper", 0.5],
+        ["Brutalist", "Light", "look-11-brutalist-light", 0],
+      ];
+      var N = LOOKS.length;
+      var BANDS = 6;
+      var BAND_H = 167;
+
+      var plates = document.getElementById("f03-plates");
+      var scan = document.getElementById("f03-scan");
+      var slotD = document.getElementById("f03-tok-d");
+      var slotP = document.getElementById("f03-tok-p");
+      var ticks = document.getElementById("f03-ticks");
+
+      // ---- Build the DOM from the table (deterministic; no randomness).
+      LOOKS.forEach(function (look, k) {
+        var url = 'url("assets/' + look[2] + '.png")';
+        var plate = document.createElement("div");
+        plate.id = "f03-plate-" + k;
+        plate.className = "f03-plate" + (k === 0 ? " f03-plate-first" : "");
+
+        var base = document.createElement("div");
+        base.id = "f03-base-" + k;
+        base.className = "f03-base";
+        base.style.backgroundImage = url;
+        plate.appendChild(base);
+
+        var glitch = document.createElement("div");
+        glitch.id = "f03-glitch-" + k;
+        glitch.className = "f03-glitch";
+        ["r", "g", "b"].forEach(function (chan) {
+          var ch = document.createElement("div");
+          ch.id = "f03-ch-" + k + chan;
+          ch.className = "f03-ch f03-ch-" + chan;
+          for (var i = 0; i < BANDS; i++) {
+            var band = document.createElement("div");
+            band.className = "f03-band";
+            band.style.top = i * BAND_H + "px";
+            var pic = document.createElement("div");
+            pic.className = "f03-bandpic f03-bandpic-" + k;
+            pic.setAttribute("data-b", String(i));
+            pic.style.top = -70 - i * BAND_H + "px";
+            pic.style.backgroundImage = url;
+            band.appendChild(pic);
+            ch.appendChild(band);
+          }
+          glitch.appendChild(ch);
+        });
+        plate.appendChild(glitch);
+        plates.insertBefore(plate, scan);
+
+        // Label tokens (stacked; only one is visible at a time).
+        var td = document.createElement("span");
+        td.id = "f03-td-" + k;
+        td.className = "f03-tok" + (k === 0 ? " f03-tok-first" : "");
+        td.textContent = look[0];
+        slotD.appendChild(td);
+        var tp = document.createElement("span");
+        tp.id = "f03-tp-" + k;
+        tp.className = "f03-tok" + (k === 0 ? " f03-tok-first" : "");
+        tp.textContent = look[1];
+        slotP.appendChild(tp);
+
+        // Tick mark.
+        var tick = document.createElement("i");
+        tick.id = "f03-tick-" + k;
+        tick.className = "f03-tick";
+        tick.style.left = ((k + 0.5) * 962) / N + "px";
+        ticks.appendChild(tick);
+      });
+
+      // ---- Timeline.
+      var SHIFT = [46, 112, 68, 148, 90, 58];
+      var CHROMA = 20;
+      var ORANGE = "#b9472f";
+      var PASSED = "rgba(194,213,210,0.6)";
+
+      // ---- Cut times, locked to the music bed's beat grid.
+      // Measured on assets/bgm/bed.wav (kick onsets and full-band flux agree): 135.1 BPM, with a beat at
+      // 8.42s on the video clock, i.e. 0.02s into this frame (the frame starts at 8.4s). Every cut lands on
+      // a beat, rounded to a whole 30fps video frame so each look gets a whole number of frames.
+      var FPS = 30;
+      var BEAT = 60 / 135.1;
+      var BEAT0 = 0.02;
+      var CUT = [0];
+      var beats = 0;
+      for (var m = 0; m < N - 1; m++) {
+        beats += LOOKS[m][3];
+        CUT.push(Math.round((BEAT0 + beats * BEAT) * FPS) / FPS);
+      }
+
+      function clamp(v, lo, hi) {
+        return Math.min(hi, Math.max(lo, v));
+      }
+      function pics(k) {
+        return gsap.utils.toArray("#f03-glitch-" + k + " .f03-bandpic");
+      }
+      function bandX(sign, amp) {
+        return function (i, el) {
+          return sign * amp * SHIFT[parseInt(el.getAttribute("data-b"), 10)];
+        };
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Tick 0 is current from the first frame.
+      tl.fromTo(
+        "#f03-tick-0",
+        { scaleY: 2.4, backgroundColor: ORANGE },
+        { scaleY: 1.6, backgroundColor: ORANGE, duration: 0.4, ease: "power3.out" },
+        0
+      );
+
+      // One shared snap for every swap, scaled by how fast the neighbouring cuts are: the window shrinks to
+      // stay inside the look's own time (never more than a quarter of it per side), the slice and split get
+      // a little smaller, and the white flash fades out entirely at the fastest speed. Fast and bright
+      // flashes are the part of a montage that can hurt, and the snap itself still reads without it.
+      function snap(out, inn, T, dBefore, dAfter, dir) {
+        var dMin = Math.min(dBefore, dAfter);
+        var HALF = Math.min(0.1, 0.25 * dMin); // each side of the cut: 0.2s total snap when unhurried
+        var calm = clamp((dMin - 0.2) / 0.6, 0, 1);
+        var amp = 0.6 + 0.4 * calm;
+        var chroma = CHROMA * amp;
+        var flashAmp = 0.22 * clamp((dMin - 0.25) / 0.5, 0, 1);
+        var scanAmp = 0.3 + 0.25 * calm;
+        var S = T - HALF;
+        var E = T + HALF;
+
+        // Outgoing plate: split channels + slice, accelerating in `dir`.
+        tl.set("#f03-base-" + out, { opacity: 0 }, S);
+        tl.set("#f03-glitch-" + out, { opacity: 1 }, S);
+        tl.fromTo(pics(out), { x: 0 }, { x: bandX(dir, amp), duration: HALF, ease: "power2.in" }, S);
+        tl.fromTo("#f03-ch-" + out + "r", { x: 0 }, { x: -dir * chroma, duration: HALF, ease: "power2.in" }, S);
+        tl.fromTo("#f03-ch-" + out + "b", { x: 0 }, { x: dir * chroma, duration: HALF, ease: "power2.in" }, S);
+
+        // The cut, at peak velocity: next plate continues in the same direction.
+        tl.set("#f03-plate-" + out, { opacity: 0 }, T);
+        tl.set("#f03-plate-" + inn, { opacity: 1 }, T);
+        tl.set("#f03-base-" + inn, { opacity: 0 }, T);
+        tl.set("#f03-glitch-" + inn, { opacity: 1 }, T);
+        tl.fromTo(pics(inn), { x: bandX(-dir, amp) }, { x: 0, duration: HALF, ease: "power2.out" }, T);
+        tl.fromTo("#f03-ch-" + inn + "r", { x: dir * chroma }, { x: 0, duration: HALF, ease: "power2.out" }, T);
+        tl.fromTo("#f03-ch-" + inn + "b", { x: -dir * chroma }, { x: 0, duration: HALF, ease: "power2.out" }, T);
+        tl.set("#f03-glitch-" + inn, { opacity: 0 }, E);
+        tl.set("#f03-base-" + inn, { opacity: 1 }, E);
+
+        // Dressing: scanlines on every cut, a tiny flash only while the cuts are unhurried.
+        tl.fromTo("#f03-scan", { opacity: 0 }, { opacity: scanAmp, duration: HALF, ease: "power2.in" }, S);
+        tl.to("#f03-scan", { opacity: 0, duration: HALF, ease: "power2.out" }, T);
+        if (flashAmp > 0.01) {
+          tl.fromTo("#f03-flash", { opacity: 0 }, { opacity: flashAmp, duration: 0.04, ease: "none" }, T - 0.04);
+          tl.to("#f03-flash", { opacity: 0, duration: 0.08, ease: "none" }, T);
+        }
+
+        // Label tokens swap in place, hard-cut at T (in-place token cycle).
+        tl.set("#f03-td-" + out, { opacity: 0 }, T);
+        tl.set("#f03-tp-" + out, { opacity: 0 }, T);
+        tl.set("#f03-td-" + inn, { opacity: 1 }, T);
+        tl.set("#f03-tp-" + inn, { opacity: 1 }, T);
+
+        // Tick advances: previous becomes "passed", the new one pops in orange. The settle is kept inside
+        // the look's own time so it can never run on past the next cut's set (which would re-grow the tick).
+        // (set + to, not fromTo: a fromTo would paint every future tick orange at authoring time.)
+        tl.set("#f03-tick-" + out, { scaleY: 1, backgroundColor: PASSED }, T);
+        tl.set("#f03-tick-" + inn, { scaleY: 2.4, backgroundColor: ORANGE }, T);
+        tl.to("#f03-tick-" + inn, { scaleY: 1.6, duration: Math.min(0.4, 0.8 * dAfter), ease: "power3.out" }, T);
+      }
+
+      for (var k = 1; k < N; k++) {
+        var dBefore = CUT[k] - CUT[k - 1];
+        var dAfter = k < N - 1 ? CUT[k + 1] - CUT[k] : 2; // the last look lands and holds
+        snap(k - 1, k, CUT[k], dBefore, dAfter, k % 2 === 1 ? 1 : -1);
+      }
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>

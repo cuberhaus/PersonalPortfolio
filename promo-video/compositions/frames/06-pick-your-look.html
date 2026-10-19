@@ -1,0 +1,175 @@
+<template>
+  <div data-hf-id="hf-nrkj" id="root" data-composition-id="06-pick-your-look" data-start="0" data-duration="3.6" data-width="1080" data-height="1080">
+    <div data-hf-id="hf-btd0" id="f06-ground" class="clip f06-ground" data-start="0" data-duration="3.6" data-track-index="0" aria-hidden="true"></div>
+
+    <!-- Scene 1: the invitation -->
+    <div data-hf-id="hf-b7oe" id="f06-head" class="clip f06-head" data-start="0" data-duration="3.6" data-track-index="1">
+      <p data-hf-id="hf-vc5z" id="f06-h1" class="f06-h">pick your<br data-hf-id="hf-x5px">look.</p>
+    </div>
+
+    <!-- Scene 2: the address, typed by a live caret (built from ADDRESS in the script) -->
+    <div data-hf-id="hf-ezwz" id="f06-box" class="clip f06-box" data-start="0" data-duration="3.6" data-track-index="2">
+      <div data-hf-id="hf-lu8a" id="f06-type" class="f06-type"></div>
+    </div>
+
+    <!-- Scene 3: the name -->
+    <div data-hf-id="hf-w5ua" id="f06-name" class="clip f06-name" data-start="2.5" data-duration="1.1" data-track-index="3">
+      <p data-hf-id="hf-cqiq" id="f06-namep" class="f06-namep">POL CASACUBERTA</p>
+    </div>
+  </div>
+
+  <style>
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("assets/fonts/captured-UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "JetBrains Mono";
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url("assets/fonts/captured-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2") format("woff2");
+    }
+
+    #root {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .f06-ground { position: absolute; inset: 0; background: #17231f; }
+
+    .f06-head { position: absolute; left: 59px; top: 76px; }
+    .f06-h {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 212px;
+      line-height: 0.98; /* opens the stack just enough that the "p" descender clears the "l" below it */
+      letter-spacing: -0.045em;
+      text-transform: lowercase;
+      color: #c2d5d2;
+      white-space: nowrap;
+      transform-origin: 0% 50%;
+    }
+
+    /* The typed address sits in a flat, hairline-bordered field: no radius, no browser chrome. */
+    .f06-box {
+      position: absolute;
+      left: 59px;
+      top: 560px;
+      width: 962px;
+      height: 156px;
+      box-sizing: border-box;
+      border: 1px solid rgba(194, 213, 210, 0.45);
+      background: #17231f;
+    }
+    .f06-type {
+      position: absolute;
+      left: 36px;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 80px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      text-transform: lowercase;
+      color: #c2d5d2;
+      white-space: nowrap;
+    }
+    .f06-c { opacity: 0; }
+    /* Zero-width caret slots between characters: only one is ever visible. */
+    .f06-caret { display: inline-block; position: relative; width: 0; height: 0; opacity: 0; }
+    .f06-caret::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      bottom: -16px;
+      width: 6px;
+      height: 78px;
+      background: #c2d5d2;
+    }
+
+    .f06-name { position: absolute; left: 59px; top: 768px; }
+    .f06-namep {
+      margin: 0;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 38px;
+      letter-spacing: 0.14em;
+      color: #c2d5d2;
+      white-space: nowrap;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FRAME_ID = "06-pick-your-look";
+      var ADDRESS = "polcasacubertagil.com";
+
+      // ---- Build per-character spans with a zero-width caret slot before the first and after every character.
+      var type = document.getElementById("f06-type");
+      function caretSlot(k) {
+        var c = document.createElement("span");
+        c.id = "f06-caret-" + k;
+        c.className = "f06-caret";
+        return c;
+      }
+      type.appendChild(caretSlot(0));
+      for (var i = 0; i < ADDRESS.length; i++) {
+        var ch = document.createElement("span");
+        ch.id = "f06-c-" + i;
+        ch.className = "f06-c";
+        ch.textContent = ADDRESS.charAt(i);
+        type.appendChild(ch);
+        type.appendChild(caretSlot(i + 1));
+      }
+
+      // ---- Keystroke schedule (discrete states): a steady cluster, a short beat before the dot.
+      var START = 1.05; // first key
+      var KEY = 0.058; // seconds per key
+      var DOT_AT = ADDRESS.indexOf(".");
+      var times = [];
+      for (var j = 0; j < ADDRESS.length; j++) {
+        times.push(START + j * KEY + (j >= DOT_AT ? 0.12 : 0));
+      }
+      var DONE = times[times.length - 1] + KEY; // ~2.45
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 (0 - 1.0s): the invitation settles on power3.
+      tl.fromTo("#f06-h1", { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 0);
+
+      // Scene 2 (1.0 - 2.5s): the field and caret appear, then the address is typed one key at a time.
+      tl.fromTo("#f06-box", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power3.out" }, 0.7);
+      tl.set("#f06-caret-0", { opacity: 1 }, 0.7);
+      tl.set("#f06-caret-0", { opacity: 0 }, times[0]);
+      for (var k = 0; k < ADDRESS.length; k++) {
+        tl.set("#f06-c-" + k, { opacity: 1 }, times[k]);
+        // the caret trails the newest character
+        tl.set("#f06-caret-" + (k + 1), { opacity: 1 }, times[k]);
+        if (k < ADDRESS.length - 1) {
+          tl.set("#f06-caret-" + (k + 1), { opacity: 0 }, times[k + 1]);
+        }
+      }
+
+      // Scene 3 (2.5 - 3.6s): the caret rests (one slow blink), the name appears under the address, then a still hold.
+      var LAST = "#f06-caret-" + ADDRESS.length;
+      tl.set(LAST, { opacity: 0 }, 2.85);
+      tl.set(LAST, { opacity: 1 }, 3.1);
+      tl.fromTo("#f06-namep", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.5);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>

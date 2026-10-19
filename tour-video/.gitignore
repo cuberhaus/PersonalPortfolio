@@ -1,0 +1,31 @@
+# Site-tour video project (HyperFrames). Keep SOURCES in git; everything below is
+# regenerable media, tool caches, or local backups.
+
+# Website capture output (screenshots, extracted assets, copied from promo-video/capture
+# plus the 1080-wide scroll shots). Only the small section map is a real input to
+# scripts/shoot-tour.mjs.
+/capture/*
+!/capture/sections.json
+
+# Staged by assemble-index.mjs from capture/ (plates, fonts) plus the music bed.
+/assets/
+
+# Review and render output
+/snapshots/
+/renders/
+
+# Local backups of earlier builds
+/.backups/
+
+# HyperFrames caches and audio-engine sidecars
+/.hyperframes/
+/.media/
+/.thumbnails/
+/.waveform-cache/
+/audio_engine_meta.json
+/audio_request.json
+/node_modules/
+
+# Byte-identical to AGENTS.md (written by `hyperframes init`); the workspace
+# keeps AGENTS.md as the single source of agent guidance.
+/CLAUDE.md

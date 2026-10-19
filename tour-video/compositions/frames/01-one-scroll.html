@@ -1,0 +1,290 @@
+<template>
+  <div id="root" data-composition-id="01-one-scroll" data-start="0" data-duration="30" data-width="1080" data-height="1080">
+    <div id="t01-ground" class="clip t01-ground" data-start="0" data-duration="30" data-track-index="0" aria-hidden="true"></div>
+
+    <!-- The page: the live site at a 1080 px viewport, captured in three stacked segments and scrolled 1:1. -->
+    <div id="t01-window" class="clip t01-window" data-start="0" data-duration="30" data-track-index="1" aria-hidden="true">
+      <!-- The page is 9115 px tall inside a 999 px window on purpose: it is the thing that scrolls. -->
+      <div id="t01-page" class="t01-page" data-layout-allow-overflow>
+        <div class="t01-seg" style="top: 0px; height: 3600px; background-image: url('assets/tour-00.png')"></div>
+        <div class="t01-seg" style="top: 3600px; height: 3600px; background-image: url('assets/tour-01.png')"></div>
+        <div class="t01-seg" style="top: 7200px; height: 1915px; background-image: url('assets/tour-02.png')"></div>
+      </div>
+    </div>
+
+    <!-- Fixed chrome: the section's number in big display type, its name beside it, the site's address at the
+         right and, along the bottom edge, one continuous progress bar that fills as the page scrolls. -->
+    <div id="t01-strip" class="clip t01-strip" data-start="0" data-duration="30" data-track-index="2">
+      <div id="t01-num" class="t01-num"></div>
+      <div class="t01-rule" aria-hidden="true"></div>
+      <div id="t01-name" class="t01-name"></div>
+      <div id="t01-addr" class="t01-addr">polcasacubertagil.com</div>
+      <div class="t01-track" aria-hidden="true">
+        <div id="t01-fill" class="t01-fill"></div>
+        <div id="t01-notches"></div>
+      </div>
+    </div>
+
+    <!-- Flat ink plates over the page: the only words that are not the site's own. -->
+    <div id="t01-p-open" class="clip t01-plate" data-start="0" data-duration="30" data-track-index="3">
+      <p class="t01-plate-p">one scroll.</p>
+    </div>
+    <div id="t01-p-client" class="clip t01-plate" data-start="0" data-duration="30" data-track-index="4">
+      <p class="t01-plate-p">real client work.</p>
+    </div>
+    <div id="t01-p-demos" class="clip t01-plate" data-start="0" data-duration="30" data-track-index="5">
+      <p class="t01-plate-p">20 interactive demos.</p>
+    </div>
+    <div id="t01-p-url" class="clip t01-plate" data-start="0" data-duration="30" data-track-index="6">
+      <p class="t01-plate-p t01-plate-p-url">polcasacubertagil.com</p>
+    </div>
+  </div>
+
+  <style>
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("assets/fonts/captured-UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "JetBrains Mono";
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url("assets/fonts/captured-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2") format("woff2");
+    }
+
+    #root {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .t01-ground { position: absolute; inset: 0; background: #17231f; }
+
+    /* Window: everything below the 80px strip + 1px hairline (81px), 999px tall. The page scrolls inside it. */
+    .t01-window { position: absolute; left: 0; top: 81px; width: 1080px; height: 999px; overflow: hidden; }
+    .t01-page { position: absolute; left: 0; top: 0; width: 1080px; height: 9115px; will-change: transform; }
+    .t01-seg { position: absolute; left: 0; width: 1080px; background-size: 100% 100%; background-repeat: no-repeat; }
+
+    /* Strip: 81px of ink. Number | rule | name on the left, the address on the right, and a 6px progress bar along
+       the bottom edge (the page's own scroll position, notched at each section). Display type is Inter 900/800
+       lowercase like the plates; only the address is mono. Orange is the progress fill and nothing else here. */
+    .t01-strip { position: absolute; left: 0; top: 0; width: 1080px; height: 81px; background: #17231f; }
+    .t01-num { position: absolute; left: 59px; top: 0; width: 80px; height: 75px; }
+    .t01-name { position: absolute; left: 171px; top: 0; width: 560px; height: 75px; }
+    .t01-tn,
+    .t01-tt { position: absolute; left: 0; white-space: nowrap; color: #c2d5d2; opacity: 0; }
+    .t01-tn {
+      top: 10px;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 58px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+    }
+    .t01-tt {
+      top: 17px;
+      font-family: "Inter", sans-serif;
+      font-weight: 800;
+      font-size: 38px;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      text-transform: lowercase;
+    }
+    /* No !important: GSAP's inline opacity must be able to hide the first tokens at the first swap. */
+    .t01-tn.t01-tok-first,
+    .t01-tt.t01-tok-first { opacity: 1; }
+    .t01-rule { position: absolute; left: 148px; top: 16px; width: 2px; height: 44px; background: rgba(194, 213, 210, 0.35); }
+    .t01-addr {
+      position: absolute;
+      right: 59px;
+      top: 23px;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 23px;
+      line-height: 30px;
+      letter-spacing: 0.01em;
+      color: rgba(194, 213, 210, 0.78);
+      white-space: nowrap;
+    }
+    .t01-track { position: absolute; left: 0; top: 75px; width: 1080px; height: 6px; background: rgba(194, 213, 210, 0.2); }
+    .t01-fill { position: absolute; left: 0; top: 0; width: 1080px; height: 6px; background: #b9472f; transform-origin: 0% 50%; }
+    .t01-notch { position: absolute; top: 0; width: 3px; height: 6px; margin-left: -1px; background: #17231f; }
+
+    /* Plates sit on the left, above the 896px caption keep-out. Flat ink, cream display type, no shadow.
+       Each plate's top and height come from scripts/pick-stops.mjs: they sit on empty rows of the page
+       at their stop where there are any, otherwise their edges are on clean rows so no line of the site's
+       text is sliced. The text is centred in the plate (a little high: lowercase has no cap-height). */
+    .t01-plate {
+      position: absolute;
+      left: 59px;
+      top: 770px;
+      height: 110px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      background: #17231f;
+      padding: 0 32px 6px 32px;
+      opacity: 0;
+    }
+    .t01-plate-p {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 76px;
+      line-height: 1;
+      letter-spacing: -0.045em;
+      text-transform: lowercase;
+      color: #c2d5d2;
+      white-space: nowrap;
+    }
+    #t01-p-open { top: 700px; height: 110px; }
+    #t01-p-client { top: 734px; height: 110px; }
+    #t01-p-demos { top: 654px; height: 110px; }
+    #t01-p-url { top: 422px; height: 134px; padding: 0 36px 8px 36px; }
+    .t01-plate-p-url { font-size: 84px; }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FRAME_ID = "01-one-scroll";
+
+      // [heading as the site writes it, where the window parks to read it (page y of the window's top edge),
+      // the heading's own page y]. Generated by scripts/pick-stops.mjs from the capture (capture/sections.json
+      // and layout.json): each stop's top and bottom edges sit on empty rows of the page (or, where a section is
+      // too tall for that, cross only a card's padding), the section's own header is fully in view, and the
+      // window never ends inside the next section's header. The hero parks 150 px down, cropping the hidden nav
+      // row and the empty top padding.
+      var STOPS = [
+        ["Pol Casacuberta", 155, 336],
+        ["Featured Projects", 942, 1020],
+        ["Try my projects", 1648, 1807],
+        ["A bit about me", 3403, 3496],
+        ["Where I've worked", 4511, 4613],
+        ["Tech I work with", 5437, 5587],
+        ["Licenses & certifications", 6369, 6472],
+        ["Where I studied", 7437, 7515],
+        ["Get in touch", 7944, 8046],
+      ];
+      var N = STOPS.length;
+
+      // ---- The music bed's beat grid (measured on the bed: 120.0 BPM, so a beat is exactly 0.5s = 15 frames; see
+      // STORYBOARD "Music only"). The bed is delayed so a beat falls on every half second from 0, and its first
+      // full hit lands at 1.5s = beat 3, which is when the first scroll leg starts.
+      var BEAT = 60 / 120;
+      var BEAT0 = 0;
+      var FPS = 30;
+      function at(beats) {
+        return Math.round((BEAT0 + beats * BEAT) * FPS) / FPS;
+      }
+
+      // Leg lengths in beats: each is half a flat share and half proportional to the distance it has to cover,
+      // so long sections get time to be read and the short education hop does not crawl. They add up to 49, so the
+      // window parks on the contact section at beat 52 = 26.0s and holds there for the last 4s.
+      var LEG_BEATS = [5.5, 5.5, 8.5, 6.5, 6, 6, 6.5, 4.5];
+      var HERO_HOLD_BEATS = 3;
+
+      var slotNum = document.getElementById("t01-num");
+      var slotName = document.getElementById("t01-name");
+      var notches = document.getElementById("t01-notches");
+
+      // Progress position of each stop along the bar, 0..1, from the same scroll distances the legs use.
+      var SPAN = STOPS[N - 1][1] - STOPS[0][1];
+      var PROG = STOPS.map(function (stop) {
+        return (stop[1] - STOPS[0][1]) / SPAN;
+      });
+
+      // ---- Build the number and name tokens and the bar's notches from the table (deterministic; no randomness).
+      STOPS.forEach(function (stop, k) {
+        var tn = document.createElement("span");
+        tn.id = "t01-tn-" + k;
+        tn.className = "t01-tn" + (k === 0 ? " t01-tok-first" : "");
+        tn.setAttribute("data-layout-allow-overlap", ""); // the old and new token cross-fade in the same spot
+        tn.setAttribute("data-layout-allow-overflow", ""); // and slide a few px past the strip while they do
+        // The site numbers its sections itself (01 Featured Projects ... 08 Get in touch; the hero has no number),
+        // so the strip uses the same numbers: 00 for the hero.
+        tn.textContent = "0" + k;
+        slotNum.appendChild(tn);
+        var tt = document.createElement("span");
+        tt.id = "t01-tt-" + k;
+        tt.className = "t01-tt" + (k === 0 ? " t01-tok-first" : "");
+        tt.setAttribute("data-layout-allow-overlap", "");
+        tt.setAttribute("data-layout-allow-overflow", "");
+        tt.textContent = stop[0];
+        slotName.appendChild(tt);
+        if (k > 0 && k < N - 1) {
+          var notch = document.createElement("i");
+          notch.className = "t01-notch";
+          notch.style.left = PROG[k] * 1080 + "px";
+          notches.appendChild(notch);
+        }
+      });
+
+      var SCROLL_EASE = "power3.inOut";
+      var ease = gsap.parseEase(SCROLL_EASE);
+
+      // Time at which a leg's scroll position reaches `target` (bisection on the same ease the tween uses).
+      function timeAtScroll(start, dur, y0, y1, target) {
+        var lo = 0;
+        var hi = 1;
+        for (var i = 0; i < 40; i++) {
+          var mid = (lo + hi) / 2;
+          if (y0 + (y1 - y0) * ease(mid) < target) lo = mid;
+          else hi = mid;
+        }
+        return start + dur * hi;
+      }
+
+      var tl = gsap.timeline({ paused: true });
+
+      // The page starts parked on the hero; the bar starts empty.
+      tl.set("#t01-page", { y: -STOPS[0][1] }, 0);
+      tl.set("#t01-fill", { scaleX: 0 }, 0);
+
+      var arrive = []; // arrive[k] = time the window parks on section k
+      arrive[0] = at(HERO_HOLD_BEATS);
+      var beats = HERO_HOLD_BEATS;
+      for (var i = 0; i < N - 1; i++) {
+        var start = at(beats);
+        beats += LEG_BEATS[i];
+        var end = at(beats);
+        var dur = end - start;
+        var y0 = STOPS[i][1];
+        var y1 = STOPS[i + 1][1];
+        tl.fromTo("#t01-page", { y: -y0 }, { y: -y1, duration: dur, ease: SCROLL_EASE }, start);
+        // The bar grows on the same ease over the same leg, so it is exactly the page's scroll position.
+        tl.fromTo("#t01-fill", { scaleX: PROG[i] }, { scaleX: PROG[i + 1], duration: dur, ease: SCROLL_EASE }, start);
+        arrive[i + 1] = end;
+
+        // The number and name roll over when the next heading has climbed to the upper middle of the window
+        // (373 px below the window's top edge): the old pair lifts out, the new pair rises in.
+        var swap = timeAtScroll(start, dur, y0, y1, STOPS[i + 1][2] - 373);
+        var k = i + 1;
+        tl.to(["#t01-tn-" + i, "#t01-tt-" + i], { opacity: 0, y: -16, duration: 0.18, ease: "power2.in" }, swap);
+        tl.fromTo(["#t01-tn-" + k, "#t01-tt-" + k], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, swap + 0.08);
+      }
+
+      // ---- Plates: each slides up and settles on power3, holds through the slow part of its stop, then drops away.
+      function plate(id, from, to) {
+        tl.fromTo(id, { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, from);
+        tl.to(id, { opacity: 0, y: 24, duration: 0.2, ease: "power2.in" }, to);
+      }
+      plate("#t01-p-open", 0.15, at(HERO_HOLD_BEATS) - 0.1); // hero hold: "one scroll."
+      plate("#t01-p-client", arrive[1] - 0.8, arrive[1] + 1.2); // Featured Projects: "real client work."
+      plate("#t01-p-demos", arrive[2] - 0.8, arrive[2] + 1.2); // Try my projects: "20 interactive demos."
+      // The strip's small address steps aside when the big one lands.
+      tl.to("#t01-addr", { opacity: 0, duration: 0.3, ease: "power2.in" }, arrive[N - 1] + 0.2);
+      // Closing: the address lands once the window has parked on the contact section, and stays to the end.
+      tl.fromTo("#t01-p-url", { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, arrive[N - 1] + 0.2);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>

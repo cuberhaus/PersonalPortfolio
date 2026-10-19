@@ -1,0 +1,11 @@
+{
+  "bgm": {
+    "path": "assets/bgm/bed.wav",
+    "volume": 1,
+    "query": "upbeat, bright and positive electronic, energetic modern tech product, driving groove, no vocals",
+    "duration_s": 35
+  },
+  "bgm_pending": false,
+  "voices": [],
+  "sfx": []
+}

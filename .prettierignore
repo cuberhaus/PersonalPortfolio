@@ -9,6 +9,9 @@ verification-screenshots/
 .build-stamps/
 public/
 planner-api/
+# HyperFrames videos (promo and site tour): generated composition HTML must stay as written
+promo-video/
+tour-video/
 *.min.*
 package-lock.json
 *.json

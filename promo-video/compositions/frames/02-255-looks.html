@@ -1,0 +1,175 @@
+<template>
+  <div data-hf-id="hf-tck5" id="root" data-composition-id="02-255-looks" data-start="0" data-duration="5.2" data-width="1080" data-height="1080">
+    <div data-hf-id="hf-6r7i" id="f02-ground" class="clip f02-ground" data-start="0" data-duration="5.2" data-track-index="0" aria-hidden="true"></div>
+
+    <!-- Scene 1: the statement -->
+    <div data-hf-id="hf-enuw" id="f02-line1" class="clip f02-line1" data-start="0" data-duration="5.2" data-track-index="1">
+      <span data-hf-id="hf-098n" id="f02-one" class="f02-one">one portfolio.</span>
+    </div>
+
+    <!-- Scene 2: the counter, then "looks." on the same baseline -->
+    <div data-hf-id="hf-8idx" id="f02-row" class="clip f02-row" data-start="1.2" data-duration="4" data-track-index="2">
+      <span data-hf-id="hf-r15x" id="f02-count" class="f02-count">0</span>
+      <span data-hf-id="hf-0ggf" id="f02-looks" class="f02-looks">looks.</span>
+    </div>
+
+    <!-- Scene 3: the evidence line -->
+    <div data-hf-id="hf-9hsm" id="f02-meta" class="clip f02-meta" data-start="3.0" data-duration="2.2" data-track-index="3">
+      <div data-hf-id="hf-5lpm" id="f02-hair" class="f02-hair"></div>
+      <p data-hf-id="hf-ai8n" id="f02-label" class="f02-label">
+        <span data-hf-id="hf-30pl" class="f02-w">15</span> <span data-hf-id="hf-mfi5" class="f02-w">THEMES</span> <span data-hf-id="hf-et98" class="f02-w">×</span>
+        <span data-hf-id="hf-3tbn" class="f02-w">17</span> <span data-hf-id="hf-yzfq" class="f02-w">DESIGNS</span>
+      </p>
+    </div>
+  </div>
+
+  <style>
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("assets/fonts/captured-UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "JetBrains Mono";
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url("assets/fonts/captured-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2") format("woff2");
+    }
+
+    #root {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .f02-ground { position: absolute; inset: 0; background: #17231f; }
+
+    .f02-line1 { position: absolute; left: 59px; top: 104px; }
+    .f02-one {
+      display: inline-block;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 124px;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      text-transform: lowercase;
+      color: #c2d5d2;
+      white-space: nowrap;
+      transform-origin: 0% 50%;
+    }
+
+    .f02-row {
+      position: absolute;
+      left: 59px;
+      top: 352px;
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      white-space: nowrap;
+    }
+    .f02-count {
+      display: inline-block;
+      min-width: 3ch;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 330px;
+      line-height: 0.82;
+      letter-spacing: -0.045em;
+      font-variant-numeric: tabular-nums;
+      color: #b9472f;
+      transform-origin: 0% 100%;
+    }
+    .f02-looks {
+      display: inline-block;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 92px;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      text-transform: lowercase;
+      color: #c2d5d2;
+    }
+
+    .f02-meta { position: absolute; left: 59px; top: 740px; width: 962px; }
+    .f02-hair {
+      width: 100%;
+      height: 1px;
+      background: rgba(194, 213, 210, 0.45);
+      transform-origin: 0% 50%;
+    }
+    .f02-label {
+      margin: 26px 0 0;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 40px;
+      letter-spacing: 0.14em;
+      color: #c2d5d2;
+      white-space: nowrap;
+    }
+    .f02-w { display: inline-block; }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FRAME_ID = "02-255-looks";
+
+      // One tempo grid drives every beat.
+      var PULSE = 0.3;
+      var BEAT_LINE = PULSE * 0; // 0.0  "one portfolio."
+      var BEAT_COUNT = PULSE * 4; // 1.2  counter starts
+      var COUNT_DUR = 1.2; // counter lands at 2.4
+      var BEAT_LOOKS = BEAT_COUNT + COUNT_DUR; // 2.4  "looks."
+      var BEAT_META = PULSE * 10; // 3.0  hairline + label
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1: scale + blur slam (power4).
+      tl.fromTo(
+        "#f02-one",
+        { scale: 1.5, filter: "blur(16px)", opacity: 0 },
+        { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "power4.out" },
+        BEAT_LINE
+      );
+
+      // Scene 2: counter. Final size is static CSS; only the transform grows (counting-dynamic-scale).
+      var counter = document.getElementById("f02-count");
+      var state = { value: 0 };
+      var START_SCALE = 0.5;
+      tl.fromTo("#f02-row", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, BEAT_COUNT);
+      tl.fromTo(
+        state,
+        { value: 0 },
+        {
+          value: 255,
+          duration: COUNT_DUR,
+          ease: "power3.out",
+          onUpdate: function () {
+            counter.textContent = String(Math.round(state.value));
+          },
+        },
+        BEAT_COUNT
+      );
+      tl.fromTo(counter, { scale: START_SCALE }, { scale: 1, duration: COUNT_DUR, ease: "power3.out" }, BEAT_COUNT);
+
+      // "looks." rises onto the same baseline once the number lands (circ.out, a different attack).
+      tl.fromTo("#f02-looks", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "circ.out" }, BEAT_LOOKS);
+
+      // Scene 3: hairline draws, then the keywords settle in on power3.
+      tl.fromTo("#f02-hair", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, BEAT_META);
+      tl.fromTo(
+        ".f02-w",
+        { y: 30, opacity: 0, filter: "blur(6px)" },
+        { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.7, ease: "power3.out", stagger: 0.12 },
+        BEAT_META + 0.15
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>

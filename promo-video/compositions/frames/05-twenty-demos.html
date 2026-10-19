@@ -1,0 +1,176 @@
+<template>
+  <div data-hf-id="hf-lz8b" id="root" data-composition-id="05-twenty-demos" data-start="0" data-duration="6.5" data-width="1080" data-height="1080">
+    <div data-hf-id="hf-cca2" id="f05-ground" class="clip f05-ground" data-start="0" data-duration="6.5" data-track-index="0" aria-hidden="true"></div>
+
+    <!-- Counter zone (top ~19%): numeral left, two-line mono label to its right. -->
+    <div data-hf-id="hf-e2c8" id="f05-zone" class="clip f05-zone" data-start="0" data-duration="6.5" data-track-index="1">
+      <div data-hf-id="hf-8o76" id="f05-num" class="f05-num"><span data-hf-id="hf-kq9b" id="f05-count" class="f05-count">0</span></div>
+      <div data-hf-id="hf-39s6" class="f05-label">
+        <p data-hf-id="hf-1npj" id="f05-l1" class="f05-l1">INTERACTIVE DEMOS</p>
+        <p data-hf-id="hf-5kt5" id="f05-l2" class="f05-l2">OPEN ANY IN YOUR BROWSER</p>
+      </div>
+    </div>
+
+    <!-- 5 x 4 grid of square tiles (built from SLUGS in the script). -->
+    <div data-hf-id="hf-gmxc" id="f05-grid" class="clip f05-grid" data-start="0" data-duration="6.5" data-track-index="2" aria-hidden="true"></div>
+  </div>
+
+  <style>
+    @font-face {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url("assets/fonts/captured-UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "JetBrains Mono";
+      font-style: normal;
+      font-weight: 400 600;
+      font-display: swap;
+      src: url("assets/fonts/captured-tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwgknk-4.woff2") format("woff2");
+    }
+
+    #root {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .f05-ground { position: absolute; inset: 0; background: #17231f; }
+
+    .f05-zone { position: absolute; left: 119px; top: 26px; width: 842px; height: 180px; }
+    .f05-num {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      font-family: "Inter", sans-serif;
+      font-weight: 900;
+      font-size: 196px;
+      line-height: 0.8;
+      letter-spacing: -0.045em;
+      font-variant-numeric: tabular-nums;
+      color: #b9472f;
+      white-space: nowrap;
+    }
+    .f05-count { display: inline-block; transform-origin: 0% 100%; }
+    .f05-label {
+      position: absolute;
+      left: 288px;
+      bottom: 8px;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 30px;
+      line-height: 42px;
+      letter-spacing: 0.14em;
+      color: #c2d5d2;
+      white-space: nowrap;
+    }
+    .f05-label p { margin: 0; }
+    .f05-l2 { opacity: 0; color: rgba(194, 213, 210, 0.78); }
+
+    .f05-grid { position: absolute; inset: 0; }
+    .f05-tile {
+      position: absolute;
+      width: 162px;
+      height: 162px;
+      box-sizing: border-box;
+      border: 1px solid rgba(194, 213, 210, 0.32);
+      background-color: #0f1815;
+      background-size: cover;
+      background-position: 0% 0%;
+      background-repeat: no-repeat;
+      opacity: 0;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FRAME_ID = "05-twenty-demos";
+
+      // Row-major, in the order the packet lists them.
+      var SLUGS = [
+        "grafics", "matriculas", "tfg-polyps", "par-parallel", "caim",
+        "algorithms", "jsbach", "planificacion", "phase-transitions", "apa-practica",
+        "bitsx-marato", "desastres-ia", "draculin", "joc-eda", "mpids",
+        "pro2", "prop", "rob-robotics", "sbc-ia", "tenda",
+      ];
+      var COLS = 5;
+      var TILE = 162;
+      var GAP = 8;
+      var GRID_L = 119;
+      var GRID_T = 222;
+
+      var grid = document.getElementById("f05-grid");
+      var cx = GRID_L + (COLS * TILE + (COLS - 1) * GAP) / 2;
+      var cy = GRID_T + (4 * TILE + 3 * GAP) / 2;
+
+      var tiles = SLUGS.map(function (slug, i) {
+        var col = i % COLS;
+        var row = Math.floor(i / COLS);
+        var el = document.createElement("div");
+        el.id = "f05-tile-" + i;
+        el.className = "f05-tile";
+        el.style.left = GRID_L + col * (TILE + GAP) + "px";
+        el.style.top = GRID_T + row * (TILE + GAP) + "px";
+        el.style.backgroundImage = 'url("assets/demo-' + slug + '.png")';
+        grid.appendChild(el);
+        return el;
+      });
+
+      // ---- One cascade clock drives the tiles AND the counter.
+      var T0 = 0.8; // first tile lands
+      var STEP = 0.18; // one tile every ~0.18s
+      var N = SLUGS.length;
+      var CASCADE_END = T0 + N * STEP; // 4.4
+
+      var tl = gsap.timeline({ paused: true });
+
+      // Scene 1 (0 - 0.8s): only the numeral "0" and the first label line.
+      // The counter block waits for the 0.5s crossfade from frame 4 to finish, so the two never stack.
+      tl.fromTo("#f05-num", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.5);
+      tl.fromTo("#f05-l1", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0.65);
+
+      // Scene 2 (0.8 - 4.4s): tiles settle into the grid on power3 (no bounce), each nudged outward from the centre.
+      tiles.forEach(function (el, i) {
+        var col = i % COLS;
+        var row = Math.floor(i / COLS);
+        var tx = GRID_L + col * (TILE + GAP) + TILE / 2;
+        var ty = GRID_T + row * (TILE + GAP) + TILE / 2;
+        tl.fromTo(
+          el,
+          { opacity: 0, scale: 0.9, x: (cx - tx) * 0.1, y: (cy - ty) * 0.1 + 14 },
+          { opacity: 1, scale: 1, x: 0, y: 0, duration: 0.5, ease: "power3.out" },
+          T0 + i * STEP
+        );
+      });
+
+      // Counter bound to the same clock: p runs 1 -> 21 over the cascade, so floor(p) is the tile count (cap 20).
+      var num = document.getElementById("f05-count");
+      var proxy = { p: 1 };
+      tl.fromTo(
+        proxy,
+        { p: 1 },
+        {
+          p: N + 1,
+          duration: N * STEP,
+          ease: "none",
+          onUpdate: function () {
+            num.textContent = String(Math.min(N, Math.floor(proxy.p)));
+          },
+        },
+        T0
+      );
+      // The numeral grows as it climbs (transform only; final size is static CSS).
+      tl.fromTo(num, { scale: 0.55 }, { scale: 1, duration: N * STEP, ease: "none" }, T0);
+
+      // Scene 3 (4.4 - 6.0s): it lands on 20; the second label line reveals; everything holds.
+      tl.fromTo("#f05-l2", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.6, ease: "power3.out" }, CASCADE_END);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>
