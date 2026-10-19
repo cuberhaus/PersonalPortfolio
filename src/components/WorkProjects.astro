@@ -223,18 +223,44 @@ const { num } = Astro.props;
 </style>
 
 <script>
-  document
-    .querySelectorAll<HTMLAnchorElement>('a.work-card-link[data-fallback]')
-    .forEach((link) => {
-      link.addEventListener('click', async (e) => {
+  function initWorkFallbacks() {
+    document
+      .querySelectorAll<HTMLAnchorElement>('a.work-card-link[data-fallback]')
+      .forEach((link) => {
+        if (link.hasAttribute('data-fallback-init')) return;
+        link.setAttribute('data-fallback-init', 'true');
         const fallback = link.dataset.fallback;
         if (!fallback) return;
-        try {
-          await fetch(link.href, { method: 'HEAD', mode: 'no-cors' });
-        } catch {
+
+        let probePromise: Promise<string> | null = null;
+        const probe = () => {
+          if (!probePromise) {
+            const primary = link.href;
+            probePromise = fetch(primary, { method: 'HEAD', mode: 'no-cors' })
+              .then(() => primary)
+              .catch(() => {
+                link.href = fallback;
+                return fallback;
+              });
+          }
+          return probePromise;
+        };
+
+        link.addEventListener('pointerenter', probe, { once: true });
+        link.addEventListener('focus', probe, { once: true });
+        link.addEventListener('click', async (e) => {
+          if (link.href === new URL(fallback, window.location.origin).href) return;
           e.preventDefault();
-          window.open(fallback, '_blank', 'noopener,noreferrer');
-        }
+          const target = await probe();
+          window.open(target, '_blank', 'noopener,noreferrer');
+        });
       });
-    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWorkFallbacks);
+  } else {
+    initWorkFallbacks();
+  }
+  document.addEventListener('astro:page-load', initWorkFallbacks);
 </script>

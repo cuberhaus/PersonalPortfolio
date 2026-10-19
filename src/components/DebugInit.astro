@@ -55,24 +55,35 @@
     }
     window.__DEBUG_ENABLED = stored;
 
-    const pending = [];
-    window.addEventListener('error', function (e) {
-      pending.push({
-        level: 'error',
-        ns: 'global',
-        msg: e.message || 'Uncaught error',
-        err: e.error,
-      });
-    });
-    window.addEventListener('unhandledrejection', function (e) {
-      pending.push({
-        level: 'error',
-        ns: 'global',
-        msg: 'Unhandled promise rejection',
-        err: e.reason,
-      });
-    });
+    const pending = window.__debugPendingErrors || [];
     window.__debugPendingErrors = pending;
+    if (!window.__debugInitListenersBound) {
+      window.__debugInitListenersBound = true;
+      window.addEventListener('error', function (e) {
+        if (window.__debug) {
+          window.__debug.log('error', 'global', e.message || 'Uncaught error', e.error);
+          return;
+        }
+        pending.push({
+          level: 'error',
+          ns: 'global',
+          msg: e.message || 'Uncaught error',
+          err: e.error,
+        });
+      });
+      window.addEventListener('unhandledrejection', function (e) {
+        if (window.__debug) {
+          window.__debug.log('error', 'global', 'Unhandled promise rejection', e.reason);
+          return;
+        }
+        pending.push({
+          level: 'error',
+          ns: 'global',
+          msg: 'Unhandled promise rejection',
+          err: e.reason,
+        });
+      });
+    }
 
     // Toggle debug overlay. Multiple combos for redundancy because:
     //   - Ctrl+Shift+D is browser-bound to "Bookmark All Tabs"
@@ -99,19 +110,22 @@
         window.__debug.log('info', 'debug', 'toggle', { enabled: nowEnabled });
       }
     }
-    document.addEventListener('keydown', function (e) {
-      const isCombo =
-        // Ctrl+Alt+Shift+D — primary, no known OS/browser conflicts
-        (e.code === 'KeyD' && e.ctrlKey && e.altKey && e.shiftKey) ||
-        // Ctrl+Backtick — reliable single-modifier fallback
-        (e.code === 'Backquote' && e.ctrlKey && !e.altKey && !e.shiftKey) ||
-        // Alt+Shift+D — kept for convenience where the OS doesn't eat it
-        (e.code === 'KeyD' && e.altKey && e.shiftKey && !e.ctrlKey);
-      if (isCombo) {
-        e.preventDefault();
-        toggleDebug();
-      }
-    });
+    if (!window.__debugKeydownBound) {
+      window.__debugKeydownBound = true;
+      document.addEventListener('keydown', function (e) {
+        const isCombo =
+          // Ctrl+Alt+Shift+D — primary, no known OS/browser conflicts
+          (e.code === 'KeyD' && e.ctrlKey && e.altKey && e.shiftKey) ||
+          // Ctrl+Backtick — reliable single-modifier fallback
+          (e.code === 'Backquote' && e.ctrlKey && !e.altKey && !e.shiftKey) ||
+          // Alt+Shift+D — kept for convenience where the OS doesn't eat it
+          (e.code === 'KeyD' && e.altKey && e.shiftKey && !e.ctrlKey);
+        if (isCombo) {
+          e.preventDefault();
+          toggleDebug();
+        }
+      });
+    }
     // Expose for manual triggering from the devtools console as a final fallback.
     window.__toggleDebug = toggleDebug;
   })();

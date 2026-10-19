@@ -13,6 +13,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import {
   debug,
+  drainPendingErrors,
   emitFrom,
   emitNetwork,
   emitPerf,
@@ -273,5 +274,23 @@ describe('requireEnabled() helper', () => {
   it('returns true in import.meta.env.DEV (vitest default)', () => {
     expect(requireEnabled()).toBe(true);
     expect(isEnabled()).toBe(true);
+  });
+});
+
+describe('drainPendingErrors()', () => {
+  it('drains and clears early errors queued in __debugPendingErrors', () => {
+    const holder = globalThis as unknown as {
+      __debugPendingErrors?: Array<{ level: 'error'; ns: string; msg: string; err?: unknown }>;
+    };
+    const boom = new Error('early crash');
+    holder.__debugPendingErrors = [
+      { level: 'error', ns: 'global', msg: 'Uncaught error', err: boom },
+    ];
+    drainPendingErrors();
+    expect(holder.__debugPendingErrors).toEqual([]);
+    const buf = getBuffer('log');
+    expect(buf).toHaveLength(1);
+    expect(buf[0].msg).toBe('Uncaught error');
+    expect(buf[0].err).toBe(boom);
   });
 });

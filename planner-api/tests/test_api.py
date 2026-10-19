@@ -88,6 +88,17 @@ def test_plan_oversized_body(client):
     assert r.json()["ok"] is False
 
 
+def test_plan_oversized_stream_without_large_content_length(client):
+    huge = "x" * 200_000
+    r = client.post(
+        "/plan",
+        content=(f'{{"domain":"{huge}","problem":"{huge}"}}').encode("utf-8"),
+        headers={"content-type": "application/json", "content-length": "10"},
+    )
+    assert r.status_code == 413
+    assert r.json()["ok"] is False
+
+
 # ─── POST /plan — successful planning ────────────────────────────
 
 SAMPLE_DOMAIN = """(define (domain viaje)
@@ -186,21 +197,25 @@ def test_plan_no_plan_in_output(client, tmp_path):
 # ─── API Key auth ─────────────────────────────────────────────────
 
 def test_plan_with_api_key_required():
-    with patch.dict(os.environ, {"PLANNER_API_KEY": "secret123"}):
-        import importlib
-        import app.main as m
+    import importlib
+    import app.main as m
+
+    try:
+        with patch.dict(os.environ, {"PLANNER_API_KEY": "secret123"}):
+            importlib.reload(m)
+            c = TestClient(m.app)
+
+            r = c.post("/plan", json={"domain": SAMPLE_DOMAIN, "problem": SAMPLE_PROBLEM})
+            assert r.status_code == 401
+
+            r = c.post(
+                "/plan",
+                json={"domain": SAMPLE_DOMAIN, "problem": SAMPLE_PROBLEM},
+                headers={"X-API-Key": "wrong"},
+            )
+            assert r.status_code == 401
+    finally:
         importlib.reload(m)
-        c = TestClient(m.app)
-
-        r = c.post("/plan", json={"domain": SAMPLE_DOMAIN, "problem": SAMPLE_PROBLEM})
-        assert r.status_code == 401
-
-        r = c.post(
-            "/plan",
-            json={"domain": SAMPLE_DOMAIN, "problem": SAMPLE_PROBLEM},
-            headers={"X-API-Key": "wrong"},
-        )
-        assert r.status_code == 401
 
 
 # ─── CORS ─────────────────────────────────────────────────────────

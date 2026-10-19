@@ -1,5 +1,10 @@
-import { getDemoTranslations } from '../locale-glob';
+import { fromLocaleGlob } from '../locale-bundle';
 
-export const TRANSLATIONS = getDemoTranslations('phase-transitions-demo');
+export const TRANSLATIONS = fromLocaleGlob(
+  import.meta.glob<Record<string, unknown>>('../../../locales/*/phase-transitions-demo.json', {
+    eager: true,
+    import: 'default',
+  })
+);
 
 export type DemoTranslations = Record<string, unknown>;

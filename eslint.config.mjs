@@ -92,30 +92,13 @@ export default [
   },
   {
     // Build / verification / codemod scripts. console.log is the intended
-    // interface here, not a debug residue. Covers the root-level utilities
-    // (verify-site.mjs, check-error.mjs) and everything under scripts/.
-    files: [
-      'scripts/**/*.{js,mjs,cjs}',
-      '*.config.{js,mjs,cjs,ts}',
-      'astro.config.mjs',
-      'verify-site.mjs',
-      'check-error.mjs',
-    ],
+    // interface here, not a debug residue.
+    files: ['scripts/**/*.{js,mjs,cjs}', '*.config.{js,mjs,cjs,ts}', 'astro.config.mjs'],
     languageOptions: {
       globals: { ...globals.node },
     },
     rules: {
       'no-console': 'off',
-    },
-  },
-  {
-    // OpenCV.js bindings have no usable TypeScript definitions; the `any`
-    // escape is unavoidable and is the documented pattern in the upstream
-    // OpenCV docs. Silence the no-explicit-any noise for this one file so
-    // the lint signal-to-noise stays useful.
-    files: ['src/lib/plate-detection.ts'],
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
   {
