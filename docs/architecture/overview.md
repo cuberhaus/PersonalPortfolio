@@ -252,16 +252,24 @@ walkthrough: [i18n.md](../guides/i18n.md).
 
 ## Theming
 
-Two orthogonal axes:
+Two axes, linked by ownership ([ADR-0002](../adr/0002-designs-own-their-palettes.md)):
 
-- **Theme** — palette tokens. Multiple themes registered in
-  [src/lib/themes.ts](../../src/lib/themes.ts), applied via
-  `html[data-theme="…"]`. Picker in the Ctrl+K modal.
 - **Design** — typography / layout flavor. Applied via
   `html[data-design="…"]` (e.g. `swiss`).
+- **Theme** — palette tokens, applied via `html[data-theme="…"]`. Registered in
+  [src/lib/themes.ts](../../src/lib/themes.ts). Every design owns exactly two
+  palettes, a night and a day (`swiss` → `barcelona-night` / `barcelona-day`),
+  so a palette is only ever offered with, and applied to, its own design.
+
+The pure helpers in [src/lib/palettes.ts](../../src/lib/palettes.ts) define the
+rule: switching design keeps night/day by snapping to the new design's palette of
+the same scheme, and stored ids that are retired, foreign or unknown resolve the
+same way. `window.setTheme(id)` and a `?theme=` link imply the design that owns
+the palette.
 
 Both persist in `localStorage` and are restored before paint by
-[ThemeInit.astro](../../src/components/ThemeInit.astro) so there's no FOUC.
+[ThemeInit.astro](../../src/components/ThemeInit.astro) so there's no FOUC. The
+Ctrl+K picker shows the active design's two palettes above the design grid.
 
 ## Localized demo dispatch
 
