@@ -1,14 +1,8 @@
 {
   "0": {
-    "event": "Guanyador de BitsXLaMarató 2022",
     "description": "Un bucle d'ecografia, l'aorta assenyalada per Mask R-CNN i un mateix fotograma mesurat de dues maneres: 4,43 cm amb el mètode de la hackató i 2,77 cm amb el millorat. Al final, les dues malles 3D giren una al costat de l'altra."
   },
   "1": {
-    "event": "Finalista a BitsXLaMarató 2023",
     "description": "Una pregunta escrita al xatbot, el veredicte d'un test, la foto d'una compresa convertida en una estimació del volum de sang i una setmana de totals diaris."
-  },
-  "2": {
-    "event": "Hackató Agentic Era (Google i Deloitte)",
-    "description": "Un formulari en paper segellat com a «pendiente», i després el log de l'agent mentre llegeix un certificat d'Hisenda i retorna vuit camps en JSON, amb un segon segell: «extraído»."
   }
 }

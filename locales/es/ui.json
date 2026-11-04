@@ -117,7 +117,6 @@
     "experience": "Experiencia",
     "projects": "Laboratorio interactivo",
     "skills": "Habilidades",
-    "videos": "Vídeos",
     "work": "Trabajo para clientes"
   },
   "notFound": {
@@ -156,16 +155,14 @@
     "recommended": "recomendada para este diseño"
   },
   "videos": {
-    "builtWith": "Hecho con",
-    "choose": "Elige un vídeo",
-    "event": "Evento",
-    "label": "Vídeos",
+    "close": "Cerrar el vídeo",
+    "heading": "La versión de {n} segundos",
     "music": "Música",
     "openDemo": "Prueba la demo interactiva",
     "play": "Reproducir el vídeo de {title}",
     "seconds": "{n} segundos",
-    "subtitle": "Cada uno de estos proyectos de hackathon tiene un vídeo corto montado con sus propias pantallas y resultados. Elige uno, pulsa reproducir y abre el proyecto si quieres profundizar.",
-    "title": "Proyectos de hackathon en 22 segundos"
+    "watch": "Ver vídeo",
+    "watchLabel": "Ver vídeo: {title}, {length}"
   },
   "work": {
     "client": "Cliente",

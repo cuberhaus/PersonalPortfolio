@@ -1422,6 +1422,12 @@ html[data-design='brutalist'] .demo-card:hover .work-tags li {
   background: #fff !important;
 }
 
+/* The Watch button sits on the card, so the yellow hover's `* { color: #000 }` would
+   otherwise leave its text black on the dark action fill. Same fix as the pills above. */
+html[data-design='brutalist'] .demo-card:hover .demo-video-button {
+  background: #fff !important;
+}
+
 html[data-design='brutalist'] .navbar {
   background: var(--bg-primary);
   backdrop-filter: none;

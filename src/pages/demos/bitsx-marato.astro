@@ -1,6 +1,7 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
+import DemoVideo from '../../components/DemoVideo.astro';
 import BitsXMaratoDemo from '../../components/demos/BitsXMaratoDemo';
 import { getDemoPageContext } from '../../lib/demo-page';
 
@@ -22,6 +23,8 @@ const { lang, t, demo } = getDemoPageContext(Astro.url, 'bitsx-marato');
       githubLabel={t('demo.viewSource')}
       accent={demo.accent}
     />
+
+    <DemoVideo slug="bitsx-marato" />
 
     <BitsXMaratoDemo lang={lang} client:visible />
   </div>

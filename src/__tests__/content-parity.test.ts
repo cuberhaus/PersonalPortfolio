@@ -310,16 +310,12 @@ describe('Videos data', () => {
     assertLocaleParity('videos', data, translations);
   });
 
-  it('every video has a title, a description and an event per locale', () => {
+  it('every video has a description per locale', () => {
     for (const locale of LOCALES) {
       const flat = flattenForLocale(data, locale, translations[locale]) as Array<{
-        title: string;
-        event: string;
         description: string;
       }>;
       for (const entry of flat) {
-        expect(entry.title.trim().length).toBeGreaterThan(0);
-        expect(entry.event.trim().length).toBeGreaterThan(0);
         expect(entry.description.trim().length).toBeGreaterThan(0);
       }
     }

@@ -102,9 +102,9 @@ describe('VideosFileSchema rejections', () => {
     expect(VideosFileSchema.safeParse([e]).success).toBe(false);
   });
 
-  it('rejects a non-https source link', () => {
-    const e = cloneFirst(videosData) as { github: string };
-    e.github = 'http://insecure.example.com';
+  it("rejects a video filed under another demo's name", () => {
+    const e = cloneFirst(videosData) as { demo: string };
+    e.demo = 'some-other-demo';
     expect(VideosFileSchema.safeParse([e]).success).toBe(false);
   });
 });

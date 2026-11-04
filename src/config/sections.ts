@@ -3,7 +3,6 @@ import About from '../components/About.astro';
 import Experience from '../components/Experience.astro';
 import WorkProjects from '../components/WorkProjects.astro';
 import Demos from '../components/Demos.astro';
-import Videos from '../components/Videos.astro';
 import Education from '../components/Education.astro';
 import Certifications from '../components/Certifications.astro';
 import Skills from '../components/Skills.astro';
@@ -31,7 +30,6 @@ const COMPONENTS = {
   experience: Experience,
   work: WorkProjects,
   projects: Demos,
-  videos: Videos,
   education: Education,
   certifications: Certifications,
   skills: Skills,

@@ -2,6 +2,8 @@
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { renderIconSvg } from '../lib/demo-icons';
 import { listDemos } from '../i18n/demo';
+import { formatVideoLength, listDemoVideos } from '../lib/demo-videos';
+import DemoVideoDialogs from './DemoVideoDialogs.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -20,6 +22,25 @@ const previews = Object.fromEntries(
 );
 
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+
+// Projects that have a short video get a "Watch" badge on their card.
+const localePrefix = lang === 'en' ? '' : `/${lang}`;
+const cardVideos = Object.fromEntries(
+  listDemoVideos(lang).map((video) => {
+    const title = demos.find((d) => d.slug === video.demo)?.title ?? video.demo;
+    const length = formatVideoLength(video.seconds);
+    return [
+      video.demo,
+      {
+        length,
+        href: `${base}${localePrefix}/demos/${video.demo}/#video`,
+        label: t('videos.watchLabel')
+          .replace('{title}', title)
+          .replace('{length}', t('videos.seconds').replace('{n}', String(video.seconds))),
+      },
+    ];
+  })
+);
 
 const { num } = Astro.props;
 ---
@@ -116,6 +137,24 @@ const { num } = Astro.props;
               </h3>
               <p class="demo-desc">{demo.description}</p>
 
+              {cardVideos[demo.slug] && (
+                <a
+                  class="demo-video-button"
+                  href={cardVideos[demo.slug].href}
+                  data-video-open={demo.slug}
+                  data-astro-reload
+                  aria-label={cardVideos[demo.slug].label}
+                >
+                  <span class="demo-video-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                      <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z" />
+                    </svg>
+                  </span>
+                  <span>{t('videos.watch')}</span>
+                  <span class="demo-video-length">{cardVideos[demo.slug].length}</span>
+                </a>
+              )}
+
               <div class="demo-card-footer">
                 <ul class="demo-tags">
                   {demo.tags.map((tag) => (
@@ -175,6 +214,8 @@ const { num } = Astro.props;
       )
     }
   </div>
+
+  <DemoVideoDialogs />
 </section>
 
 <script>
@@ -270,6 +311,89 @@ const { num } = Astro.props;
 
   .demo-card:hover::before {
     opacity: 1;
+  }
+
+  /*
+   * A button, not a caption, and deliberately not on the preview: a play pill over a picture
+   * reads as "this picture is the video". It lives with the card's other actions, names what
+   * it does, and on hover inverts to the design's primary text/background pair, which the
+   * card never does.
+   */
+  .demo-video-button {
+    /* Above the card's full-size link (z-index 1). */
+    position: relative;
+    z-index: 10;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    max-width: 100%;
+    min-height: 2.75rem;
+    margin-bottom: 1.25rem;
+    padding: 0.3rem 1.1rem 0.3rem 0.4rem;
+    /* A pill on rounded designs, a rectangle on the square-cornered ones. */
+    border-radius: calc(var(--radius-lg) * 4);
+    border: 1px solid color-mix(in srgb, var(--demo-action-color) 40%, transparent);
+    background: var(--demo-action-bg);
+    color: var(--demo-action-color);
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .demo-video-play {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, currentColor 22%, transparent);
+  }
+
+  .demo-video-length {
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+
+  .demo-video-button:hover,
+  .demo-video-button:focus-visible {
+    border-color: transparent;
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    /* Some palettes (sepia) make the action fill and the text colour near-identical, so the
+       colour swap alone can't be the only sign that this is its own control. */
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-start) 45%, transparent);
+  }
+
+  .demo-video-button:focus-visible {
+    outline: 2px solid var(--accent-start);
+    outline-offset: 2px;
+  }
+
+  /* While the pointer is on the button, the card's own "Live demo" label steps aside. */
+  .demo-card:has(.demo-video-button:hover) .demo-badge {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .demo-video-button {
+      transition:
+        transform var(--transition-base),
+        background var(--transition-fast),
+        color var(--transition-fast);
+    }
+
+    .demo-video-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .demo-video-button:active {
+      transform: translateY(0);
+    }
   }
 
   .demo-preview {

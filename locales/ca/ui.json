@@ -117,7 +117,6 @@
     "experience": "Experiència",
     "projects": "Laboratori interactiu",
     "skills": "Habilitats",
-    "videos": "Vídeos",
     "work": "Treball per a clients"
   },
   "notFound": {
@@ -156,16 +155,14 @@
     "recommended": "recomanada per a aquest disseny"
   },
   "videos": {
-    "builtWith": "Fet amb",
-    "choose": "Tria un vídeo",
-    "event": "Esdeveniment",
-    "label": "Vídeos",
+    "close": "Tanca el vídeo",
+    "heading": "La versió de {n} segons",
     "music": "Música",
     "openDemo": "Prova la demo interactiva",
     "play": "Reprodueix el vídeo de {title}",
     "seconds": "{n} segons",
-    "subtitle": "Cadascun d'aquests projectes de hackató té un vídeo curt muntat amb les seves pròpies pantalles i resultats. Tria'n un, prem reproduir i obre el projecte si vols aprofundir-hi.",
-    "title": "Projectes de hackató en 22 segons"
+    "watch": "Mira el vídeo",
+    "watchLabel": "Mira el vídeo: {title}, {length}"
   },
   "work": {
     "client": "Client",

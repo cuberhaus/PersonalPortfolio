@@ -61,34 +61,34 @@ export const WorkProjectsFileSchema = z.array(
 );
 
 // ─── videos.json (identity-only) ────────────────────────────────
-// Each entry: a short video about a project. `video`, `poster` and `thumb` are
-// served from `public/videos/`. `music` is the required CC BY credit: the page
-// prints it next to the video, so an entry without one does not parse.
+// A video belongs to a project, so an entry is keyed by the project's demo slug and
+// holds only the film itself: the title, stack, links and event stay in the demo
+// registry (one source of truth). `video` and `poster` are served from
+// `public/videos/` under the demo's slug. `music` is the required CC BY credit: the
+// page prints it next to the video, so an entry without one does not parse.
 
 const videoAsset = (extension: string) =>
   z.string().regex(new RegExp(`^/videos/[a-z0-9-]+\\.${extension}$`));
 
 export const VideosFileSchema = z.array(
-  z.object({
-    title: z.string().min(1),
-    video: videoAsset('mp4'),
-    poster: videoAsset('webp'),
-    thumb: videoAsset('webp'),
-    seconds: z.number().int().positive().max(120),
-    line: z.string().min(1),
-    lineLang: z.enum(['en', 'es', 'ca']),
-    stack: z.array(z.string().min(1)).min(1),
-    demo: z.string().min(1).optional(),
-    github: httpsUrl.optional(),
-    music: z.object({
-      title: z.string().min(1),
-      artist: z.string().min(1),
-      artistUrl: z.string().regex(/^https:\/\//),
-      license: z.string().min(1),
-      licenseUrl: z.string().regex(/^https:\/\//),
-    }),
-    ...visibility,
-  })
+  z
+    .object({
+      demo: z.string().regex(/^[a-z0-9-]+$/),
+      video: videoAsset('mp4'),
+      poster: videoAsset('webp'),
+      seconds: z.number().int().positive().max(120),
+      music: z.object({
+        title: z.string().min(1),
+        artist: z.string().min(1),
+        artistUrl: z.string().regex(/^https:\/\//),
+        license: z.string().min(1),
+        licenseUrl: z.string().regex(/^https:\/\//),
+      }),
+      ...visibility,
+    })
+    .refine((v) => v.video === `/videos/${v.demo}.mp4` && v.poster === `/videos/${v.demo}.webp`, {
+      message: 'video and poster must be /videos/<demo>.mp4 and /videos/<demo>.webp',
+    })
 );
 
 // ─── education.json (identity-only) ─────────────────────────────

@@ -1,14 +1,8 @@
 {
   "0": {
-    "event": "Ganador de BitsXLaMarató 2022",
     "description": "Un bucle de ecografía, la aorta señalada por Mask R-CNN y un mismo fotograma medido de dos maneras: 4,43 cm con el método del hackathon y 2,77 cm con el mejorado. Al final, las dos mallas 3D giran una junto a la otra."
   },
   "1": {
-    "event": "Finalista en BitsXLaMarató 2023",
     "description": "Una pregunta escrita en el chatbot, el veredicto de un test, la foto de una compresa convertida en una estimación del volumen de sangre y una semana de totales diarios."
-  },
-  "2": {
-    "event": "Hackathon Agentic Era (Google y Deloitte)",
-    "description": "Un formulario en papel sellado como «pendiente», y después el propio log del agente mientras lee un certificado de Hacienda y devuelve ocho campos en JSON, con un segundo sello: «extraído»."
   }
 }
