@@ -94,6 +94,9 @@ const t = useTranslations(lang);
   .hero-content {
     position: relative;
     z-index: 1;
+    /* #hero is a flex row: without this the item grows to its widest word and
+       the paragraph is clipped by the section's overflow instead of wrapping. */
+    min-width: 0;
     padding-top: calc(var(--nav-height) + 2rem);
   }
 
@@ -138,7 +141,12 @@ const t = useTranslations(lang);
     border-radius: var(--radius-md);
     transition:
       transform var(--transition-fast),
-      box-shadow var(--transition-fast);
+      box-shadow var(--transition-fast),
+      scale var(--transition-press);
+  }
+
+  .hero-cta:active {
+    scale: 0.97;
   }
 
   .hero-cta:hover {
@@ -146,11 +154,13 @@ const t = useTranslations(lang);
     box-shadow: 0 8px 30px var(--glow-color-strong);
   }
 
+  /* A scroll cue, not ambient decoration: two nudges (4s) and it settles, so
+     nothing keeps moving beside the text (WCAG 2.2.2). */
   .hero-cta svg {
-    animation: bounce 2s ease-in-out infinite;
+    animation: scroll-nudge 2s ease-in-out 2;
   }
 
-  @keyframes bounce {
+  @keyframes scroll-nudge {
     0%,
     100% {
       transform: translateY(0);

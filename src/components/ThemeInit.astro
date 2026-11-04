@@ -266,7 +266,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    animation: tm-fade-in 150ms ease;
+    animation: tm-fade-in 150ms var(--ease-out);
   }
 
   @keyframes tm-fade-in {
@@ -284,7 +284,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-    animation: tm-slide-in 150ms ease;
+    animation: tm-slide-in 180ms var(--ease-out);
   }
 
   @keyframes tm-slide-in {
@@ -957,7 +957,7 @@ const recFor = (themeId: string): string => (recommendedBy[themeId] ?? []).join(
       max-height: 85dvh;
       border-radius: var(--radius-lg) var(--radius-lg) 0 0;
       padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
-      animation: tm-slide-up 200ms ease;
+      animation: tm-slide-up 220ms var(--ease-drawer);
     }
 
     @keyframes tm-slide-up {

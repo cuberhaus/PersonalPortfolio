@@ -218,10 +218,19 @@ html[data-design='swiss'] h4 {
 }
 
 html[data-design='swiss'] .hero-name {
-  font-size: clamp(4rem, 12vw, 8rem);
+  /* "Casacuberta" is one unbreakable word. A 4rem floor made it wider than a
+     390px screen (the hero grew past the viewport and lost its gutter), so the
+     floor scales with the viewport on phones. */
+  font-size: clamp(2.5rem, 14.5vw, 4rem);
   font-weight: 900;
   letter-spacing: -0.05em;
   line-height: 0.9;
+}
+
+@media (min-width: 481px) {
+  html[data-design='swiss'] .hero-name {
+    font-size: clamp(4rem, 12vw, 8rem);
+  }
 }
 
 html[data-design='swiss'] .hero-greeting,
@@ -243,7 +252,10 @@ html[data-design='swiss'] .section[data-num]::before {
   content: attr(data-num);
   position: absolute;
   top: 1rem;
-  right: 0;
+  /* Align to the content column, not the viewport edge: the numeral shares its
+     right edge with the cards below it, and keeps the page gutter on phones
+     instead of touching the screen edge. */
+  right: max(1.5rem, calc((100% - var(--container-width)) / 2 + 1.5rem));
   font-size: clamp(3rem, 8vw, 7rem);
   font-weight: 800;
   color: var(--swiss-signal);
@@ -251,6 +263,13 @@ html[data-design='swiss'] .section[data-num]::before {
   letter-spacing: -0.05em;
   font-variant-numeric: tabular-nums;
   pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  /* Matches the narrower phone gutter (--container-padding: 0 1.25rem). */
+  html[data-design='swiss'] .section[data-num]::before {
+    right: 1.25rem;
+  }
 }
 
 html[data-design='swiss'] .section-title {
@@ -310,6 +329,10 @@ html[data-design='swiss'] .gradient-text {
   background-clip: initial;
   -webkit-text-fill-color: currentColor;
   color: var(--swiss-accent);
+}
+
+html[data-design='swiss'] {
+  --scroll-top-radius: 0;
 }
 
 html[data-design='swiss'] .hero-grid,
@@ -795,7 +818,8 @@ html[data-design='cyber'] h4 {
 
 html[data-design='cyber'] .hero-name {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 9vw, 6rem);
+  /* The floor must let "CASACUBERTA" fit a 320px phone (see Swiss). */
+  font-size: clamp(1.75rem, 9vw, 6rem);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.01em;
@@ -1303,6 +1327,14 @@ html[data-design='brutalist'] .hero-name {
   box-shadow: 8px 8px 0 var(--br-ink);
 }
 
+/* Narrow phones: "Casacuberta" at the 3.5rem floor leaves no room for the hard
+   shadow, so scale with the viewport below 480px (identical at 390px). */
+@media (max-width: 480px) {
+  html[data-design='brutalist'] .hero-name {
+    font-size: clamp(2.5rem, 14.4vw, 3.5rem);
+  }
+}
+
 html[data-design='brutalist'] .hero-greeting,
 html[data-design='brutalist'] .section-label {
   font-family: 'Arial Black', Arial, sans-serif;
@@ -1564,7 +1596,7 @@ html[data-design='blueprint'] h4 {
 
 html[data-design='blueprint'] .hero-name {
   font-family: var(--font-sans);
-  font-size: clamp(3rem, 9vw, 5.5rem);
+  font-size: clamp(2.75rem, 9vw, 5.5rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 0.95;
@@ -2764,7 +2796,7 @@ html[data-design='deco'] h4 {
 html[data-design='deco'] .hero-name {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(3rem, 9vw, 6rem);
+  font-size: clamp(2.4rem, 9vw, 6rem);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1;
@@ -3281,7 +3313,7 @@ html[data-design='zine'] h4 {
 
 /* Ransom-note hero name: split across words with different fonts/angles */
 html[data-design='zine'] .hero-name {
-  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-size: clamp(2.25rem, 8vw, 5rem);
   font-weight: 900;
   text-transform: uppercase;
   line-height: 0.95;

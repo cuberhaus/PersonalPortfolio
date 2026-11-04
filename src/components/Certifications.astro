@@ -142,7 +142,11 @@ const { num } = Astro.props;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition:
+      background-color var(--transition-fast),
+      border-color var(--transition-fast),
+      color var(--transition-fast),
+      scale var(--transition-press);
     font-family: inherit;
   }
 
@@ -155,6 +159,13 @@ const { num } = Astro.props;
     background: color-mix(in srgb, var(--accent-start) 15%, transparent);
     border-color: var(--accent-text);
     color: var(--text-primary);
+  }
+
+  /* Touch: chips are the primary control here, so give them a full-size target. */
+  @media (pointer: coarse) {
+    .cert-filter-btn {
+      min-height: 2.75rem;
+    }
   }
 
   .certifications-grid {
@@ -265,11 +276,14 @@ const { num } = Astro.props;
     max-width: 120px;
     max-height: 80px;
     opacity: 0;
-    transform: scale(0.8) translateY(4px);
+    /* Nothing appears from nothing: start close to full size, anchored to the
+       corner it sits in. */
+    transform: scale(0.95) translateY(4px);
+    transform-origin: bottom right;
     pointer-events: none;
     transition:
-      opacity 0.25s ease,
-      transform 0.25s ease;
+      opacity var(--transition-base),
+      transform var(--transition-base);
     z-index: 2;
   }
 
@@ -287,7 +301,9 @@ const { num } = Astro.props;
     transform: scale(1) translateY(0);
   }
 
-  @media (max-width: 768px) {
+  /* Narrow screens, and any device that cannot hover (a tablet has no :hover to
+     reveal the badge), show it all the time. */
+  @media (max-width: 768px), (hover: none) {
     .certification-badge-popover {
       opacity: 1;
       transform: scale(1) translateY(0);
@@ -322,7 +338,8 @@ const { num } = Astro.props;
     cursor: pointer;
     transition:
       border-color var(--transition-base),
-      box-shadow var(--transition-base);
+      box-shadow var(--transition-base),
+      scale var(--transition-press);
   }
 
   .certifications-toggle:hover {

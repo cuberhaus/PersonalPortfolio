@@ -45,6 +45,7 @@ const cleanBase = base === '/' ? '' : base;
     border-left: 1px solid var(--border-color);
   }
   .lang-link {
+    position: relative;
     font-size: 0.85rem;
     line-height: 1;
     margin-top: 2px;
@@ -52,6 +53,13 @@ const cleanBase = base === '/' ? '' : base;
     color: var(--text-secondary);
     transition: color var(--transition-fast);
   }
+  /* The label is ~14px tall; this invisible box brings the target to 44px. */
+  .lang-link::before {
+    content: '';
+    position: absolute;
+    inset: -1.05rem -0.4rem;
+  }
+
   .lang-link:hover,
   .lang-link.active {
     color: var(--accent-text);
@@ -68,6 +76,11 @@ const cleanBase = base === '/' ? '' : base;
       padding: 0.25rem;
     }
     .lang-link {
+      /* Pills carry their own padding, so no extra hit area (it would overlap the
+         neighbouring pill) and they are sized to a touch target instead. */
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.5rem;
       margin-top: 0;
       padding: 0.35rem 0.75rem;
       border-radius: calc(var(--radius-md) - 2px);
@@ -76,6 +89,9 @@ const cleanBase = base === '/' ? '' : base;
       transition:
         color var(--transition-fast),
         background-color var(--transition-fast);
+    }
+    .lang-link::before {
+      display: none;
     }
     .lang-link.active {
       background: var(--bg-primary);

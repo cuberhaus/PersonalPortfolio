@@ -38,11 +38,11 @@ const t = useTranslations(lang);
     justify-content: center;
     width: 3rem;
     height: 3rem;
-    border-radius: 50%;
-    /* Black overlay darkens any theme's accent gradient enough for the
-       arrow icon (white) to clear WCAG AA. Same trick as Contact.astro. */
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--accent-gradient);
-    color: white;
+    border-radius: var(--scroll-top-radius, 50%);
+    /* The shared action tokens: a darkened accent gradient that clears WCAG AA for
+       the arrow, which a design can swap for its own flat fill (Swiss does). */
+    background: var(--demo-action-bg);
+    color: var(--demo-action-color);
     box-shadow: 0 4px 14px var(--glow-color-strong);
     opacity: 0;
     pointer-events: none;
@@ -50,7 +50,8 @@ const t = useTranslations(lang);
     transition:
       opacity var(--transition-base),
       transform var(--transition-base),
-      box-shadow var(--transition-base);
+      box-shadow var(--transition-base),
+      scale var(--transition-press);
   }
 
   .scroll-to-top.visible {
@@ -65,7 +66,7 @@ const t = useTranslations(lang);
   }
 
   .scroll-to-top:active {
-    transform: translateY(0);
+    scale: 0.94;
   }
 
   @media (max-width: 1024px) {
@@ -79,8 +80,8 @@ const t = useTranslations(lang);
     .scroll-to-top {
       bottom: 1.5rem;
       right: 1rem;
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 2.75rem;
+      height: 2.75rem;
     }
   }
 </style>
