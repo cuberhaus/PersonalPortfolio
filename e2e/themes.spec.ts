@@ -5,6 +5,8 @@
  *  - pressing Ctrl+K opens the modal on the home page
  *  - selecting a design tile sets `html[data-design]`
  *  - selecting a palette swatch sets `html[data-theme]`
+ *  - a design offers, and applies, only the two palettes it owns
+ *  - switching design snaps the palette to the new design's own night/day
  *  - both selections persist across a reload (via localStorage)
  *  - switching designs actually changes the H1 font-family
  */
@@ -68,25 +70,135 @@ test.describe('Ctrl+K customize modal', () => {
 
   test('picks a palette and applies data-theme to <html>', async ({ page }) => {
     await openModal(page);
-    await page.locator('[data-theme-id="dracula"]').click();
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dracula');
+    await page.locator('[data-theme-id="barcelona-night"]').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'barcelona-night');
+    await page.locator('[data-theme-id="barcelona-day"]').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'barcelona-day');
   });
 
-  test('design + palette can be combined independently', async ({ page }) => {
+  test('a design offers only its own two palettes', async ({ page }) => {
     await openModal(page);
     await page.locator('[data-design-id="pixel"]').click();
-    await page.locator('[data-theme-id="nord"]').click();
+
+    const visible = page.locator('.theme-modal-swatch:visible');
+    await expect(visible).toHaveCount(2);
+    await expect(visible.nth(0)).toHaveAttribute('data-theme-id', 'pixel-night');
+    await expect(visible.nth(1)).toHaveAttribute('data-theme-id', 'pixel-day');
+    // Another design's palettes are not reachable from here.
+    await expect(page.locator('[data-theme-id="barcelona-day"]')).toBeHidden();
+    await expect(page.locator('[data-theme-id="comic-night"]')).toBeHidden();
+
+    await page.locator('[data-theme-id="pixel-day"]').click();
     await expect(page.locator('html')).toHaveAttribute('data-design', 'pixel');
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'nord');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'pixel-day');
+  });
+
+  test('the picker names each palette, localized, with its dark/light caption', async ({
+    page,
+  }) => {
+    await openModal(page);
+    await page.locator('[data-design-id="comic"]').click();
+    const night = page.locator('[data-theme-id="comic-night"]');
+    await expect(night.locator('.theme-modal-name')).toHaveText('Midnight Edition');
+    await expect(night.locator('.theme-modal-scheme')).toHaveText('Dark');
+    await expect(page.locator('[data-theme-id="comic-day"] .theme-modal-name')).toHaveText(
+      'Sunday Funnies'
+    );
+  });
+
+  test('retired palettes are not offered anywhere', async ({ page }) => {
+    for (const id of ['dracula', 'nord', 'gruvbox-dark', 'tokyo-night', 'sepia', 'paper']) {
+      await expect(page.locator(`[data-theme-id="${id}"]`)).toHaveCount(0);
+    }
+    // 17 designs x (night + day), each rendered once and shown one design at a time.
+    await expect(page.locator('.theme-modal-swatch')).toHaveCount(34);
+  });
+
+  test('switching design keeps night/day by snapping to the new design’s own palette', async ({
+    page,
+  }) => {
+    await openModal(page);
+    await page.locator('[data-theme-id="barcelona-night"]').click();
+    await page.locator('[data-design-id="comic"]').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'comic-night');
+
+    await page.locator('[data-theme-id="comic-day"]').click();
+    await page.locator('[data-design-id="editorial"]').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'editorial-day');
   });
 
   test('selections persist across a reload', async ({ page }) => {
     await openModal(page);
     await page.locator('[data-design-id="editorial"]').click();
-    await page.locator('[data-theme-id="tokyo-night"]').click();
+    await page.locator('[data-theme-id="editorial-night"]').click();
     await page.reload({ waitUntil: 'domcontentloaded' });
     await expect(page.locator('html')).toHaveAttribute('data-design', 'editorial');
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'tokyo-night');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'editorial-night');
+  });
+
+  test('Ctrl+K opens instantly, a click on the nav button animates', async ({ page }) => {
+    await openModal(page);
+    await expect(page.locator('#theme-modal')).toHaveClass(/instant/);
+    await page.keyboard.press('Escape');
+    await page.evaluate(() => document.dispatchEvent(new Event('open-theme-modal')));
+    await expect(page.locator('#theme-modal.open')).toBeVisible();
+    await expect(page.locator('#theme-modal')).not.toHaveClass(/instant/);
+  });
+
+  test('stored palettes that the active design does not own snap to the one it does', async ({
+    page,
+  }) => {
+    const reloadWith = async (design: string, theme: string) => {
+      await page.evaluate(
+        ([d, t]) => {
+          localStorage.setItem('design', d);
+          localStorage.setItem('theme', t);
+        },
+        [design, theme]
+      );
+      await page.reload({ waitUntil: 'domcontentloaded' });
+    };
+    const html = page.locator('html');
+
+    // Another design's palette keeps its scheme.
+    await reloadWith('comic', 'barcelona-night');
+    await expect(html).toHaveAttribute('data-theme', 'comic-night');
+    await reloadWith('comic', 'barcelona-day');
+    await expect(html).toHaveAttribute('data-theme', 'comic-day');
+
+    // A retired light palette still lands on the day colorway.
+    await reloadWith('editorial', 'sepia');
+    await expect(html).toHaveAttribute('data-theme', 'editorial-day');
+
+    // A retired palette we cannot place follows the system preference.
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await reloadWith('editorial', 'dracula');
+    await expect(html).toHaveAttribute('data-theme', 'editorial-night');
+  });
+
+  test('a ?theme= link for a palette implies the design that owns it', async ({ page }) => {
+    await page.goto('/?theme=zine-night', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'zine');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'zine-night');
+    expect(new URL(page.url()).search).toBe('');
+
+    // An explicit ?design= wins and the palette snaps to it.
+    await page.goto('/?design=comic&theme=barcelona-night', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'comic');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'comic-night');
+  });
+
+  test('window.setTheme switches to the design that owns the palette', async ({ page }) => {
+    await page.evaluate(() =>
+      (window as unknown as { setTheme(id: string): void }).setTheme('deco-day')
+    );
+    await expect(page.locator('html')).toHaveAttribute('data-design', 'deco');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'deco-day');
+
+    await page.evaluate(() =>
+      (window as unknown as { setDesign(id: string): void }).setDesign('terminal')
+    );
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'terminal-day');
   });
 
   test('h1 font-family changes between designs', async ({ page }) => {
@@ -330,34 +442,5 @@ test.describe('Ctrl+K customize modal', () => {
     const logo = page.locator('.nav-logo').first();
     const font = await logo.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(font.toLowerCase()).toMatch(/unifraktur|fraktur|playfair/);
-  });
-
-  test('recommended palettes get a ★ badge when matching design is active', async ({ page }) => {
-    await openModal(page);
-    // Terminal recommends phosphor, amber-crt, gruvbox-dark
-    await page.locator('[data-design-id="terminal"]').click();
-
-    const phosphor = page.locator('[data-theme-id="phosphor"]');
-    const nord = page.locator('[data-theme-id="nord"]');
-
-    // Recommended swatch gets data-rec='true' and a fully-opaque star badge
-    await expect(phosphor).toHaveAttribute('data-rec', 'true');
-    await expect(phosphor.locator('.theme-modal-rec-badge')).toHaveCSS('opacity', '1');
-
-    // Non-recommended swatch has no data-rec flag and a hidden star badge
-    await expect(nord).not.toHaveAttribute('data-rec', 'true');
-    await expect(nord.locator('.theme-modal-rec-badge')).toHaveCSS('opacity', '0');
-  });
-
-  test('recommendation stars move when the user picks a different design', async ({ page }) => {
-    await openModal(page);
-    // Newspaper recommends sepia; pixel does NOT recommend sepia.
-    await page.locator('[data-design-id="newspaper"]').click();
-    await expect(page.locator('[data-theme-id="sepia"]')).toHaveAttribute('data-rec', 'true');
-
-    await page.locator('[data-design-id="pixel"]').click();
-    await expect(page.locator('[data-theme-id="sepia"]')).not.toHaveAttribute('data-rec', 'true');
-    // Pixel recommends synthwave
-    await expect(page.locator('[data-theme-id="synthwave"]')).toHaveAttribute('data-rec', 'true');
   });
 });

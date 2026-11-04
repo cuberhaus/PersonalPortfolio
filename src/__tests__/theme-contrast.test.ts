@@ -19,6 +19,9 @@
  *     bg-secondary, bg-card
  *   - --status-success, --status-error, --status-warning, --status-info on
  *     bg-primary, bg-secondary, bg-card
+ *   - bg-primary on accent-start, and bg-primary or text-primary on
+ *     accent-end: the ink designs print on accent-filled buttons and tags
+ *     (design palettes only)
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -123,6 +126,35 @@ describe('theme contrast tokens', () => {
           });
         }
       }
+
+      // Designs fill buttons, tags and badges with the accents and print the
+      // ground colour (or the ink) on top of them. The pair above never sees
+      // that, so a palette whose accent is too close to its own ground passes
+      // here and fails axe on the page. Only the palettes that spell their own
+      // accents are held to it; `:root` and the generic light theme predate it.
+      if (block.name === 'default-dark' || block.name === 'light') return;
+
+      it(`--bg-primary on --accent-start fills >= ${WCAG_AA}:1`, () => {
+        const ink = resolve_token(block, 'bg-primary')!;
+        const fill = resolve_token(block, 'accent-start')!;
+        const ratio = contrastRatio(ink, fill);
+        expect(
+          ratio,
+          `${block.name}: --bg-primary (${ink}) on --accent-start (${fill}) = ${ratio.toFixed(2)}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA);
+      });
+
+      it(`--bg-primary or --text-primary on --accent-end fills >= ${WCAG_AA}:1`, () => {
+        const fill = resolve_token(block, 'accent-end')!;
+        const best = Math.max(
+          contrastRatio(resolve_token(block, 'bg-primary')!, fill),
+          contrastRatio(resolve_token(block, 'text-primary')!, fill)
+        );
+        expect(
+          best,
+          `${block.name}: no ink clears ${WCAG_AA}:1 on --accent-end (${fill})`
+        ).toBeGreaterThanOrEqual(WCAG_AA);
+      });
     });
   }
 

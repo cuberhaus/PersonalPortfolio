@@ -53,12 +53,6 @@ const localesDir = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'local
 const copy = (lang: Lang): ConsentCopy =>
   JSON.parse(readFileSync(resolve(localesDir, lang, 'ui.json'), 'utf8')).analytics;
 const en = copy('en');
-// src/lib/designs.ts needs Vite's import.meta.glob, so Playwright cannot import it. Its ids are
-// exactly the keys of locales/en/designs.json (designs.test.ts enforces that parity).
-const DESIGN_IDS: string[] = Object.keys(
-  JSON.parse(readFileSync(resolve(localesDir, 'en', 'designs.json'), 'utf8'))
-);
-
 // Fixture callbacks call their continuation `provide`, not Playwright's usual `use`:
 // eslint-plugin-react-hooks mistakes a call to `use(...)` for a React hook.
 const test = base.extend<
@@ -849,17 +843,12 @@ test.describe('accessibility of the consent UI', () => {
     await expectAccessible(page, `${label} (settings view)`, options);
   }
 
-  for (const theme of THEMES.map((t) => t.id)) {
-    test(`theme ${theme}: no axe violations in either view`, async ({ page }) => {
-      await openAppearance(page, { theme });
-      await checkBothViews(page, `theme ${theme}`);
-    });
-  }
-
-  for (const design of DESIGN_IDS) {
-    test(`design ${design}: no axe violations in either view`, async ({ page }) => {
-      await openAppearance(page, { design });
-      await checkBothViews(page, `design ${design}`);
+  // A palette only exists with the design that owns it, so the surfaces a visitor
+  // can reach are exactly these design x own-palette pairs.
+  for (const { id: theme, design } of THEMES) {
+    test(`${design} / ${theme}: no axe violations in either view`, async ({ page }) => {
+      await openAppearance(page, { theme, design });
+      await checkBothViews(page, `${design} / ${theme}`);
     });
   }
 

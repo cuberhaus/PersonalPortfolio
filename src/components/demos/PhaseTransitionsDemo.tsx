@@ -21,7 +21,7 @@ import { forceLayout } from '../../lib/mpids';
 import { TRANSLATIONS } from '../../i18n/demos/phase-transitions-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { gradientButton } from './_styles';
+import { controlTransition, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -91,7 +91,7 @@ const s = {
           border: '1px solid var(--border-color)',
           fontSize: '0.85rem',
           fontWeight: 500,
-          transition: 'all 0.15s',
+          transition: controlTransition,
         }
       : ({
           padding: '0.5rem 1rem',
@@ -102,7 +102,7 @@ const s = {
           cursor: 'pointer',
           fontSize: '0.85rem',
           fontWeight: 500,
-          transition: 'all 0.15s',
+          transition: controlTransition,
         } as const),
   btnPrimary: {
     ...gradientButton(),

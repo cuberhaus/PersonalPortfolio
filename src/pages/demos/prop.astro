@@ -54,7 +54,10 @@ const tr = getPropCopy(lang);
               <button class="mock-nav-link" data-mock-tab="recs">{tr.mockNavRecs}</button>
             </div>
           </div>
-          <div class="mock-content">
+          <!-- Scrolls when a design's type runs taller than the fixed frame, and the
+               home tab has nothing focusable inside, so the pane itself must be a
+               tab stop for keyboard users to reach the overflow. -->
+          <div class="mock-content" role="region" aria-label={String(tr.mockNavBrand)} tabindex="0">
             <div class="mock-tab-content active" id="mock-home">
               <h2 class="mock-page-title">{tr.mockDashTitle}</h2>
               <div class="mock-alert">

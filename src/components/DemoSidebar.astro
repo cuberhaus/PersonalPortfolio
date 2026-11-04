@@ -122,13 +122,15 @@ function demoHref(slug: string) {
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
     opacity: 0;
-    transition: opacity 0.25s ease;
+    /* Leaving is the system responding, so it is quicker than arriving. */
+    transition: opacity 180ms var(--ease-out);
     pointer-events: none;
   }
 
   .demo-sidebar.open .sidebar-backdrop {
     opacity: 1;
     pointer-events: auto;
+    transition-duration: 240ms;
   }
 
   .sidebar-panel {
@@ -142,13 +144,14 @@ function demoHref(slug: string) {
     display: flex;
     flex-direction: column;
     transform: translateX(-100%);
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 220ms var(--ease-drawer);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
     overflow: hidden;
   }
 
   .demo-sidebar.open .sidebar-panel {
     transform: translateX(0);
+    transition-duration: 320ms;
   }
 
   .sidebar-header {
@@ -176,10 +179,18 @@ function demoHref(slug: string) {
     color: var(--text-secondary);
     transition:
       color var(--transition-fast),
-      background var(--transition-fast);
+      background var(--transition-fast),
+      scale var(--transition-press);
     cursor: pointer;
     background: none;
     border: none;
+  }
+
+  @media (pointer: coarse) {
+    .sidebar-close {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
   }
 
   .sidebar-close:hover {

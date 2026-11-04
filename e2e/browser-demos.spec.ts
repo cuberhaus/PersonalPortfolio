@@ -149,22 +149,28 @@ type PipelineLabelCase = {
   viewport: keyof typeof PIPELINE_VIEWPORTS;
 };
 
-// Issue #250 acceptance: Barcelona day and night at laptop and iPhone sizes,
-// under the default design (swiss) and the shared fallback tokens (minimal).
-// The remaining rows are representative non-Barcelona palettes and designs,
-// including the highest-chroma accents (synthwave, phosphor) where a
-// translucent tint is easiest to over-saturate.
+// Issue #250 acceptance: Barcelona day and night at laptop and iPhone sizes under the
+// default design (swiss), and Minimal's own dark and light (the shared fallback tokens).
+// A palette only exists with the design that owns it, so every row is a pairing a
+// visitor can reach. The remaining rows are representative designs, including the
+// highest-chroma accents (cyber, terminal, comic) where a translucent tint is easiest
+// to over-saturate.
 const PIPELINE_LABEL_CASES: PipelineLabelCase[] = [
-  ...(['barcelona-night', 'barcelona-day'] as const).flatMap((theme) =>
-    (['swiss', 'minimal'] as const).flatMap((design) =>
-      (['laptop', 'iphone'] as const).map((viewport) => ({ theme, design, viewport }))
-    )
+  ...(
+    [
+      ['barcelona-night', 'swiss'],
+      ['barcelona-day', 'swiss'],
+      ['dark', 'minimal'],
+      ['light', 'minimal'],
+    ] as const
+  ).flatMap(([theme, design]) =>
+    (['laptop', 'iphone'] as const).map((viewport) => ({ theme, design, viewport }))
   ),
-  { theme: 'dracula', design: 'minimal', viewport: 'laptop' },
-  { theme: 'nord-light', design: 'swiss', viewport: 'laptop' },
-  { theme: 'synthwave', design: 'cyber', viewport: 'laptop' },
-  { theme: 'phosphor', design: 'terminal', viewport: 'laptop' },
-  { theme: 'sepia', design: 'editorial', viewport: 'laptop' },
+  { theme: 'cyber-night', design: 'cyber', viewport: 'laptop' },
+  { theme: 'terminal-night', design: 'terminal', viewport: 'laptop' },
+  { theme: 'comic-day', design: 'comic', viewport: 'laptop' },
+  { theme: 'editorial-day', design: 'editorial', viewport: 'laptop' },
+  { theme: 'newspaper-night', design: 'newspaper', viewport: 'laptop' },
 ];
 
 /**

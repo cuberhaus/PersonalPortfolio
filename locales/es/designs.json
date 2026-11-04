@@ -1,70 +1,104 @@
 {
   "minimal": {
     "name": "Minimalista",
-    "blurb": "Portfolio moderno y limpio con acentos degradados"
+    "blurb": "Portfolio moderno y limpio con acentos degradados",
+    "paletteNight": "Índigo noche",
+    "paletteDay": "Índigo día"
   },
   "editorial": {
     "name": "Editorial",
-    "blurb": "Titulares serif, capitulares y columnas de revista"
+    "blurb": "Titulares serif, capitulares y columnas de revista",
+    "paletteNight": "Burdeos",
+    "paletteDay": "Couché"
   },
   "swiss": {
     "name": "Suizo",
-    "blurb": "Retícula estricta, números enormes, filetes finos"
+    "blurb": "Retícula estricta, números enormes, filetes finos",
+    "paletteNight": "Barcelona noche",
+    "paletteDay": "Barcelona día"
   },
   "pixel": {
     "name": "Píxel",
-    "blurb": "Tipografía 8-bit, botones robustos, sombras duras"
+    "blurb": "Tipografía 8-bit, botones robustos, sombras duras",
+    "paletteNight": "Luz de antorcha",
+    "paletteDay": "Mundo exterior"
   },
   "terminal": {
     "name": "Terminal",
-    "blurb": "Aire CRT, monoespaciado, cursor parpadeante"
+    "blurb": "Aire CRT, monoespaciado, cursor parpadeante",
+    "paletteNight": "Fósforo",
+    "paletteDay": "Papel continuo"
   },
   "cyber": {
     "name": "Cyberpunk",
-    "blurb": "Brillo neón, aberración cromática, rejilla synthwave"
+    "blurb": "Brillo neón, aberración cromática, rejilla synthwave",
+    "paletteNight": "Rejilla neón",
+    "paletteDay": "Holo"
   },
   "notebook": {
     "name": "Libreta",
-    "blurb": "Papel cuadriculado, tinta manuscrita, marcas de fluorescente"
+    "blurb": "Papel cuadriculado, tinta manuscrita, marcas de fluorescente",
+    "paletteNight": "Pizarra",
+    "paletteDay": "Papel cuadriculado"
   },
   "brutalist": {
     "name": "Brutalista",
-    "blurb": "Energía HTML cruda: Times, cinta amarilla, bordes gruesos"
+    "blurb": "Energía HTML cruda: Times, cinta amarilla, bordes gruesos",
+    "paletteNight": "Hormigón",
+    "paletteDay": "HTML en bruto"
   },
   "blueprint": {
     "name": "Plano técnico",
-    "blurb": "Cuadrícula cian, líneas finas, marcas de cota y etiquetas"
+    "blurb": "Cuadrícula cian, líneas finas, marcas de cota y etiquetas",
+    "paletteNight": "Cianotipia",
+    "paletteDay": "Papel vegetal"
   },
   "academic": {
     "name": "Académico",
-    "blurb": "Paper LaTeX: Garamond, secciones numeradas, resumen"
+    "blurb": "Paper LaTeX: Garamond, secciones numeradas, resumen",
+    "paletteNight": "Sala de lectura",
+    "paletteDay": "Preprint"
   },
   "ide": {
     "name": "IDE",
-    "blurb": "Vibes VSCode: pestañas, gutter, héroe con sintaxis"
+    "blurb": "Vibes VSCode: pestañas, gutter, héroe con sintaxis",
+    "paletteNight": "Grafito",
+    "paletteDay": "Luz de día"
   },
   "risograph": {
     "name": "Risograph",
-    "blurb": "Impresión dúo-tono, trama de puntos, grano y desregistro"
+    "blurb": "Impresión dúo-tono, trama de puntos, grano y desregistro",
+    "paletteNight": "Papel negro",
+    "paletteDay": "Papel sin estucar"
   },
   "deco": {
     "name": "Art Déco",
-    "blurb": "Soles radiantes, degradados dorados, bordes escalonados"
+    "blurb": "Soles radiantes, degradados dorados, bordes escalonados",
+    "paletteNight": "Gatsby",
+    "paletteDay": "Champán"
   },
   "wabisabi": {
     "name": "Wabi-sabi",
-    "blurb": "Minimalismo japonés sereno, gran espacio en blanco"
+    "blurb": "Minimalismo japonés sereno, gran espacio en blanco",
+    "paletteNight": "Sumi",
+    "paletteDay": "Washi"
   },
   "zine": {
     "name": "Fanzine",
-    "blurb": "Collage fotocopiado estilo recorte, grapas y cinta"
+    "blurb": "Collage fotocopiado estilo recorte, grapas y cinta",
+    "paletteNight": "Cartulina negra",
+    "paletteDay": "Xerox"
   },
   "comic": {
     "name": "Cómic",
-    "blurb": "Títulos Bangers, puntos Ben-Day, bocadillos"
+    "blurb": "Títulos Bangers, puntos Ben-Day, bocadillos",
+    "paletteNight": "Edición de medianoche",
+    "paletteDay": "Tiras del domingo"
   },
   "newspaper": {
     "name": "Periódico",
-    "blurb": "Cabecera gótica, columnas, anuncios clasificados"
+    "blurb": "Cabecera gótica, columnas, anuncios clasificados",
+    "paletteNight": "Última edición",
+    "paletteDay": "Papel prensa"
   }
 }

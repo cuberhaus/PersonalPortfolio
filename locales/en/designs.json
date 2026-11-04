@@ -1,70 +1,104 @@
 {
   "minimal": {
     "name": "Minimal",
-    "blurb": "Clean modern portfolio with gradient accents"
+    "blurb": "Clean modern portfolio with gradient accents",
+    "paletteNight": "Indigo Night",
+    "paletteDay": "Indigo Day"
   },
   "editorial": {
     "name": "Editorial",
-    "blurb": "Serif headlines, drop caps, magazine columns"
+    "blurb": "Serif headlines, drop caps, magazine columns",
+    "paletteNight": "Oxblood",
+    "paletteDay": "Gloss"
   },
   "swiss": {
     "name": "Swiss",
-    "blurb": "Strict grid, giant numerals, hairline rules"
+    "blurb": "Strict grid, giant numerals, hairline rules",
+    "paletteNight": "Barcelona Night",
+    "paletteDay": "Barcelona Day"
   },
   "pixel": {
     "name": "Pixel",
-    "blurb": "8-bit pixel font, chunky buttons, hard shadows"
+    "blurb": "8-bit pixel font, chunky buttons, hard shadows",
+    "paletteNight": "Torchlight",
+    "paletteDay": "Overworld"
   },
   "terminal": {
     "name": "Terminal",
-    "blurb": "CRT vibes, monospace everywhere, blinking cursor"
+    "blurb": "CRT vibes, monospace everywhere, blinking cursor",
+    "paletteNight": "Phosphor",
+    "paletteDay": "Greenbar"
   },
   "cyber": {
     "name": "Cyberpunk",
-    "blurb": "Neon glow, chromatic aberration, synthwave grid"
+    "blurb": "Neon glow, chromatic aberration, synthwave grid",
+    "paletteNight": "Neon Grid",
+    "paletteDay": "Holo"
   },
   "notebook": {
     "name": "Notebook",
-    "blurb": "Graph paper, handwritten ink, highlighter marks"
+    "blurb": "Graph paper, handwritten ink, highlighter marks",
+    "paletteNight": "Chalkboard",
+    "paletteDay": "Graph Paper"
   },
   "brutalist": {
     "name": "Brutalist",
-    "blurb": "Raw HTML energy: Times, yellow tape, thick borders"
+    "blurb": "Raw HTML energy: Times, yellow tape, thick borders",
+    "paletteNight": "Concrete",
+    "paletteDay": "Raw HTML"
   },
   "blueprint": {
     "name": "Blueprint",
-    "blurb": "Cyan grid, hairlines, dimension marks, tech labels"
+    "blurb": "Cyan grid, hairlines, dimension marks, tech labels",
+    "paletteNight": "Cyanotype",
+    "paletteDay": "Vellum"
   },
   "academic": {
     "name": "Academic",
-    "blurb": "LaTeX paper: Garamond, numbered sections, abstracts"
+    "blurb": "LaTeX paper: Garamond, numbered sections, abstracts",
+    "paletteNight": "Reading Room",
+    "paletteDay": "Preprint"
   },
   "ide": {
     "name": "IDE",
-    "blurb": "VSCode vibes: tab cards, gutter, syntax-coloured hero"
+    "blurb": "VSCode vibes: tab cards, gutter, syntax-coloured hero",
+    "paletteNight": "Graphite",
+    "paletteDay": "Daylight"
   },
   "risograph": {
     "name": "Risograph",
-    "blurb": "Duotone print, halftone dots, grain and misregister"
+    "blurb": "Duotone print, halftone dots, grain and misregister",
+    "paletteNight": "Black Stock",
+    "paletteDay": "Uncoated"
   },
   "deco": {
     "name": "Art Deco",
-    "blurb": "Sunbursts, gold gradients, stepped pyramid borders"
+    "blurb": "Sunbursts, gold gradients, stepped pyramid borders",
+    "paletteNight": "Gatsby",
+    "paletteDay": "Champagne"
   },
   "wabisabi": {
     "name": "Wabi-sabi",
-    "blurb": "Serene Japanese minimalism, vast negative space"
+    "blurb": "Serene Japanese minimalism, vast negative space",
+    "paletteNight": "Sumi",
+    "paletteDay": "Washi"
   },
   "zine": {
     "name": "Zine",
-    "blurb": "Photocopied ransom-note collage, staples and tape"
+    "blurb": "Photocopied ransom-note collage, staples and tape",
+    "paletteNight": "Black Card",
+    "paletteDay": "Xerox"
   },
   "comic": {
     "name": "Comic",
-    "blurb": "Bangers titles, Ben-Day dots, speech bubbles"
+    "blurb": "Bangers titles, Ben-Day dots, speech bubbles",
+    "paletteNight": "Midnight Edition",
+    "paletteDay": "Sunday Funnies"
   },
   "newspaper": {
     "name": "Newspaper",
-    "blurb": "Blackletter masthead, columns, classified ads"
+    "blurb": "Blackletter masthead, columns, classified ads",
+    "paletteNight": "Late Edition",
+    "paletteDay": "Newsprint"
   }
 }

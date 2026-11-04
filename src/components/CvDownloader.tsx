@@ -272,7 +272,7 @@ const CV_DL_STYLES = `
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 2.35rem;
+    min-height: 2.75rem;
     padding: 0.45rem 0.6rem;
     color: var(--text-secondary);
     background: var(--bg-secondary);
@@ -285,9 +285,11 @@ const CV_DL_STYLES = `
       background var(--transition-fast),
       box-shadow var(--transition-fast);
   }
-  .cv-dl-segment:hover span {
-    color: var(--text-primary);
-    background: color-mix(in srgb, var(--accent-start) 8%, var(--bg-secondary));
+  @media (hover: hover) and (pointer: fine) {
+    .cv-dl-segment:hover span {
+      color: var(--text-primary);
+      background: color-mix(in srgb, var(--accent-start) 8%, var(--bg-secondary));
+    }
   }
   .cv-dl-segment input:checked + span {
     color: var(--text-primary);
@@ -316,7 +318,9 @@ const CV_DL_STYLES = `
     margin-top: 1.55rem;
     transition: color var(--transition-fast);
   }
-  .cv-dl-opt:hover { color: var(--text-primary); }
+  @media (hover: hover) and (pointer: fine) {
+    .cv-dl-opt:hover { color: var(--text-primary); }
+  }
 
   .cv-dl-input {
     position: absolute;
@@ -342,8 +346,10 @@ const CV_DL_STYLES = `
       border-color var(--transition-fast),
       box-shadow var(--transition-fast);
   }
-  .cv-dl-opt:hover .cv-dl-box {
-    border-color: var(--accent-text);
+  @media (hover: hover) and (pointer: fine) {
+    .cv-dl-opt:hover .cv-dl-box {
+      border-color: var(--accent-text);
+    }
   }
   .cv-dl-input:focus-visible + .cv-dl-box {
     outline: 2px solid var(--accent-start);
@@ -406,14 +412,17 @@ const CV_DL_STYLES = `
       color var(--transition-base),
       border-color var(--transition-base),
       background var(--transition-base),
-      transform var(--transition-fast);
+      transform var(--transition-fast),
+      scale var(--transition-press);
   }
-  .cv-dl-btn:hover {
-    color: var(--demo-action-color);
-    filter: brightness(1.12);
-    transform: translateY(-1px);
+  @media (hover: hover) and (pointer: fine) {
+    .cv-dl-btn:hover {
+      color: var(--demo-action-color);
+      filter: brightness(1.12);
+      transform: translateY(-1px);
+    }
   }
-  .cv-dl-btn:active { transform: translateY(1px); }
+  .cv-dl-btn:active { scale: 0.97; }
   .cv-dl-btn:focus-visible {
     outline: 2px solid var(--accent-text);
     outline-offset: 3px;

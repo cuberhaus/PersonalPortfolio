@@ -1,3 +1,15 @@
+/* ── Colorways ───────────────────────────────────────────────
+ * Every design owns exactly two palettes, a night and a day, composed for
+ * that design rather than borrowed from an editor theme. A palette is only
+ * ever offered with, or applied to, its own design (see src/lib/themes.ts
+ * `design` and src/lib/palettes.ts).
+ *
+ * The default dark/light pair (Minimal) lives in global.css.
+ *
+ * Contrast: every text and accent token clears WCAG AA (4.5:1) on all four
+ * surfaces; src/__tests__/theme-contrast.test.ts audits each block below.
+ * ─────────────────────────────────────────────────────────── */
+
 /* ── Barcelona Signal ───────────────────────────────────────
  * A portfolio-specific Mediterranean/technical palette:
  * mineral surfaces, teal structure, and sparing coral signals.
@@ -61,293 +73,8 @@ html[data-theme='barcelona-day'] {
   --status-info: #1e40af;
 }
 
-/* ── Dracula ──────────────────────────────────────────────── */
-html[data-theme='dracula'] {
-  color-scheme: dark;
-  --bg-primary: #282a36;
-  --bg-primary-rgb: 40, 42, 54;
-  --bg-secondary: #21222c;
-  --bg-card: #2d2f3d;
-  --bg-card-hover: #343646;
-  --bg-nav: rgba(40, 42, 54, 0.6);
-  --bg-nav-scrolled: rgba(40, 42, 54, 0.85);
-
-  --text-primary: #f8f8f2;
-  --text-secondary: #bfbfbf;
-  --text-muted: #98a2c3;
-
-  --accent-start: #bd93f9;
-  --accent-end: #ff79c6;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #bd93f9;
-
-  --glow-color: rgba(189, 147, 249, 0.15);
-  --glow-color-strong: rgba(189, 147, 249, 0.35);
-
-  --border-color: #44475a;
-  --border-color-hover: #6272a4;
-}
-
-/* ── Nord ─────────────────────────────────────────────────── */
-html[data-theme='nord'] {
-  color-scheme: dark;
-  --bg-primary: #2e3440;
-  --bg-primary-rgb: 46, 52, 64;
-  --bg-secondary: #272c36;
-  --bg-card: #3b4252;
-  --bg-card-hover: #434c5e;
-  --bg-nav: rgba(46, 52, 64, 0.6);
-  --bg-nav-scrolled: rgba(46, 52, 64, 0.85);
-
-  --text-primary: #eceff4;
-  --text-secondary: #d8dee9;
-  --text-muted: #aac0d6;
-
-  --accent-start: #88c0d0;
-  --accent-end: #5e81ac;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #93c6d4;
-
-  --glow-color: rgba(136, 192, 208, 0.15);
-  --glow-color-strong: rgba(136, 192, 208, 0.35);
-
-  --border-color: #434c5e;
-  --border-color-hover: #4c566a;
-}
-
-/* ── Tokyo Night ─────────────────────────────────────────── */
-html[data-theme='tokyo-night'] {
-  color-scheme: dark;
-  --bg-primary: #1a1b26;
-  --bg-primary-rgb: 26, 27, 38;
-  --bg-secondary: #16161e;
-  --bg-card: #1f2335;
-  --bg-card-hover: #292e42;
-  --bg-nav: rgba(26, 27, 38, 0.6);
-  --bg-nav-scrolled: rgba(26, 27, 38, 0.85);
-
-  --text-primary: #c0caf5;
-  --text-secondary: #a9b1d6;
-  --text-muted: #9098ba;
-
-  --accent-start: #7aa2f7;
-  --accent-end: #bb9af7;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #7aa2f7;
-
-  --glow-color: rgba(122, 162, 247, 0.15);
-  --glow-color-strong: rgba(122, 162, 247, 0.35);
-
-  --border-color: #292e42;
-  --border-color-hover: #3b4261;
-}
-
-/* ── Catppuccin Mocha ────────────────────────────────────── */
-html[data-theme='catppuccin-mocha'] {
-  color-scheme: dark;
-  --bg-primary: #1e1e2e;
-  --bg-primary-rgb: 30, 30, 46;
-  --bg-secondary: #181825;
-  --bg-card: #24243b;
-  --bg-card-hover: #2a2a45;
-  --bg-nav: rgba(30, 30, 46, 0.6);
-  --bg-nav-scrolled: rgba(30, 30, 46, 0.85);
-
-  --text-primary: #cdd6f4;
-  --text-secondary: #bac2de;
-  --text-muted: #9094a6;
-
-  --accent-start: #cba6f7;
-  --accent-end: #f5c2e7;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #cba6f7;
-
-  --glow-color: rgba(203, 166, 247, 0.15);
-  --glow-color-strong: rgba(203, 166, 247, 0.35);
-
-  --border-color: #313244;
-  --border-color-hover: #45475a;
-}
-
-/* ── One Dark ────────────────────────────────────────────── */
-html[data-theme='one-dark'] {
-  color-scheme: dark;
-  --bg-primary: #282c34;
-  --bg-primary-rgb: 40, 44, 52;
-  --bg-secondary: #21252b;
-  --bg-card: #2c313a;
-  --bg-card-hover: #333842;
-  --bg-nav: rgba(40, 44, 52, 0.6);
-  --bg-nav-scrolled: rgba(40, 44, 52, 0.85);
-
-  --text-primary: #abb2bf;
-  --text-secondary: #9da5b4;
-  --text-muted: #9ea5b0;
-
-  --accent-start: #61afef;
-  --accent-end: #c678dd;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #61afef;
-
-  --glow-color: rgba(97, 175, 239, 0.15);
-  --glow-color-strong: rgba(97, 175, 239, 0.35);
-
-  --border-color: #3e4451;
-  --border-color-hover: #4b5263;
-}
-
-/* ── Nord Light ──────────────────────────────────────────── */
-html[data-theme='nord-light'] {
-  color-scheme: light;
-  --bg-primary: #eceff4;
-  --bg-primary-rgb: 236, 239, 244;
-  --bg-secondary: #e5e9f0;
-  --bg-card: #ffffff;
-  --bg-card-hover: #e5e9f0;
-  --bg-nav: rgba(236, 239, 244, 0.6);
-  --bg-nav-scrolled: rgba(236, 239, 244, 0.95);
-
-  --text-primary: #2e3440;
-  --text-secondary: #3b4252;
-  --text-muted: #59667e;
-
-  --accent-start: #5e81ac;
-  --accent-end: #81a1c1;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #49688e;
-
-  --glow-color: rgba(94, 129, 172, 0.15);
-  --glow-color-strong: rgba(94, 129, 172, 0.35);
-
-  --border-color: #d8dee9;
-  --border-color-hover: #c8ced9;
-
-  --status-success: #166534;
-  --status-error: #991b1b;
-  --status-warning: #713f12;
-  --status-info: #1e40af;
-}
-
-/* ── Catppuccin Latte ────────────────────────────────────── */
-html[data-theme='catppuccin-latte'] {
-  color-scheme: light;
-  --bg-primary: #eff1f5;
-  --bg-primary-rgb: 239, 241, 245;
-  --bg-secondary: #e6e9ef;
-  --bg-card: #ffffff;
-  --bg-card-hover: #e6e9ef;
-  --bg-nav: rgba(239, 241, 245, 0.6);
-  --bg-nav-scrolled: rgba(239, 241, 245, 0.95);
-
-  --text-primary: #4c4f69;
-  --text-secondary: #5c5f77;
-  --text-muted: #626577;
-
-  --accent-start: #8839ef;
-  --accent-end: #ea76cb;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #8230ee;
-
-  --glow-color: rgba(136, 57, 239, 0.15);
-  --glow-color-strong: rgba(136, 57, 239, 0.35);
-
-  --border-color: #ccd0da;
-  --border-color-hover: #bcc0cc;
-
-  --status-success: #166534;
-  --status-error: #991b1b;
-  --status-warning: #713f12;
-  --status-info: #1e40af;
-}
-
-/* ── Solarized Light ─────────────────────────────────────── */
-html[data-theme='solarized-light'] {
-  color-scheme: light;
-  --bg-primary: #fdf6e3;
-  --bg-primary-rgb: 253, 246, 227;
-  --bg-secondary: #eee8d5;
-  --bg-card: #ffffff;
-  --bg-card-hover: #eee8d5;
-  --bg-nav: rgba(253, 246, 227, 0.6);
-  --bg-nav-scrolled: rgba(253, 246, 227, 0.95);
-
-  --text-primary: #073642;
-  --text-secondary: #4d6065;
-  --text-muted: #5a6767;
-
-  --accent-start: #b58900;
-  --accent-end: #268bd2;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #826200;
-
-  --glow-color: rgba(181, 137, 0, 0.15);
-  --glow-color-strong: rgba(181, 137, 0, 0.35);
-
-  --border-color: #d6ccb3;
-  --border-color-hover: #c9bfa5;
-
-  --status-success: #166534;
-  --status-error: #991b1b;
-  --status-warning: #713f12;
-  --status-info: #1e40af;
-}
-
-/* ── Gruvbox Dark ────────────────────────────────────────── */
-html[data-theme='gruvbox-dark'] {
-  color-scheme: dark;
-  --bg-primary: #1d2021;
-  --bg-primary-rgb: 29, 32, 33;
-  --bg-secondary: #282828;
-  --bg-card: #32302f;
-  --bg-card-hover: #3c3836;
-  --bg-nav: rgba(29, 32, 33, 0.6);
-  --bg-nav-scrolled: rgba(29, 32, 33, 0.85);
-
-  --text-primary: #ebdbb2;
-  --text-secondary: #d5c4a1;
-  --text-muted: #b2a491;
-
-  --accent-start: #fe8019;
-  --accent-end: #fb4934;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #fe8019;
-
-  --glow-color: rgba(254, 128, 25, 0.18);
-  --glow-color-strong: rgba(254, 128, 25, 0.4);
-
-  --border-color: #504945;
-  --border-color-hover: #665c54;
-}
-
-/* ── Synthwave ───────────────────────────────────────────── */
-html[data-theme='synthwave'] {
-  color-scheme: dark;
-  --bg-primary: #0b0221;
-  --bg-primary-rgb: 11, 2, 33;
-  --bg-secondary: #150936;
-  --bg-card: #1d1046;
-  --bg-card-hover: #2a1866;
-  --bg-nav: rgba(11, 2, 33, 0.6);
-  --bg-nav-scrolled: rgba(11, 2, 33, 0.88);
-
-  --text-primary: #f9f7ff;
-  --text-secondary: #d0bdff;
-  --text-muted: #9986d3;
-
-  --accent-start: #ff2a6d;
-  --accent-end: #0ff0fc;
-  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #ff5087;
-
-  --glow-color: rgba(255, 42, 109, 0.22);
-  --glow-color-strong: rgba(255, 42, 109, 0.5);
-
-  --border-color: #3a2780;
-  --border-color-hover: #5a3dd6;
-}
-
 /* ── Phosphor Green (CRT) ────────────────────────────────── */
-html[data-theme='phosphor'] {
+html[data-theme='terminal-night'] {
   color-scheme: dark;
   --bg-primary: #0a140c;
   --bg-primary-rgb: 10, 20, 12;
@@ -373,58 +100,85 @@ html[data-theme='phosphor'] {
   --border-color-hover: #2d6b42;
 }
 
-/* ── Amber CRT ───────────────────────────────────────────── */
-html[data-theme='amber-crt'] {
+/* ── Synthwave ───────────────────────────────────────────── */
+html[data-theme='cyber-night'] {
   color-scheme: dark;
-  --bg-primary: #140a00;
-  --bg-primary-rgb: 20, 10, 0;
-  --bg-secondary: #1a0f02;
-  --bg-card: #211703;
-  --bg-card-hover: #302205;
-  --bg-nav: rgba(20, 10, 0, 0.6);
-  --bg-nav-scrolled: rgba(20, 10, 0, 0.9);
+  --bg-primary: #0b0221;
+  --bg-primary-rgb: 11, 2, 33;
+  --bg-secondary: #150936;
+  --bg-card: #1d1046;
+  --bg-card-hover: #2a1866;
+  --bg-nav: rgba(11, 2, 33, 0.6);
+  --bg-nav-scrolled: rgba(11, 2, 33, 0.88);
 
-  --text-primary: #ffd390;
-  --text-secondary: #e5a64b;
-  --text-muted: #bb8423;
+  --text-primary: #f9f7ff;
+  --text-secondary: #d0bdff;
+  --text-muted: #9986d3;
 
-  --accent-start: #ffb000;
-  --accent-end: #ff8c00;
+  --accent-start: #ff2a6d;
+  --accent-end: #0ff0fc;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #ffb000;
+  --accent-text: #ff5087;
 
-  --glow-color: rgba(255, 176, 0, 0.22);
-  --glow-color-strong: rgba(255, 176, 0, 0.5);
+  --glow-color: rgba(255, 42, 109, 0.22);
+  --glow-color-strong: rgba(255, 42, 109, 0.5);
 
-  --border-color: #4a3100;
-  --border-color-hover: #6b4700;
+  --border-color: #3a2780;
+  --border-color-hover: #5a3dd6;
 }
 
-/* ── Sepia ──────────────────────────────────────────────── */
-html[data-theme='sepia'] {
-  color-scheme: light;
-  --bg-primary: #f4ecd8;
-  --bg-primary-rgb: 244, 236, 216;
-  --bg-secondary: #ebe1c8;
-  --bg-card: #faf4e3;
-  --bg-card-hover: #ebe1c8;
-  --bg-nav: rgba(244, 236, 216, 0.6);
-  --bg-nav-scrolled: rgba(244, 236, 216, 0.95);
+/* ── Oxblood (editorial, dark) ─ A magazine read after dark: wine-dark paper, rose headlines. */
+html[data-theme='editorial-night'] {
+  color-scheme: dark;
+  --bg-primary: #2a1119;
+  --bg-primary-rgb: 42, 17, 25;
+  --bg-secondary: #3a1722;
+  --bg-card: #451c2a;
+  --bg-card-hover: #552635;
+  --bg-nav: rgba(42, 17, 25, 0.72);
+  --bg-nav-scrolled: rgba(42, 17, 25, 0.95);
 
-  --text-primary: #3d2b1f;
-  --text-secondary: #5a3f2b;
-  --text-muted: #775f45;
+  --text-primary: #f6e9ec;
+  --text-secondary: #d2c1c5;
+  --text-muted: #b19ca1;
 
-  --accent-start: #a85a2e;
-  --accent-end: #7a4522;
+  --accent-start: #f58aa8;
+  --accent-end: #eea67f;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #904d27;
+  --accent-text: #f58aa8;
 
-  --glow-color: rgba(168, 90, 46, 0.15);
-  --glow-color-strong: rgba(168, 90, 46, 0.35);
+  --glow-color: rgba(245, 138, 168, 0.16);
+  --glow-color-strong: rgba(245, 138, 168, 0.34);
 
-  --border-color: #d8c8a8;
-  --border-color-hover: #c8b794;
+  --border-color: #422930;
+  --border-color-hover: #573e45;
+}
+
+/* ── Gloss (editorial, light) ─ Coated magazine stock: cool white, crimson rules. */
+html[data-theme='editorial-day'] {
+  color-scheme: light;
+  --bg-primary: #faf6f5;
+  --bg-primary-rgb: 250, 246, 245;
+  --bg-secondary: #f3ebe9;
+  --bg-card: #fefdfd;
+  --bg-card-hover: #ece3e1;
+  --bg-nav: rgba(250, 246, 245, 0.82);
+  --bg-nav-scrolled: rgba(250, 246, 245, 0.97);
+
+  --text-primary: #1b1416;
+  --text-secondary: #473d40;
+  --text-muted: #5a5052;
+
+  --accent-start: #b0123c;
+  --accent-end: #7c1d6f;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #b0123c;
+
+  --glow-color: rgba(176, 18, 60, 0.13);
+  --glow-color-strong: rgba(176, 18, 60, 0.27);
+
+  --border-color: #d9d5d4;
+  --border-color-hover: #b9b4b4;
 
   --status-success: #166534;
   --status-error: #991b1b;
@@ -432,31 +186,776 @@ html[data-theme='sepia'] {
   --status-info: #1e40af;
 }
 
-/* ── Paper ───────────────────────────────────────────────── */
-html[data-theme='paper'] {
+/* ── Torchlight (pixel, dark) ─ A dungeon lit by one torch: purple-black stone, orange flame. */
+html[data-theme='pixel-night'] {
+  color-scheme: dark;
+  --bg-primary: #15111d;
+  --bg-primary-rgb: 21, 17, 29;
+  --bg-secondary: #1f192b;
+  --bg-card: #272034;
+  --bg-card-hover: #332b42;
+  --bg-nav: rgba(21, 17, 29, 0.72);
+  --bg-nav-scrolled: rgba(21, 17, 29, 0.95);
+
+  --text-primary: #f2ecf6;
+  --text-secondary: #ccc4d1;
+  --text-muted: #a79dad;
+
+  --accent-start: #ff8a1f;
+  --accent-end: #ffd04a;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #ff8a1f;
+
+  --glow-color: rgba(255, 138, 31, 0.16);
+  --glow-color-strong: rgba(255, 138, 31, 0.34);
+
+  --border-color: #2c2835;
+  --border-color-hover: #423e4a;
+}
+
+/* ── Overworld (pixel, light) ─ The overworld at noon: sky ground, red power-up accents. */
+html[data-theme='pixel-day'] {
   color-scheme: light;
-  --bg-primary: #fafaf5;
-  --bg-primary-rgb: 250, 250, 245;
-  --bg-secondary: #f0f0ea;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f0f0ea;
-  --bg-nav: rgba(250, 250, 245, 0.6);
-  --bg-nav-scrolled: rgba(250, 250, 245, 0.95);
+  --bg-primary: #dff0fb;
+  --bg-primary-rgb: 223, 240, 251;
+  --bg-secondary: #cee7f8;
+  --bg-card: #f3f8fa;
+  --bg-card-hover: #c3e0f3;
+  --bg-nav: rgba(223, 240, 251, 0.82);
+  --bg-nav-scrolled: rgba(223, 240, 251, 0.97);
+
+  --text-primary: #0b1531;
+  --text-secondary: #303f66;
+  --text-muted: #42537a;
+
+  --accent-start: #c4281c;
+  --accent-end: #1b4fbf;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #b9180e;
+
+  --glow-color: rgba(196, 40, 28, 0.13);
+  --glow-color-strong: rgba(196, 40, 28, 0.27);
+
+  --border-color: #bfd0de;
+  --border-color-hover: #a1b1c2;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Greenbar (terminal, light) ─ Tractor-feed line-printer paper with a pale green band. */
+html[data-theme='terminal-day'] {
+  color-scheme: light;
+  --bg-primary: #eef4e6;
+  --bg-primary-rgb: 238, 244, 230;
+  --bg-secondary: #e2ebd6;
+  --bg-card: #fafcf8;
+  --bg-card-hover: #dae4cc;
+  --bg-nav: rgba(238, 244, 230, 0.82);
+  --bg-nav-scrolled: rgba(238, 244, 230, 0.97);
+
+  --text-primary: #0f1f10;
+  --text-secondary: #364b37;
+  --text-muted: #495f49;
+
+  --accent-start: #166534;
+  --accent-end: #0f766e;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #166534;
+
+  --glow-color: rgba(22, 101, 52, 0.13);
+  --glow-color-strong: rgba(22, 101, 52, 0.27);
+
+  --border-color: #cdd5c6;
+  --border-color-hover: #adb7a8;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Holo (cyber, light) ─ Holographic lavender glass under daylight, magenta and cyan inks. */
+html[data-theme='cyber-day'] {
+  color-scheme: light;
+  --bg-primary: #f3efff;
+  --bg-primary-rgb: 243, 239, 255;
+  --bg-secondary: #eae4fb;
+  --bg-card: #fcfbff;
+  --bg-card-hover: #e2dbf7;
+  --bg-nav: rgba(243, 239, 255, 0.82);
+  --bg-nav-scrolled: rgba(243, 239, 255, 0.97);
+
+  --text-primary: #160a35;
+  --text-secondary: #3e336c;
+  --text-muted: #514781;
+
+  --accent-start: #b0006b;
+  --accent-end: #0a6c8f;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #b0006b;
+
+  --glow-color: rgba(176, 0, 107, 0.13);
+  --glow-color-strong: rgba(176, 0, 107, 0.27);
+
+  --border-color: #d2cee3;
+  --border-color-hover: #b2adc7;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Chalkboard (notebook, dark) ─ A classroom board: green-slate, chalk white, yellow chalk. */
+html[data-theme='notebook-night'] {
+  color-scheme: dark;
+  --bg-primary: #1b2826;
+  --bg-primary-rgb: 27, 40, 38;
+  --bg-secondary: #213431;
+  --bg-card: #273c39;
+  --bg-card-hover: #304945;
+  --bg-nav: rgba(27, 40, 38, 0.72);
+  --bg-nav-scrolled: rgba(27, 40, 38, 0.95);
+
+  --text-primary: #eef1ea;
+  --text-secondary: #d9ddd4;
+  --text-muted: #b1b7ab;
+
+  --accent-start: #f2d268;
+  --accent-end: #8fd4b8;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #f2d268;
+
+  --glow-color: rgba(242, 210, 104, 0.16);
+  --glow-color-strong: rgba(242, 210, 104, 0.34);
+
+  --border-color: #323e3c;
+  --border-color-hover: #47534f;
+}
+
+/* ── Graph Paper (notebook, light) ─ Cool white graph paper, ballpoint blue ink. */
+html[data-theme='notebook-day'] {
+  color-scheme: light;
+  --bg-primary: #f5f8fb;
+  --bg-primary-rgb: 245, 248, 251;
+  --bg-secondary: #e9eef4;
+  --bg-card: #fdfdfe;
+  --bg-card-hover: #e0e7ed;
+  --bg-nav: rgba(245, 248, 251, 0.82);
+  --bg-nav-scrolled: rgba(245, 248, 251, 0.97);
+
+  --text-primary: #16223d;
+  --text-secondary: #394a6d;
+  --text-muted: #506287;
+
+  --accent-start: #1c4fd1;
+  --accent-end: #0e7490;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #1c4fd1;
+
+  --glow-color: rgba(28, 79, 209, 0.13);
+  --glow-color-strong: rgba(28, 79, 209, 0.27);
+
+  --border-color: #d4d9e0;
+  --border-color-hover: #b4bbc6;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Concrete (brutalist, dark) ─ Poured concrete after dark, signal orange. */
+html[data-theme='brutalist-night'] {
+  color-scheme: dark;
+  --bg-primary: #151515;
+  --bg-primary-rgb: 21, 21, 21;
+  --bg-secondary: #1f1f1f;
+  --bg-card: #262626;
+  --bg-card-hover: #323232;
+  --bg-nav: rgba(21, 21, 21, 0.72);
+  --bg-nav-scrolled: rgba(21, 21, 21, 0.95);
+
+  --text-primary: #f1f1ee;
+  --text-secondary: #cacac6;
+  --text-muted: #a4a49f;
+
+  --accent-start: #ff4a1c;
+  --accent-end: #ffe000;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #fc7353;
+
+  --glow-color: rgba(255, 74, 28, 0.16);
+  --glow-color-strong: rgba(255, 74, 28, 0.34);
+
+  --border-color: #2c2c2c;
+  --border-color-hover: #424241;
+}
+
+/* ── Raw HTML (brutalist, light) ─ The unstyled web: white page, default link blue. */
+html[data-theme='brutalist-day'] {
+  color-scheme: light;
+  --bg-primary: #f6f6f3;
+  --bg-primary-rgb: 246, 246, 243;
+  --bg-secondary: #ecece7;
+  --bg-card: #fdfdfd;
+  --bg-card-hover: #e4e4dd;
+  --bg-nav: rgba(246, 246, 243, 0.82);
+  --bg-nav-scrolled: rgba(246, 246, 243, 0.97);
+
+  --text-primary: #0a0a0a;
+  --text-secondary: #313131;
+  --text-muted: #444444;
+
+  --accent-start: #1212d6;
+  --accent-end: #d40000;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #1212d6;
+
+  --glow-color: rgba(18, 18, 214, 0.13);
+  --glow-color-strong: rgba(18, 18, 214, 0.27);
+
+  --border-color: #d3d3d0;
+  --border-color-hover: #b0b0ae;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Cyanotype (blueprint, dark) ─ Prussian-blue drawing sheet, white linework. */
+html[data-theme='blueprint-night'] {
+  color-scheme: dark;
+  --bg-primary: #0c2f55;
+  --bg-primary-rgb: 12, 47, 85;
+  --bg-secondary: #01396f;
+  --bg-card: #00417e;
+  --bg-card-hover: #054e92;
+  --bg-nav: rgba(12, 47, 85, 0.72);
+  --bg-nav-scrolled: rgba(12, 47, 85, 0.95);
+
+  --text-primary: #e8f3ff;
+  --text-secondary: #e1eefb;
+  --text-muted: #b3c5d8;
+
+  --accent-start: #7fd3ff;
+  --accent-end: #4aa8e8;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #7fd3ff;
+
+  --glow-color: rgba(127, 211, 255, 0.16);
+  --glow-color-strong: rgba(127, 211, 255, 0.34);
+
+  --border-color: #27466a;
+  --border-color-hover: #3e5a7c;
+
+  --status-success: #4ade80;
+  --status-error: #fdacac;
+  --status-warning: #fde047;
+  --status-info: #93c5fd;
+}
+
+/* ── Vellum (blueprint, light) ─ Drafting vellum with blue ink. */
+html[data-theme='blueprint-day'] {
+  color-scheme: light;
+  --bg-primary: #e8f0f6;
+  --bg-primary-rgb: 232, 240, 246;
+  --bg-secondary: #dae7f0;
+  --bg-card: #f7f9fa;
+  --bg-card-hover: #d1dfea;
+  --bg-nav: rgba(232, 240, 246, 0.82);
+  --bg-nav-scrolled: rgba(232, 240, 246, 0.97);
+
+  --text-primary: #0a2340;
+  --text-secondary: #26466c;
+  --text-muted: #406188;
+
+  --accent-start: #0a5a9c;
+  --accent-end: #017590;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #0a5a9c;
+
+  --glow-color: rgba(10, 90, 156, 0.13);
+  --glow-color-strong: rgba(10, 90, 156, 0.27);
+
+  --border-color: #c8d3dd;
+  --border-color-hover: #a8b6c4;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Reading Room (academic, dark) ─ A library after hours: bottle-green lamplight. */
+html[data-theme='academic-night'] {
+  color-scheme: dark;
+  --bg-primary: #101a16;
+  --bg-primary-rgb: 16, 26, 22;
+  --bg-secondary: #16251f;
+  --bg-card: #1c2d26;
+  --bg-card-hover: #263932;
+  --bg-nav: rgba(16, 26, 22, 0.72);
+  --bg-nav-scrolled: rgba(16, 26, 22, 0.95);
+
+  --text-primary: #ebe7da;
+  --text-secondary: #cac4b2;
+  --text-muted: #a8a18d;
+
+  --accent-start: #7fc4a0;
+  --accent-end: #c9d6a0;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #7fc4a0;
+
+  --glow-color: rgba(127, 196, 160, 0.16);
+  --glow-color-strong: rgba(127, 196, 160, 0.34);
+
+  --border-color: #28302b;
+  --border-color-hover: #3d453e;
+}
+
+/* ── Preprint (academic, light) ─ A journal PDF: white page, citation blue and maroon. */
+html[data-theme='academic-day'] {
+  color-scheme: light;
+  --bg-primary: #fdfcf9;
+  --bg-primary-rgb: 253, 252, 249;
+  --bg-secondary: #f4f2ec;
+  --bg-card: #fefdfd;
+  --bg-card-hover: #eceae3;
+  --bg-nav: rgba(253, 252, 249, 0.82);
+  --bg-nav-scrolled: rgba(253, 252, 249, 0.97);
+
+  --text-primary: #16181d;
+  --text-secondary: #3f4249;
+  --text-muted: #52555c;
+
+  --accent-start: #15429b;
+  --accent-end: #8b1d2c;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #15429b;
+
+  --glow-color: rgba(21, 66, 155, 0.13);
+  --glow-color-strong: rgba(21, 66, 155, 0.27);
+
+  --border-color: #dbdad9;
+  --border-color-hover: #babab9;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Graphite (ide, dark) ─ An editor at night: neutral graphite, azure cursor. */
+html[data-theme='ide-night'] {
+  color-scheme: dark;
+  --bg-primary: #16181c;
+  --bg-primary-rgb: 22, 24, 28;
+  --bg-secondary: #1f2227;
+  --bg-card: #262930;
+  --bg-card-hover: #31353d;
+  --bg-nav: rgba(22, 24, 28, 0.72);
+  --bg-nav-scrolled: rgba(22, 24, 28, 0.95);
+
+  --text-primary: #dde1e7;
+  --text-secondary: #bfc4cd;
+  --text-muted: #9ba1ab;
+
+  --accent-start: #5aa9ee;
+  --accent-end: #b68ae6;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #5aa9ee;
+
+  --glow-color: rgba(90, 169, 238, 0.16);
+  --glow-color-strong: rgba(90, 169, 238, 0.34);
+
+  --border-color: #2b2e32;
+  --border-color-hover: #3f4246;
+}
+
+/* ── Daylight (ide, light) ─ An editor by a window: pale grey, link blue. */
+html[data-theme='ide-day'] {
+  color-scheme: light;
+  --bg-primary: #f6f7f9;
+  --bg-primary-rgb: 246, 247, 249;
+  --bg-secondary: #ebedf1;
+  --bg-card: #fdfdfe;
+  --bg-card-hover: #e3e5ea;
+  --bg-nav: rgba(246, 247, 249, 0.82);
+  --bg-nav-scrolled: rgba(246, 247, 249, 0.97);
+
+  --text-primary: #1f2328;
+  --text-secondary: #444a51;
+  --text-muted: #5c6269;
+
+  --accent-start: #0b63c5;
+  --accent-end: #7a4bd0;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #0661c2;
+
+  --glow-color: rgba(11, 99, 197, 0.13);
+  --glow-color-strong: rgba(11, 99, 197, 0.27);
+
+  --border-color: #d7d8db;
+  --border-color-hover: #b8babd;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Black Stock (risograph, dark) ─ Fluorescent inks printed on black card. */
+html[data-theme='risograph-night'] {
+  color-scheme: dark;
+  --bg-primary: #141217;
+  --bg-primary-rgb: 20, 18, 23;
+  --bg-secondary: #1e1b22;
+  --bg-card: #25222a;
+  --bg-card-hover: #312d37;
+  --bg-nav: rgba(20, 18, 23, 0.72);
+  --bg-nav-scrolled: rgba(20, 18, 23, 0.95);
+
+  --text-primary: #f4efe9;
+  --text-secondary: #cec7bf;
+  --text-muted: #a9a198;
+
+  --accent-start: #ff6f9c;
+  --accent-end: #4cc9f0;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #ff6f9c;
+
+  --glow-color: rgba(255, 111, 156, 0.16);
+  --glow-color-strong: rgba(255, 111, 156, 0.34);
+
+  --border-color: #2c292e;
+  --border-color-hover: #423f42;
+}
+
+/* ── Uncoated (risograph, light) ─ Uncoated stock, pink and blue drums. */
+html[data-theme='risograph-day'] {
+  color-scheme: light;
+  --bg-primary: #f3f0ea;
+  --bg-primary-rgb: 243, 240, 234;
+  --bg-secondary: #ebe6dc;
+  --bg-card: #fbfaf9;
+  --bg-card-hover: #e4ded2;
+  --bg-nav: rgba(243, 240, 234, 0.82);
+  --bg-nav-scrolled: rgba(243, 240, 234, 0.97);
+
+  --text-primary: #1b1a1f;
+  --text-secondary: #45444b;
+  --text-muted: #59575e;
+
+  --accent-start: #cf1968;
+  --accent-end: #1666c1;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #bc055c;
+
+  --glow-color: rgba(207, 25, 104, 0.13);
+  --glow-color-strong: rgba(207, 25, 104, 0.27);
+
+  --border-color: #d3d1cc;
+  --border-color-hover: #b4b2b0;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Gatsby (deco, dark) ─ A theatre foyer: warm black, brushed gold. */
+html[data-theme='deco-night'] {
+  color-scheme: dark;
+  --bg-primary: #0d0c0a;
+  --bg-primary-rgb: 13, 12, 10;
+  --bg-secondary: #171512;
+  --bg-card: #1e1c19;
+  --bg-card-hover: #292723;
+  --bg-nav: rgba(13, 12, 10, 0.72);
+  --bg-nav-scrolled: rgba(13, 12, 10, 0.95);
+
+  --text-primary: #f1e8d4;
+  --text-secondary: #cdc1a5;
+  --text-muted: #a99b7a;
+
+  --accent-start: #c9a961;
+  --accent-end: #e8cf89;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #c9a961;
+
+  --glow-color: rgba(201, 169, 97, 0.16);
+  --glow-color-strong: rgba(201, 169, 97, 0.34);
+
+  --border-color: #25231f;
+  --border-color-hover: #3b3832;
+}
+
+/* ── Champagne (deco, light) ─ Champagne marble with antique gold. */
+html[data-theme='deco-day'] {
+  color-scheme: light;
+  --bg-primary: #f5eedd;
+  --bg-primary-rgb: 245, 238, 221;
+  --bg-secondary: #eee4cb;
+  --bg-card: #faf8f4;
+  --bg-card-hover: #e8dcbf;
+  --bg-nav: rgba(245, 238, 221, 0.82);
+  --bg-nav-scrolled: rgba(245, 238, 221, 0.97);
+
+  --text-primary: #1c1710;
+  --text-secondary: #484137;
+  --text-muted: #5b544a;
+
+  --accent-start: #88651d;
+  --accent-end: #b88d3a;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #7b5809;
+
+  --glow-color: rgba(136, 101, 29, 0.13);
+  --glow-color-strong: rgba(136, 101, 29, 0.27);
+
+  --border-color: #d5cebf;
+  --border-color-hover: #b6b0a1;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Sumi (wabisabi, dark) ─ Ink-stone and tea-stain: muted khaki and lichen. */
+html[data-theme='wabisabi-night'] {
+  color-scheme: dark;
+  --bg-primary: #1c1b19;
+  --bg-primary-rgb: 28, 27, 25;
+  --bg-secondary: #262522;
+  --bg-card: #2e2c29;
+  --bg-card-hover: #3a3835;
+  --bg-nav: rgba(28, 27, 25, 0.72);
+  --bg-nav-scrolled: rgba(28, 27, 25, 0.95);
+
+  --text-primary: #e9e4d8;
+  --text-secondary: #d0c9b8;
+  --text-muted: #ada591;
+
+  --accent-start: #b7a98a;
+  --accent-end: #8f9e86;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #b7a98a;
+
+  --glow-color: rgba(183, 169, 138, 0.16);
+  --glow-color-strong: rgba(183, 169, 138, 0.34);
+
+  --border-color: #32312e;
+  --border-color-hover: #474541;
+}
+
+/* ── Washi (wabisabi, light) ─ Unbleached washi, aizome indigo. */
+html[data-theme='wabisabi-day'] {
+  color-scheme: light;
+  --bg-primary: #efebe1;
+  --bg-primary-rgb: 239, 235, 225;
+  --bg-secondary: #e7e1d2;
+  --bg-card: #f6f5f3;
+  --bg-card-hover: #e0d9c7;
+  --bg-nav: rgba(239, 235, 225, 0.82);
+  --bg-nav-scrolled: rgba(239, 235, 225, 0.97);
+
+  --text-primary: #27241f;
+  --text-secondary: #46423b;
+  --text-muted: #605c55;
+
+  --accent-start: #2f4b73;
+  --accent-end: #76674c;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #2f4b73;
+
+  --glow-color: rgba(47, 75, 115, 0.13);
+  --glow-color-strong: rgba(47, 75, 115, 0.27);
+
+  --border-color: #d2cec5;
+  --border-color-hover: #b6b2a9;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Black Card (zine, dark) ─ Photocopies on black card, hot pink spot colour. */
+html[data-theme='zine-night'] {
+  color-scheme: dark;
+  --bg-primary: #131313;
+  --bg-primary-rgb: 19, 19, 19;
+  --bg-secondary: #1d1d1d;
+  --bg-card: #242424;
+  --bg-card-hover: #2f2f2f;
+  --bg-nav: rgba(19, 19, 19, 0.72);
+  --bg-nav-scrolled: rgba(19, 19, 19, 0.95);
+
+  --text-primary: #f1f1ec;
+  --text-secondary: #cacac3;
+  --text-muted: #a4a49c;
+
+  --accent-start: #ff3d8b;
+  --accent-end: #ffd84d;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #ff6098;
+
+  --glow-color: rgba(255, 61, 139, 0.16);
+  --glow-color-strong: rgba(255, 61, 139, 0.34);
+
+  --border-color: #2a2a2a;
+  --border-color-hover: #40403f;
+}
+
+/* ── Xerox (zine, light) ─ Grey toner on copy paper, one spot colour. */
+html[data-theme='zine-day'] {
+  color-scheme: light;
+  --bg-primary: #efefea;
+  --bg-primary-rgb: 239, 239, 234;
+  --bg-secondary: #e5e5dd;
+  --bg-card: #f9f9f7;
+  --bg-card-hover: #deded4;
+  --bg-nav: rgba(239, 239, 234, 0.82);
+  --bg-nav-scrolled: rgba(239, 239, 234, 0.97);
 
   --text-primary: #0f0f0f;
-  --text-secondary: #3a3a3a;
-  --text-muted: #6b6b6b;
+  --text-secondary: #373737;
+  --text-muted: #4a4a4a;
 
-  --accent-start: #cc4236;
-  --accent-end: #2a2a2a;
+  --accent-start: #c9185a;
+  --accent-end: #b87a00;
   --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-  --accent-text: #be3b30;
+  --accent-text: #b90c51;
 
-  --glow-color: rgba(204, 66, 54, 0.12);
-  --glow-color-strong: rgba(204, 66, 54, 0.28);
+  --glow-color: rgba(201, 24, 90, 0.13);
+  --glow-color-strong: rgba(201, 24, 90, 0.27);
 
-  --border-color: #e0e0dd;
-  --border-color-hover: #c8c8c5;
+  --border-color: #cecec9;
+  --border-color-hover: #adadaa;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Midnight Edition (comic, dark) ─ A night-time issue: deep navy panels, yellow captions. */
+html[data-theme='comic-night'] {
+  color-scheme: dark;
+  --bg-primary: #101b33;
+  --bg-primary-rgb: 16, 27, 51;
+  --bg-secondary: #152446;
+  --bg-card: #1a2c52;
+  --bg-card-hover: #233765;
+  --bg-nav: rgba(16, 27, 51, 0.72);
+  --bg-nav-scrolled: rgba(16, 27, 51, 0.95);
+
+  --text-primary: #fff7e6;
+  --text-secondary: #dacfb8;
+  --text-muted: #b6a98d;
+
+  --accent-start: #ffd23f;
+  --accent-end: #ff5c5c;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #ffd23f;
+
+  --glow-color: rgba(255, 210, 63, 0.16);
+  --glow-color-strong: rgba(255, 210, 63, 0.34);
+
+  --border-color: #293448;
+  --border-color-hover: #414a5b;
+}
+
+/* ── Sunday Funnies (comic, light) ─ The Sunday supplement: newsprint, primary blue and red. */
+html[data-theme='comic-day'] {
+  color-scheme: light;
+  --bg-primary: #fffbea;
+  --bg-primary-rgb: 255, 251, 234;
+  --bg-secondary: #f7f1d8;
+  --bg-card: #fefdf9;
+  --bg-card-hover: #f0e9cc;
+  --bg-nav: rgba(255, 251, 234, 0.82);
+  --bg-nav-scrolled: rgba(255, 251, 234, 0.97);
+
+  --text-primary: #14110d;
+  --text-secondary: #3e3a34;
+  --text-muted: #514c46;
+
+  --accent-start: #1a5fd1;
+  --accent-end: #d9281c;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #1a5fd1;
+
+  --glow-color: rgba(26, 95, 209, 0.13);
+  --glow-color-strong: rgba(26, 95, 209, 0.27);
+
+  --border-color: #dcd8c9;
+  --border-color-hover: #bab6a9;
+
+  --status-success: #166534;
+  --status-error: #991b1b;
+  --status-warning: #713f12;
+  --status-info: #1e40af;
+}
+
+/* ── Late Edition (newspaper, dark) ─ The press room at night: warm grey, edition red. */
+html[data-theme='newspaper-night'] {
+  color-scheme: dark;
+  --bg-primary: #1b1a17;
+  --bg-primary-rgb: 27, 26, 23;
+  --bg-secondary: #252420;
+  --bg-card: #2d2b27;
+  --bg-card-hover: #393732;
+  --bg-nav: rgba(27, 26, 23, 0.72);
+  --bg-nav-scrolled: rgba(27, 26, 23, 0.95);
+
+  --text-primary: #ebe6d8;
+  --text-secondary: #cec7b4;
+  --text-muted: #aba38d;
+
+  --accent-start: #e8574a;
+  --accent-end: #c9b98a;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #fe7c6d;
+
+  --glow-color: rgba(232, 87, 74, 0.16);
+  --glow-color-strong: rgba(232, 87, 74, 0.34);
+
+  --border-color: #32302c;
+  --border-color-hover: #46443f;
+}
+
+/* ── Newsprint (newspaper, light) ─ Grey newsprint, black ink, one red rule. */
+html[data-theme='newspaper-day'] {
+  color-scheme: light;
+  --bg-primary: #efece4;
+  --bg-primary-rgb: 239, 236, 228;
+  --bg-secondary: #e7e2d5;
+  --bg-card: #f7f6f4;
+  --bg-card-hover: #e0dacb;
+  --bg-nav: rgba(239, 236, 228, 0.82);
+  --bg-nav-scrolled: rgba(239, 236, 228, 0.97);
+
+  --text-primary: #141310;
+  --text-secondary: #3e3c38;
+  --text-muted: #504f4a;
+
+  --accent-start: #a61e1e;
+  --accent-end: #5c1010;
+  --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  --accent-text: #a61e1e;
+
+  --glow-color: rgba(166, 30, 30, 0.13);
+  --glow-color-strong: rgba(166, 30, 30, 0.27);
+
+  --border-color: #cfccc5;
+  --border-color-hover: #afada6;
 
   --status-success: #166534;
   --status-error: #991b1b;

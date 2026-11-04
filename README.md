@@ -23,11 +23,12 @@ Regenerate the images with `npm run gallery:capture` (or `make gallery-capture`)
 
 Browse the [complete screenshot gallery](docs/demo-gallery.md) for one canonical desktop capture of every registered demo.
 
-The homepage defaults to the Swiss visual system and the custom Barcelona
-Signal day/night palette, leads with client work, and uses those generated demo
+The homepage defaults to the Swiss visual system and its Barcelona Signal
+night/day colorways, leads with client work, and uses those generated demo
 captures as project-card previews. The appearance control in the navigation
-opens the full design and palette studio; system light/dark preference selects
-the matching Barcelona Signal variant for first-time visitors.
+opens the design studio: each of the 17 designs ships its own night and day
+colorway, composed for it, and system light/dark preference selects the matching
+one for first-time visitors.
 
 ## CV downloads
 

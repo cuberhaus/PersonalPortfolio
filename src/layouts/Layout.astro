@@ -176,7 +176,8 @@ const hasCredential = certs.map((cert) => ({
         transition:
           color var(--transition-fast),
           background-color var(--transition-fast),
-          border-color var(--transition-fast);
+          border-color var(--transition-fast),
+          scale var(--transition-press);
       }
       .main-design-btn:hover {
         color: var(--accent-text);
@@ -199,13 +200,23 @@ const hasCredential = certs.map((cert) => ({
     </script>
 
     <script>
+      // Longest stagger entrance: --reveal-duration (420ms) + 5 steps of
+      // --reveal-step (50ms), plus a frame of slack. Keep in step with global.css.
+      const REVEAL_SETTLE_MS = 720;
+
       function initScrollReveal() {
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
+                const el = entry.target;
+                el.classList.add('visible');
+                // Once the entrance has played, stop the stagger animation from
+                // replaying whenever filters or "Show more" un-hide cards.
+                if (el.classList.contains('reveal-stagger')) {
+                  setTimeout(() => el.classList.add('revealed'), REVEAL_SETTLE_MS);
+                }
+                observer.unobserve(el);
               }
             });
           },

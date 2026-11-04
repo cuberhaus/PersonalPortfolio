@@ -251,7 +251,11 @@ const { num } = Astro.props;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition:
+      background-color var(--transition-fast),
+      border-color var(--transition-fast),
+      color var(--transition-fast),
+      scale var(--transition-press);
     font-family: inherit;
   }
 
@@ -264,6 +268,14 @@ const { num } = Astro.props;
     background: color-mix(in srgb, var(--accent-start) 15%, transparent);
     border-color: var(--accent-text);
     color: var(--text-primary);
+  }
+
+  /* Touch: chips are the primary control here, so give them a full-size target. */
+  @media (pointer: coarse) {
+    .demo-filter-btn,
+    .show-more-btn {
+      min-height: 2.75rem;
+    }
   }
 
   .demo-grid {
@@ -290,27 +302,10 @@ const { num } = Astro.props;
     display: none !important;
   }
 
-  .demo-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--accent-gradient);
-    opacity: 0;
-    transition: opacity var(--transition-base);
-    z-index: 2;
-  }
-
   .demo-card:hover {
     transform: translateY(-4px);
     border-color: var(--accent-text);
     box-shadow: 0 12px 40px var(--glow-color);
-  }
-
-  .demo-card:hover::before {
-    opacity: 1;
   }
 
   /*
@@ -379,20 +374,22 @@ const { num } = Astro.props;
     transform: translateX(-8px);
   }
 
+  /* A link acting as a button: acknowledge the press like the global `button` rule does. */
+  .demo-video-button:active {
+    scale: 0.97;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .demo-video-button {
       transition:
         transform var(--transition-base),
         background var(--transition-fast),
-        color var(--transition-fast);
+        color var(--transition-fast),
+        scale var(--transition-press);
     }
 
     .demo-video-button:hover {
       transform: translateY(-2px);
-    }
-
-    .demo-video-button:active {
-      transform: translateY(0);
     }
   }
 
@@ -477,7 +474,8 @@ const { num } = Astro.props;
     color: var(--text-muted);
     transition:
       color var(--transition-fast),
-      transform var(--transition-fast);
+      transform var(--transition-fast),
+      scale var(--transition-press);
     padding: 0.25rem;
     border-radius: var(--radius-sm);
     pointer-events: auto;
@@ -487,9 +485,20 @@ const { num } = Astro.props;
     flex-shrink: 0;
   }
 
+  /* Invisible hit area: the glyph stays small, the target reaches 44px. */
+  .demo-github-link::before {
+    content: '';
+    position: absolute;
+    inset: -0.5rem;
+  }
+
   .demo-github-link:hover {
     color: var(--text-primary);
     transform: scale(1.1);
+  }
+
+  .demo-github-link:active {
+    scale: 0.9;
   }
 
   .full-card-link {
@@ -574,17 +583,15 @@ const { num } = Astro.props;
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition:
+      background-color var(--transition-fast),
+      transform var(--transition-fast),
+      scale var(--transition-press);
     font-family: inherit;
   }
 
   .show-more-btn:hover {
     background: color-mix(in srgb, var(--accent-start) 10%, transparent);
-    box-shadow: 0 0 15px color-mix(in srgb, var(--accent-start) 20%, transparent);
     transform: translateY(-2px);
-  }
-
-  .show-more-btn:active {
-    transform: translateY(0);
   }
 </style>

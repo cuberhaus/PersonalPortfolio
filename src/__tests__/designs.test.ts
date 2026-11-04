@@ -12,8 +12,15 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { DESIGNS, DESIGN_IDS, DEFAULT_DESIGN, getDesignName, getDesignBlurb } from '../lib/designs';
-import { THEME_IDS } from '../lib/themes';
+import {
+  DESIGNS,
+  DESIGN_IDS,
+  DEFAULT_DESIGN,
+  getDesignName,
+  getDesignBlurb,
+  getPaletteName,
+} from '../lib/designs';
+import { THEMES } from '../lib/themes';
 import { ui, languages } from '../i18n/ui';
 import { LOCALES } from '../config/locales';
 
@@ -117,32 +124,22 @@ describe('design i18n coverage', () => {
   );
 });
 
-describe('recommendedThemes (soft palette hints)', () => {
-  it('every design (active + hidden) declares at least one recommendation', () => {
-    for (const d of DESIGNS) {
-      expect(
-        d.recommendedThemes && d.recommendedThemes.length > 0,
-        `design "${d.id}" has no recommendedThemes`
-      ).toBe(true);
+describe('palette names', () => {
+  it.each(LOCALES)('%s names every palette (a night and a day colorway per design)', (locale) => {
+    for (const theme of THEMES) {
+      const name = getPaletteName(theme.id, locale);
+      expect(name, `${locale}: missing name for palette "${theme.id}"`).toBeTruthy();
     }
   });
 
-  it('every recommended palette id resolves to a real theme', () => {
-    for (const d of DESIGNS) {
-      for (const paletteId of d.recommendedThemes ?? []) {
-        expect(THEME_IDS, `design "${d.id}" recommends unknown palette "${paletteId}"`).toContain(
-          paletteId
-        );
-      }
+  it('names are unique within a locale, so the picker never shows two alike', () => {
+    for (const locale of LOCALES) {
+      const names = THEMES.map((t) => getPaletteName(t.id, locale));
+      expect(new Set(names).size, `${locale} reuses a palette name`).toBe(names.length);
     }
   });
 
-  it('recommendedThemes contains no duplicates per design', () => {
-    for (const d of DESIGNS) {
-      const recs = d.recommendedThemes ?? [];
-      expect(new Set(recs).size, `design "${d.id}" has duplicate recommendations`).toBe(
-        recs.length
-      );
-    }
+  it('returns null for an unknown palette id', () => {
+    expect(getPaletteName('dracula', 'en')).toBeNull();
   });
 });

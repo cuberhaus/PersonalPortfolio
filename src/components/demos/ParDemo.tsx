@@ -267,7 +267,9 @@ function PiMini({ lang }: { lang: Lang }) {
     const cw = w - pad.l - pad.r;
     const ch = h - pad.t - pad.b;
 
-    ctx.fillStyle = 'var(--bg-card, #12121a)';
+    // Canvas cannot resolve CSS variables, so read the active theme's values.
+    const tc = getThemeColors();
+    ctx.fillStyle = tc.bgCard;
     ctx.fillRect(0, 0, w, h);
 
     const errors = data.map((d) => d.error).filter((e) => e > 0);
@@ -280,7 +282,6 @@ function PiMini({ lang }: { lang: Lang }) {
     const toX = (v: number) => pad.l + ((v - minX) / (maxX - minX || 1)) * cw;
     const toY = (v: number) => pad.t + ch - ((v - minY) / (maxY - minY || 1)) * ch;
 
-    const tc = getThemeColors();
     ctx.strokeStyle = tc.accentStart;
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -398,9 +399,15 @@ function ParDemo({ lang = 'en' }: Props) {
           border-radius: 6px;
           color: var(--text-primary, #e4e4e7);
           cursor: pointer;
+          min-height: 2.25rem;
+          transition:
+            border-color var(--transition-fast),
+            scale var(--transition-press);
         }
-        .par-controls button:hover {
-          border-color: var(--accent-start, #6366f1);
+        @media (hover: hover) and (pointer: fine) {
+          .par-controls button:hover {
+            border-color: var(--accent-start, #6366f1);
+          }
         }
         .par-canvas {
           display: block;

@@ -16,6 +16,21 @@
 //   <button style={{ ...gradientButton(), padding: '0.6rem 1.2rem' }}>...</button>
 import type { CSSProperties } from 'react';
 
+/**
+ * Transition list for pressable demo controls. Use it instead of
+ * `transition: 'all …'`: it names exactly the properties that change on
+ * hover/selection and includes `scale` so the global `:active` press
+ * feedback (see global.css) animates both ways.
+ */
+export const controlTransition = [
+  'color 150ms var(--ease-out)',
+  'background-color 150ms var(--ease-out)',
+  'border-color 150ms var(--ease-out)',
+  'opacity 150ms var(--ease-out)',
+  'box-shadow 150ms var(--ease-out)',
+  'scale var(--transition-press)',
+].join(', ');
+
 export const demoPanel: CSSProperties = {
   background: 'var(--demo-panel-bg)',
   border: '1px solid var(--demo-panel-border)',

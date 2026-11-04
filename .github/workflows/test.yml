@@ -192,8 +192,9 @@ jobs:
           path: playwright-report-analytics-consent/
           retention-days: 7
 
-  # a11y is sharded across 8 runners for speed. ~830 tests / 8 shards / 4
-  # workers per shard = 32x effective parallelism. Workers per shard stays
+  # a11y is sharded across 8 runners for speed. ~1,770 tests (34 design
+  # palettes x ~52 checks) / 8 shards / 4 workers per shard = 32x effective
+  # parallelism. Workers per shard stays
   # at 4 because GitHub-hosted runners have 4 CPU cores; raising it makes
   # workers contend for CPU rather than going faster. Eight shards keep the
   # complete 19-job workflow under GitHub's 20-concurrent-job limit, so no

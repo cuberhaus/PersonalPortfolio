@@ -192,25 +192,9 @@ const { num } = Astro.props;
       box-shadow var(--transition-base);
   }
 
-  .timeline-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--accent-gradient);
-    opacity: 0;
-    transition: opacity var(--transition-base);
-  }
-
   .timeline-content:hover {
     border-color: var(--border-color-hover);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-  }
-
-  .timeline-content:hover::before {
-    opacity: 1;
   }
 
   .timeline-header {
