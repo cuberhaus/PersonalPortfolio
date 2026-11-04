@@ -261,27 +261,10 @@ const { num } = Astro.props;
     display: none !important;
   }
 
-  .demo-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--accent-gradient);
-    opacity: 0;
-    transition: opacity var(--transition-base);
-    z-index: 2;
-  }
-
   .demo-card:hover {
     transform: translateY(-4px);
     border-color: var(--accent-text);
     box-shadow: 0 12px 40px var(--glow-color);
-  }
-
-  .demo-card:hover::before {
-    opacity: 1;
   }
 
   .demo-preview {

@@ -10,6 +10,25 @@
  * `@media (prefers-reduced-motion: no-preference)`.
  * ───────────────────────────────────────────────────────────── */
 
+/* Eyebrow labels. The small caps caption above each section heading repeats
+ * the heading, so the neutral designs drop it. The designs where the label is
+ * part of the look keep it: Brutalist, Risograph, Zine and Comic (blocks and
+ * pills), Terminal, IDE and Blueprint (prefixes), Notebook (handwriting) and
+ * Newspaper (dateline). */
+html:is(
+    [data-design='minimal'],
+    [data-design='editorial'],
+    [data-design='swiss'],
+    [data-design='pixel'],
+    [data-design='cyber'],
+    [data-design='academic'],
+    [data-design='deco'],
+    [data-design='wabisabi']
+  )
+  .section-label {
+  display: none;
+}
+
 /* ══════════════ MINIMAL (default) ═══════════════════════════
  * Intentionally the same as the base tokens in global.css so the
  * block is explicit for theme-tooling / e2e tests.
@@ -60,8 +79,7 @@ html[data-design='editorial'] .hero-name {
   letter-spacing: -0.04em;
 }
 
-html[data-design='editorial'] .hero-greeting,
-html[data-design='editorial'] .section-label {
+html[data-design='editorial'] .hero-greeting {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-style: italic;
   text-transform: none;
@@ -234,7 +252,6 @@ html[data-design='swiss'] .hero-name {
 }
 
 html[data-design='swiss'] .hero-greeting,
-html[data-design='swiss'] .section-label,
 html[data-design='swiss'] .nav-link {
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -831,7 +848,6 @@ html[data-design='cyber'] .hero-name {
 }
 
 html[data-design='cyber'] .hero-greeting,
-html[data-design='cyber'] .section-label,
 html[data-design='cyber'] .nav-link {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   text-transform: uppercase;
@@ -1943,14 +1959,6 @@ html[data-design='academic'] .section {
   padding-top: 3.25rem;
 }
 
-html[data-design='academic'] .section-label {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
 html[data-design='academic'] .section-title {
   font-family: var(--font-display);
   font-size: clamp(1.9rem, 3.5vw, 2.6rem);
@@ -2821,8 +2829,7 @@ html[data-design='deco'] .hero-name::after {
   border-bottom: 1px solid var(--deco-gold);
 }
 
-html[data-design='deco'] .hero-greeting,
-html[data-design='deco'] .section-label {
+html[data-design='deco'] .hero-greeting {
   font-family: var(--font-display);
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -3078,8 +3085,7 @@ html[data-design='wabisabi'] .hero-name {
   color: var(--wabi-ink);
 }
 
-html[data-design='wabisabi'] .hero-greeting,
-html[data-design='wabisabi'] .section-label {
+html[data-design='wabisabi'] .hero-greeting {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   text-transform: lowercase;
   letter-spacing: 0.3em;
@@ -4095,41 +4101,9 @@ html[data-design='newspaper'] .contact-form {
   position: relative;
 }
 
-/* Classified-ad small-caps label strip across top of work / demo / education cards */
-html[data-design='newspaper'] .work-card::before,
-html[data-design='newspaper'] .demo-card::before,
-html[data-design='newspaper'] .education-card::before,
-html[data-design='newspaper'] .certification-card::before {
-  content: 'ADVERTISEMENT';
-  display: block;
-  font-family: 'EB Garamond', Georgia, serif;
-  font-variant: small-caps;
-  font-weight: 600;
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
-  color: var(--news-muted);
-  border-bottom: 1px solid var(--news-hair);
-  padding-bottom: 0.35rem;
-  margin: -0.5rem -0.5rem 0.75rem;
-  text-align: center;
-}
-
-html[data-design='newspaper'] .education-card::before {
-  content: 'ACADEMIC RECORD';
-}
-
-html[data-design='newspaper'] .certification-card::before {
-  content: 'CREDENTIAL ON FILE';
-}
-
-html[data-design='newspaper'] .work-card::before {
-  content: 'EMPLOYMENT NOTICE';
-}
-
-html[data-design='newspaper'] .demo-card::before {
-  content: 'FEATURED DEMO';
-}
-
+/* The classified-ad caption strips ("ADVERTISEMENT", "EMPLOYMENT NOTICE", …) that
+ * used to live here were hardcoded English in CSS and never showed at rest: the
+ * cards' hover stripe forced their opacity to 0. They went with the stripe. */
 html[data-design='newspaper'] .card h3,
 html[data-design='newspaper'] .work-card h3,
 html[data-design='newspaper'] .demo-card h3,
