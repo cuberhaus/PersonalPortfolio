@@ -104,9 +104,22 @@ const playLabel = t('videos.play').replace('{title}', title);
     outline-offset: -6px;
   }
 
+  /* The whole poster is the hit area, so the global button press (scale 0.97) would pull the
+     corner badge several pixels toward the middle of the picture. The press belongs to the
+     badge alone. */
+  .video-play:active {
+    scale: none;
+  }
+
+  .video-play:active .video-play-badge {
+    scale: 0.96;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .video-play .video-play-badge {
-      transition: transform var(--transition-base);
+      transition:
+        transform var(--transition-base),
+        scale var(--transition-press);
     }
 
     .video-play:hover .video-play-badge {

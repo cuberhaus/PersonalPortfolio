@@ -92,10 +92,90 @@ const items = listDemoVideos(lang).map((video) => ({
     color: var(--text-primary);
     box-shadow: var(--shadow-card);
     overflow: auto;
+    /* A long dialog on a short screen scrolls itself; it must not hand the scroll on to the page. */
+    overscroll-behavior: contain;
   }
 
   .video-dialog::backdrop {
     background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
+  }
+
+  /* The page behind an open dialog stays where it was. The gutter keeps the layout from
+     shifting by a scrollbar's width when the scrollbar goes. */
+  :global(html:has(dialog[data-video-dialog][open])) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+
+  /*
+   * Opening and closing. A native <dialog> flips between display:none and the top layer, so
+   * `display` and `overlay` transition as discrete values: that keeps a closing dialog on
+   * screen long enough to fade, which is the only way it gets an exit at all. Enter is
+   * 180ms and exit 120ms (the visitor is waiting to get back to the page), and the panel
+   * settles the way the theme picker does, a short drop and a 0.97 scale, from the centre
+   * because a modal is not anchored to its trigger. Reduced motion keeps the fade and
+   * drops the movement.
+   */
+  .video-dialog {
+    --dialog-time: 120ms;
+    opacity: 1;
+    transition-property: opacity, overlay, display;
+    transition-duration: var(--dialog-time);
+    transition-timing-function: var(--ease-out);
+    transition-behavior: allow-discrete;
+  }
+
+  .video-dialog::backdrop {
+    opacity: 1;
+    transition-property: opacity, overlay, display;
+    transition-duration: 120ms;
+    transition-timing-function: var(--ease-out);
+    transition-behavior: allow-discrete;
+  }
+
+  .video-dialog[open] {
+    --dialog-time: 180ms;
+  }
+
+  .video-dialog[open]::backdrop {
+    transition-duration: 150ms;
+  }
+
+  .video-dialog:not([open]),
+  .video-dialog:not([open])::backdrop {
+    opacity: 0;
+  }
+
+  @starting-style {
+    .video-dialog[open],
+    .video-dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .video-dialog {
+      transition-property: opacity, translate, scale, overlay, display;
+    }
+
+    .video-dialog:not([open]) {
+      translate: 0 -8px;
+      scale: 0.97;
+    }
+
+    @starting-style {
+      .video-dialog[open] {
+        translate: 0 -8px;
+        scale: 0.97;
+      }
+    }
+  }
+
+  /* Opened from the keyboard (Enter on the card's link): no entrance and no exit, the same
+     rule the theme picker follows for Ctrl+K. */
+  .video-dialog[data-instant],
+  .video-dialog[data-instant]::backdrop {
+    transition: none;
   }
 
   /* A click that lands on the dialog itself, not on this panel, hit the backdrop. */
@@ -132,7 +212,8 @@ const items = listDemoVideos(lang).map((video) => ({
     cursor: pointer;
     transition:
       border-color var(--transition-fast),
-      color var(--transition-fast);
+      color var(--transition-fast),
+      scale var(--transition-press);
   }
 
   .video-dialog-close:hover {
@@ -150,6 +231,7 @@ const items = listDemoVideos(lang).map((video) => ({
     justify-self: start;
     display: inline-flex;
     align-items: center;
+    min-height: 2.75rem;
     padding: 0.6rem 1.2rem;
     border-radius: var(--radius-sm);
     background: var(--demo-action-bg);
@@ -157,6 +239,34 @@ const items = listDemoVideos(lang).map((video) => ({
     font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast),
+      box-shadow var(--transition-fast),
+      scale var(--transition-press);
+  }
+
+  /* Same swap as the card's Watch button: this is the action the card leads to, so it answers
+     the pointer the same way (and carries a ring, since in some palettes the action fill and
+     the text colour are too close for the swap alone to read). */
+  .video-dialog-link:hover,
+  .video-dialog-link:focus-visible {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-start) 45%, transparent);
+  }
+
+  /* A link acting as a button: acknowledge the press like the global `button` rule does. */
+  .video-dialog-link:active {
+    scale: 0.97;
+  }
+
+  /* On a landscape phone the dialog is shorter than the player is wide, so the player would
+     run off the bottom with its controls out of reach. Cap it to the room left under the
+     title bar (about 8.5rem with the panel padding); everywhere else this is simply 100%. */
+  .video-dialog :global(.video-stage) {
+    justify-self: start;
+    width: min(100%, calc((100dvh - 8.5rem) * 16 / 9));
   }
 </style>
 
@@ -187,6 +297,10 @@ const items = listDemoVideos(lang).map((video) => ({
           return;
         }
         event.preventDefault();
+        // A click with no pointer behind it (detail 0) came from the keyboard: skip the
+        // entrance and exit, as for any keyboard-initiated action. Set per opening, so the
+        // matching close follows suit.
+        dialog.toggleAttribute('data-instant', event.detail === 0);
         dialog.showModal();
         // The visitor just asked to watch it: start playing (the click allows it).
         dialog
