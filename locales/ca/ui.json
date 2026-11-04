@@ -151,8 +151,7 @@
     "dark": "Fosc",
     "design": "Disseny",
     "light": "Clar",
-    "palette": "Paleta",
-    "recommended": "recomanada per a aquest disseny"
+    "palette": "Paleta"
   },
   "work": {
     "client": "Client",

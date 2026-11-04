@@ -151,8 +151,7 @@
     "dark": "Dark",
     "design": "Design",
     "light": "Light",
-    "palette": "Palette",
-    "recommended": "recommended for this design"
+    "palette": "Palette"
   },
   "work": {
     "client": "Client",

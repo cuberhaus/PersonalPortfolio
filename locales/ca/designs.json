@@ -1,70 +1,104 @@
 {
   "minimal": {
     "name": "Minimalista",
-    "blurb": "Portfoli modern i net amb accents degradats"
+    "blurb": "Portfoli modern i net amb accents degradats",
+    "paletteNight": "Índigo nit",
+    "paletteDay": "Índigo dia"
   },
   "editorial": {
     "name": "Editorial",
-    "blurb": "Titulars serif, caplletres i columnes de revista"
+    "blurb": "Titulars serif, caplletres i columnes de revista",
+    "paletteNight": "Burdeus",
+    "paletteDay": "Couché"
   },
   "swiss": {
     "name": "Suís",
-    "blurb": "Retícula estricta, números enormes, filets fins"
+    "blurb": "Retícula estricta, números enormes, filets fins",
+    "paletteNight": "Barcelona nit",
+    "paletteDay": "Barcelona dia"
   },
   "pixel": {
     "name": "Píxel",
-    "blurb": "Tipografia 8-bit, botons robustos, ombres dures"
+    "blurb": "Tipografia 8-bit, botons robustos, ombres dures",
+    "paletteNight": "Llum de torxa",
+    "paletteDay": "Món exterior"
   },
   "terminal": {
     "name": "Terminal",
-    "blurb": "Aire CRT, monoespaiat arreu, cursor parpellejant"
+    "blurb": "Aire CRT, monoespaiat arreu, cursor parpellejant",
+    "paletteNight": "Fòsfor",
+    "paletteDay": "Paper continu"
   },
   "cyber": {
     "name": "Cyberpunk",
-    "blurb": "Brillantor neó, aberració cromàtica, graella synthwave"
+    "blurb": "Brillantor neó, aberració cromàtica, graella synthwave",
+    "paletteNight": "Graella de neó",
+    "paletteDay": "Holo"
   },
   "notebook": {
     "name": "Llibreta",
-    "blurb": "Paper quadriculat, tinta manuscrita, marques de fluorescent"
+    "blurb": "Paper quadriculat, tinta manuscrita, marques de fluorescent",
+    "paletteNight": "Pissarra",
+    "paletteDay": "Paper quadriculat"
   },
   "brutalist": {
     "name": "Brutalista",
-    "blurb": "Energia HTML crua: Times, cinta groga, vores gruixudes"
+    "blurb": "Energia HTML crua: Times, cinta groga, vores gruixudes",
+    "paletteNight": "Formigó",
+    "paletteDay": "HTML en brut"
   },
   "blueprint": {
     "name": "Plànol tècnic",
-    "blurb": "Quadrícula cian, línies fines, marques de cota i etiquetes"
+    "blurb": "Quadrícula cian, línies fines, marques de cota i etiquetes",
+    "paletteNight": "Cianotípia",
+    "paletteDay": "Paper vegetal"
   },
   "academic": {
     "name": "Acadèmic",
-    "blurb": "Paper LaTeX: Garamond, seccions numerades, resum"
+    "blurb": "Paper LaTeX: Garamond, seccions numerades, resum",
+    "paletteNight": "Sala de lectura",
+    "paletteDay": "Preprint"
   },
   "ide": {
     "name": "IDE",
-    "blurb": "Vibes VSCode: pestanyes, gutter, heroi amb sintaxi"
+    "blurb": "Vibes VSCode: pestanyes, gutter, heroi amb sintaxi",
+    "paletteNight": "Grafit",
+    "paletteDay": "Llum de dia"
   },
   "risograph": {
     "name": "Risograph",
-    "blurb": "Impressió duotò, trama de punts, gra i desregistre"
+    "blurb": "Impressió duotò, trama de punts, gra i desregistre",
+    "paletteNight": "Paper negre",
+    "paletteDay": "Paper sense estucar"
   },
   "deco": {
     "name": "Art Déco",
-    "blurb": "Sols radiants, degradats daurats, vores esglaonades"
+    "blurb": "Sols radiants, degradats daurats, vores esglaonades",
+    "paletteNight": "Gatsby",
+    "paletteDay": "Xampany"
   },
   "wabisabi": {
     "name": "Wabi-sabi",
-    "blurb": "Minimalisme japonès serè, gran espai en blanc"
+    "blurb": "Minimalisme japonès serè, gran espai en blanc",
+    "paletteNight": "Sumi",
+    "paletteDay": "Washi"
   },
   "zine": {
     "name": "Fanzine",
-    "blurb": "Collage fotocopiat estil retall, grapes i cinta"
+    "blurb": "Collage fotocopiat estil retall, grapes i cinta",
+    "paletteNight": "Cartolina negra",
+    "paletteDay": "Xerox"
   },
   "comic": {
     "name": "Còmic",
-    "blurb": "Títols Bangers, punts Ben-Day, bafarades"
+    "blurb": "Títols Bangers, punts Ben-Day, bafarades",
+    "paletteNight": "Edició de mitjanit",
+    "paletteDay": "Tires del diumenge"
   },
   "newspaper": {
     "name": "Diari",
-    "blurb": "Capçalera gòtica, columnes, anuncis classificats"
+    "blurb": "Capçalera gòtica, columnes, anuncis classificats",
+    "paletteNight": "Darrera edició",
+    "paletteDay": "Paper de diari"
   }
 }
