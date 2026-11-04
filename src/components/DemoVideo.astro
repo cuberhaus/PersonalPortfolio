@@ -21,17 +21,19 @@ const demo = getDemo(slug, lang);
 {
   video && (
     <section class="demo-video" id="video" aria-labelledby={`video-heading-${slug}`}>
-      <VideoStage
-        video={video}
-        title={demo.title}
-        lang={lang}
-        describedBy={`video-description-${slug}`}
-      />
-      <div class="demo-video-copy">
-        <h2 class="demo-video-heading" id={`video-heading-${slug}`}>
-          {t('videos.heading').replace('{n}', String(video.seconds))}
-        </h2>
-        <VideoCaption video={video} lang={lang} descriptionId={`video-description-${slug}`} />
+      <div class="demo-video-layout">
+        <VideoStage
+          video={video}
+          title={demo.title}
+          lang={lang}
+          describedBy={`video-description-${slug}`}
+        />
+        <div class="demo-video-copy">
+          <h2 class="demo-video-heading" id={`video-heading-${slug}`}>
+            {t('videos.heading').replace('{n}', String(video.seconds))}
+          </h2>
+          <VideoCaption video={video} lang={lang} descriptionId={`video-description-${slug}`} />
+        </div>
       </div>
     </section>
   )
@@ -39,13 +41,25 @@ const demo = getDemo(slug, lang);
 
 <style>
   .demo-video {
-    display: grid;
-    grid-template-columns: minmax(0, 27rem) minmax(0, 1fr);
-    gap: clamp(1.25rem, 4vw, 2.5rem);
-    align-items: start;
+    /* Sized by the column the page gives it, not the viewport: the designs with a narrow
+       reading column (Wabisabi, Newspaper) would otherwise leave the copy a 15rem strip
+       beside the player. */
+    container-type: inline-size;
     margin-bottom: 2.5rem;
     /* Land below the sticky navbar when reached through the card's link. */
     scroll-margin-top: 6rem;
+  }
+
+  .demo-video-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.25rem, 4vw, 2.5rem);
+    align-items: start;
+  }
+
+  /* Stacked, the player still stops short of the full column so it does not outweigh the page. */
+  .demo-video-layout :global(.video-stage) {
+    max-width: 36rem;
   }
 
   .demo-video-copy {
@@ -58,11 +72,17 @@ const demo = getDemo(slug, lang);
     font-family: var(--font-display);
     font-size: clamp(1.25rem, 2.2vw, 1.6rem);
     line-height: 1.25;
+    text-wrap: balance;
   }
 
-  @media (max-width: 760px) {
-    .demo-video {
-      grid-template-columns: minmax(0, 1fr);
+  /* Player 27rem + gap + at least 19rem (about 38 characters) of copy. */
+  @container (min-width: 48rem) {
+    .demo-video-layout {
+      grid-template-columns: minmax(0, 27rem) minmax(0, 1fr);
+    }
+
+    .demo-video-layout :global(.video-stage) {
+      max-width: none;
     }
   }
 </style>

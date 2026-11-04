@@ -726,6 +726,113 @@ test.describe('project videos', () => {
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
+  test('the page behind an open dialog stays where it was', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const badge = watchLink(page).first();
+    await badge.scrollIntoViewIfNeeded();
+    const before = await page.evaluate(() => window.scrollY);
+    const width = await page.evaluate(() => document.documentElement.clientWidth);
+
+    await badge.click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+
+    // Over the backdrop, beside the dialog, where the wheel used to scroll the page.
+    await page.mouse.move(8, 400);
+    await page.mouse.wheel(0, 600);
+    await page.waitForTimeout(150);
+
+    expect(await page.evaluate(() => window.scrollY)).toBe(before);
+    // Locking the scroll must not shift the layout by a scrollbar's width.
+    expect(await page.evaluate(() => document.documentElement.clientWidth)).toBe(width);
+  });
+
+  test('opens with an entrance from the pointer and without one from the keyboard', async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({ reducedMotion: 'no-preference' });
+    const page = await context.newPage();
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const badge = watchLink(page).first();
+    const dialog = page.getByRole('dialog');
+    await badge.scrollIntoViewIfNeeded();
+
+    await badge.click();
+    await expect(dialog).toBeVisible();
+    await expect(dialog).not.toHaveAttribute('data-instant', '');
+    await expect(dialog).toHaveCSS('transition-property', /opacity/);
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+
+    // Enter on a focused link is a click with no pointer behind it.
+    await badge.focus();
+    await page.keyboard.press('Enter');
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveAttribute('data-instant', '');
+    await expect(dialog).toHaveCSS('transition-property', 'none');
+    await context.close();
+  });
+
+  test('the whole player fits a landscape phone', async ({ page }) => {
+    await page.setViewportSize({ width: 844, height: 390 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await watchLink(page).first().click();
+
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    const stage = await dialog.locator('.video-stage').boundingBox();
+    expect(stage).not.toBeNull();
+    // Controls sit along the bottom edge of the player: if it ends on screen, so do they.
+    expect(stage!.y + stage!.height).toBeLessThanOrEqual(390);
+  });
+
+  test('the Watch button stays inside the narrowest card column', async ({ page }) => {
+    // Academic's three-up grid gives a card about 16rem; the button used to clip its length.
+    await page.addInitScript(() => {
+      localStorage.setItem('design', 'academic');
+      localStorage.setItem('theme', 'academic-day');
+    });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+    const card = page.locator('.demo-card:has(.demo-video-button)').first();
+    const button = card.locator('.demo-video-button');
+    await button.scrollIntoViewIfNeeded();
+
+    const cardBox = (await card.boundingBox())!;
+    const buttonBox = (await button.boundingBox())!;
+    expect(buttonBox.x + buttonBox.width).toBeLessThanOrEqual(cardBox.x + cardBox.width);
+    // Its contents fit the pill rather than spilling out of it.
+    const spill = await button.evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(spill).toBeLessThanOrEqual(0);
+    // "Watch video" stays on one line; only the length may drop beneath it.
+    const label = await button.locator('.demo-video-label').boundingBox();
+    expect(label!.height).toBeLessThan(30);
+  });
+
+  test('a narrow reading column stacks the project-page video over its copy', async ({ page }) => {
+    // Wabisabi's page column is about 44rem: side by side, the copy would get a 15rem strip.
+    await page.addInitScript(() => {
+      localStorage.setItem('design', 'wabisabi');
+      localStorage.setItem('theme', 'wabisabi-night');
+    });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/demos/draculin/', { waitUntil: 'domcontentloaded' });
+
+    const stage = (await page.locator('#video .video-stage').boundingBox())!;
+    const copy = (await page.locator('#video .demo-video-copy').boundingBox())!;
+    expect(copy.y).toBeGreaterThanOrEqual(stage.y + stage.height);
+
+    // Where the column is wide enough the two sit side by side again.
+    await page.addInitScript(() => {
+      localStorage.setItem('design', 'swiss');
+      localStorage.setItem('theme', 'barcelona-night');
+    });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    const wideStage = (await page.locator('#video .video-stage').boundingBox())!;
+    const wideCopy = (await page.locator('#video .demo-video-copy').boundingBox())!;
+    expect(wideCopy.x).toBeGreaterThanOrEqual(wideStage.x + wideStage.width);
+  });
+
   test.describe('without JavaScript', () => {
     test.use({ javaScriptEnabled: false });
 

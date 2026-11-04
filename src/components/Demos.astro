@@ -150,8 +150,10 @@ const { num } = Astro.props;
                       <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z" />
                     </svg>
                   </span>
-                  <span>{t('videos.watch')}</span>
-                  <span class="demo-video-length">{cardVideos[demo.slug].length}</span>
+                  <span class="demo-video-text">
+                    <span class="demo-video-label">{t('videos.watch')}</span>{' '}
+                    <span class="demo-video-length">{cardVideos[demo.slug].length}</span>
+                  </span>
                 </a>
               )}
 
@@ -348,6 +350,19 @@ const { num } = Astro.props;
     background: color-mix(in srgb, currentColor 22%, transparent);
   }
 
+  /* Label and length are one run of text, so in a narrow card column (the 3-up grid of the
+     slimmer designs) the length drops under the label instead of being clipped by the pill,
+     and the label itself never breaks mid-phrase. */
+  .demo-video-text {
+    min-width: 0;
+    line-height: 1.2;
+  }
+
+  .demo-video-label,
+  .demo-video-length {
+    white-space: nowrap;
+  }
+
   .demo-video-length {
     font-family: var(--font-mono);
     font-weight: 600;
@@ -381,10 +396,13 @@ const { num } = Astro.props;
 
   @media (prefers-reduced-motion: no-preference) {
     .demo-video-button {
+      /* Border and ring are part of the hover swap: left out, they snap while the fill fades. */
       transition:
         transform var(--transition-base),
         background var(--transition-fast),
         color var(--transition-fast),
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
         scale var(--transition-press);
     }
 
