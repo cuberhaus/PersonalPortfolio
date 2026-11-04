@@ -1,0 +1,557 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { videos as videosData, getTranslations } from '../data/loaders';
+import { visibleEntries } from '../data/visibility';
+import { flattenForLocale } from '../i18n/load';
+import ExternalArrow from './ExternalArrow';
+
+type VideoEntry = {
+  title: string;
+  video: string;
+  poster: string;
+  thumb: string;
+  seconds: number;
+  line: string;
+  lineLang: string;
+  stack: string[];
+  demo?: string;
+  github?: string;
+  music: {
+    title: string;
+    artist: string;
+    artistUrl: string;
+    license: string;
+    licenseUrl: string;
+  };
+  hidden?: boolean;
+  event: string;
+  description: string;
+};
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+const localePrefix = lang === 'en' ? '' : `/${lang}`;
+
+const entries = visibleEntries(
+  flattenForLocale<VideoEntry>(videosData as never, lang, getTranslations('videos', lang))
+).map((entry) => {
+  const slug = entry.video
+    .split('/')
+    .pop()!
+    .replace(/\.mp4$/, '');
+  return {
+    ...entry,
+    slug,
+    length: `0:${String(entry.seconds).padStart(2, '0')}`,
+    lengthSpoken: t('videos.seconds').replace('{n}', String(entry.seconds)),
+    playLabel: t('videos.play').replace('{title}', entry.title),
+    demoHref: entry.demo ? `${base}${localePrefix}/demos/${entry.demo}/` : undefined,
+  };
+});
+
+const { num } = Astro.props;
+---
+
+<section class="section videos" id="videos" data-num={num}>
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">{t('videos.label')}</span>
+      <h2 class="section-title">{t('videos.title')}</h2>
+      <p class="section-subtitle">{t('videos.subtitle')}</p>
+    </div>
+
+    <div class="videos-layout reveal" data-videos>
+      <fieldset class="video-picker" role="radiogroup">
+        <legend class="sr-only">{t('videos.choose')}</legend>
+        <div class="video-picker-track">
+          {
+            entries.map((entry, index) => (
+              <label class="video-option">
+                <input
+                  type="radio"
+                  class="video-radio"
+                  name="video"
+                  value={entry.slug}
+                  checked={index === 0}
+                />
+                <span class="video-option-thumb">
+                  <img
+                    src={`${base}${entry.thumb}`}
+                    alt=""
+                    width="480"
+                    height="270"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="video-length" aria-hidden="true">
+                    {entry.length}
+                  </span>
+                </span>
+                <span class="video-option-text">
+                  <span class="video-option-title">{entry.title}</span>
+                  <span class="video-option-line">
+                    <q lang={entry.lineLang}>{entry.line}</q>
+                  </span>
+                  <span class="sr-only">{entry.lengthSpoken}</span>
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div class="video-panels">
+        {
+          entries.map((entry, index) => (
+            <article
+              class="video-panel"
+              id={`video-panel-${entry.slug}`}
+              data-video-panel={entry.slug}
+              aria-labelledby={`video-title-${entry.slug}`}
+              hidden={index !== 0}
+            >
+              <div class="video-stage">
+                <video
+                  class="video-player"
+                  controls
+                  playsinline
+                  preload="none"
+                  poster={`${base}${entry.poster}`}
+                  aria-describedby={`video-description-${entry.slug}`}
+                >
+                  <source src={`${base}${entry.video}`} type="video/mp4" />
+                  <a href={`${base}${entry.video}`}>{entry.title}</a>
+                </video>
+                <button type="button" class="video-play" aria-label={entry.playLabel}>
+                  <span class="video-play-badge" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z" />
+                    </svg>
+                    <span class="video-play-length">{entry.length}</span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="video-body">
+                <h3 class="video-title" id={`video-title-${entry.slug}`}>
+                  {entry.title}
+                </h3>
+                <p class="video-description" id={`video-description-${entry.slug}`}>
+                  {entry.description}
+                </p>
+
+                <dl class="video-credits">
+                  <div class="video-credit">
+                    <dt>{t('videos.event')}</dt>
+                    <dd>{entry.event}</dd>
+                  </div>
+                  <div class="video-credit">
+                    <dt>{t('videos.builtWith')}</dt>
+                    <dd>{entry.stack.join(', ')}</dd>
+                  </div>
+                  <div class="video-credit">
+                    <dt>{t('videos.music')}</dt>
+                    <dd>
+                      <a href={entry.music.artistUrl} target="_blank" rel="noopener noreferrer">
+                        {entry.music.artist}
+                      </a>
+                      , {entry.music.title},{' '}
+                      <a href={entry.music.licenseUrl} target="_blank" rel="noopener noreferrer">
+                        {entry.music.license}
+                      </a>
+                    </dd>
+                  </div>
+                </dl>
+
+                {(entry.demoHref || entry.github) && (
+                  <div class="video-links">
+                    {entry.demoHref && (
+                      <a
+                        class="video-link video-link-primary"
+                        href={entry.demoHref}
+                        data-astro-reload
+                      >
+                        {t('videos.openDemo')}
+                      </a>
+                    )}
+                    {entry.github && (
+                      <a
+                        class="video-link"
+                        href={entry.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {t('demo.viewSource')} <ExternalArrow />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .videos-layout {
+    display: grid;
+    grid-template-columns: minmax(15rem, 17.5rem) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  /* ── Picker (the rail) ─────────────────────────────────────── */
+  .video-picker {
+    min-width: 0;
+    border: 0;
+    padding: 0;
+  }
+
+  .video-picker-track {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .video-option {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+    align-items: start;
+    padding: 0.6rem 0.6rem 0.75rem;
+    border: var(--border-width) var(--border-style) transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition:
+      background var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  .video-option:hover {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+  }
+
+  .video-option:has(.video-radio:checked) {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+    box-shadow: inset 3px 0 0 var(--accent-start);
+  }
+
+  .video-option:has(.video-radio:focus-visible) {
+    outline: 2px solid var(--accent-start);
+    outline-offset: 2px;
+  }
+
+  /* The real radio stays focusable and in the accessibility tree; the label is its visible face. */
+  .video-radio {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .video-option-thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+  }
+
+  .video-option-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .video-length {
+    position: absolute;
+    right: 0.25rem;
+    bottom: 0.25rem;
+    padding: 0.15rem 0.35rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1;
+  }
+
+  .video-option-text {
+    display: grid;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .video-option-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+  }
+
+  .video-option-line {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+  }
+
+  /* ── Stage ─────────────────────────────────────────────────── */
+  .video-panels {
+    min-width: 0;
+  }
+
+  .video-stage {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: var(--border-width) var(--border-style) var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-card);
+  }
+
+  .video-player {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Without script the browser's own controls and poster are the whole player. */
+  .video-play {
+    display: none;
+  }
+
+  /* The whole poster is the button. The badge sits in the corner, clear of the poster's own text. */
+  .video-stage[data-enhanced]:not([data-started]) .video-play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: end;
+    justify-items: start;
+    width: 100%;
+    height: 100%;
+    padding: clamp(0.75rem, 3%, 1.5rem);
+    cursor: pointer;
+  }
+
+  .video-play-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 1.1rem 0.6rem 0.9rem;
+    /* A pill on rounded designs, a rectangle on the square-cornered ones. */
+    border-radius: calc(var(--radius-lg) * 4);
+    border: 1px solid color-mix(in srgb, var(--demo-action-color) 32%, transparent);
+    background: var(--demo-action-bg);
+    color: var(--demo-action-color);
+  }
+
+  .video-play-length {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .video-play:focus-visible {
+    outline: 3px solid var(--accent-start);
+    outline-offset: -6px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .video-play-badge {
+      transition: transform var(--transition-base);
+    }
+
+    .video-play:hover .video-play-badge {
+      transform: translateY(-2px);
+    }
+  }
+
+  /* ── Caption and credits ───────────────────────────────────── */
+  .video-body {
+    display: grid;
+    gap: 1.1rem;
+    max-width: 46rem;
+    margin-top: 1.5rem;
+  }
+
+  .video-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  }
+
+  .video-description {
+    max-width: 62ch;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .video-credits {
+    border-top: var(--border-width) var(--border-style) var(--border-color);
+  }
+
+  .video-credit {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-bottom: var(--border-width) var(--border-style) var(--border-color);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .video-credit dt {
+    color: var(--text-muted);
+  }
+
+  .video-credit dd {
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .video-credit a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .video-credit a:hover {
+    color: var(--accent-text);
+  }
+
+  .video-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition:
+      border-color var(--transition-fast),
+      color var(--transition-fast);
+  }
+
+  .video-link:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+  }
+
+  .video-link-primary {
+    border-color: transparent;
+    background: var(--demo-action-bg);
+    color: var(--demo-action-color);
+  }
+
+  .video-link-primary:hover {
+    border-color: transparent;
+    color: var(--demo-action-color);
+  }
+
+  /* ── Narrow screens: the rail becomes a strip above the stage ── */
+  @media (max-width: 960px) {
+    .videos-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+
+    .video-picker-track {
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(11.5rem, 14rem);
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scroll-snap-type: x proximity;
+    }
+
+    .video-option {
+      scroll-snap-align: start;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .video-credit {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.15rem;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Videos section. The radios pick which video is shown; the big play button is
+   * an enhancement over the native player, which keeps working if this never runs.
+   * Nothing is requested from the network until a visitor presses play (preload="none").
+   */
+  function init() {
+    document.querySelectorAll<HTMLElement>('[data-videos]').forEach((root) => {
+      if (root.dataset.videosReady) return;
+      root.dataset.videosReady = 'true';
+
+      const panels = [...root.querySelectorAll<HTMLElement>('[data-video-panel]')];
+
+      for (const panel of panels) {
+        const stage = panel.querySelector<HTMLElement>('.video-stage');
+        const player = panel.querySelector<HTMLVideoElement>('video');
+        const play = panel.querySelector<HTMLButtonElement>('.video-play');
+        if (!stage || !player || !play) continue;
+
+        // Take over from the native controls until the video is running.
+        player.controls = false;
+        stage.setAttribute('data-enhanced', '');
+
+        const start = () => {
+          stage.setAttribute('data-started', '');
+          player.controls = true;
+        };
+        player.addEventListener('play', start);
+        play.addEventListener('click', () => {
+          start();
+          player.play().catch(() => {
+            // Playback refused (data saver, codec): the native controls are already back.
+          });
+          player.focus();
+        });
+      }
+
+      root.querySelectorAll<HTMLInputElement>('input[name="video"]').forEach((radio) => {
+        radio.addEventListener('change', () => {
+          if (!radio.checked) return;
+          for (const panel of panels) {
+            const selected = panel.dataset.videoPanel === radio.value;
+            panel.hidden = !selected;
+            if (!selected) panel.querySelector('video')?.pause();
+          }
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  document.addEventListener('astro:page-load', init);
+</script>

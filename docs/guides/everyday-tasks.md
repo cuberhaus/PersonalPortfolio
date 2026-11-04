@@ -99,6 +99,49 @@ slugs already used in the file.
 
 ---
 
+## 4a. Adding a video
+
+The Videos section (`#videos`, below Interactive Lab, not in the navbar) lists
+the short launch films made for hackathon and demo projects.
+
+**Edit:**
+
+1. Media in `public/videos/` — three files sharing one slug:
+   `<slug>.mp4`, `<slug>.webp` (1280×720 poster) and `<slug>-thumb.webp`
+   (480×270, used by the picker). Encode so it streams before it finishes
+   downloading (`+faststart` puts the `moov` atom first):
+
+   ```bash
+   ffmpeg -nostdin -i brag.mp4 -c:v libx264 -preset slow -crf 24 -profile:v high \
+     -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart public/videos/<slug>.mp4
+   ffmpeg -nostdin -ss <t> -i brag.mp4 -frames:v 1 -vf scale=1280:720 -c:v libwebp -quality 82 public/videos/<slug>.webp
+   ffmpeg -nostdin -ss <t> -i brag.mp4 -frames:v 1 -vf scale=480:270  -c:v libwebp -quality 80 public/videos/<slug>-thumb.webp
+   ```
+
+2. [src/data/videos.json](../../src/data/videos.json) — append an entry:
+   `title`, `video`, `poster`, `thumb`, `seconds`, `line` + `lineLang` (the
+   film's own opening on-screen line, quoted in the picker in its language),
+   `stack[]`, optional `demo` (a demo slug, shown as the primary link) and
+   `github`, and `music`.
+3. `locales/{en,es,ca}/videos.json` — one entry per position (`"3"`, …) with
+   `event` and `description`. The description is the video's text alternative
+   (wired up through `aria-describedby`), so say what happens on screen, not
+   what the film is "about".
+
+**Notes:** the `music` credit is mandatory. The soundtrack is Sascha Ende's
+"Happy Beats / Business Moves" series, licensed CC BY 4.0, which requires
+attribution wherever it is published; the schema rejects an entry without
+`artist`, `artistUrl`, `license` and `licenseUrl`. Order in the file is the
+order in the picker, and the first entry is selected on load. Nothing is
+requested before the visitor presses play (`preload="none"`), so file size
+affects only people who watch, but keep each file under the budgets enforced in
+[`videos.test.ts`](../../src/__tests__/videos.test.ts): MP4 8 MB, poster
+200 KB, thumb 60 KB.
+
+**Verify:** `npx vitest run content-parity content-schemas videos`
+
+---
+
 ## 5. Editing skills
 
 **Edit:** [src/data/skills.json](../../src/data/skills.json) + `.es.json` +

@@ -1,0 +1,14 @@
+{
+  "0": {
+    "event": "Winner of BitsXLaMarató 2022",
+    "description": "An ultrasound loop, the aorta picked out by Mask R-CNN, then one frame measured two ways: 4.43 cm with the hackathon method, 2.77 cm with the improved one. Both 3D meshes turn side by side at the end."
+  },
+  "1": {
+    "event": "Finalist at BitsXLaMarató 2023",
+    "description": "A question typed into the chatbot, a quiz verdict, a photo of a pad turned into a blood-volume estimate, and a week of daily totals."
+  },
+  "2": {
+    "event": "Agentic Era hackathon (Google and Deloitte)",
+    "description": "A paper form stamped “pendiente”, then the agent's own log as it reads a tax certificate and returns eight fields as JSON, with a second stamp: “extraído”."
+  }
+}

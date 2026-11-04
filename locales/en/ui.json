@@ -117,6 +117,7 @@
     "experience": "Experience",
     "projects": "Interactive Lab",
     "skills": "Skills",
+    "videos": "Videos",
     "work": "Client Work"
   },
   "notFound": {
@@ -153,6 +154,18 @@
     "light": "Light",
     "palette": "Palette",
     "recommended": "recommended for this design"
+  },
+  "videos": {
+    "builtWith": "Built with",
+    "choose": "Choose a video",
+    "event": "Event",
+    "label": "Videos",
+    "music": "Music",
+    "openDemo": "Try the interactive demo",
+    "play": "Play the {title} video",
+    "seconds": "{n} seconds",
+    "subtitle": "Each of these hackathon projects has a short video built from its own screens and output. Pick one, press play, then open the project if you want to dig in.",
+    "title": "Hackathon projects in 22 seconds"
   },
   "work": {
     "client": "Client",

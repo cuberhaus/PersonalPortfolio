@@ -27,6 +27,7 @@ export const SECTION_META = [
     inNav: true,
     hidden: false as boolean,
   },
+  { id: 'videos', navKey: 'nav.videos', numbered: true, inNav: false, hidden: false as boolean },
   { id: 'about', navKey: 'nav.about', numbered: true, inNav: true, hidden: false as boolean },
   {
     id: 'experience',

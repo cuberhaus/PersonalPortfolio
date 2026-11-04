@@ -51,6 +51,7 @@ describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
       'hero',
       'work',
       'projects',
+      'videos',
       'about',
       'experience',
       'skills',

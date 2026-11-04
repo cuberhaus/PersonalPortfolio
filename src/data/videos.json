@@ -1,0 +1,58 @@
+[
+  {
+    "title": "Aorta Viewer",
+    "video": "/videos/aorta-viewer.mp4",
+    "poster": "/videos/aorta-viewer.webp",
+    "thumb": "/videos/aorta-viewer-thumb.webp",
+    "seconds": 21,
+    "line": "Find the aorta.",
+    "lineLang": "en",
+    "stack": ["Mask R-CNN", "FastAPI", "Angular"],
+    "demo": "bitsx-marato",
+    "github": "https://github.com/cuberhaus/bitsXlaMarato",
+    "music": {
+      "title": "Happy Beats / Business Moves Vol. 12",
+      "artist": "Sascha Ende",
+      "artistUrl": "https://www.ende.app",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  {
+    "title": "Draculin",
+    "video": "/videos/draculin.mp4",
+    "poster": "/videos/draculin.webp",
+    "thumb": "/videos/draculin-thumb.webp",
+    "seconds": 22,
+    "line": "Is this normal?",
+    "lineLang": "en",
+    "stack": ["Flutter", "Django"],
+    "demo": "draculin",
+    "github": "https://github.com/cuberhaus/Draculin-Front",
+    "music": {
+      "title": "Happy Beats / Business Moves Vol. 12",
+      "artist": "Sascha Ende",
+      "artistUrl": "https://www.ende.app",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  {
+    "title": "Agentic Era Hackathon",
+    "video": "/videos/agentic-era-hackathon.mp4",
+    "poster": "/videos/agentic-era-hackathon.webp",
+    "thumb": "/videos/agentic-era-hackathon-thumb.webp",
+    "seconds": 22,
+    "line": "Vuelva usted mañana.",
+    "lineLang": "es",
+    "stack": ["Gemini 2.5 Flash", "Cloud SQL", "Pydantic"],
+    "github": "https://github.com/cuberhaus/AgenticEraHackathon",
+    "music": {
+      "title": "Happy Beats / Business Moves Vol. 9",
+      "artist": "Sascha Ende",
+      "artistUrl": "https://www.ende.app",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  }
+]

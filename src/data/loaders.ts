@@ -10,6 +10,7 @@ import workProjectsRaw from './work_projects.json' with { type: 'json' };
 import educationRaw from './education.json' with { type: 'json' };
 import certificationsRaw from './certifications.json' with { type: 'json' };
 import experienceRaw from './experience.json' with { type: 'json' };
+import videosRaw from './videos.json' with { type: 'json' };
 
 import type { Locale } from '../config/locales';
 import { DEFAULT_LOCALE } from '../config/locales';
@@ -22,6 +23,7 @@ export const workProjects = workProjectsRaw as Record<string, unknown>[];
 export const education = educationRaw as Record<string, unknown>[];
 export const certifications = certificationsRaw as Record<string, unknown>[];
 export const experience = experienceRaw as Record<string, unknown>[];
+export const videos = videosRaw as Record<string, unknown>[];
 
 /** Map from loader name to the JSON filename in locales/ */
 const FILE_NAMES: Record<string, string> = {
@@ -30,6 +32,7 @@ const FILE_NAMES: Record<string, string> = {
   education: 'education',
   certifications: 'certifications',
   experience: 'experience',
+  videos: 'videos',
 };
 
 export function getTranslations(file: string, locale: Locale): TranslationMap {

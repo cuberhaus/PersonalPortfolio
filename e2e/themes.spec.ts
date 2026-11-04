@@ -189,10 +189,13 @@ test.describe('Ctrl+K customize modal', () => {
     await page.locator('[data-design-id="blueprint"]').click();
     await page.keyboard.press('Escape');
     const aboutSection = page.locator('section.about');
+    // The numeral comes from SECTION_META order, so read it instead of pinning a position.
+    const num = (await aboutSection.getAttribute('data-num')) ?? '';
+    expect(num).toMatch(/^\d{2}$/);
     const pseudoContent = await aboutSection.evaluate(
       (el) => getComputedStyle(el, '::before').content
     );
-    expect(pseudoContent).toMatch(/REV-?0?3/i);
+    expect(pseudoContent).toContain(`REV-${num}`);
   });
 
   test('terminal design switches the hero greeting to monospace', async ({ page }) => {
@@ -219,10 +222,12 @@ test.describe('Ctrl+K customize modal', () => {
     await page.keyboard.press('Escape');
 
     const aboutSection = page.locator('section.about');
+    const num = (await aboutSection.getAttribute('data-num')) ?? '';
+    expect(num).toMatch(/^\d{2}$/);
     const pseudoContent = await aboutSection.evaluate(
       (el) => getComputedStyle(el, '::before').content
     );
-    expect(pseudoContent).toMatch(/03/);
+    expect(pseudoContent).toContain(num);
   });
 
   test('academic design applies EB Garamond to the hero name', async ({ page }) => {
@@ -249,13 +254,12 @@ test.describe('Ctrl+K customize modal', () => {
     await openModal(page);
     await page.locator('[data-design-id="risograph"]').click();
     await page.keyboard.press('Escape');
-    const aboutBg = await page
-      .locator('section.about')
-      .evaluate((el) => getComputedStyle(el).backgroundColor);
-    const demosBg = await page
-      .locator('section.demos')
-      .evaluate((el) => getComputedStyle(el).backgroundColor);
-    expect(aboutBg).not.toBe(demosBg);
+    // Duotones alternate by `:nth-of-type`, so any two neighbouring sections must differ.
+    // Take the first two rather than naming sections, which would break when one is added.
+    const sections = page.locator('.section');
+    const firstBg = await sections.nth(0).evaluate((el) => getComputedStyle(el).backgroundColor);
+    const secondBg = await sections.nth(1).evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(firstBg).not.toBe(secondBg);
   });
 
   test('Art Deco prefixes section titles with a Roman numeral', async ({ page }) => {

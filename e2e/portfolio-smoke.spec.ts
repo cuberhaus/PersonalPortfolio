@@ -552,3 +552,97 @@ test.describe('portfolio homepage smoke', () => {
     }
   });
 });
+
+test.describe('videos section', () => {
+  const activePanel = (page: Page) => page.locator('#videos .video-panel:not([hidden])');
+
+  test('requests no video until play is pressed', async ({ page }) => {
+    const videoRequests: string[] = [];
+    page.on('request', (request) => {
+      if (request.url().endsWith('.mp4')) videoRequests.push(request.url());
+    });
+
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.locator('section#videos').scrollIntoViewIfNeeded();
+    const stage = activePanel(page).locator('.video-stage');
+    await expect(stage).toHaveAttribute('data-enhanced', '');
+    expect(videoRequests).toEqual([]);
+
+    await activePanel(page)
+      .getByRole('button', { name: /^Play the .+ video$/ })
+      .click();
+
+    await expect(stage).toHaveAttribute('data-started', '');
+    await expect(activePanel(page).locator('video')).toHaveJSProperty('controls', true);
+    await expect.poll(() => videoRequests.length).toBeGreaterThan(0);
+  });
+
+  test('the picker shows one video at a time and answers the arrow keys', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const picker = page.getByRole('radiogroup', { name: 'Choose a video' });
+    const radios = picker.getByRole('radio');
+    const total = await radios.count();
+    expect(total).toBeGreaterThanOrEqual(2);
+    await expect(page.locator('#videos .video-panel:not([hidden])')).toHaveCount(1);
+
+    const first = radios.first();
+    await first.focus();
+    await expect(first).toBeChecked();
+    const firstTitle = await activePanel(page).getByRole('heading', { level: 3 }).textContent();
+
+    await page.keyboard.press('ArrowDown');
+
+    await expect(radios.nth(1)).toBeChecked();
+    await expect(page.locator('#videos .video-panel:not([hidden])')).toHaveCount(1);
+    await expect(activePanel(page).getByRole('heading', { level: 3 })).not.toHaveText(
+      firstTitle ?? ''
+    );
+  });
+
+  test('every video credits its music and links to its licence', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const panels = page.locator('#videos .video-panel');
+    const count = await panels.count();
+    expect(count).toBeGreaterThan(0);
+
+    // Hidden panels are out of the accessibility tree, so look the links up by CSS, not by role.
+    for (let i = 0; i < count; i++) {
+      const credit = panels.nth(i).locator('.video-credit', { hasText: 'Music' });
+      await expect(credit.locator('a', { hasText: 'Sascha Ende' })).toHaveAttribute(
+        'href',
+        'https://www.ende.app'
+      );
+      await expect(credit.locator('a', { hasText: 'CC BY 4.0' })).toHaveAttribute(
+        'href',
+        'https://creativecommons.org/licenses/by/4.0/'
+      );
+    }
+  });
+
+  test('describes each video in text and sends the visitor to the project', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const video = activePanel(page).locator('video');
+    const describedBy = await video.getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    await expect(page.locator(`#${describedBy}`)).not.toBeEmpty();
+    await expect(
+      activePanel(page).getByRole('link', { name: 'Try the interactive demo' })
+    ).toHaveAttribute('href', /\/demos\/[a-z-]+\/$/);
+  });
+
+  test('stays translated and inside the viewport on a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/es/', { waitUntil: 'domcontentloaded' });
+
+    await expect(page.locator('#videos .section-label')).toHaveText('Vídeos');
+    await expect(page.getByRole('radiogroup', { name: 'Elige un vídeo' })).toBeAttached();
+    await expect(
+      activePanel(page).getByRole('link', { name: 'Prueba la demo interactiva' })
+    ).toHaveAttribute('href', /\/es\/demos\/[a-z-]+\/$/);
+
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+});
