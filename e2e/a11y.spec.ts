@@ -1,7 +1,9 @@
 /**
  * Accessibility audits using axe-core. Runs against every browser-only
  * demo route plus the localized homepage shells, cycling through every
- * theme registered in `src/lib/themes.ts` (visible + hidden).
+ * palette registered in `src/lib/themes.ts`. A palette only ever appears with
+ * the design that owns it, so each run sets both: the audited surface is
+ * exactly each (design, its own palette) pair a visitor can reach.
  *
  * Asserts zero serious or critical violations. Moderate/minor are
  * surfaced via console for triage.
@@ -12,6 +14,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { THEMES } from '../src/lib/themes';
+import { ownerOf } from '../src/lib/palettes';
 
 const HOME_ROUTES = ['/', '/es/', '/ca/'];
 
@@ -56,13 +59,19 @@ const ALL_THEME_IDS = THEMES.map((t) => t.id);
 test.use({ contextOptions: { reducedMotion: 'reduce' } });
 
 async function setThemeBeforeLoad(page: Page, theme: string, route: string) {
-  // Land on a same-origin page so localStorage is writable, set the theme,
-  // then navigate to the target route. ThemeInit reads localStorage on every
-  // page load.
+  // Land on a same-origin page so localStorage is writable, set the design that
+  // owns the palette and the palette itself, then navigate to the target route.
+  // ThemeInit reads localStorage on every page load.
+  const design = ownerOf(theme);
+  if (!design) throw new Error(`Palette "${theme}" has no owning design`);
   await page.goto('/', { waitUntil: 'domcontentloaded' });
-  await page.evaluate((t) => {
-    localStorage.setItem('theme', t);
-  }, theme);
+  await page.evaluate(
+    ([d, t]) => {
+      localStorage.setItem('design', d);
+      localStorage.setItem('theme', t);
+    },
+    [design, theme]
+  );
   await page.goto(route, { waitUntil: 'domcontentloaded' });
 }
 
