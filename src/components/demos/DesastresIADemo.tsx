@@ -267,9 +267,7 @@ function DesastresIADemo({ lang = 'en' }: { lang?: Lang }) {
           </div>
           <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{t.aima}</span>
         </div>
-        <div
-          style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.25rem' }}
-        >
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
           {(Array.isArray((t as any).pipeline) ? (t as any).pipeline : []).map(
             (step: any, i: number) => (
               <div

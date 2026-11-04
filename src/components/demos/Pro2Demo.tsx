@@ -16,7 +16,7 @@ import {
 import { TRANSLATIONS } from '../../i18n/demos/pro2-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { gradientButton } from './_styles';
+import { controlTransition, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -61,7 +61,7 @@ const styles = {
     fontWeight: 600,
     fontSize: '0.85rem',
     cursor: 'pointer',
-    transition: 'all 0.15s ease',
+    transition: controlTransition,
   },
   primaryBtn: gradientButton(),
   secondaryBtn: {
@@ -112,7 +112,7 @@ const styles = {
     padding: '0.75rem 1rem',
     fontSize: '0.85rem',
     marginBottom: '1rem',
-    borderLeft: '3px solid var(--accent-start)',
+    border: '1px solid color-mix(in srgb, var(--accent-start) 35%, var(--border-color))',
   },
 } as const;
 
@@ -235,7 +235,7 @@ function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
       <div
         style={{
           ...styles.card,
-          borderLeft: '3px solid var(--accent-start)',
+          borderColor: 'color-mix(in srgb, var(--accent-start) 35%, var(--border-color))',
           background:
             'linear-gradient(135deg, color-mix(in srgb, var(--accent-start) 5%, transparent), color-mix(in srgb, var(--accent-end) 3%, transparent))',
         }}
@@ -338,16 +338,15 @@ function Pro2Demo({ lang = 'en' }: { lang?: Lang }) {
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: 'var(--text-muted)',
+                          color: 'var(--hover-color, var(--text-muted))',
                           cursor: 'pointer',
                           padding: '0.2rem 0.4rem',
                           fontSize: '0.85rem',
                           borderRadius: '0.25rem',
-                          transition: 'color 0.15s',
+                          transition: controlTransition,
                         }}
+                        className="demo-hover"
                         title="Remove species"
-                        onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-end)')}
-                        onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
                       >
                         ×
                       </button>

@@ -23,7 +23,7 @@ const t = useTranslations(lang);
     transition:
       color var(--transition-fast),
       background-color var(--transition-fast),
-      transform var(--transition-fast);
+      scale var(--transition-press);
   }
 
   .theme-toggle-btn:hover {
@@ -32,7 +32,7 @@ const t = useTranslations(lang);
   }
 
   .theme-toggle-btn:active {
-    transform: scale(0.95);
+    scale: 0.95;
   }
 
   @media (max-width: 768px) {

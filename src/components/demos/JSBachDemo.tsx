@@ -8,7 +8,7 @@ import {
 
 import { TRANSLATIONS } from '../../i18n/demos/jsbach-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
-import { gradientButton } from './_styles';
+import { controlTransition, gradientButton } from './_styles';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
 
 type Lang = 'en' | 'es' | 'ca';
@@ -49,7 +49,7 @@ const styles = {
     fontWeight: 600,
     fontSize: '0.85rem',
     cursor: 'pointer',
-    transition: 'all 0.15s ease',
+    transition: controlTransition,
   },
   primaryBtn: gradientButton(),
   secondaryBtn: {
@@ -103,7 +103,7 @@ const styles = {
     color: 'var(--text-secondary)',
     fontSize: '0.75rem',
     cursor: 'pointer',
-    transition: 'all 0.15s ease',
+    transition: controlTransition,
     fontWeight: 500,
   },
 } as const;

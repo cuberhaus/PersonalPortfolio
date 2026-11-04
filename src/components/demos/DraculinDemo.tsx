@@ -5,7 +5,7 @@ import MockBanner from './MockBanner';
 import { debug } from '../../lib/debug';
 import { useDemoLifecycle } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { gradientButton } from './_styles';
+import { controlTransition, gradientButton } from './_styles';
 
 import { Globe, MessageCircle, Brain, Camera, BarChart2 } from 'lucide-react';
 
@@ -111,7 +111,7 @@ const s = {
     fontSize: '0.85rem',
     fontWeight: 600,
     cursor: 'pointer',
-    transition: 'all 0.15s',
+    transition: controlTransition,
     background: 'transparent',
     color: 'var(--text-muted)',
   },
@@ -129,7 +129,7 @@ const s = {
     fontWeight: 600,
     fontSize: '0.85rem',
     cursor: 'pointer',
-    transition: 'all 0.15s',
+    transition: controlTransition,
   },
   primaryBtn: gradientButton(),
   secondaryBtn: { background: 'var(--bg-secondary)', color: 'var(--text-secondary)' },
@@ -187,16 +187,16 @@ function NewsTab({ t }: { t: typeof TRANSLATIONS.en }) {
             href={n.link}
             target="_blank"
             rel="noopener noreferrer"
+            className="demo-hover"
             style={{
               ...s.card,
+              border: '1px solid var(--hover-border, var(--border-color))',
               display: 'flex',
               gap: '1rem',
               alignItems: 'center',
               textDecoration: 'none',
-              transition: 'border-color 0.15s',
+              transition: 'border-color 150ms var(--ease-out)',
             }}
-            onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-start)')}
-            onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-color)')}
           >
             {n.img && (
               <img
@@ -607,7 +607,7 @@ function StatsTab({ t, lang }: { t: typeof TRANSLATIONS.en; lang: Lang }) {
                   fontSize: '0.75rem',
                   cursor: 'pointer',
                   fontWeight: isPeriod ? 600 : 400,
-                  transition: 'all 0.15s',
+                  transition: controlTransition,
                 }}
               >
                 {day}

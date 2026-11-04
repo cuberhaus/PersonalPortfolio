@@ -201,7 +201,8 @@ const siteBase = Astro.site || Astro.url;
         transition:
           color var(--transition-fast),
           background-color var(--transition-fast),
-          border-color var(--transition-fast);
+          border-color var(--transition-fast),
+          scale var(--transition-press);
       }
       .demo-design-btn:hover {
         color: var(--accent-text);
@@ -286,7 +287,8 @@ const siteBase = Astro.site || Astro.url;
     transition:
       color var(--transition-fast),
       background-color var(--transition-fast),
-      box-shadow var(--transition-fast);
+      box-shadow var(--transition-fast),
+      scale var(--transition-press);
   }
 
   .sidebar-toggle:hover {

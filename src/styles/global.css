@@ -41,9 +41,23 @@
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
 
-  --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-  --transition-slow: 400ms ease;
+  /* Easing. The built-in CSS curves are too weak to feel intentional, so the
+     motion tokens below all use a strong ease-out: responsive at the start,
+     which is when the visitor is watching. Reach for --ease-in-out only for
+     things that move across the screen, and --ease-drawer for sheets. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --transition-press: 120ms var(--ease-out);
+  --transition-fast: 150ms var(--ease-out);
+  --transition-base: 250ms var(--ease-out);
+  --transition-slow: 400ms var(--ease-out);
+  /* One-shot entrance used by .reveal. Short travel, so it reads as a settle
+     rather than a slide. */
+  --reveal-distance: 16px;
+  --reveal-duration: 420ms;
+  --reveal-step: 50ms;
 
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -172,6 +186,8 @@ h4 {
   line-height: 1.2;
   font-weight: 700;
   color: var(--text-primary);
+  /* Even line lengths: no one-word last lines in headings. */
+  text-wrap: balance;
 }
 
 h1 {
@@ -186,6 +202,8 @@ h3 {
 
 p {
   color: var(--text-secondary);
+  /* Avoid orphaned last words in running copy. */
+  text-wrap: pretty;
 }
 
 /* ── Utility ──────────────────────────────────────────────── */
@@ -205,15 +223,20 @@ p {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* Solid accent, not a gradient clipped to the glyphs: a two-hue fill on 12px
+     caps reads as muddy where the hues meet, and loses contrast on one end. */
+  color: var(--accent-text);
   margin-bottom: 0.75rem;
 }
 
 .section-title {
   margin-bottom: 1rem;
+}
+
+/* A title with nothing under it (no subtitle) still needs the same gap before
+   the content as one that has a subtitle. */
+.section-title:last-child {
+  margin-bottom: 3rem;
 }
 
 .section-subtitle {
@@ -229,77 +252,72 @@ p {
   }
 }
 
+/* Emphasis comes from colour and weight, not a gradient clipped to the glyphs.
+   Kept as a class name because every design already restyles it. */
 .gradient-text {
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--accent-text);
 }
 
 /* ── Scroll Animations ────────────────────────────────────── */
-.reveal {
+/* Entrances are a one-shot `animation` with `backwards` fill, not a
+   `transition`. A transition on `.reveal-stagger > *` was overridden by every
+   card's own `transition:` shorthand (so cards never faded in), while its
+   `transition-delay` survived and made hover lag by up to 720ms on later
+   cards. An animation ends back at the element's own styles, so it can never
+   leave a delay or a pinned transform behind. */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-distance));
+  }
+}
+
+.reveal:not(.visible),
+.reveal-stagger:not(.visible) > * {
   opacity: 0;
-  transform: translateY(30px);
-  transition:
-    opacity var(--transition-slow),
-    transform var(--transition-slow);
 }
 
 .reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+  animation: reveal-in var(--reveal-duration) var(--ease-out) backwards;
 }
 
-/* staggered children */
-.reveal-stagger > * {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity var(--transition-slow),
-    transform var(--transition-slow);
+/* Staggered children: 50ms apart, capped at the sixth so a long grid still
+   settles in about 0.7s. The layout script adds `.revealed` once the entrance
+   has settled, so un-hiding cards later (filters, "Show more") never replays it. */
+.reveal-stagger.visible:not(.revealed) > * {
+  animation: reveal-in var(--reveal-duration) var(--ease-out) backwards;
+  animation-delay: calc(var(--reveal-i, 0) * var(--reveal-step));
 }
 
-.reveal-stagger.visible > * {
-  opacity: 1;
-  transform: translateY(0);
+.reveal-stagger > :nth-child(2) {
+  --reveal-i: 1;
+}
+.reveal-stagger > :nth-child(3) {
+  --reveal-i: 2;
+}
+.reveal-stagger > :nth-child(4) {
+  --reveal-i: 3;
+}
+.reveal-stagger > :nth-child(5) {
+  --reveal-i: 4;
+}
+.reveal-stagger > :nth-child(n + 6) {
+  --reveal-i: 5;
 }
 
-.reveal-stagger.visible > *:nth-child(1) {
-  transition-delay: 0ms;
-}
-.reveal-stagger.visible > *:nth-child(2) {
-  transition-delay: 80ms;
-}
-.reveal-stagger.visible > *:nth-child(3) {
-  transition-delay: 160ms;
-}
-.reveal-stagger.visible > *:nth-child(4) {
-  transition-delay: 240ms;
-}
-.reveal-stagger.visible > *:nth-child(5) {
-  transition-delay: 320ms;
-}
-.reveal-stagger.visible > *:nth-child(6) {
-  transition-delay: 400ms;
-}
-.reveal-stagger.visible > *:nth-child(7) {
-  transition-delay: 480ms;
-}
-.reveal-stagger.visible > *:nth-child(8) {
-  transition-delay: 560ms;
-}
-.reveal-stagger.visible > *:nth-child(9) {
-  transition-delay: 640ms;
-}
-.reveal-stagger.visible > *:nth-child(10) {
-  transition-delay: 720ms;
+/* Without scripting nothing would ever add `.visible`, so show the content. */
+@media (scripting: none) {
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1;
+  }
 }
 
 /* ── Reduced Motion ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-stagger > * {
-    transition: none !important;
+    animation: none !important;
     opacity: 1 !important;
     transform: none !important;
   }
@@ -309,10 +327,67 @@ p {
   }
 }
 
-/* ── Selection ────────────────────────────────────────────── */
+/* ── Browser surfaces ─────────────────────────────────────── */
+/* The parts of the page the browser draws by default still carry the active
+   design: text selection, the caret, native controls and scrollbars. */
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
-  color: #fff;
+  background: color-mix(in srgb, var(--accent-start) 38%, transparent);
+  color: var(--text-primary);
+}
+
+input,
+textarea {
+  caret-color: var(--accent-text);
+}
+
+:root {
+  accent-color: var(--accent-start);
+  scrollbar-color: var(--border-color) var(--bg-primary);
+  scrollbar-width: thin;
+  /* Kill the grey flash iOS paints on tap; pressables show their own :active. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* No double-tap-to-zoom delay on controls. */
+a,
+button,
+summary,
+input,
+select,
+textarea,
+label,
+[role='button'] {
+  touch-action: manipulation;
+}
+
+/* ── Press feedback ───────────────────────────────────────── */
+/* Every pressable acknowledges the press instantly. The individual `scale`
+   property composes with any `transform` a component sets for hover, which a
+   `transform: scale()` rule here could not (the hover rule would win). Components
+   with their own `transition:` list add `scale var(--transition-press)` to it. */
+:where(button, [role='button'], summary) {
+  transition: scale var(--transition-press);
+}
+
+:where(button, [role='button'], summary):where(:not(:disabled, [aria-disabled='true'])):active {
+  scale: 0.97;
+}
+
+/* ── Demo hover affordances ───────────────────────────────── */
+/* Mock UIs inside demos style themselves inline, so they cannot reach a :hover
+   rule. They read these variables with a resting fallback, e.g.
+   `color: 'var(--hover-color, var(--text-secondary))'`, and opt in with the
+   class. This replaces inline onMouseOver/onMouseOut handlers, which stick on
+   touch screens and bubble up from child elements. The local PostCSS plugin
+   gates :hover to fine pointers, so no media query is needed here. */
+.demo-hover:hover {
+  --hover-color: var(--accent-text);
+  --hover-border: var(--accent-start);
+  --hover-bg: var(--bg-card-hover);
+}
+
+.demo-lift:hover {
+  transform: translateY(-2px);
 }
 
 /* ── Accessibility ────────────────────────────────────────── */
@@ -398,11 +473,19 @@ p {
   padding: 0.4rem 1rem;
   border-radius: var(--radius-sm);
   text-decoration: none;
-  transition: all var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast),
+    scale var(--transition-press);
 }
 .demo-header-github:hover {
   background: var(--bg-card-hover);
   border-color: var(--text-secondary);
   color: var(--text-primary);
   transform: translateY(-2px);
+}
+.demo-header-github:active {
+  scale: 0.97;
 }

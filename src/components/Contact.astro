@@ -153,17 +153,18 @@ const { num } = Astro.props;
     useSuggestion: form.dataset.useSuggestionMsg ?? 'Use this',
   });
 
+  // The hint and result are `role="status"` live regions. They stay rendered
+  // (never `display: none`) so assistive tech announces text the moment it is set;
+  // CSS collapses them while empty.
   const clearHint = (hint: HTMLElement) => {
     hint.textContent = '';
     hint.classList.remove('error', 'suggestion');
-    hint.style.display = 'none';
   };
 
   const showError = (hint: HTMLElement, text: string) => {
     hint.textContent = text;
     hint.classList.remove('suggestion');
     hint.classList.add('error');
-    hint.style.display = 'block';
   };
 
   const showSuggestion = (
@@ -175,7 +176,6 @@ const { num } = Astro.props;
     hint.replaceChildren();
     hint.classList.remove('error');
     hint.classList.add('suggestion');
-    hint.style.display = 'block';
 
     hint.append(document.createTextNode(`${msgs.didYouMean} `));
     const btn = document.createElement('button');
@@ -205,6 +205,22 @@ const { num } = Astro.props;
 
     const msgs = readMsgs(form);
 
+    // The form's outcome message. Success fades after a while; an error stays put
+    // until the visitor edits a field or submits again, so it can't be missed.
+    let resultTimer: ReturnType<typeof setTimeout> | undefined;
+    let sending = false;
+    const setResult = (kind: 'success' | 'error' | null, text = '') => {
+      if (!result) return;
+      clearTimeout(resultTimer);
+      result.textContent = kind ? text : '';
+      result.classList.toggle('success', kind === 'success');
+      result.classList.toggle('error', kind === 'error');
+      if (kind === 'success') resultTimer = setTimeout(() => setResult(null), 8000);
+    };
+    form.addEventListener('input', () => {
+      if (result?.classList.contains('error')) setResult(null);
+    });
+
     // Live validation on blur / input so the user gets immediate feedback
     // without having to hit Send first.
     if (emailInput && emailHint) {
@@ -233,6 +249,8 @@ const { num } = Astro.props;
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      // Enter in a field submits even while the button looks disabled.
+      if (sending) return;
 
       const emailValue = emailInput?.value ?? '';
       const res = validateEmail(emailValue);
@@ -245,12 +263,7 @@ const { num } = Astro.props;
             showError(emailHint, msgs.invalidEmail);
           }
         }
-        if (result) {
-          result.textContent = msgs.invalidEmail;
-          result.classList.remove('success');
-          result.classList.add('error');
-          result.style.display = 'block';
-        }
+        setResult('error', msgs.invalidEmail);
         emailInput?.focus();
         return;
       }
@@ -259,12 +272,12 @@ const { num } = Astro.props;
       formData.set('email', res.normalized);
       const payload = JSON.stringify(Object.fromEntries(formData));
 
-      if (result) result.style.display = 'none';
+      setResult(null);
+      sending = true;
+      form.setAttribute('aria-busy', 'true');
       if (btnText) btnText.textContent = msgs.sending;
-      if (btn) {
-        btn.style.opacity = '0.7';
-        btn.style.pointerEvents = 'none';
-      }
+      // aria-disabled rather than `disabled`, so keyboard focus stays on the button.
+      btn?.setAttribute('aria-disabled', 'true');
 
       type DebugApi = { log: (lvl: string, ns: string, msg: string, ...args: unknown[]) => void };
       const dbg = (window as unknown as { __debug?: DebugApi }).__debug;
@@ -276,42 +289,27 @@ const { num } = Astro.props;
       })
         .then(async (response) => {
           const body = await response.json().catch(() => ({}) as Record<string, unknown>);
-          if (!result) return;
           if (response.ok) {
-            result.textContent = msgs.success;
-            result.classList.remove('error');
-            result.classList.add('success');
-            result.style.display = 'block';
+            setResult('success', msgs.success);
             form.reset();
             if (emailHint) clearHint(emailHint);
             dbg?.log('info', 'net:contact', 'submit-ok', {
               id: (body as Record<string, unknown>).id ?? null,
             });
           } else {
-            result.textContent = msgs.error;
-            result.classList.remove('success');
-            result.classList.add('error');
-            result.style.display = 'block';
+            setResult('error', msgs.error);
             dbg?.log('error', 'net:contact', 'submit-failed', { status: response.status, body });
           }
         })
         .catch((err) => {
-          if (!result) return;
-          result.textContent = msgs.error;
-          result.classList.remove('success');
-          result.classList.add('error');
-          result.style.display = 'block';
+          setResult('error', msgs.error);
           dbg?.log('error', 'net:contact', 'submit-failed', { err: String(err) });
         })
         .finally(() => {
+          sending = false;
+          form.removeAttribute('aria-busy');
           if (btnText) btnText.textContent = msgs.send;
-          if (btn) {
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'all';
-          }
-          setTimeout(() => {
-            if (result) result.style.display = 'none';
-          }, 5000);
+          btn?.removeAttribute('aria-disabled');
         });
     });
   };
@@ -325,14 +323,13 @@ const { num } = Astro.props;
     padding-bottom: 6rem;
   }
 
+  /* Aligned to the same left edge as the heading above it; the title's own
+     bottom margin provides the gap. */
   .contact-content {
     max-width: 600px;
-    margin: 0 auto;
-    margin-top: 3rem;
   }
 
   .contact-text {
-    text-align: center;
     font-size: 1.1rem;
     color: var(--text-secondary);
     margin-bottom: 2.5rem;
@@ -370,7 +367,10 @@ const { num } = Astro.props;
     color: var(--text-primary);
     font-family: var(--font-sans);
     font-size: 1rem;
-    transition: all var(--transition-base);
+    transition:
+      border-color var(--transition-base),
+      box-shadow var(--transition-base),
+      background-color var(--transition-base);
   }
 
   .form-group textarea {
@@ -408,13 +408,21 @@ const { num } = Astro.props;
     cursor: pointer;
     transition:
       transform var(--transition-fast),
-      box-shadow var(--transition-fast);
+      box-shadow var(--transition-fast),
+      opacity var(--transition-fast),
+      scale var(--transition-press);
     margin-top: 1rem;
   }
 
   .contact-submit:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px var(--glow-color-strong);
+  }
+
+  /* Sending: dimmed and inert, but still focusable and still announced via aria-busy. */
+  .contact-submit[aria-disabled='true'] {
+    opacity: 0.7;
+    pointer-events: none;
   }
 
   .contact-submit svg {
@@ -425,31 +433,35 @@ const { num } = Astro.props;
     transform: translate(2px, -2px);
   }
 
+  /* Live regions stay rendered; they only collapse while empty. */
   .form-result {
-    display: none;
-    text-align: center;
+    text-align: start;
     margin-top: 0.5rem;
     font-size: 0.9rem;
     font-weight: 500;
   }
 
+  .form-result:empty,
+  .email-hint:empty {
+    margin: 0;
+  }
+
   .form-result.success {
-    color: var(--color-success, #10b981);
+    color: var(--status-success);
   }
 
   .form-result.error {
-    color: var(--color-error, #ef4444);
+    color: var(--status-error);
   }
 
   .email-hint {
-    display: none;
     margin: 0.25rem 0 0;
     font-size: 0.85rem;
     line-height: 1.4;
   }
 
   .email-hint.error {
-    color: var(--color-error, #ef4444);
+    color: var(--status-error);
   }
 
   .email-hint.suggestion {
@@ -478,23 +490,34 @@ const { num } = Astro.props;
 
   .contact-socials {
     display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 3rem;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    margin-top: 2.5rem;
+    /* Pull the first glyph back to the content edge: each link is a 44px target
+       around a 22px icon. */
+    margin-left: -0.6875rem;
   }
 
   .contact-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
     color: var(--text-muted);
     transition:
       color var(--transition-fast),
       transform var(--transition-fast),
-      filter var(--transition-fast);
+      scale var(--transition-press);
+  }
+
+  .contact-socials a:active {
+    scale: 0.92;
   }
 
   .contact-socials a:hover {
     color: var(--accent-text);
-    transform: translateY(-3px);
-    filter: drop-shadow(0 0 8px var(--glow-color));
+    transform: translateY(-2px);
   }
 
   @media (max-width: 768px) {

@@ -33,7 +33,7 @@ import { TRANSLATIONS } from '../../i18n/demos/sbc-demo';
 import MockBanner from './MockBanner';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { gradientButton } from './_styles';
+import { controlTransition, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -57,7 +57,7 @@ const s = {
     fontWeight: 600,
     fontSize: '0.85rem',
     cursor: 'pointer',
-    transition: 'all 0.15s',
+    transition: controlTransition,
   },
   primaryBtn: gradientButton(),
   secondaryBtn: { background: 'var(--bg-secondary)', color: 'var(--text-secondary)' },
@@ -82,7 +82,7 @@ const s = {
     border: '2px solid var(--border-color)',
     background: 'var(--bg-secondary)',
     cursor: 'pointer',
-    transition: 'all 0.15s',
+    transition: controlTransition,
     textAlign: 'left' as const,
     fontSize: '0.9rem',
     color: 'var(--text-primary)',

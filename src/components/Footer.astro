@@ -63,16 +63,16 @@ const t = useTranslations(lang);
     color: var(--text-muted);
     font-size: 0.75rem;
     cursor: pointer;
+    min-height: 2rem;
     transition:
       border-color var(--transition-base),
       color var(--transition-base),
-      box-shadow var(--transition-base);
+      scale var(--transition-press);
   }
 
   .footer-theme-btn:hover {
     border-color: var(--accent-text);
     color: var(--accent-text);
-    box-shadow: 0 0 12px var(--glow-color, rgba(99, 102, 241, 0.15));
   }
 
   @media (max-width: 768px) {

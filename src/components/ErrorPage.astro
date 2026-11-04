@@ -40,11 +40,7 @@ const { code, title, message, backLabel, backHref } = Astro.props;
     font-weight: 800;
     line-height: 1;
     margin-bottom: 1rem;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
+    color: var(--accent-text);
   }
 
   .error-title {
@@ -70,12 +66,15 @@ const { code, title, message, backLabel, backHref } = Astro.props;
     transition:
       background var(--transition-fast),
       transform var(--transition-fast),
-      box-shadow var(--transition-fast);
+      scale var(--transition-press);
   }
 
   .back-btn:hover {
     background: var(--accent-end);
     transform: translateY(-2px);
-    box-shadow: 0 0 20px var(--glow-color);
+  }
+
+  .back-btn:active {
+    scale: 0.97;
   }
 </style>

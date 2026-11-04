@@ -112,26 +112,10 @@ const { num } = Astro.props;
     display: flex;
   }
 
-  .work-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--accent-gradient);
-    opacity: 0;
-    transition: opacity var(--transition-base);
-  }
-
   .work-card:hover {
     transform: translateY(-4px);
     border-color: var(--accent-text);
     box-shadow: 0 12px 40px var(--glow-color);
-  }
-
-  .work-card:hover::before {
-    opacity: 1;
   }
 
   .work-card-inner {
@@ -168,7 +152,6 @@ const { num } = Astro.props;
     padding: 0.25rem 0.6rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-color);
-    opacity: 0.8;
   }
 
   .work-badge-label {

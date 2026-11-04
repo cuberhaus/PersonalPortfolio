@@ -10,6 +10,25 @@
  * `@media (prefers-reduced-motion: no-preference)`.
  * ───────────────────────────────────────────────────────────── */
 
+/* Eyebrow labels. The small caps caption above each section heading repeats
+ * the heading, so the neutral designs drop it. The designs where the label is
+ * part of the look keep it: Brutalist, Risograph, Zine and Comic (blocks and
+ * pills), Terminal, IDE and Blueprint (prefixes), Notebook (handwriting) and
+ * Newspaper (dateline). */
+html:is(
+    [data-design='minimal'],
+    [data-design='editorial'],
+    [data-design='swiss'],
+    [data-design='pixel'],
+    [data-design='cyber'],
+    [data-design='academic'],
+    [data-design='deco'],
+    [data-design='wabisabi']
+  )
+  .section-label {
+  display: none;
+}
+
 /* ══════════════ MINIMAL (default) ═══════════════════════════
  * Intentionally the same as the base tokens in global.css so the
  * block is explicit for theme-tooling / e2e tests.
@@ -60,8 +79,7 @@ html[data-design='editorial'] .hero-name {
   letter-spacing: -0.04em;
 }
 
-html[data-design='editorial'] .hero-greeting,
-html[data-design='editorial'] .section-label {
+html[data-design='editorial'] .hero-greeting {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-style: italic;
   text-transform: none;
@@ -193,13 +211,7 @@ html[data-design='swiss'] {
   --demo-action-color: var(--swiss-on-accent);
 }
 
-html[data-design='swiss'][data-theme='barcelona-day'],
-html[data-design='swiss'][data-theme='light'],
-html[data-design='swiss'][data-theme='nord-light'],
-html[data-design='swiss'][data-theme='catppuccin-latte'],
-html[data-design='swiss'][data-theme='solarized-light'],
-html[data-design='swiss'][data-theme='sepia'],
-html[data-design='swiss'][data-theme='paper'] {
+html[data-design='swiss'][data-theme='barcelona-day'] {
   --swiss-on-accent: #fff;
 }
 
@@ -218,14 +230,22 @@ html[data-design='swiss'] h4 {
 }
 
 html[data-design='swiss'] .hero-name {
-  font-size: clamp(4rem, 12vw, 8rem);
+  /* "Casacuberta" is one unbreakable word. A 4rem floor made it wider than a
+     390px screen (the hero grew past the viewport and lost its gutter), so the
+     floor scales with the viewport on phones. */
+  font-size: clamp(2.5rem, 14.5vw, 4rem);
   font-weight: 900;
   letter-spacing: -0.05em;
   line-height: 0.9;
 }
 
+@media (min-width: 481px) {
+  html[data-design='swiss'] .hero-name {
+    font-size: clamp(4rem, 12vw, 8rem);
+  }
+}
+
 html[data-design='swiss'] .hero-greeting,
-html[data-design='swiss'] .section-label,
 html[data-design='swiss'] .nav-link {
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -243,7 +263,10 @@ html[data-design='swiss'] .section[data-num]::before {
   content: attr(data-num);
   position: absolute;
   top: 1rem;
-  right: 0;
+  /* Align to the content column, not the viewport edge: the numeral shares its
+     right edge with the cards below it, and keeps the page gutter on phones
+     instead of touching the screen edge. */
+  right: max(1.5rem, calc((100% - var(--container-width)) / 2 + 1.5rem));
   font-size: clamp(3rem, 8vw, 7rem);
   font-weight: 800;
   color: var(--swiss-signal);
@@ -251,6 +274,13 @@ html[data-design='swiss'] .section[data-num]::before {
   letter-spacing: -0.05em;
   font-variant-numeric: tabular-nums;
   pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  /* Matches the narrower phone gutter (--container-padding: 0 1.25rem). */
+  html[data-design='swiss'] .section[data-num]::before {
+    right: 1.25rem;
+  }
 }
 
 html[data-design='swiss'] .section-title {
@@ -312,6 +342,10 @@ html[data-design='swiss'] .gradient-text {
   color: var(--swiss-accent);
 }
 
+html[data-design='swiss'] {
+  --scroll-top-radius: 0;
+}
+
 html[data-design='swiss'] .hero-grid,
 html[data-design='swiss'] .hero-gradient {
   display: none;
@@ -330,7 +364,14 @@ html[data-design='pixel'] {
   --border-width: 3px;
   --shadow-card: 4px 4px 0 var(--text-primary);
   --section-padding: 4rem 0;
+  /* Ink on the accent-filled buttons: black reads on the night palette's bright
+     red but not on the day palette's deeper one. */
+  --pixel-on-accent: #000;
   image-rendering: pixelated;
+}
+
+html[data-design='pixel'][data-theme='pixel-day'] {
+  --pixel-on-accent: #fff;
 }
 
 html[data-design='pixel'] body {
@@ -434,7 +475,7 @@ html[data-design='pixel'] .nav-link {
 html[data-design='pixel'] .hero-cta,
 html[data-design='pixel'] .contact-submit {
   background: var(--accent-start);
-  color: #000;
+  color: var(--pixel-on-accent);
   border: 3px solid var(--text-primary);
   border-radius: 0;
   box-shadow: 5px 5px 0 var(--text-primary);
@@ -541,12 +582,7 @@ html[data-design='terminal'] body::after {
   mix-blend-mode: multiply;
 }
 
-html[data-design='terminal'][data-theme='light'] body::after,
-html[data-design='terminal'][data-theme='nord-light'] body::after,
-html[data-design='terminal'][data-theme='catppuccin-latte'] body::after,
-html[data-design='terminal'][data-theme='solarized-light'] body::after,
-html[data-design='terminal'][data-theme='sepia'] body::after,
-html[data-design='terminal'][data-theme='paper'] body::after {
+html[data-design='terminal'][data-theme='terminal-day'] body::after {
   background:
     repeating-linear-gradient(
       to bottom,
@@ -769,6 +805,17 @@ html[data-design='cyber'] {
   --shadow-card: 0 0 20px color-mix(in oklab, var(--accent-start) 25%, transparent);
   --cyber-pink: #ff2e88;
   --cyber-cyan: #00f0ff;
+  /* Ink on the neon buttons: white on hot pink is only ~3.5:1, so the night
+     palette sets dark type on its glowing fill instead. */
+  --cyber-on-neon: var(--bg-primary);
+}
+
+/* The day palette has no glow to lean on, so the neons give way to its deep
+   magenta and teal: legible type on the pale ground, white on the buttons. */
+html[data-design='cyber'][data-theme='cyber-day'] {
+  --cyber-pink: var(--accent-start);
+  --cyber-cyan: var(--accent-end);
+  --cyber-on-neon: #fff;
 }
 
 html[data-design='cyber'] body {
@@ -795,7 +842,8 @@ html[data-design='cyber'] h4 {
 
 html[data-design='cyber'] .hero-name {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 9vw, 6rem);
+  /* The floor must let "CASACUBERTA" fit a 320px phone (see Swiss). */
+  font-size: clamp(1.75rem, 9vw, 6rem);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.01em;
@@ -807,7 +855,6 @@ html[data-design='cyber'] .hero-name {
 }
 
 html[data-design='cyber'] .hero-greeting,
-html[data-design='cyber'] .section-label,
 html[data-design='cyber'] .nav-link {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   text-transform: uppercase;
@@ -896,7 +943,7 @@ html[data-design='cyber'] .nav-logo {
 html[data-design='cyber'] .hero-cta,
 html[data-design='cyber'] .contact-submit {
   background: linear-gradient(90deg, var(--cyber-pink), var(--accent-start));
-  color: #fff;
+  color: var(--cyber-on-neon);
   border: 0;
   border-radius: 0;
   font-family: var(--font-display);
@@ -1303,6 +1350,14 @@ html[data-design='brutalist'] .hero-name {
   box-shadow: 8px 8px 0 var(--br-ink);
 }
 
+/* Narrow phones: "Casacuberta" at the 3.5rem floor leaves no room for the hard
+   shadow, so scale with the viewport below 480px (identical at 390px). */
+@media (max-width: 480px) {
+  html[data-design='brutalist'] .hero-name {
+    font-size: clamp(2.5rem, 14.4vw, 3.5rem);
+  }
+}
+
 html[data-design='brutalist'] .hero-greeting,
 html[data-design='brutalist'] .section-label {
   font-family: 'Arial Black', Arial, sans-serif;
@@ -1404,8 +1459,10 @@ html[data-design='brutalist'] .work-tags li {
 }
 
 /* When a parent card is hovered (yellow background), the `* { color: #000 }`
-   rule above forces pill text to black. Pills themselves need a light
-   background so that black text is readable. */
+   rule above forces pill and badge text to black. Pills and the "Client"
+   badge carry their own (dark, in the night palette) fill, so they need a
+   light background for that black text to be readable. */
+html[data-design='brutalist'] .work-card:hover .work-badge,
 html[data-design='brutalist'] .card:hover .skill-pill,
 html[data-design='brutalist'] .work-card:hover .skill-pill,
 html[data-design='brutalist'] .demo-card:hover .skill-pill,
@@ -1524,12 +1581,7 @@ html[data-design='blueprint'] {
 }
 
 /* Light palettes: invert the convention — dark lines on pale-cyan paper */
-html[data-design='blueprint'][data-theme='light'],
-html[data-design='blueprint'][data-theme='nord-light'],
-html[data-design='blueprint'][data-theme='catppuccin-latte'],
-html[data-design='blueprint'][data-theme='solarized-light'],
-html[data-design='blueprint'][data-theme='sepia'],
-html[data-design='blueprint'][data-theme='paper'] {
+html[data-design='blueprint'][data-theme='blueprint-day'] {
   --bp-ink: color-mix(in oklab, var(--text-primary) 80%, transparent);
   --bp-grid: color-mix(in oklab, var(--accent-start) 30%, transparent);
   --bp-grid-strong: color-mix(in oklab, var(--accent-start) 50%, transparent);
@@ -1564,7 +1616,7 @@ html[data-design='blueprint'] h4 {
 
 html[data-design='blueprint'] .hero-name {
   font-family: var(--font-sans);
-  font-size: clamp(3rem, 9vw, 5.5rem);
+  font-size: clamp(2.75rem, 9vw, 5.5rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 0.95;
@@ -1911,14 +1963,6 @@ html[data-design='academic'] .section {
   padding-top: 3.25rem;
 }
 
-html[data-design='academic'] .section-label {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
 html[data-design='academic'] .section-title {
   font-family: var(--font-display);
   font-size: clamp(1.9rem, 3.5vw, 2.6rem);
@@ -2117,12 +2161,7 @@ html[data-design='ide'] {
 }
 
 /* Light palettes: darken syntax colours for contrast on white backgrounds */
-html[data-design='ide'][data-theme='light'],
-html[data-design='ide'][data-theme='nord-light'],
-html[data-design='ide'][data-theme='catppuccin-latte'],
-html[data-design='ide'][data-theme='solarized-light'],
-html[data-design='ide'][data-theme='sepia'],
-html[data-design='ide'][data-theme='paper'] {
+html[data-design='ide'][data-theme='ide-day'] {
   --ide-keyword: #7c3aed;
   --ide-string: #166534;
   --ide-func: #1d4ed8;
@@ -2717,15 +2756,16 @@ html[data-design='deco'] {
   counter-reset: deco-section;
 }
 
-/* Light palettes: darken gold for readable contrast on light backgrounds */
-html[data-design='deco'][data-theme='light'],
-html[data-design='deco'][data-theme='nord-light'],
-html[data-design='deco'][data-theme='catppuccin-latte'],
-html[data-design='deco'][data-theme='solarized-light'],
-html[data-design='deco'][data-theme='sepia'],
-html[data-design='deco'][data-theme='paper'] {
-  --deco-gold: #886420;
-  --deco-gold-grad: linear-gradient(135deg, #a8842a 0%, #6e4e12 45%, #a8842a 100%);
+/* The day palette gilds with its own antique gold, darkened enough that the
+   paper-coloured type on the gold buttons holds 4.5:1 along the whole sheen. */
+html[data-design='deco'][data-theme='deco-day'] {
+  --deco-gold: var(--accent-start);
+  --deco-gold-grad: linear-gradient(
+    135deg,
+    var(--accent-start) 0%,
+    color-mix(in oklab, var(--accent-start) 70%, black) 45%,
+    var(--accent-start) 100%
+  );
 }
 
 /* Body sunburst + subtle chevron wash */
@@ -2764,7 +2804,7 @@ html[data-design='deco'] h4 {
 html[data-design='deco'] .hero-name {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(3rem, 9vw, 6rem);
+  font-size: clamp(2.4rem, 9vw, 6rem);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1;
@@ -2789,8 +2829,7 @@ html[data-design='deco'] .hero-name::after {
   border-bottom: 1px solid var(--deco-gold);
 }
 
-html[data-design='deco'] .hero-greeting,
-html[data-design='deco'] .section-label {
+html[data-design='deco'] .hero-greeting {
   font-family: var(--font-display);
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -3010,7 +3049,7 @@ html[data-design='wabisabi'] {
   --section-padding: 9rem 0;
   --container-width: 760px;
   --wabi-ink: color-mix(in oklab, var(--text-primary) 95%, transparent);
-  --wabi-paper: color-mix(in oklab, var(--bg-primary) 90%, #f2ece1);
+  --wabi-paper: var(--bg-primary);
   --wabi-hair: color-mix(in oklab, var(--text-primary) 18%, transparent);
 }
 
@@ -3046,14 +3085,13 @@ html[data-design='wabisabi'] .hero-name {
   color: var(--wabi-ink);
 }
 
-html[data-design='wabisabi'] .hero-greeting,
-html[data-design='wabisabi'] .section-label {
+html[data-design='wabisabi'] .hero-greeting {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   text-transform: lowercase;
   letter-spacing: 0.3em;
   font-size: 0.65rem;
   font-weight: 400;
-  color: color-mix(in oklab, var(--wabi-ink) 55%, transparent);
+  color: var(--text-muted);
 }
 
 html[data-design='wabisabi'] .hero-tagline {
@@ -3066,7 +3104,7 @@ html[data-design='wabisabi'] .hero-description {
   font-size: 1rem;
   max-width: 48ch;
   line-height: 2.1;
-  color: color-mix(in oklab, var(--wabi-ink) 75%, transparent);
+  color: var(--text-secondary);
 }
 
 /* Each section carries a thin vertical accent line on the left */
@@ -3141,7 +3179,7 @@ html[data-design='wabisabi'] .work-tags li {
   font-weight: 400;
   text-transform: lowercase;
   padding: 0;
-  color: color-mix(in oklab, var(--wabi-ink) 65%, transparent);
+  color: var(--text-muted);
 }
 
 html[data-design='wabisabi'] .skill-pill + .skill-pill::before,
@@ -3255,7 +3293,7 @@ html[data-design='zine'] {
   --border-width: 3px;
   --shadow-card: 4px 4px 0 var(--text-primary);
   --zine-ink: var(--text-primary);
-  --zine-paper: color-mix(in oklab, var(--bg-primary) 80%, #f4efe3);
+  --zine-paper: var(--bg-primary);
   --zine-spot: var(--accent-start);
   --zine-tape: color-mix(in oklab, #ffd84d 55%, var(--bg-primary));
 }
@@ -3281,7 +3319,7 @@ html[data-design='zine'] h4 {
 
 /* Ransom-note hero name: split across words with different fonts/angles */
 html[data-design='zine'] .hero-name {
-  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-size: clamp(2.25rem, 8vw, 5rem);
   font-weight: 900;
   text-transform: uppercase;
   line-height: 0.95;
@@ -3480,12 +3518,30 @@ html[data-design='zine'] .skill-pill:nth-child(3n + 2) {
   transform: rotate(-1deg);
 }
 
-html[data-design='zine'] .navbar {
-  background: var(--zine-ink);
-  color: var(--zine-paper);
+/* The spot-colour rule under the bar. `.navbar.scrolled` (scoped in Navbar.astro)
+   outranks a bare `.navbar`, so both states are named to keep the rule. */
+html[data-design='zine'] .navbar,
+html[data-design='zine'] .navbar.scrolled {
   border-bottom: 4px solid var(--zine-spot);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+}
+
+/* Inline links only exist above the Navbar's 1024px collapse, so only there is
+   the bar inked (page ink as the ground, paper as the type). The controls in it
+   read --text-*, --accent-text and --border-color, so those are re-scoped to the
+   inked ground instead of restyling each control. Below 1024px the hamburger and
+   the full-screen menu keep the page's own tokens. */
+@media (min-width: 1025px) {
+  html[data-design='zine'] .navbar,
+  html[data-design='zine'] .navbar.scrolled {
+    background: var(--zine-ink);
+    --text-primary: var(--zine-paper);
+    --text-secondary: color-mix(in oklab, var(--zine-paper) 86%, var(--zine-ink));
+    --text-muted: color-mix(in oklab, var(--zine-paper) 70%, var(--zine-ink));
+    --accent-text: color-mix(in oklab, var(--zine-spot) 55%, var(--zine-paper));
+    --border-color: color-mix(in oklab, var(--zine-paper) 40%, var(--zine-ink));
+  }
 }
 
 html[data-design='zine'] .nav-logo {
@@ -3506,7 +3562,6 @@ html[data-design='zine'] .nav-link {
   font-weight: 700;
   font-size: 0.78rem;
   text-transform: uppercase;
-  color: var(--zine-paper);
 }
 
 html[data-design='zine'] .nav-link:hover {
@@ -3573,7 +3628,7 @@ html[data-design='comic'] {
   --comic-ink: var(--text-primary);
   --comic-pop: var(--accent-start);
   --comic-pop2: var(--accent-end);
-  --comic-paper: color-mix(in oklab, var(--bg-primary) 70%, #fffef2);
+  --comic-paper: var(--bg-primary);
   --comic-panel: var(--bg-card);
   --shadow-card: 4px 4px 0 var(--comic-ink);
 }
@@ -3777,7 +3832,7 @@ html[data-design='comic'] .work-tags li {
 }
 
 html[data-design='comic'] .skill-pill:nth-child(3n) {
-  background: #ffeb3b;
+  background: color-mix(in oklab, var(--comic-pop2) 25%, var(--comic-panel));
 }
 html[data-design='comic'] .skill-pill:nth-child(3n + 1) {
   background: color-mix(in oklab, var(--comic-pop) 25%, var(--comic-panel));
@@ -3813,7 +3868,9 @@ html[data-design='comic'] .nav-link {
 html[data-design='comic'] .hero-cta,
 html[data-design='comic'] .contact-submit {
   background: var(--comic-pop2);
-  color: var(--comic-ink);
+  /* The paper colour, not the ink: ink is cream in the night palette and
+     would sink into the coral fill. */
+  color: var(--comic-paper);
   border: 3px solid var(--comic-ink);
   border-radius: 999px;
   font-family: var(--font-display);
@@ -3873,8 +3930,8 @@ html[data-design='newspaper'] {
   --radius-md: 0;
   --radius-lg: 0;
   --border-width: 1px;
-  --news-paper: color-mix(in oklab, var(--bg-primary) 75%, #f4eedd);
-  --news-ink: color-mix(in oklab, var(--text-primary) 98%, #1a1812);
+  --news-paper: var(--bg-primary);
+  --news-ink: var(--text-primary);
   --news-muted: color-mix(in oklab, var(--news-ink) 55%, transparent);
   --news-hair: color-mix(in oklab, var(--news-ink) 30%, transparent);
   --shadow-card: none;
@@ -4063,41 +4120,9 @@ html[data-design='newspaper'] .contact-form {
   position: relative;
 }
 
-/* Classified-ad small-caps label strip across top of work / demo / education cards */
-html[data-design='newspaper'] .work-card::before,
-html[data-design='newspaper'] .demo-card::before,
-html[data-design='newspaper'] .education-card::before,
-html[data-design='newspaper'] .certification-card::before {
-  content: 'ADVERTISEMENT';
-  display: block;
-  font-family: 'EB Garamond', Georgia, serif;
-  font-variant: small-caps;
-  font-weight: 600;
-  font-size: 0.7rem;
-  letter-spacing: 0.25em;
-  color: var(--news-muted);
-  border-bottom: 1px solid var(--news-hair);
-  padding-bottom: 0.35rem;
-  margin: -0.5rem -0.5rem 0.75rem;
-  text-align: center;
-}
-
-html[data-design='newspaper'] .education-card::before {
-  content: 'ACADEMIC RECORD';
-}
-
-html[data-design='newspaper'] .certification-card::before {
-  content: 'CREDENTIAL ON FILE';
-}
-
-html[data-design='newspaper'] .work-card::before {
-  content: 'EMPLOYMENT NOTICE';
-}
-
-html[data-design='newspaper'] .demo-card::before {
-  content: 'FEATURED DEMO';
-}
-
+/* The classified-ad caption strips ("ADVERTISEMENT", "EMPLOYMENT NOTICE", …) that
+ * used to live here were hardcoded English in CSS and never showed at rest: the
+ * cards' hover stripe forced their opacity to 0. They went with the stripe. */
 html[data-design='newspaper'] .card h3,
 html[data-design='newspaper'] .work-card h3,
 html[data-design='newspaper'] .demo-card h3,
