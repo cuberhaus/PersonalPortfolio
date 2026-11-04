@@ -3,7 +3,7 @@ import { useState, lazy, Suspense } from 'react';
 import { T } from '../../i18n/demos/caim-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { gradientButton } from './_styles';
+import { controlTransition, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -79,7 +79,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     fontSize: '0.82rem',
     cursor: 'pointer',
-    transition: 'all 0.15s',
+    transition: controlTransition,
   },
   tabActive: gradientButton(),
   content: {

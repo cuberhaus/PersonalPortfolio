@@ -25,7 +25,7 @@ const LINEAR_NB = 'PracticaAPA-Hipotiroidismo-ModelsLineals.ipynb';
 
 import { TRANSLATIONS } from '../../i18n/demos/apa-practica-demo';
 import { useDemoLifecycle, useDebug } from '../../lib/useDebug';
-import { demoPanel, gradientBadge, gradientButton } from './_styles';
+import { controlTransition, demoPanel, gradientBadge, gradientButton } from './_styles';
 
 type Lang = 'en' | 'es' | 'ca';
 
@@ -213,7 +213,7 @@ function KnnCanvas({ t, log }: { t: typeof TRANSLATIONS.en; log: ReturnType<type
                     borderRadius: '0.4rem',
                     fontSize: '0.78rem',
                     fontWeight: 700,
-                    transition: 'all 0.15s',
+                    transition: controlTransition,
                   }
                 : {
                     padding: '0.3rem 0.65rem',
@@ -224,7 +224,7 @@ function KnnCanvas({ t, log }: { t: typeof TRANSLATIONS.en; log: ReturnType<type
                     cursor: 'pointer',
                     background: 'var(--bg-card-hover)',
                     color: 'var(--text-muted)',
-                    transition: 'all 0.15s',
+                    transition: controlTransition,
                   }
             }
           >
@@ -350,7 +350,7 @@ function Predictor({ t, featMeta }: { t: typeof TRANSLATIONS.en; featMeta: Featu
             ? 'linear-gradient(135deg, rgba(251,113,133,0.08), rgba(251,113,133,0.03))'
             : 'linear-gradient(135deg, rgba(45,212,191,0.08), rgba(45,212,191,0.03))',
           border: `1px solid ${isHypo ? 'rgba(251,113,133,0.25)' : 'rgba(45,212,191,0.25)'}`,
-          transition: 'all 0.3s ease',
+          transition: 'border-color 300ms var(--ease-out)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>

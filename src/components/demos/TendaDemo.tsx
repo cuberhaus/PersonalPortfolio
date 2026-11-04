@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { MOCK_CATEGORIES, MOCK_PRODUCTS, type Category, type Product } from '../../data/tenda-mock';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { gradientBadge, gradientButton } from './_styles';
+import { controlTransition, gradientBadge, gradientButton } from './_styles';
 
 type View = 'home' | 'category' | 'product' | 'cart' | 'checkout';
 import { TRANSLATIONS } from '../../i18n/demos/tenda-demo';
@@ -32,15 +32,17 @@ const styles = {
   navTitle: { fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' },
   navLinks: { display: 'flex' as const, gap: '0.75rem', alignItems: 'center' as const },
   link: {
-    color: 'var(--text-secondary)',
+    background: 'none',
+    border: 'none',
+    font: 'inherit',
+    color: 'var(--hover-color, var(--text-secondary))',
     fontSize: '0.85rem',
     cursor: 'pointer',
     textDecoration: 'none',
     padding: '0.35rem 0.5rem',
     borderRadius: '0.35rem',
-    transition: 'all 0.15s',
+    transition: controlTransition,
   },
-  linkHover: { color: 'var(--accent-text)' },
   cartBadge: {
     ...gradientBadge(),
     fontSize: '0.7rem',
@@ -49,11 +51,11 @@ const styles = {
     marginLeft: '0.25rem',
   },
   card: {
-    background: 'var(--bg-card)',
-    border: '1px solid var(--border-color)',
+    background: 'var(--hover-bg, var(--bg-card))',
+    border: '1px solid var(--hover-border, var(--border-color))',
     borderRadius: '0.75rem',
     padding: '1.25rem',
-    transition: 'all 0.2s',
+    transition: 'border-color 150ms var(--ease-out), background-color 150ms var(--ease-out)',
   },
   grid: {
     display: 'grid' as const,
@@ -62,11 +64,12 @@ const styles = {
   },
   productCard: {
     background: 'var(--bg-card)',
-    border: '1px solid var(--border-color)',
+    border: '1px solid var(--hover-border, var(--border-color))',
     borderRadius: '0.75rem',
     overflow: 'hidden' as const,
     cursor: 'pointer',
-    transition: 'all 0.2s',
+    transition:
+      'border-color 150ms var(--ease-out), background-color 150ms var(--ease-out), transform 200ms var(--ease-out)',
   },
   productImg: {
     width: '100%',
@@ -98,7 +101,7 @@ const styles = {
     fontWeight: 600,
     fontSize: '0.85rem',
     cursor: 'pointer',
-    transition: 'all 0.15s',
+    transition: controlTransition,
   },
   primaryBtn: {
     ...gradientButton(),
@@ -272,30 +275,25 @@ function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
           {t.storeName}
         </span>
         <div style={styles.navLinks}>
-          <span
-            style={styles.link}
-            onClick={goHome}
-            onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-start)')}
-            onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
-          >
+          <button type="button" className="demo-hover" style={styles.link} onClick={goHome}>
             {t.home}
-          </span>
+          </button>
           {MOCK_CATEGORIES.map((c) => (
-            <span
+            <button
+              type="button"
               key={c.id}
+              className="demo-hover"
               style={styles.link}
               onClick={() => openCategory(c)}
-              onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-start)')}
-              onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
             >
               {c.name}
-            </span>
+            </button>
           ))}
-          <span
+          <button
+            type="button"
+            className="demo-hover"
             style={styles.link}
             onClick={() => setView('cart')}
-            onMouseOver={(e) => (e.currentTarget.style.color = 'var(--accent-start)')}
-            onMouseOut={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
           >
             {t.cart}{' '}
             {cartCount > 0 && (
@@ -303,7 +301,7 @@ function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
                 {cartCount}
               </span>
             )}
-          </span>
+          </button>
         </div>
       </nav>
 
@@ -316,16 +314,9 @@ function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
               return (
                 <div
                   key={c.id}
+                  className="demo-hover"
                   style={{ ...styles.card, cursor: 'pointer' }}
                   onClick={() => openCategory(c)}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--accent-start)';
-                    e.currentTarget.style.background = 'var(--bg-card-hover)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--border-color)';
-                    e.currentTarget.style.background = 'var(--bg-card)';
-                  }}
                 >
                   <div style={styles.productImg}>
                     <ProductIcon />
@@ -364,16 +355,9 @@ function TendaDemo({ lang = 'en' }: { lang?: Lang }) {
             {categoryProducts.map((p) => (
               <div
                 key={p.id}
+                className="demo-hover demo-lift"
                 style={styles.productCard}
                 onClick={() => openProduct(p)}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--accent-start)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--border-color)';
-                  e.currentTarget.style.transform = 'none';
-                }}
               >
                 <div style={styles.productImg}>
                   <ProductIcon />

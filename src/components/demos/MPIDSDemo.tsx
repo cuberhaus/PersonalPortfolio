@@ -17,7 +17,7 @@ import { TRANSLATIONS } from '../../i18n/demos/mpids-demo';
 import { debug } from '../../lib/debug';
 import { useDemoLifecycle } from '../../lib/useDebug';
 import { withDemoErrorBoundary } from '../DemoErrorBoundary';
-import { gradientButton } from './_styles';
+import { controlTransition, gradientButton } from './_styles';
 
 const log = debug('net:mpids');
 const demoLog = debug('demo:mpids');
@@ -63,7 +63,7 @@ const s = {
           border: '1px solid var(--border-color)',
           fontSize: '0.85rem',
           fontWeight: 500,
-          transition: 'all 0.15s',
+          transition: controlTransition,
         }
       : ({
           padding: '0.5rem 1rem',
@@ -74,7 +74,7 @@ const s = {
           cursor: 'pointer',
           fontSize: '0.85rem',
           fontWeight: 500,
-          transition: 'all 0.15s',
+          transition: controlTransition,
         } as const),
   btnPrimary: {
     ...gradientButton(),
