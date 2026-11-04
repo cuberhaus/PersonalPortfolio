@@ -596,9 +596,8 @@ function ApaPracticaDemo({ lang = 'en' }: { lang?: Lang }) {
         <div
           style={{
             display: 'flex',
+            flexWrap: 'wrap',
             gap: '0.35rem',
-            overflowX: 'auto',
-            paddingBottom: '0.25rem',
           }}
         >
           {pipelineSteps.map((step, i: number) => (
