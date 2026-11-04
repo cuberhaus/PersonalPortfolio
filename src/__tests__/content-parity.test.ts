@@ -17,6 +17,7 @@ import education from '../data/education.json';
 import workProjects from '../data/work_projects.json';
 import certifications from '../data/certifications.json';
 import demos from '../data/demos.json';
+import videos from '../data/videos.json';
 
 // Locale translation files
 import skillsEn from '../../locales/en/skills.json';
@@ -38,6 +39,9 @@ import { getLocalizedCertifications } from '../lib/certifications';
 import demosEn from '../../locales/en/demos.json';
 import demosEs from '../../locales/es/demos.json';
 import demosCa from '../../locales/ca/demos.json';
+import videosEn from '../../locales/en/videos.json';
+import videosEs from '../../locales/es/videos.json';
+import videosCa from '../../locales/ca/videos.json';
 
 import { ISSUERS } from '../lib/issuer-icons';
 import { LOCALES } from '../config/locales';
@@ -292,6 +296,38 @@ describe('Certifications data', () => {
     for (const entry of data) {
       const issuer = entry.issuer as string;
       expect(registered, `issuer-icons.ts missing issuer "${issuer}"`).toContain(issuer);
+    }
+  });
+});
+
+// ─── Videos ─────────────────────────────────────────────────────
+
+describe('Videos data', () => {
+  const data = videos as Record<string, unknown>[];
+  const translations = { en: videosEn, es: videosEs, ca: videosCa };
+
+  it('locales match', () => {
+    assertLocaleParity('videos', data, translations);
+  });
+
+  it('every video has a description per locale', () => {
+    for (const locale of LOCALES) {
+      const flat = flattenForLocale(data, locale, translations[locale]) as Array<{
+        description: string;
+      }>;
+      for (const entry of flat) {
+        expect(entry.description.trim().length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('translated descriptions are not copies of the English text', () => {
+    for (const locale of LOCALES.filter((l) => l !== 'en')) {
+      for (const index of Object.keys(videosEn)) {
+        const en = (videosEn as TranslationMap)[index].description;
+        const translated = (translations[locale] as TranslationMap)[index].description;
+        expect(translated, `${locale}.videos[${index}].description is untranslated`).not.toBe(en);
+      }
     }
   });
 });

@@ -552,3 +552,194 @@ test.describe('portfolio homepage smoke', () => {
     }
   });
 });
+
+test.describe('project videos', () => {
+  const watchLink = (page: Page, name: RegExp = /^Watch video: .+, \d+ seconds$/) =>
+    page.getByRole('link', { name });
+
+  test('requests no video until a visitor asks to watch one', async ({ page }) => {
+    const videoRequests: string[] = [];
+    page.on('request', (request) => {
+      if (request.url().endsWith('.mp4')) videoRequests.push(request.url());
+    });
+
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await expect(watchLink(page).first()).toBeVisible();
+    expect(videoRequests).toEqual([]);
+
+    await watchLink(page).first().click();
+
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect.poll(() => videoRequests.length).toBeGreaterThan(0);
+  });
+
+  test('the Watch button is a button of its own, not a play mark on the picture', async ({
+    page,
+  }) => {
+    // A play pill over the preview reads as "this picture is the video" and makes the whole
+    // card look like the thing that plays. The button lives with the card's other actions,
+    // and it reacts by itself while the card's "Live demo" label steps aside.
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const card = page.locator('.demo-card:has(.demo-video-button)').first();
+    const button = card.locator('.demo-video-button');
+    const cardLabel = card.locator('.demo-badge');
+    await button.scrollIntoViewIfNeeded();
+
+    const buttonBox = (await button.boundingBox())!;
+    const previewBox = (await card.locator('.demo-preview').boundingBox())!;
+    expect(buttonBox.y).toBeGreaterThanOrEqual(previewBox.y + previewBox.height);
+    expect(buttonBox.height).toBeGreaterThanOrEqual(44);
+
+    await expect(button).toHaveCSS('cursor', 'pointer');
+    const restFill = await button.evaluate((el) => getComputedStyle(el).backgroundColor);
+
+    // Over the card body: the card offers its own "Live demo" label.
+    await card.hover({ position: { x: 40, y: 40 } });
+    await expect(cardLabel).toHaveCSS('opacity', '1');
+
+    // Over the button: that label goes away and the button changes by itself.
+    await button.hover();
+    await expect(cardLabel).toHaveCSS('opacity', '0');
+    await expect
+      .poll(() => button.evaluate((el) => getComputedStyle(el).backgroundColor))
+      .not.toBe(restFill);
+  });
+
+  test('opens in a dialog and Escape closes it, stops the video and returns focus', async ({
+    page,
+  }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const badge = watchLink(page).first();
+    await badge.click();
+
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole('heading', { level: 3 })).not.toBeEmpty();
+
+    await page.keyboard.press('Escape');
+
+    await expect(dialog).toBeHidden();
+    await expect(badge).toBeFocused();
+    await expect(page.locator('dialog video').first()).toHaveJSProperty('paused', true);
+  });
+
+  test('the dialog credits the music, describes the video and goes on to the demo', async ({
+    page,
+  }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const count = await page.locator('.demo-video-button').count();
+    expect(count).toBeGreaterThan(0);
+
+    for (let i = 0; i < count; i++) {
+      await page.locator('.demo-video-button').nth(i).click();
+      const dialog = page.getByRole('dialog');
+
+      await expect(dialog.getByRole('link', { name: 'Sascha Ende' })).toHaveAttribute(
+        'href',
+        'https://www.ende.app'
+      );
+      await expect(dialog.getByRole('link', { name: 'CC BY 4.0' })).toHaveAttribute(
+        'href',
+        'https://creativecommons.org/licenses/by/4.0/'
+      );
+      const describedBy = await dialog.locator('video').getAttribute('aria-describedby');
+      expect(describedBy).toBeTruthy();
+      await expect(page.locator(`#${describedBy}`)).not.toBeEmpty();
+      await expect(dialog.getByRole('link', { name: 'Try the interactive demo' })).toHaveAttribute(
+        'href',
+        /\/demos\/[a-z-]+\/$/
+      );
+
+      await page.keyboard.press('Escape');
+      await expect(dialog).toBeHidden();
+    }
+  });
+
+  test('a project page shows the video and plays nothing until asked', async ({ page }) => {
+    const videoRequests: string[] = [];
+    page.on('request', (request) => {
+      if (request.url().endsWith('.mp4')) videoRequests.push(request.url());
+    });
+
+    await page.goto('/demos/draculin/', { waitUntil: 'networkidle' });
+    const section = page.locator('#video');
+    await expect(section.getByRole('heading', { level: 2 })).toHaveText('The 22-second version');
+    await expect(section.getByRole('link', { name: 'Sascha Ende' })).toBeVisible();
+    await expect(section.getByRole('link', { name: 'CC BY 4.0' })).toBeVisible();
+    expect(videoRequests).toEqual([]);
+
+    await section.getByRole('button', { name: /^Play the .+ video$/ }).click();
+
+    await expect(section.locator('.video-stage')).toHaveAttribute('data-started', '');
+    await expect(section.locator('video')).toHaveJSProperty('controls', true);
+    await expect.poll(() => videoRequests.length).toBeGreaterThan(0);
+  });
+
+  test('the play badge keeps its own contrast pair on a project page', async ({ page }) => {
+    // Project pages recolour every <span> (`.demo-main span`), which once turned the
+    // badge's text pale on its coral fill. It must keep the design's action colours.
+    await page.goto('/demos/draculin/', { waitUntil: 'domcontentloaded' });
+    const badge = page.locator('#video .video-play-badge');
+    await expect(badge).toBeVisible();
+
+    const { badgeColor, length, action } = await badge.evaluate((el) => {
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--demo-action-color)';
+      el.append(probe);
+      const action = getComputedStyle(probe).color;
+      probe.remove();
+      const length = el.querySelector('.video-play-length');
+      return {
+        badgeColor: getComputedStyle(el).color,
+        length: length ? getComputedStyle(length).color : '',
+        action,
+      };
+    });
+    expect(badgeColor).toBe(action);
+    expect(length).toBe(action);
+  });
+
+  test('stays translated and inside the viewport on a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/es/', { waitUntil: 'domcontentloaded' });
+
+    const badge = watchLink(page, /^Ver vídeo: .+, \d+ segundos$/).first();
+    await expect(badge).toHaveAttribute('href', /\/es\/demos\/[a-z-]+\/#video$/);
+    await badge.click();
+
+    const dialog = page.getByRole('dialog');
+    await expect(dialog.getByRole('button', { name: 'Cerrar el vídeo' })).toBeVisible();
+    await expect(dialog.getByRole('link', { name: 'Prueba la demo interactiva' })).toHaveAttribute(
+      'href',
+      /\/es\/demos\/[a-z-]+\/$/
+    );
+    const box = await dialog.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+
+    await dialog.getByRole('button', { name: 'Cerrar el vídeo' }).click();
+    await expect(dialog).toBeHidden();
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+
+  test.describe('without JavaScript', () => {
+    test.use({ javaScriptEnabled: false });
+
+    test('the badge is a link to the video on the project page, which has native controls', async ({
+      page,
+    }) => {
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
+      await watchLink(page).first().click();
+
+      await expect(page).toHaveURL(/\/demos\/[a-z-]+\/#video$/);
+      const video = page.locator('#video video');
+      await expect(video).toBeVisible();
+      await expect(video).toHaveAttribute('controls', '');
+      await expect(video).toHaveAttribute('preload', 'none');
+    });
+  });
+});

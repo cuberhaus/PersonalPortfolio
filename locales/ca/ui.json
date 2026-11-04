@@ -153,6 +153,16 @@
     "light": "Clar",
     "palette": "Paleta"
   },
+  "videos": {
+    "close": "Tanca el vídeo",
+    "heading": "La versió de {n} segons",
+    "music": "Música",
+    "openDemo": "Prova la demo interactiva",
+    "play": "Reprodueix el vídeo de {title}",
+    "seconds": "{n} segons",
+    "watch": "Mira el vídeo",
+    "watchLabel": "Mira el vídeo: {title}, {length}"
+  },
   "work": {
     "client": "Client",
     "label": "Treball Professional",

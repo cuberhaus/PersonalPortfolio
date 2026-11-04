@@ -1,6 +1,7 @@
 ---
 import DemoLayout from '../../layouts/DemoLayout.astro';
 import DemoHeader from '../../components/DemoHeader.astro';
+import DemoVideo from '../../components/DemoVideo.astro';
 import DraculinDemo from '../../components/demos/DraculinDemo';
 import LiveAppEmbed from '../../components/demos/LiveAppEmbed';
 import LiveAppFallbackRegion from '../../components/demos/LiveAppFallbackRegion.astro';
@@ -24,6 +25,8 @@ const { lang, t, demo } = getDemoPageContext(Astro.url, 'draculin');
       githubLabel={[t('demo.viewFrontend'), t('demo.viewBackend')]}
       accent={demo.accent}
     />
+
+    <DemoVideo slug="draculin" />
 
     <LiveAppFallbackRegion>
       <LiveAppEmbed

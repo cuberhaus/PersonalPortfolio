@@ -1,0 +1,65 @@
+---
+import { useTranslations, type Lang } from '../i18n/utils';
+import type { DemoVideo } from '../lib/demo-videos';
+
+interface Props {
+  video: DemoVideo;
+  lang: Lang;
+  /** id for the description, referenced by the player's aria-describedby. */
+  descriptionId: string;
+}
+
+const { video, lang, descriptionId } = Astro.props;
+const t = useTranslations(lang);
+const { music } = video;
+---
+
+<div class="video-caption">
+  <p class="video-description" id={descriptionId}>{video.description}</p>
+  {
+    /* The soundtrack is CC BY 4.0: this credit is a condition of using it, so it travels with every player. */
+  }
+  <p class="video-music">
+    <span class="video-music-label">{t('videos.music')}</span>
+    <a href={music.artistUrl} target="_blank" rel="noopener noreferrer">{music.artist}</a>, {
+      music.title
+    }, <a href={music.licenseUrl} target="_blank" rel="noopener noreferrer">{music.license}</a>
+  </p>
+</div>
+
+<style>
+  .video-caption {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .video-description {
+    max-width: 62ch;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .video-music {
+    padding-top: 0.75rem;
+    border-top: var(--border-width) var(--border-style) var(--border-color);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+
+  /* A compound selector so `.demo-main span` on project pages does not brighten the label. */
+  .video-music .video-music-label {
+    margin-right: 0.5rem;
+    color: inherit;
+  }
+
+  .video-music a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .video-music a:hover {
+    color: var(--accent-text);
+  }
+</style>

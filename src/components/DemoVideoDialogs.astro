@@ -1,0 +1,208 @@
+---
+import { getDemo } from '../i18n/demo';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { listDemoVideos } from '../lib/demo-videos';
+import VideoCaption from './VideoCaption.astro';
+import VideoStage from './VideoStage.astro';
+
+/**
+ * One modal per video, opened from the "Watch video" button on a project card (see
+ * `data-video-open` in Demos.astro). A native <dialog> gives the focus trap,
+ * Escape to close and focus return to the button for free. Closed dialogs are not
+ * rendered by the browser, and the player is preload="none", so nothing is
+ * downloaded until a visitor opens one.
+ */
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+const localePrefix = lang === 'en' ? '' : `/${lang}`;
+
+const items = listDemoVideos(lang).map((video) => ({
+  video,
+  demo: getDemo(video.demo, lang),
+  demoHref: `${base}${localePrefix}/demos/${video.demo}/`,
+}));
+---
+
+{
+  items.map(({ video, demo, demoHref }) => (
+    <dialog
+      class="video-dialog"
+      id={`video-dialog-${video.demo}`}
+      aria-labelledby={`video-dialog-title-${video.demo}`}
+      data-video-dialog
+    >
+      <div class="video-dialog-panel">
+        <div class="video-dialog-bar">
+          <h3 class="video-dialog-title" id={`video-dialog-title-${video.demo}`}>
+            {demo.title}
+          </h3>
+          <button
+            type="button"
+            class="video-dialog-close"
+            data-video-close
+            aria-label={t('videos.close')}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <VideoStage
+          video={video}
+          title={demo.title}
+          lang={lang}
+          describedBy={`video-dialog-description-${video.demo}`}
+        />
+        <VideoCaption
+          video={video}
+          lang={lang}
+          descriptionId={`video-dialog-description-${video.demo}`}
+        />
+
+        <a class="video-dialog-link" href={demoHref} data-astro-reload>
+          {t('videos.openDemo')}
+        </a>
+      </div>
+    </dialog>
+  ))
+}
+
+<style>
+  .video-dialog {
+    /* The global reset zeroes margins, which would pin a modal dialog to the top-left. */
+    margin: auto;
+    width: min(56rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 0;
+    border: var(--border-width) var(--border-style) var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-card);
+    overflow: auto;
+  }
+
+  .video-dialog::backdrop {
+    background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
+  }
+
+  /* A click that lands on the dialog itself, not on this panel, hit the backdrop. */
+  .video-dialog-panel {
+    display: grid;
+    gap: 1.1rem;
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+  }
+
+  .video-dialog-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .video-dialog-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    line-height: 1.25;
+  }
+
+  .video-dialog-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition:
+      border-color var(--transition-fast),
+      color var(--transition-fast);
+  }
+
+  .video-dialog-close:hover {
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+  }
+
+  .video-dialog-close:focus-visible,
+  .video-dialog-link:focus-visible {
+    outline: 2px solid var(--accent-start);
+    outline-offset: 2px;
+  }
+
+  .video-dialog-link {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-sm);
+    background: var(--demo-action-bg);
+    color: var(--demo-action-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>
+
+<script>
+  function init() {
+    document.querySelectorAll<HTMLDialogElement>('dialog[data-video-dialog]').forEach((dialog) => {
+      if (dialog.dataset.dialogReady) return;
+      dialog.dataset.dialogReady = 'true';
+
+      dialog
+        .querySelector<HTMLElement>('[data-video-close]')
+        ?.addEventListener('click', () => dialog.close());
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+      // Escape, the close button and the backdrop all end up here.
+      dialog.addEventListener('close', () => dialog.querySelector('video')?.pause());
+    });
+
+    // Without script, or where <dialog> is missing, the button is a plain link to the project page.
+    document.querySelectorAll<HTMLElement>('[data-video-open]').forEach((opener) => {
+      if (opener.dataset.openerReady) return;
+      opener.dataset.openerReady = 'true';
+
+      opener.addEventListener('click', (event) => {
+        const dialog = document.getElementById(`video-dialog-${opener.dataset.videoOpen}`);
+        if (!(dialog instanceof HTMLDialogElement) || typeof dialog.showModal !== 'function') {
+          return;
+        }
+        event.preventDefault();
+        dialog.showModal();
+        // The visitor just asked to watch it: start playing (the click allows it).
+        dialog
+          .querySelector('video')
+          ?.play()
+          .catch(() => {
+            // Refused: the poster and play button stay, and pressing play works.
+          });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  document.addEventListener('astro:page-load', init);
+</script>

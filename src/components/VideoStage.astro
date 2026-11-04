@@ -1,0 +1,159 @@
+---
+import { useTranslations, type Lang } from '../i18n/utils';
+import { formatVideoLength, type DemoVideo } from '../lib/demo-videos';
+
+interface Props {
+  video: DemoVideo;
+  /** The project's title, used for the play button and the no-video fallback link. */
+  title: string;
+  lang: Lang;
+  /** id of the element holding the text alternative. */
+  describedBy: string;
+}
+
+const { video, title, lang, describedBy } = Astro.props;
+const t = useTranslations(lang);
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+const length = formatVideoLength(video.seconds);
+const playLabel = t('videos.play').replace('{title}', title);
+---
+
+<div class="video-stage" data-video-stage>
+  <video
+    class="video-player"
+    controls
+    playsinline
+    preload="none"
+    poster={`${base}${video.poster}`}
+    aria-describedby={describedBy}
+  >
+    <source src={`${base}${video.video}`} type="video/mp4" />
+    <a href={`${base}${video.video}`}>{title}</a>
+  </video>
+  <button type="button" class="video-play" aria-label={playLabel}>
+    <span class="video-play-badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z"
+        ></path>
+      </svg>
+      <span class="video-play-length">{length}</span>
+    </span>
+  </button>
+</div>
+
+<style>
+  .video-stage {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: var(--border-width) var(--border-style) var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-card);
+  }
+
+  .video-player {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Without script the browser's own controls and poster are the whole player. */
+  .video-play {
+    display: none;
+  }
+
+  /* The whole poster is the button. The badge sits in the corner, clear of the poster's own text. */
+  .video-stage[data-enhanced]:not([data-started]) .video-play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: end;
+    justify-items: start;
+    width: 100%;
+    height: 100%;
+    padding: clamp(0.75rem, 3%, 1.5rem);
+    cursor: pointer;
+  }
+
+  /* Project pages recolour every <span> (.demo-main span, specificity 0,2,1), so these two
+     selectors are compound on purpose: they keep the badge's own background/text pair. */
+  .video-play .video-play-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 1.1rem 0.6rem 0.9rem;
+    /* A pill on rounded designs, a rectangle on the square-cornered ones. */
+    border-radius: calc(var(--radius-lg) * 4);
+    border: 1px solid color-mix(in srgb, var(--demo-action-color) 32%, transparent);
+    background: var(--demo-action-bg);
+    color: var(--demo-action-color);
+  }
+
+  .video-play-badge .video-play-length {
+    color: inherit;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .video-play:focus-visible {
+    outline: 3px solid var(--accent-start);
+    outline-offset: -6px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .video-play .video-play-badge {
+      transition: transform var(--transition-base);
+    }
+
+    .video-play:hover .video-play-badge {
+      transform: translateY(-2px);
+    }
+  }
+</style>
+
+<script>
+  /**
+   * The big play button is an enhancement over the native player, which keeps
+   * working if this never runs. Nothing is requested from the network until the
+   * video plays (preload="none").
+   */
+  function init() {
+    document.querySelectorAll<HTMLElement>('[data-video-stage]').forEach((stage) => {
+      if (stage.dataset.videoReady) return;
+      stage.dataset.videoReady = 'true';
+
+      const player = stage.querySelector<HTMLVideoElement>('video');
+      const play = stage.querySelector<HTMLButtonElement>('.video-play');
+      if (!player || !play) return;
+
+      // Take over from the native controls until the video is running.
+      player.controls = false;
+      stage.setAttribute('data-enhanced', '');
+
+      const start = () => {
+        stage.setAttribute('data-started', '');
+        player.controls = true;
+      };
+      // Also fires when something else calls play(), e.g. a dialog opening onto this video.
+      player.addEventListener('play', start);
+      play.addEventListener('click', () => {
+        start();
+        player.play().catch(() => {
+          // Playback refused (data saver, codec): the native controls are already back.
+        });
+        player.focus();
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  document.addEventListener('astro:page-load', init);
+</script>

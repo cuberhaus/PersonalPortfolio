@@ -1,0 +1,68 @@
+---
+import { getDemo } from '../i18n/demo';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { getDemoVideo } from '../lib/demo-videos';
+import VideoCaption from './VideoCaption.astro';
+import VideoStage from './VideoStage.astro';
+
+interface Props {
+  /** Slug of the demo whose video to show. Renders nothing when the demo has none. */
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const video = getDemoVideo(slug, lang);
+const demo = getDemo(slug, lang);
+// `id="video"` below is also where a card's "Watch" link lands when script is off.
+---
+
+{
+  video && (
+    <section class="demo-video" id="video" aria-labelledby={`video-heading-${slug}`}>
+      <VideoStage
+        video={video}
+        title={demo.title}
+        lang={lang}
+        describedBy={`video-description-${slug}`}
+      />
+      <div class="demo-video-copy">
+        <h2 class="demo-video-heading" id={`video-heading-${slug}`}>
+          {t('videos.heading').replace('{n}', String(video.seconds))}
+        </h2>
+        <VideoCaption video={video} lang={lang} descriptionId={`video-description-${slug}`} />
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .demo-video {
+    display: grid;
+    grid-template-columns: minmax(0, 27rem) minmax(0, 1fr);
+    gap: clamp(1.25rem, 4vw, 2.5rem);
+    align-items: start;
+    margin-bottom: 2.5rem;
+    /* Land below the sticky navbar when reached through the card's link. */
+    scroll-margin-top: 6rem;
+  }
+
+  .demo-video-copy {
+    display: grid;
+    gap: 0.9rem;
+    min-width: 0;
+  }
+
+  .demo-video-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    line-height: 1.25;
+  }
+
+  @media (max-width: 760px) {
+    .demo-video {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

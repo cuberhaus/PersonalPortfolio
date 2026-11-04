@@ -1,0 +1,8 @@
+{
+  "0": {
+    "description": "Un bucle d'ecografia, l'aorta assenyalada per Mask R-CNN i un mateix fotograma mesurat de dues maneres: 4,43 cm amb el mètode de la hackató i 2,77 cm amb el millorat. Al final, les dues malles 3D giren una al costat de l'altra."
+  },
+  "1": {
+    "description": "Una pregunta escrita al xatbot, el veredicte d'un test, la foto d'una compresa convertida en una estimació del volum de sang i una setmana de totals diaris."
+  }
+}

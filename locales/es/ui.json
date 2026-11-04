@@ -153,6 +153,16 @@
     "light": "Claro",
     "palette": "Paleta"
   },
+  "videos": {
+    "close": "Cerrar el vídeo",
+    "heading": "La versión de {n} segundos",
+    "music": "Música",
+    "openDemo": "Prueba la demo interactiva",
+    "play": "Reproducir el vídeo de {title}",
+    "seconds": "{n} segundos",
+    "watch": "Ver vídeo",
+    "watchLabel": "Ver vídeo: {title}, {length}"
+  },
   "work": {
     "client": "Cliente",
     "label": "Trabajo Profesional",

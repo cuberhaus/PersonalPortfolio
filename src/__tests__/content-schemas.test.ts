@@ -8,12 +8,14 @@ import skillsData from '../data/skills.json';
 import workProjectsData from '../data/work_projects.json';
 import educationData from '../data/education.json';
 import certificationsData from '../data/certifications.json';
+import videosData from '../data/videos.json';
 
 import {
   SkillsFileSchema,
   WorkProjectsFileSchema,
   EducationFileSchema,
   CertificationsFileSchema,
+  VideosFileSchema,
 } from '../i18n/content-schemas';
 import { getIssuerAttribution } from '../lib/issuer-icons';
 
@@ -31,6 +33,9 @@ describe('Content file schemas accept the real data', () => {
   });
   it('certifications.json parses', () => {
     expect(() => CertificationsFileSchema.parse(certificationsData)).not.toThrow();
+  });
+  it('videos.json parses', () => {
+    expect(() => VideosFileSchema.parse(videosData)).not.toThrow();
   });
 });
 
@@ -75,6 +80,32 @@ describe('CertificationsFileSchema rejections', () => {
     const first = cloneFirst(certificationsData) as { id: string; displayOrder: number };
     const duplicate = structuredClone(first);
     expect(CertificationsFileSchema.safeParse([first, duplicate]).success).toBe(false);
+  });
+});
+
+describe('VideosFileSchema rejections', () => {
+  it('rejects a video without its music credit', () => {
+    const e = cloneFirst(videosData) as { music?: unknown };
+    delete e.music;
+    expect(VideosFileSchema.safeParse([e]).success).toBe(false);
+  });
+
+  it('rejects a music credit without a licence link', () => {
+    const e = cloneFirst(videosData) as { music: { licenseUrl: string } };
+    e.music.licenseUrl = '';
+    expect(VideosFileSchema.safeParse([e]).success).toBe(false);
+  });
+
+  it('rejects assets that are not served from /videos/', () => {
+    const e = cloneFirst(videosData) as { video: string };
+    e.video = '/somewhere-else/clip.mp4';
+    expect(VideosFileSchema.safeParse([e]).success).toBe(false);
+  });
+
+  it("rejects a video filed under another demo's name", () => {
+    const e = cloneFirst(videosData) as { demo: string };
+    e.demo = 'some-other-demo';
+    expect(VideosFileSchema.safeParse([e]).success).toBe(false);
   });
 });
 

@@ -1,0 +1,28 @@
+[
+  {
+    "demo": "bitsx-marato",
+    "video": "/videos/bitsx-marato.mp4",
+    "poster": "/videos/bitsx-marato.webp",
+    "seconds": 21,
+    "music": {
+      "title": "Happy Beats / Business Moves Vol. 12",
+      "artist": "Sascha Ende",
+      "artistUrl": "https://www.ende.app",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  {
+    "demo": "draculin",
+    "video": "/videos/draculin.mp4",
+    "poster": "/videos/draculin.webp",
+    "seconds": 22,
+    "music": {
+      "title": "Happy Beats / Business Moves Vol. 12",
+      "artist": "Sascha Ende",
+      "artistUrl": "https://www.ende.app",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "0": {
+    "description": "An ultrasound loop, the aorta picked out by Mask R-CNN, then one frame measured two ways: 4.43 cm with the hackathon method, 2.77 cm with the improved one. Both 3D meshes turn side by side at the end."
+  },
+  "1": {
+    "description": "A question typed into the chatbot, a quiz verdict, a photo of a pad turned into a blood-volume estimate, and a week of daily totals."
+  }
+}

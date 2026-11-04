@@ -4,6 +4,14 @@
 
 Design-customizable portfolio built with **[Astro 7](https://astro.build)** and **React 19** islands for 20 interactive demos. Three-locale i18n (EN / ES / CA). Deployed to **GitHub Pages** via Actions.
 
+## Launch video
+
+[![Launch video poster: "It's a portfolio. It has 17 designs."](docs/assets/launch-video/portfolio-launch.jpg)](docs/assets/launch-video/portfolio-launch.mp4)
+
+A 24-second tour of the design studio: 17 designs, 15 palettes, 20 interactive demos and three languages. Select the poster to play it, or press **Ctrl+K** on the [live site](https://polcasacubertagil.com) to open the same picker.
+
+Music: "Happy Beats / Business Moves Vol. 9" by Sascha Ende, [ende.app](https://www.ende.app) ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)).
+
 ## Gallery
 
 | Portfolio overview                                                                                                      | Interactive demo                                                                                 | Mobile navigation                                                                               |
