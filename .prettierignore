@@ -12,6 +12,9 @@ planner-api/
 # HyperFrames videos (promo and site tour): generated composition HTML must stay as written
 promo-video/
 tour-video/
+brag-output/
+brag-output-*/
+.impeccable/
 *.min.*
 package-lock.json
 *.json
