@@ -289,7 +289,8 @@ html[data-design='swiss'] .section-title {
   letter-spacing: -0.04em;
 }
 
-html[data-design='swiss'] .navbar {
+html[data-design='swiss'] .navbar,
+html[data-design='swiss'] .navbar.scrolled {
   background: var(--bg-primary);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -332,6 +333,148 @@ html[data-design='swiss'] .contact-submit {
   letter-spacing: 0.15em;
   font-weight: 700;
   border: 0;
+}
+
+/* The CV download button (a React island with its own injected CSS) is
+   square here like every other action; other designs keep its pill. */
+html[data-design='swiss'] .cv-dl-btn {
+  border-radius: 0;
+}
+
+html[data-design='swiss'] .cv-dl-btn:hover {
+  transform: none;
+}
+
+/* ...and it is the primary action, so it is set like the hero's: grotesque
+   caps, not the monospace of the panel's labels. */
+html[data-design='swiss'] .cv-dl-btn {
+  padding: 0.85rem 2rem;
+  border: 0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Its portrait switch is a square, solid control too: no pill, no gradient. */
+html[data-design='swiss'] .cv-dl-box,
+html[data-design='swiss'] .cv-dl-box::after {
+  border-radius: 0;
+}
+
+html[data-design='swiss'] .cv-dl-input:checked + .cv-dl-box {
+  background: var(--swiss-accent);
+  border-color: var(--swiss-accent);
+}
+
+html[data-design='swiss'] .cv-dl-input:checked + .cv-dl-box::after {
+  background: var(--bg-primary);
+}
+
+/* Flat at rest and flat on hover: the action darkens a touch toward Ink
+   instead of lifting and glowing. */
+html[data-design='swiss'] .hero-cta:hover,
+html[data-design='swiss'] .contact-submit:hover {
+  transform: none;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--swiss-signal) 88%, var(--text-primary));
+}
+
+/* The quiet way on, set like the nav labels. */
+html[data-design='swiss'] .hero-link {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Filter chips and "Show more" are outlined rectangles, like the skill pills
+   and tags: Ink border, no tint, no pill. The selected chip inverts to Ink on
+   the ground, so it reads without relying on the coral signal. */
+html[data-design='swiss'] .demo-filter-btn,
+html[data-design='swiss'] .cert-filter-btn,
+html[data-design='swiss'] .show-more-btn,
+html[data-design='swiss'] .certifications-toggle {
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--text-primary);
+  color: var(--text-primary);
+}
+
+html[data-design='swiss'] .demo-filter-btn:hover,
+html[data-design='swiss'] .cert-filter-btn:hover,
+html[data-design='swiss'] .show-more-btn:hover,
+html[data-design='swiss'] .certifications-toggle:hover {
+  background: transparent;
+  border-color: var(--swiss-accent);
+  color: var(--swiss-accent);
+  box-shadow: none;
+  transform: none;
+}
+
+/* The certifications "Show more" was the one chip left in monospace on a filled
+   tile; it is the same control as the demos' "Show more". */
+html[data-design='swiss'] .certifications-toggle {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+}
+
+/* Content sits on the left of the grid, like the titles above it: the filter
+   rows and "Show more" are not centred under a flush-left heading. */
+html[data-design='swiss'] .demo-filters,
+html[data-design='swiss'] .cert-filters,
+html[data-design='swiss'] .show-more-container {
+  justify-content: flex-start;
+}
+
+html[data-design='swiss'] .certifications-toggle {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+html[data-design='swiss'] .demo-filter-btn.active,
+html[data-design='swiss'] .cert-filter-btn.active,
+html[data-design='swiss'] .demo-filter-btn.active:hover,
+html[data-design='swiss'] .cert-filter-btn.active:hover {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+/* Back to top is position, not the action: an outlined square like the chips.
+   The coral fill is reserved for the one primary action, and nothing glows. */
+html[data-design='swiss'] .scroll-to-top {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+  box-shadow: none;
+}
+
+html[data-design='swiss'] .scroll-to-top:hover {
+  border-color: var(--swiss-accent);
+  color: var(--swiss-accent);
+  box-shadow: none;
+  transform: none;
+}
+
+/* Cards hold their place on hover: the border takes the teal text colour and
+   doubles in weight (an inset hairline, not a glow or a lift). */
+html[data-design='swiss'] .work-card:hover,
+html[data-design='swiss'] .demo-card:hover,
+html[data-design='swiss'] .education-card:hover,
+html[data-design='swiss'] .certification-card:hover {
+  transform: none;
+  border-color: var(--swiss-accent);
+  box-shadow: inset 0 0 0 1px var(--swiss-accent);
+}
+
+/* Form fields: the focus ring is the same doubled teal border, not a glow. */
+html[data-design='swiss'] .form-group input:focus,
+html[data-design='swiss'] .form-group textarea:focus {
+  border-color: var(--swiss-accent);
+  box-shadow: inset 0 0 0 1px var(--swiss-accent);
 }
 
 html[data-design='swiss'] .gradient-text {

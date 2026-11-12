@@ -1,29 +1,16 @@
 ---
-import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { resolveCvAssets } from '../lib/cv-assets';
 import CvDownloader from './CvDownloader';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const hasProfileImage = existsSync(resolve('./public/profile.jpg'));
-const cvVariantsDir = resolve('./public/cv');
-const hasCvVariants = existsSync(resolve(cvVariantsDir, 'cv_english_standard_photo.pdf'));
-const cvVariantsHash = createHash('sha1');
-if (hasCvVariants) {
-  for (const file of readdirSync(cvVariantsDir)
-    .filter((name) => name.endsWith('.pdf'))
-    .sort()) {
-    cvVariantsHash.update(file).update(readFileSync(resolve(cvVariantsDir, file)));
-  }
-}
-const cvVariantsVersion = hasCvVariants ? cvVariantsHash.digest('hex').slice(0, 8) : '';
 const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
-const cvAssetBase = hasCvVariants
-  ? `${base}/cv`
-  : 'https://github.com/cuberhaus/cv/releases/latest/download';
+const { assetBase: cvAssetBase, assetVersion: cvVariantsVersion } = resolveCvAssets(base);
 
 const cvLabels = {
   title: t('about.cv'),
@@ -41,6 +28,7 @@ const cvLabels = {
     concise: t('about.cvPresetConciseDescription'),
   },
   includePhoto: t('about.cvIncludePhoto'),
+  otherVersions: t('about.cvOtherVersions'),
   download: t('about.cvDownload'),
 };
 

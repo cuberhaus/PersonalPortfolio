@@ -1,12 +1,12 @@
 [
   {
-    "role": "AI & Data Consultant @ Deloitte",
+    "role": "AI & ML Engineer @ Deloitte",
     "icon": "cpu",
     "link": "https://www.deloitte.com/global/en/about/press-room/physical-ai-nvidia-omniverse-industrial-transformation.html",
     "fallback": "/deloitte-physical-ai-press-release.html"
   },
   {
-    "role": "AI & Data Consultant @ Deloitte",
+    "role": "AI & ML Engineer @ Deloitte",
     "icon": "users",
     "link": "https://www.aragon.es/"
   }

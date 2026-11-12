@@ -12,8 +12,9 @@
     "cvPresetConcise": "Concise",
     "cvPresetConciseDescription": "Shortest version with profile, experience, education, and skills.",
     "cvIncludePhoto": "Include portrait",
+    "cvOtherVersions": "Other versions",
     "label": "About",
-    "p1": "Hi! I'm Pol — a Computer Science Engineer from Barcelona. I graduated from UPC's Facultat d'Informàtica de Barcelona (FIB) and now work as an AI & Data Consultant at Deloitte, where most of my days are spent at the intersection of AI, data platforms, and the messy reality of making them useful.",
+    "p1": "Hi! I'm Pol — a Computer Science Engineer from Barcelona. I graduated from UPC's Facultat d'Informàtica de Barcelona (FIB) and now work as an AI & ML Engineer at Deloitte, where most of my days are spent at the intersection of AI, data platforms, and the messy reality of making them useful.",
     "p2": "What I actually enjoy is building stuff — exploring new tools, figuring out how they fit together, and helping my team ship things we're proud of. I care more about solving the problem than about picking the trendiest stack, though I'm happy when both line up.",
     "p3": "Outside of work you'll usually find me climbing, deep in a videogame, or pretending my Vim keybindings make me faster than I really am. Here's some of the tech I've been using lately:",
     "title": "A bit about me"
@@ -99,14 +100,15 @@
     "title": "Where I've worked"
   },
   "hero": {
-    "cta": "View my work",
-    "description": "Computer Science Engineer in Barcelona and AI & Data Consultant at Deloitte. I turn ideas into production-ready systems across cloud data platforms, computer vision, and generative AI.",
+    "cta": "Download CV",
+    "description": "AI & ML Engineer at Deloitte, based in Barcelona. I turn ideas into production-ready systems across cloud data platforms, computer vision, and generative AI.",
     "greeting": "Hi, I'm",
+    "secondary": "View my work",
     "tagline_1": "I build AI & data systems",
     "tagline_2": "that work in the real world."
   },
   "meta": {
-    "description": "Pol Casacuberta — AI & Data Consultant from Barcelona. I build things with AI and data.",
+    "description": "Pol Casacuberta — AI & ML Engineer from Barcelona. I build things with AI and data.",
     "title": "Pol Casacuberta — Portfolio"
   },
   "nav": {
