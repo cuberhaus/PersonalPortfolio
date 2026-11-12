@@ -1,0 +1,156 @@
+{
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "dsf": 2,
+  "panel": {
+    "x": 700,
+    "y": 16,
+    "width": 520,
+    "height": 1048
+  },
+  "close": {
+    "x": 1167,
+    "y": 37,
+    "width": 32,
+    "height": 32
+  },
+  "designCards": {
+    "minimal": {
+      "x": 721,
+      "y": 110.6875,
+      "width": 235,
+      "height": 65.03125
+    },
+    "editorial": {
+      "x": 964,
+      "y": 110.6875,
+      "width": 235,
+      "height": 65.03125
+    },
+    "swiss": {
+      "x": 721,
+      "y": 183.71875,
+      "width": 235,
+      "height": 65.03125
+    },
+    "pixel": {
+      "x": 964,
+      "y": 183.71875,
+      "width": 235,
+      "height": 65.03125
+    },
+    "terminal": {
+      "x": 721,
+      "y": 256.75,
+      "width": 235,
+      "height": 65.03125
+    },
+    "cyber": {
+      "x": 964,
+      "y": 256.75,
+      "width": 235,
+      "height": 65.03125
+    },
+    "notebook": {
+      "x": 721,
+      "y": 329.78125,
+      "width": 235,
+      "height": 65.03125
+    },
+    "brutalist": {
+      "x": 964,
+      "y": 329.78125,
+      "width": 235,
+      "height": 65.03125
+    },
+    "blueprint": {
+      "x": 721,
+      "y": 402.8125,
+      "width": 235,
+      "height": 65.03125
+    },
+    "academic": {
+      "x": 964,
+      "y": 402.8125,
+      "width": 235,
+      "height": 65.03125
+    },
+    "ide": {
+      "x": 721,
+      "y": 475.84375,
+      "width": 235,
+      "height": 65.03125
+    },
+    "risograph": {
+      "x": 964,
+      "y": 475.84375,
+      "width": 235,
+      "height": 65.03125
+    },
+    "deco": {
+      "x": 721,
+      "y": 548.875,
+      "width": 235,
+      "height": 65.03125
+    },
+    "wabisabi": {
+      "x": 964,
+      "y": 548.875,
+      "width": 235,
+      "height": 65.03125
+    },
+    "zine": {
+      "x": 721,
+      "y": 621.90625,
+      "width": 235,
+      "height": 65.03125
+    },
+    "comic": {
+      "x": 964,
+      "y": 621.90625,
+      "width": 235,
+      "height": 65.03125
+    },
+    "newspaper": {
+      "x": 721,
+      "y": 694.9375,
+      "width": 235,
+      "height": 65.03125
+    }
+  },
+  "swatches": {
+    "synthwave": {
+      "x": 721,
+      "y": 952.9375,
+      "width": 237,
+      "height": 34.53125
+    },
+    "phosphor": {
+      "x": 962,
+      "y": 952.9375,
+      "width": 237,
+      "height": 34.53125
+    },
+    "barcelona-night": {
+      "x": 721,
+      "y": 837.34375,
+      "width": 237,
+      "height": 34.53125
+    },
+    "dracula": {
+      "x": 721,
+      "y": 875.875,
+      "width": 237,
+      "height": 34.53125
+    },
+    "sepia": {
+      "x": 721,
+      "y": 1137.75,
+      "width": 237,
+      "height": 34.53125
+    }
+  },
+  "labAnchor": "#projects"
+}

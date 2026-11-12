@@ -1,0 +1,168 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground);
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s6-full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root #s6-veil {
+      background: rgba(16, 26, 24, 0.94);
+    }
+    #root #s6-flood {
+      background: var(--color-ground);
+    }
+    #root #s6-hi {
+      position: absolute;
+      left: 136px;
+      top: 296px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 40px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-teal);
+    }
+    #root #s6-name {
+      position: absolute;
+      left: 126px;
+      top: 348px;
+      font-weight: 900;
+      font-size: 190px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--color-ink);
+      white-space: nowrap;
+      text-shadow: 0 0 0px rgba(255, 138, 101, 0);
+    }
+    #root .s6-w {
+      display: inline-block;
+    }
+    #root #s6-rule {
+      position: absolute;
+      left: 136px;
+      top: 592px;
+      width: 200px;
+      height: 12px;
+      background: var(--color-coral);
+      transform-origin: 0 50%;
+    }
+    #root #s6-tag {
+      position: absolute;
+      left: 136px;
+      top: 650px;
+      font-weight: 700;
+      font-size: 58px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--color-ink);
+      white-space: nowrap;
+    }
+    #root #s6-tag .s6-acc {
+      color: var(--color-teal);
+    }
+    #root #s6-url {
+      position: absolute;
+      left: 136px;
+      top: 776px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 42px;
+      letter-spacing: 0.02em;
+      color: var(--color-coral);
+    }
+  </style>
+
+  <div data-hf-id="hf-grww" id="root" data-composition-id="s6-outro" data-width="1920" data-height="1080">
+    <!-- same dimmed real hero as frame 0 → loop-friendly -->
+    <img data-hf-id="hf-93ay"
+      id="s6-bg"
+      class="clip s6-full"
+      src="assets/shots/home-swiss.png"
+      alt=""
+      data-start="0"
+      data-duration="3.16"
+      data-track-index="0"
+      data-layout-allow-overflow
+    />
+    <div data-hf-id="hf-5suu" id="s6-veil" class="clip s6-full" data-start="0" data-duration="3.16" data-track-index="1"></div>
+
+    <div data-hf-id="hf-nm4h" id="s6-hi" class="clip" data-start="0" data-duration="3.16" data-track-index="2">Hi, I'm</div>
+    <div data-hf-id="hf-3oki" id="s6-name" class="clip" data-start="0" data-duration="3.16" data-track-index="3">
+      <span data-hf-id="hf-hnix" class="s6-w">Pol</span> <span data-hf-id="hf-9skc" class="s6-w">Casacuberta</span>
+    </div>
+    <div data-hf-id="hf-8gud" id="s6-rule" class="clip" data-start="0.2" data-duration="2.96" data-track-index="4"></div>
+    <div data-hf-id="hf-rg1k" id="s6-tag" class="clip" data-start="0.2" data-duration="2.96" data-track-index="5">
+      <span data-hf-id="hf-mgud" class="s6-w">I</span> <span data-hf-id="hf-no8m" class="s6-w">build</span> <span data-hf-id="hf-dq4c" class="s6-w">AI</span>
+      <span data-hf-id="hf-ysc8" class="s6-w">&amp;</span> <span data-hf-id="hf-clu6" class="s6-w">data</span> <span data-hf-id="hf-jfo4" class="s6-w">systems</span>
+      <span data-hf-id="hf-orck" class="s6-w s6-acc">that</span> <span data-hf-id="hf-wiag" class="s6-w s6-acc">work</span>
+      <span data-hf-id="hf-5nme" class="s6-w s6-acc">in</span> <span data-hf-id="hf-kdqs" class="s6-w s6-acc">the</span>
+      <span data-hf-id="hf-n1ol" class="s6-w s6-acc">real</span> <span data-hf-id="hf-rqz3" class="s6-w s6-acc">world.</span>
+    </div>
+    <div data-hf-id="hf-duqa" id="s6-url" class="clip" data-start="0.8" data-duration="2.36" data-track-index="6">polcasacubertagil.com</div>
+
+    <!-- colour flood: ground colour clears as the name slams in -->
+    <div data-hf-id="hf-ucgq" id="s6-flood" class="clip s6-full" data-start="0" data-duration="0.4" data-track-index="7"></div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var T0 = 20.54; // this scene's start on the main timeline
+      var bass = window.__AUDIO_ENV.bass;
+
+      tl.fromTo("#s6-flood", { opacity: 1 }, { opacity: 0, duration: 0.34, ease: "power2.out" }, 0.02);
+
+      // beat-locked: 20.54s — the name slams in on the strong cue
+      tl.fromTo(
+        "#s6-hi",
+        { opacity: 0, x: -24 },
+        { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" },
+        0.02,
+      );
+      tl.fromTo(
+        "#s6-name .s6-w",
+        { opacity: 0, filter: "blur(14px)", scale: 1.08, x: -36 },
+        { opacity: 1, filter: "blur(0px)", scale: 1, x: 0, duration: 0.42, ease: "power4.out", stagger: 0.08 },
+        0,
+      );
+      tl.fromTo("#s6-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0.24);
+
+      // Tagline: per-word blur-in, then holds ≥ 1.9 s
+      tl.fromTo(
+        "#s6-tag .s6-w",
+        { opacity: 0, filter: "blur(8px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power2.out", stagger: 0.04 },
+        0.22,
+      );
+      tl.fromTo("#s6-url", { opacity: 0, filter: "blur(8px)", y: 12 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.3, ease: "power3.out" }, 0.82);
+
+      // Audio-reactive (subtle): coral halo on the name with the bass.
+      window.__BEATS.filter(function (b) {
+        return b >= 20.54 && b < 23.5;
+      }).forEach(function (b) {
+        var e = window.__audioAt(bass, b);
+        tl.to(
+          "#s6-name",
+          {
+            textShadow: "0 0 " + Math.round(18 + e * 40) + "px rgba(255,138,101," + (0.22 + e * 0.38).toFixed(2) + ")",
+            duration: 0.1,
+            ease: "power2.out",
+          },
+          b - T0 + 0.1,
+        );
+        tl.to("#s6-name", { textShadow: "0 0 0px rgba(255,138,101,0)", duration: 0.45, ease: "power2.in" }, b - T0 + 0.2);
+      });
+
+      window.__timelines["s6-outro"] = tl;
+    })();
+  </script>
+</template>

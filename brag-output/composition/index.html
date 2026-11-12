@@ -1,0 +1,180 @@
+<!doctype html>
+<html
+  lang="en"
+  data-resolution="landscape"
+  data-composition-variables='[
+    {"id":"color-ground","type":"color","label":"Background","default":"#101a18"},
+    {"id":"color-ink","type":"color","label":"Text","default":"#f2f6f1"},
+    {"id":"color-teal","type":"color","label":"Accent (teal)","default":"#68d2bd"},
+    {"id":"color-coral","type":"color","label":"Signal (coral)","default":"#ff8a65"},
+    {"id":"font-display","type":"string","label":"Display font","default":"Inter"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/audio-env.js"></script>
+    <style>
+      /* Palette from the site's Barcelona Signal Night theme (src/styles/themes.css) */
+      :root {
+        --color-ground: #101a18;
+        --color-card: #1b2d28;
+        --color-border: #2d4841;
+        --color-border-hi: #3e6359;
+        --color-ink: #f2f6f1;
+        --color-ink-2: #c3d0ca;
+        --color-muted: #9aada5;
+        --color-teal: #68d2bd;
+        --color-coral: #ff8a65;
+        --font-display: 'Inter', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--color-ground);
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-idqy"
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="23.7"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- Scene 1: hook (0.00-3.18) -->
+      <div data-hf-id="hf-ig3b"
+        id="s1-hook"
+        data-composition-id="s1-hook"
+        data-composition-src="compositions/s1-hook.html"
+        data-start="0"
+        data-duration="3.18"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 2: the real Ctrl+K flow (3.18-7.40) -->
+      <div data-hf-id="hf-wrq4"
+        id="s2-flow"
+        data-composition-id="s2-flow"
+        data-composition-src="compositions/s2-flow.html"
+        data-start="3.18"
+        data-duration="4.22"
+        data-track-index="2"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 3: swap montage (7.40-14.62; last 0.40 s sits under scene 4's iris) -->
+      <div data-hf-id="hf-iinh"
+        id="s3-montage"
+        data-composition-id="s3-montage"
+        data-composition-src="compositions/s3-montage.html"
+        data-start="7.4"
+        data-duration="7.22"
+        data-track-index="3"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 4: Lab wall (14.22-17.38) -->
+      <div data-hf-id="hf-9f70"
+        id="s4-lab"
+        data-composition-id="s4-lab"
+        data-composition-src="compositions/s4-lab.html"
+        data-start="14.22"
+        data-duration="3.16"
+        data-track-index="4"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 5: three languages (17.38-20.54) -->
+      <div data-hf-id="hf-vhh2"
+        id="s5-langs"
+        data-composition-id="s5-langs"
+        data-composition-src="compositions/s5-langs.html"
+        data-start="17.38"
+        data-duration="3.16"
+        data-track-index="5"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 6: outro (20.54-23.70) -->
+      <div data-hf-id="hf-ipgk"
+        id="s6-outro"
+        data-composition-id="s6-outro"
+        data-composition-src="compositions/s6-outro.html"
+        data-start="20.54"
+        data-duration="3.16"
+        data-track-index="6"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Music bed: Happy Beats / Business Moves Vol. 9, Sascha Ende (ende.app), CC BY 4.0 -->
+      <audio data-hf-id="hf-rxw8"
+        id="bg-music"
+        data-start="0"
+        data-duration="23.7"
+        data-track-index="10"
+        data-volume="0.36"
+        data-fade-in="0.3"
+        data-fade-out="1.6"
+        src="assets/music/happy-beats-business-moves-vol-9-by-ende-dot-app.mp3"
+      ></audio>
+
+      <!-- SFX: motion-matched, all low/medium high-frequency risk (see sfx-analysis.md); each on its own lane -->
+      <audio data-hf-id="hf-116w" id="sfx-01" data-start="1.56" data-duration="0.19" data-track-index="11" data-volume="0.55" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio> <!-- "17" lands (beat 1.59) -->
+      <audio data-hf-id="hf-vn41" id="sfx-02" data-start="3.42" data-duration="0.26" data-track-index="12" data-volume="0.75" src="assets/sfx/keyboard/keypress-005.wav"></audio> <!-- Ctrl pressed -->
+      <audio data-hf-id="hf-rp39" id="sfx-03" data-start="3.57" data-duration="0.26" data-track-index="13" data-volume="0.75" src="assets/sfx/keyboard/keypress-012.wav"></audio> <!-- K pressed -->
+      <audio data-hf-id="hf-ej7m" id="sfx-04" data-start="3.66" data-duration="0.15" data-track-index="14" data-volume="0.5" src="assets/sfx/impact/impactSoft_medium_003.ogg"></audio> <!-- picker opens (strong cue 3.70) -->
+      <audio data-hf-id="hf-7l31" id="sfx-05" data-start="4.21" data-duration="0.06" data-track-index="15" data-volume="0.8" src="assets/sfx/ui/click2.ogg"></audio> <!-- click Comic (beat 4.23) -->
+      <audio data-hf-id="hf-jvxd" id="sfx-06" data-start="5.26" data-duration="0.06" data-track-index="16" data-volume="0.8" src="assets/sfx/ui/click2.ogg"></audio> <!-- click Synthwave (beat 5.28) -->
+      <audio data-hf-id="hf-fsx2" id="sfx-07" data-start="5.94" data-duration="0.26" data-track-index="17" data-volume="0.7" src="assets/sfx/keyboard/keypress-020.wav"></audio> <!-- Esc pressed -->
+      <audio data-hf-id="hf-5n8f" id="sfx-08" data-start="6.3" data-duration="0.19" data-track-index="18" data-volume="0.6" src="assets/sfx/impact/impactSoft_medium_001.ogg"></audio> <!-- picker closes, hero revealed (strong cue 6.34) -->
+      <audio data-hf-id="hf-gowe" id="sfx-09" data-start="7.38" data-duration="0.12" data-track-index="19" data-volume="0.4" src="assets/sfx/impact/impactSoft_medium_000.ogg"></audio> <!-- cut: Terminal (beat 7.40) -->
+      <audio data-hf-id="hf-kqmi" id="sfx-10" data-start="8.42" data-duration="0.14" data-track-index="20" data-volume="0.4" src="assets/sfx/impact/impactSoft_medium_002.ogg"></audio> <!-- cut: Pixel (beat 8.44) -->
+      <audio data-hf-id="hf-a6zc" id="sfx-11" data-start="9.48" data-duration="0.15" data-track-index="21" data-volume="0.4" src="assets/sfx/impact/impactSoft_medium_004.ogg"></audio> <!-- cut: Newspaper (beat 9.50) -->
+      <audio data-hf-id="hf-2jf8" id="sfx-12" data-start="10.52" data-duration="0.15" data-track-index="22" data-volume="0.4" src="assets/sfx/impact/impactSoft_medium_003.ogg"></audio> <!-- cut: Brutalist (beat 10.54) -->
+      <audio data-hf-id="hf-0co3" id="sfx-13" data-start="11.58" data-duration="0.12" data-track-index="23" data-volume="0.4" src="assets/sfx/impact/impactSoft_medium_000.ogg"></audio> <!-- cut: Zine (beat 11.60) -->
+      <audio data-hf-id="hf-rsek" id="sfx-14" data-start="14.18" data-duration="0.15" data-track-index="24" data-volume="0.45" src="assets/sfx/impact/impactSoft_medium_004.ogg"></audio> <!-- iris into Lab wall (strong cue 14.22) -->
+      <audio data-hf-id="hf-638c" id="sfx-15" data-start="14.2" data-duration="0.61" data-track-index="25" data-volume="0.45" src="assets/sfx/casino/card-slide-1.ogg"></audio> <!-- row 1 (beat 14.22) -->
+      <audio data-hf-id="hf-40j5" id="sfx-16" data-start="14.74" data-duration="0.61" data-track-index="26" data-volume="0.45" src="assets/sfx/casino/card-slide-1.ogg"></audio> <!-- row 2 (beat 14.76) -->
+      <audio data-hf-id="hf-herl" id="sfx-17" data-start="15.26" data-duration="0.61" data-track-index="27" data-volume="0.45" src="assets/sfx/casino/card-slide-1.ogg"></audio> <!-- row 3 (beat 15.28) -->
+      <audio data-hf-id="hf-nw4b" id="sfx-18" data-start="15.79" data-duration="0.61" data-track-index="28" data-volume="0.45" src="assets/sfx/casino/card-slide-1.ogg"></audio> <!-- row 4 (beat 15.81) -->
+      <audio data-hf-id="hf-10yz" id="sfx-19" data-start="15.86" data-duration="0.13" data-track-index="29" data-volume="0.4" src="assets/sfx/interface/bong_001.ogg"></audio> <!-- "20" lands -->
+      <audio data-hf-id="hf-qvao" id="sfx-20" data-start="17.36" data-duration="0.05" data-track-index="30" data-volume="0.55" src="assets/sfx/interface/select_008.ogg"></audio> <!-- language: EN (beat 17.38) -->
+      <audio data-hf-id="hf-jci6" id="sfx-21" data-start="18.42" data-duration="0.05" data-track-index="31" data-volume="0.55" src="assets/sfx/interface/select_008.ogg"></audio> <!-- language: ES (beat 18.44) -->
+      <audio data-hf-id="hf-x4bd" id="sfx-22" data-start="19.46" data-duration="0.05" data-track-index="32" data-volume="0.55" src="assets/sfx/interface/select_008.ogg"></audio> <!-- language: CA (beat 19.48) -->
+      <audio data-hf-id="hf-gvcn" id="sfx-23" data-start="20.5" data-duration="0.66" data-track-index="33" data-volume="0.7" src="assets/sfx/impact/impactBell_heavy_003.ogg"></audio> <!-- name slam (strong cue 20.54) -->
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      // The root only mounts scenes and audio; scenes own their motion.
+      tl.set({}, {}, 23.7);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

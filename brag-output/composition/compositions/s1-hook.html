@@ -1,0 +1,135 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground);
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s1-full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root .s1-veil {
+      background: rgba(16, 26, 24, 0.91);
+    }
+    #root .s1-line {
+      position: absolute;
+      left: 120px;
+      color: var(--color-ink);
+      font-weight: 900;
+      font-size: 156px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      white-space: nowrap;
+    }
+    #root .s1-w {
+      display: inline-block;
+    }
+    #root #s1-17 {
+      color: var(--color-coral);
+      text-shadow: 0 0 0px rgba(255, 138, 101, 0);
+    }
+  </style>
+
+  <div data-hf-id="hf-hv3x" id="root" data-composition-id="s1-hook" data-width="1920" data-height="1080">
+    <!-- Real hero from the running site (default Swiss look, Barcelona Signal Night), dimmed -->
+    <img data-hf-id="hf-9xtg"
+      id="s1-bg"
+      class="clip s1-full"
+      src="assets/shots/home-swiss.png"
+      alt=""
+      data-start="0"
+      data-duration="3.18"
+      data-track-index="0"
+      data-layout-allow-overflow
+    />
+    <div data-hf-id="hf-66b1" id="s1-veil" class="clip s1-full s1-veil" data-start="0" data-duration="3.18" data-track-index="1"></div>
+
+    <div data-hf-id="hf-ohlu"
+      id="s1-text"
+      class="clip s1-full"
+      data-start="0.1"
+      data-duration="3.08"
+      data-track-index="2"
+    >
+      <div data-hf-id="hf-i1es" id="s1-block" class="s1-full">
+        <div data-hf-id="hf-24vx" id="s1-l1" class="s1-line" style="top: 382px">
+          <span data-hf-id="hf-mql2" class="s1-w">It's</span> <span data-hf-id="hf-2fqw" class="s1-w">a</span>
+          <span data-hf-id="hf-5p03" class="s1-w">portfolio.</span>
+        </div>
+        <div data-hf-id="hf-emfd" id="s1-l2" class="s1-line" style="top: 538px">
+          <span data-hf-id="hf-kyjg" class="s1-w">It</span> <span data-hf-id="hf-owe7" class="s1-w">has</span>
+          <span data-hf-id="hf-8u94" id="s1-17" class="s1-w">17</span> <span data-hf-id="hf-r9ne" class="s1-w">designs.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var T0 = 0; // this scene's start on the main timeline
+
+      // Line 1 — word-by-word blur-in, then it simply holds.
+      tl.fromTo(
+        "#s1-l1 .s1-w",
+        { opacity: 0, filter: "blur(10px)", y: 16 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.3, ease: "power3.out", stagger: 0.08 },
+        0.2,
+      );
+
+      // Line 2 — beat-locked to 1.59 s: "It has 17 designs."
+      // beat-grid: 1.59s
+      tl.fromTo(
+        "#s1-l2 .s1-w",
+        { opacity: 0, filter: "blur(10px)", y: 16 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.3, ease: "power3.out", stagger: 0.06 },
+        1.59 - T0,
+      );
+      // "17" pops (position/size may bounce; opacity never does)
+      tl.fromTo(
+        "#s1-17",
+        { scale: 1.3 },
+        { scale: 1, duration: 0.45, ease: "back.out(1.6)" },
+        1.59 - T0 + 0.12,
+      );
+
+      // Audio-reactive (subtle): coral glow on "17" follows the bass at each beat.
+      var bass = window.__AUDIO_ENV.bass;
+      window.__BEATS.filter(function (b) {
+        return b >= 1.59 && b < 2.95;
+      }).forEach(function (b) {
+        var e = window.__audioAt(bass, b);
+        tl.to(
+          "#s1-17",
+          {
+            textShadow:
+              "0 0 " + Math.round(18 + e * 42) + "px rgba(255,138,101," + (0.3 + e * 0.45).toFixed(2) + ")",
+            duration: 0.1,
+            ease: "power2.out",
+          },
+          b - T0 + 0.12,
+        );
+        tl.to(
+          "#s1-17",
+          { textShadow: "0 0 0px rgba(255,138,101,0)", duration: 0.4, ease: "power2.in" },
+          b - T0 + 0.22,
+        );
+      });
+
+      // Exit: one smooth blur-out (shorter than the entrance).
+      tl.to(
+        "#s1-block",
+        { opacity: 0, filter: "blur(12px)", duration: 0.18, ease: "power3.in" },
+        2.98,
+      );
+
+      window.__timelines["s1-hook"] = tl;
+    })();
+  </script>
+</template>

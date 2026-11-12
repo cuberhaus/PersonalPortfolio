@@ -1,0 +1,216 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground);
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root #s4-stage {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      background: var(--color-ground);
+    }
+    #root .s4-abs {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    #root #s4-eyebrow {
+      position: absolute;
+      left: 96px;
+      top: 108px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-teal);
+    }
+    #root #s4-title {
+      position: absolute;
+      left: 96px;
+      top: 156px;
+      font-weight: 900;
+      font-size: 104px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--color-ink);
+      white-space: nowrap;
+    }
+    #root #s4-rule {
+      position: absolute;
+      left: 96px;
+      top: 300px;
+      width: 880px;
+      height: 3px;
+      background: var(--color-ink);
+      transform-origin: 0 50%;
+    }
+    #root .s4-num {
+      position: absolute;
+      left: 84px;
+      top: 330px;
+      font-weight: 900;
+      font-size: 440px;
+      line-height: 0.88;
+      letter-spacing: -0.06em;
+      color: var(--color-coral);
+      text-shadow: 0 0 0px rgba(255, 138, 101, 0);
+    }
+    #root #s4-sub {
+      position: absolute;
+      left: 96px;
+      top: 790px;
+      font-weight: 700;
+      font-size: 60px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--color-ink-2);
+      white-space: nowrap;
+    }
+    #root #s4-wall {
+      position: absolute;
+      left: 1072px;
+      top: 86px;
+      width: 752px;
+      display: grid;
+      grid-template-columns: repeat(5, 144px);
+      grid-auto-rows: 221px;
+      gap: 8px;
+    }
+    #root .s4-card {
+      width: 144px;
+      height: 221px;
+      object-fit: cover;
+      object-position: top left;
+      display: block;
+      border: 1px solid var(--color-border);
+    }
+  </style>
+
+  <div data-hf-id="hf-zury" id="root" data-composition-id="s4-lab" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-sepl" id="s4-stage">
+      <div data-hf-id="hf-oj9e" id="s4-eyebrow" class="clip" data-start="0.1" data-duration="3.06" data-track-index="0">Interactive Lab</div>
+      <div data-hf-id="hf-3ayk" id="s4-title" class="clip" data-start="0.16" data-duration="3.0" data-track-index="1">Try my projects</div>
+      <div data-hf-id="hf-52z5" id="s4-rule" class="clip" data-start="0.2" data-duration="2.96" data-track-index="2"></div>
+
+      <!-- counter follows the rows: 05 → 10 → 15 → 20 -->
+      <div data-hf-id="hf-3v31" id="s4-n5" class="clip s4-abs" data-start="0" data-duration="0.54" data-track-index="3"><div data-hf-id="hf-4ypl" class="s4-num">05</div></div>
+      <div data-hf-id="hf-kict" id="s4-n10" class="clip s4-abs" data-start="0.54" data-duration="0.52" data-track-index="6"><div data-hf-id="hf-po8r" class="s4-num">10</div></div>
+      <div data-hf-id="hf-ib6s" id="s4-n15" class="clip s4-abs" data-start="1.06" data-duration="0.53" data-track-index="7"><div data-hf-id="hf-ohbo" class="s4-num">15</div></div>
+      <div data-hf-id="hf-2zti" id="s4-n20" class="clip s4-abs" data-start="1.59" data-duration="1.57" data-track-index="8"><div data-hf-id="hf-f2yr" class="s4-num" id="s4-n20-num">20</div></div>
+
+      <div data-hf-id="hf-e427" id="s4-sub" class="clip" data-start="1.7" data-duration="1.46" data-track-index="4">Live, interactive demos</div>
+
+      <!-- the 20 real Interactive Lab cards, captured from the running site -->
+      <div data-hf-id="hf-mmvn" id="s4-wall" class="clip" data-start="0" data-duration="3.16" data-track-index="5">
+        <img data-hf-id="hf-br7j" class="s4-card" data-row="0" src="assets/cards/card-00.png" alt="" />
+        <img data-hf-id="hf-vh5a" class="s4-card" data-row="0" src="assets/cards/card-01.png" alt="" />
+        <img data-hf-id="hf-2a9p" class="s4-card" data-row="0" src="assets/cards/card-02.png" alt="" />
+        <img data-hf-id="hf-1st0" class="s4-card" data-row="0" src="assets/cards/card-03.png" alt="" />
+        <img data-hf-id="hf-4xgb" class="s4-card" data-row="0" src="assets/cards/card-04.png" alt="" />
+        <img data-hf-id="hf-o095" class="s4-card" data-row="1" src="assets/cards/card-05.png" alt="" />
+        <img data-hf-id="hf-xhx6" class="s4-card" data-row="1" src="assets/cards/card-06.png" alt="" />
+        <img data-hf-id="hf-xqff" class="s4-card" data-row="1" src="assets/cards/card-07.png" alt="" />
+        <img data-hf-id="hf-evy4" class="s4-card" data-row="1" src="assets/cards/card-08.png" alt="" />
+        <img data-hf-id="hf-yidh" class="s4-card" data-row="1" src="assets/cards/card-09.png" alt="" />
+        <img data-hf-id="hf-5lxq" class="s4-card" data-row="2" src="assets/cards/card-10.png" alt="" />
+        <img data-hf-id="hf-wain" class="s4-card" data-row="2" src="assets/cards/card-11.png" alt="" />
+        <img data-hf-id="hf-cv6c" class="s4-card" data-row="2" src="assets/cards/card-12.png" alt="" />
+        <img data-hf-id="hf-xwe5" class="s4-card" data-row="2" src="assets/cards/card-13.png" alt="" />
+        <img data-hf-id="hf-zjii" class="s4-card" data-row="2" src="assets/cards/card-14.png" alt="" />
+        <img data-hf-id="hf-9ick" class="s4-card" data-row="3" src="assets/cards/card-15.png" alt="" />
+        <img data-hf-id="hf-b80f" class="s4-card" data-row="3" src="assets/cards/card-16.png" alt="" />
+        <img data-hf-id="hf-3zfi" class="s4-card" data-row="3" src="assets/cards/card-17.png" alt="" />
+        <img data-hf-id="hf-d3mp" class="s4-card" data-row="3" src="assets/cards/card-18.png" alt="" />
+        <img data-hf-id="hf-9xjs" class="s4-card" data-row="3" src="assets/cards/card-19.png" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var T0 = 14.22; // this scene's start on the main timeline
+      var bass = window.__AUDIO_ENV.bass;
+
+      // Iris opens from the centre over scene 3's last frames (beat-locked: 14.22 s).
+      tl.fromTo(
+        "#s4-stage",
+        { clipPath: "circle(0% at 50% 50%)" },
+        { clipPath: "circle(105% at 50% 50%)", duration: 0.42, ease: "power2.out" },
+        0,
+      );
+
+      // Heading block
+      tl.fromTo("#s4-eyebrow", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, 0.14);
+      tl.fromTo(
+        "#s4-title",
+        { opacity: 0, filter: "blur(10px)", y: 18 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.34, ease: "power3.out" },
+        0.2,
+      );
+      tl.fromTo("#s4-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: "power3.out" }, 0.26);
+
+      // Counter: each number lands with its row.
+      ["#s4-n5", "#s4-n10", "#s4-n15", "#s4-n20"].forEach(function (id, i) {
+        var t = [0, 0.54, 1.06, 1.59][i];
+        tl.fromTo(
+          id + " .s4-num",
+          { opacity: 0, y: 36, filter: "blur(8px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.24, ease: "power3.out" },
+          t,
+        );
+      });
+
+      // Rows: one per beat — beat-grid: 14.22s, 14.76s, 15.28s, 15.81s
+      var rows = [0, 0.54, 1.06, 1.59];
+      var cards = document.querySelectorAll("#s4-wall .s4-card");
+      Array.prototype.forEach.call(cards, function (card, i) {
+        var r = Math.floor(i / 5);
+        var c = i % 5;
+        tl.fromTo(
+          card,
+          { opacity: 0, y: 44, scale: 0.94 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.46, ease: "power3.out" },
+          rows[r] + c * 0.05,
+        );
+      });
+
+      // Sub line: lands with "20" and holds ≥ 1.4 s.
+      tl.fromTo(
+        "#s4-sub",
+        { opacity: 0, filter: "blur(10px)", y: 14 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.3, ease: "power3.out" },
+        1.72,
+      );
+
+      // Audio-reactive (subtle): soft coral glow on "20" with the bass.
+      window.__BEATS.filter(function (b) {
+        return b >= 15.81 && b < 17.2;
+      }).forEach(function (b) {
+        var e = window.__audioAt(bass, b);
+        tl.to(
+          "#s4-n20-num",
+          {
+            textShadow: "0 0 " + Math.round(20 + e * 44) + "px rgba(255,138,101," + (0.28 + e * 0.4).toFixed(2) + ")",
+            duration: 0.1,
+            ease: "power2.out",
+          },
+          b - T0 + 0.02,
+        );
+        tl.to("#s4-n20-num", { textShadow: "0 0 0px rgba(255,138,101,0)", duration: 0.4, ease: "power2.in" }, b - T0 + 0.12);
+      });
+
+      // Exit: blur swap into scene 5.
+      tl.to("#s4-stage", { opacity: 0, filter: "blur(10px)", duration: 0.14, ease: "power3.in" }, 3.02);
+
+      window.__timelines["s4-lab"] = tl;
+    })();
+  </script>
+</template>
