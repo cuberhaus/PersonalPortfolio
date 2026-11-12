@@ -1,0 +1,146 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground);
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s1-full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root .s1-line {
+      position: absolute;
+      left: 120px;
+      color: var(--color-ink);
+      font-weight: 900;
+      font-size: 172px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      white-space: nowrap;
+    }
+    #root .s1-w {
+      display: inline-block;
+    }
+    #root #s1-zip {
+      color: var(--color-coral);
+      text-shadow: 0 0 0px rgba(255, 138, 101, 0);
+    }
+    #root #s1-chip {
+      position: absolute;
+      left: 120px;
+      top: 700px;
+      display: inline-flex;
+      align-items: center;
+      gap: 26px;
+      padding: 24px 40px 24px 30px;
+      background: var(--color-card);
+      border: 1px solid var(--color-border-hi);
+      color: var(--color-ink);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 38px;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    #root #s1-chip svg {
+      width: 46px;
+      height: 54px;
+      flex: none;
+    }
+    #root #s1-chip-name {
+      display: inline-block;
+    }
+  </style>
+
+  <div id="root" data-composition-id="s1-hook" data-width="1920" data-height="1080">
+    <div id="s1-text" class="clip s1-full" data-start="0.1" data-duration="3.3" data-track-index="2">
+      <div id="s1-block" class="s1-full">
+        <div id="s1-l1" class="s1-line" style="top: 260px">
+          <span class="s1-w">Homework</span> <span class="s1-w">ends</span>
+        </div>
+        <div id="s1-l2" class="s1-line" style="top: 440px">
+          <span class="s1-w">in</span> <span class="s1-w">a</span> <span id="s1-zip" class="s1-w">.zip.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- invented gag: the file every course project used to end up as -->
+    <div id="s1-chip" class="clip" data-start="1.3" data-duration="2.16" data-track-index="3">
+      <svg viewBox="0 0 48 56" aria-hidden="true" fill="none" stroke="#68d2bd" stroke-width="3" stroke-linejoin="round">
+        <path d="M4 2h27l13 13v39H4z" />
+        <path d="M31 2v13h13" />
+        <path d="M20 22h8M20 30h8M20 38h8" stroke-linecap="round" />
+        <rect x="18" y="42" width="12" height="9" fill="#68d2bd" stroke="none" />
+      </svg>
+      <span id="s1-chip-name">entrega_final_v2_DEFINITIVO.zip</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var T0 = 0; // this scene's start on the main timeline
+
+      // Line 1: per-word blur-in. beat-grid: 0.27s
+      tl.fromTo(
+        "#s1-l1 .s1-w",
+        { opacity: 0, filter: "blur(10px)", y: 18 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.38, ease: "power3.out", stagger: 0.1 },
+        0.27 - T0,
+      );
+
+      // Line 2: "in a .zip." lands on the next beat. beat-grid: 0.82s
+      tl.fromTo(
+        "#s1-l2 .s1-w",
+        { opacity: 0, filter: "blur(10px)", y: 18 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.38, ease: "power3.out", stagger: 0.09 },
+        0.82 - T0,
+      );
+      // ".zip." pops (size may bounce; opacity never does)
+      tl.fromTo("#s1-zip", { scale: 1.28 }, { scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 0.82 - T0 + 0.08);
+
+      // The file chip drops in and its name types out. beat-grid: 1.37s
+      tl.fromTo(
+        "#s1-chip",
+        { y: 26, scale: 0.97 },
+        { y: 0, scale: 1, duration: 0.5, ease: "power3.out" },
+        1.37 - T0 - 0.07,
+      );
+      tl.fromTo(
+        "#s1-chip-name",
+        { clipPath: "inset(0 100% 0 0)" },
+        { clipPath: "inset(0 0% 0 0)", duration: 0.62, ease: "steps(31)" },
+        1.37 - T0 + 0.08,
+      );
+
+      // Anticipation: the chip tenses up, which is what the iris in scene 2 opens from.
+      tl.to("#s1-chip", { scale: 1.05, borderColor: "#ff8a65", duration: 0.34, ease: "power2.inOut" }, 2.58 - T0);
+
+      // Audio-reactive (subtle): coral glow on ".zip." follows the bass on each beat.
+      var bass = window.__AUDIO_ENV.bass;
+      window.__BEATS.filter(function (b) {
+        return b >= 0.82 && b < 2.9;
+      }).forEach(function (b) {
+        var e = window.__audioAt(bass, b);
+        tl.to(
+          "#s1-zip",
+          {
+            textShadow: "0 0 " + Math.round(18 + e * 40) + "px rgba(255,138,101," + (0.3 + e * 0.45).toFixed(2) + ")",
+            duration: 0.1,
+            ease: "power2.out",
+          },
+          b - T0 + 0.08,
+        );
+        tl.to("#s1-zip", { textShadow: "0 0 0px rgba(255,138,101,0)", duration: 0.4, ease: "power2.in" }, b - T0 + 0.18);
+      });
+
+      window.__timelines["s1-hook"] = tl;
+    })();
+  </script>
+</template>

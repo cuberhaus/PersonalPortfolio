@@ -1,0 +1,136 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s2-full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root #s2-wrap {
+      background: var(--color-ground);
+      clip-path: circle(0px at 560px 751px);
+    }
+    #root .s2-line {
+      position: absolute;
+      left: 116px;
+      font-weight: 900;
+      font-size: 264px;
+      line-height: 1;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      color: var(--color-ink);
+    }
+    #root .s2-w {
+      display: inline-block;
+    }
+    #root #s2-run {
+      color: var(--color-coral);
+      text-shadow: 0 0 0px rgba(255, 138, 101, 0);
+    }
+    #root #s2-cap {
+      position: absolute;
+      left: 122px;
+      top: 770px;
+      width: 740px;
+      font-weight: 600;
+      font-size: 46px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--color-ink-2);
+    }
+    #root #s2-shot {
+      position: absolute;
+      left: 900px;
+      top: 150px;
+      width: 960px;
+      height: 766px;
+      border: 1px solid var(--color-border-hi);
+      background: var(--color-card);
+    }
+    #root #s2-shot img {
+      display: block;
+      width: 960px;
+      height: 766px;
+    }
+  </style>
+
+  <div id="root" data-composition-id="s2-reveal" data-width="1920" data-height="1080">
+    <div id="s2-wrap" class="clip s2-full" data-start="0" data-duration="4.79" data-track-index="1">
+      <!-- Real Lab section from the running site (Swiss design, Barcelona Signal Night) -->
+      <div id="s2-shot">
+        <img id="s2-img" src="assets/shots/lab-top.png" alt="" />
+      </div>
+
+      <div id="s2-l1" class="s2-line" style="top: 200px">
+        <span class="s2-w">Mine</span>
+      </div>
+      <div id="s2-l2" class="s2-line" style="top: 440px">
+        <span id="s2-run" class="s2-w">run.</span>
+      </div>
+      <!-- Trimmed from the section's own subtitle: "Live, interactive demos you can play with right in your browser." -->
+      <div id="s2-cap">Live demos, right in your browser.</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var T0 = 3.01; // this scene's start on the main timeline
+
+      // Iris opens from the zip chip (scene 1 tenses it up just before).
+      tl.fromTo(
+        "#s2-wrap",
+        { clipPath: "circle(0px at 560px 751px)" },
+        { clipPath: "circle(1750px at 560px 751px)", duration: 0.62, ease: "power3.inOut" },
+        0,
+      );
+
+      // The real section slides in as the iris clears the screen.
+      tl.fromTo("#s2-shot", { x: 70, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 0.3);
+      tl.fromTo("#s2-img", { y: 22 }, { y: -18, duration: 4.4, ease: "none" }, 0.3);
+
+      // "Mine" then "run." on consecutive beats. beat-grid: 3.55s, 4.10s
+      tl.fromTo(
+        "#s2-l1 .s2-w",
+        { opacity: 0, filter: "blur(14px)", y: 24 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.42, ease: "power3.out" },
+        3.55 - T0,
+      );
+      tl.fromTo(
+        "#s2-run",
+        { opacity: 0, filter: "blur(14px)", y: 24 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.42, ease: "power3.out" },
+        4.1 - T0,
+      );
+      tl.fromTo("#s2-run", { scale: 1.2 }, { scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 4.1 - T0 + 0.1);
+      tl.fromTo("#s2-cap", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 4.38 - T0);
+
+      // Audio-reactive (subtle): coral glow on "run." follows the bass on each beat.
+      var bass = window.__AUDIO_ENV.bass;
+      window.__BEATS.filter(function (b) {
+        return b >= 4.1 && b < 7.0;
+      }).forEach(function (b) {
+        var e = window.__audioAt(bass, b);
+        tl.to(
+          "#s2-run",
+          {
+            textShadow: "0 0 " + Math.round(20 + e * 44) + "px rgba(255,138,101," + (0.3 + e * 0.45).toFixed(2) + ")",
+            duration: 0.1,
+            ease: "power2.out",
+          },
+          b - T0 + 0.1,
+        );
+        tl.to("#s2-run", { textShadow: "0 0 0px rgba(255,138,101,0)", duration: 0.4, ease: "power2.in" }, b - T0 + 0.2);
+      });
+
+      window.__timelines["s2-reveal"] = tl;
+    })();
+  </script>
+</template>

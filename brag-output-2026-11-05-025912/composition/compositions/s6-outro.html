@@ -1,0 +1,144 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s6-full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root #s6-bg {
+      background: var(--color-ground);
+    }
+    /* coral hit on the strong cue; it collapses into the rule under the name */
+    #root #s6-flood {
+      background: var(--color-coral);
+      clip-path: inset(0px 0px 0px 0px);
+    }
+    #root #s6-hi {
+      position: absolute;
+      left: 136px;
+      top: 290px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 40px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-teal);
+    }
+    #root #s6-name {
+      position: absolute;
+      left: 126px;
+      top: 346px;
+      font-weight: 900;
+      font-size: 196px;
+      line-height: 1;
+      letter-spacing: -0.055em;
+      color: var(--color-ink);
+      white-space: nowrap;
+      text-shadow: 0 0 0px rgba(255, 138, 101, 0);
+    }
+    #root #s6-tag {
+      position: absolute;
+      left: 136px;
+      top: 660px;
+      font-weight: 700;
+      font-size: 66px;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      color: var(--color-ink);
+      white-space: nowrap;
+    }
+    #root #s6-tag .s6-acc {
+      color: var(--color-coral);
+    }
+    #root #s6-url {
+      position: absolute;
+      left: 136px;
+      top: 830px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 44px;
+      letter-spacing: -0.01em;
+      color: var(--color-teal);
+    }
+    #root .s6-w {
+      display: inline-block;
+    }
+  </style>
+
+  <div id="root" data-composition-id="s6-outro" data-width="1920" data-height="1080">
+    <div id="s6-bg" class="clip s6-full" data-start="0" data-duration="2.96" data-track-index="1"></div>
+
+    <div id="s6-hi" class="clip" data-start="0" data-duration="2.96" data-track-index="2">Hi, I'm</div>
+    <div id="s6-name" class="clip" data-start="0" data-duration="2.96" data-track-index="3">
+      <span class="s6-w">Pol</span> <span class="s6-w">Casacuberta</span>
+    </div>
+    <!-- The title from the site's hero ("AI & ML Engineer"); the second sentence calls back to scene 1's zip file. -->
+    <div id="s6-tag" class="clip" data-start="0.3" data-duration="2.66" data-track-index="4">
+      <span class="s6-w">AI</span> <span class="s6-w">&amp;</span> <span class="s6-w">ML</span> <span class="s6-w">Engineer.</span>
+      <span class="s6-w s6-acc">Homework</span> <span class="s6-w s6-acc">that</span> <span class="s6-w s6-acc">runs.</span>
+    </div>
+    <div id="s6-url" class="clip" data-start="0.5" data-duration="2.46" data-track-index="5">polcasacubertagil.com</div>
+
+    <div id="s6-flood" class="clip s6-full" data-start="0" data-duration="2.96" data-track-index="30" data-layout-allow-overlap></div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var T0 = 20.74; // this scene's start on the main timeline
+
+      // Hard cut to coral on the strongest cue, then it collapses into the rule under the name.
+      // beat-locked: 20.74s
+      tl.fromTo(
+        "#s6-flood",
+        { clipPath: "inset(0px 0px 0px 0px)" },
+        { clipPath: "inset(592px 1584px 476px 136px)", duration: 0.55, ease: "power3.inOut" },
+        0.1,
+      );
+
+      tl.fromTo("#s6-hi", { opacity: 0, y: 16, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "power3.out" }, 0.3);
+      tl.fromTo(
+        "#s6-name .s6-w",
+        { opacity: 0, filter: "blur(14px)", y: 28 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.45, ease: "power3.out", stagger: 0.12 },
+        0.3,
+      );
+      tl.fromTo(
+        "#s6-tag .s6-w",
+        { opacity: 0, filter: "blur(8px)", y: 16 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.32, ease: "power3.out", stagger: 0.06 },
+        0.34,
+      );
+      // URL lands on a beat, early enough to be held 2 s as the closing line. beat-grid: 21.28s
+      tl.fromTo("#s6-url", { opacity: 0, filter: "blur(8px)", y: 12 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.3, ease: "power3.out" }, 21.28 - T0);
+
+      // Audio-reactive (subtle): the name glows with the bass on each beat.
+      var bass = window.__AUDIO_ENV.bass;
+      window.__BEATS.filter(function (b) {
+        return b >= 21.28 && b < 23.4;
+      }).forEach(function (b) {
+        var e = window.__audioAt(bass, b);
+        tl.to(
+          "#s6-name",
+          {
+            textShadow: "0 0 " + Math.round(20 + e * 44) + "px rgba(255,138,101," + (0.28 + e * 0.4).toFixed(2) + ")",
+            duration: 0.1,
+            ease: "power2.out",
+          },
+          b - T0 + 0.05,
+        );
+        tl.to("#s6-name", { textShadow: "0 0 0px rgba(255,138,101,0)", duration: 0.45, ease: "power2.in" }, b - T0 + 0.15);
+      });
+
+      window.__timelines["s6-outro"] = tl;
+    })();
+  </script>
+</template>
