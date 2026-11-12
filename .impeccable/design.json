@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T22:40:00.000Z",
+  "title": "Design System: Personal Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "teal-night": {
+        "role": "primary",
+        "displayName": "Platform Teal (night)",
+        "canonical": "oklch(75.9% 0.108 179)",
+        "tonalRamp": ["#001a12", "#003b2f", "#005f4e", "#008270", "#43a593", "#80c8b8", "#aee5d8", "#d3fcf2"]
+      },
+      "teal-day": {
+        "role": "primary",
+        "displayName": "Platform Teal (day)",
+        "canonical": "oklch(48.6% 0.083 200)",
+        "tonalRamp": ["#00181b", "#00373b", "#005a5f", "#207d82", "#56a0a4", "#8bc3c6", "#b6e1e3", "#d8f9fb"]
+      },
+      "coral-night": {
+        "role": "secondary",
+        "displayName": "Signal Coral (night)",
+        "canonical": "oklch(75.5% 0.151 38)",
+        "tonalRamp": ["#300000", "#5d0200", "#8c1f00", "#b54722", "#d77252", "#f29f85", "#ffc5b0", "#ffe4d4"]
+      },
+      "coral-day": {
+        "role": "secondary",
+        "displayName": "Signal Coral (day)",
+        "canonical": "oklch(54.9% 0.153 33)",
+        "tonalRamp": ["#310000", "#5e0000", "#8d1c00", "#b6442c", "#d87059", "#f49e8a", "#ffc4b4", "#ffe3d6"]
+      },
+      "ground-night": {
+        "role": "neutral",
+        "displayName": "Station Ground (night)",
+        "canonical": "oklch(20.7% 0.015 181)",
+        "tonalRamp": ["#0d1312", "#27302e", "#44504d", "#66726f", "#8a9592", "#b0bab8", "#d2d9d8", "#eef3f2"]
+      },
+      "ground-day": {
+        "role": "neutral",
+        "displayName": "Station Ground (day)",
+        "canonical": "oklch(97.2% 0.007 132)",
+        "tonalRamp": ["#111210", "#2d2e2b", "#4b4e4a", "#6d706b", "#91938f", "#b6b8b5", "#d6d8d5", "#f1f2f0"]
+      },
+      "ink-night": { "role": "neutral", "displayName": "Ink (night)", "canonical": "#f2f6f1" },
+      "ink-day": { "role": "neutral", "displayName": "Ink (day)", "canonical": "#17231f" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The hero name only." },
+      "numeral": { "displayName": "Section numeral", "purpose": "Coral section number in the right margin." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles." },
+      "title": { "displayName": "Title", "purpose": "Card and item titles." },
+      "body": { "displayName": "Body", "purpose": "Running copy in Soft Ink." },
+      "label": { "displayName": "Label", "purpose": "Uppercase tracked nav links, greeting, and section labels." },
+      "button": { "displayName": "Button", "purpose": "The primary action label." },
+      "mono": { "displayName": "Mono", "purpose": "Code and technical readouts only." }
+    },
+    "shadows": [
+      {
+        "name": "none-at-rest",
+        "value": "none",
+        "purpose": "Swiss sets --shadow-card to none. Surfaces are flat; depth comes from 1px Ink rules."
+      },
+      {
+        "name": "hover-hairline",
+        "value": "inset 0 0 0 1px var(--swiss-accent)",
+        "purpose": "Card hover and input focus: the Ink border turns teal and doubles in weight. Zero blur, no lift, no glow."
+      }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Default for every UI transition and entrance." },
+      { "name": "ease-in-out", "value": "cubic-bezier(0.77, 0, 0.175, 1)", "purpose": "Only for things that move across the screen." },
+      { "name": "ease-drawer", "value": "cubic-bezier(0.32, 0.72, 0, 1)", "purpose": "Sheets and drawers." },
+      { "name": "transition-press", "value": "120ms var(--ease-out)", "purpose": "Press feedback: controls scale to 0.97." },
+      { "name": "transition-fast", "value": "150ms var(--ease-out)", "purpose": "Color, border and underline state changes." },
+      { "name": "transition-base", "value": "250ms var(--ease-out)", "purpose": "Larger state changes." },
+      { "name": "reveal", "value": "420ms, 16px travel, 50ms stagger (max sixth child)", "purpose": "One-shot scroll entrance; removed under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "narrow", "value": "481px" },
+      { "name": "mobile", "value": "768px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single filled coral control in a view. Uppercase, tracked, square.",
+      "html": "<button class=\"ds-btn-primary\">Download CV</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 2rem; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--bg-primary, #101a18); background: var(--accent-signal, #ff8a65); border: 0; border-radius: 0; cursor: pointer; transition: scale 120ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-btn-primary:hover { opacity: 0.92; } .ds-btn-primary:active { scale: 0.97; } .ds-btn-primary:focus-visible { outline: 2px solid var(--accent-start, #56c7b2); outline-offset: 4px; }"
+    },
+    {
+      "name": "Ruled Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Transparent, square box outlined in Ink. Shows the page ground.",
+      "html": "<article class=\"ds-card\"><h3>Client project</h3><p>One line on the work and the outcome.</p></article>",
+      "css": ".ds-card { padding: 1.5rem; background: transparent; border: 1px solid var(--text-primary, #f2f6f1); border-radius: 0; box-shadow: none; } .ds-card h3 { font-family: 'Inter Tight', Helvetica, Arial, sans-serif; font-size: 1.35rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; color: var(--text-primary, #f2f6f1); margin: 0 0 0.5rem; } .ds-card p { margin: 0; font-size: 1rem; line-height: 1.7; letter-spacing: -0.005em; color: var(--text-secondary, #c3d0ca); }"
+    },
+    {
+      "name": "Skill Pill",
+      "kind": "chip",
+      "refersTo": "skill-pill",
+      "description": "Square, Ink-outlined tag. Not a pill on the Swiss design.",
+      "html": "<span class=\"ds-pill\">TypeScript</span>",
+      "css": ".ds-pill { display: inline-block; padding: 0.4rem 1rem; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary, #c3d0ca); background: transparent; border: 1px solid var(--text-primary, #f2f6f1); border-radius: 0; }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Small tracked caps with a teal underline that grows in on hover.",
+      "html": "<a class=\"ds-nav-link\" href=\"#\">Work</a>",
+      "css": ".ds-nav-link { position: relative; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary, #c3d0ca); text-decoration: none; transition: color 150ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-nav-link::after { content: ''; position: absolute; left: 0; bottom: -4px; width: 0; height: 2px; background: var(--accent-text, #68d2bd); transition: width 250ms cubic-bezier(0.23, 1, 0.32, 1); } .ds-nav-link:hover, .ds-nav-link:focus-visible { color: var(--text-primary, #f2f6f1); } .ds-nav-link:hover::after, .ds-nav-link:focus-visible::after { width: 100%; }"
+    },
+    {
+      "name": "Section Header",
+      "kind": "custom",
+      "refersTo": "numeral",
+      "description": "Ink rule on top, coral numeral in the right margin, tracked-caps label, headline title.",
+      "html": "<header class=\"ds-section\"><span class=\"ds-section-num\" aria-hidden=\"true\">02</span><span class=\"ds-section-label\">Work</span><h2>Selected client work</h2></header>",
+      "css": ".ds-section { position: relative; padding-top: 4rem; border-top: 1px solid var(--text-primary, #f2f6f1); } .ds-section-num { position: absolute; top: 1rem; right: 1.5rem; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; font-size: clamp(3rem, 8vw, 7rem); font-weight: 800; line-height: 1; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; color: var(--accent-signal, #ff8a65); pointer-events: none; } .ds-section-label { display: inline-block; margin-bottom: 0.75rem; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-text, #68d2bd); } .ds-section h2 { margin: 0; font-family: 'Inter Tight', Helvetica, Arial, sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.2; color: var(--text-primary, #f2f6f1); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Signal Board",
+    "overview": "A transit signage board is a design system that has to be read at a glance by someone who is already moving. That is the brief for a portfolio that a recruiter skims. The page is a strict grid of ruled boxes and large grotesque type, set on mineral surfaces (a deep green-black at night, a pale chalk-green by day), with one coral signal reserved for position and action. Structure comes from lines and from type size, never from decoration.",
+    "keyCharacteristics": [
+      "A strict grid with a 1180px container and 1px full-contrast rules between sections.",
+      "One sans family (Inter Tight) at extreme weights and sizes; hierarchy is size and weight, not color.",
+      "Zero radius, shadow and gradient at rest on the default design.",
+      "Teal carries structure and emphasis; coral marks position and the single action.",
+      "A night and a day palette, chosen by system preference on first visit, each held to WCAG AA."
+    ],
+    "rules": [
+      { "name": "The One Signal Rule", "body": "Coral marks where you are (the section numeral) and what to do (the one filled action). It never decorates, never fills a card, and never appears as text on a paragraph.", "section": "colors" },
+      { "name": "The Ink Rule", "body": "Structural lines (section tops, card borders, the nav underline) are Ink at 1px, not a tinted grey. The grid is meant to be seen.", "section": "colors" },
+      { "name": "The Text-Safe Accent Rule", "body": "Raw teal is for fills, borders and decoration. As text it is the accent-text shade, which clears 4.5:1 on all four surfaces.", "section": "colors" },
+      { "name": "The Size-Not-Color Rule", "body": "Hierarchy is carried by scale and weight. Headings are Ink; do not use an accent color to make a heading important.", "section": "typography" },
+      { "name": "The Tracked-Caps Rule", "body": "Uppercase is for short labels and the action, always tracked open (0.12em to 0.15em). Never uppercase a sentence.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. State is shown with color, underline, or border weight, never with a drop shadow or glow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use the theme variables (var(--text-primary), var(--accent-text), var(--bg-primary)) in every component and demo, never raw hex; the palette is swapped at runtime and the studio reshapes the rest.",
+      "Do draw structure with 1px Ink rules and let the section numerals and large type fill the space.",
+      "Do keep exactly one filled coral action per view.",
+      "Do use accent-text for any accent-colored text, and verify new color pairs against WCAG AA on both palettes.",
+      "Do keep every corner square on the default design and state that in new components.",
+      "Do use demoPanel and gradientButton from src/components/demos/_styles.ts for demo panels and actions so the active design can reshape them."
+    ],
+    "donts": [
+      "Don't use indigo-to-purple gradients, glow, or glass cards (the generic dev-portfolio look).",
+      "Don't use SaaS landing-page tropes: a row of vanity metrics or identical icon-over-heading-over-text card grids.",
+      "Don't add ornament for its own sake: decorative shapes, stock illustration, or emoji (iOS also turns many text glyphs into colored tiles).",
+      "Don't put coral on body text, cards, or secondary buttons; it is the signal and loses meaning if it spreads.",
+      "Don't add shadows, blur, gradients, rounded corners, or hover lift to new components on the default design, and don't bring back the base card-hover glow.",
+      "Don't set sentences in uppercase or in a second typeface to create emphasis.",
+      "Don't let a decorative element carry meaning; the numeral and any icon are aria-hidden and the text stands alone."
+    ]
+  }
+}
