@@ -1,0 +1,2 @@
+Course projects usually end as a .zip. Mine still run: 20 live demos in your browser, from a MATLAB license-plate reader to a Mandelbrot you can scroll-zoom.
+0 zip files. polcasacubertagil.com

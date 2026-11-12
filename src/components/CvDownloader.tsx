@@ -1,6 +1,6 @@
 import { useId, useState } from 'react';
 
-type Lang = 'en' | 'es' | 'ca';
+export type Lang = 'en' | 'es' | 'ca';
 export type CvPreset = 'standard' | 'technical' | 'complete' | 'concise';
 
 export const CV_PRESETS: ReadonlyArray<{ id: CvPreset }> = [
@@ -20,6 +20,7 @@ interface Props {
     presets: Record<CvPreset, string>;
     presetDescriptions: Record<CvPreset, string>;
     includePhoto: string;
+    otherVersions: string;
     download: string;
   };
 }
@@ -27,7 +28,7 @@ interface Props {
 // Portfolio locale code -> cv repo filename slug. The cv repo uses full
 // language names; the portfolio uses ISO-639-1 short codes. Keep this
 // mapping aligned with .github/workflows/deploy.yml's fetch loop.
-const CV_LANG_BY_LOCALE: Record<Lang, string> = {
+export const CV_LANG_BY_LOCALE: Record<Lang, string> = {
   en: 'english',
   es: 'spanish',
   ca: 'catalan',
@@ -87,56 +88,60 @@ export default function CvDownloader({ lang, assetBase, assetVersion, labels }: 
         <span>{labels.title}</span>
       </h3>
 
-      <div className="cv-dl-options">
-        <div className="cv-dl-field">
-          <span id={`${formId}-preset-label`} className="cv-dl-field-label">
-            {labels.preset}
-          </span>
-          <div
-            className="cv-dl-segments"
-            role="radiogroup"
-            aria-labelledby={`${formId}-preset-label`}
-            aria-describedby={`${formId}-preset-description`}
-          >
-            {CV_PRESETS.map(({ id }) => (
-              <label key={id} className="cv-dl-segment">
-                <input
-                  type="radio"
-                  name={`${formId}-preset`}
-                  value={id}
-                  checked={preset === id}
-                  onChange={() => setPreset(id)}
-                />
-                <span>{labels.presets[id]}</span>
-              </label>
-            ))}
-          </div>
-          <span
-            id={`${formId}-preset-description`}
-            className="cv-dl-description"
-            aria-live="polite"
-          >
-            {getCvPresetDescription(labels.presetDescriptions, preset)}
-          </span>
-        </div>
-        <Toggle
-          id={`${formId}-photo`}
-          label={labels.includePhoto}
-          checked={includePhoto}
-          onChange={setIncludePhoto}
-        />
+      <div className="cv-dl-primary">
+        <span id={`${formId}-preset-description`} className="cv-dl-description" aria-live="polite">
+          {getCvPresetDescription(labels.presetDescriptions, preset)}
+        </span>
+        <a
+          className="cv-dl-btn"
+          href={asset.href}
+          download={asset.filename}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <DownloadIcon />
+          <span>{labels.download}</span>
+        </a>
       </div>
 
-      <a
-        className="cv-dl-btn"
-        href={asset.href}
-        download={asset.filename}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <DownloadIcon />
-        <span>{labels.download}</span>
-      </a>
+      <details className="cv-dl-more">
+        <summary className="cv-dl-more-summary">
+          <span>{labels.otherVersions}</span>
+          <ChevronIcon />
+        </summary>
+        <div className="cv-dl-options">
+          <div className="cv-dl-field">
+            <span id={`${formId}-preset-label`} className="cv-dl-field-label">
+              {labels.preset}
+            </span>
+            <div
+              className="cv-dl-segments"
+              role="radiogroup"
+              aria-labelledby={`${formId}-preset-label`}
+              aria-describedby={`${formId}-preset-description`}
+            >
+              {CV_PRESETS.map(({ id }) => (
+                <label key={id} className="cv-dl-segment">
+                  <input
+                    type="radio"
+                    name={`${formId}-preset`}
+                    value={id}
+                    checked={preset === id}
+                    onChange={() => setPreset(id)}
+                  />
+                  <span>{labels.presets[id]}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <Toggle
+            id={`${formId}-photo`}
+            label={labels.includePhoto}
+            checked={includePhoto}
+            onChange={setIncludePhoto}
+          />
+        </div>
+      </details>
     </div>
   );
 }
@@ -184,6 +189,24 @@ function DownloadIcon() {
   );
 }
 
+function ChevronIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
 const CV_DL_STYLES = `
   .cv-dl {
     display: flex;
@@ -225,12 +248,54 @@ const CV_DL_STYLES = `
     height: 1.1rem;
   }
 
+  /* The one thing most visitors want: describe the default file, then offer
+     it. Everything else lives behind "Other versions". */
+  .cv-dl-primary {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+    min-width: 0;
+    padding: 1rem 0;
+  }
+  .cv-dl-more {
+    border-top: 1px solid var(--border-color);
+  }
+  .cv-dl-more-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    list-style: none;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+  .cv-dl-more-summary::-webkit-details-marker { display: none; }
+  .cv-dl-more-summary svg {
+    flex: 0 0 auto;
+    transition: transform var(--transition-fast);
+  }
+  .cv-dl-more[open] .cv-dl-more-summary { color: var(--text-primary); }
+  .cv-dl-more[open] .cv-dl-more-summary svg { transform: rotate(180deg); }
+  .cv-dl-more-summary:focus-visible {
+    outline: 2px solid var(--accent-start);
+    outline-offset: -2px;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .cv-dl-more-summary:hover { color: var(--text-primary); }
+  }
   .cv-dl-options {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(9rem, auto);
     gap: 1rem;
     align-items: start;
-    padding: 1rem 0;
+    padding: 0.25rem 0 0.5rem;
   }
   .cv-dl-field {
     display: grid;
@@ -241,7 +306,7 @@ const CV_DL_STYLES = `
   }
   .cv-dl-field-label {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
   }
@@ -277,7 +342,7 @@ const CV_DL_STYLES = `
     color: var(--text-secondary);
     background: var(--bg-secondary);
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-align: center;
     transition:
@@ -393,7 +458,6 @@ const CV_DL_STYLES = `
     justify-content: center;
     gap: 0.5rem;
     min-height: 2.75rem;
-    margin-bottom: 1rem;
     padding: 0.65rem 1rem;
     font-family: var(--font-mono);
     font-weight: 700;
@@ -436,6 +500,7 @@ const CV_DL_STYLES = `
   @media (prefers-reduced-motion: reduce) {
     .cv-dl,
     .cv-dl-box,
+    .cv-dl-more-summary svg,
     .cv-dl-btn { transition: none; }
   }
 `;

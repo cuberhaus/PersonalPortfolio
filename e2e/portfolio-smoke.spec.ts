@@ -93,8 +93,11 @@ test.describe('portfolio homepage smoke', () => {
     const portrait = page.getByRole('checkbox', { name: 'Include portrait' });
     const download = page.getByRole('link', { name: 'Download', exact: true });
 
-    await expect(preset).toBeVisible();
+    // The default file is one click away; the variants wait behind a disclosure.
     await expect(download).toHaveAttribute('href', /cv_english_standard_photo\.pdf(?:\?|$)/);
+    await expect(preset).toBeHidden();
+    await page.getByText('Other versions', { exact: true }).click();
+    await expect(preset).toBeVisible();
 
     await technical.click();
     await portrait.focus();
@@ -140,7 +143,9 @@ test.describe('portfolio homepage smoke', () => {
           });
 
           expect(measurements.buttonWidth).toBeLessThan(measurements.containerWidth);
-          expect(measurements.borderRadius).toBeGreaterThan(0);
+          // Swiss is square by design; every other design keeps the rounded button.
+          if (design === 'swiss') expect(measurements.borderRadius).toBe(0);
+          else expect(measurements.borderRadius).toBeGreaterThan(0);
           expect(measurements.whiteSpace).toBe('nowrap');
           expect(measurements.horizontalOverflow).toBeLessThanOrEqual(1);
         }
@@ -191,6 +196,12 @@ test.describe('portfolio homepage smoke', () => {
           }
         };
 
+        // Options live behind "Other versions"; measure them once opened. A
+        // hash-only goto keeps the document, so the disclosure may already be open.
+        if (!(await page.locator('.cv-dl-more').evaluate((el: HTMLDetailsElement) => el.open))) {
+          await page.locator('.cv-dl-more-summary').click();
+        }
+        await expect(page.locator('.cv-dl-more')).toHaveJSProperty('open', true);
         await assertInsetLayout();
         await page.locator('.cv-dl-segment input[value="complete"]').check();
         await assertInsetLayout();
@@ -239,7 +250,7 @@ test.describe('portfolio homepage smoke', () => {
         await assertFocusSurface(checkbox);
 
         const download = page.locator('.cv-dl-btn');
-        await page.keyboard.press('Tab');
+        await download.focus();
         await assertFocusSurface(download);
       }
     }

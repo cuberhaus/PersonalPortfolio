@@ -12,8 +12,9 @@
     "cvPresetConcise": "Concisa",
     "cvPresetConciseDescription": "La versión más breve con perfil, experiencia, formación y habilidades.",
     "cvIncludePhoto": "Incluir retrato",
+    "cvOtherVersions": "Otras versiones",
     "label": "Sobre mí",
-    "p1": "¡Hola! Soy Pol, Ingeniero Informático de Barcelona. Me gradué en la Facultat d'Informàtica de Barcelona (FIB) de la UPC y ahora trabajo como Consultor de IA y Datos en Deloitte, donde paso la mayor parte de los días en la intersección de la IA, las plataformas de datos y la realidad algo caótica de hacerlas útiles.",
+    "p1": "¡Hola! Soy Pol, Ingeniero Informático de Barcelona. Me gradué en la Facultat d'Informàtica de Barcelona (FIB) de la UPC y ahora trabajo como Ingeniero de IA y ML en Deloitte, donde paso la mayor parte de los días en la intersección de la IA, las plataformas de datos y la realidad algo caótica de hacerlas útiles.",
     "p2": "Lo que realmente disfruto es construir: explorar herramientas nuevas, entender cómo encajan entre sí y ayudar a mi equipo a sacar adelante cosas de las que estemos orgullosos. Me importa más resolver el problema que usar el stack más de moda, aunque me alegra cuando ambas cosas coinciden.",
     "p3": "Fuera del trabajo me suelen encontrar escalando, metido en un videojuego o fingiendo que mis atajos de Vim me hacen más rápido de lo que soy. Estas son algunas de las tecnologías con las que he trabajado últimamente:",
     "title": "Un poco sobre mí"
@@ -99,14 +100,15 @@
     "title": "Dónde he trabajado"
   },
   "hero": {
-    "cta": "Ver mi trabajo",
-    "description": "Ingeniero Informático en Barcelona y Consultor de IA y Datos en Deloitte. Convierto ideas en sistemas listos para producción, desde plataformas de datos en la nube hasta visión por computador e IA generativa.",
+    "cta": "Descargar CV",
+    "description": "Ingeniero de IA y ML en Deloitte, desde Barcelona. Convierto ideas en sistemas listos para producción, desde plataformas de datos en la nube hasta visión por computador e IA generativa.",
     "greeting": "Hola, soy",
+    "secondary": "Ver mi trabajo",
     "tagline_1": "Construyo sistemas de IA y datos",
     "tagline_2": "que funcionan en el mundo real."
   },
   "meta": {
-    "description": "Pol Casacuberta — Consultor de IA y Datos de Barcelona. Construyo cosas con IA y datos.",
+    "description": "Pol Casacuberta — Ingeniero de IA y ML de Barcelona. Construyo cosas con IA y datos.",
     "title": "Pol Casacuberta — Portafolio"
   },
   "nav": {

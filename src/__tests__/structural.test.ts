@@ -46,13 +46,13 @@ describe('Icon parity: demo-icons.ts covers all demos.json icons', () => {
 // ─── Navbar / homepage section invariants ───────────────────────
 
 describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
-  it('leads with proof of work and keeps the primary navigation focused', () => {
+  it('leads with proof of work, puts the employer next, and keeps the primary navigation focused', () => {
     expect(SECTION_META.map((section) => section.id)).toEqual([
       'hero',
       'work',
+      'experience',
       'projects',
       'about',
-      'experience',
       'skills',
       'certifications',
       'education',
@@ -60,6 +60,7 @@ describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
     ]);
     expect(SECTION_META.filter((section) => section.inNav).map((section) => section.id)).toEqual([
       'work',
+      'experience',
       'projects',
       'about',
       'contact',
@@ -94,9 +95,11 @@ describe('Sections SSOT (src/config/sections.ts) drives the homepage', () => {
     expect(navbar).toMatch(/href="#hero"/);
   });
 
-  it('the primary hero CTA points to professional work', () => {
+  it('the primary hero CTA downloads the CV and professional work stays one quiet link away', () => {
     const hero = read('components/Hero.astro');
-    expect(hero).toMatch(/href="#work"/);
+    expect(hero).toMatch(/<a[^>]*\bclass="hero-cta"/);
+    expect(hero).toMatch(/href=\{cv\.href\}/);
+    expect(hero).toMatch(/<a href="#work" class="hero-link"/);
   });
 
   it('the mobile menu protects short viewports from centered overflow', () => {

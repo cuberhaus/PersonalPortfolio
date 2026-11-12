@@ -1,0 +1,98 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s5-full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root #s5-bg {
+      background: var(--color-ground);
+    }
+    #root #s5-label {
+      position: absolute;
+      left: 114px;
+      top: 150px;
+      font-weight: 900;
+      font-size: 132px;
+      line-height: 1;
+      letter-spacing: -0.055em;
+      color: var(--color-ink);
+      white-space: nowrap;
+    }
+    #root #s5-label .s5-acc {
+      color: var(--color-coral);
+    }
+    #root .s5-w {
+      display: inline-block;
+    }
+    #root .s5-card {
+      position: absolute;
+      top: 410px;
+      width: 840px;
+      height: 572px;
+      overflow: hidden;
+    }
+    #root .s5-card img {
+      position: absolute;
+      top: 0;
+      width: 1680px;
+      height: 572px;
+      display: block;
+    }
+  </style>
+
+  <div id="root" data-composition-id="s5-client" data-width="1920" data-height="1080">
+    <div id="s5-bg" class="clip s5-full" data-start="0" data-duration="2.19" data-track-index="1"></div>
+
+    <div id="s5-label" class="clip" data-start="0.1" data-duration="2.09" data-track-index="2">
+      <span class="s5-w">Client</span> <span class="s5-w">work,</span> <span class="s5-w s5-acc">too.</span>
+    </div>
+
+    <!-- The two real Client Work cards from the running site, one after the other -->
+    <div id="s5-c1" class="clip s5-card" data-start="0.1" data-duration="2.09" data-track-index="3" style="left: 120px" data-layout-allow-overflow>
+      <img src="assets/shots/work-cards.png" alt="" style="left: 0" data-layout-allow-overflow />
+    </div>
+    <div id="s5-c2" class="clip s5-card" data-start="0.5" data-duration="1.69" data-track-index="4" style="left: 960px" data-layout-allow-overflow>
+      <img src="assets/shots/work-cards.png" alt="" style="left: -840px" data-layout-allow-overflow />
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var T0 = 18.55; // this scene's start on the main timeline
+
+      // Blur swap in from the wall (strong cue 18.55s). beat-locked: 18.55s
+      tl.fromTo("#s5-bg", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo(
+        "#s5-label .s5-w",
+        { opacity: 0, filter: "blur(14px)", y: 22 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.42, ease: "power3.out", stagger: 0.09 },
+        0.22,
+      );
+      tl.fromTo(
+        "#s5-c1",
+        { opacity: 0, y: 70, filter: "blur(10px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" },
+        0.26,
+      );
+      // Second card on the next beat. beat-grid: 19.10s
+      tl.fromTo(
+        "#s5-c2",
+        { opacity: 0, y: 70, filter: "blur(10px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "expo.out" },
+        19.1 - T0 - 0.04,
+      );
+
+      window.__timelines["s5-client"] = tl;
+    })();
+  </script>
+</template>

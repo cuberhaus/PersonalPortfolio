@@ -1,0 +1,244 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground);
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s2-full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root #s2-cam {
+      transform-origin: 0 0;
+    }
+    #root .s2-shot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root #s2-veil {
+      background: rgba(16, 26, 24, 0.88);
+    }
+
+    /* simulated cursor (lives inside the camera, in page coordinates) */
+    #root .s2-cursor {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 40px;
+      height: 50px;
+      transform-origin: 2px 2px;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+    }
+
+    /* keycaps */
+    #root .s2-key {
+      position: absolute;
+      top: 872px;
+    }
+    #root .s2-cap {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 1;
+      color: var(--color-ink);
+      background: var(--color-card);
+      border: 3px solid var(--color-border-hi);
+      border-radius: 14px;
+      padding: 20px 30px;
+      box-shadow: 0 8px 0 #0a100f;
+    }
+
+    /* step captions (Swiss numeral + label) */
+    #root .s2-cap-num {
+      font-weight: 900;
+      font-size: 150px;
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      color: var(--color-coral);
+    }
+    #root .s2-cap-label {
+      font-weight: 900;
+      font-size: 72px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--color-ink);
+      margin-top: 8px;
+    }
+    #root .s2-step {
+      position: absolute;
+      left: 96px;
+      top: 330px;
+    }
+
+    /* caption plate (shared look with the montage) */
+    #root .pl-plate {
+      position: absolute;
+      left: 96px;
+      top: 76px;
+      background: var(--color-ground);
+      border-left: 10px solid var(--color-coral);
+      padding: 14px 32px 16px 26px;
+    }
+    #root .pl-idx {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      color: var(--color-teal);
+    }
+    #root .pl-name {
+      font-weight: 900;
+      font-size: 84px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--color-ink);
+      margin-top: 2px;
+    }
+    #root .pl-pal {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      color: var(--color-ink-2);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    #root .pl-sw {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--a) 50%, var(--b) 50%);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+    }
+  </style>
+
+  <div data-hf-id="hf-tnhh" id="root" data-composition-id="s2-flow" data-width="1920" data-height="1080">
+    <!-- Camera: punches into the real picker, follows the cursor, then frames the re-skinned hero -->
+    <div data-hf-id="hf-elop" id="s2-cam" class="s2-full" data-layout-allow-overflow>
+      <img data-hf-id="hf-ehdq" id="s2-home" class="clip s2-shot" src="assets/shots/home-swiss.png" alt="" data-start="0" data-duration="4.22" data-track-index="0" />
+      <img data-hf-id="hf-4k7i" id="s2-picker" class="clip s2-shot" src="assets/shots/picker-swiss.png" alt="" data-start="0.52" data-duration="3.7" data-track-index="1" />
+      <img data-hf-id="hf-0oz0" id="s2-comic" class="clip s2-shot" src="assets/shots/picker-comic.png" alt="" data-start="1.05" data-duration="3.17" data-track-index="2" />
+      <img data-hf-id="hf-xuj9" id="s2-synth" class="clip s2-shot" src="assets/shots/picker-comic-synthwave.png" alt="" data-start="2.1" data-duration="2.12" data-track-index="3" />
+      <img data-hf-id="hf-ksae" id="s2-hero" class="clip s2-shot" src="assets/shots/hero-comic-flow.png" alt="" data-start="3.16" data-duration="1.06" data-track-index="4" />
+
+      <div data-hf-id="hf-aie6" id="s2-cursor-host" class="clip s2-full" data-start="0.4" data-duration="2.2" data-track-index="5" style="pointer-events: none">
+        <svg data-hf-id="hf-n5bg" id="s2-cursor" class="s2-cursor" viewBox="0 0 32 40" aria-hidden="true">
+          <path data-hf-id="hf-vzg7" d="M2 2 L2 30 L9 23 L14 35 L19 33 L14 21 L24 21 Z" fill="#ffffff" stroke="#101a18" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- colour flood: the dimmed hero from scene 1 lifts to full brightness -->
+    <div data-hf-id="hf-2jwr" id="s2-veil" class="clip s2-full" data-start="0" data-duration="0.5" data-track-index="9"></div>
+
+    <!-- keycaps -->
+    <div data-hf-id="hf-i91i" id="s2-k-ctrl" class="clip s2-key" style="left: 96px" data-start="0.1" data-duration="0.78" data-track-index="6">
+      <div data-hf-id="hf-cl2d" class="s2-cap">Ctrl</div>
+    </div>
+    <div data-hf-id="hf-mq4a" id="s2-k-k" class="clip s2-key" style="left: 238px" data-start="0.25" data-duration="0.63" data-track-index="6">
+      <div data-hf-id="hf-pln9" class="s2-cap">K</div>
+    </div>
+    <div data-hf-id="hf-bpqw" id="s2-k-esc" class="clip s2-key" style="left: 96px" data-start="2.62" data-duration="0.8" data-track-index="6">
+      <div data-hf-id="hf-r99d" class="s2-cap">Esc</div>
+    </div>
+
+    <!-- step captions -->
+    <div data-hf-id="hf-udof" id="s2-step1" class="clip s2-step" data-start="0.62" data-duration="1.22" data-track-index="7">
+      <div data-hf-id="hf-wxku" class="s2-step-in">
+        <div data-hf-id="hf-6xi0" class="s2-cap-num">01</div>
+        <div data-hf-id="hf-le4b" class="s2-cap-label">Design</div>
+      </div>
+    </div>
+    <div data-hf-id="hf-f4nh" id="s2-step2" class="clip s2-step" data-start="1.86" data-duration="1.28" data-track-index="7">
+      <div data-hf-id="hf-omhu" class="s2-step-in">
+        <div data-hf-id="hf-5qkx" class="s2-cap-num">02</div>
+        <div data-hf-id="hf-35m4" class="s2-cap-label">Palette</div>
+      </div>
+    </div>
+
+    <!-- result plate -->
+    <div data-hf-id="hf-i7uk" id="s2-plate" class="clip pl-plate" data-start="3.3" data-duration="0.92" data-track-index="8">
+      <div data-hf-id="hf-nj2s" class="s2-plate-in">
+        <div data-hf-id="hf-l7co" class="pl-idx">16 / 17</div>
+        <div data-hf-id="hf-b7al" class="pl-name">Comic</div>
+        <div data-hf-id="hf-c8mz" class="pl-pal"><i data-hf-id="hf-odxz" class="pl-sw" style="--a: #0b0221; --b: #ff2a6d"></i>Synthwave</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var cam = "#s2-cam";
+      var cur = "#s2-cursor";
+
+      gsap.set(cam, { transformOrigin: "0 0" });
+
+      // ── Colour flood: dimmed hero → full brightness
+      tl.fromTo("#s2-veil", { opacity: 1 }, { opacity: 0, duration: 0.4, ease: "power2.out" }, 0.05);
+
+      // ── Keycaps: Ctrl then K (pressed), gone as the picker opens
+      function press(id, t) {
+        tl.fromTo(id + " .s2-cap", { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: 0.12, ease: "power3.out" }, t);
+        tl.to(id + " .s2-cap", { y: 6, boxShadow: "0 2px 0 #0a100f", color: "#68d2bd", duration: 0.06, ease: "power1.in" }, t + 0.12);
+      }
+      press("#s2-k-ctrl", 0.12);
+      press("#s2-k-k", 0.27);
+      tl.to("#s2-k-ctrl .s2-cap, #s2-k-k .s2-cap", { opacity: 0, duration: 0.14, ease: "power2.in" }, 0.7);
+
+      // Esc later
+      tl.fromTo("#s2-k-esc .s2-cap", { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: 0.12, ease: "power3.out" }, 2.64);
+      tl.to("#s2-k-esc .s2-cap", { y: 6, boxShadow: "0 2px 0 #0a100f", color: "#68d2bd", duration: 0.06, ease: "power1.in" }, 2.76);
+      tl.to("#s2-k-esc .s2-cap", { opacity: 0, duration: 0.14, ease: "power2.in" }, 3.2);
+
+      // ── Real frames swap exactly where the real UI changed
+      // beat-locked: picker opens at 3.70s (local 0.52)
+      tl.fromTo("#s2-picker", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 0.52);
+      // click Comic at 4.23s (local 1.05)
+      tl.fromTo("#s2-comic", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, 1.05);
+      // click Synthwave at 5.28s (local 2.10)
+      tl.fromTo("#s2-synth", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, 2.1);
+      // beat-locked: picker closes at 6.34s (local 3.16) → full comic hero
+      tl.fromTo("#s2-hero", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, 3.16);
+
+      // ── Camera (transform-origin 0 0 → x/y = -window origin × scale)
+      // punch into the picker's design grid as it opens
+      tl.to(cam, { scale: 1.7, x: -671.5, y: -153, duration: 0.5, ease: "power3.out" }, 0.42);
+      // follow the cursor down to the palette list
+      tl.to(cam, { y: -765, duration: 0.6, ease: "power2.inOut" }, 1.35);
+      // pull out onto the re-skinned hero (same framing the montage starts with)
+      tl.to(cam, { scale: 1.6, x: -576, y: -208, duration: 0.75, ease: "power2.inOut" }, 2.75);
+
+      // ── Cursor (page coordinates; tip at the element's top-left)
+      tl.fromTo(cur, { x: 1560, y: 820, opacity: 0 }, { x: 1081, y: 654, opacity: 1, duration: 0.55, ease: "power2.inOut" }, 0.45);
+      tl.to(cur, { scale: 0.82, duration: 0.06, ease: "power1.in" }, 1.02);
+      tl.to(cur, { scale: 1, duration: 0.14, ease: "power2.out" }, 1.08);
+      tl.to(cur, { x: 839, y: 970, duration: 0.7, ease: "power2.inOut" }, 1.38);
+      tl.to(cur, { scale: 0.82, duration: 0.06, ease: "power1.in" }, 2.07);
+      tl.to(cur, { scale: 1, duration: 0.14, ease: "power2.out" }, 2.13);
+      tl.to(cur, { opacity: 0, duration: 0.2, ease: "power2.in" }, 2.4);
+
+      // ── Step captions
+      function stepIn(id, t, out) {
+        tl.fromTo(id + " .s2-step-in", { opacity: 0, filter: "blur(10px)", x: -26 }, { opacity: 1, filter: "blur(0px)", x: 0, duration: 0.3, ease: "power3.out" }, t);
+        tl.to(id + " .s2-step-in", { opacity: 0, filter: "blur(8px)", duration: 0.14, ease: "power2.in" }, out);
+      }
+      stepIn("#s2-step1", 0.64, 1.66);
+      stepIn("#s2-step2", 1.88, 2.96);
+
+      // ── Result plate
+      tl.fromTo("#s2-plate .s2-plate-in", { opacity: 0, filter: "blur(10px)", x: -30 }, { opacity: 1, filter: "blur(0px)", x: 0, duration: 0.3, ease: "power4.out" }, 3.32);
+
+      window.__timelines["s2-flow"] = tl;
+    })();
+  </script>
+</template>

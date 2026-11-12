@@ -21,6 +21,13 @@ export const SECTION_META = [
   { id: 'hero', navKey: 'nav.about', numbered: false, inNav: false, hidden: false as boolean },
   { id: 'work', navKey: 'nav.work', numbered: true, inNav: true, hidden: false as boolean },
   {
+    id: 'experience',
+    navKey: 'nav.experience',
+    numbered: true,
+    inNav: true,
+    hidden: false as boolean,
+  },
+  {
     id: 'projects',
     navKey: 'nav.projects',
     numbered: true,
@@ -28,13 +35,6 @@ export const SECTION_META = [
     hidden: false as boolean,
   },
   { id: 'about', navKey: 'nav.about', numbered: true, inNav: true, hidden: false as boolean },
-  {
-    id: 'experience',
-    navKey: 'nav.experience',
-    numbered: true,
-    inNav: false,
-    hidden: false as boolean,
-  },
   { id: 'skills', navKey: 'nav.skills', numbered: true, inNav: false, hidden: false as boolean },
   {
     id: 'certifications',

@@ -20,6 +20,7 @@ const labels = {
     concise: 'Core experience and skills',
   },
   includePhoto: 'Include portrait',
+  otherVersions: 'Other versions',
   download: 'Download PDF',
 };
 
@@ -32,6 +33,24 @@ describe('CV downloader assets', () => {
     expect(markup).toContain('role="radiogroup"');
     expect(markup.match(/type="radio"/g)).toHaveLength(CV_PRESETS.length);
     expect(markup).not.toContain('<select');
+  });
+
+  it('offers the default CV first and tucks every other option behind a disclosure', () => {
+    const markup = renderToStaticMarkup(
+      createElement(CvDownloader, { lang: 'en', assetVersion: 'abc123', labels })
+    );
+
+    const disclosure = markup.indexOf('<details');
+    expect(disclosure).toBeGreaterThan(-1);
+    // One download action, shown before the disclosure and closed by default.
+    expect(markup.match(/class="cv-dl-btn"/g)).toHaveLength(1);
+    expect(markup.indexOf('class="cv-dl-btn"')).toBeLessThan(disclosure);
+    expect(markup.slice(disclosure)).not.toMatch(/^<details[^>]*\bopen\b/);
+    expect(markup).toContain('cv_english_standard_photo.pdf');
+    // Presets and the portrait switch only exist inside the disclosure.
+    expect(markup.indexOf('role="radiogroup"')).toBeGreaterThan(disclosure);
+    expect(markup.indexOf('class="cv-dl-input"')).toBeGreaterThan(disclosure);
+    expect(markup).toContain('Other versions');
   });
 
   it('cache-busts the selected asset and preserves its variant in the filename', () => {

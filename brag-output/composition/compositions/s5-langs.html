@@ -1,0 +1,187 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground);
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s5-item {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+    }
+    #root .s5-fr {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: 0 0;
+    }
+    #root .s5-pop {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root .s5-pop img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+
+    #root #s5-plate {
+      position: absolute;
+      left: 96px;
+      top: 72px;
+      background: var(--color-ground);
+      border-left: 10px solid var(--color-coral);
+      padding: 14px 32px 16px 26px;
+    }
+    #root .s5-idx {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      color: var(--color-teal);
+    }
+    #root .s5-name {
+      font-weight: 900;
+      font-size: 84px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--color-ink);
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+    #root .s5-sub {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      color: var(--color-ink-2);
+      margin-top: 8px;
+    }
+
+    /* the language switch (EN / ES / CA), like the one in the real nav */
+    #root #s5-switch {
+      position: absolute;
+      right: 96px;
+      top: 72px;
+      display: flex;
+      gap: 0;
+      background: var(--color-ground);
+      border: 3px solid var(--color-border-hi);
+    }
+    #root .s5-chip {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 44px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      padding: 18px 28px;
+      color: var(--color-ink-2);
+      background: transparent;
+    }
+    #root #s5-flood {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      background: var(--color-ground);
+    }
+  </style>
+
+  <div data-hf-id="hf-4e8v" id="root" data-composition-id="s5-langs" data-width="1920" data-height="1080">
+    <!-- EN · beat 17.38 -->
+    <div data-hf-id="hf-j6jp" id="s5-en" class="clip s5-item" data-start="0" data-duration="1.06" data-track-index="0">
+      <div data-hf-id="hf-5e9k" class="s5-fr" data-layout-allow-overflow>
+        <div data-hf-id="hf-ohl6" class="s5-pop"><img data-hf-id="hf-99lh" src="assets/shots/hero-en.png" alt="" /></div>
+      </div>
+    </div>
+    <!-- ES · beat 18.44 -->
+    <div data-hf-id="hf-z9o8" id="s5-es" class="clip s5-item" data-start="1.06" data-duration="1.04" data-track-index="1">
+      <div data-hf-id="hf-kmkw" class="s5-fr" data-layout-allow-overflow>
+        <div data-hf-id="hf-vopa" class="s5-pop"><img data-hf-id="hf-04dc" src="assets/shots/hero-es.png" alt="" /></div>
+      </div>
+    </div>
+    <!-- CA · beat 19.48 -->
+    <div data-hf-id="hf-iejb" id="s5-ca" class="clip s5-item" data-start="2.1" data-duration="1.06" data-track-index="2">
+      <div data-hf-id="hf-jfnt" class="s5-fr" data-layout-allow-overflow>
+        <div data-hf-id="hf-w30b" class="s5-pop"><img data-hf-id="hf-9xmo" src="assets/shots/hero-ca.png" alt="" /></div>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-mabk" id="s5-plate" class="clip" data-start="0.06" data-duration="3.1" data-track-index="3">
+      <div data-hf-id="hf-83bh" class="s5-plate-in">
+        <div data-hf-id="hf-udpq" class="s5-idx">i18n</div>
+        <div data-hf-id="hf-8r9m" class="s5-name">3 languages</div>
+        <div data-hf-id="hf-82ec" class="s5-sub">/ &middot; /es/ &middot; /ca/</div>
+      </div>
+    </div>
+
+    <div data-hf-id="hf-dk19" id="s5-switch" class="clip" data-start="0.06" data-duration="3.1" data-track-index="4">
+      <div data-hf-id="hf-t99o" id="s5-c-en" class="s5-chip">EN</div>
+      <div data-hf-id="hf-uagu" id="s5-c-es" class="s5-chip">ES</div>
+      <div data-hf-id="hf-0a7a" id="s5-c-ca" class="s5-chip">CA</div>
+    </div>
+
+    <!-- colour flood to ground, handing over to the outro -->
+    <div data-hf-id="hf-rm5n" id="s5-flood" class="clip" data-start="2.86" data-duration="0.3" data-track-index="5"></div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      gsap.set(".s5-fr", { transformOrigin: "0 0", scale: 1.6, x: -576, y: -208 });
+
+      // Each cut lands slightly large and settles. beat-grid: 17.38s, 18.44s, 19.48s
+      [
+        ["#s5-en", 0],
+        ["#s5-es", 1.06],
+        ["#s5-ca", 2.1],
+      ].forEach(function (it) {
+        tl.fromTo(it[0] + " .s5-pop", { scale: 1.07 }, { scale: 1, duration: 0.45, ease: "power3.out" }, it[1]);
+      });
+      // First item blurs in from scene 4's blur swap.
+      tl.fromTo("#s5-en", { opacity: 0 }, { opacity: 1, duration: 0.13, ease: "power2.out" }, 0);
+
+      // Plate
+      tl.fromTo(
+        "#s5-plate .s5-plate-in",
+        { opacity: 0, filter: "blur(10px)", x: -28 },
+        { opacity: 1, filter: "blur(0px)", x: 0, duration: 0.3, ease: "power4.out" },
+        0.1,
+      );
+
+      // Switch follows the cuts (hard state change on the beat, like clicking a language).
+      var ON = { backgroundColor: "#68d2bd", color: "#101a18" };
+      var OFF = { backgroundColor: "rgba(104,210,189,0)", color: "#c3d0ca" };
+      tl.fromTo("#s5-switch", { opacity: 0, y: -16 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0.1);
+      tl.set("#s5-c-en", ON, 0.1);
+      tl.set("#s5-c-en", OFF, 1.06);
+      tl.set("#s5-c-es", ON, 1.06);
+      tl.set("#s5-c-es", OFF, 2.1);
+      tl.set("#s5-c-ca", ON, 2.1);
+      [
+        ["#s5-c-es", 1.06],
+        ["#s5-c-ca", 2.1],
+      ].forEach(function (it) {
+        tl.fromTo(it[0], { scale: 0.9 }, { scale: 1, duration: 0.25, ease: "back.out(2)" }, it[1]);
+      });
+
+      // Colour flood to ground
+      tl.fromTo("#s5-flood", { opacity: 0 }, { opacity: 1, duration: 0.28, ease: "power2.in" }, 2.88);
+
+      window.__timelines["s5-langs"] = tl;
+    })();
+  </script>
+</template>

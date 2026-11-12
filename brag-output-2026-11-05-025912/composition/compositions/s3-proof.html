@@ -1,0 +1,217 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s3-full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root #s3-bg {
+      background: var(--color-ground);
+    }
+    #root #s3-flood {
+      background: var(--color-coral);
+      clip-path: circle(0px at 380px 570px);
+    }
+    #root .s3-kick {
+      position: absolute;
+      left: 122px;
+      width: 700px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-teal);
+      white-space: nowrap;
+    }
+    #root .s3-title {
+      position: absolute;
+      left: 116px;
+      width: 720px;
+      font-weight: 900;
+      font-size: 96px;
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      color: var(--color-ink);
+    }
+    #root .s3-cap {
+      position: absolute;
+      left: 122px;
+      width: 700px;
+      font-weight: 600;
+      font-size: 40px;
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+      color: var(--color-ink-2);
+    }
+    #root .s3-win {
+      position: absolute;
+      left: 860px;
+      width: 1000px;
+      border: 1px solid var(--color-border-hi);
+      background: var(--color-card);
+      object-fit: cover;
+    }
+    #root .s3-live {
+      position: absolute;
+      left: 860px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-ink-2);
+    }
+    #root .s3-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--color-coral);
+      box-shadow: 0 0 0px rgba(255, 138, 101, 0);
+    }
+    #root .s3-w {
+      display: inline-block;
+    }
+  </style>
+
+  <div id="root" data-composition-id="s3-proof" data-width="1920" data-height="1080">
+    <div id="s3-bg" class="clip s3-full" data-start="0.33" data-duration="7.6" data-track-index="1"></div>
+
+    <!-- ============ Part A: License Plate Detection (real card copy) ============ -->
+    <div id="a-kick" class="clip s3-kick s3a" data-layout-allow-overflow data-start="0.45" data-duration="4.2" data-track-index="2" style="top: 300px">
+      Computer Vision · FIB-UPC
+    </div>
+    <div id="a-title" class="clip s3-title s3a" data-layout-allow-overflow data-start="0.5" data-duration="4.15" data-track-index="3" style="top: 342px">
+      <span class="s3-w">License</span> <span class="s3-w">Plate</span><br /><span class="s3-w">Detection</span>
+    </div>
+    <div id="a-cap" class="clip s3-cap s3a" data-layout-allow-overflow data-start="0.85" data-duration="3.8" data-track-index="4" style="top: 560px">
+      Originally a MATLAB pipeline.
+    </div>
+    <div id="a-live" class="clip s3-live s3a" data-layout-allow-overflow data-start="0.4" data-duration="4.25" data-track-index="5" style="top: 214px">
+      <span id="a-dot" class="s3-dot"></span><span>Live demo</span>
+    </div>
+    <!-- Recorded from the running dev server: sample 2 picked, Detect plate pressed, plate read. 1.13x. -->
+    <video
+      id="a-video"
+      class="clip s3-win s3a" data-layout-allow-overflow
+      src="assets/clips/plate-cut.mp4"
+      data-start="0.1"
+      data-duration="4.5"
+      data-track-index="6"
+      style="top: 262px; height: 557px"
+      muted
+      playsinline
+    ></video>
+
+    <!-- ============ Part B: Parallel Computing Labs (real card copy) ============ -->
+    <div id="b-kick" class="clip s3-kick s3b" data-layout-allow-overflow data-start="4.0" data-duration="3.93" data-track-index="7" style="top: 262px">
+      Mandelbrot · Heat equation
+    </div>
+    <div id="b-title" class="clip s3-title s3b" data-layout-allow-overflow data-start="4.0" data-duration="3.93" data-track-index="8" style="top: 304px">
+      <span class="s3-w">Parallel</span><br /><span class="s3-w">Computing</span><br /><span class="s3-w">Labs</span>
+    </div>
+    <div id="b-cap" class="clip s3-cap s3b" data-layout-allow-overflow data-start="4.0" data-duration="3.93" data-track-index="9" style="top: 612px">
+      Course labs in C with OpenMP.
+    </div>
+    <div id="b-live" class="clip s3-live s3b" data-layout-allow-overflow data-start="4.0" data-duration="3.93" data-track-index="10" style="top: 272px">
+      <span id="b-dot" class="s3-dot"></span><span>Live demo</span>
+    </div>
+    <!-- Recorded from the running dev server: Play pressed, then drag + scroll-zoom into the Mandelbrot set. 1.09x. -->
+    <video
+      id="b-video"
+      class="clip s3-win s3b" data-layout-allow-overflow
+      src="assets/clips/par-cut.mp4"
+      data-start="4.12"
+      data-duration="3.81"
+      data-track-index="11"
+      style="top: 318px; height: 442px"
+      muted
+      playsinline
+    ></video>
+
+    <!-- coral flood = a "Run" press: it opens from the word "run." and wipes off to the right -->
+    <div id="s3-flood" class="clip s3-full" data-start="0" data-duration="0.8" data-track-index="30"></div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var T0 = 7.35; // this scene's start on the main timeline
+
+      // ---- flood in from "run.", then wipe off ----
+      tl.fromTo(
+        "#s3-flood",
+        { clipPath: "circle(0px at 380px 570px)" },
+        { clipPath: "circle(1800px at 380px 570px)", duration: 0.36, ease: "power2.in" },
+        0,
+      );
+      tl.fromTo(
+        "#s3-flood",
+        { clipPath: "inset(0% 0% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 100%)", duration: 0.42, ease: "power3.inOut" },
+        0.36,
+      );
+
+      // ---- Part A entrances: kicker, title per word, caption, window ----
+      tl.fromTo("#a-kick", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, 0.45);
+      tl.fromTo(
+        "#a-title .s3-w",
+        { opacity: 0, filter: "blur(12px)", y: 22 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.42, ease: "power3.out", stagger: 0.09 },
+        0.52,
+      );
+      tl.fromTo("#a-cap", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.9);
+      tl.fromTo("#a-live", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.45);
+      tl.fromTo(
+        "#a-video",
+        { opacity: 0, x: 90 },
+        { opacity: 1, x: 0, duration: 0.6, ease: "expo.out" },
+        0.42,
+      );
+
+      // ---- whip: A scrolls up and out, B scrolls up in. beat-locked: 11.47s (local 4.12)
+      tl.to(".s3a", { y: -1150, filter: "blur(14px)", duration: 0.36, ease: "power2.in" }, 4.0);
+      tl.fromTo(
+        ".s3b",
+        { y: 1150, filter: "blur(14px)" },
+        { y: 0, filter: "blur(0px)", duration: 0.62, ease: "expo.out" },
+        4.02,
+      );
+
+      // ---- Audio-reactive (subtle): the LIVE dots glow with the bass on every beat ----
+      var bass = window.__AUDIO_ENV.bass;
+      function glow(sel, from, to) {
+        window.__BEATS.filter(function (b) {
+          return b >= from && b < to;
+        }).forEach(function (b) {
+          var e = window.__audioAt(bass, b);
+          tl.to(
+            sel,
+            {
+              boxShadow: "0 0 " + Math.round(8 + e * 20) + "px rgba(255,138,101," + (0.4 + e * 0.5).toFixed(2) + ")",
+              duration: 0.1,
+              ease: "power2.out",
+            },
+            b - T0,
+          );
+          tl.to(sel, { boxShadow: "0 0 0px rgba(255,138,101,0)", duration: 0.4, ease: "power2.in" }, b - T0 + 0.1);
+        });
+      }
+      glow("#a-dot", 7.79, 11.4);
+      glow("#b-dot", 11.9, 15.2);
+
+      window.__timelines["s3-proof"] = tl;
+    })();
+  </script>
+</template>

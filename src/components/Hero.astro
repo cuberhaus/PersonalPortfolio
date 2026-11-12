@@ -1,8 +1,16 @@
 ---
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { resolveCvAssets } from '../lib/cv-assets';
+import { CV_LANG_BY_LOCALE, getCvAssetPath } from './CvDownloader';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+// The one filled action is the default CV (standard, with portrait): the About
+// section keeps the other versions. Same file and cache-bust version as there.
+const base = import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+const { assetBase, assetVersion } = resolveCvAssets(base);
+const cv = getCvAssetPath(CV_LANG_BY_LOCALE[lang], 'standard', true, assetVersion, assetBase);
 ---
 
 <section class="hero" id="hero">
@@ -21,17 +29,36 @@ const t = useTranslations(lang);
     <p class="hero-description">
       {t('hero.description')}
     </p>
-    <a href="#work" class="hero-cta">
-      {t('hero.cta')}
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path
-          d="M8 3v10M3 8l5 5 5-5"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"></path>
-      </svg>
-    </a>
+    <div class="hero-actions">
+      <a
+        href={cv.href}
+        download={cv.filename}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hero-cta"
+      >
+        {t('hero.cta')}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </a>
+      <a href="#work" class="hero-link">
+        {t('hero.secondary')}
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path
+            d="M8 3v10M3 8l5 5 5-5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -97,6 +124,10 @@ const t = useTranslations(lang);
     /* #hero is a flex row: without this the item grows to its widest word and
        the paragraph is clipped by the section's overflow instead of wrapping. */
     min-width: 0;
+    /* Fill the container: a flex item without a width is shrink-wrapped and its
+       auto margins centre it, which set the name up to 107px right of the nav
+       logo and every section title. */
+    width: 100%;
     padding-top: calc(var(--nav-height) + 2rem);
   }
 
@@ -129,6 +160,13 @@ const t = useTranslations(lang);
     line-height: 1.8;
   }
 
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.75rem;
+  }
+
   .hero-cta {
     display: inline-flex;
     align-items: center;
@@ -154,9 +192,29 @@ const t = useTranslations(lang);
     box-shadow: 0 8px 30px var(--glow-color-strong);
   }
 
+  /* The quiet way on: a text link, not a second button. */
+  .hero-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--accent-text);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+    transition: color var(--transition-fast);
+  }
+
+  .hero-link:hover {
+    color: var(--accent-text);
+  }
+
   /* A scroll cue, not ambient decoration: two nudges (4s) and it settles, so
      nothing keeps moving beside the text (WCAG 2.2.2). */
-  .hero-cta svg {
+  .hero-link svg {
     animation: scroll-nudge 2s ease-in-out 2;
   }
 
@@ -175,7 +233,7 @@ const t = useTranslations(lang);
       animation: none;
     }
 
-    .hero-cta svg {
+    .hero-link svg {
       animation: none;
     }
   }

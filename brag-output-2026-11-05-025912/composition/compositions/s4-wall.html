@@ -1,0 +1,180 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: var(--font-display);
+    }
+    #root .s4-full {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #root #s4-bg {
+      background: var(--color-ground);
+    }
+    #root #s4-win {
+      position: absolute;
+      left: 900px;
+      top: 0;
+      width: 960px;
+      height: 1080px;
+      overflow: hidden;
+      background: var(--color-ground);
+    }
+    #root #s4-wallimg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 960px;
+      height: 3383px;
+      display: block;
+    }
+    #root #s4-count {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 860px;
+      height: 520px;
+    }
+    #root .s4-n {
+      position: absolute;
+      left: 112px;
+      top: 130px;
+      font-weight: 900;
+      font-size: 330px;
+      line-height: 0.82;
+      letter-spacing: -0.06em;
+      font-variant-numeric: tabular-nums;
+      color: var(--color-coral);
+      white-space: nowrap;
+      text-shadow: 0 0 0px rgba(255, 138, 101, 0);
+    }
+    #root #s4-proj {
+      position: absolute;
+      left: 122px;
+      top: 462px;
+      font-weight: 800;
+      font-size: 124px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--color-ink);
+      white-space: nowrap;
+    }
+    #root #s4-zip {
+      position: absolute;
+      left: 122px;
+      top: 640px;
+      font-weight: 800;
+      font-size: 92px;
+      line-height: 1.05;
+      letter-spacing: -0.045em;
+      color: var(--color-ink-2);
+      white-space: nowrap;
+    }
+    #root #s4-zip .s4-zero {
+      color: var(--color-coral);
+    }
+    #root .s4-w {
+      display: inline-block;
+    }
+  </style>
+
+  <div id="root" data-composition-id="s4-wall" data-width="1920" data-height="1080">
+    <div id="s4-bg" class="clip s4-full s4x" data-start="0" data-duration="3.67" data-track-index="1"></div>
+
+    <!-- All 20 real project cards, captured from the running site; it steps one beat at a time -->
+    <div id="s4-win" class="clip s4x" data-start="0" data-duration="3.67" data-track-index="2" data-layout-allow-overflow>
+      <img id="s4-wallimg" src="assets/shots/lab-wall.png" alt="" data-layout-allow-overflow />
+    </div>
+
+    <div id="s4-count" class="clip s4x" data-layout-allow-overflow data-start="0" data-duration="3.67" data-track-index="3">
+      <div id="c0" class="s4-n">00</div>
+      <div id="c5" class="s4-n">05</div>
+      <div id="c10" class="s4-n">10</div>
+      <div id="c15" class="s4-n">15</div>
+      <div id="c20" class="s4-n">20</div>
+    </div>
+    <div id="s4-proj" class="clip s4x" data-layout-allow-overflow data-start="0.5" data-duration="3.17" data-track-index="4">projects.</div>
+    <div id="s4-zip" class="clip s4x" data-start="2.15" data-duration="1.52" data-track-index="5">
+      <span class="s4-w s4-zero">0</span> <span class="s4-w">zip</span> <span class="s4-w">files.</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      var T0 = 15.28; // this scene's start on the main timeline
+
+      // The wall steps one beat at a time, ~1 row each. beat-grid: 15.82s, 16.38s, 16.93s, 17.47s
+      var steps = [
+        { t: 15.82, y: -576 },
+        { t: 16.38, y: -1152 },
+        { t: 16.93, y: -1727 },
+        { t: 17.47, y: -2303 },
+      ];
+      var prev = 0;
+      tl.set("#s4-wallimg", { y: 0 }, 0);
+      steps.forEach(function (s) {
+        tl.fromTo(
+          "#s4-wallimg",
+          { y: prev },
+          { y: s.y, duration: 0.44, ease: "power3.inOut", immediateRender: false },
+          s.t - T0,
+        );
+        prev = s.y;
+      });
+
+      // The counter rolls on the same beats: 00 -> 05 -> 10 -> 15 -> 20
+      var ids = ["c0", "c5", "c10", "c15", "c20"];
+      tl.set("#c5, #c10, #c15, #c20", { opacity: 0 }, 0);
+      steps.forEach(function (s, i) {
+        tl.to("#" + ids[i], { opacity: 0, y: -40, duration: 0.14, ease: "power2.in" }, s.t - T0);
+        tl.fromTo(
+          "#" + ids[i + 1],
+          { opacity: 0, y: 40, filter: "blur(8px)" },
+          { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.26, ease: "power3.out" },
+          s.t - T0 + 0.06,
+        );
+      });
+
+      // "projects." arrives with the first tick
+      tl.fromTo("#s4-proj", { opacity: 0, y: 24, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 15.82 - T0 + 0.05);
+
+      // "20" lands with "0 zip files." (the gag from scene 1, paid off). beat-grid: 17.47s
+      tl.fromTo(
+        "#s4-zip .s4-w",
+        { opacity: 0, filter: "blur(10px)", y: 22 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.38, ease: "power3.out", stagger: 0.09 },
+        17.47 - T0 + 0.04,
+      );
+      tl.fromTo("#c20", { scale: 1.12 }, { scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 17.47 - T0 + 0.1);
+
+      // Audio-reactive (subtle): the number glows with the bass once it reads "20"
+      var bass = window.__AUDIO_ENV.bass;
+      window.__BEATS.filter(function (b) {
+        return b >= 17.47 && b < 18.5;
+      }).forEach(function (b) {
+        var e = window.__audioAt(bass, b);
+        tl.to(
+          "#c20",
+          {
+            textShadow: "0 0 " + Math.round(24 + e * 50) + "px rgba(255,138,101," + (0.3 + e * 0.45).toFixed(2) + ")",
+            duration: 0.1,
+            ease: "power2.out",
+          },
+          b - T0 + 0.1,
+        );
+        tl.to("#c20", { textShadow: "0 0 0px rgba(255,138,101,0)", duration: 0.4, ease: "power2.in" }, b - T0 + 0.2);
+      });
+
+      // Exit: blur swap into the client-work scene (strong cue 18.55s). beat-locked: 18.55s
+      tl.to(".s4x", { opacity: 0, filter: "blur(14px)", duration: 0.26, ease: "power2.in" }, 18.55 - T0);
+
+      window.__timelines["s4-wall"] = tl;
+    })();
+  </script>
+</template>

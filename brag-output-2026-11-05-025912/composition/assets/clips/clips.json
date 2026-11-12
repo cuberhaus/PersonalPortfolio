@@ -1,0 +1,33 @@
+{
+  "par": {
+    "file": "clips/par.mp4",
+    "region": {
+      "x": 68,
+      "y": 629,
+      "width": 1144,
+      "height": 505
+    },
+    "frames": 80,
+    "seconds": 5.27,
+    "marks": {
+      "click-play": 0.974,
+      "drag-start": 2.178,
+      "zoom-start": 2.794
+    }
+  },
+  "plate": {
+    "file": "clips/plate.mp4",
+    "region": {
+      "x": 68,
+      "y": 560,
+      "width": 1144,
+      "height": 637
+    },
+    "frames": 85,
+    "seconds": 5.453,
+    "marks": {
+      "click-sample": 1.184,
+      "click-detect": 2.38
+    }
+  }
+}
