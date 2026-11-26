@@ -54,7 +54,7 @@ Installable third-party skills live under `.agents/skills/` (gitignored; restore
 - **playwright-best-practices** — consult when adding/modifying Playwright tests (`browser-demos`, `live-demos`, `themes` projects).
 - **accessibility** — consult before merging UI changes; pair with the a11y Playwright project.
 - **performance** — consult when optimizing bundle size, LCP, or Core Web Vitals.
-- **sentry-workflow** — consult when touching Sentry configuration / observability.
+- **sentry-instrument** — consult when touching Sentry configuration / observability.
 - **add-certification** — consult when adding or updating a certification; keeps the portfolio locale data and all three CV certification sections synchronized.
 
 ## Pitfalls
